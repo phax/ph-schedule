@@ -1,5 +1,4 @@
 /**
- * Copyright (C) 2006-2014 phloc systems (www.phloc.com)
  * Copyright (C) 2014 Philip Helger (www.helger.com)
  * philip[at]helger[dot]com
  *
@@ -36,23 +35,23 @@ import org.quartz.impl.matchers.EverythingMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotations.DevelopersNote;
 import com.helger.commons.annotations.Nonempty;
 import com.helger.commons.annotations.OverrideOnDemand;
 import com.helger.commons.annotations.UsedViaReflection;
 import com.helger.commons.exceptions.LoggedRuntimeException;
-import com.helger.commons.string.StringHelper;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
 import com.helger.scopes.singleton.GlobalSingleton;
 
 /**
  * Global scheduler instance.
- * 
+ *
  * @author Philip Helger
  */
 public class GlobalQuartzScheduler extends GlobalSingleton
 {
-  public static final String GROUP_NAME = "phloc";
+  public static final String GROUP_NAME = "com.helger";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalQuartzScheduler.class);
 
@@ -89,28 +88,26 @@ public class GlobalQuartzScheduler extends GlobalSingleton
 
   /**
    * Set the Quartz internal group name.
-   * 
+   *
    * @param sGroupName
    *        The new group name to be used. May neither be <code>null</code> nor
    *        empty.
    */
   public void setGroupName (@Nonnull @Nonempty final String sGroupName)
   {
-    if (StringHelper.hasNoText (sGroupName))
-      throw new IllegalArgumentException ("GroupName");
+    ValueEnforcer.notEmpty (sGroupName, "GroupName");
     m_sGroupName = sGroupName;
   }
 
   /**
    * Add a job listener for all jobs.
-   * 
+   *
    * @param aJobListener
    *        The job listener to be added. May not be <code>null</code>.
    */
   public void addJobListener (@Nonnull final JobListener aJobListener)
   {
-    if (aJobListener == null)
-      throw new NullPointerException ("jobListener");
+    ValueEnforcer.notNull (aJobListener, "JobListener");
 
     try
     {
@@ -134,7 +131,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   /**
    * Modify the JobData map in derived classes. This is e.g. used in pdaf3 to
    * set the correct state data in executed jobs.
-   * 
+   *
    * @param aJobDataMap
    *        The job data map to modify. Never <code>null</code>.
    */
@@ -144,7 +141,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
 
   /**
    * This method is only for testing purposes.
-   * 
+   *
    * @param sJobName
    *        Name of the backup job. Needs to be passed in for testing purposes
    *        since no two job details with the same name may exist.
@@ -160,12 +157,9 @@ public class GlobalQuartzScheduler extends GlobalSingleton
                                  @Nonnull final Class <? extends Job> aJobClass,
                                  @Nullable final Map <String, ? extends Object> aJobData)
   {
-    if (sJobName == null)
-      throw new NullPointerException ("name");
-    if (aTriggerBuilder == null)
-      throw new NullPointerException ("triggerBuilder");
-    if (aJobClass == null)
-      throw new NullPointerException ("class");
+    ValueEnforcer.notNull (sJobName, "JobName");
+    ValueEnforcer.notNull (aTriggerBuilder, "TriggerBuilder");
+    ValueEnforcer.notNull (aJobClass, "JobClass");
 
     // what to do
     final JobDetail aJobDetail = JobBuilder.newJob (aJobClass).withIdentity (sJobName, m_sGroupName).build ();
@@ -195,7 +189,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
 
   /**
    * Schedule a new job that should be executed now and only once.
-   * 
+   *
    * @param sJobName
    *        Name of the job - must be unique within the whole system!
    * @param aJobClass
@@ -210,14 +204,16 @@ public class GlobalQuartzScheduler extends GlobalSingleton
     scheduleJob (sJobName,
                  TriggerBuilder.newTrigger ()
                                .startNow ()
-                               .withSchedule (SimpleScheduleBuilder.repeatMinutelyForTotalCount (1)),
+                               .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
+                                                                   .withIntervalInMinutes (1)
+                                                                   .withRepeatCount (0)),
                  aJobClass,
                  aJobData);
   }
 
   /**
    * Shutdown the scheduler and wait for all jobs to complete.
-   * 
+   *
    * @throws SchedulerException
    *         If something goes wrong
    */
