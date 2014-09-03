@@ -16,12 +16,8 @@
  */
 package com.helger.schedule.job;
 
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.quartz.Job;
@@ -32,6 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.annotations.OverrideOnDemand;
+import com.helger.commons.annotations.ReturnsMutableObject;
+import com.helger.commons.callback.CallbackList;
 import com.helger.commons.state.ESuccess;
 import com.helger.commons.stats.IStatisticsHandlerKeyedCounter;
 import com.helger.commons.stats.IStatisticsHandlerKeyedTimer;
@@ -41,7 +39,7 @@ import com.helger.schedule.longrun.ILongRunningJob;
 
 /**
  * Abstract {@link Job} implementation with an exception handler etc.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -53,56 +51,25 @@ public abstract class AbstractJob implements Job
                                                                                                                          "$success");
   private static final IStatisticsHandlerKeyedCounter s_aStatsCounterFailure = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
                                                                                                                          "$failure");
-  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
-  @GuardedBy ("s_aRWLock")
-  private static IJobExceptionHandler s_aCustomExceptionHandler;
+  private static final CallbackList <IJobExceptionCallback> s_aExceptionCallbacks = new CallbackList <IJobExceptionCallback> ();
 
   public AbstractJob ()
   {}
 
   /**
-   * Set a custom exception handler that is invoked in case an exception is
-   * thrown. This exception handler is invoked additional to the regular
-   * exception logging!
-   * 
-   * @param aCustomExceptionHandler
-   *        The custom handler. May be <code>null</code> to indicate that no
-   *        handler is needed.
+   * @return The custom exception handler. Never <code>null</code>.
    */
-  public static void setCustomExceptionHandler (@Nullable final IJobExceptionHandler aCustomExceptionHandler)
+  @Nonnull
+  @ReturnsMutableObject (reason = "design")
+  public static CallbackList <IJobExceptionCallback> getExceptionCallbacks ()
   {
-    s_aRWLock.writeLock ().lock ();
-    try
-    {
-      s_aCustomExceptionHandler = aCustomExceptionHandler;
-    }
-    finally
-    {
-      s_aRWLock.writeLock ().unlock ();
-    }
-  }
-
-  /**
-   * @return The custom exception handler set. May be <code>null</code>.
-   */
-  @Nullable
-  public static IJobExceptionHandler getCustomExceptionHandler ()
-  {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      return s_aCustomExceptionHandler;
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
+    return s_aExceptionCallbacks;
   }
 
   /**
    * Called before the job gets executed. This method is called before the
    * scopes are initialized!
-   * 
+   *
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
    */
@@ -112,7 +79,7 @@ public abstract class AbstractJob implements Job
 
   /**
    * This is the method with the main actions to be executed.
-   * 
+   *
    * @param aContext
    *        The Quartz context
    * @throws JobExecutionException
@@ -123,7 +90,7 @@ public abstract class AbstractJob implements Job
   /**
    * Called after the job gets executed. This method is called after the scopes
    * are destroyed.
-   * 
+   *
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
    * @param eExecSuccess
@@ -135,23 +102,25 @@ public abstract class AbstractJob implements Job
 
   /**
    * Called when an exception of the specified type occurred
-   * 
+   *
    * @param t
    *        The exception. Never <code>null</code>.
    * @param sJobClassName
    *        The name of the job class
+   * @param aJob
+   *        The {@link Job} instance
    * @param bIsLongRunning
    *        <code>true</code> if it is a long running job
    */
   protected static void triggerCustomExceptionHandler (@Nonnull final Throwable t,
                                                        @Nullable final String sJobClassName,
+                                                       @Nonnull final Job aJob,
                                                        final boolean bIsLongRunning)
   {
-    final IJobExceptionHandler aCustomExceptionHandler = getCustomExceptionHandler ();
-    if (aCustomExceptionHandler != null)
+    for (final IJobExceptionCallback aCustomExceptionHandler : getExceptionCallbacks ().getAllCallbacks ())
       try
       {
-        aCustomExceptionHandler.onScheduledJobException (t, sJobClassName, bIsLongRunning);
+        aCustomExceptionHandler.onScheduledJobException (t, sJobClassName, aJob, bIsLongRunning);
       }
       catch (final Throwable t2)
       {
@@ -202,7 +171,7 @@ public abstract class AbstractJob implements Job
         s_aStatsCounterFailure.increment (sJobClassName);
 
         // Notify custom exception handler
-        triggerCustomExceptionHandler (t, sJobClassName, this instanceof ILongRunningJob);
+        triggerCustomExceptionHandler (t, sJobClassName, this, this instanceof ILongRunningJob);
 
         if (t instanceof JobExecutionException)
           throw (JobExecutionException) t;

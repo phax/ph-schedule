@@ -19,23 +19,32 @@ package com.helger.schedule.job;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.quartz.Job;
+
+import com.helger.commons.callback.ICallback;
+
 /**
  * Callback interface to handle thrown exception objects from the
  * {@link AbstractScopeAwareJob}.
- * 
+ *
  * @author Philip Helger
  */
-public interface IJobExceptionHandler
+public interface IJobExceptionCallback extends ICallback
 {
   /**
    * Called when an exception of the specified type occurred
-   * 
+   *
    * @param t
    *        The exception. Never <code>null</code>.
    * @param sJobClassName
    *        The name of the job class
+   * @param aJob
+   *        The {@link Job} instance
    * @param bIsLongRunning
    *        <code>true</code> if it is a long running job
    */
-  void onScheduledJobException (@Nonnull Throwable t, @Nullable String sJobClassName, boolean bIsLongRunning);
+  void onScheduledJobException (@Nonnull Throwable t,
+                                @Nullable String sJobClassName,
+                                @Nonnull Job aJob,
+                                boolean bIsLongRunning);
 }
