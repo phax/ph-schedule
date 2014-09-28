@@ -1,8 +1,6 @@
-ph-schedule
-===========
+#ph-schedule
 
-Java scheduling library based on Quartz with scope support
-
+Java scheduling library based on Quartz with scope support (see [ph-scopes](https://github.com/phax/ph-scopes))
 
 #Maven usage
 Add the following to your pom.xml to use this artifact:
@@ -13,3 +11,7 @@ Add the following to your pom.xml to use this artifact:
   <version>1.6.1</version>
 </dependency>
 ```
+
+---
+
+On Twitter: <a href="https://twitter.com/philiphelger">Follow @philiphelger</a>
