@@ -42,6 +42,7 @@ import com.helger.commons.annotations.OverrideOnDemand;
 import com.helger.commons.annotations.UsedViaReflection;
 import com.helger.commons.exceptions.LoggedRuntimeException;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
+import com.helger.scopes.IScope;
 import com.helger.scopes.singleton.GlobalSingleton;
 
 /**
@@ -233,7 +234,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   }
 
   @Override
-  protected final void onDestroy () throws Exception
+  protected final void onDestroy (@Nonnull final IScope aScopeInDestruction) throws Exception
   {
     shutdown ();
   }

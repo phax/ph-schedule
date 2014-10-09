@@ -18,25 +18,31 @@ package com.helger.schedule.quartz;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.TriggerBuilder;
 
 import com.helger.commons.mutable.MutableBoolean;
+import com.helger.scopes.mock.ScopeTestRule;
 
 /**
  * Test class for class {@link GlobalQuartzScheduler}.
- * 
+ *
  * @author Philip Helger
  */
 public final class GlobalQuartzSchedulerTest
 {
   static final MutableBoolean EXEC_LOG = new MutableBoolean (false);
 
+  @Rule
+  public TestRule m_aRule = new ScopeTestRule ();
+
   @Test
   public void testGetScheduler () throws Exception
   {
-    final GlobalQuartzScheduler aDS = new GlobalQuartzScheduler ();
+    final GlobalQuartzScheduler aDS = GlobalQuartzScheduler.getInstance ();
     aDS.scheduleJob ("test",
                      TriggerBuilder.newTrigger ()
                                    .startNow ()
@@ -45,6 +51,5 @@ public final class GlobalQuartzSchedulerTest
                      null);
     Thread.sleep (100);
     assertTrue (EXEC_LOG.booleanValue ());
-    aDS.onScopeDestruction ();
   }
 }
