@@ -144,8 +144,8 @@ public class GlobalQuartzScheduler extends GlobalSingleton
    * This method is only for testing purposes.
    *
    * @param sJobName
-   *        Name of the backup job. Needs to be passed in for testing purposes
-   *        since no two job details with the same name may exist.
+   *        Name of the job. Needs to be unique since no two job details with
+   *        the same name may exist.
    * @param aTriggerBuilder
    *        The trigger builder instance to schedule the job
    * @param aJobClass
