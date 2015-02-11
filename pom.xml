@@ -85,7 +85,7 @@
     <dependency>
       <groupId>com.helger</groupId>
       <artifactId>ph-webscopes</artifactId>
-      <version>6.6.3</version>
+      <version>6.8.0</version>
     </dependency>
     
     <dependency>
