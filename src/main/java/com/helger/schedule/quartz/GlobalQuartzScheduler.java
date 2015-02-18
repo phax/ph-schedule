@@ -41,9 +41,9 @@ import com.helger.commons.annotations.Nonempty;
 import com.helger.commons.annotations.OverrideOnDemand;
 import com.helger.commons.annotations.UsedViaReflection;
 import com.helger.commons.exceptions.LoggedRuntimeException;
+import com.helger.commons.scopes.IScope;
+import com.helger.commons.scopes.singleton.GlobalSingleton;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
-import com.helger.scopes.IScope;
-import com.helger.scopes.singleton.GlobalSingleton;
 
 /**
  * Global scheduler instance.

@@ -25,7 +25,7 @@ import org.quartz.SimpleScheduleBuilder;
 import org.quartz.TriggerBuilder;
 
 import com.helger.commons.mutable.MutableBoolean;
-import com.helger.scopes.mock.ScopeTestRule;
+import com.helger.commons.scopes.mock.ScopeTestRule;
 
 /**
  * Test class for class {@link GlobalQuartzScheduler}.
