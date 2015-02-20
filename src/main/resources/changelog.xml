@@ -19,6 +19,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="ph-schedule">
+  <release date="2015-02-20" version="1.7.1" />
+  <entry date="2015-02-20" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to ph-web 6.3.0</text>
+    </change>
+  </entry>
   <release date="2015-02-18" version="1.7.0" />
   <entry date="2015-02-18" category="tech" action="update">
     <change>
