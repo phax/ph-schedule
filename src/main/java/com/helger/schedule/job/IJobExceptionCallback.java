@@ -40,11 +40,6 @@ public interface IJobExceptionCallback extends ICallback
    *        The name of the job class
    * @param aJob
    *        The {@link Job} instance
-   * @param bIsLongRunning
-   *        <code>true</code> if it is a long running job
    */
-  void onScheduledJobException (@Nonnull Throwable t,
-                                @Nullable String sJobClassName,
-                                @Nonnull Job aJob,
-                                boolean bIsLongRunning);
+  void onScheduledJobException (@Nonnull Throwable t, @Nullable String sJobClassName, @Nonnull Job aJob);
 }

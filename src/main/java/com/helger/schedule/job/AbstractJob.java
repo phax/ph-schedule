@@ -35,7 +35,6 @@ import com.helger.commons.stats.IStatisticsHandlerKeyedCounter;
 import com.helger.commons.stats.IStatisticsHandlerKeyedTimer;
 import com.helger.commons.stats.StatisticsManager;
 import com.helger.commons.timing.StopWatch;
-import com.helger.schedule.longrun.ILongRunningJob;
 
 /**
  * Abstract {@link Job} implementation with an exception handler etc.
@@ -71,10 +70,13 @@ public abstract class AbstractJob implements Job
    * scopes are initialized!
    *
    * @param aJobDataMap
-   *        The current job data map. Never <code>null</code>.
+   *        The current job data map. Never <code>null</code>. The map might be
+   *        modified inside of this method.
+   * @param aContext
+   *        The current job execution context. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap)
+  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final JobExecutionContext aContext)
   {}
 
   /**
@@ -93,11 +95,15 @@ public abstract class AbstractJob implements Job
    *
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
+   * @param aContext
+   *        The current job execution context. Never <code>null</code>.
    * @param eExecSuccess
    *        The execution success state. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final ESuccess eExecSuccess)
+  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap,
+                               @Nonnull final JobExecutionContext aContext,
+                               @Nonnull final ESuccess eExecSuccess)
   {}
 
   /**
@@ -109,18 +115,15 @@ public abstract class AbstractJob implements Job
    *        The name of the job class
    * @param aJob
    *        The {@link Job} instance
-   * @param bIsLongRunning
-   *        <code>true</code> if it is a long running job
    */
   protected static void triggerCustomExceptionHandler (@Nonnull final Throwable t,
                                                        @Nullable final String sJobClassName,
-                                                       @Nonnull final Job aJob,
-                                                       final boolean bIsLongRunning)
+                                                       @Nonnull final Job aJob)
   {
     for (final IJobExceptionCallback aCustomExceptionHandler : getExceptionCallbacks ().getAllCallbacks ())
       try
       {
-        aCustomExceptionHandler.onScheduledJobException (t, sJobClassName, aJob, bIsLongRunning);
+        aCustomExceptionHandler.onScheduledJobException (t, sJobClassName, aJob);
       }
       catch (final Throwable t2)
       {
@@ -141,7 +144,7 @@ public abstract class AbstractJob implements Job
     // alteration
     final JobDataMap aJobDataMap = new JobDataMap (aContext.getMergedJobDataMap ());
 
-    beforeExecute (aJobDataMap);
+    beforeExecute (aJobDataMap, aContext);
     try
     {
       final String sJobClassName = getClass ().getName ();
@@ -171,7 +174,7 @@ public abstract class AbstractJob implements Job
         s_aStatsCounterFailure.increment (sJobClassName);
 
         // Notify custom exception handler
-        triggerCustomExceptionHandler (t, sJobClassName, this, this instanceof ILongRunningJob);
+        triggerCustomExceptionHandler (t, sJobClassName, this);
 
         if (t instanceof JobExecutionException)
           throw (JobExecutionException) t;
@@ -181,7 +184,7 @@ public abstract class AbstractJob implements Job
     finally
     {
       // Invoke callback
-      afterExecute (aJobDataMap, eExecSuccess);
+      afterExecute (aJobDataMap, aContext, eExecSuccess);
     }
   }
 }

@@ -22,6 +22,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import org.quartz.Job;
 import org.quartz.JobDataMap;
+import org.quartz.JobExecutionContext;
 
 import com.helger.commons.annotations.OverrideOnDemand;
 import com.helger.commons.scopes.mgr.ScopeManager;
@@ -35,7 +36,7 @@ import com.helger.web.scopes.mgr.WebScopeManager;
  * Abstract {@link Job} implementation that handles request scopes correctly.
  * This is required, because each scheduled job runs in its own thread so that
  * no default {@link ScopeManager} information would be available.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -47,10 +48,13 @@ public abstract class AbstractScopeAwareJob extends AbstractJob
   /**
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
+   * @param aContext
+   *        The current job execution context. Never <code>null</code>.
    * @return The application scope ID to be used. May not be <code>null</code>.
    */
   @Nonnull
-  protected abstract String getApplicationScopeID (@Nonnull final JobDataMap aJobDataMap);
+  protected abstract String getApplicationScopeID (@Nonnull JobDataMap aJobDataMap,
+                                                   @Nonnull JobExecutionContext aContext);
 
   /**
    * @return The dummy HTTP request to be used for executing this job. By
@@ -77,67 +81,60 @@ public abstract class AbstractScopeAwareJob extends AbstractJob
   /**
    * Called before the job gets executed. This method is called after the scopes
    * are initialized!
-   * 
+   *
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
+   * @param aContext
+   *        The current job execution context. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void beforeExecuteInScope (@Nonnull final JobDataMap aJobDataMap)
+  protected void beforeExecuteInScope (@Nonnull final JobDataMap aJobDataMap,
+                                       @Nonnull final JobExecutionContext aContext)
   {}
 
-  /**
-   * Called before the job gets executed. This method is called before the
-   * scopes are initialized!
-   * 
-   * @param aJobDataMap
-   *        The current job data map. Never <code>null</code>.
-   */
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap)
+  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final JobExecutionContext aContext)
   {
     // Scopes (ensure to create a new scope each time!)
-    final String sApplicationScopeID = getApplicationScopeID (aJobDataMap);
+    final String sApplicationScopeID = getApplicationScopeID (aJobDataMap, aContext);
     final MockHttpServletRequest aHttpRequest = createMockHttpServletRequest ();
     final MockHttpServletResponse aHttpResponse = createMockHttpServletResponse ();
     WebScopeManager.onRequestBegin (sApplicationScopeID, aHttpRequest, aHttpResponse);
 
     // Invoke callback
-    beforeExecuteInScope (aJobDataMap);
+    beforeExecuteInScope (aJobDataMap, aContext);
   }
 
   /**
    * Called after the job gets executed. This method is called before the scopes
    * are destroyed.
-   * 
+   *
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
+   * @param aContext
+   *        The current job execution context. Never <code>null</code>.
    * @param eExecSuccess
    *        The execution success state. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void afterExecuteInScope (@Nonnull final JobDataMap aJobDataMap, @Nonnull final ESuccess eExecSuccess)
+  protected void afterExecuteInScope (@Nonnull final JobDataMap aJobDataMap,
+                                      @Nonnull final JobExecutionContext aContext,
+                                      @Nonnull final ESuccess eExecSuccess)
   {}
 
-  /**
-   * Called after the job gets executed. This method is called after the scopes
-   * are destroyed.
-   * 
-   * @param aJobDataMap
-   *        The current job data map. Never <code>null</code>.
-   * @param eExecSuccess
-   *        The execution success state. Never <code>null</code>.
-   */
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final ESuccess eExecSuccess)
+  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap,
+                               @Nonnull final JobExecutionContext aContext,
+                               @Nonnull final ESuccess eExecSuccess)
   {
     try
     {
       // Invoke callback
-      afterExecuteInScope (aJobDataMap, eExecSuccess);
+      afterExecuteInScope (aJobDataMap, aContext, eExecSuccess);
     }
     finally
     {
