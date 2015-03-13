@@ -27,7 +27,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 /**
  * Misc utility methods around Quartz schedulers
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -38,6 +38,15 @@ public final class QuartzSchedulerHelper
 
   private QuartzSchedulerHelper ()
   {}
+
+  /**
+   * @return The global scheduler factory that is used. Never <code>null</code>.
+   */
+  @Nonnull
+  public static SchedulerFactory getSchedulerFactory ()
+  {
+    return s_aSchedulerFactory;
+  }
 
   /**
    * @return The single {@link Scheduler} instance that is ensured to be
@@ -52,7 +61,7 @@ public final class QuartzSchedulerHelper
 
   /**
    * Get the underlying Quartz scheduler
-   * 
+   *
    * @param bStartAutomatically
    *        If <code>true</code> the returned scheduler is automatically
    *        started. If <code>false</code> the state is not changed.
@@ -78,7 +87,7 @@ public final class QuartzSchedulerHelper
   /**
    * Get the metadata of the scheduler. The state of the scheduler is not
    * changed within this method.
-   * 
+   *
    * @return The metadata of the underlying scheduler.
    */
   @Nonnull
