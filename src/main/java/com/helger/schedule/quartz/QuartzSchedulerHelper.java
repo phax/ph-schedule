@@ -41,6 +41,7 @@ public final class QuartzSchedulerHelper
 
   /**
    * @return The global scheduler factory that is used. Never <code>null</code>.
+   * @since 1.8.2
    */
   @Nonnull
   public static SchedulerFactory getSchedulerFactory ()
