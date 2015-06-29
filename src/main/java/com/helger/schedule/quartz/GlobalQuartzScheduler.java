@@ -36,13 +36,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotations.DevelopersNote;
-import com.helger.commons.annotations.Nonempty;
-import com.helger.commons.annotations.OverrideOnDemand;
-import com.helger.commons.annotations.UsedViaReflection;
-import com.helger.commons.exceptions.LoggedRuntimeException;
-import com.helger.commons.scopes.IScope;
-import com.helger.commons.scopes.singleton.GlobalSingleton;
+import com.helger.commons.annotation.DevelopersNote;
+import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.annotation.OverrideOnDemand;
+import com.helger.commons.annotation.UsedViaReflection;
+import com.helger.commons.exception.LoggedRuntimeException;
+import com.helger.commons.scope.IScope;
+import com.helger.commons.scope.singleton.AbstractGlobalSingleton;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
 
 /**
@@ -50,7 +50,7 @@ import com.helger.schedule.quartz.listener.StatisticsJobListener;
  *
  * @author Philip Helger
  */
-public class GlobalQuartzScheduler extends GlobalSingleton
+public class GlobalQuartzScheduler extends AbstractGlobalSingleton
 {
   public static final String GROUP_NAME = "com.helger";
 

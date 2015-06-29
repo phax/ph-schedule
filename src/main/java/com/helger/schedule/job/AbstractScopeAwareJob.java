@@ -24,8 +24,8 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 
-import com.helger.commons.annotations.OverrideOnDemand;
-import com.helger.commons.scopes.mgr.ScopeManager;
+import com.helger.commons.annotation.OverrideOnDemand;
+import com.helger.commons.scope.mgr.ScopeManager;
 import com.helger.commons.state.ESuccess;
 import com.helger.web.mock.MockHttpServletRequest;
 import com.helger.web.mock.MockHttpServletResponse;

@@ -27,13 +27,13 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.annotations.OverrideOnDemand;
-import com.helger.commons.annotations.ReturnsMutableObject;
+import com.helger.commons.annotation.OverrideOnDemand;
+import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.callback.CallbackList;
 import com.helger.commons.state.ESuccess;
-import com.helger.commons.stats.IStatisticsHandlerKeyedCounter;
-import com.helger.commons.stats.IStatisticsHandlerKeyedTimer;
-import com.helger.commons.stats.StatisticsManager;
+import com.helger.commons.statistics.IMutableStatisticsHandlerKeyedCounter;
+import com.helger.commons.statistics.IMutableStatisticsHandlerKeyedTimer;
+import com.helger.commons.statistics.StatisticsManager;
 import com.helger.commons.timing.StopWatch;
 
 /**
@@ -45,11 +45,11 @@ import com.helger.commons.timing.StopWatch;
 public abstract class AbstractJob implements Job
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractJob.class);
-  private static final IStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (AbstractJob.class);
-  private static final IStatisticsHandlerKeyedCounter s_aStatsCounterSuccess = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
-                                                                                                                         "$success");
-  private static final IStatisticsHandlerKeyedCounter s_aStatsCounterFailure = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
-                                                                                                                         "$failure");
+  private static final IMutableStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (AbstractJob.class);
+  private static final IMutableStatisticsHandlerKeyedCounter s_aStatsCounterSuccess = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
+                                                                                                                                "$success");
+  private static final IMutableStatisticsHandlerKeyedCounter s_aStatsCounterFailure = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
+                                                                                                                                "$failure");
   private static final CallbackList <IJobExceptionCallback> s_aExceptionCallbacks = new CallbackList <IJobExceptionCallback> ();
 
   public AbstractJob ()
@@ -59,7 +59,7 @@ public abstract class AbstractJob implements Job
    * @return The custom exception handler. Never <code>null</code>.
    */
   @Nonnull
-  @ReturnsMutableObject (reason = "design")
+  @ReturnsMutableObject ("design")
   public static CallbackList <IJobExceptionCallback> getExceptionCallbacks ()
   {
     return s_aExceptionCallbacks;
@@ -153,7 +153,7 @@ public abstract class AbstractJob implements Job
         if (s_aLogger.isDebugEnabled ())
           s_aLogger.debug ("Executing scheduled job " + sJobClassName);
 
-        final StopWatch aSW = new StopWatch (true);
+        final StopWatch aSW = StopWatch.createdStarted ();
 
         // Main execution
         onExecute (aContext);

@@ -22,14 +22,14 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
 
-import com.helger.commons.annotations.Nonempty;
-import com.helger.commons.lang.CGStringHelper;
-import com.helger.commons.stats.StatisticsManager;
+import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.lang.ClassHelper;
+import com.helger.commons.statistics.StatisticsManager;
 
 /**
  * A Quartz job listener that handles statistics for job executions. It handles
  * vetoed job executions as well as job executions.
- * 
+ *
  * @author Philip Helger
  */
 public class StatisticsJobListener implements JobListener
@@ -45,7 +45,7 @@ public class StatisticsJobListener implements JobListener
   @Nonempty
   protected String getStatisticsName (@Nonnull final JobExecutionContext aContext)
   {
-    return "quartz." + CGStringHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
+    return "quartz." + ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
   }
 
   public void jobToBeExecuted (@Nonnull final JobExecutionContext aContext)

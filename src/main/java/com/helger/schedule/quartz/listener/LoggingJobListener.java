@@ -24,15 +24,15 @@ import org.quartz.JobListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.annotations.Nonempty;
-import com.helger.commons.lang.CGStringHelper;
+import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.lang.ClassHelper;
 
 /**
  * An implementation of the {@link JobListener} interface that logs job
  * executions. Before execution debug log level is used, for vetoed executions
  * warning level is used and after job execution either info (upon success) or
  * error (in case of an execution) is used.
- * 
+ *
  * @author Philip Helger
  */
 public class LoggingJobListener implements JobListener
@@ -50,7 +50,7 @@ public class LoggingJobListener implements JobListener
   @Nonempty
   protected String getJobName (@Nonnull final JobExecutionContext aContext)
   {
-    return CGStringHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
+    return ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
   }
 
   public void jobToBeExecuted (@Nonnull final JobExecutionContext aContext)
