@@ -22,11 +22,11 @@ import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
 
 /**
- * Typesafe implementation of GroupMatcher for {@link TriggerKey}
- * 
+ * Type-safe implementation of GroupMatcher for {@link TriggerKey}
+ *
  * @author Philip Helger
  */
-public final class TriggerKeyGroupMatcher extends GroupMatcher <TriggerKey>
+public class TriggerKeyGroupMatcher extends GroupMatcher <TriggerKey>
 {
   public TriggerKeyGroupMatcher (@Nonnull final String sCompareTo, @Nonnull final StringOperatorName eCompareWith)
   {

@@ -22,11 +22,11 @@ import org.quartz.JobKey;
 import org.quartz.impl.matchers.GroupMatcher;
 
 /**
- * Typesafe implementation of GroupMatcher for {@link JobKey}
- * 
+ * Type-safe implementation of GroupMatcher for {@link JobKey}
+ *
  * @author Philip Helger
  */
-public final class JobKeyGroupMatcher extends GroupMatcher <JobKey>
+public class JobKeyGroupMatcher extends GroupMatcher <JobKey>
 {
   public JobKeyGroupMatcher (@Nonnull final String sCompareTo, @Nonnull final StringOperatorName eCompareWith)
   {
