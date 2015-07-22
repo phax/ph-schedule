@@ -30,7 +30,7 @@ import com.helger.commons.state.ESuccess;
 import com.helger.web.mock.MockHttpServletRequest;
 import com.helger.web.mock.MockHttpServletResponse;
 import com.helger.web.mock.OfflineHttpServletRequest;
-import com.helger.web.scopes.mgr.WebScopeManager;
+import com.helger.web.scope.mgr.WebScopeManager;
 
 /**
  * Abstract {@link Job} implementation that handles request scopes correctly.
