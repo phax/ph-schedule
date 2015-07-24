@@ -31,18 +31,19 @@ import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.EverythingMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotation.DevelopersNote;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.OverrideOnDemand;
 import com.helger.commons.annotation.UsedViaReflection;
 import com.helger.commons.exception.LoggedRuntimeException;
 import com.helger.commons.scope.IScope;
 import com.helger.commons.scope.singleton.AbstractGlobalSingleton;
+import com.helger.commons.state.EChange;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
 
 /**
@@ -50,7 +51,7 @@ import com.helger.schedule.quartz.listener.StatisticsJobListener;
  *
  * @author Philip Helger
  */
-public class GlobalQuartzScheduler extends AbstractGlobalSingleton
+public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 {
   public static final String GROUP_NAME = "com.helger";
 
@@ -59,12 +60,12 @@ public class GlobalQuartzScheduler extends AbstractGlobalSingleton
   private final Scheduler m_aScheduler;
   private String m_sGroupName = GROUP_NAME;
 
+  @Deprecated
   @UsedViaReflection
-  @DevelopersNote ("Used from derived classes")
   public GlobalQuartzScheduler ()
   {
-    // main scheduler
-    m_aScheduler = QuartzSchedulerHelper.getScheduler ();
+    // main scheduler - start directly
+    m_aScheduler = QuartzSchedulerHelper.getScheduler (true);
 
     // Always add the statistics listener
     addJobListener (new StatisticsJobListener ());
@@ -116,7 +117,7 @@ public class GlobalQuartzScheduler extends AbstractGlobalSingleton
     }
     catch (final SchedulerException ex)
     {
-      throw new IllegalStateException ("Failed to add job listener " + aJobListener, ex);
+      throw new IllegalStateException ("Failed to add job listener " + aJobListener.toString (), ex);
     }
   }
 
@@ -124,7 +125,7 @@ public class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @return The underlying Quartz scheduler object. Never <code>null</code>.
    */
   @Nonnull
-  protected final Scheduler getScheduler ()
+  public final Scheduler getScheduler ()
   {
     return m_aScheduler;
   }
@@ -152,11 +153,13 @@ public class GlobalQuartzScheduler extends AbstractGlobalSingleton
    *        Class to execute
    * @param aJobData
    *        Additional parameters. May be <code>null</code>.
+   * @return The created trigger key for further usage. Never <code>null</code>.
    */
-  public final void scheduleJob (@Nonnull final String sJobName,
-                                 @Nonnull final TriggerBuilder <? extends Trigger> aTriggerBuilder,
-                                 @Nonnull final Class <? extends Job> aJobClass,
-                                 @Nullable final Map <String, ? extends Object> aJobData)
+  @Nonnull
+  public final TriggerKey scheduleJob (@Nonnull final String sJobName,
+                                       @Nonnull final TriggerBuilder <? extends Trigger> aTriggerBuilder,
+                                       @Nonnull final Class <? extends Job> aJobClass,
+                                       @Nullable final Map <String, ? extends Object> aJobData)
   {
     ValueEnforcer.notNull (sJobName, "JobName");
     ValueEnforcer.notNull (aTriggerBuilder, "TriggerBuilder");
@@ -180,7 +183,9 @@ public class GlobalQuartzScheduler extends AbstractGlobalSingleton
       final Trigger aTrigger = aTriggerBuilder.build ();
       m_aScheduler.scheduleJob (aJobDetail, aTrigger);
 
-      s_aLogger.info ("Succesfully scheduled job '" + sJobName + "' with trigger " + aTrigger);
+      final TriggerKey ret = aTrigger.getKey ();
+      s_aLogger.info ("Succesfully scheduled job '" + sJobName + "' with TriggerKey " + ret.toString ());
+      return ret;
     }
     catch (final SchedulerException ex)
     {
@@ -197,19 +202,91 @@ public class GlobalQuartzScheduler extends AbstractGlobalSingleton
    *        The Job class to be executed.
    * @param aJobData
    *        Optional job data map.
+   * @return The created trigger key for further usage. Never <code>null</code>.
    */
-  public void scheduleJobNowOnce (@Nonnull final String sJobName,
-                                  @Nonnull final Class <? extends Job> aJobClass,
-                                  @Nullable final Map <String, ? extends Object> aJobData)
+  @Nonnull
+  public TriggerKey scheduleJobNowOnce (@Nonnull final String sJobName,
+                                        @Nonnull final Class <? extends Job> aJobClass,
+                                        @Nullable final Map <String, ? extends Object> aJobData)
   {
-    scheduleJob (sJobName,
-                 TriggerBuilder.newTrigger ()
-                               .startNow ()
-                               .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
-                                                                   .withIntervalInMinutes (1)
-                                                                   .withRepeatCount (0)),
-                 aJobClass,
-                 aJobData);
+    return scheduleJob (sJobName,
+                        TriggerBuilder.newTrigger ()
+                                      .startNow ()
+                                      .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
+                                                                          .withIntervalInMinutes (1)
+                                                                          .withRepeatCount (0)),
+                        aJobClass,
+                        aJobData);
+  }
+
+  /**
+   * Unschedule the job with the specified trigger key as returned from
+   * {@link #scheduleJob(String, TriggerBuilder, Class, Map)}.
+   *
+   * @param aTriggerKey
+   *        Trigger key to use. May not be <code>null</code>.
+   * @return {@link EChange}.
+   */
+  @Nonnull
+  public EChange unscheduleJob (@Nonnull final TriggerKey aTriggerKey)
+  {
+    ValueEnforcer.notNull (aTriggerKey, "TriggerKey");
+    try
+    {
+      if (m_aScheduler.unscheduleJob (aTriggerKey))
+      {
+        s_aLogger.info ("Succesfully unscheduled job with TriggerKey " + aTriggerKey.toString ());
+        return EChange.CHANGED;
+      }
+    }
+    catch (final SchedulerException ex)
+    {
+      s_aLogger.error ("Failed to unschedule job with TriggerKey " + aTriggerKey.toString (), ex);
+    }
+    return EChange.UNCHANGED;
+  }
+
+  /**
+   * Pause the job with the specified trigger key as returned from
+   * {@link #scheduleJob(String, TriggerBuilder, Class, Map)}.
+   *
+   * @param aTriggerKey
+   *        Trigger key to use. May not be <code>null</code>.
+   * @see #resumeJob(TriggerKey)
+   */
+  public void pauseJob (@Nonnull final TriggerKey aTriggerKey)
+  {
+    ValueEnforcer.notNull (aTriggerKey, "TriggerKey");
+    try
+    {
+      m_aScheduler.pauseTrigger (aTriggerKey);
+      s_aLogger.info ("Succesfully paused job with TriggerKey " + aTriggerKey.toString ());
+    }
+    catch (final SchedulerException ex)
+    {
+      s_aLogger.error ("Failed to pause job with TriggerKey " + aTriggerKey.toString (), ex);
+    }
+  }
+
+  /**
+   * Resume the job with the specified trigger key as returned from
+   * {@link #scheduleJob(String, TriggerBuilder, Class, Map)}.
+   *
+   * @param aTriggerKey
+   *        Trigger key to use. May not be <code>null</code>.
+   */
+  public void resumeJob (@Nonnull final TriggerKey aTriggerKey)
+  {
+    ValueEnforcer.notNull (aTriggerKey, "TriggerKey");
+    try
+    {
+      m_aScheduler.resumeTrigger (aTriggerKey);
+      s_aLogger.info ("Succesfully resumed job with TriggerKey " + aTriggerKey.toString ());
+    }
+    catch (final SchedulerException ex)
+    {
+      s_aLogger.error ("Failed to resume job with TriggerKey " + aTriggerKey.toString (), ex);
+    }
   }
 
   /**
@@ -218,7 +295,7 @@ public class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @throws SchedulerException
    *         If something goes wrong
    */
-  public final void shutdown () throws SchedulerException
+  public void shutdown () throws SchedulerException
   {
     try
     {

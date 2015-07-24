@@ -16,14 +16,41 @@
  */
 package com.helger.schedule.quartz;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.id.IHasID;
+import com.helger.commons.lang.EnumHelper;
+
 /**
  * Defines the different scheduler states.
- * 
+ *
  * @author Philip Helger
  */
-public enum ESchedulerState
+public enum ESchedulerState implements IHasID <String>
 {
-  STARTED,
-  STANDBY,
-  SHUTDOWN;
+ STARTED ("started"),
+ STANDBY ("standby"),
+ SHUTDOWN ("shutdown");
+
+  private String m_sID;
+
+  private ESchedulerState (@Nonnull @Nonempty final String sID)
+  {
+    m_sID = sID;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getID ()
+  {
+    return m_sID;
+  }
+
+  @Nullable
+  public static ESchedulerState getFromIDOrNull (@Nullable final String sID)
+  {
+    return EnumHelper.getFromIDOrNull (ESchedulerState.class, sID);
+  }
 }

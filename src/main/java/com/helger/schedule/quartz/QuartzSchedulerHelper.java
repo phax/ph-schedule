@@ -81,7 +81,10 @@ public final class QuartzSchedulerHelper
     }
     catch (final SchedulerException ex)
     {
-      throw new IllegalStateException ("Failed to create and start scheduler!", ex);
+      throw new IllegalStateException ("Failed to create" +
+                                       (bStartAutomatically ? " and start" : "") +
+                                       " scheduler!",
+                                       ex);
     }
   }
 
@@ -121,11 +124,11 @@ public final class QuartzSchedulerHelper
         return ESchedulerState.STANDBY;
       if (aScheduler.isShutdown ())
         return ESchedulerState.SHUTDOWN;
+      throw new IllegalStateException ("Unknown scheduler state: " + aScheduler.toString ());
     }
     catch (final SchedulerException ex)
     {
       throw new IllegalStateException ("Error retrieving scheduler state!", ex);
     }
-    throw new IllegalStateException ("Unknown scheduler state!");
   }
 }
