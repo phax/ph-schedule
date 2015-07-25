@@ -18,6 +18,7 @@
 
 -->
 <changelog xmlns="http://www.helger.com/xsd/changelog/1.0" version="1.0" component="ph-schedule">
+  <release date="2015-07-25" version="2.1.0" />
   <entry date="2015-07-24" category="api" action="update">
     <change>
       <text locale="en">Extended the GlobalQuartzScheduler API to pause, resume and unschedule jobs</text>
