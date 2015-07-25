@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
-import com.helger.commons.annotation.OverrideOnDemand;
 import com.helger.commons.annotation.UsedViaReflection;
 import com.helger.commons.exception.LoggedRuntimeException;
 import com.helger.commons.scope.IScope;
@@ -72,7 +71,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
   }
 
   @Nonnull
-  public static final GlobalQuartzScheduler getInstance ()
+  public static GlobalQuartzScheduler getInstance ()
   {
     return getGlobalSingleton (GlobalQuartzScheduler.class);
   }
@@ -125,21 +124,10 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @return The underlying Quartz scheduler object. Never <code>null</code>.
    */
   @Nonnull
-  public final Scheduler getScheduler ()
+  public Scheduler getScheduler ()
   {
     return m_aScheduler;
   }
-
-  /**
-   * Modify the JobData map in derived classes. This is e.g. used in pdaf3 to
-   * set the correct state data in executed jobs.
-   *
-   * @param aJobDataMap
-   *        The job data map to modify. Never <code>null</code>.
-   */
-  @OverrideOnDemand
-  protected void modifyJobDataMap (@Nonnull final JobDataMap aJobDataMap)
-  {}
 
   /**
    * This method is only for testing purposes.
@@ -156,10 +144,10 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @return The created trigger key for further usage. Never <code>null</code>.
    */
   @Nonnull
-  public final TriggerKey scheduleJob (@Nonnull final String sJobName,
-                                       @Nonnull final TriggerBuilder <? extends Trigger> aTriggerBuilder,
-                                       @Nonnull final Class <? extends Job> aJobClass,
-                                       @Nullable final Map <String, ? extends Object> aJobData)
+  public TriggerKey scheduleJob (@Nonnull final String sJobName,
+                                 @Nonnull final TriggerBuilder <? extends Trigger> aTriggerBuilder,
+                                 @Nonnull final Class <? extends Job> aJobClass,
+                                 @Nullable final Map <String, ? extends Object> aJobData)
   {
     ValueEnforcer.notNull (sJobName, "JobName");
     ValueEnforcer.notNull (aTriggerBuilder, "TriggerBuilder");
@@ -173,9 +161,6 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     if (aJobData != null)
       for (final Map.Entry <String, ? extends Object> aEntry : aJobData.entrySet ())
         aJobDataMap.put (aEntry.getKey (), aEntry.getValue ());
-
-    // Add parameters via callback as well
-    modifyJobDataMap (aJobDataMap);
 
     try
     {
@@ -311,7 +296,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
   }
 
   @Override
-  protected final void onDestroy (@Nonnull final IScope aScopeInDestruction) throws Exception
+  protected void onDestroy (@Nonnull final IScope aScopeInDestruction) throws Exception
   {
     shutdown ();
   }
