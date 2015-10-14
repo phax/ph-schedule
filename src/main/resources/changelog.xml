@@ -18,6 +18,11 @@
 
 -->
 <changelog xmlns="http://www.helger.com/xsd/changelog/1.0" version="1.0" component="ph-schedule">
+  <entry date="2015-10-14" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to Quartz 2.2.2</text>
+    </change>
+  </entry>
   <release date="2015-07-25" version="2.1.0" />
   <entry date="2015-07-24" category="api" action="update">
     <change>
