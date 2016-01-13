@@ -70,7 +70,7 @@ import com.helger.commons.hashcode.HashCodeGenerator;
 
 /**
  * {@link JobStore} implementation based on {@link org.quartz.simpl.RAMJobStore}
- * 
+ *
  * @author Philip Helger
  */
 public class BaseJobStore implements JobStore
@@ -80,16 +80,16 @@ public class BaseJobStore implements JobStore
 
   private final SimpleReadWriteLock m_aRWLock = new SimpleReadWriteLock ();
   private SchedulerSignaler m_aSignaler;
-  private final Map <JobKey, JobWrapper> m_aJobsByKey = new HashMap <JobKey, JobWrapper> (1000);
-  private final Map <TriggerKey, TriggerWrapper> m_aTriggersByKey = new HashMap <TriggerKey, TriggerWrapper> (1000);
-  private final Map <String, Map <JobKey, JobWrapper>> m_aJobsByGroup = new HashMap <String, Map <JobKey, JobWrapper>> (25);
-  private final Map <String, Map <TriggerKey, TriggerWrapper>> m_aTriggersByGroup = new HashMap <String, Map <TriggerKey, TriggerWrapper>> (25);
-  private final NavigableSet <TriggerWrapper> m_aTimeTriggers = new TreeSet <TriggerWrapper> (new TriggerWrapperComparator ());
-  private final Map <String, Calendar> m_aCalendarsByName = new HashMap <String, Calendar> (25);
-  private final List <TriggerWrapper> m_aTriggers = new ArrayList <TriggerWrapper> (1000);
-  private final Set <String> m_aPausedTriggerGroups = new HashSet <String> ();
-  private final Set <String> m_aPausedJobGroups = new HashSet <String> ();
-  private final Set <JobKey> m_aBlockedJobs = new HashSet <JobKey> ();
+  private final Map <JobKey, JobWrapper> m_aJobsByKey = new HashMap <> (1000);
+  private final Map <TriggerKey, TriggerWrapper> m_aTriggersByKey = new HashMap <> (1000);
+  private final Map <String, Map <JobKey, JobWrapper>> m_aJobsByGroup = new HashMap <> (25);
+  private final Map <String, Map <TriggerKey, TriggerWrapper>> m_aTriggersByGroup = new HashMap <> (25);
+  private final NavigableSet <TriggerWrapper> m_aTimeTriggers = new TreeSet <> (new TriggerWrapperComparator ());
+  private final Map <String, Calendar> m_aCalendarsByName = new HashMap <> (25);
+  private final List <TriggerWrapper> m_aTriggers = new ArrayList <> (1000);
+  private final Set <String> m_aPausedTriggerGroups = new HashSet <> ();
+  private final Set <String> m_aPausedJobGroups = new HashSet <> ();
+  private final Set <JobKey> m_aBlockedJobs = new HashSet <> ();
   private long m_nMisfireThreshold = 5000L;
 
   public BaseJobStore ()
@@ -97,15 +97,9 @@ public class BaseJobStore implements JobStore
 
   public void initialize (final ClassLoadHelper loadHelper, final SchedulerSignaler aSignaler)
   {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       m_aSignaler = aSignaler;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
     s_aLogger.info ("ph-schedule JobStore initialized.");
   }
 
@@ -127,15 +121,7 @@ public class BaseJobStore implements JobStore
   @Nonnegative
   public long getMisfireThreshold ()
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_nMisfireThreshold;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked ( () -> m_nMisfireThreshold);
   }
 
   /**
@@ -149,15 +135,9 @@ public class BaseJobStore implements JobStore
   public void setMisfireThreshold (@Nonnegative final long nMisfireThreshold)
   {
     ValueEnforcer.isGT0 (nMisfireThreshold, "MisfireThreshold");
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       m_nMisfireThreshold = nMisfireThreshold;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   public void shutdown ()
@@ -198,7 +178,8 @@ public class BaseJobStore implements JobStore
       removeCalendar (name);
   }
 
-  public void storeJobAndTrigger (final JobDetail aNewJob, final OperableTrigger aNewTrigger) throws JobPersistenceException
+  public void storeJobAndTrigger (final JobDetail aNewJob,
+                                  final OperableTrigger aNewTrigger) throws JobPersistenceException
   {
     storeJob (aNewJob, false);
     storeTrigger (aNewTrigger, false);
@@ -227,17 +208,15 @@ public class BaseJobStore implements JobStore
       m_aRWLock.readLock ().unlock ();
     }
 
-    m_aRWLock.writeLock ().lock ();
-    try
+    if (!bReplace)
     {
-      if (!bReplace)
-      {
+      m_aRWLock.writeLocked ( () -> {
         // get job group
         final String sGroupName = aKey.getGroup ();
         Map <JobKey, JobWrapper> aMap = m_aJobsByGroup.get (sGroupName);
         if (aMap == null)
         {
-          aMap = new HashMap <JobKey, JobWrapper> (100);
+          aMap = new HashMap <> (100);
           m_aJobsByGroup.put (sGroupName, aMap);
         }
 
@@ -246,37 +225,32 @@ public class BaseJobStore implements JobStore
         aMap.put (aKey, jw);
         // add to jobs by FQN map
         m_aJobsByKey.put (aKey, jw);
-      }
-      else
-      {
+      });
+    }
+    else
+    {
+      m_aRWLock.writeLocked ( () -> {
         // update job detail
         aOld.setJobDetail ((JobDetail) aNewJob.clone ());
-      }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
+      });
     }
   }
 
   public boolean removeJob (final JobKey jobKey)
   {
-    boolean bFound = false;
+    boolean bFoundTrigger = false;
 
     final List <OperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
     for (final OperableTrigger trig : triggersOfJob)
     {
       removeTrigger (trig.getKey ());
-      bFound = true;
+      bFoundTrigger = true;
     }
+    final boolean bFinalFoundTrigger = bFoundTrigger;
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      if (m_aJobsByKey.remove (jobKey) != null)
-        bFound = true;
-
-      if (!bFound)
+    return m_aRWLock.writeLocked ( () -> {
+      final boolean bRemovedJob = m_aJobsByKey.remove (jobKey) != null;
+      if (!bFinalFoundTrigger && !bRemovedJob)
         return false;
 
       final Map <JobKey, JobWrapper> aGrpMap = m_aJobsByGroup.get (jobKey.getGroup ());
@@ -287,11 +261,7 @@ public class BaseJobStore implements JobStore
           m_aJobsByGroup.remove (jobKey.getGroup ());
       }
       return true;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   public boolean removeJobs (@Nonnull final List <JobKey> jobKeys) throws JobPersistenceException
@@ -337,7 +307,8 @@ public class BaseJobStore implements JobStore
     }
   }
 
-  public void storeTrigger (@Nonnull final OperableTrigger aNewTrigger, final boolean bReplaceExisting) throws JobPersistenceException
+  public void storeTrigger (@Nonnull final OperableTrigger aNewTrigger,
+                            final boolean bReplaceExisting) throws JobPersistenceException
   {
     final TriggerKey aTriggerKey = aNewTrigger.getKey ();
 
@@ -349,13 +320,13 @@ public class BaseJobStore implements JobStore
     }
 
     if (retrieveJob (aNewTrigger.getJobKey ()) == null)
-      throw new JobPersistenceException ("The job (" + aNewTrigger.getJobKey () + ") referenced by the trigger does not exist.");
+      throw new JobPersistenceException ("The job (" +
+                                         aNewTrigger.getJobKey () +
+                                         ") referenced by the trigger does not exist.");
 
     final TriggerWrapper tw = new TriggerWrapper ((OperableTrigger) aNewTrigger.clone ());
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       // add to triggers array
       m_aTriggers.add (tw);
       // add to triggers by group
@@ -370,7 +341,8 @@ public class BaseJobStore implements JobStore
       // add to triggers by FQN map
       m_aTriggersByKey.put (aTriggerKey, tw);
 
-      if (m_aPausedTriggerGroups.contains (sTriggerGroupName) || m_aPausedJobGroups.contains (aNewTrigger.getJobKey ().getGroup ()))
+      if (m_aPausedTriggerGroups.contains (sTriggerGroupName) ||
+          m_aPausedJobGroups.contains (aNewTrigger.getJobKey ().getGroup ()))
       {
         tw.setState (TriggerWrapper.STATE_PAUSED);
         if (m_aBlockedJobs.contains (tw.getJobKey ()))
@@ -383,11 +355,7 @@ public class BaseJobStore implements JobStore
         {
           m_aTimeTriggers.add (tw);
         }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   /**
@@ -407,9 +375,7 @@ public class BaseJobStore implements JobStore
   @IsLocked (ELockType.WRITE)
   private boolean _removeTrigger (@Nonnull final TriggerKey key, final boolean bRemoveOrphanedJob)
   {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    return m_aRWLock.writeLocked ( () -> {
       // remove from triggers by FQN map
       if (m_aTriggersByKey.remove (key) == null)
         return false;
@@ -448,18 +414,15 @@ public class BaseJobStore implements JobStore
       }
 
       return true;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   /**
    * @see org.quartz.spi.JobStore#replaceTrigger(TriggerKey triggerKey,
    *      OperableTrigger newTrigger)
    */
-  public boolean replaceTrigger (final TriggerKey aTriggerKey, final OperableTrigger aNewTrigger) throws JobPersistenceException
+  public boolean replaceTrigger (final TriggerKey aTriggerKey,
+                                 final OperableTrigger aNewTrigger) throws JobPersistenceException
   {
     TriggerWrapper tw;
     m_aRWLock.writeLock ().lock ();
@@ -524,16 +487,10 @@ public class BaseJobStore implements JobStore
    */
   public JobDetail retrieveJob (final JobKey jobKey)
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    return m_aRWLock.readLocked ( () -> {
       final JobWrapper jw = m_aJobsByKey.get (jobKey);
       return jw != null ? (JobDetail) jw.getJobDetail ().clone () : null;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
   }
 
   /**
@@ -545,49 +502,25 @@ public class BaseJobStore implements JobStore
    */
   public OperableTrigger retrieveTrigger (final TriggerKey triggerKey)
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    return m_aRWLock.readLocked ( () -> {
       final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
       return tw != null ? (OperableTrigger) tw.getTrigger ().clone () : null;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
   }
 
   public boolean checkExists (final JobKey jobKey) throws JobPersistenceException
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_aJobsByKey.containsKey (jobKey);
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked ( () -> m_aJobsByKey.containsKey (jobKey));
   }
 
   public boolean checkExists (final TriggerKey aTriggerKey) throws JobPersistenceException
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_aTriggersByKey.containsKey (aTriggerKey);
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked ( () -> m_aTriggersByKey.containsKey (aTriggerKey));
   }
 
   public TriggerState getTriggerState (final TriggerKey triggerKey) throws JobPersistenceException
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    return m_aRWLock.readLocked ( () -> {
       final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
 
       if (tw == null)
@@ -609,11 +542,7 @@ public class BaseJobStore implements JobStore
         return TriggerState.ERROR;
 
       return TriggerState.NORMAL;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
   }
 
   public void storeCalendar (final String name,
@@ -621,9 +550,7 @@ public class BaseJobStore implements JobStore
                              final boolean bReplaceExisting,
                              final boolean bUpdateTriggers) throws ObjectAlreadyExistsException
   {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLockedThrowing ( () -> {
       final Calendar aOld = m_aCalendarsByName.get (name);
       if (aOld != null)
       {
@@ -647,18 +574,12 @@ public class BaseJobStore implements JobStore
             m_aTimeTriggers.add (tw);
         }
       }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   public boolean removeCalendar (final String calName) throws JobPersistenceException
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    m_aRWLock.readLockedThrowing ( () -> {
       int numRefs = 0;
       for (final TriggerWrapper aTriggerWrapper : m_aTriggers)
       {
@@ -669,86 +590,42 @@ public class BaseJobStore implements JobStore
 
       if (numRefs > 0)
         throw new JobPersistenceException ("Calender cannot be removed if it referenced by a Trigger!");
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      return m_aCalendarsByName.remove (calName) != null;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    return m_aRWLock.writeLocked ( () -> m_aCalendarsByName.remove (calName) != null);
   }
 
   public Calendar retrieveCalendar (final String calName)
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    return m_aRWLock.readLocked ( () -> {
       final Calendar cal = m_aCalendarsByName.get (calName);
       return cal != null ? (Calendar) cal.clone () : null;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
   }
 
   public int getNumberOfJobs ()
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_aJobsByKey.size ();
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked (m_aJobsByKey::size);
   }
 
   public int getNumberOfTriggers ()
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_aTriggers.size ();
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked (m_aTriggers::size);
   }
 
   public int getNumberOfCalendars ()
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_aCalendarsByName.size ();
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked (m_aCalendarsByName::size);
   }
 
   public Set <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher)
   {
-    final Set <JobKey> ret = new HashSet <JobKey> ();
+    final Set <JobKey> ret = new HashSet <> ();
 
     final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
     final String compareToValue = matcher.getCompareToValue ();
 
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    m_aRWLock.readLocked ( () -> {
       switch (eOperator)
       {
         case EQUALS:
@@ -766,11 +643,7 @@ public class BaseJobStore implements JobStore
                   ret.add (jobWrapper.getJobKey ());
           break;
       }
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
 
     return ret;
   }
@@ -779,26 +652,16 @@ public class BaseJobStore implements JobStore
   @ReturnsMutableCopy
   public List <String> getCalendarNames ()
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return CollectionHelper.newList (m_aCalendarsByName.keySet ());
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked ( () -> CollectionHelper.newList (m_aCalendarsByName.keySet ()));
   }
 
   public Set <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher)
   {
-    final Set <TriggerKey> ret = new HashSet <TriggerKey> ();
+    final Set <TriggerKey> ret = new HashSet <> ();
     final StringMatcher.StringOperatorName operator = matcher.getCompareWithOperator ();
     final String compareToValue = matcher.getCompareToValue ();
 
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    m_aRWLock.readLocked ( () -> {
       switch (operator)
       {
         case EQUALS:
@@ -816,86 +679,52 @@ public class BaseJobStore implements JobStore
                   ret.add (triggerWrapper.getTriggerKey ());
           break;
       }
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
 
     return ret;
   }
 
   public List <String> getJobGroupNames ()
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return CollectionHelper.newList (m_aJobsByGroup.keySet ());
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked ( () -> CollectionHelper.newList (m_aJobsByGroup.keySet ()));
   }
 
   public List <String> getTriggerGroupNames ()
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return CollectionHelper.newList (m_aTriggersByGroup.keySet ());
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked ( () -> CollectionHelper.newList (m_aTriggersByGroup.keySet ()));
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public List <OperableTrigger> getTriggersForJob (final JobKey aJobKey)
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    return m_aRWLock.readLocked ( () -> {
       final List <OperableTrigger> ret = new ArrayList <OperableTrigger> ();
       for (final TriggerWrapper aTW : m_aTriggers)
         if (aTW.getJobKey ().equals (aJobKey))
           ret.add ((OperableTrigger) aTW.getTrigger ().clone ());
       return ret;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
   }
 
   @Nonnull
   @ReturnsMutableCopy
   protected List <TriggerWrapper> getTriggerWrappersForJob (final JobKey aJobKey)
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    return m_aRWLock.readLocked ( () -> {
       final List <TriggerWrapper> ret = new ArrayList <TriggerWrapper> ();
       for (final TriggerWrapper aTW : m_aTriggers)
         if (aTW.getJobKey ().equals (aJobKey))
           ret.add (aTW);
       return ret;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
   }
 
   @Nonnull
   @ReturnsMutableCopy
   protected List <TriggerWrapper> getTriggerWrappersForCalendar (final String calName)
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    return m_aRWLock.readLocked ( () -> {
       final List <TriggerWrapper> ret = new ArrayList <TriggerWrapper> ();
       for (final TriggerWrapper tw : m_aTriggers)
       {
@@ -904,11 +733,7 @@ public class BaseJobStore implements JobStore
           ret.add (tw);
       }
       return ret;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
   }
 
   /**
@@ -918,50 +743,33 @@ public class BaseJobStore implements JobStore
    */
   public void pauseTrigger (final TriggerKey triggerKey)
   {
-    TriggerWrapper tw;
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      tw = m_aTriggersByKey.get (triggerKey);
+    final TriggerWrapper tw = m_aRWLock.readLocked ( () -> m_aTriggersByKey.get (triggerKey));
 
-      // does the trigger exist?
-      if (tw == null)
-        return;
+    // does the trigger exist?
+    if (tw == null)
+      return;
 
-      // if the trigger is "complete" pausing it does not make sense...
-      if (tw.getState () == TriggerWrapper.STATE_COMPLETE)
-        return;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    // if the trigger is "complete" pausing it does not make sense...
+    if (tw.getState () == TriggerWrapper.STATE_COMPLETE)
+      return;
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       if (tw.getState () == TriggerWrapper.STATE_BLOCKED)
         tw.setState (TriggerWrapper.STATE_PAUSED_BLOCKED);
       else
         tw.setState (TriggerWrapper.STATE_PAUSED);
 
       m_aTimeTriggers.remove (tw);
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   public List <String> pauseTriggers (final GroupMatcher <TriggerKey> matcher)
   {
-    final List <String> ret = new ArrayList <String> ();
+    final List <String> ret = new ArrayList <> ();
 
     final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       switch (eOperator)
       {
         case EQUALS:
@@ -974,11 +782,7 @@ public class BaseJobStore implements JobStore
               if (m_aPausedTriggerGroups.add (matcher.getCompareToValue ()))
                 ret.add (group);
       }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
 
     for (final String pausedGroup : ret)
     {
@@ -1016,12 +820,10 @@ public class BaseJobStore implements JobStore
    */
   public List <String> pauseJobs (final GroupMatcher <JobKey> matcher)
   {
-    final List <String> pausedGroups = new ArrayList <String> ();
+    final List <String> pausedGroups = new ArrayList <> ();
     final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       switch (eOperator)
       {
         case EQUALS:
@@ -1035,11 +837,7 @@ public class BaseJobStore implements JobStore
                 pausedGroups.add (group);
           break;
       }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
 
     for (final String groupName : pausedGroups)
       for (final JobKey jobKey : getJobKeys (GroupMatcher.jobGroupEquals (groupName)))
@@ -1063,31 +861,18 @@ public class BaseJobStore implements JobStore
    */
   public void resumeTrigger (final TriggerKey triggerKey)
   {
-    TriggerWrapper tw;
-    OperableTrigger trig;
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      tw = m_aTriggersByKey.get (triggerKey);
+    final TriggerWrapper tw = m_aRWLock.readLocked ( () -> m_aTriggersByKey.get (triggerKey));
 
-      // does the trigger exist?
-      if (tw == null)
-        return;
+    // does the trigger exist?
+    if (tw == null)
+      return;
 
-      trig = tw.getTrigger ();
+    // if the trigger is not paused resuming it does not make sense...
+    if (tw.getState () != TriggerWrapper.STATE_PAUSED && tw.getState () != TriggerWrapper.STATE_PAUSED_BLOCKED)
+      return;
 
-      // if the trigger is not paused resuming it does not make sense...
-      if (tw.getState () != TriggerWrapper.STATE_PAUSED && tw.getState () != TriggerWrapper.STATE_PAUSED_BLOCKED)
-        return;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
-
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
+      final OperableTrigger trig = tw.getTrigger ();
       if (m_aBlockedJobs.contains (trig.getJobKey ()))
         tw.setState (TriggerWrapper.STATE_BLOCKED);
       else
@@ -1097,50 +882,37 @@ public class BaseJobStore implements JobStore
 
       if (tw.getState () == TriggerWrapper.STATE_WAITING)
         m_aTimeTriggers.add (tw);
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   public List <String> resumeTriggers (final GroupMatcher <TriggerKey> matcher)
   {
-    final Set <String> ret = new HashSet <String> ();
+    final Set <String> ret = new HashSet <> ();
     final Set <TriggerKey> keys = getTriggerKeys (matcher);
 
     for (final TriggerKey triggerKey : keys)
     {
       ret.add (triggerKey.getGroup ());
 
-      m_aRWLock.readLock ().lock ();
-      try
-      {
+      if (m_aRWLock.readLocked ( () -> {
         final TriggerWrapper aTW = m_aTriggersByKey.get (triggerKey);
         if (aTW != null)
         {
           final String sJobGroupName = aTW.getJobKey ().getGroup ();
           if (m_aPausedJobGroups.contains (sJobGroupName))
-            continue;
+            return false;
         }
-      }
-      finally
+        return true;
+      }))
       {
-        m_aRWLock.readLock ().unlock ();
+        resumeTrigger (triggerKey);
       }
-      resumeTrigger (triggerKey);
     }
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       for (final String group : ret)
         m_aPausedTriggerGroups.remove (group);
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
 
     // Convert to list
     return CollectionHelper.newList (ret);
@@ -1155,32 +927,20 @@ public class BaseJobStore implements JobStore
 
   public Collection <String> resumeJobs (final GroupMatcher <JobKey> matcher)
   {
-    final Set <String> ret = new HashSet <String> ();
+    final Set <String> ret = new HashSet <> ();
 
     final Set <JobKey> keys = getJobKeys (matcher);
 
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    m_aRWLock.readLocked ( () -> {
       for (final String pausedJobGroup : m_aPausedJobGroups)
         if (matcher.getCompareWithOperator ().evaluate (pausedJobGroup, matcher.getCompareToValue ()))
           ret.add (pausedJobGroup);
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       for (final String resumedGroup : ret)
         m_aPausedJobGroups.remove (resumedGroup);
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
 
     for (final JobKey key : keys)
     {
@@ -1212,15 +972,9 @@ public class BaseJobStore implements JobStore
    */
   public void resumeAll ()
   {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       m_aPausedJobGroups.clear ();
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
 
     resumeTriggers (GroupMatcher.anyTriggerGroup ());
   }
@@ -1270,14 +1024,12 @@ public class BaseJobStore implements JobStore
 
   public List <OperableTrigger> acquireNextTriggers (final long noLaterThan, final int maxCount, final long timeWindow)
   {
-    final List <OperableTrigger> ret = new ArrayList <OperableTrigger> ();
-    final Set <JobKey> acquiredJobKeysForNoConcurrentExec = new HashSet <JobKey> ();
-    final Set <TriggerWrapper> excludedTriggers = new HashSet <TriggerWrapper> ();
-    long firstAcquiredTriggerFireTime = 0;
+    return m_aRWLock.writeLocked ( () -> {
+      final List <OperableTrigger> ret = new ArrayList <> ();
+      final Set <JobKey> acquiredJobKeysForNoConcurrentExec = new HashSet <> ();
+      final Set <TriggerWrapper> excludedTriggers = new HashSet <> ();
+      long firstAcquiredTriggerFireTime = 0;
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
       // return empty list if store has no triggers.
       if (m_aTimeTriggers.isEmpty ())
         return ret;
@@ -1344,13 +1096,10 @@ public class BaseJobStore implements JobStore
       // DisallowConcurrentExecution, we need to add them back to store.
       if (!excludedTriggers.isEmpty ())
         m_aTimeTriggers.addAll (excludedTriggers);
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
 
-    return ret;
+      return ret;
+    });
+
   }
 
   /**
@@ -1361,20 +1110,14 @@ public class BaseJobStore implements JobStore
    */
   public void releaseAcquiredTrigger (final OperableTrigger trigger)
   {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       final TriggerWrapper tw = m_aTriggersByKey.get (trigger.getKey ());
       if (tw != null && tw.getState () == TriggerWrapper.STATE_ACQUIRED)
       {
         tw.setState (TriggerWrapper.STATE_WAITING);
         m_aTimeTriggers.add (tw);
       }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   /**
@@ -1386,11 +1129,9 @@ public class BaseJobStore implements JobStore
    */
   public List <TriggerFiredResult> triggersFired (final List <OperableTrigger> firedTriggers)
   {
-    final List <TriggerFiredResult> ret = new ArrayList <TriggerFiredResult> ();
+    return m_aRWLock.writeLocked ( () -> {
+      final List <TriggerFiredResult> ret = new ArrayList <> ();
 
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
       for (final OperableTrigger trigger : firedTriggers)
       {
         final TriggerWrapper tw = m_aTriggersByKey.get (trigger.getKey ());
@@ -1449,20 +1190,16 @@ public class BaseJobStore implements JobStore
 
         ret.add (new TriggerFiredResult (bndle));
       }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
 
-    return ret;
+      return ret;
+    });
   }
 
-  public void triggeredJobComplete (final OperableTrigger trigger, final JobDetail jobDetail, final CompletedExecutionInstruction triggerInstCode)
+  public void triggeredJobComplete (final OperableTrigger trigger,
+                                    final JobDetail jobDetail,
+                                    final CompletedExecutionInstruction triggerInstCode)
   {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
+    m_aRWLock.writeLocked ( () -> {
       final JobWrapper jw = m_aJobsByKey.get (jobDetail.getKey ());
       final TriggerWrapper tw = m_aTriggersByKey.get (trigger.getKey ());
 
@@ -1556,11 +1293,7 @@ public class BaseJobStore implements JobStore
                   m_aSignaler.signalSchedulingChange (0L);
                 }
       }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    });
   }
 
   @MustBeLocked (ELockType.WRITE)
@@ -1577,9 +1310,7 @@ public class BaseJobStore implements JobStore
 
   protected String peekTriggers ()
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
+    return m_aRWLock.readLocked ( () -> {
       final StringBuilder aSB = new StringBuilder ();
       for (final TriggerWrapper triggerWrapper : m_aTriggersByKey.values ())
       {
@@ -1594,11 +1325,7 @@ public class BaseJobStore implements JobStore
         aSB.append ("->");
       }
       return aSB.toString ();
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    });
   }
 
   /**
@@ -1606,15 +1333,7 @@ public class BaseJobStore implements JobStore
    */
   public Set <String> getPausedTriggerGroups () throws JobPersistenceException
   {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return CollectionHelper.newSet (m_aPausedTriggerGroups);
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
+    return m_aRWLock.readLocked ( () -> CollectionHelper.newSet (m_aPausedTriggerGroups));
   }
 
   public void setInstanceId (final String schedInstId)
