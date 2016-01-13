@@ -191,21 +191,12 @@ public class BaseJobStore implements JobStore
 
     boolean bReplace = false;
 
-    JobWrapper aOld;
-    m_aRWLock.readLock ().lock ();
-    try
+    final JobWrapper aOld = m_aRWLock.readLocked ( () -> m_aJobsByKey.get (aKey));
+    if (aOld != null)
     {
-      aOld = m_aJobsByKey.get (aKey);
-      if (aOld != null)
-      {
-        if (!bReplaceExisting)
-          throw new ObjectAlreadyExistsException (aNewJob);
-        bReplace = true;
-      }
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
+      if (!bReplaceExisting)
+        throw new ObjectAlreadyExistsException (aNewJob);
+      bReplace = true;
     }
 
     if (!bReplace)
