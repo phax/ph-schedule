@@ -50,7 +50,7 @@ public abstract class AbstractJob implements Job
                                                                                                                                 "$success");
   private static final IMutableStatisticsHandlerKeyedCounter s_aStatsCounterFailure = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
                                                                                                                                 "$failure");
-  private static final CallbackList <IJobExceptionCallback> s_aExceptionCallbacks = new CallbackList <IJobExceptionCallback> ();
+  private static final CallbackList <IJobExceptionCallback> s_aExceptionCallbacks = new CallbackList<> ();
 
   public AbstractJob ()
   {}
@@ -131,7 +131,8 @@ public abstract class AbstractJob implements Job
                          aCustomExceptionHandler +
                          " for job class '" +
                          sJobClassName +
-                         "'", t2);
+                         "'",
+                         t2);
       }
   }
 
