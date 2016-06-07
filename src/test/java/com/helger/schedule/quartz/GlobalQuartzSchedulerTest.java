@@ -22,10 +22,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.quartz.SimpleScheduleBuilder;
-import org.quartz.TriggerBuilder;
 
 import com.helger.commons.mutable.MutableBoolean;
 import com.helger.commons.scope.mock.ScopeTestRule;
+import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
 
 /**
  * Test class for class {@link GlobalQuartzScheduler}.
@@ -44,9 +44,9 @@ public final class GlobalQuartzSchedulerTest
   {
     final GlobalQuartzScheduler aDS = GlobalQuartzScheduler.getInstance ();
     aDS.scheduleJob ("test",
-                     TriggerBuilder.newTrigger ()
-                                   .startNow ()
-                                   .withSchedule (SimpleScheduleBuilder.repeatMinutelyForTotalCount (1)),
+                     JDK8TriggerBuilder.newTrigger ()
+                                       .startNow ()
+                                       .withSchedule (SimpleScheduleBuilder.repeatMinutelyForTotalCount (1)),
                      MockJob.class,
                      null);
     Thread.sleep (100);

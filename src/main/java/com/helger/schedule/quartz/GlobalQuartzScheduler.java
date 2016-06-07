@@ -30,7 +30,6 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.EverythingMatcher;
 import org.slf4j.Logger;
@@ -43,6 +42,7 @@ import com.helger.commons.scope.IScope;
 import com.helger.commons.scope.singleton.AbstractGlobalSingleton;
 import com.helger.commons.state.EChange;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
+import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
 
 /**
  * Global scheduler instance.
@@ -144,7 +144,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    */
   @Nonnull
   public TriggerKey scheduleJob (@Nonnull final String sJobName,
-                                 @Nonnull final TriggerBuilder <? extends Trigger> aTriggerBuilder,
+                                 @Nonnull final JDK8TriggerBuilder <? extends Trigger> aTriggerBuilder,
                                  @Nonnull final Class <? extends Job> aJobClass,
                                  @Nullable final Map <String, ? extends Object> aJobData)
   {
@@ -194,18 +194,18 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
                                         @Nullable final Map <String, ? extends Object> aJobData)
   {
     return scheduleJob (sJobName,
-                        TriggerBuilder.newTrigger ()
-                                      .startNow ()
-                                      .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
-                                                                          .withIntervalInMinutes (1)
-                                                                          .withRepeatCount (0)),
+                        JDK8TriggerBuilder.newTrigger ()
+                                          .startNow ()
+                                          .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
+                                                                              .withIntervalInMinutes (1)
+                                                                              .withRepeatCount (0)),
                         aJobClass,
                         aJobData);
   }
 
   /**
    * Unschedule the job with the specified trigger key as returned from
-   * {@link #scheduleJob(String, TriggerBuilder, Class, Map)}.
+   * {@link #scheduleJob(String, JDK8TriggerBuilder, Class, Map)}.
    *
    * @param aTriggerKey
    *        Trigger key to use. May not be <code>null</code>.
@@ -232,7 +232,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 
   /**
    * Pause the job with the specified trigger key as returned from
-   * {@link #scheduleJob(String, TriggerBuilder, Class, Map)}.
+   * {@link #scheduleJob(String, JDK8TriggerBuilder, Class, Map)}.
    *
    * @param aTriggerKey
    *        Trigger key to use. May not be <code>null</code>.
@@ -254,7 +254,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 
   /**
    * Resume the job with the specified trigger key as returned from
-   * {@link #scheduleJob(String, TriggerBuilder, Class, Map)}.
+   * {@link #scheduleJob(String, JDK8TriggerBuilder, Class, Map)}.
    *
    * @param aTriggerKey
    *        Trigger key to use. May not be <code>null</code>.
