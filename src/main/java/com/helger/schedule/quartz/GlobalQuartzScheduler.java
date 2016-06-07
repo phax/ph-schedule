@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.UsedViaReflection;
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.scope.IScope;
 import com.helger.commons.scope.singleton.AbstractGlobalSingleton;
 import com.helger.commons.state.EChange;
@@ -168,7 +169,12 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
       m_aScheduler.scheduleJob (aJobDetail, aTrigger);
 
       final TriggerKey ret = aTrigger.getKey ();
-      s_aLogger.info ("Succesfully scheduled job '" + sJobName + "' with TriggerKey " + ret.toString ());
+      s_aLogger.info ("Succesfully scheduled job '" +
+                      sJobName +
+                      "' with TriggerKey " +
+                      ret.toString () +
+                      " - starting at " +
+                      PDTFactory.createLocalDateTime (aTrigger.getStartTime ()));
       return ret;
     }
     catch (final SchedulerException ex)
