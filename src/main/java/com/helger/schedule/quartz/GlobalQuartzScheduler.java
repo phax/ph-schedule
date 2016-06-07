@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.UsedViaReflection;
-import com.helger.commons.exception.LoggedRuntimeException;
 import com.helger.commons.scope.IScope;
 import com.helger.commons.scope.singleton.AbstractGlobalSingleton;
 import com.helger.commons.state.EChange;
@@ -174,7 +173,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     }
     catch (final SchedulerException ex)
     {
-      throw LoggedRuntimeException.newException (ex);
+      throw new RuntimeException (ex);
     }
   }
 
