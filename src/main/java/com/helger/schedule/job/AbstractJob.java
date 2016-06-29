@@ -120,20 +120,7 @@ public abstract class AbstractJob implements Job
                                                        @Nullable final String sJobClassName,
                                                        @Nonnull final Job aJob)
   {
-    for (final IJobExceptionCallback aCustomExceptionHandler : getExceptionCallbacks ().getAllCallbacks ())
-      try
-      {
-        aCustomExceptionHandler.onScheduledJobException (t, sJobClassName, aJob);
-      }
-      catch (final Throwable t2)
-      {
-        s_aLogger.error ("Exception in custom scheduled job exception handler " +
-                         aCustomExceptionHandler +
-                         " for job class '" +
-                         sJobClassName +
-                         "'",
-                         t2);
-      }
+    getExceptionCallbacks ().forEach (x -> x.onScheduledJobException (t, sJobClassName, aJob));
   }
 
   public final void execute (@Nonnull final JobExecutionContext aContext) throws JobExecutionException
