@@ -517,10 +517,10 @@ public class StdSchedulerFactory implements SchedulerFactory
   }
 
   /**
-   * <p>
    * Initialize the <code>{@link org.quartz.SchedulerFactory}</code> with the
    * contents of the given <code>Properties</code> object.
-   * </p>
+   *
+   * @throws SchedulerException
    */
   public void initialize (final Properties props) throws SchedulerException
   {
@@ -1098,9 +1098,13 @@ public class StdSchedulerFactory implements SchedulerFactory
     }
   }
 
+  /**
+   * @param rsrcs
+   * @param qs
+   * @return
+   */
   protected Scheduler instantiate (final QuartzSchedulerResources rsrcs, final QuartzScheduler qs)
   {
-
     final Scheduler scheduler = new StdScheduler (qs);
     return scheduler;
   }

@@ -34,14 +34,6 @@ import java.util.Set;
  */
 public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Serializable
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-  private static final long serialVersionUID = 1433884852607126222L;
-
   private boolean dirty = false;
   private Map <K, V> map;
 

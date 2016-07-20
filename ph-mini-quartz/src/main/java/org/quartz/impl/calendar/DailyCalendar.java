@@ -497,10 +497,7 @@ public class DailyCalendar extends BaseCalendar
       return ((timeInMillis > startOfDayInMillis && timeInMillis < timeRangeStartingTimeInMillis) ||
               (timeInMillis > timeRangeEndingTimeInMillis && timeInMillis < endOfDayInMillis));
     }
-    else
-    {
-      return ((timeInMillis >= timeRangeStartingTimeInMillis) && (timeInMillis <= timeRangeEndingTimeInMillis));
-    }
+    return ((timeInMillis >= timeRangeStartingTimeInMillis) && (timeInMillis <= timeRangeEndingTimeInMillis));
   }
 
   /**

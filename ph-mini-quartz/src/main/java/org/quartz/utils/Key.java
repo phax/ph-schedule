@@ -29,9 +29,6 @@ import java.util.UUID;
  */
 public class Key <T> implements Serializable, Comparable <Key <T>>
 {
-
-  private static final long serialVersionUID = -7141167957642391350L;
-
   /**
    * The default group for scheduling entities, with the value "DEFAULT".
    */

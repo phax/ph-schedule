@@ -91,23 +91,9 @@ import org.quartz.Trigger;
 public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeIntervalTrigger>
                                           implements DailyTimeIntervalTrigger, CoreTrigger
 {
-
-  private static final long serialVersionUID = -632667786771388749L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
                                                                             .get (java.util.Calendar.YEAR) +
                                                           100;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   private Date startTime = null;
 

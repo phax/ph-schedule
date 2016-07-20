@@ -50,9 +50,6 @@ import java.util.Date;
  */
 public interface Trigger extends Serializable, Cloneable, Comparable <Trigger>
 {
-
-  public static final long serialVersionUID = -3904243490805975570L;
-
   public enum TriggerState
   {
     NONE,
@@ -308,11 +305,8 @@ public interface Trigger extends Serializable, Cloneable, Comparable <Trigger>
    * same, then the triggers are sorted according to priority (highest value
    * first), if the priorities are the same, then they are sorted by key.
    */
-  class TriggerTimeComparator implements Comparator <Trigger>, Serializable
+  static class TriggerTimeComparator implements Comparator <Trigger>, Serializable
   {
-
-    private static final long serialVersionUID = -3904243490805975570L;
-
     // This static method exists for comparator in TC clustered quartz
     public static int compare (final Date nextFireTime1,
                                final int priority1,

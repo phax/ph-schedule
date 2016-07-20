@@ -47,30 +47,9 @@ import org.quartz.TriggerUtils;
  */
 public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implements SimpleTrigger, CoreTrigger
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  /**
-   * Required for serialization support. Introduced in Quartz 1.6.1 to maintain
-   * compatibility after the introduction of hasAdditionalProperties method.
-   *
-   * @see java.io.Serializable
-   */
-  private static final long serialVersionUID = -3735980074222850397L;
-
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
                                                                             .get (java.util.Calendar.YEAR) +
                                                           100;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   private Date startTime = null;
 
@@ -88,12 +67,6 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
 
   private final boolean complete = false;
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Create a <code>SimpleTrigger</code> with no settings.
@@ -102,6 +75,34 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
   public SimpleTriggerImpl ()
   {
     super ();
+  }
+
+  @Deprecated
+  public SimpleTriggerImpl (final String name, final String group, final Date startTime)
+  {
+    super (name, group);
+
+    setStartTime (startTime);
+    setRepeatCount (0);
+    setRepeatInterval (0);
+  }
+
+  @Deprecated
+  public SimpleTriggerImpl (final String name,
+                            final String group,
+                            final String jobName,
+                            final String jobGroup,
+                            final Date startTime,
+                            final Date endTime,
+                            final int repeatCount,
+                            final long repeatInterval)
+  {
+    super (name, group, jobName, jobGroup);
+
+    setStartTime (startTime);
+    setEndTime (endTime);
+    setRepeatCount (repeatCount);
+    setRepeatInterval (repeatInterval);
   }
 
   /**
@@ -127,15 +128,11 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
   public void setStartTime (final Date startTime)
   {
     if (startTime == null)
-    {
       throw new IllegalArgumentException ("Start time cannot be null");
-    }
 
     final Date eTime = getEndTime ();
-    if (eTime != null && startTime != null && eTime.before (startTime))
-    {
+    if (eTime != null && eTime.before (startTime))
       throw new IllegalArgumentException ("End time cannot be before start time");
-    }
 
     this.startTime = startTime;
   }
@@ -618,53 +615,35 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
   public Date getFireTimeAfter (Date afterTime)
   {
     if (complete)
-    {
       return null;
-    }
 
     if ((timesTriggered > repeatCount) && (repeatCount != REPEAT_INDEFINITELY))
-    {
       return null;
-    }
 
     if (afterTime == null)
-    {
       afterTime = new Date ();
-    }
 
     if (repeatCount == 0 && afterTime.compareTo (getStartTime ()) >= 0)
-    {
       return null;
-    }
 
     final long startMillis = getStartTime ().getTime ();
     final long afterMillis = afterTime.getTime ();
     final long endMillis = (getEndTime () == null) ? Long.MAX_VALUE : getEndTime ().getTime ();
 
     if (endMillis <= afterMillis)
-    {
       return null;
-    }
 
     if (afterMillis < startMillis)
-    {
       return new Date (startMillis);
-    }
 
     final long numberOfTimesExecuted = ((afterMillis - startMillis) / repeatInterval) + 1;
 
     if ((numberOfTimesExecuted > repeatCount) && (repeatCount != REPEAT_INDEFINITELY))
-    {
       return null;
-    }
 
     final Date time = new Date (startMillis + (numberOfTimesExecuted * repeatInterval));
-
     if (endMillis <= time.getTime ())
-    {
       return null;
-    }
-
     return time;
   }
 

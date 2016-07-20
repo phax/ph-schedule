@@ -1893,7 +1893,6 @@ public class RAMJobStore implements JobStore
     }
   }
 
-  
   protected String peekTriggers ()
   {
 
@@ -1966,9 +1965,6 @@ public class RAMJobStore implements JobStore
 
 class TriggerWrapperComparator implements Comparator <TriggerWrapper>, java.io.Serializable
 {
-
-  private static final long serialVersionUID = 8809557142191514261L;
-
   TriggerTimeComparator ttc = new TriggerTimeComparator ();
 
   public int compare (final TriggerWrapper trig1, final TriggerWrapper trig2)
@@ -2039,7 +2035,6 @@ class TriggerWrapper
 
   public static final int STATE_ACQUIRED = 1;
 
-  
   public static final int STATE_EXECUTING = 2;
 
   public static final int STATE_COMPLETE = 3;

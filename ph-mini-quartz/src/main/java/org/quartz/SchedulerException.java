@@ -31,15 +31,6 @@ package org.quartz;
  */
 public class SchedulerException extends Exception
 {
-
-  private static final long serialVersionUID = 174841398690789156L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   public SchedulerException ()
   {
     super ();

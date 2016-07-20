@@ -44,21 +44,6 @@ import org.quartz.TriggerUtils;
  */
 public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements CronTrigger, CoreTrigger
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  /**
-   * Required for serialization support. Introduced in Quartz 1.6.1 to maintain
-   * compatibility after the introduction of hasAdditionalProperties method.
-   *
-   * @see java.io.Serializable
-   */
-  private static final long serialVersionUID = -8644953146451592766L;
-
   protected static final int YEAR_TO_GIVEUP_SCHEDULING_AT = CronExpression.MAX_YEAR;
 
   /*
@@ -660,5 +645,4 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
   {
     return (cronEx == null) ? null : cronEx.getTimeBefore (eTime);
   }
-
 }

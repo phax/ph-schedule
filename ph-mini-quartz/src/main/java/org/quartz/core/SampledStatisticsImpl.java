@@ -117,9 +117,4 @@ public class SampledStatisticsImpl extends SchedulerListenerSupport implements S
   {
     /**/
   }
-
-  public void jobDeleted (final String jobName, final String groupName)
-  {
-    /**/
-  }
 }

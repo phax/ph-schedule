@@ -33,15 +33,6 @@ import org.quartz.JobDetail;
  */
 public class TriggerFiredBundle implements java.io.Serializable
 {
-
-  private static final long serialVersionUID = -6414106108306999265L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private final JobDetail job;
 
   private final OperableTrigger trigger;

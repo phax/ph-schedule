@@ -267,13 +267,8 @@ public class JobDataMap extends StringKeyDirtyFlagMap
     final Object obj = get (key);
 
     if (obj instanceof String)
-    {
       return getIntFromString (key);
-    }
-    else
-    {
-      return getInt (key);
-    }
+    return getInt (key);
   }
 
   /**
@@ -519,13 +514,8 @@ public class JobDataMap extends StringKeyDirtyFlagMap
     final Object obj = get (key);
 
     if (obj instanceof String)
-    {
       return getLongValueFromString (key);
-    }
-    else
-    {
-      return getLong (key);
-    }
+    return getLong (key);
   }
 
   /**

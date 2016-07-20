@@ -26,9 +26,6 @@ import org.quartz.utils.Key;
  */
 public class AndMatcher <T extends Key <?>> implements Matcher <T>
 {
-
-  private static final long serialVersionUID = 4697276220890670941L;
-
   protected Matcher <T> leftOperand;
   protected Matcher <T> rightOperand;
 
@@ -47,7 +44,7 @@ public class AndMatcher <T extends Key <?>> implements Matcher <T>
    */
   public static <U extends Key <?>> AndMatcher <U> and (final Matcher <U> leftOperand, final Matcher <U> rightOperand)
   {
-    return new AndMatcher <> (leftOperand, rightOperand);
+    return new AndMatcher<> (leftOperand, rightOperand);
   }
 
   public boolean isMatch (final T key)

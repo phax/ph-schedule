@@ -52,9 +52,6 @@ import org.quartz.utils.Key;
  */
 public final class TriggerKey extends Key <TriggerKey>
 {
-
-  private static final long serialVersionUID = 8070357886703449660L;
-
   public TriggerKey (final String name)
   {
     super (name, null);
@@ -74,5 +71,4 @@ public final class TriggerKey extends Key <TriggerKey>
   {
     return new TriggerKey (name, group);
   }
-
 }

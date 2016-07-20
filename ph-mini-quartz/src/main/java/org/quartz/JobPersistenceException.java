@@ -26,15 +26,6 @@ package org.quartz;
  */
 public class JobPersistenceException extends SchedulerException
 {
-
-  private static final long serialVersionUID = -8924958757341995694L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Create a <code>JobPersistenceException</code> with the given message.

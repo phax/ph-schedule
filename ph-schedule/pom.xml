@@ -28,7 +28,7 @@
   <packaging>bundle</packaging>
   <name>ph-schedule</name>
   <description>Library for easy scheduling of jobs using Quartz</description>
-  <url>https://github.com/phax/ph-schedule</url>
+  <url>https://github.com/phax/ph-schedule/ph-schedule</url>
   <inceptionYear>2014</inceptionYear>
   <licenses>
     <license>

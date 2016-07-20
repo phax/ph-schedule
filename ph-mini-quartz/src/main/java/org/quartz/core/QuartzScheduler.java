@@ -69,6 +69,8 @@ import org.quartz.spi.ThreadExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.random.RandomHelper;
+
 /**
  * <p>
  * This is the heart of Quartz, an indirect implementation of the
@@ -111,7 +113,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
         {
           final String [] versionComponents = version.split ("\\.");
           VERSION_MAJOR = versionComponents[0];
-          VERSION_MINOR = versionComponents[1];
+          if (versionComponents.length > 1)
+            VERSION_MINOR = versionComponents[1];
+          else
+            VERSION_MINOR = "0";
           if (versionComponents.length > 2)
             VERSION_ITERATION = versionComponents[2];
           else
@@ -142,58 +147,26 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private final QuartzSchedulerResources resources;
-
   private final QuartzSchedulerThread schedThread;
-
   private ThreadGroup threadGroup;
-
   private final SchedulerContext context = new SchedulerContext ();
-
   private final ListenerManager listenerManager = new ListenerManagerImpl ();
-
-  private final HashMap <String, JobListener> internalJobListeners = new HashMap<> (10);
-
-  private final HashMap <String, TriggerListener> internalTriggerListeners = new HashMap<> (10);
-
-  private final ArrayList <SchedulerListener> internalSchedulerListeners = new ArrayList<> (10);
-
+  private final Map <String, JobListener> internalJobListeners = new HashMap<> (10);
+  private final Map <String, TriggerListener> internalTriggerListeners = new HashMap<> (10);
+  private final List <SchedulerListener> internalSchedulerListeners = new ArrayList<> (10);
   private JobFactory jobFactory = new PropertySettingJobFactory ();
-
   ExecutingJobsManager jobMgr = null;
-
   ErrorLogger errLogger = null;
-
   private final SchedulerSignaler signaler;
-
-  private final Random random = new Random ();
-
-  private final ArrayList <Object> holdToPreventGC = new ArrayList<> (5);
-
+  private final Random random = RandomHelper.getRandom ();
+  private final List <Object> holdToPreventGC = new ArrayList<> (5);
   private boolean signalOnSchedulingChange = true;
-
   private volatile boolean closed = false;
   private volatile boolean shuttingDown = false;
-
   private Date initialStart = null;
 
   private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  // private static final Map<String, ManagementServer> MGMT_SVR_BY_BIND = new
-  // HashMap<String, ManagementServer>();
-  // private String registeredManagementServerBind;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
@@ -202,6 +175,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * </p>
    *
    * @see QuartzSchedulerResources
+   * @throws SchedulerException
    */
   public QuartzScheduler (final QuartzSchedulerResources resources, final long idleWaitTime) throws SchedulerException
   {
@@ -1742,7 +1716,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  private List <TriggerListener> buildTriggerListenerList () throws SchedulerException
+  private List <TriggerListener> buildTriggerListenerList ()
   {
     final List <TriggerListener> allListeners = new LinkedList<> ();
     allListeners.addAll (getListenerManager ().getTriggerListeners ());
@@ -1751,7 +1725,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return allListeners;
   }
 
-  private List <JobListener> buildJobListenerList () throws SchedulerException
+  private List <JobListener> buildJobListenerList ()
   {
     final List <JobListener> allListeners = new LinkedList<> ();
     allListeners.addAll (getListenerManager ().getJobListeners ());
@@ -2337,6 +2311,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
+  /**
+   * @param factory
+   * @throws SchedulerException
+   */
   public void setJobFactory (final JobFactory factory) throws SchedulerException
   {
 

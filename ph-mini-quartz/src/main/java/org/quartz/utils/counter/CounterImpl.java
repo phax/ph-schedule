@@ -27,9 +27,6 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class CounterImpl implements Counter, Serializable
 {
-
-  private static final long serialVersionUID = -1529134342654953984L;
-
   private final AtomicLong value;
 
   /**

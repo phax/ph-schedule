@@ -60,15 +60,6 @@ import org.quartz.spi.OperableTrigger;
  */
 public abstract class AbstractTrigger <T extends Trigger> implements OperableTrigger
 {
-
-  private static final long serialVersionUID = -3904243490805975570L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private String name;
 
   private String group = Scheduler.DEFAULT_GROUP;

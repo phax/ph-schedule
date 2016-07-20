@@ -201,8 +201,6 @@ public final class CronExpression implements Serializable, Cloneable
     int pos;
   }
 
-  private static final long serialVersionUID = 12423409423L;
-
   protected static final int SECOND = 0;
   protected static final int MINUTE = 1;
   protected static final int HOUR = 2;
@@ -467,10 +465,8 @@ public final class CronExpression implements Serializable, Cloneable
   protected void buildExpression (final String expression) throws ParseException
   {
     expressionParsed = true;
-
     try
     {
-
       if (seconds == null)
       {
         seconds = new TreeSet<> ();
@@ -551,13 +547,10 @@ public final class CronExpression implements Serializable, Cloneable
       final boolean dayOfMSpec = !dom.contains (NO_SPEC);
       final boolean dayOfWSpec = !dow.contains (NO_SPEC);
 
-      if (!dayOfMSpec || dayOfWSpec)
+      if (dayOfMSpec && dayOfWSpec)
       {
-        if (!dayOfWSpec || dayOfMSpec)
-        {
-          throw new ParseException ("Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.",
-                                    0);
-        }
+        throw new ParseException ("Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.",
+                                  0);
       }
     }
     catch (final ParseException pe)
@@ -937,17 +930,11 @@ public final class CronExpression implements Serializable, Cloneable
           i = vs.pos;
           return i;
         }
-        else
-        {
-          addToSet (val, end, v2, type);
-          return i;
-        }
-      }
-      else
-      {
-        addToSet (val, end, 1, type);
+        addToSet (val, end, v2, type);
         return i;
       }
+      addToSet (val, end, 1, type);
+      return i;
     }
 
     if (c == '/')
@@ -1095,7 +1082,7 @@ public final class CronExpression implements Serializable, Cloneable
     final int nMax = s.length ();
     while (nIndex < nMax)
     {
-      if (Character.isWhitespace (s.charAt (i)))
+      if (!Character.isWhitespace (s.charAt (i)))
         break;
       nIndex++;
     }
@@ -1109,7 +1096,7 @@ public final class CronExpression implements Serializable, Cloneable
     final int nMax = s.length ();
     while (nIndex < nMax)
     {
-      if (!Character.isWhitespace (s.charAt (i)))
+      if (Character.isWhitespace (s.charAt (i)))
         break;
       nIndex++;
     }
@@ -1119,7 +1106,6 @@ public final class CronExpression implements Serializable, Cloneable
 
   protected void addToSet (final int val, final int end, int incr, final int type) throws ParseException
   {
-
     final TreeSet <Integer> set = getSet (type);
 
     if (type == SECOND || type == MINUTE)
@@ -1930,12 +1916,12 @@ public final class CronExpression implements Serializable, Cloneable
     return null;
   }
 
-  protected boolean isLeapYear (final int year)
+  protected static boolean isLeapYear (final int year)
   {
     return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0));
   }
 
-  protected int getLastDayOfMonth (final int monthNum, final int year)
+  protected static int getLastDayOfMonth (final int monthNum, final int year)
   {
 
     switch (monthNum)

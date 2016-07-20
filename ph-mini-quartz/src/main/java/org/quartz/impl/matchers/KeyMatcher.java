@@ -26,9 +26,6 @@ import org.quartz.utils.Key;
  */
 public class KeyMatcher <T extends Key <?>> implements Matcher <T>
 {
-
-  private static final long serialVersionUID = 1230009869074992437L;
-
   protected T compareTo;
 
   protected KeyMatcher (final T compareTo)
@@ -41,7 +38,7 @@ public class KeyMatcher <T extends Key <?>> implements Matcher <T>
    */
   public static <U extends Key <?>> KeyMatcher <U> keyEquals (final U compareTo)
   {
-    return new KeyMatcher <> (compareTo);
+    return new KeyMatcher<> (compareTo);
   }
 
   public boolean isMatch (final T key)

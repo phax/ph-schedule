@@ -29,9 +29,6 @@ import org.quartz.utils.counter.CounterImpl;
  */
 public class SampledCounterImpl extends CounterImpl implements SampledCounter
 {
-
-  private static final long serialVersionUID = -3605369302464131521L;
-
   private static final int MILLIS_PER_SEC = 1000;
 
   /**
@@ -56,7 +53,7 @@ public class SampledCounterImpl extends CounterImpl implements SampledCounter
     super (config.getInitialValue ());
 
     this.intervalMillis = config.getIntervalSecs () * MILLIS_PER_SEC;
-    this.history = new CircularLossyQueue <> (config.getHistorySize ());
+    this.history = new CircularLossyQueue<> (config.getHistorySize ());
     this.resetOnSample = config.isResetOnSample ();
 
     this.samplerTask = new TimerTask ()

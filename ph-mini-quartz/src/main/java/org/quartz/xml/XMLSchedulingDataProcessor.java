@@ -94,12 +94,6 @@ import org.xml.sax.SAXParseException;
  */
 public class XMLSchedulingDataProcessor implements ErrorHandler
 {
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   public static final String QUARTZ_NS = "http://www.quartz-scheduler.org/xml/JobSchedulingData";
 
   public static final String QUARTZ_SCHEMA_WEB_URL = "http://www.quartz-scheduler.org/xml/job_scheduling_data_2_0.xsd";
@@ -109,12 +103,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   public static final String QUARTZ_XML_DEFAULT_FILE_NAME = "quartz_data.xml";
 
   public static final String QUARTZ_SYSTEM_ID_JAR_PREFIX = "jar:";
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   // pre-processing commands
   protected List <String> jobGroupsToDelete = new LinkedList<> ();
@@ -136,8 +124,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   protected List <String> jobGroupsToNeverDelete = new LinkedList<> ();
   protected List <String> triggerGroupsToNeverDelete = new LinkedList<> ();
 
-  private DocumentBuilder docBuilder = null;
-  private XPath xpath = null;
+  private DocumentBuilder docBuilder;
+  private XPath xpath;
 
   private final Logger log = LoggerFactory.getLogger (getClass ());
 
@@ -413,25 +401,19 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
         return fileName;
       }
     }
-    else
+    final URL url = getURL (fileName);
+    if (url == null)
     {
-      final URL url = getURL (fileName);
-      if (url == null)
-      {
-        return fileName;
-      }
-      else
-      {
-        try
-        {
-          url.openStream ().close ();
-          return url.toString ();
-        }
-        catch (final IOException ignore)
-        {
-          return fileName;
-        }
-      }
+      return fileName;
+    }
+    try
+    {
+      url.openStream ().close ();
+      return url.toString ();
+    }
+    catch (final IOException ignore)
+    {
+      return fileName;
     }
   }
 
@@ -471,14 +453,13 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    * @param systemId
    *        system ID.
    */
-  protected void processFile (final String fileName, final String systemId) throws ValidationException,
-                                                                            ParserConfigurationException,
-                                                                            SAXException,
-                                                                            IOException,
-                                                                            SchedulerException,
-                                                                            ClassNotFoundException,
-                                                                            ParseException,
-                                                                            XPathException
+  protected void processFile (final String fileName,
+                              final String systemId) throws ValidationException,
+                                                     SAXException,
+                                                     IOException,
+                                                     ClassNotFoundException,
+                                                     ParseException,
+                                                     XPathException
   {
 
     prepForProcessing ();
@@ -503,7 +484,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   public void processStreamAndScheduleJobs (final InputStream stream,
                                             final String systemId,
                                             final Scheduler sched) throws ValidationException,
-                                                                   ParserConfigurationException,
                                                                    SAXException,
                                                                    XPathException,
                                                                    IOException,

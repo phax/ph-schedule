@@ -26,9 +26,6 @@ import org.quartz.utils.Key;
  */
 public class NotMatcher <T extends Key <?>> implements Matcher <T>
 {
-
-  private static final long serialVersionUID = -2856769076151741391L;
-
   protected Matcher <T> operand;
 
   protected NotMatcher (final Matcher <T> operand)
@@ -44,7 +41,7 @@ public class NotMatcher <T extends Key <?>> implements Matcher <T>
    */
   public static <U extends Key <?>> NotMatcher <U> not (final Matcher <U> operand)
   {
-    return new NotMatcher <> (operand);
+    return new NotMatcher<> (operand);
   }
 
   public boolean isMatch (final T key)

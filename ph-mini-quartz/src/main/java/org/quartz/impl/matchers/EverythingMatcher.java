@@ -28,9 +28,6 @@ import org.quartz.utils.Key;
  */
 public class EverythingMatcher <T extends Key <?>> implements Matcher <T>
 {
-
-  private static final long serialVersionUID = 202300056681974058L;
-
   protected EverythingMatcher ()
   {}
 
@@ -39,7 +36,7 @@ public class EverythingMatcher <T extends Key <?>> implements Matcher <T>
    */
   public static EverythingMatcher <JobKey> allJobs ()
   {
-    return new EverythingMatcher <> ();
+    return new EverythingMatcher<> ();
   }
 
   /**
@@ -47,7 +44,7 @@ public class EverythingMatcher <T extends Key <?>> implements Matcher <T>
    */
   public static EverythingMatcher <TriggerKey> allTriggers ()
   {
-    return new EverythingMatcher <> ();
+    return new EverythingMatcher<> ();
   }
 
   public boolean isMatch (final T key)

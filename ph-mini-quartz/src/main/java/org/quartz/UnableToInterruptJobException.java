@@ -27,15 +27,6 @@ package org.quartz;
  */
 public class UnableToInterruptJobException extends SchedulerException
 {
-
-  private static final long serialVersionUID = -490863760696463776L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Create a <code>UnableToInterruptJobException</code> with the given message.

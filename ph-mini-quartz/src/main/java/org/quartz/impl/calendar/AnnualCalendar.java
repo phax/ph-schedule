@@ -298,9 +298,6 @@ public class AnnualCalendar extends BaseCalendar
 
 class CalendarComparator implements Comparator <java.util.Calendar>, Serializable
 {
-
-  private static final long serialVersionUID = 7346867105876610961L;
-
   public CalendarComparator ()
   {}
 

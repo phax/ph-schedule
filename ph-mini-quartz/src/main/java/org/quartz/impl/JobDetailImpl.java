@@ -91,8 +91,14 @@ public class JobDetailImpl implements JobDetail
    * </p>
    */
   public JobDetailImpl ()
+  {}
+
+  @Deprecated
+  public JobDetailImpl (final String name, final String group, final Class <? extends Job> jobClass)
   {
-    // do nothing...
+    setName (name);
+    setGroup (group);
+    setJobClass (jobClass);
   }
 
   /*

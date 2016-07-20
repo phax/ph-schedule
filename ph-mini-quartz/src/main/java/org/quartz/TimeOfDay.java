@@ -34,9 +34,6 @@ import java.util.TimeZone;
  */
 public class TimeOfDay implements Serializable
 {
-
-  private static final long serialVersionUID = 2964774315889061771L;
-
   private final int hour;
   private final int minute;
   private final int second;

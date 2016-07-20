@@ -34,15 +34,6 @@ import org.quartz.spi.TriggerFiredBundle;
 
 public class JobExecutionContextImpl implements java.io.Serializable, JobExecutionContext
 {
-
-  private static final long serialVersionUID = -8139417614523942021L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private transient Scheduler scheduler;
 
   private final Trigger trigger;
@@ -71,7 +62,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
 
   private Object result;
 
-  private final HashMap <Object, Object> data = new HashMap <> ();
+  private final HashMap <Object, Object> data = new HashMap<> ();
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

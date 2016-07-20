@@ -27,9 +27,6 @@ import org.quartz.utils.Key;
  */
 public class GroupMatcher <T extends Key <?>> extends StringMatcher <T>
 {
-
-  private static final long serialVersionUID = -3275767650469343849L;
-
   protected GroupMatcher (final String compareTo, final StringOperatorName compareWith)
   {
     super (compareTo, compareWith);
@@ -40,7 +37,7 @@ public class GroupMatcher <T extends Key <?>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> groupEquals (final String compareTo)
   {
-    return new GroupMatcher <> (compareTo, StringOperatorName.EQUALS);
+    return new GroupMatcher<> (compareTo, StringOperatorName.EQUALS);
   }
 
   /**
@@ -65,7 +62,7 @@ public class GroupMatcher <T extends Key <?>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> groupStartsWith (final String compareTo)
   {
-    return new GroupMatcher <> (compareTo, StringOperatorName.STARTS_WITH);
+    return new GroupMatcher<> (compareTo, StringOperatorName.STARTS_WITH);
   }
 
   /**
@@ -91,7 +88,7 @@ public class GroupMatcher <T extends Key <?>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> groupEndsWith (final String compareTo)
   {
-    return new GroupMatcher <> (compareTo, StringOperatorName.ENDS_WITH);
+    return new GroupMatcher<> (compareTo, StringOperatorName.ENDS_WITH);
   }
 
   /**
@@ -116,7 +113,7 @@ public class GroupMatcher <T extends Key <?>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> groupContains (final String compareTo)
   {
-    return new GroupMatcher <> (compareTo, StringOperatorName.CONTAINS);
+    return new GroupMatcher<> (compareTo, StringOperatorName.CONTAINS);
   }
 
   /**
@@ -141,7 +138,7 @@ public class GroupMatcher <T extends Key <?>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> anyGroup ()
   {
-    return new GroupMatcher <> ("", StringOperatorName.ANYTHING);
+    return new GroupMatcher<> ("", StringOperatorName.ANYTHING);
   }
 
   /**
