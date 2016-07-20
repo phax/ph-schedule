@@ -30,9 +30,9 @@ import com.helger.commons.lang.EnumHelper;
  */
 public enum ESchedulerState implements IHasID <String>
 {
- STARTED ("started"),
- STANDBY ("standby"),
- SHUTDOWN ("shutdown");
+  STARTED ("started"),
+  STANDBY ("standby"),
+  SHUTDOWN ("shutdown");
 
   private String m_sID;
 
