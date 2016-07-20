@@ -69,8 +69,6 @@ public class QuartzSchedulerResources
 
   private ThreadExecutor threadExecutor;
 
-  private boolean runUpdateCheck = false;
-
   private long batchTimeWindow = 0;
 
   private int maxBatchSize = 1;
@@ -367,28 +365,6 @@ public class QuartzSchedulerResources
   public void setThreadExecutor (final ThreadExecutor threadExecutor)
   {
     this.threadExecutor = threadExecutor;
-  }
-
-  /**
-   * Create the name under which this scheduler should be registered in JMX.
-   * <p>
-   * The name is composed as:
-   * quartz:type=QuartzScheduler,name=<i>[schedName]</i>,instance=<i>[schedInstId]</i>
-   * </p>
-   */
-  public static String generateJMXObjectName (final String schedName, final String schedInstId)
-  {
-    return "quartz:type=QuartzScheduler" + ",name=" + schedName.replaceAll (":|=|\n", ".") + ",instance=" + schedInstId;
-  }
-
-  public boolean isRunUpdateCheck ()
-  {
-    return runUpdateCheck;
-  }
-
-  public void setRunUpdateCheck (final boolean runUpdateCheck)
-  {
-    this.runUpdateCheck = runUpdateCheck;
   }
 
   public long getBatchTimeWindow ()

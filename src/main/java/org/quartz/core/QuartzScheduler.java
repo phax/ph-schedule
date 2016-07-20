@@ -32,7 +32,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-import java.util.Timer;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.quartz.Calendar;
@@ -59,7 +58,6 @@ import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.SchedulerRepository;
-import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.listeners.SchedulerListenerSupport;
 import org.quartz.simpl.PropertySettingJobFactory;
@@ -68,7 +66,6 @@ import org.quartz.spi.OperableTrigger;
 import org.quartz.spi.SchedulerPlugin;
 import org.quartz.spi.SchedulerSignaler;
 import org.quartz.spi.ThreadExecutor;
-import org.quartz.utils.UpdateChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -186,9 +183,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   private Date initialStart = null;
 
-  /** Update timer that must be cancelled upon shutdown. */
-  private final Timer updateTimer;
-
   private final Logger log = LoggerFactory.getLogger (getClass ());
 
   // private static final Map<String, ManagementServer> MGMT_SVR_BY_BIND = new
@@ -232,11 +226,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
     signaler = new SchedulerSignalerImpl (this, this.schedThread);
 
-    if (shouldRunUpdateCheck ())
-      updateTimer = scheduleUpdateCheck ();
-    else
-      updateTimer = null;
-
     getLog ().info ("Quartz Scheduler v." + getVersion () + " created.");
   }
 
@@ -274,17 +263,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return VERSION_MAJOR;
   }
 
-  private boolean shouldRunUpdateCheck ()
-  {
-    if (resources.isRunUpdateCheck () &&
-        !Boolean.getBoolean (StdSchedulerFactory.PROP_SCHED_SKIP_UPDATE_CHECK) &&
-        !Boolean.getBoolean ("org.terracotta.quartz.skipUpdateCheck"))
-    {
-      return true;
-    }
-    return false;
-  }
-
   public static String getVersionMinor ()
   {
     return VERSION_MINOR;
@@ -303,16 +281,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public Logger getLog ()
   {
     return log;
-  }
-
-  /**
-   * Update checker scheduler - fires every week
-   */
-  private Timer scheduleUpdateCheck ()
-  {
-    final Timer rval = new Timer (true);
-    rval.scheduleAtFixedRate (new UpdateChecker (), 1000, 7 * 24 * 60 * 60 * 1000L);
-    return rval;
   }
 
   /**
@@ -624,9 +592,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     SchedulerRepository.getInstance ().remove (resources.getName ());
 
     holdToPreventGC.clear ();
-
-    if (updateTimer != null)
-      updateTimer.cancel ();
 
     getLog ().info ("Scheduler " + resources.getUniqueIdentifier () + " shutdown complete.");
   }

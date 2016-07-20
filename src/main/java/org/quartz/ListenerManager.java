@@ -71,7 +71,7 @@ public interface ListenerManager
    * @see Matcher
    * @see org.quartz.impl.matchers.EverythingMatcher
    */
-  public void addJobListener (JobListener jobListener, Matcher <JobKey>... matchers);
+  public void addJobListener (JobListener jobListener, @SuppressWarnings ("unchecked") Matcher <JobKey>... matchers);
 
   /**
    * Add the given <code>{@link JobListener}</code> to the
@@ -186,7 +186,8 @@ public interface ListenerManager
    * @see Matcher
    * @see org.quartz.impl.matchers.EverythingMatcher
    */
-  public void addTriggerListener (TriggerListener triggerListener, Matcher <TriggerKey>... matchers);
+  public void addTriggerListener (TriggerListener triggerListener,
+                                  @SuppressWarnings ("unchecked") Matcher <TriggerKey>... matchers);
 
   /**
    * Add the given <code>{@link TriggerListener}</code> to the

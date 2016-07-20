@@ -123,8 +123,6 @@ public class StdSchedulerFactory implements SchedulerFactory
 
   public static final String PROP_SCHED_THREAD_NAME = "org.quartz.scheduler.threadName";
 
-  public static final String PROP_SCHED_SKIP_UPDATE_CHECK = "org.quartz.scheduler.skipUpdateCheck";
-
   public static final String PROP_SCHED_BATCH_TIME_WINDOW = "org.quartz.scheduler.batchTriggerAcquisitionFireAheadTimeWindow";
 
   public static final String PROP_SCHED_MAX_BATCH_SIZE = "org.quartz.scheduler.batchTriggerAcquisitionMaxCount";
@@ -596,7 +594,6 @@ public class StdSchedulerFactory implements SchedulerFactory
 
     final boolean threadsInheritInitalizersClassLoader = cfg.getBooleanProperty (PROP_SCHED_SCHEDULER_THREADS_INHERIT_CONTEXT_CLASS_LOADER_OF_INITIALIZING_THREAD);
 
-    final boolean skipUpdateCheck = cfg.getBooleanProperty (PROP_SCHED_SKIP_UPDATE_CHECK, true);
     final long batchTimeWindow = cfg.getLongProperty (PROP_SCHED_BATCH_TIME_WINDOW, 0L);
     final int maxBatchSize = cfg.getIntProperty (PROP_SCHED_MAX_BATCH_SIZE, 1);
 
@@ -982,7 +979,6 @@ public class StdSchedulerFactory implements SchedulerFactory
       rsrcs.setJobRunShellFactory (jrsf);
       rsrcs.setMakeSchedulerThreadDaemon (makeSchedulerThreadDaemon);
       rsrcs.setThreadsInheritInitializersClassLoadContext (threadsInheritInitalizersClassLoader);
-      rsrcs.setRunUpdateCheck (!skipUpdateCheck);
       rsrcs.setBatchTimeWindow (batchTimeWindow);
       rsrcs.setMaxBatchSize (maxBatchSize);
       rsrcs.setInterruptJobsOnShutdown (interruptJobsOnShutdown);

@@ -27,7 +27,8 @@ public class ListenerManagerImpl implements ListenerManager
   private final Map <String, List <Matcher <TriggerKey>>> globalTriggerListenersMatchers = new LinkedHashMap<> (10);
   private final List <SchedulerListener> schedulerListeners = new ArrayList<> (10);
 
-  public void addJobListener (final JobListener jobListener, final Matcher <JobKey>... matchers)
+  @SafeVarargs
+  public final void addJobListener (final JobListener jobListener, final Matcher <JobKey>... matchers)
   {
     addJobListener (jobListener, new CommonsArrayList<> (matchers));
   }
@@ -42,7 +43,7 @@ public class ListenerManagerImpl implements ListenerManager
     synchronized (globalJobListeners)
     {
       globalJobListeners.put (jobListener.getName (), jobListener);
-      final LinkedList <Matcher <JobKey>> matchersL = new LinkedList<> ();
+      final List <Matcher <JobKey>> matchersL = new LinkedList<> ();
       if (matchers != null && matchers.size () > 0)
         matchersL.addAll (matchers);
       else
@@ -156,7 +157,8 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public void addTriggerListener (final TriggerListener triggerListener, final Matcher <TriggerKey>... matchers)
+  @SafeVarargs
+  public final void addTriggerListener (final TriggerListener triggerListener, final Matcher <TriggerKey>... matchers)
   {
     addTriggerListener (triggerListener, Arrays.asList (matchers));
   }
