@@ -75,7 +75,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
   private TimeOfDay endTimeOfDay;
   private int repeatCount = DailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
 
-  private int misfireInstruction = CalendarIntervalTrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int misfireInstruction = Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   /**
    * A set of all days of the week. The set contains all values between
@@ -100,17 +100,17 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
 
   static
   {
-    Set <Integer> t = new HashSet <> (7);
+    Set <Integer> t = new HashSet<> (7);
     for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++)
       t.add (i);
     ALL_DAYS_OF_THE_WEEK = Collections.unmodifiableSet (t);
 
-    t = new HashSet <> (5);
+    t = new HashSet<> (5);
     for (int i = Calendar.MONDAY; i <= Calendar.FRIDAY; i++)
       t.add (i);
     MONDAY_THROUGH_FRIDAY = Collections.unmodifiableSet (t);
 
-    t = new HashSet <> (2);
+    t = new HashSet<> (2);
     t.add (Calendar.SUNDAY);
     t.add (Calendar.SATURDAY);
     SATURDAY_AND_SUNDAY = Collections.unmodifiableSet (t);
@@ -270,7 +270,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
    */
   public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Integer... onDaysOfWeek)
   {
-    final Set <Integer> daysAsSet = new HashSet <> (12);
+    final Set <Integer> daysAsSet = new HashSet<> (12);
     Collections.addAll (daysAsSet, onDaysOfWeek);
     return onDaysOfTheWeek (daysAsSet);
   }

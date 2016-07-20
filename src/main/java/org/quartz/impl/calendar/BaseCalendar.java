@@ -17,7 +17,6 @@
 
 package org.quartz.impl.calendar;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -41,11 +40,8 @@ import org.quartz.Calendar;
  * @author Juergen Donnerstag
  * @author James House
  */
-public class BaseCalendar implements Calendar, Serializable, Cloneable
+public class BaseCalendar implements Calendar
 {
-
-  static final long serialVersionUID = 3106623404629760239L;
-
   // <p>A optional base calendar.</p>
   private Calendar baseCalendar;
 

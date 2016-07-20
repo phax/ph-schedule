@@ -28,8 +28,6 @@ import java.util.TimeZone;
  */
 public class DailyCalendar extends BaseCalendar
 {
-  static final long serialVersionUID = -7561220099904944039L;
-
   private static final String invalidHourOfDay = "Invalid hour of day: ";
   private static final String invalidMinute = "Invalid minute: ";
   private static final String invalidSecond = "Invalid second: ";
@@ -692,7 +690,7 @@ public class DailyCalendar extends BaseCalendar
    */
   private String [] split (final String string, final String delim)
   {
-    final ArrayList <String> result = new ArrayList <> ();
+    final ArrayList <String> result = new ArrayList<> ();
 
     final StringTokenizer stringTokenizer = new StringTokenizer (string, delim);
     while (stringTokenizer.hasMoreTokens ())

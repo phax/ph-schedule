@@ -195,6 +195,11 @@ import java.util.TreeSet;
  */
 public final class CronExpression implements Serializable, Cloneable
 {
+  static final class ValueSet
+  {
+    int value;
+    int pos;
+  }
 
   private static final long serialVersionUID = 12423409423L;
 
@@ -1084,22 +1089,32 @@ public final class CronExpression implements Serializable, Cloneable
     return buf.toString ();
   }
 
-  protected int skipWhiteSpace (int i, final String s)
+  protected int skipWhiteSpace (final int i, final String s)
   {
-    for (; i < s.length () && (s.charAt (i) == ' ' || s.charAt (i) == '\t'); i++)
+    int nIndex = i;
+    final int nMax = s.length ();
+    while (nIndex < nMax)
     {
-      ;
+      if (Character.isWhitespace (s.charAt (i)))
+        break;
+      nIndex++;
     }
 
-    return i;
+    return nIndex++;
   }
 
-  protected int findNextWhiteSpace (int i, final String s)
+  protected int findNextWhiteSpace (final int i, final String s)
   {
-    for (; i < s.length () && (s.charAt (i) != ' ' || s.charAt (i) != '\t'); i++)
-    {}
+    int nIndex = i;
+    final int nMax = s.length ();
+    while (nIndex < nMax)
+    {
+      if (!Character.isWhitespace (s.charAt (i)))
+        break;
+      nIndex++;
+    }
 
-    return i;
+    return nIndex++;
   }
 
   protected void addToSet (final int val, final int end, int incr, final int type) throws ParseException
@@ -1965,18 +1980,4 @@ public final class CronExpression implements Serializable, Cloneable
     catch (final Exception ignore)
     {} // never happens
   }
-
-  @Override
-  @Deprecated
-  public Object clone ()
-  {
-    return new CronExpression (this);
-  }
-}
-
-class ValueSet
-{
-  public int value;
-
-  public int pos;
 }

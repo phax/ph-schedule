@@ -55,7 +55,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
 
   private long interval = 0;
   private int repeatCount = 0;
-  private int misfireInstruction = SimpleTrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int misfireInstruction = Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   protected SimpleScheduleBuilder ()
   {}

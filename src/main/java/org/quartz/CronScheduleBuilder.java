@@ -58,7 +58,7 @@ public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
 {
 
   private final CronExpression cronExpression;
-  private int misfireInstruction = CronTrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int misfireInstruction = Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   protected CronScheduleBuilder (final CronExpression cronExpression)
   {

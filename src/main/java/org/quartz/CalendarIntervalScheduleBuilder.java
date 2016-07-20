@@ -60,7 +60,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
   private int interval = 1;
   private IntervalUnit intervalUnit = IntervalUnit.DAY;
 
-  private int misfireInstruction = CalendarIntervalTrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int misfireInstruction = Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
   private TimeZone timeZone;
   private boolean preserveHourOfDayAcrossDaylightSavings;
   private boolean skipDayIfHourDoesNotExist;

@@ -18,7 +18,6 @@
 
 package org.quartz;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import org.quartz.utils.StringKeyDirtyFlagMap;
@@ -50,17 +49,8 @@ import org.quartz.utils.StringKeyDirtyFlagMap;
  * @see JobExecutionContext
  * @author James House
  */
-public class JobDataMap extends StringKeyDirtyFlagMap implements Serializable
+public class JobDataMap extends StringKeyDirtyFlagMap
 {
-
-  private static final long serialVersionUID = -6939901990106713909L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Create an empty <code>JobDataMap</code>.
@@ -80,9 +70,8 @@ public class JobDataMap extends StringKeyDirtyFlagMap implements Serializable
   {
     this ();
     @SuppressWarnings ("unchecked") // casting to keep API compatible and avoid
-    final
     // compiler errors/warnings.
-    Map <String, Object> mapTyped = (Map <String, Object>) map;
+    final Map <String, Object> mapTyped = (Map <String, Object>) map;
     putAll (mapTyped);
   }
 

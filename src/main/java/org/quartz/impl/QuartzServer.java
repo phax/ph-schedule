@@ -169,7 +169,7 @@ public class QuartzServer extends SchedulerListenerSupport
 
     if (System.getSecurityManager () == null)
     {
-      System.setSecurityManager (new java.rmi.RMISecurityManager ());
+      System.setSecurityManager (new SecurityManager ());
     }
 
     try

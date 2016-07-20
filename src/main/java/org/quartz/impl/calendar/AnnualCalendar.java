@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.quartz.Calendar;
@@ -36,12 +37,9 @@ import org.quartz.Calendar;
  * @see org.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class AnnualCalendar extends BaseCalendar implements Calendar, Serializable
+public class AnnualCalendar extends BaseCalendar
 {
-
-  static final long serialVersionUID = 7346867105876610961L;
-
-  private ArrayList <java.util.Calendar> excludeDays = new ArrayList <> ();
+  private List <java.util.Calendar> excludeDays = new ArrayList<> ();
 
   // true, if excludeDays is sorted
   private boolean dataSorted = false;
@@ -68,7 +66,7 @@ public class AnnualCalendar extends BaseCalendar implements Calendar, Serializab
   public Object clone ()
   {
     final AnnualCalendar clone = (AnnualCalendar) super.clone ();
-    clone.excludeDays = new ArrayList <> (excludeDays);
+    clone.excludeDays = new ArrayList<> (excludeDays);
     return clone;
   }
 
@@ -77,7 +75,7 @@ public class AnnualCalendar extends BaseCalendar implements Calendar, Serializab
    * Get the array which defines the exclude-value of each day of month
    * </p>
    */
-  public ArrayList <java.util.Calendar> getDaysExcluded ()
+  public List <java.util.Calendar> getDaysExcluded ()
   {
     return excludeDays;
   }
@@ -147,7 +145,7 @@ public class AnnualCalendar extends BaseCalendar implements Calendar, Serializab
   {
     if (days == null)
     {
-      excludeDays = new ArrayList <> ();
+      excludeDays = new ArrayList<> ();
     }
     else
     {

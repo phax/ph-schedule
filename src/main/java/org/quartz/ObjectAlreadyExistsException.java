@@ -28,15 +28,6 @@ package org.quartz;
  */
 public class ObjectAlreadyExistsException extends JobPersistenceException
 {
-
-  private static final long serialVersionUID = -558301282071659896L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Create a <code>ObjectAlreadyExistsException</code> with the given message.

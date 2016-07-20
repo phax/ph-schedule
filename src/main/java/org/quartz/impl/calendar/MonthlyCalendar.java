@@ -17,7 +17,6 @@
 
 package org.quartz.impl.calendar;
 
-import java.io.Serializable;
 import java.util.TimeZone;
 
 import org.quartz.Calendar;
@@ -33,11 +32,8 @@ import org.quartz.Calendar;
  * @see org.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class MonthlyCalendar extends BaseCalendar implements Calendar, Serializable
+public class MonthlyCalendar extends BaseCalendar
 {
-
-  static final long serialVersionUID = 419164961091807944L;
-
   private static final int MAX_DAYS_IN_MONTH = 31;
 
   // An array to store a months days which are to be excluded.

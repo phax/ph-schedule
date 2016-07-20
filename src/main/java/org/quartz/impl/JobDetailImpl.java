@@ -27,7 +27,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
 import org.quartz.PersistJobDataAfterExecution;
 import org.quartz.Scheduler;
-import org.quartz.StatefulJob;
 import org.quartz.Trigger;
 import org.quartz.utils.ClassUtils;
 
@@ -51,24 +50,13 @@ import org.quartz.utils.ClassUtils;
  * </p>
  *
  * @see Job
- * @see StatefulJob
  * @see JobDataMap
  * @see Trigger
  * @author James House
  * @author Sharada Jambula
  */
-@SuppressWarnings ("deprecation")
-public class JobDetailImpl implements Cloneable, java.io.Serializable, JobDetail
+public class JobDetailImpl implements JobDetail
 {
-
-  private static final long serialVersionUID = -6069784757781506897L;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private String name;
 
   private String group = Scheduler.DEFAULT_GROUP;
@@ -105,68 +93,6 @@ public class JobDetailImpl implements Cloneable, java.io.Serializable, JobDetail
   public JobDetailImpl ()
   {
     // do nothing...
-  }
-
-  /**
-   * <p>
-   * Create a <code>JobDetail</code> with the given name, given class, default
-   * group, and the default settings of all the other properties.
-   * </p>
-   *
-   * @exception IllegalArgumentException
-   *            if name is null or empty, or the group is an empty string.
-   * @deprecated use {@link JobBuilder}
-   */
-  @Deprecated
-  public JobDetailImpl (final String name, final Class <? extends Job> jobClass)
-  {
-    this (name, null, jobClass);
-  }
-
-  /**
-   * <p>
-   * Create a <code>JobDetail</code> with the given name, group and class, and
-   * the default settings of all the other properties.
-   * </p>
-   *
-   * @param group
-   *        if <code>null</code>, Scheduler.DEFAULT_GROUP will be used.
-   * @exception IllegalArgumentException
-   *            if name is null or empty, or the group is an empty string.
-   * @deprecated use {@link JobBuilder}
-   */
-  @Deprecated
-  public JobDetailImpl (final String name, final String group, final Class <? extends Job> jobClass)
-  {
-    setName (name);
-    setGroup (group);
-    setJobClass (jobClass);
-  }
-
-  /**
-   * <p>
-   * Create a <code>JobDetail</code> with the given name, and group, and the
-   * given settings of all the other properties.
-   * </p>
-   *
-   * @param group
-   *        if <code>null</code>, Scheduler.DEFAULT_GROUP will be used.
-   * @exception IllegalArgumentException
-   *            if name is null or empty, or the group is an empty string.
-   * @deprecated use {@link JobBuilder}
-   */
-  @Deprecated
-  public JobDetailImpl (final String name,
-                        final String group,
-                        final Class <? extends Job> jobClass,
-                        final boolean durability,
-                        final boolean recover)
-  {
-    setName (name);
-    setGroup (group);
-    setJobClass (jobClass);
-    setDurability (durability);
-    setRequestsRecovery (recover);
   }
 
   /*

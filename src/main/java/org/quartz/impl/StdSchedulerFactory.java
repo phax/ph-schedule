@@ -41,9 +41,6 @@ import org.quartz.TriggerListener;
 import org.quartz.core.JobRunShellFactory;
 import org.quartz.core.QuartzScheduler;
 import org.quartz.core.QuartzSchedulerResources;
-import org.quartz.impl.jdbcjobstore.JobStoreSupport;
-import org.quartz.impl.jdbcjobstore.Semaphore;
-import org.quartz.impl.jdbcjobstore.TablePrefixAware;
 import org.quartz.impl.matchers.EverythingMatcher;
 import org.quartz.simpl.RAMJobStore;
 import org.quartz.simpl.SimpleThreadPool;
@@ -54,7 +51,6 @@ import org.quartz.spi.JobStore;
 import org.quartz.spi.SchedulerPlugin;
 import org.quartz.spi.ThreadExecutor;
 import org.quartz.spi.ThreadPool;
-import org.quartz.utils.DBConnectionManager;
 import org.quartz.utils.PropertiesParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,8 +131,6 @@ public class StdSchedulerFactory implements SchedulerFactory
 
   public static final String PROP_SCHED_IDLE_WAIT_TIME = "org.quartz.scheduler.idleWaitTime";
 
-  public static final String PROP_SCHED_DB_FAILURE_RETRY_INTERVAL = "org.quartz.scheduler.dbFailureRetryInterval";
-
   public static final String PROP_SCHED_MAKE_SCHEDULER_THREAD_DAEMON = "org.quartz.scheduler.makeSchedulerThreadDaemon";
 
   public static final String PROP_SCHED_SCHEDULER_THREADS_INHERIT_CONTEXT_CLASS_LOADER_OF_INITIALIZING_THREAD = "org.quartz.scheduler.threadsInheritContextClassLoaderOfInitializer";
@@ -162,10 +156,6 @@ public class StdSchedulerFactory implements SchedulerFactory
   public static final String PROP_JOB_STORE_LOCK_HANDLER_PREFIX = PROP_JOB_STORE_PREFIX + ".lockHandler";
 
   public static final String PROP_JOB_STORE_LOCK_HANDLER_CLASS = PROP_JOB_STORE_LOCK_HANDLER_PREFIX + ".class";
-
-  public static final String PROP_TABLE_PREFIX = "tablePrefix";
-
-  public static final String PROP_SCHED_NAME = "schedName";
 
   public static final String PROP_JOB_STORE_CLASS = "org.quartz.jobStore.class";
 
@@ -559,12 +549,10 @@ public class StdSchedulerFactory implements SchedulerFactory
     JobStore js = null;
     ThreadPool tp = null;
     QuartzScheduler qs = null;
-    final DBConnectionManager dbMgr = null;
     String instanceIdGeneratorClass = null;
     Properties tProps = null;
     boolean autoId = false;
     long idleWaitTime = -1;
-    long dbFailureRetry = 15000L; // 15 secs
     String classLoadHelperClass;
     String jobFactoryClass;
     ThreadExecutor threadExecutor;
@@ -602,12 +590,6 @@ public class StdSchedulerFactory implements SchedulerFactory
     if (idleWaitTime > -1 && idleWaitTime < 1000)
     {
       throw new SchedulerException ("org.quartz.scheduler.idleWaitTime of less than 1000ms is not legal.");
-    }
-
-    dbFailureRetry = cfg.getLongProperty (PROP_SCHED_DB_FAILURE_RETRY_INTERVAL, dbFailureRetry);
-    if (dbFailureRetry < 0)
-    {
-      throw new SchedulerException (PROP_SCHED_DB_FAILURE_RETRY_INTERVAL + " of less than 0 ms is not legal.");
     }
 
     final boolean makeSchedulerThreadDaemon = cfg.getBooleanProperty (PROP_SCHED_MAKE_SCHEDULER_THREAD_DAEMON);
@@ -753,53 +735,6 @@ public class StdSchedulerFactory implements SchedulerFactory
     {
       initException = new SchedulerException ("JobStore class '" + jsClass + "' props could not be configured.", e);
       throw initException;
-    }
-
-    if (js instanceof JobStoreSupport)
-    {
-      // Install custom lock handler (Semaphore)
-      final String lockHandlerClass = cfg.getStringProperty (PROP_JOB_STORE_LOCK_HANDLER_CLASS);
-      if (lockHandlerClass != null)
-      {
-        try
-        {
-          final Semaphore lockHandler = (Semaphore) loadHelper.loadClass (lockHandlerClass).newInstance ();
-
-          tProps = cfg.getPropertyGroup (PROP_JOB_STORE_LOCK_HANDLER_PREFIX, true);
-
-          // If this lock handler requires the table prefix, add it to its
-          // properties.
-          if (lockHandler instanceof TablePrefixAware)
-          {
-            tProps.setProperty (PROP_TABLE_PREFIX, ((JobStoreSupport) js).getTablePrefix ());
-            tProps.setProperty (PROP_SCHED_NAME, schedName);
-          }
-
-          try
-          {
-            setBeanProps (lockHandler, tProps);
-          }
-          catch (final Exception e)
-          {
-            initException = new SchedulerException ("JobStore LockHandler class '" +
-                                                    lockHandlerClass +
-                                                    "' props could not be configured.",
-                                                    e);
-            throw initException;
-          }
-
-          ((JobStoreSupport) js).setLockHandler (lockHandler);
-          getLog ().info ("Using custom data access locking (synchronization): " + lockHandlerClass);
-        }
-        catch (final Exception e)
-        {
-          initException = new SchedulerException ("JobStore LockHandler class '" +
-                                                  lockHandlerClass +
-                                                  "' could not be instantiated.",
-                                                  e);
-          throw initException;
-        }
-      }
     }
 
     // Set up any SchedulerPlugins
@@ -1040,16 +975,6 @@ public class StdSchedulerFactory implements SchedulerFactory
         }
       }
 
-      if (js instanceof JobStoreSupport)
-      {
-        final JobStoreSupport jjs = (JobStoreSupport) js;
-        jjs.setDbRetryInterval (dbFailureRetry);
-        if (threadsInheritInitalizersClassLoader)
-          jjs.setThreadsInheritInitializersClassLoadContext (threadsInheritInitalizersClassLoader);
-
-        jjs.setThreadExecutor (threadExecutor);
-      }
-
       final QuartzSchedulerResources rsrcs = new QuartzSchedulerResources ();
       rsrcs.setName (schedName);
       rsrcs.setThreadName (threadName);
@@ -1085,7 +1010,7 @@ public class StdSchedulerFactory implements SchedulerFactory
         rsrcs.addSchedulerPlugin (plugin);
       }
 
-      qs = new QuartzScheduler (rsrcs, idleWaitTime, dbFailureRetry);
+      qs = new QuartzScheduler (rsrcs, idleWaitTime);
       qsInited = true;
 
       // Create Scheduler ref...
@@ -1137,11 +1062,6 @@ public class StdSchedulerFactory implements SchedulerFactory
 
       // prevents the repository from being garbage collected
       qs.addNoGCObject (schedRep);
-      // prevents the db manager from being garbage collected
-      if (dbMgr != null)
-      {
-        qs.addNoGCObject (dbMgr);
-      }
 
       schedRep.bind (scheduler);
       return scheduler;

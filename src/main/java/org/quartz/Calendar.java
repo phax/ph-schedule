@@ -18,6 +18,8 @@
 
 package org.quartz;
 
+import java.io.Serializable;
+
 /**
  * An interface to be implemented by objects that define spaces of time during
  * which an associated <code>{@link Trigger}</code> may (not) fire. Calendars do
@@ -40,22 +42,9 @@ package org.quartz;
  * @author James House
  * @author Juergen Donnerstag
  */
-public interface Calendar extends java.io.Serializable, java.lang.Cloneable
+public interface Calendar extends Serializable, Cloneable
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   int MONTH = 0;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>

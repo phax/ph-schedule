@@ -60,7 +60,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   public DirtyFlagMap ()
   {
-    map = new HashMap <> ();
+    map = new HashMap<> ();
   }
 
   /**
@@ -73,7 +73,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   public DirtyFlagMap (final int initialCapacity)
   {
-    map = new HashMap <> (initialCapacity);
+    map = new HashMap<> (initialCapacity);
   }
 
   /**
@@ -86,7 +86,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   public DirtyFlagMap (final int initialCapacity, final float loadFactor)
   {
-    map = new HashMap <> (initialCapacity, loadFactor);
+    map = new HashMap<> (initialCapacity, loadFactor);
   }
 
   /*
@@ -178,7 +178,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
 
   public Set <K> keySet ()
   {
-    return new DirtyFlagSet <> (map.keySet ());
+    return new DirtyFlagSet<> (map.keySet ());
   }
 
   public V put (final K key, final V val)
@@ -217,7 +217,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
 
   public Collection <V> values ()
   {
-    return new DirtyFlagCollection <> (map.values ());
+    return new DirtyFlagCollection<> (map.values ());
   }
 
   @Override
@@ -262,7 +262,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
 
     public Iterator <T> iterator ()
     {
-      return new DirtyFlagIterator <> (collection.iterator ());
+      return new DirtyFlagIterator<> (collection.iterator ());
     }
 
     public boolean remove (final Object o)
@@ -502,6 +502,12 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
     public boolean equals (final Object o)
     {
       return entry.equals (o);
+    }
+
+    @Override
+    public int hashCode ()
+    {
+      return entry.hashCode ();
     }
   }
 }

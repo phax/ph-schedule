@@ -58,7 +58,6 @@ import org.quartz.Trigger.TriggerState;
 import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 import org.quartz.UnableToInterruptJobException;
-import org.quartz.core.jmx.QuartzSchedulerMBean;
 import org.quartz.impl.SchedulerRepository;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -185,8 +184,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   private volatile boolean closed = false;
   private volatile boolean shuttingDown = false;
 
-  private final QuartzSchedulerMBean jmxBean = null;
-
   private Date initialStart = null;
 
   /** Update timer that must be cancelled upon shutdown. */
@@ -212,9 +209,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    *
    * @see QuartzSchedulerResources
    */
-  public QuartzScheduler (final QuartzSchedulerResources resources,
-                          final long idleWaitTime,
-                          @Deprecated final long dbRetryInterval) throws SchedulerException
+  public QuartzScheduler (final QuartzSchedulerResources resources, final long idleWaitTime) throws SchedulerException
   {
     this.resources = resources;
     if (resources.getJobStore () instanceof JobListener)

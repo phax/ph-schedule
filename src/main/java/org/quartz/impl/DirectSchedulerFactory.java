@@ -215,7 +215,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
                                final ThreadPool threadPool,
                                final JobStore jobStore) throws SchedulerException
   {
-    createScheduler (schedulerName, schedulerInstanceId, threadPool, jobStore, -1, -1);
+    createScheduler (schedulerName, schedulerInstanceId, threadPool, jobStore, -1);
   }
 
   /**
@@ -240,16 +240,14 @@ public class DirectSchedulerFactory implements SchedulerFactory
                                final String schedulerInstanceId,
                                final ThreadPool threadPool,
                                final JobStore jobStore,
-                               final long idleWaitTime,
-                               final long dbFailureRetryInterval) throws SchedulerException
+                               final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
                      schedulerInstanceId,
                      threadPool,
                      jobStore,
                      null, // plugins
-                     idleWaitTime,
-                     dbFailureRetryInterval);
+                     idleWaitTime);
   }
 
   /**
@@ -268,11 +266,6 @@ public class DirectSchedulerFactory implements SchedulerFactory
    *        Map from a <code>String</code> plugin names to
    *        <code>{@link org.quartz.spi.SchedulerPlugin}</code>s. Can use "null"
    *        if no plugins are required.
-   * @param rmiRegistryHost
-   *        The hostname to register this scheduler with for RMI. Can use "null"
-   *        if no RMI is required.
-   * @param rmiRegistryPort
-   *        The port for RMI. Typically 1099.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
    *        default value, which is currently 30000 ms.
@@ -284,8 +277,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
                                final ThreadPool threadPool,
                                final JobStore jobStore,
                                final Map <String, SchedulerPlugin> schedulerPluginMap,
-                               final long idleWaitTime,
-                               final long dbFailureRetryInterval) throws SchedulerException
+                               final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
                      schedulerInstanceId,
@@ -293,8 +285,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
                      DEFAULT_THREAD_EXECUTOR,
                      jobStore,
                      schedulerPluginMap,
-                     idleWaitTime,
-                     dbFailureRetryInterval);
+                     idleWaitTime);
   }
 
   /**
@@ -315,11 +306,6 @@ public class DirectSchedulerFactory implements SchedulerFactory
    *        Map from a <code>String</code> plugin names to
    *        <code>{@link org.quartz.spi.SchedulerPlugin}</code>s. Can use "null"
    *        if no plugins are required.
-   * @param rmiRegistryHost
-   *        The hostname to register this scheduler with for RMI. Can use "null"
-   *        if no RMI is required.
-   * @param rmiRegistryPort
-   *        The port for RMI. Typically 1099.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
    *        default value, which is currently 30000 ms.
@@ -332,8 +318,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
                                final ThreadExecutor threadExecutor,
                                final JobStore jobStore,
                                final Map <String, SchedulerPlugin> schedulerPluginMap,
-                               final long idleWaitTime,
-                               final long dbFailureRetryInterval) throws SchedulerException
+                               final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
                      schedulerInstanceId,
@@ -342,7 +327,6 @@ public class DirectSchedulerFactory implements SchedulerFactory
                      jobStore,
                      schedulerPluginMap,
                      idleWaitTime,
-                     dbFailureRetryInterval,
                      DEFAULT_BATCH_MAX_SIZE,
                      DEFAULT_BATCH_TIME_WINDOW);
   }
@@ -365,11 +349,6 @@ public class DirectSchedulerFactory implements SchedulerFactory
    *        Map from a <code>String</code> plugin names to
    *        <code>{@link org.quartz.spi.SchedulerPlugin}</code>s. Can use "null"
    *        if no plugins are required.
-   * @param rmiRegistryHost
-   *        The hostname to register this scheduler with for RMI. Can use "null"
-   *        if no RMI is required.
-   * @param rmiRegistryPort
-   *        The port for RMI. Typically 1099.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
    *        default value, which is currently 30000 ms.
@@ -388,7 +367,6 @@ public class DirectSchedulerFactory implements SchedulerFactory
                                final JobStore jobStore,
                                final Map <String, SchedulerPlugin> schedulerPluginMap,
                                final long idleWaitTime,
-                               final long dbFailureRetryInterval,
                                final int maxBatchSize,
                                final long batchTimeWindow) throws SchedulerException
   {
@@ -421,7 +399,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
       }
     }
 
-    final QuartzScheduler qs = new QuartzScheduler (qrs, idleWaitTime, dbFailureRetryInterval);
+    final QuartzScheduler qs = new QuartzScheduler (qrs, idleWaitTime);
 
     final ClassLoadHelper cch = new CascadingClassLoadHelper ();
     cch.initialize ();

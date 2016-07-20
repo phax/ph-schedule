@@ -17,7 +17,6 @@
 
 package org.quartz.impl.calendar;
 
-import java.io.Serializable;
 import java.util.TimeZone;
 
 import org.quartz.Calendar;
@@ -33,10 +32,8 @@ import org.quartz.Calendar;
  * @see org.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class WeeklyCalendar extends BaseCalendar implements Calendar, Serializable
+public class WeeklyCalendar extends BaseCalendar
 {
-  static final long serialVersionUID = -6809298821229007586L;
-
   // An array to store the week days which are to be excluded.
   // java.util.Calendar.MONDAY etc. are used as index.
   private boolean [] excludeDays = new boolean [8];

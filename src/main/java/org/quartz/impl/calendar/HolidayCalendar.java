@@ -17,7 +17,6 @@
 
 package org.quartz.impl.calendar;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.SortedSet;
@@ -40,12 +39,10 @@ import org.quartz.Calendar;
  * @author Sharada Jambula
  * @author Juergen Donnerstag
  */
-public class HolidayCalendar extends BaseCalendar implements Calendar, Serializable
+public class HolidayCalendar extends BaseCalendar
 {
-  static final long serialVersionUID = -7590908752291814693L;
-
   // A sorted set to store the holidays
-  private TreeSet <Date> dates = new TreeSet <> ();
+  private TreeSet <Date> dates = new TreeSet<> ();
 
   public HolidayCalendar ()
   {}
@@ -69,7 +66,7 @@ public class HolidayCalendar extends BaseCalendar implements Calendar, Serializa
   public Object clone ()
   {
     final HolidayCalendar clone = (HolidayCalendar) super.clone ();
-    clone.dates = new TreeSet <> (dates);
+    clone.dates = new TreeSet<> (dates);
     return clone;
   }
 

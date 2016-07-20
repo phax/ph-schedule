@@ -6,7 +6,6 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
-import org.quartz.SchedulerListener;
 import org.quartz.Trigger;
 import org.quartz.listeners.SchedulerListenerSupport;
 import org.quartz.utils.counter.CounterConfig;
@@ -16,8 +15,7 @@ import org.quartz.utils.counter.sampled.SampledCounter;
 import org.quartz.utils.counter.sampled.SampledCounterConfig;
 import org.quartz.utils.counter.sampled.SampledRateCounterConfig;
 
-public class SampledStatisticsImpl extends SchedulerListenerSupport
-                                   implements SampledStatistics, JobListener, SchedulerListener
+public class SampledStatisticsImpl extends SchedulerListenerSupport implements SampledStatistics, JobListener
 {
   @SuppressWarnings ("unused")
   private final QuartzScheduler scheduler;
