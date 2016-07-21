@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -55,7 +56,8 @@ public class QTZ336_MissSchedulingChangeSignalTest
   private static final Logger LOG = LoggerFactory.getLogger (QTZ336_MissSchedulingChangeSignalTest.class);
 
   @Test
-  public void simpleScheduleAlwaysFiredUnder20s () throws Exception
+  @Ignore ("Takes nearly a minute to execute and works")
+  public void simpleScheduleAlwaysFiredUnder50s () throws Exception
   {
     final Properties properties = new Properties ();
     try (final InputStream propertiesIs = getClass ().getResourceAsStream ("/org/quartz/quartz.properties"))
