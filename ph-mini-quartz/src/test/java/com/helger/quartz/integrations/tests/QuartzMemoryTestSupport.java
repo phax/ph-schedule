@@ -23,8 +23,8 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Scheduler;
-import com.helger.quartz.SchedulerFactory;
+import com.helger.quartz.IScheduler;
+import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.simpl.SimpleThreadPool;
 
@@ -38,13 +38,13 @@ import com.helger.quartz.simpl.SimpleThreadPool;
 public class QuartzMemoryTestSupport
 {
   protected static final Logger LOG = LoggerFactory.getLogger (QuartzMemoryTestSupport.class);
-  protected Scheduler scheduler;
+  protected IScheduler scheduler;
 
   @Before
   public void initSchedulerBeforeTest () throws Exception
   {
     final Properties properties = createSchedulerProperties ();
-    final SchedulerFactory sf = new StdSchedulerFactory (properties);
+    final ISchedulerFactory sf = new StdSchedulerFactory (properties);
     scheduler = sf.getScheduler ();
     afterSchedulerInit ();
   }

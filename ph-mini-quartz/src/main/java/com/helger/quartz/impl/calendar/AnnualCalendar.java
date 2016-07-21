@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.helger.quartz.Calendar;
+import com.helger.quartz.ICalendar;
 
 /**
  * <p>
@@ -33,7 +33,7 @@ import com.helger.quartz.Calendar;
  * may use it to exclude bank holidays which are on the same date every year.
  * </p>
  *
- * @see com.helger.quartz.Calendar
+ * @see com.helger.quartz.ICalendar
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
@@ -47,7 +47,7 @@ public class AnnualCalendar extends BaseCalendar
   public AnnualCalendar ()
   {}
 
-  public AnnualCalendar (final Calendar baseCalendar)
+  public AnnualCalendar (final ICalendar baseCalendar)
   {
     super (baseCalendar);
   }
@@ -57,7 +57,7 @@ public class AnnualCalendar extends BaseCalendar
     super (timeZone);
   }
 
-  public AnnualCalendar (final Calendar baseCalendar, final TimeZone timeZone)
+  public AnnualCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
   }

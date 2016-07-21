@@ -17,10 +17,11 @@
 
 package com.helger.quartz.spi;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import com.helger.quartz.Calendar;
-import com.helger.quartz.JobDetail;
+import com.helger.quartz.ICalendar;
+import com.helger.quartz.IJobDetail;
 
 /**
  * <p>
@@ -31,22 +32,15 @@ import com.helger.quartz.JobDetail;
  * @see com.helger.quartz.core.QuartzSchedulerThread
  * @author James House
  */
-public class TriggerFiredBundle implements java.io.Serializable
+public class TriggerFiredBundle implements Serializable
 {
-  private final JobDetail job;
-
-  private final OperableTrigger trigger;
-
-  private final Calendar cal;
-
+  private final IJobDetail job;
+  private final IOperableTrigger trigger;
+  private final ICalendar cal;
   private final boolean jobIsRecovering;
-
   private final Date fireTime;
-
   private final Date scheduledFireTime;
-
   private final Date prevFireTime;
-
   private final Date nextFireTime;
 
   /*
@@ -55,9 +49,9 @@ public class TriggerFiredBundle implements java.io.Serializable
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  public TriggerFiredBundle (final JobDetail job,
-                             final OperableTrigger trigger,
-                             final Calendar cal,
+  public TriggerFiredBundle (final IJobDetail job,
+                             final IOperableTrigger trigger,
+                             final ICalendar cal,
                              final boolean jobIsRecovering,
                              final Date fireTime,
                              final Date scheduledFireTime,
@@ -80,17 +74,17 @@ public class TriggerFiredBundle implements java.io.Serializable
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  public JobDetail getJobDetail ()
+  public IJobDetail getJobDetail ()
   {
     return job;
   }
 
-  public OperableTrigger getTrigger ()
+  public IOperableTrigger getTrigger ()
   {
     return trigger;
   }
 
-  public Calendar getCalendar ()
+  public ICalendar getCalendar ()
   {
     return cal;
   }

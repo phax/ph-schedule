@@ -36,30 +36,30 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Calendar;
-import com.helger.quartz.Job;
+import com.helger.quartz.ICalendar;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobDetail;
+import com.helger.quartz.IJobDetail;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.ObjectAlreadyExistsException;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.Trigger.CompletedExecutionInstruction;
-import com.helger.quartz.Trigger.TriggerState;
-import com.helger.quartz.Trigger.TriggerTimeComparator;
+import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.ITrigger.TriggerTimeComparator;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.impl.matchers.StringMatcher;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.JobStore;
-import com.helger.quartz.spi.OperableTrigger;
-import com.helger.quartz.spi.SchedulerSignaler;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.IJobStore;
+import com.helger.quartz.spi.IOperableTrigger;
+import com.helger.quartz.spi.ISchedulerSignaler;
 import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
 
 /**
  * <p>
- * This class implements a <code>{@link com.helger.quartz.spi.JobStore}</code> that
+ * This class implements a <code>{@link com.helger.quartz.spi.IJobStore}</code> that
  * utilizes RAM as its storage device.
  * </p>
  * <p>
@@ -73,7 +73,7 @@ import com.helger.quartz.spi.TriggerFiredResult;
  * @author Sharada Jambula
  * @author Eric Mueller
  */
-public class RAMJobStore implements JobStore
+public class RAMJobStore implements IJobStore
 {
 
   /*
@@ -92,7 +92,7 @@ public class RAMJobStore implements JobStore
 
   protected TreeSet <TriggerWrapper> timeTriggers = new TreeSet<> (new TriggerWrapperComparator ());
 
-  protected HashMap <String, Calendar> calendarsByName = new HashMap<> (25);
+  protected HashMap <String, ICalendar> calendarsByName = new HashMap<> (25);
 
   protected ArrayList <TriggerWrapper> triggers = new ArrayList<> (1000);
 
@@ -106,7 +106,7 @@ public class RAMJobStore implements JobStore
 
   protected long misfireThreshold = 5000l;
 
-  protected SchedulerSignaler signaler;
+  protected ISchedulerSignaler signaler;
 
   private final Logger log = LoggerFactory.getLogger (getClass ());
 
@@ -141,7 +141,7 @@ public class RAMJobStore implements JobStore
    * order to give the it a chance to initialize.
    * </p>
    */
-  public void initialize (final ClassLoadHelper loadHelper, final SchedulerSignaler schedSignaler)
+  public void initialize (final IClassLoadHelper loadHelper, final ISchedulerSignaler schedSignaler)
   {
 
     this.signaler = schedSignaler;
@@ -202,8 +202,8 @@ public class RAMJobStore implements JobStore
   }
 
   /**
-   * Clear (delete!) all scheduling data - all {@link Job}s, {@link Trigger}s
-   * {@link Calendar}s.
+   * Clear (delete!) all scheduling data - all {@link IJob}s, {@link ITrigger}s
+   * {@link ICalendar}s.
    *
    * @throws JobPersistenceException
    */
@@ -243,8 +243,8 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Store the given <code>{@link com.helger.quartz.JobDetail}</code> and
-   * <code>{@link com.helger.quartz.Trigger}</code>.
+   * Store the given <code>{@link com.helger.quartz.IJobDetail}</code> and
+   * <code>{@link com.helger.quartz.ITrigger}</code>.
    * </p>
    *
    * @param newJob
@@ -254,8 +254,8 @@ public class RAMJobStore implements JobStore
    * @throws ObjectAlreadyExistsException
    *         if a <code>Job</code> with the same name/group already exists.
    */
-  public void storeJobAndTrigger (final JobDetail newJob,
-                                  final OperableTrigger newTrigger) throws JobPersistenceException
+  public void storeJobAndTrigger (final IJobDetail newJob,
+                                  final IOperableTrigger newTrigger) throws JobPersistenceException
   {
     storeJob (newJob, false);
     storeTrigger (newTrigger, false);
@@ -263,7 +263,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Store the given <code>{@link com.helger.quartz.Job}</code>.
+   * Store the given <code>{@link com.helger.quartz.IJob}</code>.
    * </p>
    *
    * @param newJob
@@ -276,9 +276,9 @@ public class RAMJobStore implements JobStore
    *         if a <code>Job</code> with the same name/group already exists, and
    *         replaceExisting is set to false.
    */
-  public void storeJob (final JobDetail newJob, final boolean replaceExisting) throws ObjectAlreadyExistsException
+  public void storeJob (final IJobDetail newJob, final boolean replaceExisting) throws ObjectAlreadyExistsException
   {
-    final JobWrapper jw = new JobWrapper ((JobDetail) newJob.clone ());
+    final JobWrapper jw = new JobWrapper ((IJobDetail) newJob.clone ());
 
     boolean repl = false;
 
@@ -318,8 +318,8 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link com.helger.quartz.Job}</code> with the given
-   * name, and any <code>{@link com.helger.quartz.Trigger}</code> s that reference it.
+   * Remove (delete) the <code>{@link com.helger.quartz.IJob}</code> with the given
+   * name, and any <code>{@link com.helger.quartz.ITrigger}</code> s that reference it.
    * </p>
    *
    * @return <code>true</code> if a <code>Job</code> with the given name & group
@@ -332,8 +332,8 @@ public class RAMJobStore implements JobStore
 
     synchronized (lock)
     {
-      final List <OperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
-      for (final OperableTrigger trig : triggersOfJob)
+      final List <IOperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
+      for (final IOperableTrigger trig : triggersOfJob)
       {
         this.removeTrigger (trig.getKey ());
         found = true;
@@ -384,7 +384,7 @@ public class RAMJobStore implements JobStore
     return allFound;
   }
 
-  public void storeJobsAndTriggers (final Map <JobDetail, Set <? extends Trigger>> triggersAndJobs,
+  public void storeJobsAndTriggers (final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                                     final boolean replace) throws JobPersistenceException
   {
 
@@ -393,11 +393,11 @@ public class RAMJobStore implements JobStore
       // make sure there are no collisions...
       if (!replace)
       {
-        for (final Entry <JobDetail, Set <? extends Trigger>> e : triggersAndJobs.entrySet ())
+        for (final Entry <IJobDetail, Set <? extends ITrigger>> e : triggersAndJobs.entrySet ())
         {
           if (checkExists (e.getKey ().getKey ()))
             throw new ObjectAlreadyExistsException (e.getKey ());
-          for (final Trigger trigger : e.getValue ())
+          for (final ITrigger trigger : e.getValue ())
           {
             if (checkExists (trigger.getKey ()))
               throw new ObjectAlreadyExistsException (trigger);
@@ -405,12 +405,12 @@ public class RAMJobStore implements JobStore
         }
       }
       // do bulk add...
-      for (final Entry <JobDetail, Set <? extends Trigger>> e : triggersAndJobs.entrySet ())
+      for (final Entry <IJobDetail, Set <? extends ITrigger>> e : triggersAndJobs.entrySet ())
       {
         storeJob (e.getKey (), true);
-        for (final Trigger trigger : e.getValue ())
+        for (final ITrigger trigger : e.getValue ())
         {
-          storeTrigger ((OperableTrigger) trigger, true);
+          storeTrigger ((IOperableTrigger) trigger, true);
         }
       }
     }
@@ -419,7 +419,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Store the given <code>{@link com.helger.quartz.Trigger}</code>.
+   * Store the given <code>{@link com.helger.quartz.ITrigger}</code>.
    * </p>
    *
    * @param newTrigger
@@ -433,10 +433,10 @@ public class RAMJobStore implements JobStore
    *         and replaceExisting is set to false.
    * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
    */
-  public void storeTrigger (final OperableTrigger newTrigger,
+  public void storeTrigger (final IOperableTrigger newTrigger,
                             final boolean replaceExisting) throws JobPersistenceException
   {
-    final TriggerWrapper tw = new TriggerWrapper ((OperableTrigger) newTrigger.clone ());
+    final TriggerWrapper tw = new TriggerWrapper ((IOperableTrigger) newTrigger.clone ());
 
     synchronized (lock)
     {
@@ -493,7 +493,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link com.helger.quartz.Trigger}</code> with the given
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the given
    * name.
    * </p>
    *
@@ -543,7 +543,7 @@ public class RAMJobStore implements JobStore
         if (removeOrphanedJob)
         {
           final JobWrapper jw = jobsByKey.get (tw.jobKey);
-          final List <OperableTrigger> trigs = getTriggersForJob (tw.jobKey);
+          final List <IOperableTrigger> trigs = getTriggersForJob (tw.jobKey);
           if ((trigs == null || trigs.size () == 0) && !jw.jobDetail.isDurable ())
           {
             if (removeJob (jw.key))
@@ -559,11 +559,11 @@ public class RAMJobStore implements JobStore
   }
 
   /**
-   * @see com.helger.quartz.spi.JobStore#replaceTrigger(TriggerKey triggerKey,
-   *      OperableTrigger newTrigger)
+   * @see com.helger.quartz.spi.IJobStore#replaceTrigger(TriggerKey triggerKey,
+   *      IOperableTrigger newTrigger)
    */
   public boolean replaceTrigger (final TriggerKey triggerKey,
-                                 final OperableTrigger newTrigger) throws JobPersistenceException
+                                 final IOperableTrigger newTrigger) throws JobPersistenceException
   {
 
     boolean found;
@@ -624,40 +624,40 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Retrieve the <code>{@link com.helger.quartz.JobDetail}</code> for the given
-   * <code>{@link com.helger.quartz.Job}</code>.
+   * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the given
+   * <code>{@link com.helger.quartz.IJob}</code>.
    * </p>
    *
    * @return The desired <code>Job</code>, or null if there is no match.
    */
-  public JobDetail retrieveJob (final JobKey jobKey)
+  public IJobDetail retrieveJob (final JobKey jobKey)
   {
     synchronized (lock)
     {
       final JobWrapper jw = jobsByKey.get (jobKey);
-      return (jw != null) ? (JobDetail) jw.jobDetail.clone () : null;
+      return (jw != null) ? (IJobDetail) jw.jobDetail.clone () : null;
     }
   }
 
   /**
    * <p>
-   * Retrieve the given <code>{@link com.helger.quartz.Trigger}</code>.
+   * Retrieve the given <code>{@link com.helger.quartz.ITrigger}</code>.
    * </p>
    *
    * @return The desired <code>Trigger</code>, or null if there is no match.
    */
-  public OperableTrigger retrieveTrigger (final TriggerKey triggerKey)
+  public IOperableTrigger retrieveTrigger (final TriggerKey triggerKey)
   {
     synchronized (lock)
     {
       final TriggerWrapper tw = triggersByKey.get (triggerKey);
 
-      return (tw != null) ? (OperableTrigger) tw.getTrigger ().clone () : null;
+      return (tw != null) ? (IOperableTrigger) tw.getTrigger ().clone () : null;
     }
   }
 
   /**
-   * Determine whether a {@link Job} with the given identifier already exists
+   * Determine whether a {@link IJob} with the given identifier already exists
    * within the scheduler.
    *
    * @param jobKey
@@ -675,7 +675,7 @@ public class RAMJobStore implements JobStore
   }
 
   /**
-   * Determine whether a {@link Trigger} with the given identifier already
+   * Determine whether a {@link ITrigger} with the given identifier already
    * exists within the scheduler.
    *
    * @param triggerKey
@@ -695,7 +695,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Get the current state of the identified <code>{@link Trigger}</code>.
+   * Get the current state of the identified <code>{@link ITrigger}</code>.
    * </p>
    *
    * @see TriggerState#NORMAL
@@ -747,7 +747,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Store the given <code>{@link com.helger.quartz.Calendar}</code>.
+   * Store the given <code>{@link com.helger.quartz.ICalendar}</code>.
    * </p>
    *
    * @param calendar
@@ -766,11 +766,11 @@ public class RAMJobStore implements JobStore
    *         replaceExisting is set to false.
    */
   public void storeCalendar (final String name,
-                             final Calendar aCalendar,
+                             final ICalendar aCalendar,
                              final boolean replaceExisting,
                              final boolean updateTriggers) throws ObjectAlreadyExistsException
   {
-    final Calendar calendar = (Calendar) aCalendar.clone ();
+    final ICalendar calendar = (ICalendar) aCalendar.clone ();
 
     synchronized (lock)
     {
@@ -787,7 +787,7 @@ public class RAMJobStore implements JobStore
       {
         for (final TriggerWrapper tw : getTriggerWrappersForCalendar (name))
         {
-          final OperableTrigger trig = tw.getTrigger ();
+          final IOperableTrigger trig = tw.getTrigger ();
           final boolean removed = timeTriggers.remove (tw);
 
           trig.updateWithNewCalendar (calendar, getMisfireThreshold ());
@@ -803,7 +803,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link com.helger.quartz.Calendar}</code> with the given
+   * Remove (delete) the <code>{@link com.helger.quartz.ICalendar}</code> with the given
    * name.
    * </p>
    * <p>
@@ -826,7 +826,7 @@ public class RAMJobStore implements JobStore
     {
       for (final TriggerWrapper trigger : triggers)
       {
-        final OperableTrigger trigg = trigger.trigger;
+        final IOperableTrigger trigg = trigger.trigger;
         if (trigg.getCalendarName () != null && trigg.getCalendarName ().equals (calName))
         {
           numRefs++;
@@ -844,27 +844,27 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Retrieve the given <code>{@link com.helger.quartz.Trigger}</code>.
+   * Retrieve the given <code>{@link com.helger.quartz.ITrigger}</code>.
    * </p>
    *
    * @param calName
    *        The name of the <code>Calendar</code> to be retrieved.
    * @return The desired <code>Calendar</code>, or null if there is no match.
    */
-  public Calendar retrieveCalendar (final String calName)
+  public ICalendar retrieveCalendar (final String calName)
   {
     synchronized (lock)
     {
-      final Calendar cal = calendarsByName.get (calName);
+      final ICalendar cal = calendarsByName.get (calName);
       if (cal != null)
-        return (Calendar) cal.clone ();
+        return (ICalendar) cal.clone ();
       return null;
     }
   }
 
   /**
    * <p>
-   * Get the number of <code>{@link com.helger.quartz.JobDetail}</code> s that are
+   * Get the number of <code>{@link com.helger.quartz.IJobDetail}</code> s that are
    * stored in the <code>JobsStore</code>.
    * </p>
    */
@@ -878,7 +878,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Get the number of <code>{@link com.helger.quartz.Trigger}</code> s that are stored
+   * Get the number of <code>{@link com.helger.quartz.ITrigger}</code> s that are stored
    * in the <code>JobsStore</code>.
    * </p>
    */
@@ -892,7 +892,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Get the number of <code>{@link com.helger.quartz.Calendar}</code> s that are
+   * Get the number of <code>{@link com.helger.quartz.ICalendar}</code> s that are
    * stored in the <code>JobsStore</code>.
    * </p>
    */
@@ -906,7 +906,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Get the names of all of the <code>{@link com.helger.quartz.Job}</code> s that
+   * Get the names of all of the <code>{@link com.helger.quartz.IJob}</code> s that
    * match the given groupMatcher.
    * </p>
    */
@@ -964,7 +964,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Get the names of all of the <code>{@link com.helger.quartz.Calendar}</code> s in
+   * Get the names of all of the <code>{@link com.helger.quartz.ICalendar}</code> s in
    * the <code>JobStore</code>.
    * </p>
    * <p>
@@ -982,7 +982,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Get the names of all of the <code>{@link com.helger.quartz.Trigger}</code> s that
+   * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code> s that
    * match the given groupMatcher.
    * </p>
    */
@@ -1040,7 +1040,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Get the names of all of the <code>{@link com.helger.quartz.Job}</code> groups.
+   * Get the names of all of the <code>{@link com.helger.quartz.IJob}</code> groups.
    * </p>
    */
   public List <String> getJobGroupNames ()
@@ -1057,7 +1057,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Get the names of all of the <code>{@link com.helger.quartz.Trigger}</code> groups.
+   * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code> groups.
    * </p>
    */
   public List <String> getTriggerGroupNames ()
@@ -1080,9 +1080,9 @@ public class RAMJobStore implements JobStore
    * If there are no matches, a zero-length array should be returned.
    * </p>
    */
-  public List <OperableTrigger> getTriggersForJob (final JobKey jobKey)
+  public List <IOperableTrigger> getTriggersForJob (final JobKey jobKey)
   {
-    final ArrayList <OperableTrigger> trigList = new ArrayList<> ();
+    final ArrayList <IOperableTrigger> trigList = new ArrayList<> ();
 
     synchronized (lock)
     {
@@ -1090,7 +1090,7 @@ public class RAMJobStore implements JobStore
       {
         if (tw.jobKey.equals (jobKey))
         {
-          trigList.add ((OperableTrigger) tw.trigger.clone ());
+          trigList.add ((IOperableTrigger) tw.trigger.clone ());
         }
       }
     }
@@ -1137,7 +1137,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Pause the <code>{@link Trigger}</code> with the given name.
+   * Pause the <code>{@link ITrigger}</code> with the given name.
    * </p>
    */
   public void pauseTrigger (final TriggerKey triggerKey)
@@ -1174,7 +1174,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Pause all of the known <code>{@link Trigger}s</code> matching.
+   * Pause all of the known <code>{@link ITrigger}s</code> matching.
    * </p>
    * <p>
    * The JobStore should "remember" the groups paused, and impose the pause on
@@ -1228,7 +1228,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Pause the <code>{@link com.helger.quartz.JobDetail}</code> with the given name -
+   * Pause the <code>{@link com.helger.quartz.IJobDetail}</code> with the given name -
    * by pausing all of its current <code>Trigger</code>s.
    * </p>
    */
@@ -1236,8 +1236,8 @@ public class RAMJobStore implements JobStore
   {
     synchronized (lock)
     {
-      final List <OperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
-      for (final OperableTrigger trigger : triggersOfJob)
+      final List <IOperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
+      for (final IOperableTrigger trigger : triggersOfJob)
       {
         pauseTrigger (trigger.getKey ());
       }
@@ -1246,7 +1246,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Pause all of the <code>{@link com.helger.quartz.JobDetail}s</code> in the given
+   * Pause all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in the given
    * group - by pausing all of their <code>Trigger</code>s.
    * </p>
    * <p>
@@ -1287,8 +1287,8 @@ public class RAMJobStore implements JobStore
       {
         for (final JobKey jobKey : getJobKeys (GroupMatcher.jobGroupEquals (groupName)))
         {
-          final List <OperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
-          for (final OperableTrigger trigger : triggersOfJob)
+          final List <IOperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
+          for (final IOperableTrigger trigger : triggersOfJob)
           {
             pauseTrigger (trigger.getKey ());
           }
@@ -1301,7 +1301,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Resume (un-pause) the <code>{@link Trigger}</code> with the given key.
+   * Resume (un-pause) the <code>{@link ITrigger}</code> with the given key.
    * </p>
    * <p>
    * If the <code>Trigger</code> missed one or more fire-times, then the
@@ -1321,7 +1321,7 @@ public class RAMJobStore implements JobStore
         return;
       }
 
-      final OperableTrigger trig = tw.getTrigger ();
+      final IOperableTrigger trig = tw.getTrigger ();
 
       // if the trigger is not paused resuming it does not make sense...
       if (tw.state != TriggerWrapper.STATE_PAUSED && tw.state != TriggerWrapper.STATE_PAUSED_BLOCKED)
@@ -1349,7 +1349,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Resume (un-pause) all of the <code>{@link Trigger}s</code> in the given
+   * Resume (un-pause) all of the <code>{@link ITrigger}s</code> in the given
    * group.
    * </p>
    * <p>
@@ -1389,7 +1389,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Resume (un-pause) the <code>{@link com.helger.quartz.JobDetail}</code> with the
+   * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code> with the
    * given name.
    * </p>
    * <p>
@@ -1403,8 +1403,8 @@ public class RAMJobStore implements JobStore
 
     synchronized (lock)
     {
-      final List <OperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
-      for (final OperableTrigger trigger : triggersOfJob)
+      final List <IOperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
+      for (final IOperableTrigger trigger : triggersOfJob)
       {
         resumeTrigger (trigger.getKey ());
       }
@@ -1413,7 +1413,7 @@ public class RAMJobStore implements JobStore
 
   /**
    * <p>
-   * Resume (un-pause) all of the <code>{@link com.helger.quartz.JobDetail}s</code> in
+   * Resume (un-pause) all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in
    * the given group.
    * </p>
    * <p>
@@ -1444,8 +1444,8 @@ public class RAMJobStore implements JobStore
 
       for (final JobKey key : keys)
       {
-        final List <OperableTrigger> triggersOfJob = getTriggersForJob (key);
-        for (final OperableTrigger trigger : triggersOfJob)
+        final List <IOperableTrigger> triggersOfJob = getTriggersForJob (key);
+        for (final IOperableTrigger trigger : triggersOfJob)
         {
           resumeTrigger (trigger.getKey ());
         }
@@ -1516,18 +1516,18 @@ public class RAMJobStore implements JobStore
     final Date tnft = tw.trigger.getNextFireTime ();
     if (tnft == null ||
         tnft.getTime () > misfireTime ||
-        tw.trigger.getMisfireInstruction () == Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+        tw.trigger.getMisfireInstruction () == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
     {
       return false;
     }
 
-    Calendar cal = null;
+    ICalendar cal = null;
     if (tw.trigger.getCalendarName () != null)
     {
       cal = retrieveCalendar (tw.trigger.getCalendarName ());
     }
 
-    signaler.notifyTriggerListenersMisfired ((OperableTrigger) tw.trigger.clone ());
+    signaler.notifyTriggerListenersMisfired ((IOperableTrigger) tw.trigger.clone ());
 
     tw.trigger.updateAfterMisfire (cal);
 
@@ -1562,13 +1562,13 @@ public class RAMJobStore implements JobStore
    * the calling scheduler.
    * </p>
    *
-   * @see #releaseAcquiredTrigger(OperableTrigger)
+   * @see #releaseAcquiredTrigger(IOperableTrigger)
    */
-  public List <OperableTrigger> acquireNextTriggers (final long noLaterThan, final int maxCount, final long timeWindow)
+  public List <IOperableTrigger> acquireNextTriggers (final long noLaterThan, final int maxCount, final long timeWindow)
   {
     synchronized (lock)
     {
-      final List <OperableTrigger> result = new ArrayList<> ();
+      final List <IOperableTrigger> result = new ArrayList<> ();
       final Set <JobKey> acquiredJobKeysForNoConcurrentExec = new HashSet<> ();
       final Set <TriggerWrapper> excludedTriggers = new HashSet<> ();
       long batchEnd = noLaterThan;
@@ -1618,7 +1618,7 @@ public class RAMJobStore implements JobStore
         // put it back into the timeTriggers set and continue to search for next
         // trigger.
         final JobKey jobKey = tw.trigger.getJobKey ();
-        final JobDetail job = jobsByKey.get (tw.trigger.getJobKey ()).jobDetail;
+        final IJobDetail job = jobsByKey.get (tw.trigger.getJobKey ()).jobDetail;
         if (job.isConcurrentExectionDisallowed ())
         {
           if (!acquiredJobKeysForNoConcurrentExec.add (jobKey))
@@ -1630,7 +1630,7 @@ public class RAMJobStore implements JobStore
 
         tw.state = TriggerWrapper.STATE_ACQUIRED;
         tw.trigger.setFireInstanceId (getFiredTriggerRecordId ());
-        final OperableTrigger trig = (OperableTrigger) tw.trigger.clone ();
+        final IOperableTrigger trig = (IOperableTrigger) tw.trigger.clone ();
         if (result.isEmpty ())
         {
           batchEnd = Math.max (tw.trigger.getNextFireTime ().getTime (), System.currentTimeMillis ()) + timeWindow;
@@ -1654,7 +1654,7 @@ public class RAMJobStore implements JobStore
    * the given <code>Trigger</code>, that it had previously acquired (reserved).
    * </p>
    */
-  public void releaseAcquiredTrigger (final OperableTrigger trigger)
+  public void releaseAcquiredTrigger (final IOperableTrigger trigger)
   {
     synchronized (lock)
     {
@@ -1674,14 +1674,14 @@ public class RAMJobStore implements JobStore
    * had previously acquired (reserved).
    * </p>
    */
-  public List <TriggerFiredResult> triggersFired (final List <OperableTrigger> firedTriggers)
+  public List <TriggerFiredResult> triggersFired (final List <IOperableTrigger> firedTriggers)
   {
 
     synchronized (lock)
     {
       final List <TriggerFiredResult> results = new ArrayList<> ();
 
-      for (final OperableTrigger trigger : firedTriggers)
+      for (final IOperableTrigger trigger : firedTriggers)
       {
         final TriggerWrapper tw = triggersByKey.get (trigger.getKey ());
         // was the trigger deleted since being acquired?
@@ -1696,7 +1696,7 @@ public class RAMJobStore implements JobStore
           continue;
         }
 
-        Calendar cal = null;
+        ICalendar cal = null;
         if (tw.trigger.getCalendarName () != null)
         {
           cal = retrieveCalendar (tw.trigger.getCalendarName ());
@@ -1721,7 +1721,7 @@ public class RAMJobStore implements JobStore
                                                                  prevFireTime,
                                                                  trigger.getNextFireTime ());
 
-        final JobDetail job = bndle.getJobDetail ();
+        final IJobDetail job = bndle.getJobDetail ();
 
         if (job.isConcurrentExectionDisallowed ())
         {
@@ -1764,8 +1764,8 @@ public class RAMJobStore implements JobStore
    * <code>Job</code> is stateful.
    * </p>
    */
-  public void triggeredJobComplete (final OperableTrigger trigger,
-                                    final JobDetail jobDetail,
+  public void triggeredJobComplete (final IOperableTrigger trigger,
+                                    final IJobDetail jobDetail,
                                     final CompletedExecutionInstruction triggerInstCode)
   {
 
@@ -1781,7 +1781,7 @@ public class RAMJobStore implements JobStore
       // from the JDBC job store
       if (jw != null)
       {
-        JobDetail jd = jw.jobDetail;
+        IJobDetail jd = jw.jobDetail;
 
         if (jd.isPersistJobDataAfterExecution ())
         {
@@ -1910,7 +1910,7 @@ public class RAMJobStore implements JobStore
   }
 
   /**
-   * @see com.helger.quartz.spi.JobStore#getPausedTriggerGroups()
+   * @see com.helger.quartz.spi.IJobStore#getPausedTriggerGroups()
    */
   public Set <String> getPausedTriggerGroups () throws JobPersistenceException
   {
@@ -1980,9 +1980,9 @@ class JobWrapper
 
   public JobKey key;
 
-  public JobDetail jobDetail;
+  public IJobDetail jobDetail;
 
-  JobWrapper (final JobDetail jobDetail)
+  JobWrapper (final IJobDetail jobDetail)
   {
     this.jobDetail = jobDetail;
     key = jobDetail.getKey ();
@@ -2017,7 +2017,7 @@ class TriggerWrapper
 
   public final JobKey jobKey;
 
-  public final OperableTrigger trigger;
+  public final IOperableTrigger trigger;
 
   public int state = STATE_WAITING;
 
@@ -2037,7 +2037,7 @@ class TriggerWrapper
 
   public static final int STATE_ERROR = 7;
 
-  TriggerWrapper (final OperableTrigger trigger)
+  TriggerWrapper (final IOperableTrigger trigger)
   {
     if (trigger == null)
       throw new IllegalArgumentException ("Trigger cannot be null!");
@@ -2067,7 +2067,7 @@ class TriggerWrapper
     return key.hashCode ();
   }
 
-  public OperableTrigger getTrigger ()
+  public IOperableTrigger getTrigger ()
   {
     return this.trigger;
   }

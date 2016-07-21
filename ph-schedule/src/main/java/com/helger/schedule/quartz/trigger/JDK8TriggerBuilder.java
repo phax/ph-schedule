@@ -21,21 +21,21 @@ import java.time.LocalDateTime;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.datetime.PDTFactory;
-import com.helger.quartz.Calendar;
+import com.helger.quartz.ICalendar;
 import com.helger.quartz.DateBuilder;
 import com.helger.quartz.JobBuilder;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobDetail;
+import com.helger.quartz.IJobDetail;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.ScheduleBuilder;
 import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.spi.MutableTrigger;
+import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.utils.Key;
 
 /**
- * <code>JDK8TriggerBuilder</code> is used to instantiate {@link Trigger}s.
+ * <code>JDK8TriggerBuilder</code> is used to instantiate {@link ITrigger}s.
  * <p>
  * The builder will always try to keep itself in a valid state, with reasonable
  * defaults set for calling build() at any point. For instance if you do not
@@ -67,17 +67,17 @@ import com.helger.quartz.utils.Key;
  * @see JobBuilder
  * @see ScheduleBuilder
  * @see DateBuilder
- * @see Trigger
+ * @see ITrigger
  * @param <T>
  *        Trigger type to create
  */
-public class JDK8TriggerBuilder <T extends Trigger>
+public class JDK8TriggerBuilder <T extends ITrigger>
 {
   private TriggerKey key;
   private String description;
   private LocalDateTime startTime = PDTFactory.getCurrentLocalDateTime ();
   private LocalDateTime endTime;
-  private int priority = Trigger.DEFAULT_PRIORITY;
+  private int priority = ITrigger.DEFAULT_PRIORITY;
   private String calendarName;
   private JobKey jobKey;
   private JobDataMap jobDataMap = new JobDataMap ();
@@ -92,7 +92,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    *
    * @return the new JDK8TriggerBuilder
    */
-  public static JDK8TriggerBuilder <Trigger> newTrigger ()
+  public static JDK8TriggerBuilder <ITrigger> newTrigger ()
   {
     return new JDK8TriggerBuilder<> ();
   }
@@ -107,7 +107,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
   {
     if (scheduleBuilder == null)
       scheduleBuilder = SimpleScheduleBuilder.simpleSchedule ();
-    final MutableTrigger trig = scheduleBuilder.build ();
+    final IMutableTrigger trig = scheduleBuilder.build ();
     trig.setCalendarName (calendarName);
     trig.setDescription (description);
     trig.setStartTime (PDTFactory.createDate (startTime));
@@ -137,7 +137,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    *        the name element for the Trigger's TriggerKey
    * @return the updated JDK8TriggerBuilder
    * @see TriggerKey
-   * @see Trigger#getKey()
+   * @see ITrigger#getKey()
    */
   public JDK8TriggerBuilder <T> withIdentity (final String name)
   {
@@ -158,7 +158,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    *        the group element for the Trigger's TriggerKey
    * @return the updated JDK8TriggerBuilder
    * @see TriggerKey
-   * @see Trigger#getKey()
+   * @see ITrigger#getKey()
    */
   public JDK8TriggerBuilder <T> withIdentity (final String name, final String group)
   {
@@ -177,7 +177,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    *        the TriggerKey for the Trigger to be built
    * @return the updated JDK8TriggerBuilder
    * @see TriggerKey
-   * @see Trigger#getKey()
+   * @see ITrigger#getKey()
    */
   public JDK8TriggerBuilder <T> withIdentity (final TriggerKey triggerKey)
   {
@@ -191,7 +191,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param triggerDescription
    *        the description for the Trigger
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getDescription()
+   * @see ITrigger#getDescription()
    */
   public JDK8TriggerBuilder <T> withDescription (final String triggerDescription)
   {
@@ -206,8 +206,8 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param triggerPriority
    *        the priority for the Trigger
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#DEFAULT_PRIORITY
-   * @see Trigger#getPriority()
+   * @see ITrigger#DEFAULT_PRIORITY
+   * @see ITrigger#getPriority()
    */
   public JDK8TriggerBuilder <T> withPriority (final int triggerPriority)
   {
@@ -216,14 +216,14 @@ public class JDK8TriggerBuilder <T extends Trigger>
   }
 
   /**
-   * Set the name of the {@link Calendar} that should be applied to this
+   * Set the name of the {@link ICalendar} that should be applied to this
    * Trigger's schedule.
    *
    * @param calName
    *        the name of the Calendar to reference.
    * @return the updated JDK8TriggerBuilder
-   * @see Calendar
-   * @see Trigger#getCalendarName()
+   * @see ICalendar
+   * @see ITrigger#getCalendarName()
    */
   public JDK8TriggerBuilder <T> modifiedByCalendar (final String calName)
   {
@@ -240,7 +240,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param triggerStartTime
    *        the start time for the Trigger.
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getStartTime()
+   * @see ITrigger#getStartTime()
    * @see DateBuilder
    */
   public JDK8TriggerBuilder <T> startAt (final LocalDateTime triggerStartTime)
@@ -255,7 +255,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * configured for the Trigger.
    *
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getStartTime()
+   * @see ITrigger#getStartTime()
    */
   public JDK8TriggerBuilder <T> startNow ()
   {
@@ -269,7 +269,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param triggerEndTime
    *        the end time for the Trigger. If null, the end time is indefinite.
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getEndTime()
+   * @see ITrigger#getEndTime()
    * @see DateBuilder
    */
   public JDK8TriggerBuilder <T> endAt (final LocalDateTime triggerEndTime)
@@ -303,7 +303,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param keyOfJobToFire
    *        the identity of the Job to fire.
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobKey()
+   * @see ITrigger#getJobKey()
    */
   public JDK8TriggerBuilder <T> forJob (final JobKey keyOfJobToFire)
   {
@@ -319,7 +319,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param jobName
    *        the name of the job (in default group) to fire.
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobKey()
+   * @see ITrigger#getJobKey()
    */
   public JDK8TriggerBuilder <T> forJob (final String jobName)
   {
@@ -336,7 +336,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param jobGroup
    *        the group of the job to fire.
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobKey()
+   * @see ITrigger#getJobKey()
    */
   public JDK8TriggerBuilder <T> forJob (final String jobName, final String jobGroup)
   {
@@ -351,9 +351,9 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param jobDetail
    *        the Job to fire.
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobKey()
+   * @see ITrigger#getJobKey()
    */
-  public JDK8TriggerBuilder <T> forJob (final JobDetail jobDetail)
+  public JDK8TriggerBuilder <T> forJob (final IJobDetail jobDetail)
   {
     final JobKey k = jobDetail.getKey ();
     if (k.getName () == null)
@@ -370,7 +370,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param value
    *        Job data value
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public <V> JDK8TriggerBuilder <T> usingJobData (final String dataKey, final V value)
   {
@@ -386,7 +386,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param value
    *        Job data value
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final int value)
   {
@@ -401,7 +401,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param value
    *        Job data value
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final long value)
   {
@@ -416,7 +416,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param value
    *        Job data value
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final float value)
   {
@@ -431,7 +431,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param value
    *        Job data value
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final double value)
   {
@@ -446,7 +446,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param value
    *        Job data value
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final boolean value)
   {
@@ -461,7 +461,7 @@ public class JDK8TriggerBuilder <T extends Trigger>
    * @param newJobDataMap
    *        New map to use. May not be <code>null</code>.
    * @return the updated JDK8TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public JDK8TriggerBuilder <T> usingJobData (@Nonnull final JobDataMap newJobDataMap)
   {

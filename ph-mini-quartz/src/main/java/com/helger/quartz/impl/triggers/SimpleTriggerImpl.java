@@ -20,32 +20,32 @@ package com.helger.quartz.impl.triggers;
 
 import java.util.Date;
 
-import com.helger.quartz.Calendar;
-import com.helger.quartz.CronTrigger;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.ICalendar;
+import com.helger.quartz.ICronTrigger;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.ScheduleBuilder;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.SimpleTrigger;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ISimpleTrigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerUtils;
 
 /**
  * <p>
- * A concrete <code>{@link Trigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.JobDetail}</code> at a given moment in time,
+ * A concrete <code>{@link ITrigger}</code> that is used to fire a
+ * <code>{@link com.helger.quartz.IJobDetail}</code> at a given moment in time,
  * and optionally repeated at a specified interval.
  * </p>
  *
- * @see Trigger
- * @see CronTrigger
+ * @see ITrigger
+ * @see ICronTrigger
  * @see TriggerUtils
  * @author James House
  * @author contributions by Lieven Govaerts of Ebitec Nv, Belgium.
  */
-public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implements SimpleTrigger, CoreTrigger
+public class SimpleTriggerImpl extends AbstractTrigger <ISimpleTrigger> implements ISimpleTrigger, ICoreTrigger
 {
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
                                                                             .get (java.util.Calendar.YEAR) +
@@ -285,14 +285,14 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
    * </p>
    */
   @Override
-  public void updateAfterMisfire (final Calendar cal)
+  public void updateAfterMisfire (final ICalendar cal)
   {
     int instr = getMisfireInstruction ();
 
-    if (instr == Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+    if (instr == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
       return;
 
-    if (instr == Trigger.MISFIRE_INSTRUCTION_SMART_POLICY)
+    if (instr == ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY)
     {
       if (getRepeatCount () == 0)
       {
@@ -420,16 +420,16 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
 
   /**
    * <p>
-   * Called when the <code>{@link Scheduler}</code> has decided to 'fire' the
+   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
    * trigger (execute the associated <code>Job</code>), in order to give the
    * <code>Trigger</code> a chance to update itself for its next triggering (if
    * any).
    * </p>
    *
-   * @see #executionComplete(JobExecutionContext, JobExecutionException)
+   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
   @Override
-  public void triggered (final Calendar calendar)
+  public void triggered (final ICalendar calendar)
   {
     timesTriggered++;
     previousFireTime = nextFireTime;
@@ -454,11 +454,11 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
   }
 
   /**
-   * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateWithNewCalendar(com.helger.quartz.Calendar,
+   * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
   @Override
-  public void updateWithNewCalendar (final Calendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
   {
     nextFireTime = getFireTimeAfter (previousFireTime);
 
@@ -513,7 +513,7 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
    *         </p>
    */
   @Override
-  public Date computeFirstFireTime (final Calendar calendar)
+  public Date computeFirstFireTime (final ICalendar calendar)
   {
     nextFireTime = getStartTime ();
 
@@ -551,7 +551,7 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
    * </p>
    *
    * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.OperableTrigger,
-   *      Calendar, Date, Date)
+   *      ICalendar, Date, Date)
    */
   @Override
   public Date getNextFireTime ()
@@ -752,7 +752,7 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
    * @see #getTriggerBuilder()
    */
   @Override
-  public ScheduleBuilder <SimpleTrigger> getScheduleBuilder ()
+  public ScheduleBuilder <ISimpleTrigger> getScheduleBuilder ()
   {
     final SimpleScheduleBuilder sb = SimpleScheduleBuilder.simpleSchedule ()
                                                           .withIntervalInMilliseconds (getRepeatInterval ())

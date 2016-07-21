@@ -17,10 +17,10 @@
 
 package com.helger.quartz.impl;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.core.JobRunShell;
-import com.helger.quartz.core.JobRunShellFactory;
+import com.helger.quartz.core.IJobRunShellFactory;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
 /**
@@ -32,7 +32,7 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  *
  * @author James House
  */
-public class StdJobRunShellFactory implements JobRunShellFactory
+public class StdJobRunShellFactory implements IJobRunShellFactory
 {
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,7 +40,7 @@ public class StdJobRunShellFactory implements JobRunShellFactory
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  private Scheduler scheduler;
+  private IScheduler scheduler;
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,7 +55,7 @@ public class StdJobRunShellFactory implements JobRunShellFactory
    * <code>JobExecutionContext</code> s within it.
    * </p>
    */
-  public void initialize (final Scheduler sched)
+  public void initialize (final IScheduler sched)
   {
     this.scheduler = sched;
   }

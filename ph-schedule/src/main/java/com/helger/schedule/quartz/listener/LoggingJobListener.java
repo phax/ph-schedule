@@ -23,19 +23,19 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.lang.ClassHelper;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobListener;
+import com.helger.quartz.IJobListener;
 
 /**
- * An implementation of the {@link JobListener} interface that logs job
+ * An implementation of the {@link IJobListener} interface that logs job
  * executions. Before execution debug log level is used, for vetoed executions
  * warning level is used and after job execution either info (upon success) or
  * error (in case of an execution) is used.
  *
  * @author Philip Helger
  */
-public class LoggingJobListener implements JobListener
+public class LoggingJobListener implements IJobListener
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingJobListener.class);
 
@@ -48,23 +48,23 @@ public class LoggingJobListener implements JobListener
 
   @Nonnull
   @Nonempty
-  protected String getJobName (@Nonnull final JobExecutionContext aContext)
+  protected String getJobName (@Nonnull final IJobExecutionContext aContext)
   {
     return ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
   }
 
-  public void jobToBeExecuted (@Nonnull final JobExecutionContext aContext)
+  public void jobToBeExecuted (@Nonnull final IJobExecutionContext aContext)
   {
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Job to be executed: " + getJobName (aContext));
   }
 
-  public void jobExecutionVetoed (@Nonnull final JobExecutionContext aContext)
+  public void jobExecutionVetoed (@Nonnull final IJobExecutionContext aContext)
   {
     s_aLogger.warn ("Job execution vetoed by trigger listener: " + getJobName (aContext));
   }
 
-  public void jobWasExecuted (@Nonnull final JobExecutionContext aContext, final JobExecutionException aJobException)
+  public void jobWasExecuted (@Nonnull final IJobExecutionContext aContext, final JobExecutionException aJobException)
   {
     final Object aResult = aContext.getResult ();
     final long nRuntimeMilliSecs = aContext.getJobRunTime ();

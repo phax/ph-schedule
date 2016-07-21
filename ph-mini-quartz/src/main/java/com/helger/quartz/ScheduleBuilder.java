@@ -17,14 +17,14 @@
 
 package com.helger.quartz;
 
-import com.helger.quartz.spi.MutableTrigger;
+import com.helger.quartz.spi.IMutableTrigger;
 
 /**
  * @author Terracotta
  * @param <T>
  *        Trigger class - whysoever
  */
-public abstract class ScheduleBuilder <T extends Trigger>
+public abstract class ScheduleBuilder <T extends ITrigger>
 {
-  protected abstract MutableTrigger build ();
+  protected abstract IMutableTrigger build ();
 }

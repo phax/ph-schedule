@@ -16,7 +16,7 @@
 
 package com.helger.quartz.utils.counter.sampled;
 
-import com.helger.quartz.utils.counter.Counter;
+import com.helger.quartz.utils.counter.ICounter;
 
 /**
  * An implementation of {@link SampledCounterConfig}
@@ -70,7 +70,7 @@ public class SampledRateCounterConfig extends SampledCounterConfig
    * {@inheritDoc}
    */
   @Override
-  public Counter createCounter ()
+  public ICounter createCounter ()
   {
     final SampledRateCounterImpl sampledRateCounter = new SampledRateCounterImpl (this);
     sampledRateCounter.setValue (initialNumeratorValue, initialDenominatorValue);

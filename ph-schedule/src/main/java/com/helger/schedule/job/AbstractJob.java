@@ -31,18 +31,18 @@ import com.helger.commons.statistics.IMutableStatisticsHandlerKeyedCounter;
 import com.helger.commons.statistics.IMutableStatisticsHandlerKeyedTimer;
 import com.helger.commons.statistics.StatisticsManager;
 import com.helger.commons.timing.StopWatch;
-import com.helger.quartz.Job;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 
 /**
- * Abstract {@link Job} implementation with an exception handler etc.
+ * Abstract {@link IJob} implementation with an exception handler etc.
  *
  * @author Philip Helger
  */
 @ThreadSafe
-public abstract class AbstractJob implements Job
+public abstract class AbstractJob implements IJob
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractJob.class);
   private static final IMutableStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (AbstractJob.class);
@@ -76,7 +76,7 @@ public abstract class AbstractJob implements Job
    *        The current job execution context. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final JobExecutionContext aContext)
+  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final IJobExecutionContext aContext)
   {}
 
   /**
@@ -87,7 +87,7 @@ public abstract class AbstractJob implements Job
    * @throws JobExecutionException
    *         In case of an error in execution
    */
-  protected abstract void onExecute (@Nonnull final JobExecutionContext aContext) throws JobExecutionException;
+  protected abstract void onExecute (@Nonnull final IJobExecutionContext aContext) throws JobExecutionException;
 
   /**
    * Called after the job gets executed. This method is called after the scopes
@@ -102,7 +102,7 @@ public abstract class AbstractJob implements Job
    */
   @OverrideOnDemand
   protected void afterExecute (@Nonnull final JobDataMap aJobDataMap,
-                               @Nonnull final JobExecutionContext aContext,
+                               @Nonnull final IJobExecutionContext aContext,
                                @Nonnull final ESuccess eExecSuccess)
   {}
 
@@ -114,16 +114,16 @@ public abstract class AbstractJob implements Job
    * @param sJobClassName
    *        The name of the job class
    * @param aJob
-   *        The {@link Job} instance
+   *        The {@link IJob} instance
    */
   protected static void triggerCustomExceptionHandler (@Nonnull final Throwable t,
                                                        @Nullable final String sJobClassName,
-                                                       @Nonnull final Job aJob)
+                                                       @Nonnull final IJob aJob)
   {
     getExceptionCallbacks ().forEach (x -> x.onScheduledJobException (t, sJobClassName, aJob));
   }
 
-  public final void execute (@Nonnull final JobExecutionContext aContext) throws JobExecutionException
+  public final void execute (@Nonnull final IJobExecutionContext aContext) throws JobExecutionException
   {
     // State variables
     ESuccess eExecSuccess = ESuccess.FAILURE;

@@ -19,7 +19,7 @@ package com.helger.quartz.impl.calendar;
 
 import java.util.TimeZone;
 
-import com.helger.quartz.Calendar;
+import com.helger.quartz.ICalendar;
 
 /**
  * <p>
@@ -28,7 +28,7 @@ import com.helger.quartz.Calendar;
  * define any day of a month.
  * </p>
  *
- * @see com.helger.quartz.Calendar
+ * @see com.helger.quartz.ICalendar
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
@@ -48,7 +48,7 @@ public class MonthlyCalendar extends BaseCalendar
     this (null, null);
   }
 
-  public MonthlyCalendar (final Calendar baseCalendar)
+  public MonthlyCalendar (final ICalendar baseCalendar)
   {
     this (baseCalendar, null);
   }
@@ -58,7 +58,7 @@ public class MonthlyCalendar extends BaseCalendar
     this (null, timeZone);
   }
 
-  public MonthlyCalendar (final Calendar baseCalendar, final TimeZone timeZone)
+  public MonthlyCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
 

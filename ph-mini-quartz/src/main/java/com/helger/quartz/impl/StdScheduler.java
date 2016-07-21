@@ -22,23 +22,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.helger.quartz.Calendar;
+import com.helger.quartz.ICalendar;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobKey;
-import com.helger.quartz.ListenerManager;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IListenerManager;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerContext;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SchedulerMetaData;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.UnableToInterruptJobException;
-import com.helger.quartz.Trigger.TriggerState;
+import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.core.QuartzScheduler;
 import com.helger.quartz.impl.matchers.GroupMatcher;
-import com.helger.quartz.spi.JobFactory;
+import com.helger.quartz.spi.IJobFactory;
 
 /**
  * <p>
@@ -47,11 +47,11 @@ import com.helger.quartz.spi.JobFactory;
  * <code>QuartzScheduler</code> instance.
  * </p>
  *
- * @see com.helger.quartz.Scheduler
+ * @see com.helger.quartz.IScheduler
  * @see com.helger.quartz.core.QuartzScheduler
  * @author James House
  */
-public class StdScheduler implements Scheduler
+public class StdScheduler implements IScheduler
 {
 
   /*
@@ -234,7 +234,7 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public List <JobExecutionContext> getCurrentlyExecutingJobs ()
+  public List <IJobExecutionContext> getCurrentlyExecutingJobs ()
   {
     return sched.getCurrentlyExecutingJobs ();
   }
@@ -260,7 +260,7 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Date scheduleJob (final JobDetail jobDetail, final Trigger trigger) throws SchedulerException
+  public Date scheduleJob (final IJobDetail jobDetail, final ITrigger trigger) throws SchedulerException
   {
     return sched.scheduleJob (jobDetail, trigger);
   }
@@ -270,7 +270,7 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Date scheduleJob (final Trigger trigger) throws SchedulerException
+  public Date scheduleJob (final ITrigger trigger) throws SchedulerException
   {
     return sched.scheduleJob (trigger);
   }
@@ -280,12 +280,12 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void addJob (final JobDetail jobDetail, final boolean replace) throws SchedulerException
+  public void addJob (final IJobDetail jobDetail, final boolean replace) throws SchedulerException
   {
     sched.addJob (jobDetail, replace);
   }
 
-  public void addJob (final JobDetail jobDetail,
+  public void addJob (final IJobDetail jobDetail,
                       final boolean replace,
                       final boolean storeNonDurableWhileAwaitingScheduling) throws SchedulerException
   {
@@ -297,14 +297,14 @@ public class StdScheduler implements Scheduler
     return sched.deleteJobs (jobKeys);
   }
 
-  public void scheduleJobs (final Map <JobDetail, Set <? extends Trigger>> triggersAndJobs,
+  public void scheduleJobs (final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                             final boolean replace) throws SchedulerException
   {
     sched.scheduleJobs (triggersAndJobs, replace);
   }
 
-  public void scheduleJob (final JobDetail jobDetail,
-                           final Set <? extends Trigger> triggersForJob,
+  public void scheduleJob (final IJobDetail jobDetail,
+                           final Set <? extends ITrigger> triggersForJob,
                            final boolean replace) throws SchedulerException
   {
     sched.scheduleJob (jobDetail, triggersForJob, replace);
@@ -340,7 +340,7 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Date rescheduleJob (final TriggerKey triggerKey, final Trigger newTrigger) throws SchedulerException
+  public Date rescheduleJob (final TriggerKey triggerKey, final ITrigger newTrigger) throws SchedulerException
   {
     return sched.rescheduleJob (triggerKey, newTrigger);
   }
@@ -396,7 +396,7 @@ public class StdScheduler implements Scheduler
   }
 
   /**
-   * @see com.helger.quartz.Scheduler#getPausedTriggerGroups()
+   * @see com.helger.quartz.IScheduler#getPausedTriggerGroups()
    */
   public Set <String> getPausedTriggerGroups () throws SchedulerException
   {
@@ -488,7 +488,7 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public List <? extends Trigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
+  public List <? extends ITrigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
   {
     return sched.getTriggersOfJob (jobKey);
   }
@@ -528,7 +528,7 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public JobDetail getJobDetail (final JobKey jobKey) throws SchedulerException
+  public IJobDetail getJobDetail (final JobKey jobKey) throws SchedulerException
   {
     return sched.getJobDetail (jobKey);
   }
@@ -538,7 +538,7 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Trigger getTrigger (final TriggerKey triggerKey) throws SchedulerException
+  public ITrigger getTrigger (final TriggerKey triggerKey) throws SchedulerException
   {
     return sched.getTrigger (triggerKey);
   }
@@ -559,7 +559,7 @@ public class StdScheduler implements Scheduler
    * </p>
    */
   public void addCalendar (final String calName,
-                           final Calendar calendar,
+                           final ICalendar calendar,
                            final boolean replace,
                            final boolean updateTriggers) throws SchedulerException
   {
@@ -581,7 +581,7 @@ public class StdScheduler implements Scheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Calendar getCalendar (final String calName) throws SchedulerException
+  public ICalendar getCalendar (final String calName) throws SchedulerException
   {
     return sched.getCalendar (calName);
   }
@@ -623,17 +623,17 @@ public class StdScheduler implements Scheduler
   ///////////////////////////////////////////////////////////////////////////
 
   /**
-   * @see com.helger.quartz.Scheduler#setJobFactory(com.helger.quartz.spi.JobFactory)
+   * @see com.helger.quartz.IScheduler#setJobFactory(com.helger.quartz.spi.IJobFactory)
    */
-  public void setJobFactory (final JobFactory factory) throws SchedulerException
+  public void setJobFactory (final IJobFactory factory) throws SchedulerException
   {
     sched.setJobFactory (factory);
   }
 
   /**
-   * @see com.helger.quartz.Scheduler#getListenerManager()
+   * @see com.helger.quartz.IScheduler#getListenerManager()
    */
-  public ListenerManager getListenerManager () throws SchedulerException
+  public IListenerManager getListenerManager () throws SchedulerException
   {
     return sched.getListenerManager ();
   }

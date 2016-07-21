@@ -18,7 +18,7 @@ package com.helger.quartz.impl.matchers;
 
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.JobKey;
-import com.helger.quartz.Matcher;
+import com.helger.quartz.IMatcher;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.utils.Key;
 
@@ -27,7 +27,7 @@ import com.helger.quartz.utils.Key;
  *
  * @author jhouse
  */
-public class EverythingMatcher <T extends Key <T>> implements Matcher <T>
+public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
 {
   protected EverythingMatcher ()
   {}

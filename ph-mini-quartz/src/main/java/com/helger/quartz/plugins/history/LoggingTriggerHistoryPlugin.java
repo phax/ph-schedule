@@ -22,16 +22,16 @@ import java.text.MessageFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.JobExecutionContext;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.Trigger;
-import com.helger.quartz.TriggerListener;
-import com.helger.quartz.Trigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITriggerListener;
+import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.SchedulerPlugin;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.ISchedulerPlugin;
 
 /**
  * Logs a history of all trigger firings via the Jakarta Commons-Logging
@@ -208,7 +208,7 @@ import com.helger.quartz.spi.SchedulerPlugin;
  *
  * @author James House
  */
-public class LoggingTriggerHistoryPlugin implements SchedulerPlugin, TriggerListener
+public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerListener
 {
 
   /*
@@ -326,8 +326,8 @@ public class LoggingTriggerHistoryPlugin implements SchedulerPlugin, TriggerList
    *         if there is an error initializing.
    */
   public void initialize (final String pname,
-                          final Scheduler scheduler,
-                          final ClassLoadHelper classLoadHelper) throws SchedulerException
+                          final IScheduler scheduler,
+                          final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
     this.name = pname;
 
@@ -368,7 +368,7 @@ public class LoggingTriggerHistoryPlugin implements SchedulerPlugin, TriggerList
     return name;
   }
 
-  public void triggerFired (final Trigger trigger, final JobExecutionContext context)
+  public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
   {
     if (!getLog ().isInfoEnabled ())
     {
@@ -387,7 +387,7 @@ public class LoggingTriggerHistoryPlugin implements SchedulerPlugin, TriggerList
     getLog ().info (MessageFormat.format (getTriggerFiredMessage (), args));
   }
 
-  public void triggerMisfired (final Trigger trigger)
+  public void triggerMisfired (final ITrigger trigger)
   {
     if (!getLog ().isInfoEnabled ())
     {
@@ -405,8 +405,8 @@ public class LoggingTriggerHistoryPlugin implements SchedulerPlugin, TriggerList
     getLog ().info (MessageFormat.format (getTriggerMisfiredMessage (), args));
   }
 
-  public void triggerComplete (final Trigger trigger,
-                               final JobExecutionContext context,
+  public void triggerComplete (final ITrigger trigger,
+                               final IJobExecutionContext context,
                                final CompletedExecutionInstruction triggerInstructionCode)
   {
     if (!getLog ().isInfoEnabled ())
@@ -454,7 +454,7 @@ public class LoggingTriggerHistoryPlugin implements SchedulerPlugin, TriggerList
     getLog ().info (MessageFormat.format (getTriggerCompleteMessage (), args));
   }
 
-  public boolean vetoJobExecution (final Trigger trigger, final JobExecutionContext context)
+  public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
   {
     return false;
   }

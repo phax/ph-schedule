@@ -22,7 +22,7 @@ package com.helger.quartz;
  * An exception that is thrown to indicate that a call to
  * InterruptableJob.interrupt() failed without interrupting the Job.
  *
- * @see com.helger.quartz.InterruptableJob#interrupt()
+ * @see com.helger.quartz.IInterruptableJob#interrupt()
  * @author James House
  */
 public class UnableToInterruptJobException extends SchedulerException

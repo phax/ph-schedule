@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.Trigger;
-import com.helger.quartz.spi.SchedulerSignaler;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.spi.ISchedulerSignaler;
 
 /**
  * An interface to be used by <code>JobStore</code> instances in order to
@@ -32,7 +32,7 @@ import com.helger.quartz.spi.SchedulerSignaler;
  *
  * @author jhouse
  */
-public class SchedulerSignalerImpl implements SchedulerSignaler
+public class SchedulerSignalerImpl implements ISchedulerSignaler
 {
 
   Logger log = LoggerFactory.getLogger (SchedulerSignalerImpl.class);
@@ -66,7 +66,7 @@ public class SchedulerSignalerImpl implements SchedulerSignaler
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  public void notifyTriggerListenersMisfired (final Trigger trigger)
+  public void notifyTriggerListenersMisfired (final ITrigger trigger)
   {
     try
     {
@@ -79,7 +79,7 @@ public class SchedulerSignalerImpl implements SchedulerSignaler
     }
   }
 
-  public void notifySchedulerListenersFinalized (final Trigger trigger)
+  public void notifySchedulerListenersFinalized (final ITrigger trigger)
   {
     sched.notifySchedulerListenersFinalized (trigger);
   }

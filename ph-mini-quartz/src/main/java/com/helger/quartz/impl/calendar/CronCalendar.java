@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.helger.quartz.Calendar;
+import com.helger.quartz.ICalendar;
 import com.helger.quartz.CronExpression;
 
 /**
@@ -15,7 +15,7 @@ import com.helger.quartz.CronExpression;
  * <P>
  * It is important to remember that the cron expression here describes a set of
  * times to be <I>excluded</I> from firing. Whereas the cron expression in
- * {@link com.helger.quartz.CronTrigger CronTrigger} describes a set of times that can
+ * {@link com.helger.quartz.ICronTrigger CronTrigger} describes a set of times that can
  * be <I>included</I> for firing. Thus, if a <CODE>CronTrigger</CODE> has a
  * given cron expression and is associated with a <CODE>CronCalendar</CODE> with
  * the <I>same</I> expression, the calendar will exclude all the times the
@@ -50,7 +50,7 @@ public class CronCalendar extends BaseCalendar
    * @param expression
    *        a String representation of the desired cron expression
    */
-  public CronCalendar (final Calendar baseCalendar, final String expression) throws ParseException
+  public CronCalendar (final ICalendar baseCalendar, final String expression) throws ParseException
   {
     this (baseCalendar, expression, null);
   }
@@ -71,7 +71,7 @@ public class CronCalendar extends BaseCalendar
    *        am in this time zone. If <code>timeZone</code> is <code>null</code>
    *        then <code>TimeZone.getDefault()</code> will be used.
    */
-  public CronCalendar (final Calendar baseCalendar,
+  public CronCalendar (final ICalendar baseCalendar,
                        final String expression,
                        final TimeZone timeZone) throws ParseException
   {

@@ -28,22 +28,22 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.Trigger;
-import com.helger.quartz.Trigger.CompletedExecutionInstruction;
-import com.helger.quartz.spi.OperableTrigger;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
 
 /**
  * <p>
  * The thread responsible for performing the work of firing
- * <code>{@link Trigger}</code> s that are registered with the
+ * <code>{@link ITrigger}</code> s that are registered with the
  * <code>{@link QuartzScheduler}</code>.
  * </p>
  *
  * @see QuartzScheduler
- * @see com.helger.quartz.Job
- * @see Trigger
+ * @see com.helger.quartz.IJob
+ * @see ITrigger
  * @author James House
  */
 public class QuartzSchedulerThread extends Thread
@@ -306,7 +306,7 @@ public class QuartzSchedulerThread extends Thread
         { // will always be true, due to semantics of
           // blockForAvailableThreads...
 
-          List <OperableTrigger> triggers = null;
+          List <IOperableTrigger> triggers = null;
 
           long now = System.currentTimeMillis ();
 
@@ -512,12 +512,12 @@ public class QuartzSchedulerThread extends Thread
     qsRsrcs = null;
   }
 
-  private boolean releaseIfScheduleChangedSignificantly (final List <OperableTrigger> triggers, final long triggerTime)
+  private boolean releaseIfScheduleChangedSignificantly (final List <IOperableTrigger> triggers, final long triggerTime)
   {
     if (isCandidateNewTimeEarlierWithinReason (triggerTime, true))
     {
       // above call does a clearSignaledSchedulingChange()
-      for (final OperableTrigger trigger : triggers)
+      for (final IOperableTrigger trigger : triggers)
       {
         qsRsrcs.getJobStore ().releaseAcquiredTrigger (trigger);
       }

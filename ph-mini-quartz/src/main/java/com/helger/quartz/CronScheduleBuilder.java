@@ -47,17 +47,17 @@ import com.helger.quartz.impl.triggers.CronTriggerImpl;
  * <pre>
  *
  * @see CronExpression
- * @see CronTrigger
+ * @see ICronTrigger
  * @see ScheduleBuilder
  * @see SimpleScheduleBuilder
  * @see CalendarIntervalScheduleBuilder
  * @see TriggerBuilder
  */
-public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
+public class CronScheduleBuilder extends ScheduleBuilder <ICronTrigger>
 {
 
   private final CronExpression cronExpression;
-  private int misfireInstruction = Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   protected CronScheduleBuilder (final CronExpression cronExpression)
   {
@@ -297,40 +297,40 @@ public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
+   * {@link ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
+   * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
   public CronScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    misfireInstruction = Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link CronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
+   * {@link ICronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see CronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
+   * @see ICronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
    */
   public CronScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    misfireInstruction = CronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    misfireInstruction = ICronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link CronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW} instruction.
+   * {@link ICronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW} instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see CronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
+   * @see ICronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
   public CronScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    misfireInstruction = CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    misfireInstruction = ICronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 }

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.quartz.CronTrigger;
+import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.DateBuilder;
 
 /**
@@ -36,7 +36,7 @@ public class CronScheduleBuilderTest
   public void testAtHourAndMinuteOnGivenDaysOfWeek ()
   {
 
-    CronTrigger trigger = newTrigger ().withIdentity ("test")
+    ICronTrigger trigger = newTrigger ().withIdentity ("test")
                                        .withSchedule (atHourAndMinuteOnGivenDaysOfWeek (10,
                                                                                         0,
                                                                                         DateBuilder.MONDAY,

@@ -21,16 +21,16 @@ package com.helger.quartz.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Job;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.Trigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
 import com.helger.quartz.impl.JobExecutionContextImpl;
-import com.helger.quartz.listeners.SchedulerListenerSupport;
-import com.helger.quartz.spi.OperableTrigger;
+import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
+import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
 /**
@@ -48,13 +48,13 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  * <code>Job</code> has been triggered.
  * </p>
  *
- * @see JobRunShellFactory
+ * @see IJobRunShellFactory
  * @see com.helger.quartz.core.QuartzSchedulerThread
- * @see com.helger.quartz.Job
- * @see com.helger.quartz.Trigger
+ * @see com.helger.quartz.IJob
+ * @see com.helger.quartz.ITrigger
  * @author James House
  */
-public class JobRunShell extends SchedulerListenerSupport implements Runnable
+public class JobRunShell extends AbstractSchedulerListenerSupport implements Runnable
 {
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,7 +68,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
 
   protected TriggerFiredBundle firedTriggerBundle = null;
 
-  protected Scheduler scheduler = null;
+  protected IScheduler scheduler = null;
 
   protected volatile boolean shutdownRequested = false;
 
@@ -89,7 +89,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
    *        The <code>Scheduler</code> instance that should be made available
    *        within the <code>JobExecutionContext</code>.
    */
-  public JobRunShell (final Scheduler scheduler, final TriggerFiredBundle bndle)
+  public JobRunShell (final IScheduler scheduler, final TriggerFiredBundle bndle)
   {
     this.scheduler = scheduler;
     this.firedTriggerBundle = bndle;
@@ -117,8 +117,8 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
   {
     this.qs = sched;
 
-    Job job = null;
-    final JobDetail jobDetail = firedTriggerBundle.getJobDetail ();
+    IJob job = null;
+    final IJobDetail jobDetail = firedTriggerBundle.getJobDetail ();
 
     try
     {
@@ -159,14 +159,14 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
 
     try
     {
-      final OperableTrigger trigger = (OperableTrigger) jec.getTrigger ();
-      final JobDetail jobDetail = jec.getJobDetail ();
+      final IOperableTrigger trigger = (IOperableTrigger) jec.getTrigger ();
+      final IJobDetail jobDetail = jec.getJobDetail ();
 
       do
       {
 
         JobExecutionException jobExEx = null;
-        final Job job = jec.getJobInstance ();
+        final IJob job = jec.getJobInstance ();
 
         try
         {
@@ -330,7 +330,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
     qs = null;
   }
 
-  private boolean _notifyListenersBeginning (final JobExecutionContext jobExCtxt) throws VetoedException
+  private boolean _notifyListenersBeginning (final IJobExecutionContext jobExCtxt) throws VetoedException
   {
 
     boolean vetoed = false;
@@ -392,7 +392,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
     return true;
   }
 
-  private boolean _notifyJobListenersComplete (final JobExecutionContext jobExCtxt, final JobExecutionException jobExEx)
+  private boolean _notifyJobListenersComplete (final IJobExecutionContext jobExCtxt, final JobExecutionException jobExEx)
   {
     try
     {
@@ -413,7 +413,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
     return true;
   }
 
-  private boolean _notifyTriggerListenersComplete (final JobExecutionContext jobExCtxt,
+  private boolean _notifyTriggerListenersComplete (final IJobExecutionContext jobExCtxt,
                                                   final CompletedExecutionInstruction instCode)
   {
     try

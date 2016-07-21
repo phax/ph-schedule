@@ -22,7 +22,7 @@ import java.util.Date;
 
 /**
  * Describes the settings and capabilities of a given
- * <code>{@link Scheduler}</code> instance.
+ * <code>{@link IScheduler}</code> instance.
  *
  * @author James House
  */

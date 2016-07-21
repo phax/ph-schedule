@@ -21,7 +21,7 @@ import com.helger.quartz.impl.JobDetailImpl;
 import com.helger.quartz.utils.Key;
 
 /**
- * <code>JobBuilder</code> is used to instantiate {@link JobDetail}s.
+ * <code>JobBuilder</code> is used to instantiate {@link IJobDetail}s.
  * <p>
  * The builder will always try to keep itself in a valid state, with reasonable
  * defaults set for calling build() at any point. For instance if you do not
@@ -50,13 +50,13 @@ import com.helger.quartz.utils.Key;
  *
  * @see TriggerBuilder
  * @see DateBuilder
- * @see JobDetail
+ * @see IJobDetail
  */
 public class JobBuilder
 {
   private JobKey key;
   private String description;
-  private Class <? extends Job> jobClass;
+  private Class <? extends IJob> jobClass;
   private boolean durability;
   private boolean shouldRecover;
 
@@ -81,7 +81,7 @@ public class JobBuilder
    *
    * @return a new JobBuilder
    */
-  public static JobBuilder newJob (final Class <? extends Job> jobClass)
+  public static JobBuilder newJob (final Class <? extends IJob> jobClass)
   {
     final JobBuilder b = new JobBuilder ();
     b.ofType (jobClass);
@@ -94,7 +94,7 @@ public class JobBuilder
    *
    * @return the defined JobDetail.
    */
-  public JobDetail build ()
+  public IJobDetail build ()
   {
 
     final JobDetailImpl job = new JobDetailImpl ();
@@ -125,7 +125,7 @@ public class JobBuilder
    *        the name element for the Job's JobKey
    * @return the updated JobBuilder
    * @see JobKey
-   * @see JobDetail#getKey()
+   * @see IJobDetail#getKey()
    */
   public JobBuilder withIdentity (final String name)
   {
@@ -147,7 +147,7 @@ public class JobBuilder
    *        the group element for the Job's JobKey
    * @return the updated JobBuilder
    * @see JobKey
-   * @see JobDetail#getKey()
+   * @see IJobDetail#getKey()
    */
   public JobBuilder withIdentity (final String name, final String group)
   {
@@ -166,7 +166,7 @@ public class JobBuilder
    *        the Job's JobKey
    * @return the updated JobBuilder
    * @see JobKey
-   * @see JobDetail#getKey()
+   * @see IJobDetail#getKey()
    */
   public JobBuilder withIdentity (final JobKey jobKey)
   {
@@ -180,7 +180,7 @@ public class JobBuilder
    * @param jobDescription
    *        the description for the Job
    * @return the updated JobBuilder
-   * @see JobDetail#getDescription()
+   * @see IJobDetail#getDescription()
    */
   public JobBuilder withDescription (final String jobDescription)
   {
@@ -195,9 +195,9 @@ public class JobBuilder
    * @param jobClazz
    *        a class implementing the Job interface.
    * @return the updated JobBuilder
-   * @see JobDetail#getJobClass()
+   * @see IJobDetail#getJobClass()
    */
-  public JobBuilder ofType (final Class <? extends Job> jobClazz)
+  public JobBuilder ofType (final Class <? extends IJob> jobClazz)
   {
     this.jobClass = jobClazz;
     return this;
@@ -212,7 +212,7 @@ public class JobBuilder
    * </p>
    *
    * @return the updated JobBuilder
-   * @see JobDetail#requestsRecovery()
+   * @see IJobDetail#requestsRecovery()
    */
   public JobBuilder requestRecovery ()
   {
@@ -240,14 +240,14 @@ public class JobBuilder
 
   /**
    * Whether or not the <code>Job</code> should remain stored after it is
-   * orphaned (no <code>{@link Trigger}s</code> point to it).
+   * orphaned (no <code>{@link ITrigger}s</code> point to it).
    * <p>
    * If not explicitly set, the default value is <code>false</code> - this
    * method sets the value to <code>true</code>.
    * </p>
    *
    * @return the updated JobBuilder
-   * @see JobDetail#isDurable()
+   * @see IJobDetail#isDurable()
    */
   public JobBuilder storeDurably ()
   {
@@ -257,7 +257,7 @@ public class JobBuilder
 
   /**
    * Whether or not the <code>Job</code> should remain stored after it is
-   * orphaned (no <code>{@link Trigger}s</code> point to it).
+   * orphaned (no <code>{@link ITrigger}s</code> point to it).
    * <p>
    * If not explicitly set, the default value is <code>false</code>.
    * </p>
@@ -265,7 +265,7 @@ public class JobBuilder
    * @param jobDurability
    *        the value to set for the durability property.
    * @return the updated JobBuilder
-   * @see JobDetail#isDurable()
+   * @see IJobDetail#isDurable()
    */
   public JobBuilder storeDurably (final boolean jobDurability)
   {
@@ -277,7 +277,7 @@ public class JobBuilder
    * Add the given key-value pair to the JobDetail's {@link JobDataMap}.
    *
    * @return the updated JobBuilder
-   * @see JobDetail#getJobDataMap()
+   * @see IJobDetail#getJobDataMap()
    */
   public JobBuilder usingJobData (final String dataKey, final String value)
   {
@@ -289,7 +289,7 @@ public class JobBuilder
    * Add the given key-value pair to the JobDetail's {@link JobDataMap}.
    *
    * @return the updated JobBuilder
-   * @see JobDetail#getJobDataMap()
+   * @see IJobDetail#getJobDataMap()
    */
   public JobBuilder usingJobData (final String dataKey, final Integer value)
   {
@@ -301,7 +301,7 @@ public class JobBuilder
    * Add the given key-value pair to the JobDetail's {@link JobDataMap}.
    *
    * @return the updated JobBuilder
-   * @see JobDetail#getJobDataMap()
+   * @see IJobDetail#getJobDataMap()
    */
   public JobBuilder usingJobData (final String dataKey, final Long value)
   {
@@ -313,7 +313,7 @@ public class JobBuilder
    * Add the given key-value pair to the JobDetail's {@link JobDataMap}.
    *
    * @return the updated JobBuilder
-   * @see JobDetail#getJobDataMap()
+   * @see IJobDetail#getJobDataMap()
    */
   public JobBuilder usingJobData (final String dataKey, final Float value)
   {
@@ -325,7 +325,7 @@ public class JobBuilder
    * Add the given key-value pair to the JobDetail's {@link JobDataMap}.
    *
    * @return the updated JobBuilder
-   * @see JobDetail#getJobDataMap()
+   * @see IJobDetail#getJobDataMap()
    */
   public JobBuilder usingJobData (final String dataKey, final Double value)
   {
@@ -337,7 +337,7 @@ public class JobBuilder
    * Add the given key-value pair to the JobDetail's {@link JobDataMap}.
    *
    * @return the updated JobBuilder
-   * @see JobDetail#getJobDataMap()
+   * @see IJobDetail#getJobDataMap()
    */
   public JobBuilder usingJobData (final String dataKey, final Boolean value)
   {
@@ -350,7 +350,7 @@ public class JobBuilder
    * {@code JobDetail}'s {@code JobDataMap}.
    *
    * @return the updated JobBuilder
-   * @see JobDetail#getJobDataMap()
+   * @see IJobDetail#getJobDataMap()
    */
   public JobBuilder usingJobData (final JobDataMap newJobDataMap)
   {
@@ -363,7 +363,7 @@ public class JobBuilder
    * {@code JobDataMap}.
    *
    * @return the updated JobBuilder
-   * @see JobDetail#getJobDataMap()
+   * @see IJobDetail#getJobDataMap()
    */
   public JobBuilder setJobData (final JobDataMap newJobDataMap)
   {

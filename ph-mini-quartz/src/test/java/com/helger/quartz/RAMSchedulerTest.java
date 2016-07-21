@@ -9,7 +9,7 @@ public class RAMSchedulerTest extends AbstractSchedulerTest
 {
 
   @Override
-  protected Scheduler createScheduler (final String name, final int threadPoolSize) throws SchedulerException
+  protected IScheduler createScheduler (final String name, final int threadPoolSize) throws SchedulerException
   {
     final Properties config = new Properties ();
     config.setProperty ("org.quartz.scheduler.instanceName", name + "Scheduler");

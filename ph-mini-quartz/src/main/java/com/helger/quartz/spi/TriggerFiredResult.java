@@ -5,9 +5,7 @@ package com.helger.quartz.spi;
  */
 public class TriggerFiredResult
 {
-
   private TriggerFiredBundle triggerFiredBundle;
-
   private Exception exception;
 
   public TriggerFiredResult (final TriggerFiredBundle triggerFiredBundle)

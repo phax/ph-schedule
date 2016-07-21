@@ -19,7 +19,7 @@ package com.helger.quartz.simpl;
 import java.net.InetAddress;
 
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.spi.InstanceIdGenerator;
+import com.helger.quartz.spi.IInstanceIdGenerator;
 
 /**
  * <p>
@@ -33,10 +33,10 @@ import com.helger.quartz.spi.InstanceIdGenerator;
  * renamed.
  * </p>
  *
- * @see InstanceIdGenerator
+ * @see IInstanceIdGenerator
  * @see SimpleInstanceIdGenerator
  */
-public class HostnameInstanceIdGenerator implements InstanceIdGenerator
+public class HostnameInstanceIdGenerator implements IInstanceIdGenerator
 {
   public String generateInstanceId () throws SchedulerException
   {

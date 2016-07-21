@@ -23,22 +23,22 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
-import com.helger.quartz.CalendarIntervalTrigger;
-import com.helger.quartz.CronTrigger;
+import com.helger.quartz.ICalendarIntervalTrigger;
+import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.DateBuilder.IntervalUnit;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.ScheduleBuilder;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SimpleTrigger;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ISimpleTrigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerUtils;
 
 /**
  * <p>
- * A concrete <code>{@link Trigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.JobDetail}</code> based upon repeating
+ * A concrete <code>{@link ITrigger}</code> that is used to fire a
+ * <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating
  * calendar time intervals.
  * </p>
  * <p>
@@ -46,8 +46,8 @@ import com.helger.quartz.TriggerUtils;
  * calendar time (see
  * {@link #setRepeatIntervalUnit(com.helger.quartz.DateBuilder.IntervalUnit)})
  * as specified in the trigger's definition. This trigger can achieve schedules
- * that are not possible with {@link SimpleTrigger} (e.g because months are not
- * a fixed number of seconds) or {@link CronTrigger} (e.g. because "every 5
+ * that are not possible with {@link ISimpleTrigger} (e.g because months are not
+ * a fixed number of seconds) or {@link ICronTrigger} (e.g. because "every 5
  * months" is not an even divisor of 12).
  * </p>
  * <p>
@@ -62,15 +62,15 @@ import com.helger.quartz.TriggerUtils;
  * number of days in the month, you should use <code>CronTrigger</code>.
  * </p>
  *
- * @see Trigger
- * @see CronTrigger
- * @see SimpleTrigger
+ * @see ITrigger
+ * @see ICronTrigger
+ * @see ISimpleTrigger
  * @see TriggerUtils
  * @since 1.7
  * @author James House
  */
-public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarIntervalTrigger>
-                                         implements CalendarIntervalTrigger, CoreTrigger
+public class CalendarIntervalTriggerImpl extends AbstractTrigger <ICalendarIntervalTrigger>
+                                         implements ICalendarIntervalTrigger, ICoreTrigger
 {
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
                                                                             .get (java.util.Calendar.YEAR) +
@@ -489,11 +489,11 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarInterv
    * </p>
    */
   @Override
-  public void updateAfterMisfire (final com.helger.quartz.Calendar cal)
+  public void updateAfterMisfire (final com.helger.quartz.ICalendar cal)
   {
     int instr = getMisfireInstruction ();
 
-    if (instr == Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+    if (instr == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
       return;
 
     if (instr == MISFIRE_INSTRUCTION_SMART_POLICY)
@@ -525,16 +525,16 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarInterv
 
   /**
    * <p>
-   * Called when the <code>{@link Scheduler}</code> has decided to 'fire' the
+   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
    * trigger (execute the associated <code>Job</code>), in order to give the
    * <code>Trigger</code> a chance to update itself for its next triggering (if
    * any).
    * </p>
    *
-   * @see #executionComplete(JobExecutionContext, JobExecutionException)
+   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
   @Override
-  public void triggered (final com.helger.quartz.Calendar calendar)
+  public void triggered (final com.helger.quartz.ICalendar calendar)
   {
     timesTriggered++;
     previousFireTime = nextFireTime;
@@ -559,11 +559,11 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarInterv
   }
 
   /**
-   * @see com.helger.quartz.spi.OperableTrigger#updateWithNewCalendar(com.helger.quartz.Calendar,
+   * @see com.helger.quartz.spi.IOperableTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
   @Override
-  public void updateWithNewCalendar (final com.helger.quartz.Calendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (final com.helger.quartz.ICalendar calendar, final long misfireThreshold)
   {
     nextFireTime = getFireTimeAfter (previousFireTime);
 
@@ -618,7 +618,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarInterv
    *         </p>
    */
   @Override
-  public Date computeFirstFireTime (final com.helger.quartz.Calendar calendar)
+  public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)
   {
     nextFireTime = getStartTime ();
 
@@ -1041,7 +1041,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarInterv
    * @see #getTriggerBuilder()
    */
   @Override
-  public ScheduleBuilder <CalendarIntervalTrigger> getScheduleBuilder ()
+  public ScheduleBuilder <ICalendarIntervalTrigger> getScheduleBuilder ()
   {
 
     final CalendarIntervalScheduleBuilder cb = CalendarIntervalScheduleBuilder.calendarIntervalSchedule ()

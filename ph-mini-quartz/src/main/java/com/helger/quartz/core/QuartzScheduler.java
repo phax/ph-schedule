@@ -41,54 +41,54 @@ import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.lang.PropertiesHelper;
 import com.helger.commons.random.RandomHelper;
 import com.helger.commons.string.StringHelper;
-import com.helger.quartz.Calendar;
-import com.helger.quartz.InterruptableJob;
-import com.helger.quartz.Job;
+import com.helger.quartz.ICalendar;
+import com.helger.quartz.IInterruptableJob;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
-import com.helger.quartz.JobListener;
-import com.helger.quartz.ListenerManager;
-import com.helger.quartz.Matcher;
+import com.helger.quartz.IJobListener;
+import com.helger.quartz.IListenerManager;
+import com.helger.quartz.IMatcher;
 import com.helger.quartz.ObjectAlreadyExistsException;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerContext;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SchedulerListener;
+import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.SchedulerMetaData;
-import com.helger.quartz.Trigger;
-import com.helger.quartz.Trigger.CompletedExecutionInstruction;
-import com.helger.quartz.Trigger.TriggerState;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.TriggerListener;
+import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.UnableToInterruptJobException;
 import com.helger.quartz.impl.SchedulerRepository;
 import com.helger.quartz.impl.matchers.GroupMatcher;
-import com.helger.quartz.listeners.SchedulerListenerSupport;
+import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.simpl.PropertySettingJobFactory;
-import com.helger.quartz.spi.JobFactory;
-import com.helger.quartz.spi.OperableTrigger;
-import com.helger.quartz.spi.SchedulerSignaler;
-import com.helger.quartz.spi.ThreadExecutor;
+import com.helger.quartz.spi.IJobFactory;
+import com.helger.quartz.spi.IOperableTrigger;
+import com.helger.quartz.spi.ISchedulerSignaler;
+import com.helger.quartz.spi.IThreadExecutor;
 import com.helger.quartz.utils.Key;
 
 /**
  * <p>
  * This is the heart of Quartz, an indirect implementation of the
- * <code>{@link com.helger.quartz.Scheduler}</code> interface, containing
- * methods to schedule <code>{@link com.helger.quartz.Job}</code>s, register
- * <code>{@link com.helger.quartz.JobListener}</code> instances, etc.
+ * <code>{@link com.helger.quartz.IScheduler}</code> interface, containing
+ * methods to schedule <code>{@link com.helger.quartz.IJob}</code>s, register
+ * <code>{@link com.helger.quartz.IJobListener}</code> instances, etc.
  * </p>
  *
- * @see com.helger.quartz.Scheduler
+ * @see com.helger.quartz.IScheduler
  * @see com.helger.quartz.core.QuartzSchedulerThread
- * @see com.helger.quartz.spi.JobStore
- * @see com.helger.quartz.spi.ThreadPool
+ * @see com.helger.quartz.spi.IJobStore
+ * @see com.helger.quartz.spi.IThreadPool
  * @author James House
  */
-public class QuartzScheduler implements RemotableQuartzScheduler
+public class QuartzScheduler implements IRemotableQuartzScheduler
 {
 
   /*
@@ -132,14 +132,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   private final QuartzSchedulerThread schedThread;
   private ThreadGroup threadGroup;
   private final SchedulerContext context = new SchedulerContext ();
-  private final ListenerManager listenerManager = new ListenerManagerImpl ();
-  private final Map <String, JobListener> internalJobListeners = new HashMap<> (10);
-  private final Map <String, TriggerListener> internalTriggerListeners = new HashMap<> (10);
-  private final List <SchedulerListener> internalSchedulerListeners = new ArrayList<> (10);
-  private JobFactory jobFactory = new PropertySettingJobFactory ();
+  private final IListenerManager listenerManager = new ListenerManagerImpl ();
+  private final Map <String, IJobListener> internalJobListeners = new HashMap<> (10);
+  private final Map <String, ITriggerListener> internalTriggerListeners = new HashMap<> (10);
+  private final List <ISchedulerListener> internalSchedulerListeners = new ArrayList<> (10);
+  private IJobFactory jobFactory = new PropertySettingJobFactory ();
   ExecutingJobsManager jobMgr = null;
   ErrorLogger errLogger = null;
-  private final SchedulerSignaler signaler;
+  private final ISchedulerSignaler signaler;
   private final Random random = RandomHelper.getRandom ();
   private final List <Object> holdToPreventGC = new ArrayList<> (5);
   private boolean signalOnSchedulingChange = true;
@@ -161,13 +161,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public QuartzScheduler (final QuartzSchedulerResources resources, final long idleWaitTime) throws SchedulerException
   {
     this.resources = resources;
-    if (resources.getJobStore () instanceof JobListener)
+    if (resources.getJobStore () instanceof IJobListener)
     {
-      addInternalJobListener ((JobListener) resources.getJobStore ());
+      addInternalJobListener ((IJobListener) resources.getJobStore ());
     }
 
     this.schedThread = new QuartzSchedulerThread (this, resources);
-    final ThreadExecutor schedThreadExecutor = resources.getThreadExecutor ();
+    final IThreadExecutor schedThreadExecutor = resources.getThreadExecutor ();
     schedThreadExecutor.execute (this.schedThread);
     if (idleWaitTime > 0)
     {
@@ -231,7 +231,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return VERSION_ITERATION;
   }
 
-  public SchedulerSignaler getSchedulerSignaler ()
+  public ISchedulerSignaler getSchedulerSignaler ()
   {
     return signaler;
   }
@@ -319,10 +319,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Starts the <code>QuartzScheduler</code>'s threads that fire
-   * <code>{@link com.helger.quartz.Trigger}s</code>.
+   * <code>{@link com.helger.quartz.ITrigger}s</code>.
    * </p>
    * <p>
-   * All <code>{@link com.helger.quartz.Trigger}s</code> that have misfired will
+   * All <code>{@link com.helger.quartz.ITrigger}s</code> that have misfired will
    * be passed to the appropriate TriggerListener(s).
    * </p>
    */
@@ -385,7 +385,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Temporarily halts the <code>QuartzScheduler</code>'s firing of
-   * <code>{@link com.helger.quartz.Trigger}s</code>.
+   * <code>{@link com.helger.quartz.ITrigger}s</code>.
    * </p>
    * <p>
    * The scheduler is not destroyed, and can be re-started at any time.
@@ -449,7 +449,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Halts the <code>QuartzScheduler</code>'s firing of
-   * <code>{@link com.helger.quartz.Trigger}s</code>, and cleans up all
+   * <code>{@link com.helger.quartz.ITrigger}s</code>, and cleans up all
    * resources associated with the QuartzScheduler. Equivalent to
    * <code>shutdown(false)</code>.
    * </p>
@@ -465,7 +465,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Halts the <code>QuartzScheduler</code>'s firing of
-   * <code>{@link com.helger.quartz.Trigger}s</code>, and cleans up all
+   * <code>{@link com.helger.quartz.ITrigger}s</code>, and cleans up all
    * resources associated with the QuartzScheduler.
    * </p>
    * <p>
@@ -497,13 +497,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     if ((resources.isInterruptJobsOnShutdown () && !waitForJobsToComplete) ||
         (resources.isInterruptJobsOnShutdownWithWait () && waitForJobsToComplete))
     {
-      final List <JobExecutionContext> jobs = getCurrentlyExecutingJobs ();
-      for (final JobExecutionContext job : jobs)
+      final List <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
+      for (final IJobExecutionContext job : jobs)
       {
-        if (job.getJobInstance () instanceof InterruptableJob)
+        if (job.getJobInstance () instanceof IInterruptableJob)
           try
           {
-            ((InterruptableJob) job.getJobInstance ()).interrupt ();
+            ((IInterruptableJob) job.getJobInstance ()).interrupt ();
           }
           catch (final Throwable e)
           {
@@ -577,7 +577,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * soon as it's returned, the true list of executing jobs may be different.
    * </p>
    */
-  public List <JobExecutionContext> getCurrentlyExecutingJobs ()
+  public List <IJobExecutionContext> getCurrentlyExecutingJobs ()
   {
     return jobMgr.getExecutingJobs ();
   }
@@ -590,9 +590,9 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Add the <code>{@link com.helger.quartz.Job}</code> identified by the given
-   * <code>{@link com.helger.quartz.JobDetail}</code> to the Scheduler, and
-   * associate the given <code>{@link com.helger.quartz.Trigger}</code> with it.
+   * Add the <code>{@link com.helger.quartz.IJob}</code> identified by the given
+   * <code>{@link com.helger.quartz.IJobDetail}</code> to the Scheduler, and
+   * associate the given <code>{@link com.helger.quartz.ITrigger}</code> with it.
    * </p>
    * <p>
    * If the given Trigger does not reference any <code>Job</code>, then it will
@@ -603,7 +603,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    *         if the Job or Trigger cannot be added to the Scheduler, or there is
    *         an internal Scheduler error.
    */
-  public Date scheduleJob (final JobDetail jobDetail, final Trigger trigger) throws SchedulerException
+  public Date scheduleJob (final IJobDetail jobDetail, final ITrigger trigger) throws SchedulerException
   {
     validateState ();
 
@@ -619,7 +619,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     if (jobDetail.getJobClass () == null)
       throw new SchedulerException ("Job's class cannot be null");
 
-    final OperableTrigger trig = (OperableTrigger) trigger;
+    final IOperableTrigger trig = (IOperableTrigger) trigger;
 
     if (trigger.getJobKey () == null)
     {
@@ -633,7 +633,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
     trig.validate ();
 
-    Calendar cal = null;
+    ICalendar cal = null;
     if (trigger.getCalendarName () != null)
     {
       cal = resources.getJobStore ().retrieveCalendar (trigger.getCalendarName ());
@@ -657,7 +657,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Schedule the given <code>{@link com.helger.quartz.Trigger}</code> with the
+   * Schedule the given <code>{@link com.helger.quartz.ITrigger}</code> with the
    * <code>Job</code> identified by the <code>Trigger</code>'s settings.
    * </p>
    *
@@ -665,7 +665,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    *         if the indicated Job does not exist, or the Trigger cannot be added
    *         to the Scheduler, or there is an internal Scheduler error.
    */
-  public Date scheduleJob (final Trigger trigger) throws SchedulerException
+  public Date scheduleJob (final ITrigger trigger) throws SchedulerException
   {
     validateState ();
 
@@ -674,11 +674,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
       throw new SchedulerException ("Trigger cannot be null");
     }
 
-    final OperableTrigger trig = (OperableTrigger) trigger;
+    final IOperableTrigger trig = (IOperableTrigger) trigger;
 
     trig.validate ();
 
-    Calendar cal = null;
+    ICalendar cal = null;
     if (trigger.getCalendarName () != null)
     {
       cal = resources.getJobStore ().retrieveCalendar (trigger.getCalendarName ());
@@ -720,12 +720,12 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    *         durable, or a Job with the same name already exists, and
    *         <code>replace</code> is <code>false</code>.
    */
-  public void addJob (final JobDetail jobDetail, final boolean replace) throws SchedulerException
+  public void addJob (final IJobDetail jobDetail, final boolean replace) throws SchedulerException
   {
     addJob (jobDetail, replace, false);
   }
 
-  public void addJob (final JobDetail jobDetail,
+  public void addJob (final IJobDetail jobDetail,
                       final boolean replace,
                       final boolean storeNonDurableWhileAwaitingScheduling) throws SchedulerException
   {
@@ -757,8 +757,8 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
     boolean result = false;
 
-    final List <? extends Trigger> triggers = getTriggersOfJob (jobKey);
-    for (final Trigger trigger : triggers)
+    final List <? extends ITrigger> triggers = getTriggersOfJob (jobKey);
+    for (final ITrigger trigger : triggers)
     {
       if (!unscheduleJob (trigger.getKey ()))
       {
@@ -794,36 +794,36 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return result;
   }
 
-  public void scheduleJobs (final Map <JobDetail, Set <? extends Trigger>> triggersAndJobs,
+  public void scheduleJobs (final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                             final boolean replace) throws SchedulerException
   {
     validateState ();
 
     // make sure all triggers refer to their associated job
-    for (final Entry <JobDetail, Set <? extends Trigger>> e : triggersAndJobs.entrySet ())
+    for (final Entry <IJobDetail, Set <? extends ITrigger>> e : triggersAndJobs.entrySet ())
     {
-      final JobDetail job = e.getKey ();
+      final IJobDetail job = e.getKey ();
       if (job == null)
       {
         // there can be one of these (for adding a bulk set of
         // triggers for pre-existing jobs)
         continue;
       }
-      final Set <? extends Trigger> triggers = e.getValue ();
+      final Set <? extends ITrigger> triggers = e.getValue ();
       if (triggers == null)
       {
         // this is possible because the job may be durable,
         // and not yet be having triggers
         continue;
       }
-      for (final Trigger trigger : triggers)
+      for (final ITrigger trigger : triggers)
       {
-        final OperableTrigger opt = (OperableTrigger) trigger;
+        final IOperableTrigger opt = (IOperableTrigger) trigger;
         opt.setJobKey (job.getKey ());
 
         opt.validate ();
 
-        Calendar cal = null;
+        ICalendar cal = null;
         if (trigger.getCalendarName () != null)
         {
           cal = resources.getJobStore ().retrieveCalendar (trigger.getCalendarName ());
@@ -846,15 +846,15 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
     resources.getJobStore ().storeJobsAndTriggers (triggersAndJobs, replace);
     notifySchedulerThread (0L);
-    for (final JobDetail job : triggersAndJobs.keySet ())
+    for (final IJobDetail job : triggersAndJobs.keySet ())
       notifySchedulerListenersJobAdded (job);
   }
 
-  public void scheduleJob (final JobDetail jobDetail,
-                           final Set <? extends Trigger> triggersForJob,
+  public void scheduleJob (final IJobDetail jobDetail,
+                           final Set <? extends ITrigger> triggersForJob,
                            final boolean replace) throws SchedulerException
   {
-    final Map <JobDetail, Set <? extends Trigger>> triggersAndJobs = new HashMap<> ();
+    final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs = new HashMap<> ();
     triggersAndJobs.put (jobDetail, triggersForJob);
     scheduleJobs (triggersAndJobs, replace);
   }
@@ -874,7 +874,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Remove the indicated <code>{@link com.helger.quartz.Trigger}</code> from
+   * Remove the indicated <code>{@link com.helger.quartz.ITrigger}</code> from
    * the scheduler.
    * </p>
    */
@@ -897,7 +897,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link com.helger.quartz.Trigger}</code> with the
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the
    * given name, and store the new given one - which must be associated with the
    * same job.
    * </p>
@@ -908,7 +908,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    *         group was not found and removed from the store, otherwise the first
    *         fire time of the newly scheduled trigger.
    */
-  public Date rescheduleJob (final TriggerKey triggerKey, final Trigger newTrigger) throws SchedulerException
+  public Date rescheduleJob (final TriggerKey triggerKey, final ITrigger newTrigger) throws SchedulerException
   {
     validateState ();
 
@@ -917,8 +917,8 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     if (newTrigger == null)
       throw new IllegalArgumentException ("newTrigger cannot be null");
 
-    final OperableTrigger trig = (OperableTrigger) newTrigger;
-    final Trigger oldTrigger = getTrigger (triggerKey);
+    final IOperableTrigger trig = (IOperableTrigger) newTrigger;
+    final ITrigger oldTrigger = getTrigger (triggerKey);
     if (oldTrigger == null)
     {
       return null;
@@ -926,7 +926,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     trig.setJobKey (oldTrigger.getJobKey ());
     trig.validate ();
 
-    Calendar cal = null;
+    ICalendar cal = null;
     if (newTrigger.getCalendarName () != null)
     {
       cal = resources.getJobStore ().retrieveCalendar (newTrigger.getCalendarName ());
@@ -965,7 +965,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Trigger the identified <code>{@link com.helger.quartz.Job}</code> (execute
+   * Trigger the identified <code>{@link com.helger.quartz.IJob}</code> (execute
    * it now) - with a non-volatile trigger.
    * </p>
    */
@@ -973,8 +973,8 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   {
     validateState ();
 
-    final OperableTrigger trig = (OperableTrigger) newTrigger ().withIdentity (_newTriggerId (),
-                                                                               Scheduler.DEFAULT_GROUP)
+    final IOperableTrigger trig = (IOperableTrigger) newTrigger ().withIdentity (_newTriggerId (),
+                                                                               IScheduler.DEFAULT_GROUP)
                                                                 .forJob (jobKey)
                                                                 .build ();
     trig.computeFirstFireTime (null);
@@ -993,7 +993,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
       }
       catch (final ObjectAlreadyExistsException oaee)
       {
-        trig.setKey (new TriggerKey (_newTriggerId (), Scheduler.DEFAULT_GROUP));
+        trig.setKey (new TriggerKey (_newTriggerId (), IScheduler.DEFAULT_GROUP));
       }
     }
 
@@ -1004,10 +1004,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Store and schedule the identified
-   * <code>{@link com.helger.quartz.spi.OperableTrigger}</code>
+   * <code>{@link com.helger.quartz.spi.IOperableTrigger}</code>
    * </p>
    */
-  public void triggerJob (final OperableTrigger trig) throws SchedulerException
+  public void triggerJob (final IOperableTrigger trig) throws SchedulerException
   {
     validateState ();
 
@@ -1023,7 +1023,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
       }
       catch (final ObjectAlreadyExistsException oaee)
       {
-        trig.setKey (new TriggerKey (_newTriggerId (), Scheduler.DEFAULT_GROUP));
+        trig.setKey (new TriggerKey (_newTriggerId (), IScheduler.DEFAULT_GROUP));
       }
     }
 
@@ -1033,7 +1033,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Pause the <code>{@link Trigger}</code> with the given name.
+   * Pause the <code>{@link ITrigger}</code> with the given name.
    * </p>
    */
   public void pauseTrigger (final TriggerKey triggerKey) throws SchedulerException
@@ -1047,12 +1047,12 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   private <T extends Key <T>> GroupMatcher <T> _getOrDefault (final GroupMatcher <T> matcher)
   {
-    return matcher != null ? matcher : GroupMatcher.groupEquals (Scheduler.DEFAULT_GROUP);
+    return matcher != null ? matcher : GroupMatcher.groupEquals (IScheduler.DEFAULT_GROUP);
   }
 
   /**
    * <p>
-   * Pause all of the <code>{@link Trigger}s</code> in the matching groups.
+   * Pause all of the <code>{@link ITrigger}s</code> in the matching groups.
    * </p>
    */
   public void pauseTriggers (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
@@ -1069,7 +1069,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Pause the <code>{@link com.helger.quartz.JobDetail}</code> with the given
+   * Pause the <code>{@link com.helger.quartz.IJobDetail}</code> with the given
    * name - by pausing all of its current <code>Trigger</code>s.
    * </p>
    */
@@ -1084,7 +1084,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Pause all of the <code>{@link com.helger.quartz.JobDetail}s</code> in the
+   * Pause all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in the
    * matching groups - by pausing all of their <code>Trigger</code>s.
    * </p>
    */
@@ -1102,7 +1102,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Resume (un-pause) the <code>{@link Trigger}</code> with the given name.
+   * Resume (un-pause) the <code>{@link ITrigger}</code> with the given name.
    * </p>
    * <p>
    * If the <code>Trigger</code> missed one or more fire-times, then the
@@ -1120,7 +1120,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Resume (un-pause) all of the <code>{@link Trigger}s</code> in the matching
+   * Resume (un-pause) all of the <code>{@link ITrigger}s</code> in the matching
    * groups.
    * </p>
    * <p>
@@ -1147,7 +1147,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Resume (un-pause) the <code>{@link com.helger.quartz.JobDetail}</code> with
+   * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code> with
    * the given name.
    * </p>
    * <p>
@@ -1168,7 +1168,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Resume (un-pause) all of the
-   * <code>{@link com.helger.quartz.JobDetail}s</code> in the matching groups.
+   * <code>{@link com.helger.quartz.IJobDetail}s</code> in the matching groups.
    * </p>
    * <p>
    * If any of the <code>Job</code> s had <code>Trigger</code> s that missed one
@@ -1235,7 +1235,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all known <code>{@link com.helger.quartz.Job}</code>
+   * Get the names of all known <code>{@link com.helger.quartz.IJob}</code>
    * groups.
    * </p>
    */
@@ -1248,7 +1248,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all the <code>{@link com.helger.quartz.Job}s</code> in the
+   * Get the names of all the <code>{@link com.helger.quartz.IJob}s</code> in the
    * matching groups.
    * </p>
    */
@@ -1261,11 +1261,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get all <code>{@link Trigger}</code> s that are associated with the
-   * identified <code>{@link com.helger.quartz.JobDetail}</code>.
+   * Get all <code>{@link ITrigger}</code> s that are associated with the
+   * identified <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    */
-  public List <? extends Trigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
+  public List <? extends ITrigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
   {
     validateState ();
 
@@ -1274,7 +1274,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all known <code>{@link com.helger.quartz.Trigger}</code>
+   * Get the names of all known <code>{@link com.helger.quartz.ITrigger}</code>
    * groups.
    * </p>
    */
@@ -1287,7 +1287,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all the <code>{@link com.helger.quartz.Trigger}s</code> in
+   * Get the names of all the <code>{@link com.helger.quartz.ITrigger}s</code> in
    * the matching groups.
    * </p>
    */
@@ -1300,11 +1300,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the <code>{@link JobDetail}</code> for the <code>Job</code> instance
+   * Get the <code>{@link IJobDetail}</code> for the <code>Job</code> instance
    * with the given name and group.
    * </p>
    */
-  public JobDetail getJobDetail (final JobKey jobKey) throws SchedulerException
+  public IJobDetail getJobDetail (final JobKey jobKey) throws SchedulerException
   {
     validateState ();
 
@@ -1313,11 +1313,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the <code>{@link Trigger}</code> instance with the given name and
+   * Get the <code>{@link ITrigger}</code> instance with the given name and
    * group.
    * </p>
    */
-  public Trigger getTrigger (final TriggerKey triggerKey) throws SchedulerException
+  public ITrigger getTrigger (final TriggerKey triggerKey) throws SchedulerException
   {
     validateState ();
 
@@ -1325,7 +1325,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   }
 
   /**
-   * Determine whether a {@link Job} with the given identifier already exists
+   * Determine whether a {@link IJob} with the given identifier already exists
    * within the scheduler.
    *
    * @param jobKey
@@ -1342,7 +1342,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   }
 
   /**
-   * Determine whether a {@link Trigger} with the given identifier already
+   * Determine whether a {@link ITrigger} with the given identifier already
    * exists within the scheduler.
    *
    * @param triggerKey
@@ -1359,8 +1359,8 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   }
 
   /**
-   * Clears (deletes!) all scheduling data - all {@link Job}s, {@link Trigger}s
-   * {@link Calendar}s.
+   * Clears (deletes!) all scheduling data - all {@link IJob}s, {@link ITrigger}s
+   * {@link ICalendar}s.
    *
    * @throws SchedulerException
    */
@@ -1374,7 +1374,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the current state of the identified <code>{@link Trigger}</code>.
+   * Get the current state of the identified <code>{@link ITrigger}</code>.
    * </p>
    * J *
    *
@@ -1398,7 +1398,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    *         <code>false</code>.
    */
   public void addCalendar (final String calName,
-                           final Calendar calendar,
+                           final ICalendar calendar,
                            final boolean replace,
                            final boolean updateTriggers) throws SchedulerException
   {
@@ -1425,10 +1425,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the <code>{@link Calendar}</code> instance with the given name.
+   * Get the <code>{@link ICalendar}</code> instance with the given name.
    * </p>
    */
-  public Calendar getCalendar (final String calName) throws SchedulerException
+  public ICalendar getCalendar (final String calName) throws SchedulerException
   {
     validateState ();
 
@@ -1437,7 +1437,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all registered <code>{@link Calendar}s</code>.
+   * Get the names of all registered <code>{@link ICalendar}s</code>.
    * </p>
    */
   public List <String> getCalendarNames () throws SchedulerException
@@ -1447,18 +1447,18 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return resources.getJobStore ().getCalendarNames ();
   }
 
-  public ListenerManager getListenerManager ()
+  public IListenerManager getListenerManager ()
   {
     return listenerManager;
   }
 
   /**
    * <p>
-   * Add the given <code>{@link com.helger.quartz.JobListener}</code> to the
+   * Add the given <code>{@link com.helger.quartz.IJobListener}</code> to the
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
-  public void addInternalJobListener (final JobListener jobListener)
+  public void addInternalJobListener (final IJobListener jobListener)
   {
     if (jobListener.getName () == null || jobListener.getName ().length () == 0)
     {
@@ -1473,7 +1473,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Remove the identified <code>{@link JobListener}</code> from the
+   * Remove the identified <code>{@link IJobListener}</code> from the
    * <code>Scheduler</code>'s list of <i>internal</i> listeners.
    * </p>
    *
@@ -1490,11 +1490,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Get a List containing all of the
-   * <code>{@link com.helger.quartz.JobListener}</code>s in the
+   * <code>{@link com.helger.quartz.IJobListener}</code>s in the
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
-  public List <JobListener> getInternalJobListeners ()
+  public List <IJobListener> getInternalJobListeners ()
   {
     synchronized (internalJobListeners)
     {
@@ -1504,11 +1504,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the <i>internal</i> <code>{@link com.helger.quartz.JobListener}</code>
+   * Get the <i>internal</i> <code>{@link com.helger.quartz.IJobListener}</code>
    * that has the given name.
    * </p>
    */
-  public JobListener getInternalJobListener (final String name)
+  public IJobListener getInternalJobListener (final String name)
   {
     synchronized (internalJobListeners)
     {
@@ -1518,11 +1518,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Add the given <code>{@link com.helger.quartz.TriggerListener}</code> to the
+   * Add the given <code>{@link com.helger.quartz.ITriggerListener}</code> to the
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
-  public void addInternalTriggerListener (final TriggerListener triggerListener)
+  public void addInternalTriggerListener (final ITriggerListener triggerListener)
   {
     if (triggerListener.getName () == null || triggerListener.getName ().length () == 0)
     {
@@ -1537,7 +1537,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Remove the identified <code>{@link TriggerListener}</code> from the
+   * Remove the identified <code>{@link ITriggerListener}</code> from the
    * <code>Scheduler</code>'s list of <i>internal</i> listeners.
    * </p>
    *
@@ -1554,11 +1554,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Get a list containing all of the
-   * <code>{@link com.helger.quartz.TriggerListener}</code>s in the
+   * <code>{@link com.helger.quartz.ITriggerListener}</code>s in the
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
-  public List <TriggerListener> getInternalTriggerListeners ()
+  public List <ITriggerListener> getInternalTriggerListeners ()
   {
     synchronized (internalTriggerListeners)
     {
@@ -1568,11 +1568,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the <i>internal</i> <code>{@link TriggerListener}</code> that has the
+   * Get the <i>internal</i> <code>{@link ITriggerListener}</code> that has the
    * given name.
    * </p>
    */
-  public TriggerListener getInternalTriggerListener (final String name)
+  public ITriggerListener getInternalTriggerListener (final String name)
   {
     synchronized (internalTriggerListeners)
     {
@@ -1582,11 +1582,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Register the given <code>{@link SchedulerListener}</code> with the
+   * Register the given <code>{@link ISchedulerListener}</code> with the
    * <code>Scheduler</code>'s list of internal listeners.
    * </p>
    */
-  public void addInternalSchedulerListener (final SchedulerListener schedulerListener)
+  public void addInternalSchedulerListener (final ISchedulerListener schedulerListener)
   {
     synchronized (internalSchedulerListeners)
     {
@@ -1596,13 +1596,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   /**
    * <p>
-   * Remove the given <code>{@link SchedulerListener}</code> from the
+   * Remove the given <code>{@link ISchedulerListener}</code> from the
    * <code>Scheduler</code>'s list of internal listeners.
    * </p>
    *
    * @return true if the identified listener was found in the list, and removed.
    */
-  public boolean removeInternalSchedulerListener (final SchedulerListener schedulerListener)
+  public boolean removeInternalSchedulerListener (final ISchedulerListener schedulerListener)
   {
     synchronized (internalSchedulerListeners)
     {
@@ -1613,11 +1613,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   /**
    * <p>
    * Get a List containing all of the <i>internal</i>
-   * <code>{@link SchedulerListener}</code>s registered with the
+   * <code>{@link ISchedulerListener}</code>s registered with the
    * <code>Scheduler</code>.
    * </p>
    */
-  public List <SchedulerListener> getInternalSchedulerListeners ()
+  public List <ISchedulerListener> getInternalSchedulerListeners ()
   {
     synchronized (internalSchedulerListeners)
     {
@@ -1625,15 +1625,15 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  protected void notifyJobStoreJobComplete (final OperableTrigger trigger,
-                                            final JobDetail detail,
+  protected void notifyJobStoreJobComplete (final IOperableTrigger trigger,
+                                            final IJobDetail detail,
                                             final CompletedExecutionInstruction instCode)
   {
     resources.getJobStore ().triggeredJobComplete (trigger, detail, instCode);
   }
 
-  protected void notifyJobStoreJobVetoed (final OperableTrigger trigger,
-                                          final JobDetail detail,
+  protected void notifyJobStoreJobVetoed (final IOperableTrigger trigger,
+                                          final IJobDetail detail,
                                           final CompletedExecutionInstruction instCode)
   {
     resources.getJobStore ().triggeredJobComplete (trigger, detail, instCode);
@@ -1647,39 +1647,39 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  private List <TriggerListener> _buildTriggerListenerList ()
+  private List <ITriggerListener> _buildTriggerListenerList ()
   {
-    final List <TriggerListener> allListeners = new LinkedList<> ();
+    final List <ITriggerListener> allListeners = new LinkedList<> ();
     allListeners.addAll (getListenerManager ().getTriggerListeners ());
     allListeners.addAll (getInternalTriggerListeners ());
 
     return allListeners;
   }
 
-  private List <JobListener> _buildJobListenerList ()
+  private List <IJobListener> _buildJobListenerList ()
   {
-    final List <JobListener> allListeners = new LinkedList<> ();
+    final List <IJobListener> allListeners = new LinkedList<> ();
     allListeners.addAll (getListenerManager ().getJobListeners ());
     allListeners.addAll (getInternalJobListeners ());
 
     return allListeners;
   }
 
-  private List <SchedulerListener> _buildSchedulerListenerList ()
+  private List <ISchedulerListener> _buildSchedulerListenerList ()
   {
-    final List <SchedulerListener> allListeners = new ArrayList<> ();
+    final List <ISchedulerListener> allListeners = new ArrayList<> ();
     allListeners.addAll (getListenerManager ().getSchedulerListeners ());
     allListeners.addAll (getInternalSchedulerListeners ());
 
     return allListeners;
   }
 
-  private boolean _matchJobListener (final JobListener listener, final JobKey key)
+  private boolean _matchJobListener (final IJobListener listener, final JobKey key)
   {
-    final List <Matcher <JobKey>> matchers = getListenerManager ().getJobListenerMatchers (listener.getName ());
+    final List <IMatcher <JobKey>> matchers = getListenerManager ().getJobListenerMatchers (listener.getName ());
     if (matchers == null)
       return true;
-    for (final Matcher <JobKey> matcher : matchers)
+    for (final IMatcher <JobKey> matcher : matchers)
     {
       if (matcher.isMatch (key))
         return true;
@@ -1687,12 +1687,12 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return false;
   }
 
-  private boolean _matchTriggerListener (final TriggerListener listener, final TriggerKey key)
+  private boolean _matchTriggerListener (final ITriggerListener listener, final TriggerKey key)
   {
-    final List <Matcher <TriggerKey>> matchers = getListenerManager ().getTriggerListenerMatchers (listener.getName ());
+    final List <IMatcher <TriggerKey>> matchers = getListenerManager ().getTriggerListenerMatchers (listener.getName ());
     if (matchers == null)
       return true;
-    for (final Matcher <TriggerKey> matcher : matchers)
+    for (final IMatcher <TriggerKey> matcher : matchers)
     {
       if (matcher.isMatch (key))
         return true;
@@ -1700,16 +1700,16 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return false;
   }
 
-  public boolean notifyTriggerListenersFired (final JobExecutionContext jec) throws SchedulerException
+  public boolean notifyTriggerListenersFired (final IJobExecutionContext jec) throws SchedulerException
   {
 
     boolean vetoedExecution = false;
 
     // build a list of all trigger listeners that are to be notified...
-    final List <TriggerListener> triggerListeners = _buildTriggerListenerList ();
+    final List <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
-    for (final TriggerListener tl : triggerListeners)
+    for (final ITriggerListener tl : triggerListeners)
     {
       try
       {
@@ -1736,13 +1736,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return vetoedExecution;
   }
 
-  public void notifyTriggerListenersMisfired (final Trigger trigger) throws SchedulerException
+  public void notifyTriggerListenersMisfired (final ITrigger trigger) throws SchedulerException
   {
     // build a list of all trigger listeners that are to be notified...
-    final List <TriggerListener> triggerListeners = _buildTriggerListenerList ();
+    final List <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
-    for (final TriggerListener tl : triggerListeners)
+    for (final ITriggerListener tl : triggerListeners)
     {
       try
       {
@@ -1762,14 +1762,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  public void notifyTriggerListenersComplete (final JobExecutionContext jec,
+  public void notifyTriggerListenersComplete (final IJobExecutionContext jec,
                                               final CompletedExecutionInstruction instCode) throws SchedulerException
   {
     // build a list of all trigger listeners that are to be notified...
-    final List <TriggerListener> triggerListeners = _buildTriggerListenerList ();
+    final List <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
-    for (final TriggerListener tl : triggerListeners)
+    for (final ITriggerListener tl : triggerListeners)
     {
       try
       {
@@ -1789,13 +1789,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  public void notifyJobListenersToBeExecuted (final JobExecutionContext jec) throws SchedulerException
+  public void notifyJobListenersToBeExecuted (final IJobExecutionContext jec) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <JobListener> jobListeners = _buildJobListenerList ();
+    final List <IJobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
-    for (final JobListener jl : jobListeners)
+    for (final IJobListener jl : jobListeners)
     {
       try
       {
@@ -1815,13 +1815,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  public void notifyJobListenersWasVetoed (final JobExecutionContext jec) throws SchedulerException
+  public void notifyJobListenersWasVetoed (final IJobExecutionContext jec) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <JobListener> jobListeners = _buildJobListenerList ();
+    final List <IJobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
-    for (final JobListener jl : jobListeners)
+    for (final IJobListener jl : jobListeners)
     {
       try
       {
@@ -1841,14 +1841,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  public void notifyJobListenersWasExecuted (final JobExecutionContext jec,
+  public void notifyJobListenersWasExecuted (final IJobExecutionContext jec,
                                              final JobExecutionException je) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <JobListener> jobListeners = _buildJobListenerList ();
+    final List <IJobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
-    for (final JobListener jl : jobListeners)
+    for (final IJobListener jl : jobListeners)
     {
       try
       {
@@ -1871,10 +1871,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersError (final String msg, final SchedulerException se)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -1888,13 +1888,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  public void notifySchedulerListenersSchduled (final Trigger trigger)
+  public void notifySchedulerListenersSchduled (final ITrigger trigger)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -1913,10 +1913,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersUnscheduled (final TriggerKey triggerKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -1935,13 +1935,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  public void notifySchedulerListenersFinalized (final Trigger trigger)
+  public void notifySchedulerListenersFinalized (final ITrigger trigger)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -1960,10 +1960,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersPausedTrigger (final TriggerKey triggerKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -1979,10 +1979,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersPausedTriggers (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -1998,10 +1998,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersResumedTrigger (final TriggerKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2017,10 +2017,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersResumedTriggers (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2036,10 +2036,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersPausedJob (final JobKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2055,10 +2055,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersPausedJobs (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2074,10 +2074,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersResumedJob (final JobKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2093,10 +2093,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersResumedJobs (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2112,10 +2112,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersInStandbyMode ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2131,10 +2131,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersStarted ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2150,10 +2150,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersStarting ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2169,10 +2169,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersShutdown ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2188,10 +2188,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersShuttingdown ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2204,13 +2204,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  public void notifySchedulerListenersJobAdded (final JobDetail jobDetail)
+  public void notifySchedulerListenersJobAdded (final IJobDetail jobDetail)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2226,10 +2226,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersJobDeleted (final JobKey jobKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
-    for (final SchedulerListener sl : schedListeners)
+    for (final ISchedulerListener sl : schedListeners)
     {
       try
       {
@@ -2246,7 +2246,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * @param factory
    * @throws SchedulerException
    */
-  public void setJobFactory (final JobFactory factory) throws SchedulerException
+  public void setJobFactory (final IJobFactory factory) throws SchedulerException
   {
 
     if (factory == null)
@@ -2259,7 +2259,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     this.jobFactory = factory;
   }
 
-  public JobFactory getJobFactory ()
+  public IJobFactory getJobFactory ()
   {
     return jobFactory;
   }
@@ -2273,27 +2273,27 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * instance, not across the entire cluster.
    * </p>
    *
-   * @see com.helger.quartz.core.RemotableQuartzScheduler#interrupt(JobKey)
+   * @see com.helger.quartz.core.IRemotableQuartzScheduler#interrupt(JobKey)
    */
   public boolean interrupt (final JobKey jobKey) throws UnableToInterruptJobException
   {
 
-    final List <JobExecutionContext> jobs = getCurrentlyExecutingJobs ();
+    final List <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
 
-    JobDetail jobDetail = null;
-    Job job = null;
+    IJobDetail jobDetail = null;
+    IJob job = null;
 
     boolean interrupted = false;
 
-    for (final JobExecutionContext jec : jobs)
+    for (final IJobExecutionContext jec : jobs)
     {
       jobDetail = jec.getJobDetail ();
       if (jobKey.equals (jobDetail.getKey ()))
       {
         job = jec.getJobInstance ();
-        if (job instanceof InterruptableJob)
+        if (job instanceof IInterruptableJob)
         {
-          ((InterruptableJob) job).interrupt ();
+          ((IInterruptableJob) job).interrupt ();
           interrupted = true;
         }
         else
@@ -2301,7 +2301,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
           throw new UnableToInterruptJobException ("Job " +
                                                    jobDetail.getKey () +
                                                    " can not be interrupted, since it does not implement " +
-                                                   InterruptableJob.class.getName ());
+                                                   IInterruptableJob.class.getName ());
         }
       }
     }
@@ -2318,28 +2318,28 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * instance, not across the entire cluster.
    * </p>
    *
-   * @see com.helger.quartz.core.RemotableQuartzScheduler#interrupt(JobKey)
+   * @see com.helger.quartz.core.IRemotableQuartzScheduler#interrupt(JobKey)
    */
   public boolean interrupt (final String fireInstanceId) throws UnableToInterruptJobException
   {
-    final List <JobExecutionContext> jobs = getCurrentlyExecutingJobs ();
+    final List <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
 
-    Job job = null;
+    IJob job = null;
 
-    for (final JobExecutionContext jec : jobs)
+    for (final IJobExecutionContext jec : jobs)
     {
       if (jec.getFireInstanceId ().equals (fireInstanceId))
       {
         job = jec.getJobInstance ();
-        if (job instanceof InterruptableJob)
+        if (job instanceof IInterruptableJob)
         {
-          ((InterruptableJob) job).interrupt ();
+          ((IInterruptableJob) job).interrupt ();
           return true;
         }
         throw new UnableToInterruptJobException ("Job " +
                                                  jec.getJobDetail ().getKey () +
                                                  " can not be interrupted, since it does not implement " +
-                                                 InterruptableJob.class.getName ());
+                                                 IInterruptableJob.class.getName ());
       }
     }
 
@@ -2357,7 +2357,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   }
 }
 
-class ErrorLogger extends SchedulerListenerSupport
+class ErrorLogger extends AbstractSchedulerListenerSupport
 {
   ErrorLogger ()
   {}
@@ -2369,9 +2369,9 @@ class ErrorLogger extends SchedulerListenerSupport
   }
 }
 
-class ExecutingJobsManager implements JobListener
+class ExecutingJobsManager implements IJobListener
 {
-  private final HashMap <String, JobExecutionContext> executingJobs = new HashMap<> ();
+  private final HashMap <String, IJobExecutionContext> executingJobs = new HashMap<> ();
   private final AtomicInteger numJobsFired = new AtomicInteger (0);
 
   ExecutingJobsManager ()
@@ -2390,21 +2390,21 @@ class ExecutingJobsManager implements JobListener
     }
   }
 
-  public void jobToBeExecuted (final JobExecutionContext context)
+  public void jobToBeExecuted (final IJobExecutionContext context)
   {
     numJobsFired.incrementAndGet ();
 
     synchronized (executingJobs)
     {
-      executingJobs.put (((OperableTrigger) context.getTrigger ()).getFireInstanceId (), context);
+      executingJobs.put (((IOperableTrigger) context.getTrigger ()).getFireInstanceId (), context);
     }
   }
 
-  public void jobWasExecuted (final JobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
     synchronized (executingJobs)
     {
-      executingJobs.remove (((OperableTrigger) context.getTrigger ()).getFireInstanceId ());
+      executingJobs.remove (((IOperableTrigger) context.getTrigger ()).getFireInstanceId ());
     }
   }
 
@@ -2413,7 +2413,7 @@ class ExecutingJobsManager implements JobListener
     return numJobsFired.get ();
   }
 
-  public List <JobExecutionContext> getExecutingJobs ()
+  public List <IJobExecutionContext> getExecutingJobs ()
   {
     synchronized (executingJobs)
     {
@@ -2421,6 +2421,6 @@ class ExecutingJobsManager implements JobListener
     }
   }
 
-  public void jobExecutionVetoed (final JobExecutionContext context)
+  public void jobExecutionVetoed (final IJobExecutionContext context)
   {}
 }

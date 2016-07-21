@@ -20,14 +20,14 @@ package com.helger.quartz.simpl;
 import java.io.InputStream;
 import java.net.URL;
 
-import com.helger.quartz.spi.ClassLoadHelper;
+import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
  * A <code>ClassLoadHelper</code> that uses either the current thread's context
  * class loader
  * (<code>Thread.currentThread().getContextClassLoader().loadClass( .. )</code>).
  *
- * @see com.helger.quartz.spi.ClassLoadHelper
+ * @see com.helger.quartz.spi.IClassLoadHelper
  * @see com.helger.quartz.simpl.InitThreadContextClassLoadHelper
  * @see com.helger.quartz.simpl.SimpleClassLoadHelper
  * @see com.helger.quartz.simpl.CascadingClassLoadHelper
@@ -35,7 +35,7 @@ import com.helger.quartz.spi.ClassLoadHelper;
  * @author jhouse
  * @author pl47ypus
  */
-public class ThreadContextClassLoadHelper implements ClassLoadHelper
+public class ThreadContextClassLoadHelper implements IClassLoadHelper
 {
 
   /*

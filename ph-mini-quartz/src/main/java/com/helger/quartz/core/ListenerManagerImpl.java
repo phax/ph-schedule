@@ -10,29 +10,29 @@ import java.util.Map;
 
 import com.helger.commons.collection.ext.CommonsArrayList;
 import com.helger.quartz.JobKey;
-import com.helger.quartz.JobListener;
-import com.helger.quartz.ListenerManager;
-import com.helger.quartz.Matcher;
-import com.helger.quartz.SchedulerListener;
+import com.helger.quartz.IJobListener;
+import com.helger.quartz.IListenerManager;
+import com.helger.quartz.IMatcher;
+import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.TriggerListener;
+import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 
-public class ListenerManagerImpl implements ListenerManager
+public class ListenerManagerImpl implements IListenerManager
 {
-  private final Map <String, JobListener> globalJobListeners = new LinkedHashMap<> (10);
-  private final Map <String, TriggerListener> globalTriggerListeners = new LinkedHashMap<> (10);
-  private final Map <String, List <Matcher <JobKey>>> globalJobListenersMatchers = new LinkedHashMap<> (10);
-  private final Map <String, List <Matcher <TriggerKey>>> globalTriggerListenersMatchers = new LinkedHashMap<> (10);
-  private final List <SchedulerListener> schedulerListeners = new ArrayList<> (10);
+  private final Map <String, IJobListener> globalJobListeners = new LinkedHashMap<> (10);
+  private final Map <String, ITriggerListener> globalTriggerListeners = new LinkedHashMap<> (10);
+  private final Map <String, List <IMatcher <JobKey>>> globalJobListenersMatchers = new LinkedHashMap<> (10);
+  private final Map <String, List <IMatcher <TriggerKey>>> globalTriggerListenersMatchers = new LinkedHashMap<> (10);
+  private final List <ISchedulerListener> schedulerListeners = new ArrayList<> (10);
 
   @SafeVarargs
-  public final void addJobListener (final JobListener jobListener, final Matcher <JobKey>... matchers)
+  public final void addJobListener (final IJobListener jobListener, final IMatcher <JobKey>... matchers)
   {
     addJobListener (jobListener, new CommonsArrayList<> (matchers));
   }
 
-  public void addJobListener (final JobListener jobListener, final List <Matcher <JobKey>> matchers)
+  public void addJobListener (final IJobListener jobListener, final List <IMatcher <JobKey>> matchers)
   {
     if (jobListener.getName () == null || jobListener.getName ().length () == 0)
     {
@@ -42,7 +42,7 @@ public class ListenerManagerImpl implements ListenerManager
     synchronized (globalJobListeners)
     {
       globalJobListeners.put (jobListener.getName (), jobListener);
-      final List <Matcher <JobKey>> matchersL = new LinkedList<> ();
+      final List <IMatcher <JobKey>> matchersL = new LinkedList<> ();
       if (matchers != null && matchers.size () > 0)
         matchersL.addAll (matchers);
       else
@@ -52,12 +52,12 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public void addJobListener (final JobListener jobListener)
+  public void addJobListener (final IJobListener jobListener)
   {
     addJobListener (jobListener, EverythingMatcher.allJobs ());
   }
 
-  public void addJobListener (final JobListener jobListener, final Matcher <JobKey> matcher)
+  public void addJobListener (final IJobListener jobListener, final IMatcher <JobKey> matcher)
   {
     if (jobListener.getName () == null || jobListener.getName ().length () == 0)
     {
@@ -67,7 +67,7 @@ public class ListenerManagerImpl implements ListenerManager
     synchronized (globalJobListeners)
     {
       globalJobListeners.put (jobListener.getName (), jobListener);
-      final LinkedList <Matcher <JobKey>> matchersL = new LinkedList<> ();
+      final LinkedList <IMatcher <JobKey>> matchersL = new LinkedList<> ();
       if (matcher != null)
         matchersL.add (matcher);
       else
@@ -77,14 +77,14 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public boolean addJobListenerMatcher (final String listenerName, final Matcher <JobKey> matcher)
+  public boolean addJobListenerMatcher (final String listenerName, final IMatcher <JobKey> matcher)
   {
     if (matcher == null)
       throw new IllegalArgumentException ("Null value not acceptable.");
 
     synchronized (globalJobListeners)
     {
-      final List <Matcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
+      final List <IMatcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
       if (matchers == null)
         return false;
       matchers.add (matcher);
@@ -92,39 +92,39 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public boolean removeJobListenerMatcher (final String listenerName, final Matcher <JobKey> matcher)
+  public boolean removeJobListenerMatcher (final String listenerName, final IMatcher <JobKey> matcher)
   {
     if (matcher == null)
       throw new IllegalArgumentException ("Non-null value not acceptable.");
 
     synchronized (globalJobListeners)
     {
-      final List <Matcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
+      final List <IMatcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
       if (matchers == null)
         return false;
       return matchers.remove (matcher);
     }
   }
 
-  public List <Matcher <JobKey>> getJobListenerMatchers (final String listenerName)
+  public List <IMatcher <JobKey>> getJobListenerMatchers (final String listenerName)
   {
     synchronized (globalJobListeners)
     {
-      final List <Matcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
+      final List <IMatcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
       if (matchers == null)
         return null;
       return Collections.unmodifiableList (matchers);
     }
   }
 
-  public boolean setJobListenerMatchers (final String listenerName, final List <Matcher <JobKey>> matchers)
+  public boolean setJobListenerMatchers (final String listenerName, final List <IMatcher <JobKey>> matchers)
   {
     if (matchers == null)
       throw new IllegalArgumentException ("Non-null value not acceptable.");
 
     synchronized (globalJobListeners)
     {
-      final List <Matcher <JobKey>> oldMatchers = globalJobListenersMatchers.get (listenerName);
+      final List <IMatcher <JobKey>> oldMatchers = globalJobListenersMatchers.get (listenerName);
       if (oldMatchers == null)
         return false;
       globalJobListenersMatchers.put (listenerName, matchers);
@@ -140,7 +140,7 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public List <JobListener> getJobListeners ()
+  public List <IJobListener> getJobListeners ()
   {
     synchronized (globalJobListeners)
     {
@@ -148,7 +148,7 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public JobListener getJobListener (final String name)
+  public IJobListener getJobListener (final String name)
   {
     synchronized (globalJobListeners)
     {
@@ -157,12 +157,12 @@ public class ListenerManagerImpl implements ListenerManager
   }
 
   @SafeVarargs
-  public final void addTriggerListener (final TriggerListener triggerListener, final Matcher <TriggerKey>... matchers)
+  public final void addTriggerListener (final ITriggerListener triggerListener, final IMatcher <TriggerKey>... matchers)
   {
     addTriggerListener (triggerListener, Arrays.asList (matchers));
   }
 
-  public void addTriggerListener (final TriggerListener triggerListener, final List <Matcher <TriggerKey>> matchers)
+  public void addTriggerListener (final ITriggerListener triggerListener, final List <IMatcher <TriggerKey>> matchers)
   {
     if (triggerListener.getName () == null || triggerListener.getName ().length () == 0)
     {
@@ -173,7 +173,7 @@ public class ListenerManagerImpl implements ListenerManager
     {
       globalTriggerListeners.put (triggerListener.getName (), triggerListener);
 
-      final LinkedList <Matcher <TriggerKey>> matchersL = new LinkedList<> ();
+      final LinkedList <IMatcher <TriggerKey>> matchersL = new LinkedList<> ();
       if (matchers != null && matchers.size () > 0)
         matchersL.addAll (matchers);
       else
@@ -183,12 +183,12 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public void addTriggerListener (final TriggerListener triggerListener)
+  public void addTriggerListener (final ITriggerListener triggerListener)
   {
     addTriggerListener (triggerListener, EverythingMatcher.allTriggers ());
   }
 
-  public void addTriggerListener (final TriggerListener triggerListener, final Matcher <TriggerKey> matcher)
+  public void addTriggerListener (final ITriggerListener triggerListener, final IMatcher <TriggerKey> matcher)
   {
     if (matcher == null)
       throw new IllegalArgumentException ("Null value not acceptable for matcher.");
@@ -201,20 +201,20 @@ public class ListenerManagerImpl implements ListenerManager
     synchronized (globalTriggerListeners)
     {
       globalTriggerListeners.put (triggerListener.getName (), triggerListener);
-      final List <Matcher <TriggerKey>> matchers = new LinkedList<> ();
+      final List <IMatcher <TriggerKey>> matchers = new LinkedList<> ();
       matchers.add (matcher);
       globalTriggerListenersMatchers.put (triggerListener.getName (), matchers);
     }
   }
 
-  public boolean addTriggerListenerMatcher (final String listenerName, final Matcher <TriggerKey> matcher)
+  public boolean addTriggerListenerMatcher (final String listenerName, final IMatcher <TriggerKey> matcher)
   {
     if (matcher == null)
       throw new IllegalArgumentException ("Non-null value not acceptable.");
 
     synchronized (globalTriggerListeners)
     {
-      final List <Matcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
+      final List <IMatcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
       if (matchers == null)
         return false;
       matchers.add (matcher);
@@ -222,39 +222,39 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public boolean removeTriggerListenerMatcher (final String listenerName, final Matcher <TriggerKey> matcher)
+  public boolean removeTriggerListenerMatcher (final String listenerName, final IMatcher <TriggerKey> matcher)
   {
     if (matcher == null)
       throw new IllegalArgumentException ("Non-null value not acceptable.");
 
     synchronized (globalTriggerListeners)
     {
-      final List <Matcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
+      final List <IMatcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
       if (matchers == null)
         return false;
       return matchers.remove (matcher);
     }
   }
 
-  public List <Matcher <TriggerKey>> getTriggerListenerMatchers (final String listenerName)
+  public List <IMatcher <TriggerKey>> getTriggerListenerMatchers (final String listenerName)
   {
     synchronized (globalTriggerListeners)
     {
-      final List <Matcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
+      final List <IMatcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
       if (matchers == null)
         return null;
       return Collections.unmodifiableList (matchers);
     }
   }
 
-  public boolean setTriggerListenerMatchers (final String listenerName, final List <Matcher <TriggerKey>> matchers)
+  public boolean setTriggerListenerMatchers (final String listenerName, final List <IMatcher <TriggerKey>> matchers)
   {
     if (matchers == null)
       throw new IllegalArgumentException ("Non-null value not acceptable.");
 
     synchronized (globalTriggerListeners)
     {
-      final List <Matcher <TriggerKey>> oldMatchers = globalTriggerListenersMatchers.get (listenerName);
+      final List <IMatcher <TriggerKey>> oldMatchers = globalTriggerListenersMatchers.get (listenerName);
       if (oldMatchers == null)
         return false;
       globalTriggerListenersMatchers.put (listenerName, matchers);
@@ -270,7 +270,7 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public List <TriggerListener> getTriggerListeners ()
+  public List <ITriggerListener> getTriggerListeners ()
   {
     synchronized (globalTriggerListeners)
     {
@@ -278,7 +278,7 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public TriggerListener getTriggerListener (final String name)
+  public ITriggerListener getTriggerListener (final String name)
   {
     synchronized (globalTriggerListeners)
     {
@@ -286,7 +286,7 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public void addSchedulerListener (final SchedulerListener schedulerListener)
+  public void addSchedulerListener (final ISchedulerListener schedulerListener)
   {
     synchronized (schedulerListeners)
     {
@@ -294,7 +294,7 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public boolean removeSchedulerListener (final SchedulerListener schedulerListener)
+  public boolean removeSchedulerListener (final ISchedulerListener schedulerListener)
   {
     synchronized (schedulerListeners)
     {
@@ -302,7 +302,7 @@ public class ListenerManagerImpl implements ListenerManager
     }
   }
 
-  public List <SchedulerListener> getSchedulerListeners ()
+  public List <ISchedulerListener> getSchedulerListeners ()
   {
     synchronized (schedulerListeners)
     {

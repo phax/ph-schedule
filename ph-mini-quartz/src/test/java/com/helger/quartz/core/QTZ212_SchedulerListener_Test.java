@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SchedulerFactory;
-import com.helger.quartz.SchedulerListener;
+import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.listeners.BroadcastSchedulerListener;
-import com.helger.quartz.listeners.SchedulerListenerSupport;
+import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 
 /**
  * Test that verifies that schedulerStarting() is called before the
@@ -31,8 +31,8 @@ public class QTZ212_SchedulerListener_Test
   @Test
   public void stdSchedulerCallsStartingBeforeStartedTest () throws SchedulerException
   {
-    final SchedulerFactory sf = new StdSchedulerFactory ();
-    final Scheduler sched = sf.getScheduler ();
+    final ISchedulerFactory sf = new StdSchedulerFactory ();
+    final IScheduler sched = sf.getScheduler ();
     sched.getListenerManager ().addSchedulerListener (new TestSchedulerListener ());
     sched.start ();
 
@@ -47,9 +47,9 @@ public class QTZ212_SchedulerListener_Test
   {
 
     methodsCalledInSchedulerListener = new ArrayList<> ();
-    final SchedulerFactory sf = new StdSchedulerFactory ();
-    final Scheduler sched = sf.getScheduler ();
-    final List <SchedulerListener> listeners = new ArrayList<> ();
+    final ISchedulerFactory sf = new StdSchedulerFactory ();
+    final IScheduler sched = sf.getScheduler ();
+    final List <ISchedulerListener> listeners = new ArrayList<> ();
     listeners.add (new TestSchedulerListener ());
 
     sched.getListenerManager ().addSchedulerListener (new BroadcastSchedulerListener (listeners));
@@ -61,7 +61,7 @@ public class QTZ212_SchedulerListener_Test
     sched.shutdown ();
   }
 
-  public static class TestSchedulerListener extends SchedulerListenerSupport
+  public static class TestSchedulerListener extends AbstractSchedulerListenerSupport
   {
 
     @Override

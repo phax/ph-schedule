@@ -26,12 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.SchedulerConfigException;
-import com.helger.quartz.spi.ThreadPool;
+import com.helger.quartz.spi.IThreadPool;
 
 /**
  * <p>
  * This is class is a simple implementation of a thread pool, based on the
- * <code>{@link com.helger.quartz.spi.ThreadPool}</code> interface.
+ * <code>{@link com.helger.quartz.spi.IThreadPool}</code> interface.
  * </p>
  * <p>
  * <CODE>Runnable</CODE> objects are sent to the pool with the
@@ -46,7 +46,7 @@ import com.helger.quartz.spi.ThreadPool;
  * @author James House
  * @author Juergen Donnerstag
  */
-public class SimpleThreadPool implements ThreadPool
+public class SimpleThreadPool implements IThreadPool
 {
 
   /*

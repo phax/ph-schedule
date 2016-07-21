@@ -16,11 +16,11 @@
 
 package com.helger.quartz.utils.counter.sampled;
 
-import com.helger.quartz.utils.counter.Counter;
+import com.helger.quartz.utils.counter.ICounter;
 import com.helger.quartz.utils.counter.CounterConfig;
 
 /**
- * Config for a {@link SampledCounter}
+ * Config for a {@link ISampledCounter}
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7
@@ -95,7 +95,7 @@ public class SampledCounterConfig extends CounterConfig
    * {@inheritDoc}
    */
   @Override
-  public Counter createCounter ()
+  public ICounter createCounter ()
   {
     return new SampledCounterImpl (this);
   }

@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
@@ -137,7 +137,7 @@ public class QuartzInitializerServlet extends HttpServlet
   private boolean performShutdown = true;
   private boolean waitOnShutdown = false;
 
-  private transient Scheduler scheduler = null;
+  private transient IScheduler scheduler = null;
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

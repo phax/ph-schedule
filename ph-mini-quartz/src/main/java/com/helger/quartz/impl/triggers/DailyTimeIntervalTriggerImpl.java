@@ -21,19 +21,19 @@ import java.util.Date;
 import java.util.Set;
 
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
-import com.helger.quartz.DailyTimeIntervalTrigger;
+import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.DateBuilder.IntervalUnit;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.ScheduleBuilder;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TimeOfDay;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 
 /**
  * A concrete implementation of DailyTimeIntervalTrigger that is used to fire a
- * <code>{@link com.helger.quartz.JobDetail}</code> based upon daily repeating
+ * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating
  * time intervals.
  * <p>
  * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) seconds,
@@ -82,14 +82,14 @@ import com.helger.quartz.Trigger;
  * default value of repeatCount of this trigger is set to REPEAT_INDEFINITELY
  * instead of 0 though.
  *
- * @see DailyTimeIntervalTrigger
+ * @see IDailyTimeIntervalTrigger
  * @see DailyTimeIntervalScheduleBuilder
  * @since 2.1.0
  * @author James House
  * @author Zemian Deng <saltnlight5@gmail.com>
  */
-public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeIntervalTrigger>
-                                          implements DailyTimeIntervalTrigger, CoreTrigger
+public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <IDailyTimeIntervalTrigger>
+                                          implements IDailyTimeIntervalTrigger, ICoreTrigger
 {
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
                                                                             .get (java.util.Calendar.YEAR) +
@@ -498,11 +498,11 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
    * </p>
    */
   @Override
-  public void updateAfterMisfire (final com.helger.quartz.Calendar cal)
+  public void updateAfterMisfire (final com.helger.quartz.ICalendar cal)
   {
     int instr = getMisfireInstruction ();
 
-    if (instr == Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+    if (instr == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
       return;
 
     if (instr == MISFIRE_INSTRUCTION_SMART_POLICY)
@@ -534,16 +534,16 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
 
   /**
    * <p>
-   * Called when the <code>{@link Scheduler}</code> has decided to 'fire' the
+   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
    * trigger (execute the associated <code>Job</code>), in order to give the
    * <code>Trigger</code> a chance to update itself for its next triggering (if
    * any).
    * </p>
    *
-   * @see #executionComplete(JobExecutionContext, JobExecutionException)
+   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
   @Override
-  public void triggered (final com.helger.quartz.Calendar calendar)
+  public void triggered (final com.helger.quartz.ICalendar calendar)
   {
     timesTriggered++;
     previousFireTime = nextFireTime;
@@ -573,11 +573,11 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
   }
 
   /**
-   * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateWithNewCalendar(com.helger.quartz.Calendar,
+   * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
   @Override
-  public void updateWithNewCalendar (final com.helger.quartz.Calendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (final com.helger.quartz.ICalendar calendar, final long misfireThreshold)
   {
     nextFireTime = getFireTimeAfter (previousFireTime);
 
@@ -632,7 +632,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
    *         </p>
    */
   @Override
-  public Date computeFirstFireTime (final com.helger.quartz.Calendar calendar)
+  public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)
   {
 
     nextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000L));
@@ -1076,7 +1076,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
    * @see #getTriggerBuilder()
    */
   @Override
-  public ScheduleBuilder <DailyTimeIntervalTrigger> getScheduleBuilder ()
+  public ScheduleBuilder <IDailyTimeIntervalTrigger> getScheduleBuilder ()
   {
 
     final DailyTimeIntervalScheduleBuilder cb = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule ()

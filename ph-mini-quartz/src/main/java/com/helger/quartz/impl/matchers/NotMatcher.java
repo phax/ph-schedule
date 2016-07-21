@@ -17,7 +17,7 @@
 package com.helger.quartz.impl.matchers;
 
 import com.helger.commons.hashcode.HashCodeGenerator;
-import com.helger.quartz.Matcher;
+import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
 
 /**
@@ -25,11 +25,11 @@ import com.helger.quartz.utils.Key;
  *
  * @author jhouse
  */
-public class NotMatcher <T extends Key <T>> implements Matcher <T>
+public class NotMatcher <T extends Key <T>> implements IMatcher <T>
 {
-  private final Matcher <T> operand;
+  private final IMatcher <T> operand;
 
-  public NotMatcher (final Matcher <T> operand)
+  public NotMatcher (final IMatcher <T> operand)
   {
     if (operand == null)
       throw new IllegalArgumentException ("Non-null operand required!");
@@ -42,7 +42,7 @@ public class NotMatcher <T extends Key <T>> implements Matcher <T>
     return !operand.isMatch (key);
   }
 
-  public Matcher <T> getOperand ()
+  public IMatcher <T> getOperand ()
   {
     return operand;
   }

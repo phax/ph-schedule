@@ -39,21 +39,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.Test;
 
 import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.Job;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobBuilder;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.PersistJobDataAfterExecution;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerContext;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.Trigger.TriggerState;
+import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.utils.Key;
 
@@ -70,23 +70,23 @@ public abstract class AbstractSchedulerTest
 
   @PersistJobDataAfterExecution
   @DisallowConcurrentExecution
-  public static class TestStatefulJob implements Job
+  public static class TestStatefulJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
-  public static class TestJob implements Job
+  public static class TestJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
   public static final long TEST_TIMEOUT_SECONDS = 125;
 
-  public static class TestJobWithSync implements Job
+  public static class TestJobWithSync implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
 
       try
@@ -109,22 +109,22 @@ public abstract class AbstractSchedulerTest
 
   @DisallowConcurrentExecution
   @PersistJobDataAfterExecution
-  public static class TestAnnotatedJob implements Job
+  public static class TestAnnotatedJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
-  protected abstract Scheduler createScheduler (String name, int threadPoolSize) throws SchedulerException;
+  protected abstract IScheduler createScheduler (String name, int threadPoolSize) throws SchedulerException;
 
   @Test
   public void testBasicStorageFunctions () throws Exception
   {
-    final Scheduler sched = createScheduler ("testBasicStorageFunctions", 2);
+    final IScheduler sched = createScheduler ("testBasicStorageFunctions", 2);
 
     // test basic storage functions of scheduler...
 
-    JobDetail job = newJob ().ofType (TestJob.class).withIdentity ("j1").storeDurably ().build ();
+    IJobDetail job = newJob ().ofType (TestJob.class).withIdentity ("j1").storeDurably ().build ();
 
     assertFalse ("Unexpected existence of job named 'j1'.", sched.checkExists (jobKey ("j1")));
 
@@ -139,7 +139,7 @@ public abstract class AbstractSchedulerTest
 
     sched.deleteJob (jobKey ("j1"));
 
-    Trigger trigger = newTrigger ().withIdentity ("t1")
+    ITrigger trigger = newTrigger ().withIdentity ("t1")
                                    .forJob (job)
                                    .startNow ()
                                    .withSchedule (simpleSchedule ().repeatForever ().withIntervalInSeconds (5))
@@ -289,12 +289,12 @@ public abstract class AbstractSchedulerTest
   @Test
   public void testDurableStorageFunctions () throws Exception
   {
-    final Scheduler sched = createScheduler ("testDurableStorageFunctions", 2);
+    final IScheduler sched = createScheduler ("testDurableStorageFunctions", 2);
     try
     {
       // test basic storage functions of scheduler...
 
-      final JobDetail job = newJob ().ofType (TestJob.class).withIdentity ("j1").storeDurably ().build ();
+      final IJobDetail job = newJob ().ofType (TestJob.class).withIdentity ("j1").storeDurably ().build ();
 
       assertFalse ("Unexpected existence of job named 'j1'.", sched.checkExists (jobKey ("j1")));
 
@@ -302,7 +302,7 @@ public abstract class AbstractSchedulerTest
 
       assertTrue ("Unexpected non-existence of job named 'j1'.", sched.checkExists (jobKey ("j1")));
 
-      final JobDetail nonDurableJob = newJob ().ofType (TestJob.class).withIdentity ("j2").build ();
+      final IJobDetail nonDurableJob = newJob ().ofType (TestJob.class).withIdentity ("j2").build ();
 
       try
       {
@@ -329,7 +329,7 @@ public abstract class AbstractSchedulerTest
   {
     final Map <Thread, StackTraceElement []> allThreadsStart = Thread.getAllStackTraces ();
     final int threadPoolSize = 5;
-    final Scheduler scheduler = createScheduler ("testShutdownWithSleepReturnsAfterAllThreadsAreStopped",
+    final IScheduler scheduler = createScheduler ("testShutdownWithSleepReturnsAfterAllThreadsAreStopped",
                                                  threadPoolSize);
 
     Thread.sleep (500L);
@@ -407,15 +407,15 @@ public abstract class AbstractSchedulerTest
     final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <Long> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
-    final Scheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedBefore", 5);
+    final IScheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedBefore", 5);
     sched.getContext ().put (BARRIER, barrier);
     sched.getContext ().put (DATE_STAMPS, jobExecTimestamps);
     sched.start ();
 
     Thread.yield ();
 
-    final JobDetail job1 = JobBuilder.newJob (TestJobWithSync.class).withIdentity ("job1").build ();
-    final Trigger trigger1 = TriggerBuilder.newTrigger ().forJob (job1).build ();
+    final IJobDetail job1 = JobBuilder.newJob (TestJobWithSync.class).withIdentity ("job1").build ();
+    final ITrigger trigger1 = TriggerBuilder.newTrigger ().forJob (job1).build ();
 
     final long sTime = System.currentTimeMillis ();
 
@@ -445,7 +445,7 @@ public abstract class AbstractSchedulerTest
     final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <Long> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
-    final Scheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedBeforeWithTriggerJob", 5);
+    final IScheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedBeforeWithTriggerJob", 5);
     sched.getContext ().put (BARRIER, barrier);
     sched.getContext ().put (DATE_STAMPS, jobExecTimestamps);
 
@@ -453,7 +453,7 @@ public abstract class AbstractSchedulerTest
 
     Thread.yield ();
 
-    final JobDetail job1 = JobBuilder.newJob (TestJobWithSync.class).withIdentity ("job1").storeDurably ().build ();
+    final IJobDetail job1 = JobBuilder.newJob (TestJobWithSync.class).withIdentity ("job1").storeDurably ().build ();
     sched.addJob (job1, false);
 
     final long sTime = System.currentTimeMillis ();
@@ -484,12 +484,12 @@ public abstract class AbstractSchedulerTest
     final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <Long> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
-    final Scheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedAfter", 5);
+    final IScheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedAfter", 5);
     sched.getContext ().put (BARRIER, barrier);
     sched.getContext ().put (DATE_STAMPS, jobExecTimestamps);
 
-    final JobDetail job1 = JobBuilder.newJob (TestJobWithSync.class).withIdentity ("job1").build ();
-    final Trigger trigger1 = TriggerBuilder.newTrigger ().forJob (job1).build ();
+    final IJobDetail job1 = JobBuilder.newJob (TestJobWithSync.class).withIdentity ("job1").build ();
+    final ITrigger trigger1 = TriggerBuilder.newTrigger ().forJob (job1).build ();
 
     final long sTime = System.currentTimeMillis ();
 
@@ -517,27 +517,27 @@ public abstract class AbstractSchedulerTest
   public void testScheduleMultipleTriggersForAJob () throws SchedulerException
   {
 
-    final JobDetail job = newJob (TestJob.class).withIdentity ("job1", "group1").build ();
-    final Trigger trigger1 = newTrigger ().withIdentity ("trigger1", "group1")
+    final IJobDetail job = newJob (TestJob.class).withIdentity ("job1", "group1").build ();
+    final ITrigger trigger1 = newTrigger ().withIdentity ("trigger1", "group1")
                                           .startNow ()
                                           .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
                                                                               .withIntervalInSeconds (1)
                                                                               .repeatForever ())
                                           .build ();
-    final Trigger trigger2 = newTrigger ().withIdentity ("trigger2", "group1")
+    final ITrigger trigger2 = newTrigger ().withIdentity ("trigger2", "group1")
                                           .startNow ()
                                           .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
                                                                               .withIntervalInSeconds (1)
                                                                               .repeatForever ())
                                           .build ();
-    final Set <Trigger> triggersForJob = new HashSet<> ();
+    final Set <ITrigger> triggersForJob = new HashSet<> ();
     triggersForJob.add (trigger1);
     triggersForJob.add (trigger2);
 
-    final Scheduler sched = createScheduler ("testScheduleMultipleTriggersForAJob", 5);
+    final IScheduler sched = createScheduler ("testScheduleMultipleTriggersForAJob", 5);
     sched.scheduleJob (job, triggersForJob, true);
 
-    final List <? extends Trigger> triggersOfJob = sched.getTriggersOfJob (job.getKey ());
+    final List <? extends ITrigger> triggersOfJob = sched.getTriggersOfJob (job.getKey ());
     assertEquals (2, triggersOfJob.size ());
     assertTrue (triggersOfJob.contains (trigger1));
     assertTrue (triggersOfJob.contains (trigger2));
@@ -549,7 +549,7 @@ public abstract class AbstractSchedulerTest
   public void testShutdownWithoutWaitIsUnclean () throws Exception
   {
     final CyclicBarrier barrier = new CyclicBarrier (2);
-    final Scheduler scheduler = createScheduler ("testShutdownWithoutWaitIsUnclean", 8);
+    final IScheduler scheduler = createScheduler ("testShutdownWithoutWaitIsUnclean", 8);
     try
     {
       scheduler.getContext ().put (BARRIER, barrier);
@@ -573,10 +573,10 @@ public abstract class AbstractSchedulerTest
     jobThread.join (TimeUnit.SECONDS.toMillis (TEST_TIMEOUT_SECONDS));
   }
 
-  public static class UncleanShutdownJob implements Job
+  public static class UncleanShutdownJob implements IJob
   {
     @Override
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       try
       {
@@ -599,7 +599,7 @@ public abstract class AbstractSchedulerTest
     final AtomicBoolean shutdown = new AtomicBoolean (false);
     final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <Long> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
-    final Scheduler scheduler = createScheduler ("testShutdownWithWaitIsClean", 8);
+    final IScheduler scheduler = createScheduler ("testShutdownWithWaitIsClean", 8);
     try
     {
       scheduler.getContext ().put (BARRIER, barrier);

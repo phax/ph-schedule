@@ -36,13 +36,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.io.resource.ClassPathResource;
-import com.helger.quartz.JobListener;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IJobListener;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SchedulerFactory;
-import com.helger.quartz.TriggerListener;
-import com.helger.quartz.core.JobRunShellFactory;
+import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.ITriggerListener;
+import com.helger.quartz.core.IJobRunShellFactory;
 import com.helger.quartz.core.QuartzScheduler;
 import com.helger.quartz.core.QuartzSchedulerResources;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
@@ -51,18 +51,18 @@ import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.simpl.SimpleInstanceIdGenerator;
 import com.helger.quartz.simpl.SimpleThreadPool;
 import com.helger.quartz.simpl.SystemPropertyInstanceIdGenerator;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.InstanceIdGenerator;
-import com.helger.quartz.spi.JobFactory;
-import com.helger.quartz.spi.JobStore;
-import com.helger.quartz.spi.SchedulerPlugin;
-import com.helger.quartz.spi.ThreadExecutor;
-import com.helger.quartz.spi.ThreadPool;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.IInstanceIdGenerator;
+import com.helger.quartz.spi.IJobFactory;
+import com.helger.quartz.spi.IJobStore;
+import com.helger.quartz.spi.ISchedulerPlugin;
+import com.helger.quartz.spi.IThreadExecutor;
+import com.helger.quartz.spi.IThreadPool;
 import com.helger.quartz.utils.PropertiesParser;
 
 /**
  * <p>
- * An implementation of <code>{@link com.helger.quartz.SchedulerFactory}</code>
+ * An implementation of <code>{@link com.helger.quartz.ISchedulerFactory}</code>
  * that does all of its work of creating a <code>QuartzScheduler</code> instance
  * based on the contents of a <code>Properties</code> file.
  * </p>
@@ -86,8 +86,8 @@ import com.helger.quartz.utils.PropertiesParser;
  * </p>
  * <p>
  * Instances of the specified
- * <code>{@link com.helger.quartz.spi.JobStore}</code>,
- * <code>{@link com.helger.quartz.spi.ThreadPool}</code>, and other SPI classes
+ * <code>{@link com.helger.quartz.spi.IJobStore}</code>,
+ * <code>{@link com.helger.quartz.spi.IThreadPool}</code>, and other SPI classes
  * will be created by name, and then any additional properties specified for
  * them in the config file will be set on the instance by calling an equivalent
  * 'set' method. For example if the properties file contains the property
@@ -107,7 +107,7 @@ import com.helger.quartz.utils.PropertiesParser;
  * @author Anthony Eden
  * @author Mohammad Rezaei
  */
-public class StdSchedulerFactory implements SchedulerFactory
+public class StdSchedulerFactory implements ISchedulerFactory
 {
 
   /*
@@ -206,7 +206,7 @@ public class StdSchedulerFactory implements SchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.SchedulerFactory}</code> with
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
    * the contents of a <code>Properties</code> file and overriding System
    * properties.
    * </p>
@@ -369,7 +369,7 @@ public class StdSchedulerFactory implements SchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.SchedulerFactory}</code> with
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
    * the contents of the <code>Properties</code> file with the given name.
    * </p>
    */
@@ -425,7 +425,7 @@ public class StdSchedulerFactory implements SchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.SchedulerFactory}</code> with
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
    * the contents of the <code>Properties</code> file opened with the given
    * <code>InputStream</code>.
    * </p>
@@ -468,7 +468,7 @@ public class StdSchedulerFactory implements SchedulerFactory
   }
 
   /**
-   * Initialize the <code>{@link com.helger.quartz.SchedulerFactory}</code> with
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
    * the contents of the given <code>Properties</code> object.
    *
    * @throws SchedulerException
@@ -483,7 +483,7 @@ public class StdSchedulerFactory implements SchedulerFactory
     this.cfg = new PropertiesParser (props);
   }
 
-  private Scheduler instantiate () throws SchedulerException
+  private IScheduler instantiate () throws SchedulerException
   {
     if (cfg == null)
     {
@@ -495,8 +495,8 @@ public class StdSchedulerFactory implements SchedulerFactory
       throw initException;
     }
 
-    JobStore js = null;
-    ThreadPool tp = null;
+    IJobStore js = null;
+    IThreadPool tp = null;
     QuartzScheduler qs = null;
     String instanceIdGeneratorClass = null;
     Properties tProps = null;
@@ -504,7 +504,7 @@ public class StdSchedulerFactory implements SchedulerFactory
     long idleWaitTime = -1;
     String classLoadHelperClass;
     String jobFactoryClass;
-    ThreadExecutor threadExecutor;
+    IThreadExecutor threadExecutor;
 
     final SchedulerRepository schedRep = SchedulerRepository.getInstance ();
 
@@ -555,10 +555,10 @@ public class StdSchedulerFactory implements SchedulerFactory
     final Properties schedCtxtProps = cfg.getPropertyGroup (PROP_SCHED_CONTEXT_PREFIX, true);
 
     // Create class load helper
-    ClassLoadHelper loadHelper = null;
+    IClassLoadHelper loadHelper = null;
     try
     {
-      loadHelper = (ClassLoadHelper) loadClass (classLoadHelperClass).newInstance ();
+      loadHelper = (IClassLoadHelper) loadClass (classLoadHelperClass).newInstance ();
     }
     catch (final Exception e)
     {
@@ -566,12 +566,12 @@ public class StdSchedulerFactory implements SchedulerFactory
     }
     loadHelper.initialize ();
 
-    JobFactory jobFactory = null;
+    IJobFactory jobFactory = null;
     if (jobFactoryClass != null)
     {
       try
       {
-        jobFactory = (JobFactory) loadHelper.loadClass (jobFactoryClass).newInstance ();
+        jobFactory = (IJobFactory) loadHelper.loadClass (jobFactoryClass).newInstance ();
       }
       catch (final Exception e)
       {
@@ -593,12 +593,12 @@ public class StdSchedulerFactory implements SchedulerFactory
       }
     }
 
-    InstanceIdGenerator instanceIdGenerator = null;
+    IInstanceIdGenerator instanceIdGenerator = null;
     if (instanceIdGeneratorClass != null)
     {
       try
       {
-        instanceIdGenerator = (InstanceIdGenerator) loadHelper.loadClass (instanceIdGeneratorClass).newInstance ();
+        instanceIdGenerator = (IInstanceIdGenerator) loadHelper.loadClass (instanceIdGeneratorClass).newInstance ();
       }
       catch (final Exception e)
       {
@@ -633,7 +633,7 @@ public class StdSchedulerFactory implements SchedulerFactory
 
     try
     {
-      tp = (ThreadPool) loadHelper.loadClass (tpClass).newInstance ();
+      tp = (IThreadPool) loadHelper.loadClass (tpClass).newInstance ();
     }
     catch (final Exception e)
     {
@@ -664,7 +664,7 @@ public class StdSchedulerFactory implements SchedulerFactory
 
     try
     {
-      js = (JobStore) loadHelper.loadClass (jsClass).newInstance ();
+      js = (IJobStore) loadHelper.loadClass (jsClass).newInstance ();
     }
     catch (final Exception e)
     {
@@ -689,7 +689,7 @@ public class StdSchedulerFactory implements SchedulerFactory
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     final String [] pluginNames = cfg.getPropertyGroups (PROP_PLUGIN_PREFIX);
-    final SchedulerPlugin [] plugins = new SchedulerPlugin [pluginNames.length];
+    final ISchedulerPlugin [] plugins = new ISchedulerPlugin [pluginNames.length];
     for (int i = 0; i < pluginNames.length; i++)
     {
       final Properties pp = cfg.getPropertyGroup (PROP_PLUGIN_PREFIX + "." + pluginNames[i], true);
@@ -703,10 +703,10 @@ public class StdSchedulerFactory implements SchedulerFactory
                                                 "'");
         throw initException;
       }
-      SchedulerPlugin plugin = null;
+      ISchedulerPlugin plugin = null;
       try
       {
-        plugin = (SchedulerPlugin) loadHelper.loadClass (plugInClass).newInstance ();
+        plugin = (ISchedulerPlugin) loadHelper.loadClass (plugInClass).newInstance ();
       }
       catch (final Exception e)
       {
@@ -737,7 +737,7 @@ public class StdSchedulerFactory implements SchedulerFactory
 
     final Class <?> [] strArg = new Class [] { String.class };
     final String [] jobListenerNames = cfg.getPropertyGroups (PROP_JOB_LISTENER_PREFIX);
-    final JobListener [] jobListeners = new JobListener [jobListenerNames.length];
+    final IJobListener [] jobListeners = new IJobListener [jobListenerNames.length];
     for (int i = 0; i < jobListenerNames.length; i++)
     {
       final Properties lp = cfg.getPropertyGroup (PROP_JOB_LISTENER_PREFIX + "." + jobListenerNames[i], true);
@@ -751,10 +751,10 @@ public class StdSchedulerFactory implements SchedulerFactory
                                                 "'");
         throw initException;
       }
-      JobListener listener = null;
+      IJobListener listener = null;
       try
       {
-        listener = (JobListener) loadHelper.loadClass (listenerClass).newInstance ();
+        listener = (IJobListener) loadHelper.loadClass (listenerClass).newInstance ();
       }
       catch (final Exception e)
       {
@@ -796,7 +796,7 @@ public class StdSchedulerFactory implements SchedulerFactory
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     final String [] triggerListenerNames = cfg.getPropertyGroups (PROP_TRIGGER_LISTENER_PREFIX);
-    final TriggerListener [] triggerListeners = new TriggerListener [triggerListenerNames.length];
+    final ITriggerListener [] triggerListeners = new ITriggerListener [triggerListenerNames.length];
     for (int i = 0; i < triggerListenerNames.length; i++)
     {
       final Properties lp = cfg.getPropertyGroup (PROP_TRIGGER_LISTENER_PREFIX + "." + triggerListenerNames[i], true);
@@ -810,10 +810,10 @@ public class StdSchedulerFactory implements SchedulerFactory
                                                 "'");
         throw initException;
       }
-      TriggerListener listener = null;
+      ITriggerListener listener = null;
       try
       {
-        listener = (TriggerListener) loadHelper.loadClass (listenerClass).newInstance ();
+        listener = (ITriggerListener) loadHelper.loadClass (listenerClass).newInstance ();
       }
       catch (final Exception e)
       {
@@ -861,7 +861,7 @@ public class StdSchedulerFactory implements SchedulerFactory
       tProps = cfg.getPropertyGroup (PROP_THREAD_EXECUTOR, true);
       try
       {
-        threadExecutor = (ThreadExecutor) loadHelper.loadClass (threadExecutorClass).newInstance ();
+        threadExecutor = (IThreadExecutor) loadHelper.loadClass (threadExecutorClass).newInstance ();
         log.info ("Using custom implementation for ThreadExecutor: " + threadExecutorClass);
 
         setBeanProps (threadExecutor, tProps);
@@ -888,7 +888,7 @@ public class StdSchedulerFactory implements SchedulerFactory
 
       // Create correct run-shell
       // factory...
-      final JobRunShellFactory jrsf = new StdJobRunShellFactory ();
+      final IJobRunShellFactory jrsf = new StdJobRunShellFactory ();
 
       if (autoId)
       {
@@ -952,7 +952,7 @@ public class StdSchedulerFactory implements SchedulerFactory
       rsrcs.setJobStore (js);
 
       // add plugins
-      for (final SchedulerPlugin plugin : plugins)
+      for (final ISchedulerPlugin plugin : plugins)
       {
         rsrcs.addSchedulerPlugin (plugin);
       }
@@ -961,7 +961,7 @@ public class StdSchedulerFactory implements SchedulerFactory
       qsInited = true;
 
       // Create Scheduler ref...
-      final Scheduler scheduler = instantiate (rsrcs, qs);
+      final IScheduler scheduler = instantiate (rsrcs, qs);
 
       // set job factory if specified
       if (jobFactory != null)
@@ -976,11 +976,11 @@ public class StdSchedulerFactory implements SchedulerFactory
       }
 
       // add listeners
-      for (final JobListener jobListener : jobListeners)
+      for (final IJobListener jobListener : jobListeners)
       {
         qs.getListenerManager ().addJobListener (jobListener, EverythingMatcher.allJobs ());
       }
-      for (final TriggerListener triggerListener : triggerListeners)
+      for (final ITriggerListener triggerListener : triggerListeners)
       {
         qs.getListenerManager ().addTriggerListener (triggerListener, EverythingMatcher.allTriggers ());
       }
@@ -1030,7 +1030,7 @@ public class StdSchedulerFactory implements SchedulerFactory
     }
   }
 
-  private void shutdownFromInstantiateException (final ThreadPool tp,
+  private void shutdownFromInstantiateException (final IThreadPool tp,
                                                  final QuartzScheduler qs,
                                                  final boolean tpInited,
                                                  final boolean qsInited)
@@ -1054,9 +1054,9 @@ public class StdSchedulerFactory implements SchedulerFactory
    * @param qs
    * @return
    */
-  protected Scheduler instantiate (final QuartzSchedulerResources rsrcs, final QuartzScheduler qs)
+  protected IScheduler instantiate (final QuartzSchedulerResources rsrcs, final QuartzScheduler qs)
   {
-    final Scheduler scheduler = new StdScheduler (qs);
+    final IScheduler scheduler = new StdScheduler (qs);
     return scheduler;
   }
 
@@ -1209,7 +1209,7 @@ public class StdSchedulerFactory implements SchedulerFactory
    * by this method.
    * </p>
    */
-  public Scheduler getScheduler () throws SchedulerException
+  public IScheduler getScheduler () throws SchedulerException
   {
     if (cfg == null)
     {
@@ -1218,7 +1218,7 @@ public class StdSchedulerFactory implements SchedulerFactory
 
     final SchedulerRepository schedRep = SchedulerRepository.getInstance ();
 
-    Scheduler sched = schedRep.lookup (getSchedulerName ());
+    IScheduler sched = schedRep.lookup (getSchedulerName ());
     if (sched != null)
     {
       if (sched.isShutdown ())
@@ -1240,7 +1240,7 @@ public class StdSchedulerFactory implements SchedulerFactory
    *
    * @see #initialize()
    */
-  public static Scheduler getDefaultScheduler () throws SchedulerException
+  public static IScheduler getDefaultScheduler () throws SchedulerException
   {
     final StdSchedulerFactory fact = new StdSchedulerFactory ();
 
@@ -1253,7 +1253,7 @@ public class StdSchedulerFactory implements SchedulerFactory
    * has already been instantiated).
    * </p>
    */
-  public Scheduler getScheduler (final String schedName) throws SchedulerException
+  public IScheduler getScheduler (final String schedName) throws SchedulerException
   {
     return SchedulerRepository.getInstance ().lookup (schedName);
   }
@@ -1264,7 +1264,7 @@ public class StdSchedulerFactory implements SchedulerFactory
    * instance.).
    * </p>
    */
-  public Collection <Scheduler> getAllSchedulers () throws SchedulerException
+  public Collection <IScheduler> getAllSchedulers () throws SchedulerException
   {
     return SchedulerRepository.getInstance ().lookupAll ();
   }

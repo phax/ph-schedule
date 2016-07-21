@@ -17,12 +17,12 @@ package com.helger.quartz.simpl;
 
 import com.helger.quartz.AbstractJobStoreTest;
 import com.helger.quartz.simpl.RAMJobStore;
-import com.helger.quartz.spi.JobStore;
+import com.helger.quartz.spi.IJobStore;
 
 public class RAMJobStoreTest extends AbstractJobStoreTest
 {
   @Override
-  protected JobStore createJobStore (final String name)
+  protected IJobStore createJobStore (final String name)
   {
     final RAMJobStore rs = new RAMJobStore ();
     return rs;

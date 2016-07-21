@@ -19,11 +19,11 @@ package com.helger.quartz;
 
 import java.util.Date;
 
-import com.helger.quartz.spi.MutableTrigger;
+import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.utils.Key;
 
 /**
- * <code>TriggerBuilder</code> is used to instantiate {@link Trigger}s.
+ * <code>TriggerBuilder</code> is used to instantiate {@link ITrigger}s.
  * <p>
  * The builder will always try to keep itself in a valid state, with reasonable
  * defaults set for calling build() at any point. For instance if you do not
@@ -55,16 +55,16 @@ import com.helger.quartz.utils.Key;
  * @see JobBuilder
  * @see ScheduleBuilder
  * @see DateBuilder
- * @see Trigger
+ * @see ITrigger
  */
-public class TriggerBuilder <T extends Trigger>
+public class TriggerBuilder <T extends ITrigger>
 {
 
   private TriggerKey key;
   private String description;
   private Date startTime = new Date ();
   private Date endTime;
-  private int priority = Trigger.DEFAULT_PRIORITY;
+  private int priority = ITrigger.DEFAULT_PRIORITY;
   private String calendarName;
   private JobKey jobKey;
   private JobDataMap jobDataMap = new JobDataMap ();
@@ -82,7 +82,7 @@ public class TriggerBuilder <T extends Trigger>
    *
    * @return the new TriggerBuilder
    */
-  public static TriggerBuilder <Trigger> newTrigger ()
+  public static TriggerBuilder <ITrigger> newTrigger ()
   {
     return new TriggerBuilder<> ();
   }
@@ -98,7 +98,7 @@ public class TriggerBuilder <T extends Trigger>
 
     if (scheduleBuilder == null)
       scheduleBuilder = SimpleScheduleBuilder.simpleSchedule ();
-    final MutableTrigger trig = scheduleBuilder.build ();
+    final IMutableTrigger trig = scheduleBuilder.build ();
 
     trig.setCalendarName (calendarName);
     trig.setDescription (description);
@@ -129,7 +129,7 @@ public class TriggerBuilder <T extends Trigger>
    *        the name element for the Trigger's TriggerKey
    * @return the updated TriggerBuilder
    * @see TriggerKey
-   * @see Trigger#getKey()
+   * @see ITrigger#getKey()
    */
   public TriggerBuilder <T> withIdentity (final String name)
   {
@@ -150,7 +150,7 @@ public class TriggerBuilder <T extends Trigger>
    *        the group element for the Trigger's TriggerKey
    * @return the updated TriggerBuilder
    * @see TriggerKey
-   * @see Trigger#getKey()
+   * @see ITrigger#getKey()
    */
   public TriggerBuilder <T> withIdentity (final String name, final String group)
   {
@@ -169,7 +169,7 @@ public class TriggerBuilder <T extends Trigger>
    *        the TriggerKey for the Trigger to be built
    * @return the updated TriggerBuilder
    * @see TriggerKey
-   * @see Trigger#getKey()
+   * @see ITrigger#getKey()
    */
   public TriggerBuilder <T> withIdentity (final TriggerKey triggerKey)
   {
@@ -183,7 +183,7 @@ public class TriggerBuilder <T extends Trigger>
    * @param triggerDescription
    *        the description for the Trigger
    * @return the updated TriggerBuilder
-   * @see Trigger#getDescription()
+   * @see ITrigger#getDescription()
    */
   public TriggerBuilder <T> withDescription (final String triggerDescription)
   {
@@ -198,8 +198,8 @@ public class TriggerBuilder <T extends Trigger>
    * @param triggerPriority
    *        the priority for the Trigger
    * @return the updated TriggerBuilder
-   * @see Trigger#DEFAULT_PRIORITY
-   * @see Trigger#getPriority()
+   * @see ITrigger#DEFAULT_PRIORITY
+   * @see ITrigger#getPriority()
    */
   public TriggerBuilder <T> withPriority (final int triggerPriority)
   {
@@ -208,14 +208,14 @@ public class TriggerBuilder <T extends Trigger>
   }
 
   /**
-   * Set the name of the {@link Calendar} that should be applied to this
+   * Set the name of the {@link ICalendar} that should be applied to this
    * Trigger's schedule.
    *
    * @param calName
    *        the name of the Calendar to reference.
    * @return the updated TriggerBuilder
-   * @see Calendar
-   * @see Trigger#getCalendarName()
+   * @see ICalendar
+   * @see ITrigger#getCalendarName()
    */
   public TriggerBuilder <T> modifiedByCalendar (final String calName)
   {
@@ -232,7 +232,7 @@ public class TriggerBuilder <T extends Trigger>
    * @param triggerStartTime
    *        the start time for the Trigger.
    * @return the updated TriggerBuilder
-   * @see Trigger#getStartTime()
+   * @see ITrigger#getStartTime()
    * @see DateBuilder
    */
   public TriggerBuilder <T> startAt (final Date triggerStartTime)
@@ -247,7 +247,7 @@ public class TriggerBuilder <T extends Trigger>
    * configured for the Trigger.
    *
    * @return the updated TriggerBuilder
-   * @see Trigger#getStartTime()
+   * @see ITrigger#getStartTime()
    */
   public TriggerBuilder <T> startNow ()
   {
@@ -262,7 +262,7 @@ public class TriggerBuilder <T extends Trigger>
    * @param triggerEndTime
    *        the end time for the Trigger. If null, the end time is indefinite.
    * @return the updated TriggerBuilder
-   * @see Trigger#getEndTime()
+   * @see ITrigger#getEndTime()
    * @see DateBuilder
    */
   public TriggerBuilder <T> endAt (final Date triggerEndTime)
@@ -300,7 +300,7 @@ public class TriggerBuilder <T extends Trigger>
    * @param keyOfJobToFire
    *        the identity of the Job to fire.
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobKey()
+   * @see ITrigger#getJobKey()
    */
   public TriggerBuilder <T> forJob (final JobKey keyOfJobToFire)
   {
@@ -316,7 +316,7 @@ public class TriggerBuilder <T extends Trigger>
    * @param jobName
    *        the name of the job (in default group) to fire.
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobKey()
+   * @see ITrigger#getJobKey()
    */
   public TriggerBuilder <T> forJob (final String jobName)
   {
@@ -333,7 +333,7 @@ public class TriggerBuilder <T extends Trigger>
    * @param jobGroup
    *        the group of the job to fire.
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobKey()
+   * @see ITrigger#getJobKey()
    */
   public TriggerBuilder <T> forJob (final String jobName, final String jobGroup)
   {
@@ -348,9 +348,9 @@ public class TriggerBuilder <T extends Trigger>
    * @param jobDetail
    *        the Job to fire.
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobKey()
+   * @see ITrigger#getJobKey()
    */
-  public TriggerBuilder <T> forJob (final JobDetail jobDetail)
+  public TriggerBuilder <T> forJob (final IJobDetail jobDetail)
   {
     final JobKey k = jobDetail.getKey ();
     if (k.getName () == null)
@@ -363,7 +363,7 @@ public class TriggerBuilder <T extends Trigger>
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public TriggerBuilder <T> usingJobData (final String dataKey, final String value)
   {
@@ -375,7 +375,7 @@ public class TriggerBuilder <T extends Trigger>
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public TriggerBuilder <T> usingJobData (final String dataKey, final Integer value)
   {
@@ -387,7 +387,7 @@ public class TriggerBuilder <T extends Trigger>
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public TriggerBuilder <T> usingJobData (final String dataKey, final Long value)
   {
@@ -399,7 +399,7 @@ public class TriggerBuilder <T extends Trigger>
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public TriggerBuilder <T> usingJobData (final String dataKey, final Float value)
   {
@@ -411,7 +411,7 @@ public class TriggerBuilder <T extends Trigger>
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public TriggerBuilder <T> usingJobData (final String dataKey, final Double value)
   {
@@ -423,7 +423,7 @@ public class TriggerBuilder <T extends Trigger>
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public TriggerBuilder <T> usingJobData (final String dataKey, final Boolean value)
   {
@@ -437,7 +437,7 @@ public class TriggerBuilder <T extends Trigger>
    * methods.
    *
    * @return the updated TriggerBuilder
-   * @see Trigger#getJobDataMap()
+   * @see ITrigger#getJobDataMap()
    */
   public TriggerBuilder <T> usingJobData (final JobDataMap newJobDataMap)
   {

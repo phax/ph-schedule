@@ -20,20 +20,20 @@ package com.helger.quartz.plugins.management;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.SchedulerPlugin;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.ISchedulerPlugin;
 
 /**
  * This plugin catches the event of the JVM terminating (such as upon a CRTL-C)
  * and tells the scheuler to shutdown.
  *
- * @see com.helger.quartz.Scheduler#shutdown(boolean)
+ * @see com.helger.quartz.IScheduler#shutdown(boolean)
  * @author James House
  */
-public class ShutdownHookPlugin implements SchedulerPlugin
+public class ShutdownHookPlugin implements ISchedulerPlugin
 {
 
   /*
@@ -68,7 +68,7 @@ public class ShutdownHookPlugin implements SchedulerPlugin
    * The default value is <code>true</code>.
    * </p>
    *
-   * @see com.helger.quartz.Scheduler#shutdown(boolean)
+   * @see com.helger.quartz.IScheduler#shutdown(boolean)
    */
   public boolean isCleanShutdown ()
   {
@@ -82,7 +82,7 @@ public class ShutdownHookPlugin implements SchedulerPlugin
    * The default value is <code>true</code>.
    * </p>
    *
-   * @see com.helger.quartz.Scheduler#shutdown(boolean)
+   * @see com.helger.quartz.IScheduler#shutdown(boolean)
    */
   public void setCleanShutdown (final boolean b)
   {
@@ -110,8 +110,8 @@ public class ShutdownHookPlugin implements SchedulerPlugin
    *         if there is an error initializing.
    */
   public void initialize (final String name,
-                          final Scheduler scheduler,
-                          final ClassLoadHelper classLoadHelper) throws SchedulerException
+                          final IScheduler scheduler,
+                          final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
 
     getLog ().info ("Registering Quartz shutdown hook.");

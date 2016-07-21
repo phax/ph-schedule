@@ -21,10 +21,10 @@ package com.helger.quartz.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.helger.quartz.spi.JobStore;
-import com.helger.quartz.spi.SchedulerPlugin;
-import com.helger.quartz.spi.ThreadExecutor;
-import com.helger.quartz.spi.ThreadPool;
+import com.helger.quartz.spi.IJobStore;
+import com.helger.quartz.spi.ISchedulerPlugin;
+import com.helger.quartz.spi.IThreadExecutor;
+import com.helger.quartz.spi.IThreadPool;
 
 /**
  * <p>
@@ -56,18 +56,18 @@ public class QuartzSchedulerResources
 
   private String threadName;
 
-  private ThreadPool threadPool;
-  private JobStore jobStore;
+  private IThreadPool threadPool;
+  private IJobStore jobStore;
 
-  private JobRunShellFactory jobRunShellFactory;
+  private IJobRunShellFactory jobRunShellFactory;
 
-  private final List <SchedulerPlugin> schedulerPlugins = new ArrayList<> (10);
+  private final List <ISchedulerPlugin> schedulerPlugins = new ArrayList<> (10);
 
   private boolean makeSchedulerThreadDaemon = false;
 
   private boolean threadsInheritInitializersClassLoadContext = false;
 
-  private ThreadExecutor threadExecutor;
+  private IThreadExecutor threadExecutor;
 
   private long batchTimeWindow = 0;
 
@@ -200,25 +200,25 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Get the <code>{@link ThreadPool}</code> for the
+   * Get the <code>{@link IThreadPool}</code> for the
    * <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
-  public ThreadPool getThreadPool ()
+  public IThreadPool getThreadPool ()
   {
     return threadPool;
   }
 
   /**
    * <p>
-   * Set the <code>{@link ThreadPool}</code> for the
+   * Set the <code>{@link IThreadPool}</code> for the
    * <code>{@link QuartzScheduler}</code> to use.
    * </p>
    *
    * @exception IllegalArgumentException
    *            if threadPool is null.
    */
-  public void setThreadPool (final ThreadPool threadPool)
+  public void setThreadPool (final IThreadPool threadPool)
   {
     if (threadPool == null)
     {
@@ -230,25 +230,25 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Get the <code>{@link JobStore}</code> for the
+   * Get the <code>{@link IJobStore}</code> for the
    * <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
-  public JobStore getJobStore ()
+  public IJobStore getJobStore ()
   {
     return jobStore;
   }
 
   /**
    * <p>
-   * Set the <code>{@link JobStore}</code> for the
+   * Set the <code>{@link IJobStore}</code> for the
    * <code>{@link QuartzScheduler}</code> to use.
    * </p>
    *
    * @exception IllegalArgumentException
    *            if jobStore is null.
    */
-  public void setJobStore (final JobStore jobStore)
+  public void setJobStore (final IJobStore jobStore)
   {
     if (jobStore == null)
     {
@@ -260,25 +260,25 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Get the <code>{@link JobRunShellFactory}</code> for the
+   * Get the <code>{@link IJobRunShellFactory}</code> for the
    * <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
-  public JobRunShellFactory getJobRunShellFactory ()
+  public IJobRunShellFactory getJobRunShellFactory ()
   {
     return jobRunShellFactory;
   }
 
   /**
    * <p>
-   * Set the <code>{@link JobRunShellFactory}</code> for the
+   * Set the <code>{@link IJobRunShellFactory}</code> for the
    * <code>{@link QuartzScheduler}</code> to use.
    * </p>
    *
    * @exception IllegalArgumentException
    *            if jobRunShellFactory is null.
    */
-  public void setJobRunShellFactory (final JobRunShellFactory jobRunShellFactory)
+  public void setJobRunShellFactory (final IJobRunShellFactory jobRunShellFactory)
   {
     if (jobRunShellFactory == null)
     {
@@ -290,13 +290,13 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Add the given <code>{@link com.helger.quartz.spi.SchedulerPlugin}</code> for the
+   * Add the given <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code> for the
    * <code>{@link QuartzScheduler}</code> to use. This method expects the
    * plugin's "initialize" method to be invoked externally (either before or
    * after this method is called).
    * </p>
    */
-  public void addSchedulerPlugin (final SchedulerPlugin plugin)
+  public void addSchedulerPlugin (final ISchedulerPlugin plugin)
   {
     schedulerPlugins.add (plugin);
   }
@@ -304,11 +304,11 @@ public class QuartzSchedulerResources
   /**
    * <p>
    * Get the <code>List</code> of all
-   * <code>{@link com.helger.quartz.spi.SchedulerPlugin}</code>s for the
+   * <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s for the
    * <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
-  public List <SchedulerPlugin> getSchedulerPlugins ()
+  public List <ISchedulerPlugin> getSchedulerPlugins ()
   {
     return schedulerPlugins;
   }
@@ -354,7 +354,7 @@ public class QuartzSchedulerResources
   /**
    * Get the ThreadExecutor which runs the QuartzSchedulerThread
    */
-  public ThreadExecutor getThreadExecutor ()
+  public IThreadExecutor getThreadExecutor ()
   {
     return threadExecutor;
   }
@@ -362,7 +362,7 @@ public class QuartzSchedulerResources
   /**
    * Set the ThreadExecutor which runs the QuartzSchedulerThread
    */
-  public void setThreadExecutor (final ThreadExecutor threadExecutor)
+  public void setThreadExecutor (final IThreadExecutor threadExecutor)
   {
     this.threadExecutor = threadExecutor;
   }

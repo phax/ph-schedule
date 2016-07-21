@@ -31,7 +31,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.helger.quartz.impl.StdSchedulerFactory;
-import com.helger.quartz.listeners.JobListenerSupport;
+import com.helger.quartz.listeners.AbstractJobListenerSupport;
 
 /**
  * Integration test for using DisallowConcurrentExecution annot.
@@ -47,9 +47,9 @@ public class DisallowConcurrentExecutionJobTest
   private static final String DATE_STAMPS = "DATE_STAMPS";
 
   @DisallowConcurrentExecution
-  public static class TestJob implements Job
+  public static class TestJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       try
       {
@@ -76,7 +76,7 @@ public class DisallowConcurrentExecutionJobTest
     }
   }
 
-  public static class TestJobListener extends JobListenerSupport
+  public static class TestJobListener extends AbstractJobListenerSupport
   {
 
     private final AtomicInteger jobExCount = new AtomicInteger (0);
@@ -93,7 +93,7 @@ public class DisallowConcurrentExecutionJobTest
     }
 
     @Override
-    public void jobWasExecuted (final JobExecutionContext context, final JobExecutionException jobException)
+    public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
     {
       if (jobExCount.incrementAndGet () == jobExecutionCountToSyncAfter)
       {
@@ -127,13 +127,13 @@ public class DisallowConcurrentExecutionJobTest
                                                                          // same
                                                                          // time.
 
-    final JobDetail job1 = JobBuilder.newJob (TestJob.class).withIdentity ("job1").build ();
-    final Trigger trigger1 = TriggerBuilder.newTrigger ()
+    final IJobDetail job1 = JobBuilder.newJob (TestJob.class).withIdentity ("job1").build ();
+    final ITrigger trigger1 = TriggerBuilder.newTrigger ()
                                            .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
                                            .startAt (startTime)
                                            .build ();
 
-    final Trigger trigger2 = TriggerBuilder.newTrigger ()
+    final ITrigger trigger2 = TriggerBuilder.newTrigger ()
                                            .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
                                            .startAt (startTime)
                                            .forJob (job1.getKey ())
@@ -142,7 +142,7 @@ public class DisallowConcurrentExecutionJobTest
     final Properties props = new Properties ();
     props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1500");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");
-    final Scheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
+    final IScheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
     scheduler.getContext ().put (BARRIER, barrier);
     scheduler.getContext ().put (DATE_STAMPS, jobExecDates);
     scheduler.getListenerManager ().addJobListener (new TestJobListener (2));
@@ -177,13 +177,13 @@ public class DisallowConcurrentExecutionJobTest
                                                                          // same
                                                                          // time.
 
-    final JobDetail job1 = JobBuilder.newJob (TestJob.class).withIdentity ("job1").build ();
-    final Trigger trigger1 = TriggerBuilder.newTrigger ()
+    final IJobDetail job1 = JobBuilder.newJob (TestJob.class).withIdentity ("job1").build ();
+    final ITrigger trigger1 = TriggerBuilder.newTrigger ()
                                            .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
                                            .startAt (startTime)
                                            .build ();
 
-    final Trigger trigger2 = TriggerBuilder.newTrigger ()
+    final ITrigger trigger2 = TriggerBuilder.newTrigger ()
                                            .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
                                            .startAt (startTime)
                                            .forJob (job1.getKey ())
@@ -193,7 +193,7 @@ public class DisallowConcurrentExecutionJobTest
     props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1500");
     props.setProperty ("org.quartz.scheduler.batchTriggerAcquisitionMaxCount", "2");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");
-    final Scheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
+    final IScheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
     scheduler.getContext ().put (BARRIER, barrier);
     scheduler.getContext ().put (DATE_STAMPS, jobExecDates);
     scheduler.getListenerManager ().addJobListener (new TestJobListener (2));

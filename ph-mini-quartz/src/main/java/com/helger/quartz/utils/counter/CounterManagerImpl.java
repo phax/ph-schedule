@@ -20,21 +20,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
-import com.helger.quartz.utils.counter.sampled.SampledCounter;
+import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounterImpl;
 
 /**
- * An implementation of a {@link CounterManager}.
+ * An implementation of a {@link ICounterManager}.
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8
  */
-public class CounterManagerImpl implements CounterManager
+public class CounterManagerImpl implements ICounterManager
 {
 
   private final Timer timer;
   private boolean shutdown;
-  private final List <Counter> counters = new ArrayList <> ();
+  private final List <ICounter> counters = new ArrayList <> ();
 
   /**
    * Constructor that accepts a timer that will be used for scheduling sampled
@@ -61,11 +61,11 @@ public class CounterManagerImpl implements CounterManager
     try
     {
       // shutdown the counters of this counterManager
-      for (final Counter counter : counters)
+      for (final ICounter counter : counters)
       {
-        if (counter instanceof SampledCounter)
+        if (counter instanceof ISampledCounter)
         {
-          ((SampledCounter) counter).shutdown ();
+          ((ISampledCounter) counter).shutdown ();
         }
       }
       if (killTimer)
@@ -80,7 +80,7 @@ public class CounterManagerImpl implements CounterManager
   /**
    * {@inheritDoc}
    */
-  public synchronized Counter createCounter (final CounterConfig config)
+  public synchronized ICounter createCounter (final CounterConfig config)
   {
     if (shutdown)
     {
@@ -90,7 +90,7 @@ public class CounterManagerImpl implements CounterManager
     {
       throw new NullPointerException ("config cannot be null");
     }
-    final Counter counter = config.createCounter ();
+    final ICounter counter = config.createCounter ();
     if (counter instanceof SampledCounterImpl)
     {
       final SampledCounterImpl sampledCounter = (SampledCounterImpl) counter;
@@ -105,11 +105,11 @@ public class CounterManagerImpl implements CounterManager
   /**
    * {@inheritDoc}
    */
-  public void shutdownCounter (final Counter counter)
+  public void shutdownCounter (final ICounter counter)
   {
-    if (counter instanceof SampledCounter)
+    if (counter instanceof ISampledCounter)
     {
-      final SampledCounter sc = (SampledCounter) counter;
+      final ISampledCounter sc = (ISampledCounter) counter;
       sc.shutdown ();
     }
   }

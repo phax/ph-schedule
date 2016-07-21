@@ -19,15 +19,15 @@
 package com.helger.quartz.impl;
 
 import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.Job;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobBuilder;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.PersistJobDataAfterExecution;
-import com.helger.quartz.Scheduler;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.IScheduler;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.utils.ClassUtils;
 
 /**
@@ -41,7 +41,7 @@ import com.helger.quartz.utils.ClassUtils;
  * </p>
  * <p>
  * <code>Job</code>s have a name and group associated with them, which should
- * uniquely identify them within a single <code>{@link Scheduler}</code>.
+ * uniquely identify them within a single <code>{@link IScheduler}</code>.
  * </p>
  * <p>
  * <code>Trigger</code>s are the 'mechanism' by which <code>Job</code>s are
@@ -49,21 +49,21 @@ import com.helger.quartz.utils.ClassUtils;
  * but a single <code>Trigger</code> can only point to one <code>Job</code>.
  * </p>
  *
- * @see Job
+ * @see IJob
  * @see JobDataMap
- * @see Trigger
+ * @see ITrigger
  * @author James House
  * @author Sharada Jambula
  */
-public class JobDetailImpl implements JobDetail
+public class JobDetailImpl implements IJobDetail
 {
   private String name;
 
-  private String group = Scheduler.DEFAULT_GROUP;
+  private String group = IScheduler.DEFAULT_GROUP;
 
   private String description;
 
-  private Class <? extends Job> jobClass;
+  private Class <? extends IJob> jobClass;
 
   private JobDataMap jobDataMap;
 
@@ -87,14 +87,14 @@ public class JobDetailImpl implements JobDetail
    * <p>
    * Note that the {@link #setName(String)},{@link #setGroup(String)}and
    * {@link #setJobClass(Class)}methods must be called before the job can be
-   * placed into a {@link Scheduler}
+   * placed into a {@link IScheduler}
    * </p>
    */
   public JobDetailImpl ()
   {}
 
   @Deprecated
-  public JobDetailImpl (final String name, final String group, final Class <? extends Job> jobClass)
+  public JobDetailImpl (final String name, final String group, final Class <? extends IJob> jobClass)
   {
     setName (name);
     setGroup (group);
@@ -164,7 +164,7 @@ public class JobDetailImpl implements JobDetail
     }
 
     if (group == null)
-      this.group = Scheduler.DEFAULT_GROUP;
+      this.group = IScheduler.DEFAULT_GROUP;
     else
       this.group = group;
     this.key = null;
@@ -220,7 +220,7 @@ public class JobDetailImpl implements JobDetail
     this.description = description;
   }
 
-  public Class <? extends Job> getJobClass ()
+  public Class <? extends IJob> getJobClass ()
   {
     return jobClass;
   }
@@ -233,14 +233,14 @@ public class JobDetailImpl implements JobDetail
    * @exception IllegalArgumentException
    *            if jobClass is null or the class is not a <code>Job</code>.
    */
-  public void setJobClass (final Class <? extends Job> jobClass)
+  public void setJobClass (final Class <? extends IJob> jobClass)
   {
     if (jobClass == null)
     {
       throw new IllegalArgumentException ("Job class cannot be null.");
     }
 
-    if (!Job.class.isAssignableFrom (jobClass))
+    if (!IJob.class.isAssignableFrom (jobClass))
     {
       throw new IllegalArgumentException ("Job class must implement the Job interface.");
     }
@@ -270,7 +270,7 @@ public class JobDetailImpl implements JobDetail
   /**
    * <p>
    * Set whether or not the <code>Job</code> should remain stored after it is
-   * orphaned (no <code>{@link Trigger}s</code> point to it).
+   * orphaned (no <code>{@link ITrigger}s</code> point to it).
    * </p>
    * <p>
    * If not explicitly set, the default value is <code>false</code>.
@@ -290,7 +290,7 @@ public class JobDetailImpl implements JobDetail
    * If not explicitly set, the default value is <code>false</code>.
    * </p>
    *
-   * @see JobExecutionContext#isRecovering()
+   * @see IJobExecutionContext#isRecovering()
    */
   public void setRequestsRecovery (final boolean shouldRecover)
   {
@@ -352,12 +352,12 @@ public class JobDetailImpl implements JobDetail
   @Override
   public boolean equals (final Object obj)
   {
-    if (!(obj instanceof JobDetail))
+    if (!(obj instanceof IJobDetail))
     {
       return false;
     }
 
-    final JobDetail other = (JobDetail) obj;
+    final IJobDetail other = (IJobDetail) obj;
 
     if (other.getKey () == null || getKey () == null)
       return false;

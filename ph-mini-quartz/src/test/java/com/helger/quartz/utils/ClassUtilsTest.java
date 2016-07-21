@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.Job;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.utils.ClassUtils;
@@ -29,9 +29,9 @@ public class ClassUtilsTest
   }
 
   @DisallowConcurrentExecution
-  private static class BaseJob implements Job
+  private static class BaseJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       System.out.println (this.getClass ().getSimpleName ());
     }

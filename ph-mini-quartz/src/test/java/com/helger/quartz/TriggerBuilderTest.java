@@ -26,11 +26,11 @@ import org.junit.Test;
 
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.Job;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.PersistJobDataAfterExecution;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.DateBuilder.IntervalUnit;
 import com.helger.quartz.utils.Key;
@@ -40,17 +40,17 @@ import com.helger.quartz.utils.Key;
  */
 public class TriggerBuilderTest
 {
-  public static class TestJob implements Job
+  public static class TestJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
   @DisallowConcurrentExecution
   @PersistJobDataAfterExecution
-  public static class TestAnnotatedJob implements Job
+  public static class TestAnnotatedJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
@@ -58,7 +58,7 @@ public class TriggerBuilderTest
   public void testTriggerBuilder () throws Exception
   {
 
-    Trigger trigger = newTrigger ().build ();
+    ITrigger trigger = newTrigger ().build ();
 
     assertTrue ("Expected non-null trigger name ", trigger.getKey ().getName () != null);
     assertTrue ("Unexpected trigger group: " +
@@ -68,7 +68,7 @@ public class TriggerBuilderTest
     assertTrue ("Unexpected job description: " + trigger.getDescription (), trigger.getDescription () == null);
     assertTrue ("Unexpected trigger priortiy: " +
                 trigger.getPriority (),
-                trigger.getPriority () == Trigger.DEFAULT_PRIORITY);
+                trigger.getPriority () == ITrigger.DEFAULT_PRIORITY);
     assertTrue ("Unexpected start-time: " + trigger.getStartTime (), trigger.getStartTime () != null);
     assertTrue ("Unexpected end-time: " + trigger.getEndTime (), trigger.getEndTime () == null);
 

@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.commons.callback.ICallback;
-import com.helger.quartz.Job;
+import com.helger.quartz.IJob;
 
 /**
  * Callback interface to handle thrown exception objects from the
@@ -38,7 +38,7 @@ public interface IJobExceptionCallback extends ICallback
    * @param sJobClassName
    *        The name of the job class
    * @param aJob
-   *        The {@link Job} instance
+   *        The {@link IJob} instance
    */
-  void onScheduledJobException (@Nonnull Throwable t, @Nullable String sJobClassName, @Nonnull Job aJob);
+  void onScheduledJobException (@Nonnull Throwable t, @Nullable String sJobClassName, @Nonnull IJob aJob);
 }

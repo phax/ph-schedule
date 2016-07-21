@@ -25,8 +25,8 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
-import com.helger.quartz.SimpleTrigger;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ISimpleTrigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.impl.triggers.SimpleTriggerImpl;
 
 /**
@@ -59,7 +59,7 @@ public class SimpleTriggerTest
     endTime.set (2005, Calendar.JULY, 5, 10, 0, 0);
 
     final SimpleTriggerImpl simpleTrigger = new SimpleTriggerImpl ();
-    simpleTrigger.setMisfireInstruction (SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
+    simpleTrigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
     simpleTrigger.setRepeatCount (5);
     simpleTrigger.setStartTime (startTime.getTime ());
     simpleTrigger.setEndTime (endTime.getTime ());
@@ -89,13 +89,13 @@ public class SimpleTriggerTest
     final SimpleTriggerImpl simpleTrigger = new SimpleTriggerImpl ();
 
     // Make sure empty sub-objects are cloned okay
-    Trigger clone = (Trigger) simpleTrigger.clone ();
+    ITrigger clone = (ITrigger) simpleTrigger.clone ();
     assertEquals (0, clone.getJobDataMap ().size ());
 
     // Make sure non-empty sub-objects are cloned okay
     simpleTrigger.getJobDataMap ().put ("K1", "V1");
     simpleTrigger.getJobDataMap ().put ("K2", "V2");
-    clone = (Trigger) simpleTrigger.clone ();
+    clone = (ITrigger) simpleTrigger.clone ();
     assertEquals (2, clone.getJobDataMap ().size ());
     assertEquals ("V1", clone.getJobDataMap ().get ("K1"));
     assertEquals ("V2", clone.getJobDataMap ().get ("K2"));
@@ -123,13 +123,13 @@ public class SimpleTriggerTest
 
     try
     {
-      trigger.setMisfireInstruction (Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
-      trigger.setMisfireInstruction (Trigger.MISFIRE_INSTRUCTION_SMART_POLICY);
-      trigger.setMisfireInstruction (SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
-      trigger.setMisfireInstruction (SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT);
-      trigger.setMisfireInstruction (SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
-      trigger.setMisfireInstruction (SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
-      trigger.setMisfireInstruction (SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT);
+      trigger.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
+      trigger.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY);
+      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT);
+      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
+      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
+      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT);
     }
     catch (final Exception e)
     {
@@ -138,7 +138,7 @@ public class SimpleTriggerTest
 
     try
     {
-      trigger.setMisfireInstruction (SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT + 1);
+      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT + 1);
 
       fail ("Expected exception while setting invalid misfire instruction but did not get it.");
     }

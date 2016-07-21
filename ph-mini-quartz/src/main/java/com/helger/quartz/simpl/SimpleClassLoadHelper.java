@@ -22,20 +22,20 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.net.URL;
 
-import com.helger.quartz.spi.ClassLoadHelper;
+import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
  * A <code>ClassLoadHelper</code> that simply calls
  * <code>Class.forName(..)</code>.
  *
- * @see com.helger.quartz.spi.ClassLoadHelper
+ * @see com.helger.quartz.spi.IClassLoadHelper
  * @see com.helger.quartz.simpl.ThreadContextClassLoadHelper
  * @see com.helger.quartz.simpl.CascadingClassLoadHelper
  * @see com.helger.quartz.simpl.LoadingLoaderClassLoadHelper
  * @author jhouse
  * @author pl47ypus
  */
-public class SimpleClassLoadHelper implements ClassLoadHelper
+public class SimpleClassLoadHelper implements IClassLoadHelper
 {
 
   /*

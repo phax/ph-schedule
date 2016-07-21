@@ -22,12 +22,12 @@ import com.helger.quartz.utils.CircularLossyQueue;
 import com.helger.quartz.utils.counter.CounterImpl;
 
 /**
- * An implementation of {@link SampledCounter}
+ * An implementation of {@link ISampledCounter}
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7
  */
-public class SampledCounterImpl extends CounterImpl implements SampledCounter
+public class SampledCounterImpl extends CounterImpl implements ISampledCounter
 {
   private static final int MILLIS_PER_SEC = 1000;
 

@@ -32,7 +32,7 @@ import com.helger.quartz.utils.StringKeyDirtyFlagMap;
  * scheduler instance - i.e. if Quartz is being used via RMI.
  * </p>
  *
- * @see Scheduler#getContext
+ * @see IScheduler#getContext
  * @author James House
  */
 public class SchedulerContext extends StringKeyDirtyFlagMap

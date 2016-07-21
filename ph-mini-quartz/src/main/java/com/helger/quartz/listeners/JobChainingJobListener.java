@@ -18,7 +18,7 @@ package com.helger.quartz.listeners;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
@@ -43,7 +43,7 @@ import com.helger.quartz.SchedulerException;
  *
  * @author James House (jhouse AT revolition DOT net)
  */
-public class JobChainingJobListener extends JobListenerSupport
+public class JobChainingJobListener extends AbstractJobListenerSupport
 {
 
   private final String name;
@@ -96,7 +96,7 @@ public class JobChainingJobListener extends JobListenerSupport
   }
 
   @Override
-  public void jobWasExecuted (final JobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
 
     final JobKey sj = chainLinks.get (context.getJobDetail ().getKey ());

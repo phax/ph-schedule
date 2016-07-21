@@ -17,12 +17,12 @@
 package com.helger.quartz.utils.counter.sampled;
 
 /**
- * An implementation of {@link SampledRateCounter}
+ * An implementation of {@link ISampledRateCounter}
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8
  */
-public class SampledRateCounterImpl extends SampledCounterImpl implements SampledRateCounter
+public class SampledRateCounterImpl extends SampledCounterImpl implements ISampledRateCounter
 {
   private static final String OPERATION_NOT_SUPPORTED_MSG = "This operation is not supported. Use SampledCounter Or Counter instead";
 

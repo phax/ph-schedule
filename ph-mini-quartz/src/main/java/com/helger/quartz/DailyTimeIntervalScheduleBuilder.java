@@ -64,7 +64,7 @@ import com.helger.quartz.impl.triggers.DailyTimeIntervalTriggerImpl;
  * @author James House
  * @author Zemian Deng <saltnlight5@gmail.com>
  */
-public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTimeIntervalTrigger>
+public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTimeIntervalTrigger>
 {
 
   private int interval = 1;
@@ -72,9 +72,9 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
   private Set <Integer> daysOfWeek;
   private TimeOfDay startTimeOfDay;
   private TimeOfDay endTimeOfDay;
-  private int repeatCount = DailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
+  private int repeatCount = IDailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
 
-  private int misfireInstruction = Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   /**
    * A set of all days of the week. The set contains all values between
@@ -174,8 +174,8 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
    *        {@link IntervalUnit#SECOND}, {@link IntervalUnit#MINUTE}, and
    *        {@link IntervalUnit#HOUR}.
    * @return the updated DailyTimeIntervalScheduleBuilder
-   * @see DailyTimeIntervalTrigger#getRepeatInterval()
-   * @see DailyTimeIntervalTrigger#getRepeatIntervalUnit()
+   * @see IDailyTimeIntervalTrigger#getRepeatInterval()
+   * @see IDailyTimeIntervalTrigger#getRepeatIntervalUnit()
    */
   public DailyTimeIntervalScheduleBuilder withInterval (final int timeInterval, final IntervalUnit unit)
   {
@@ -195,8 +195,8 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
    * @param intervalInSeconds
    *        the number of seconds at which the trigger should repeat.
    * @return the updated DailyTimeIntervalScheduleBuilder
-   * @see DailyTimeIntervalTrigger#getRepeatInterval()
-   * @see DailyTimeIntervalTrigger#getRepeatIntervalUnit()
+   * @see IDailyTimeIntervalTrigger#getRepeatInterval()
+   * @see IDailyTimeIntervalTrigger#getRepeatIntervalUnit()
    */
   public DailyTimeIntervalScheduleBuilder withIntervalInSeconds (final int intervalInSeconds)
   {
@@ -211,8 +211,8 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
    * @param intervalInMinutes
    *        the number of minutes at which the trigger should repeat.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see DailyTimeIntervalTrigger#getRepeatInterval()
-   * @see DailyTimeIntervalTrigger#getRepeatIntervalUnit()
+   * @see IDailyTimeIntervalTrigger#getRepeatInterval()
+   * @see IDailyTimeIntervalTrigger#getRepeatIntervalUnit()
    */
   public DailyTimeIntervalScheduleBuilder withIntervalInMinutes (final int intervalInMinutes)
   {
@@ -227,8 +227,8 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
    * @param intervalInHours
    *        the number of hours at which the trigger should repeat.
    * @return the updated DailyTimeIntervalScheduleBuilder
-   * @see DailyTimeIntervalTrigger#getRepeatInterval()
-   * @see DailyTimeIntervalTrigger#getRepeatIntervalUnit()
+   * @see IDailyTimeIntervalTrigger#getRepeatInterval()
+   * @see IDailyTimeIntervalTrigger#getRepeatIntervalUnit()
    */
   public DailyTimeIntervalScheduleBuilder withIntervalInHours (final int intervalInHours)
   {
@@ -394,42 +394,42 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
 
   /**
    * If the Trigger misfires, use the
-   * {@link Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
+   * {@link ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
    *
    * @return the updated DailyTimeIntervalScheduleBuilder
-   * @see Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
+   * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    misfireInstruction = Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link DailyTimeIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING}
+   * {@link IDailyTimeIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING}
    * instruction.
    *
    * @return the updated DailyTimeIntervalScheduleBuilder
-   * @see DailyTimeIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
+   * @see IDailyTimeIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
    */
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    misfireInstruction = DailyTimeIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    misfireInstruction = IDailyTimeIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link DailyTimeIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW}
+   * {@link IDailyTimeIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW}
    * instruction.
    *
    * @return the updated DailyTimeIntervalScheduleBuilder
-   * @see DailyTimeIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
+   * @see IDailyTimeIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    misfireInstruction = CalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    misfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 

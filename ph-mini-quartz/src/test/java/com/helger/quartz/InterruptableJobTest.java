@@ -38,12 +38,12 @@ public class InterruptableJobTest
 
   static final CyclicBarrier sync = new CyclicBarrier (2);
 
-  public static class TestInterruptableJob implements InterruptableJob
+  public static class TestInterruptableJob implements IInterruptableJob
   {
 
     public static final AtomicBoolean interrupted = new AtomicBoolean (false);
 
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       System.out.println ("TestInterruptableJob is executing.");
       try
@@ -96,17 +96,17 @@ public class InterruptableJobTest
     config.setProperty (StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, "AUTO");
     config.setProperty ("org.quartz.threadPool.threadCount", "2");
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
-    final Scheduler sched = new StdSchedulerFactory (config).getScheduler ();
+    final IScheduler sched = new StdSchedulerFactory (config).getScheduler ();
     sched.start ();
 
     // add a job with a trigger that will fire immediately
-    final JobDetail job = newJob ().ofType (TestInterruptableJob.class).withIdentity ("j1").build ();
-    final Trigger trigger = newTrigger ().withIdentity ("t1").forJob (job).startNow ().build ();
+    final IJobDetail job = newJob ().ofType (TestInterruptableJob.class).withIdentity ("j1").build ();
+    final ITrigger trigger = newTrigger ().withIdentity ("t1").forJob (job).startNow ().build ();
     sched.scheduleJob (job, trigger);
     sync.await (); // make sure the job starts running...
-    final List <JobExecutionContext> executingJobs = sched.getCurrentlyExecutingJobs ();
+    final List <IJobExecutionContext> executingJobs = sched.getCurrentlyExecutingJobs ();
     assertTrue ("Number of executing jobs should be 1 ", executingJobs.size () == 1);
-    final JobExecutionContext jec = executingJobs.get (0);
+    final IJobExecutionContext jec = executingJobs.get (0);
     final boolean interruptResult = sched.interrupt (jec.getFireInstanceId ());
     sync.await (); // wait for the job to terminate
     assertTrue ("Expected successful result from interruption of job ", interruptResult);

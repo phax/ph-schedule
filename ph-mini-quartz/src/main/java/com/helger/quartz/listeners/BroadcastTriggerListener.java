@@ -19,10 +19,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.helger.quartz.JobExecutionContext;
-import com.helger.quartz.Trigger;
-import com.helger.quartz.TriggerListener;
-import com.helger.quartz.Trigger.CompletedExecutionInstruction;
+import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITriggerListener;
+import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
 
 /**
  * Holds a List of references to TriggerListener instances and broadcasts all
@@ -33,16 +33,16 @@ import com.helger.quartz.Trigger.CompletedExecutionInstruction;
  * and provides the flexibility of easily changing which listeners get notified.
  * </p>
  *
- * @see #addListener(com.helger.quartz.TriggerListener)
- * @see #removeListener(com.helger.quartz.TriggerListener)
+ * @see #addListener(com.helger.quartz.ITriggerListener)
+ * @see #removeListener(com.helger.quartz.ITriggerListener)
  * @see #removeListener(String)
  * @author James House (jhouse AT revolition DOT net)
  */
-public class BroadcastTriggerListener implements TriggerListener
+public class BroadcastTriggerListener implements ITriggerListener
 {
 
   private final String name;
-  private final List <TriggerListener> listeners;
+  private final List <ITriggerListener> listeners;
 
   /**
    * Construct an instance with the given name. (Remember to add some delegate
@@ -69,7 +69,7 @@ public class BroadcastTriggerListener implements TriggerListener
    * @param listeners
    *        the initial List of TriggerListeners to broadcast to.
    */
-  public BroadcastTriggerListener (final String name, final List <TriggerListener> listeners)
+  public BroadcastTriggerListener (final String name, final List <ITriggerListener> listeners)
   {
     this (name);
     this.listeners.addAll (listeners);
@@ -80,22 +80,22 @@ public class BroadcastTriggerListener implements TriggerListener
     return name;
   }
 
-  public void addListener (final TriggerListener listener)
+  public void addListener (final ITriggerListener listener)
   {
     listeners.add (listener);
   }
 
-  public boolean removeListener (final TriggerListener listener)
+  public boolean removeListener (final ITriggerListener listener)
   {
     return listeners.remove (listener);
   }
 
   public boolean removeListener (final String listenerName)
   {
-    final Iterator <TriggerListener> itr = listeners.iterator ();
+    final Iterator <ITriggerListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final TriggerListener l = itr.next ();
+      final ITriggerListener l = itr.next ();
       if (l.getName ().equals (listenerName))
       {
         itr.remove ();
@@ -105,29 +105,29 @@ public class BroadcastTriggerListener implements TriggerListener
     return false;
   }
 
-  public List <TriggerListener> getListeners ()
+  public List <ITriggerListener> getListeners ()
   {
     return java.util.Collections.unmodifiableList (listeners);
   }
 
-  public void triggerFired (final Trigger trigger, final JobExecutionContext context)
+  public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
   {
 
-    final Iterator <TriggerListener> itr = listeners.iterator ();
+    final Iterator <ITriggerListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final TriggerListener l = itr.next ();
+      final ITriggerListener l = itr.next ();
       l.triggerFired (trigger, context);
     }
   }
 
-  public boolean vetoJobExecution (final Trigger trigger, final JobExecutionContext context)
+  public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
   {
 
-    final Iterator <TriggerListener> itr = listeners.iterator ();
+    final Iterator <ITriggerListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final TriggerListener l = itr.next ();
+      final ITriggerListener l = itr.next ();
       if (l.vetoJobExecution (trigger, context))
       {
         return true;
@@ -136,26 +136,26 @@ public class BroadcastTriggerListener implements TriggerListener
     return false;
   }
 
-  public void triggerMisfired (final Trigger trigger)
+  public void triggerMisfired (final ITrigger trigger)
   {
 
-    final Iterator <TriggerListener> itr = listeners.iterator ();
+    final Iterator <ITriggerListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final TriggerListener l = itr.next ();
+      final ITriggerListener l = itr.next ();
       l.triggerMisfired (trigger);
     }
   }
 
-  public void triggerComplete (final Trigger trigger,
-                               final JobExecutionContext context,
+  public void triggerComplete (final ITrigger trigger,
+                               final IJobExecutionContext context,
                                final CompletedExecutionInstruction triggerInstructionCode)
   {
 
-    final Iterator <TriggerListener> itr = listeners.iterator ();
+    final Iterator <ITriggerListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final TriggerListener l = itr.next ();
+      final ITriggerListener l = itr.next ();
       l.triggerComplete (trigger, context, triggerInstructionCode);
     }
   }

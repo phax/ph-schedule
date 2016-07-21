@@ -17,26 +17,26 @@ package com.helger.quartz.integrations.tests;
 
 import java.util.List;
 
-import com.helger.quartz.Job;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 
 /**
  * @author cdennis
  */
-public class TrackingJob implements Job
+public class TrackingJob implements IJob
 {
   public static String SCHEDULED_TIMES_KEY = "TrackingJob.ScheduledTimes";
 
   @SuppressWarnings ("unchecked")
   @Override
-  public void execute (final JobExecutionContext context) throws JobExecutionException
+  public void execute (final IJobExecutionContext context) throws JobExecutionException
   {
     try
     {
-      final Scheduler scheduler = context.getScheduler ();
+      final IScheduler scheduler = context.getScheduler ();
       final List <Long> scheduledFires = (List <Long>) scheduler.getContext ().get (SCHEDULED_TIMES_KEY);
       scheduledFires.add (context.getScheduledFireTime ().getTime ());
     }

@@ -26,18 +26,18 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Job;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SchedulerListener;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ISchedulerListener;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.TriggerListener;
-import com.helger.quartz.Trigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITriggerListener;
+import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
 /**
@@ -50,11 +50,11 @@ public class Qtz205SchedulerListenerTest
 {
   private static Logger logger = LoggerFactory.getLogger (Qtz205SchedulerListenerTest.class);
 
-  public static class Qtz205Job implements Job
+  public static class Qtz205Job implements IJob
   {
     private static volatile int jobExecutionCount = 0;
 
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       jobExecutionCount++;
       logger.info ("Job executed. jobExecutionCount=" + jobExecutionCount);
@@ -62,7 +62,7 @@ public class Qtz205SchedulerListenerTest
 
   }
 
-  public static class Qtz205TriggerListener implements TriggerListener
+  public static class Qtz205TriggerListener implements ITriggerListener
   {
     private volatile int fireCount;
 
@@ -76,13 +76,13 @@ public class Qtz205SchedulerListenerTest
       return "Qtz205TriggerListener";
     }
 
-    public void triggerFired (final Trigger trigger, final JobExecutionContext context)
+    public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
     {
       fireCount++;
       logger.info ("Trigger fired. count " + fireCount);
     }
 
-    public boolean vetoJobExecution (final Trigger trigger, final JobExecutionContext context)
+    public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
     {
       if (fireCount >= 3)
       {
@@ -92,17 +92,17 @@ public class Qtz205SchedulerListenerTest
       return false;
     }
 
-    public void triggerMisfired (final Trigger trigger)
+    public void triggerMisfired (final ITrigger trigger)
     {}
 
-    public void triggerComplete (final Trigger trigger,
-                                 final JobExecutionContext context,
+    public void triggerComplete (final ITrigger trigger,
+                                 final IJobExecutionContext context,
                                  final CompletedExecutionInstruction triggerInstructionCode)
     {}
 
   }
 
-  public static class Qtz205ScheListener implements SchedulerListener
+  public static class Qtz205ScheListener implements ISchedulerListener
   {
     private int triggerFinalizedCount;
 
@@ -111,13 +111,13 @@ public class Qtz205SchedulerListenerTest
       return triggerFinalizedCount;
     }
 
-    public void jobScheduled (final Trigger trigger)
+    public void jobScheduled (final ITrigger trigger)
     {}
 
     public void jobUnscheduled (final TriggerKey triggerKey)
     {}
 
-    public void triggerFinalized (final Trigger trigger)
+    public void triggerFinalized (final ITrigger trigger)
     {
       triggerFinalizedCount++;
       logger.info ("triggerFinalized " + trigger);
@@ -135,7 +135,7 @@ public class Qtz205SchedulerListenerTest
     public void triggersResumed (final String triggerGroup)
     {}
 
-    public void jobAdded (final JobDetail jobDetail)
+    public void jobAdded (final IJobDetail jobDetail)
     {}
 
     public void jobDeleted (final JobKey jobKey)
@@ -187,14 +187,14 @@ public class Qtz205SchedulerListenerTest
     final Properties props = new Properties ();
     props.setProperty ("org.quartz.scheduler.idleWaitTime", "1500");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");
-    final Scheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
+    final IScheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
     scheduler.getListenerManager ().addSchedulerListener (schedulerListener);
     scheduler.getListenerManager ().addTriggerListener (triggerListener);
     scheduler.start ();
     scheduler.standby ();
 
-    final JobDetail job = newJob (Qtz205Job.class).withIdentity ("test").build ();
-    final Trigger trigger = newTrigger ().withIdentity ("test")
+    final IJobDetail job = newJob (Qtz205Job.class).withIdentity ("test").build ();
+    final ITrigger trigger = newTrigger ().withIdentity ("test")
                                          .withSchedule (simpleSchedule ().withIntervalInMilliseconds (250)
                                                                          .withRepeatCount (2))
                                          .build ();

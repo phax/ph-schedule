@@ -19,15 +19,15 @@ package com.helger.schedule.quartz;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Job;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 
-public final class MockJob implements Job
+public final class MockJob implements IJob
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MockJob.class);
 
-  public void execute (final JobExecutionContext context) throws JobExecutionException
+  public void execute (final IJobExecutionContext context) throws JobExecutionException
   {
     s_aLogger.info ("Scheduled routine executed!");
     GlobalQuartzSchedulerTest.EXEC_LOG.set (true);

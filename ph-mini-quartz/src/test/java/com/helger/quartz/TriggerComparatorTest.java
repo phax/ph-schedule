@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.helger.quartz.Trigger;
-import com.helger.quartz.spi.OperableTrigger;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.spi.IOperableTrigger;
 
 public class TriggerComparatorTest
 {
@@ -36,14 +36,14 @@ public class TriggerComparatorTest
   {
 
     // build trigger in expected sort order
-    final Trigger t1 = newTrigger ().withIdentity ("a").build ();
-    final Trigger t2 = newTrigger ().withIdentity ("b").build ();
-    final Trigger t3 = newTrigger ().withIdentity ("c").build ();
-    final Trigger t4 = newTrigger ().withIdentity ("a", "a").build ();
-    final Trigger t5 = newTrigger ().withIdentity ("a", "b").build ();
-    final Trigger t6 = newTrigger ().withIdentity ("a", "c").build ();
+    final ITrigger t1 = newTrigger ().withIdentity ("a").build ();
+    final ITrigger t2 = newTrigger ().withIdentity ("b").build ();
+    final ITrigger t3 = newTrigger ().withIdentity ("c").build ();
+    final ITrigger t4 = newTrigger ().withIdentity ("a", "a").build ();
+    final ITrigger t5 = newTrigger ().withIdentity ("a", "b").build ();
+    final ITrigger t6 = newTrigger ().withIdentity ("a", "c").build ();
 
-    final List <Trigger> ts = new LinkedList<> ();
+    final List <ITrigger> ts = new LinkedList<> ();
     // add triggers to list in somewhat randomized order
     ts.add (t5);
     ts.add (t6);
@@ -69,26 +69,26 @@ public class TriggerComparatorTest
   {
 
     // build trigger in expected sort order
-    final Trigger t1 = newTrigger ().withIdentity ("a").startAt (futureDate (1, MINUTE)).build ();
-    ((OperableTrigger) t1).computeFirstFireTime (null);
-    final Trigger t2 = newTrigger ().withIdentity ("b").startAt (futureDate (2, MINUTE)).build ();
-    ((OperableTrigger) t2).computeFirstFireTime (null);
-    final Trigger t3 = newTrigger ().withIdentity ("c").startAt (futureDate (3, MINUTE)).build ();
-    ((OperableTrigger) t3).computeFirstFireTime (null);
-    final Trigger t4 = newTrigger ().withIdentity ("d").startAt (futureDate (5, MINUTE)).withPriority (7).build ();
-    ((OperableTrigger) t4).computeFirstFireTime (null);
-    final Trigger t5 = newTrigger ().withIdentity ("e").startAt (futureDate (5, MINUTE)).build ();
-    ((OperableTrigger) t5).computeFirstFireTime (null);
-    final Trigger t6 = newTrigger ().withIdentity ("g").startAt (futureDate (5, MINUTE)).build ();
-    ((OperableTrigger) t6).computeFirstFireTime (null);
-    final Trigger t7 = newTrigger ().withIdentity ("h").startAt (futureDate (5, MINUTE)).withPriority (2).build ();
-    ((OperableTrigger) t7).computeFirstFireTime (null);
-    final Trigger t8 = newTrigger ().withIdentity ("i").startAt (futureDate (6, MINUTE)).build ();
-    ((OperableTrigger) t8).computeFirstFireTime (null);
-    final Trigger t9 = newTrigger ().withIdentity ("j").startAt (futureDate (7, MINUTE)).build ();
-    ((OperableTrigger) t9).computeFirstFireTime (null);
+    final ITrigger t1 = newTrigger ().withIdentity ("a").startAt (futureDate (1, MINUTE)).build ();
+    ((IOperableTrigger) t1).computeFirstFireTime (null);
+    final ITrigger t2 = newTrigger ().withIdentity ("b").startAt (futureDate (2, MINUTE)).build ();
+    ((IOperableTrigger) t2).computeFirstFireTime (null);
+    final ITrigger t3 = newTrigger ().withIdentity ("c").startAt (futureDate (3, MINUTE)).build ();
+    ((IOperableTrigger) t3).computeFirstFireTime (null);
+    final ITrigger t4 = newTrigger ().withIdentity ("d").startAt (futureDate (5, MINUTE)).withPriority (7).build ();
+    ((IOperableTrigger) t4).computeFirstFireTime (null);
+    final ITrigger t5 = newTrigger ().withIdentity ("e").startAt (futureDate (5, MINUTE)).build ();
+    ((IOperableTrigger) t5).computeFirstFireTime (null);
+    final ITrigger t6 = newTrigger ().withIdentity ("g").startAt (futureDate (5, MINUTE)).build ();
+    ((IOperableTrigger) t6).computeFirstFireTime (null);
+    final ITrigger t7 = newTrigger ().withIdentity ("h").startAt (futureDate (5, MINUTE)).withPriority (2).build ();
+    ((IOperableTrigger) t7).computeFirstFireTime (null);
+    final ITrigger t8 = newTrigger ().withIdentity ("i").startAt (futureDate (6, MINUTE)).build ();
+    ((IOperableTrigger) t8).computeFirstFireTime (null);
+    final ITrigger t9 = newTrigger ().withIdentity ("j").startAt (futureDate (7, MINUTE)).build ();
+    ((IOperableTrigger) t9).computeFirstFireTime (null);
 
-    final List <Trigger> ts = new LinkedList<> ();
+    final List <ITrigger> ts = new LinkedList<> ();
     // add triggers to list in somewhat randomized order
     ts.add (t5);
     ts.add (t9);

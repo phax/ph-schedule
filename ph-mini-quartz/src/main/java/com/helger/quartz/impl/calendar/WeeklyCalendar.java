@@ -19,7 +19,7 @@ package com.helger.quartz.impl.calendar;
 
 import java.util.TimeZone;
 
-import com.helger.quartz.Calendar;
+import com.helger.quartz.ICalendar;
 
 /**
  * <p>
@@ -28,7 +28,7 @@ import com.helger.quartz.Calendar;
  * week. By default it excludes SATURDAY and SUNDAY.
  * </p>
  *
- * @see com.helger.quartz.Calendar
+ * @see com.helger.quartz.ICalendar
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
@@ -46,7 +46,7 @@ public class WeeklyCalendar extends BaseCalendar
     this (null, null);
   }
 
-  public WeeklyCalendar (final Calendar baseCalendar)
+  public WeeklyCalendar (final ICalendar baseCalendar)
   {
     this (baseCalendar, null);
   }
@@ -56,7 +56,7 @@ public class WeeklyCalendar extends BaseCalendar
     super (null, timeZone);
   }
 
-  public WeeklyCalendar (final Calendar baseCalendar, final TimeZone timeZone)
+  public WeeklyCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
 

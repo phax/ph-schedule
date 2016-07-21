@@ -22,14 +22,14 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.helger.quartz.spi.OperableTrigger;
+import com.helger.quartz.spi.IOperableTrigger;
 
 /**
  * Convenience and utility methods for working with
- * <code>{@link Trigger}s</code>.
+ * <code>{@link ITrigger}s</code>.
  *
- * @see CronTrigger
- * @see SimpleTrigger
+ * @see ICronTrigger
+ * @see ISimpleTrigger
  * @see DateBuilder
  * @author James House
  */
@@ -67,13 +67,13 @@ public class TriggerUtils
    *        The number of next fire times to produce
    * @return List of java.util.Date objects
    */
-  public static List <Date> computeFireTimes (final OperableTrigger trigg,
-                                              final com.helger.quartz.Calendar cal,
+  public static List <Date> computeFireTimes (final IOperableTrigger trigg,
+                                              final com.helger.quartz.ICalendar cal,
                                               final int numTimes)
   {
     final LinkedList <Date> lst = new LinkedList <> ();
 
-    final OperableTrigger t = (OperableTrigger) trigg.clone ();
+    final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
 
     if (t.getNextFireTime () == null)
     {
@@ -113,12 +113,12 @@ public class TriggerUtils
    * @return the computed Date, or null if the trigger (as configured) will not
    *         fire that many times.
    */
-  public static Date computeEndTimeToAllowParticularNumberOfFirings (final OperableTrigger trigg,
-                                                                     final com.helger.quartz.Calendar cal,
+  public static Date computeEndTimeToAllowParticularNumberOfFirings (final IOperableTrigger trigg,
+                                                                     final com.helger.quartz.ICalendar cal,
                                                                      final int numTimes)
   {
 
-    final OperableTrigger t = (OperableTrigger) trigg.clone ();
+    final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
 
     if (t.getNextFireTime () == null)
     {
@@ -173,14 +173,14 @@ public class TriggerUtils
    *        The ending date at which to stop finding fire times
    * @return List of java.util.Date objects
    */
-  public static List <Date> computeFireTimesBetween (final OperableTrigger trigg,
-                                                     final com.helger.quartz.Calendar cal,
+  public static List <Date> computeFireTimesBetween (final IOperableTrigger trigg,
+                                                     final com.helger.quartz.ICalendar cal,
                                                      final Date from,
                                                      final Date to)
   {
     final LinkedList <Date> lst = new LinkedList <> ();
 
-    final OperableTrigger t = (OperableTrigger) trigg.clone ();
+    final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
 
     if (t.getNextFireTime () == null)
     {

@@ -53,13 +53,13 @@ import com.helger.quartz.impl.triggers.CalendarIntervalTriggerImpl;
  * @see SimpleScheduleBuilder
  * @see TriggerBuilder
  */
-public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIntervalTrigger>
+public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarIntervalTrigger>
 {
 
   private int interval = 1;
   private IntervalUnit intervalUnit = IntervalUnit.DAY;
 
-  private int misfireInstruction = Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
   private TimeZone timeZone;
   private boolean preserveHourOfDayAcrossDaylightSavings;
   private boolean skipDayIfHourDoesNotExist;
@@ -107,8 +107,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param unit
    *        the time unit (IntervalUnit) of the interval.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getRepeatInterval()
-   * @see CalendarIntervalTrigger#getRepeatIntervalUnit()
+   * @see ICalendarIntervalTrigger#getRepeatInterval()
+   * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
   public CalendarIntervalScheduleBuilder withInterval (final int timeInterval, final IntervalUnit unit)
   {
@@ -127,8 +127,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param intervalInSeconds
    *        the number of seconds at which the trigger should repeat.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getRepeatInterval()
-   * @see CalendarIntervalTrigger#getRepeatIntervalUnit()
+   * @see ICalendarIntervalTrigger#getRepeatInterval()
+   * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
   public CalendarIntervalScheduleBuilder withIntervalInSeconds (final int intervalInSeconds)
   {
@@ -145,8 +145,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param intervalInMinutes
    *        the number of minutes at which the trigger should repeat.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getRepeatInterval()
-   * @see CalendarIntervalTrigger#getRepeatIntervalUnit()
+   * @see ICalendarIntervalTrigger#getRepeatInterval()
+   * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
   public CalendarIntervalScheduleBuilder withIntervalInMinutes (final int intervalInMinutes)
   {
@@ -163,8 +163,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param intervalInHours
    *        the number of hours at which the trigger should repeat.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getRepeatInterval()
-   * @see CalendarIntervalTrigger#getRepeatIntervalUnit()
+   * @see ICalendarIntervalTrigger#getRepeatInterval()
+   * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
   public CalendarIntervalScheduleBuilder withIntervalInHours (final int intervalInHours)
   {
@@ -181,8 +181,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param intervalInDays
    *        the number of days at which the trigger should repeat.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getRepeatInterval()
-   * @see CalendarIntervalTrigger#getRepeatIntervalUnit()
+   * @see ICalendarIntervalTrigger#getRepeatInterval()
+   * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
   public CalendarIntervalScheduleBuilder withIntervalInDays (final int intervalInDays)
   {
@@ -199,8 +199,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param intervalInWeeks
    *        the number of weeks at which the trigger should repeat.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getRepeatInterval()
-   * @see CalendarIntervalTrigger#getRepeatIntervalUnit()
+   * @see ICalendarIntervalTrigger#getRepeatInterval()
+   * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
   public CalendarIntervalScheduleBuilder withIntervalInWeeks (final int intervalInWeeks)
   {
@@ -217,8 +217,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param intervalInMonths
    *        the number of months at which the trigger should repeat.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getRepeatInterval()
-   * @see CalendarIntervalTrigger#getRepeatIntervalUnit()
+   * @see ICalendarIntervalTrigger#getRepeatInterval()
+   * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
   public CalendarIntervalScheduleBuilder withIntervalInMonths (final int intervalInMonths)
   {
@@ -235,8 +235,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param intervalInYears
    *        the number of years at which the trigger should repeat.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getRepeatInterval()
-   * @see CalendarIntervalTrigger#getRepeatIntervalUnit()
+   * @see ICalendarIntervalTrigger#getRepeatInterval()
+   * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
   public CalendarIntervalScheduleBuilder withIntervalInYears (final int intervalInYears)
   {
@@ -248,41 +248,41 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
 
   /**
    * If the Trigger misfires, use the
-   * {@link Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
+   * {@link ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
+   * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    misfireInstruction = Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link CalendarIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
+   * {@link ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
    *
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
+   * @see ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
    */
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    misfireInstruction = CalendarIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    misfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link CalendarIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW}
+   * {@link ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW}
    * instruction.
    *
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
+   * @see ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    misfireInstruction = CalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    misfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 
@@ -292,7 +292,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @param timezone
    *        the time-zone for the schedule.
    * @return the updated CalendarIntervalScheduleBuilder
-   * @see CalendarIntervalTrigger#getTimeZone()
+   * @see ICalendarIntervalTrigger#getTimeZone()
    */
   public CalendarIntervalScheduleBuilder inTimeZone (final TimeZone timezone)
   {

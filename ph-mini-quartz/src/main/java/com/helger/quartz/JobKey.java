@@ -20,7 +20,7 @@ package com.helger.quartz;
 import com.helger.quartz.utils.Key;
 
 /**
- * Uniquely identifies a {@link JobDetail}.
+ * Uniquely identifies a {@link IJobDetail}.
  * <p>
  * Keys are composed of both a name and group, and the name must be unique
  * within the group. If only a group is specified then the default group name
@@ -47,7 +47,7 @@ import com.helger.quartz.utils.Key;
  *
  * <pre>
  *
- * @see Job
+ * @see IJob
  * @see Key#DEFAULT_GROUP
  */
 public final class JobKey extends Key <JobKey>

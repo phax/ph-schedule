@@ -23,7 +23,7 @@ import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
-import com.helger.quartz.Calendar;
+import com.helger.quartz.ICalendar;
 
 /**
  * <p>
@@ -47,7 +47,7 @@ public class HolidayCalendar extends BaseCalendar
   public HolidayCalendar ()
   {}
 
-  public HolidayCalendar (final Calendar baseCalendar)
+  public HolidayCalendar (final ICalendar baseCalendar)
   {
     super (baseCalendar);
   }
@@ -57,7 +57,7 @@ public class HolidayCalendar extends BaseCalendar
     super (timeZone);
   }
 
-  public HolidayCalendar (final Calendar baseCalendar, final TimeZone timeZone)
+  public HolidayCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
   }

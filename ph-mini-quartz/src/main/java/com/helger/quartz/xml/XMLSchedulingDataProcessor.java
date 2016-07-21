@@ -65,20 +65,20 @@ import org.xml.sax.SAXParseException;
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.DateBuilder.IntervalUnit;
-import com.helger.quartz.Job;
-import com.helger.quartz.JobDetail;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobDetail;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.ObjectAlreadyExistsException;
 import com.helger.quartz.ScheduleBuilder;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.GroupMatcher;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.MutableTrigger;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.IMutableTrigger;
 
 /**
  * Parses an XML file that declares Jobs and their schedules (Triggers), and
@@ -107,8 +107,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   protected List <TriggerKey> triggersToDelete = new LinkedList<> ();
 
   // scheduling commands
-  protected List <JobDetail> loadedJobs = new LinkedList<> ();
-  protected List <MutableTrigger> loadedTriggers = new LinkedList<> ();
+  protected List <IJobDetail> loadedJobs = new LinkedList<> ();
+  protected List <IMutableTrigger> loadedTriggers = new LinkedList<> ();
 
   // directives
   private boolean overWriteExistingData = true;
@@ -116,7 +116,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
   protected Collection <Exception> validationExceptions = new ArrayList<> ();
 
-  protected ClassLoadHelper classLoadHelper;
+  protected IClassLoadHelper classLoadHelper;
   protected List <String> jobGroupsToNeverDelete = new LinkedList<> ();
   protected List <String> triggerGroupsToNeverDelete = new LinkedList<> ();
 
@@ -139,7 +139,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    * @throws ParserConfigurationException
    *         if the XML parser cannot be configured as needed.
    */
-  public XMLSchedulingDataProcessor (final ClassLoadHelper clh) throws ParserConfigurationException
+  public XMLSchedulingDataProcessor (final IClassLoadHelper clh) throws ParserConfigurationException
   {
     this.classLoadHelper = clh;
     initDocumentParser ();
@@ -379,8 +379,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    * @see #getURL(String)
    * @see #processFile()
    * @see #processFile(String)
-   * @see #processFileAndScheduleJobs(Scheduler, boolean)
-   * @see #processFileAndScheduleJobs(String, com.helger.quartz.Scheduler)
+   * @see #processFileAndScheduleJobs(IScheduler, boolean)
+   * @see #processFileAndScheduleJobs(String, com.helger.quartz.IScheduler)
    */
   protected String getSystemIdForFileName (final String fileName)
   {
@@ -469,7 +469,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   public void processStreamAndScheduleJobs (final InputStream stream,
                                             final String systemId,
-                                            final Scheduler sched) throws ValidationException,
+                                            final IScheduler sched) throws ValidationException,
                                                                    SAXException,
                                                                    XPathException,
                                                                    IOException,
@@ -626,9 +626,9 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       t = getTrimmedToNullString (xpath, "q:recover", jobDetailNode);
       final boolean jobRecoveryRequested = (t != null) && t.equals ("true");
 
-      final Class <? extends Job> jobClass = classLoadHelper.loadClass (jobClassName, Job.class);
+      final Class <? extends IJob> jobClass = classLoadHelper.loadClass (jobClassName, IJob.class);
 
-      final JobDetail jobDetail = newJob (jobClass).withIdentity (jobName, jobGroup)
+      final IJobDetail jobDetail = newJob (jobClass).withIdentity (jobName, jobGroup)
                                                    .withDescription (jobDescription)
                                                    .storeDurably (jobDurability)
                                                    .requestRecovery (jobRecoveryRequested)
@@ -676,7 +676,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       final String triggerJobName = getTrimmedToNullString (xpath, "q:job-name", triggerNode);
       final String triggerJobGroup = getTrimmedToNullString (xpath, "q:job-group", triggerNode);
 
-      int triggerPriority = Trigger.DEFAULT_PRIORITY;
+      int triggerPriority = ITrigger.DEFAULT_PRIORITY;
       if (triggerPriorityString != null)
         triggerPriority = Integer.valueOf (triggerPriorityString);
 
@@ -809,7 +809,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
             throw new ParseException ("Unknown trigger type: " + triggerNode.getNodeName (), -1);
           }
 
-      final MutableTrigger trigger = (MutableTrigger) newTrigger ().withIdentity (triggerName, triggerGroup)
+      final IMutableTrigger trigger = (IMutableTrigger) newTrigger ().withIdentity (triggerName, triggerGroup)
                                                                    .withDescription (triggerDescription)
                                                                    .forJob (triggerJobName, triggerJobGroup)
                                                                    .startAt (triggerStartTime)
@@ -877,7 +877,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    * Note that we will set overWriteExistingJobs after the default xml is
    * parsed.
    */
-  public void processFileAndScheduleJobs (final Scheduler sched, final boolean overWriteExistingJobs) throws Exception
+  public void processFileAndScheduleJobs (final IScheduler sched, final boolean overWriteExistingJobs) throws Exception
   {
     final String fileName = QUARTZ_XML_DEFAULT_FILE_NAME;
     processFile (fileName, getSystemIdForFileName (fileName));
@@ -896,7 +896,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    * @param fileName
    *        meta data file name.
    */
-  public void processFileAndScheduleJobs (final String fileName, final Scheduler sched) throws Exception
+  public void processFileAndScheduleJobs (final String fileName, final IScheduler sched) throws Exception
   {
     processFileAndScheduleJobs (fileName, getSystemIdForFileName (fileName), sched);
   }
@@ -910,7 +910,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   public void processFileAndScheduleJobs (final String fileName,
                                           final String systemId,
-                                          final Scheduler sched) throws Exception
+                                          final IScheduler sched) throws Exception
   {
     processFile (fileName, systemId);
     executePreProcessCommands (sched);
@@ -923,7 +923,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    *
    * @return a <code>List</code> of jobs.
    */
-  protected List <JobDetail> getLoadedJobs ()
+  protected List <IJobDetail> getLoadedJobs ()
   {
     return Collections.unmodifiableList (loadedJobs);
   }
@@ -934,7 +934,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    *
    * @return a <code>List</code> of triggers.
    */
-  protected List <MutableTrigger> getLoadedTriggers ()
+  protected List <IMutableTrigger> getLoadedTriggers ()
   {
     return Collections.unmodifiableList (loadedTriggers);
   }
@@ -951,24 +951,24 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
     return this.classLoadHelper.getResourceAsStream (fileName);
   }
 
-  protected void addJobToSchedule (final JobDetail job)
+  protected void addJobToSchedule (final IJobDetail job)
   {
     loadedJobs.add (job);
   }
 
-  protected void addTriggerToSchedule (final MutableTrigger trigger)
+  protected void addTriggerToSchedule (final IMutableTrigger trigger)
   {
     loadedTriggers.add (trigger);
   }
 
-  private Map <JobKey, List <MutableTrigger>> buildTriggersByFQJobNameMap (final List <MutableTrigger> triggers)
+  private Map <JobKey, List <IMutableTrigger>> buildTriggersByFQJobNameMap (final List <IMutableTrigger> triggers)
   {
 
-    final Map <JobKey, List <MutableTrigger>> triggersByFQJobName = new HashMap<> ();
+    final Map <JobKey, List <IMutableTrigger>> triggersByFQJobName = new HashMap<> ();
 
-    for (final MutableTrigger trigger : triggers)
+    for (final IMutableTrigger trigger : triggers)
     {
-      List <MutableTrigger> triggersOfJob = triggersByFQJobName.get (trigger.getJobKey ());
+      List <IMutableTrigger> triggersOfJob = triggersByFQJobName.get (trigger.getJobKey ());
       if (triggersOfJob == null)
       {
         triggersOfJob = new LinkedList<> ();
@@ -980,7 +980,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
     return triggersByFQJobName;
   }
 
-  protected void executePreProcessCommands (final Scheduler scheduler) throws SchedulerException
+  protected void executePreProcessCommands (final IScheduler scheduler) throws SchedulerException
   {
 
     for (final String group : jobGroupsToDelete)
@@ -1069,24 +1069,24 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    *            if the Job or Trigger cannot be added to the Scheduler, or there
    *            is an internal Scheduler error.
    */
-  protected void scheduleJobs (final Scheduler sched) throws SchedulerException
+  protected void scheduleJobs (final IScheduler sched) throws SchedulerException
   {
 
-    final List <JobDetail> jobs = new LinkedList<> (getLoadedJobs ());
-    final List <MutableTrigger> triggers = new LinkedList<> (getLoadedTriggers ());
+    final List <IJobDetail> jobs = new LinkedList<> (getLoadedJobs ());
+    final List <IMutableTrigger> triggers = new LinkedList<> (getLoadedTriggers ());
 
     log.info ("Adding " + jobs.size () + " jobs, " + triggers.size () + " triggers.");
 
-    final Map <JobKey, List <MutableTrigger>> triggersByFQJobName = buildTriggersByFQJobNameMap (triggers);
+    final Map <JobKey, List <IMutableTrigger>> triggersByFQJobName = buildTriggersByFQJobNameMap (triggers);
 
     // add each job, and it's associated triggers
-    final Iterator <JobDetail> itr = jobs.iterator ();
+    final Iterator <IJobDetail> itr = jobs.iterator ();
     while (itr.hasNext ())
     {
-      final JobDetail detail = itr.next ();
+      final IJobDetail detail = itr.next ();
       itr.remove (); // remove jobs as we handle them...
 
-      JobDetail dupeJ = null;
+      IJobDetail dupeJ = null;
       try
       {
         // The existing job could have been deleted, and Quartz API doesn't
@@ -1130,7 +1130,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
         log.info ("Adding job: " + detail.getKey ());
       }
 
-      final List <MutableTrigger> triggersOfJob = triggersByFQJobName.get (detail.getKey ());
+      final List <IMutableTrigger> triggersOfJob = triggersByFQJobName.get (detail.getKey ());
 
       if (!detail.isDurable () && (triggersOfJob == null || triggersOfJob.size () == 0))
       {
@@ -1162,7 +1162,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
         boolean addJobWithFirstSchedule = true;
 
         // Add triggers related to the job...
-        for (final MutableTrigger trigger : triggersOfJob)
+        for (final IMutableTrigger trigger : triggersOfJob)
         {
           triggers.remove (trigger); // remove triggers as we handle them...
 
@@ -1171,7 +1171,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
             trigger.setStartTime (new Date ());
           }
 
-          final Trigger dupeT = sched.getTrigger (trigger.getKey ());
+          final ITrigger dupeT = sched.getTrigger (trigger.getKey ());
           if (dupeT != null)
           {
             if (isOverWriteExistingData ())
@@ -1242,7 +1242,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
     // add triggers that weren't associated with a new job... (those we already
     // handled were removed above)
-    for (final MutableTrigger trigger : triggers)
+    for (final IMutableTrigger trigger : triggers)
     {
 
       if (trigger.getStartTime () == null)
@@ -1250,7 +1250,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
         trigger.setStartTime (new Date ());
       }
 
-      final Trigger dupeT = sched.getTrigger (trigger.getKey ());
+      final ITrigger dupeT = sched.getTrigger (trigger.getKey ());
       if (dupeT != null)
       {
         if (isOverWriteExistingData ())

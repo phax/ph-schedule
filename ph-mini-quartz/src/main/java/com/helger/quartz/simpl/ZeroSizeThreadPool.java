@@ -21,12 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.SchedulerConfigException;
-import com.helger.quartz.spi.ThreadPool;
+import com.helger.quartz.spi.IThreadPool;
 
 /**
  * <p>
  * This is class is a simple implementation of a zero size thread pool, based on
- * the <code>{@link com.helger.quartz.spi.ThreadPool}</code> interface.
+ * the <code>{@link com.helger.quartz.spi.IThreadPool}</code> interface.
  * </p>
  * <p>
  * The pool has zero <code>Thread</code>s and does not grow or shrink based on
@@ -41,7 +41,7 @@ import com.helger.quartz.spi.ThreadPool;
  *
  * @author Wayne Fay
  */
-public class ZeroSizeThreadPool implements ThreadPool
+public class ZeroSizeThreadPool implements IThreadPool
 {
 
   /*

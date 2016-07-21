@@ -29,27 +29,27 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.helger.quartz.DateBuilder;
-import com.helger.quartz.Job;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobBuilder;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.ObjectAlreadyExistsException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.Trigger.TriggerState;
+import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.impl.JobDetailImpl;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.impl.triggers.SimpleTriggerImpl;
 import com.helger.quartz.simpl.CascadingClassLoadHelper;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.JobStore;
-import com.helger.quartz.spi.OperableTrigger;
-import com.helger.quartz.spi.SchedulerSignaler;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.IJobStore;
+import com.helger.quartz.spi.IOperableTrigger;
+import com.helger.quartz.spi.ISchedulerSignaler;
 
 /**
  * Unit test for JobStores. These tests were submitted by Johannes Zillmann as
@@ -57,7 +57,7 @@ import com.helger.quartz.spi.SchedulerSignaler;
  */
 public abstract class AbstractJobStoreTest
 {
-  private JobStore fJobStore;
+  private IJobStore fJobStore;
   private JobDetailImpl fJobDetail;
   private SampleSignaler fSignaler;
 
@@ -66,7 +66,7 @@ public abstract class AbstractJobStoreTest
   public void setUp () throws Exception
   {
     this.fSignaler = new SampleSignaler ();
-    final ClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
+    final IClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
     loadHelper.initialize ();
     this.fJobStore = createJobStore ("AbstractJobStoreTest");
     this.fJobStore.initialize (loadHelper, this.fSignaler);
@@ -83,7 +83,7 @@ public abstract class AbstractJobStoreTest
     destroyJobStore ("AbstractJobStoreTest");
   }
 
-  protected abstract JobStore createJobStore (String name);
+  protected abstract IJobStore createJobStore (String name);
 
   protected abstract void destroyJobStore (String name);
 
@@ -95,7 +95,7 @@ public abstract class AbstractJobStoreTest
     final Date baseFireTimeDate = DateBuilder.evenMinuteDateAfterNow ();
     final long baseFireTime = baseFireTimeDate.getTime ();
 
-    final OperableTrigger trigger1 = new SimpleTriggerImpl ("trigger1",
+    final IOperableTrigger trigger1 = new SimpleTriggerImpl ("trigger1",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -103,7 +103,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 200000),
                                                             2,
                                                             2000);
-    final OperableTrigger trigger2 = new SimpleTriggerImpl ("trigger2",
+    final IOperableTrigger trigger2 = new SimpleTriggerImpl ("trigger2",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -111,7 +111,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 200000),
                                                             2,
                                                             2000);
-    final OperableTrigger trigger3 = new SimpleTriggerImpl ("trigger1",
+    final IOperableTrigger trigger3 = new SimpleTriggerImpl ("trigger1",
                                                             "triggerGroup2",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -155,7 +155,7 @@ public abstract class AbstractJobStoreTest
 
     final long baseFireTime = System.currentTimeMillis () - 1000;
 
-    final OperableTrigger early = new SimpleTriggerImpl ("early",
+    final IOperableTrigger early = new SimpleTriggerImpl ("early",
                                                          "triggerGroup1",
                                                          this.fJobDetail.getName (),
                                                          this.fJobDetail.getGroup (),
@@ -163,7 +163,7 @@ public abstract class AbstractJobStoreTest
                                                          new Date (baseFireTime + 5),
                                                          2,
                                                          2000);
-    final OperableTrigger trigger1 = new SimpleTriggerImpl ("trigger1",
+    final IOperableTrigger trigger1 = new SimpleTriggerImpl ("trigger1",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -171,7 +171,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 200005),
                                                             2,
                                                             2000);
-    final OperableTrigger trigger2 = new SimpleTriggerImpl ("trigger2",
+    final IOperableTrigger trigger2 = new SimpleTriggerImpl ("trigger2",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -179,7 +179,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 210005),
                                                             2,
                                                             2000);
-    final OperableTrigger trigger3 = new SimpleTriggerImpl ("trigger3",
+    final IOperableTrigger trigger3 = new SimpleTriggerImpl ("trigger3",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -187,7 +187,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 220005),
                                                             2,
                                                             2000);
-    final OperableTrigger trigger4 = new SimpleTriggerImpl ("trigger4",
+    final IOperableTrigger trigger4 = new SimpleTriggerImpl ("trigger4",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -196,7 +196,7 @@ public abstract class AbstractJobStoreTest
                                                             2,
                                                             2000);
 
-    final OperableTrigger trigger10 = new SimpleTriggerImpl ("trigger10",
+    final IOperableTrigger trigger10 = new SimpleTriggerImpl ("trigger10",
                                                              "triggerGroup2",
                                                              this.fJobDetail.getName (),
                                                              this.fJobDetail.getGroup (),
@@ -206,7 +206,7 @@ public abstract class AbstractJobStoreTest
                                                              2000);
 
     early.computeFirstFireTime (null);
-    early.setMisfireInstruction (Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
+    early.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
     trigger1.computeFirstFireTime (null);
     trigger2.computeFirstFireTime (null);
     trigger3.computeFirstFireTime (null);
@@ -221,7 +221,7 @@ public abstract class AbstractJobStoreTest
 
     final long firstFireTime = new Date (trigger1.getNextFireTime ().getTime ()).getTime ();
 
-    List <OperableTrigger> acquiredTriggers = this.fJobStore.acquireNextTriggers (firstFireTime + 10000, 4, 1000L);
+    List <IOperableTrigger> acquiredTriggers = this.fJobStore.acquireNextTriggers (firstFireTime + 10000, 4, 1000L);
     assertEquals (1, acquiredTriggers.size ());
     assertEquals (early.getKey (), acquiredTriggers.get (0).getKey ());
     this.fJobStore.releaseAcquiredTrigger (early);
@@ -280,7 +280,7 @@ public abstract class AbstractJobStoreTest
   @Test
   public void testTriggerStates () throws Exception
   {
-    OperableTrigger trigger = new SimpleTriggerImpl ("trigger1",
+    IOperableTrigger trigger = new SimpleTriggerImpl ("trigger1",
                                                      "triggerGroup1",
                                                      this.fJobDetail.getName (),
                                                      this.fJobDetail.getGroup (),
@@ -332,7 +332,7 @@ public abstract class AbstractJobStoreTest
 
     final String trName = "StoreTriggerReplacesTrigger";
     final String trGroup = "StoreTriggerReplacesTriggerGroup";
-    final OperableTrigger tr = new SimpleTriggerImpl (trName, trGroup, new Date ());
+    final IOperableTrigger tr = new SimpleTriggerImpl (trName, trGroup, new Date ());
     tr.setJobKey (new JobKey (jobName, jobGroup));
     tr.setCalendarName (null);
 
@@ -376,7 +376,7 @@ public abstract class AbstractJobStoreTest
 
     final String trName = "PauseJobGroupPausesNewJobTrigger";
     final String trGroup = "PauseJobGroupPausesNewJobTriggerGroup";
-    final OperableTrigger tr = new SimpleTriggerImpl (trName, trGroup, new Date ());
+    final IOperableTrigger tr = new SimpleTriggerImpl (trName, trGroup, new Date ());
     tr.setJobKey (new JobKey (jobName2, jobGroup));
     fJobStore.storeTrigger (tr, false);
     assertEquals (TriggerState.PAUSED, fJobStore.getTriggerState (tr.getKey ()));
@@ -385,18 +385,18 @@ public abstract class AbstractJobStoreTest
   @Test
   public void testStoreAndRetrieveJobs () throws Exception
   {
-    final SchedulerSignaler schedSignaler = new SampleSignaler ();
-    final ClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
+    final ISchedulerSignaler schedSignaler = new SampleSignaler ();
+    final IClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
     loadHelper.initialize ();
 
-    final JobStore store = createJobStore ("testStoreAndRetrieveJobs");
+    final IJobStore store = createJobStore ("testStoreAndRetrieveJobs");
     store.initialize (loadHelper, schedSignaler);
 
     // Store jobs.
     for (int i = 0; i < 10; i++)
     {
       final String group = i < 5 ? "a" : "b";
-      final JobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i, group).build ();
+      final IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i, group).build ();
       store.storeJob (job, false);
     }
     // Retrieve jobs.
@@ -404,7 +404,7 @@ public abstract class AbstractJobStoreTest
     {
       final String group = i < 5 ? "a" : "b";
       final JobKey jobKey = JobKey.jobKey ("job" + i, group);
-      final JobDetail storedJob = store.retrieveJob (jobKey);
+      final IJobDetail storedJob = store.retrieveJob (jobKey);
       assertEquals (jobKey, storedJob.getKey ());
     }
     // Retrieve by group
@@ -415,37 +415,37 @@ public abstract class AbstractJobStoreTest
   @Test
   public void testStoreAndRetriveTriggers () throws Exception
   {
-    final SchedulerSignaler schedSignaler = new SampleSignaler ();
-    final ClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
+    final ISchedulerSignaler schedSignaler = new SampleSignaler ();
+    final IClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
     loadHelper.initialize ();
 
-    final JobStore store = createJobStore ("testStoreAndRetriveTriggers");
+    final IJobStore store = createJobStore ("testStoreAndRetriveTriggers");
     store.initialize (loadHelper, schedSignaler);
 
     // Store jobs and triggers.
     for (int i = 0; i < 10; i++)
     {
       final String group = i < 5 ? "a" : "b";
-      final JobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i, group).build ();
+      final IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i, group).build ();
       store.storeJob (job, true);
       final SimpleScheduleBuilder schedule = SimpleScheduleBuilder.simpleSchedule ();
-      final Trigger trigger = TriggerBuilder.newTrigger ()
+      final ITrigger trigger = TriggerBuilder.newTrigger ()
                                             .withIdentity ("job" + i, group)
                                             .withSchedule (schedule)
                                             .forJob (job)
                                             .build ();
-      store.storeTrigger ((OperableTrigger) trigger, true);
+      store.storeTrigger ((IOperableTrigger) trigger, true);
     }
     // Retrieve job and trigger.
     for (int i = 0; i < 10; i++)
     {
       final String group = i < 5 ? "a" : "b";
       final JobKey jobKey = JobKey.jobKey ("job" + i, group);
-      final JobDetail storedJob = store.retrieveJob (jobKey);
+      final IJobDetail storedJob = store.retrieveJob (jobKey);
       assertEquals (jobKey, storedJob.getKey ());
 
       final TriggerKey triggerKey = TriggerKey.triggerKey ("job" + i, group);
-      final Trigger storedTrigger = store.retrieveTrigger (triggerKey);
+      final ITrigger storedTrigger = store.retrieveTrigger (triggerKey);
       assertEquals (triggerKey, storedTrigger.getKey ());
     }
     // Retrieve by group
@@ -460,22 +460,22 @@ public abstract class AbstractJobStoreTest
   @Test
   public void testMatchers () throws Exception
   {
-    final SchedulerSignaler schedSignaler = new SampleSignaler ();
-    final ClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
+    final ISchedulerSignaler schedSignaler = new SampleSignaler ();
+    final IClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
     loadHelper.initialize ();
 
-    final JobStore store = createJobStore ("testMatchers");
+    final IJobStore store = createJobStore ("testMatchers");
     store.initialize (loadHelper, schedSignaler);
 
-    JobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job1", "aaabbbccc").build ();
+    IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job1", "aaabbbccc").build ();
     store.storeJob (job, true);
     SimpleScheduleBuilder schedule = SimpleScheduleBuilder.simpleSchedule ();
-    Trigger trigger = TriggerBuilder.newTrigger ()
+    ITrigger trigger = TriggerBuilder.newTrigger ()
                                     .withIdentity ("trig1", "aaabbbccc")
                                     .withSchedule (schedule)
                                     .forJob (job)
                                     .build ();
-    store.storeTrigger ((OperableTrigger) trigger, true);
+    store.storeTrigger ((IOperableTrigger) trigger, true);
 
     job = JobBuilder.newJob (MyJob.class).withIdentity ("job1", "xxxyyyzzz").build ();
     store.storeJob (job, true);
@@ -485,7 +485,7 @@ public abstract class AbstractJobStoreTest
                             .withSchedule (schedule)
                             .forJob (job)
                             .build ();
-    store.storeTrigger ((OperableTrigger) trigger, true);
+    store.storeTrigger ((IOperableTrigger) trigger, true);
 
     job = JobBuilder.newJob (MyJob.class).withIdentity ("job2", "xxxyyyzzz").build ();
     store.storeJob (job, true);
@@ -495,7 +495,7 @@ public abstract class AbstractJobStoreTest
                             .withSchedule (schedule)
                             .forJob (job)
                             .build ();
-    store.storeTrigger ((OperableTrigger) trigger, true);
+    store.storeTrigger ((IOperableTrigger) trigger, true);
 
     Set <JobKey> jkeys = store.getJobKeys (GroupMatcher.anyJobGroup ());
     assertEquals ("Wrong number of jobs found by anything matcher", 3, jkeys.size ());
@@ -556,11 +556,11 @@ public abstract class AbstractJobStoreTest
   @Test
   public void testAcquireTriggers () throws Exception
   {
-    final SchedulerSignaler schedSignaler = new SampleSignaler ();
-    final ClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
+    final ISchedulerSignaler schedSignaler = new SampleSignaler ();
+    final IClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
     loadHelper.initialize ();
 
-    final JobStore store = createJobStore ("testAcquireTriggers");
+    final IJobStore store = createJobStore ("testAcquireTriggers");
     store.initialize (loadHelper, schedSignaler);
 
     // Setup: Store jobs and triggers.
@@ -574,9 +574,9 @@ public abstract class AbstractJobStoreTest
       final Date startTime = new Date (startTime0.getTime () + i * MIN); // a
                                                                          // min
                                                                          // apart
-      final JobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i).build ();
+      final IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i).build ();
       final SimpleScheduleBuilder schedule = SimpleScheduleBuilder.repeatMinutelyForever (2);
-      final OperableTrigger trigger = (OperableTrigger) TriggerBuilder.newTrigger ()
+      final IOperableTrigger trigger = (IOperableTrigger) TriggerBuilder.newTrigger ()
                                                                       .withIdentity ("job" + i)
                                                                       .withSchedule (schedule)
                                                                       .forJob (job)
@@ -598,7 +598,7 @@ public abstract class AbstractJobStoreTest
       final long noLaterThan = (startTime0.getTime () + i * MIN);
       final int maxCount = 1;
       final long timeWindow = 0;
-      final List <OperableTrigger> triggers = store.acquireNextTriggers (noLaterThan, maxCount, timeWindow);
+      final List <IOperableTrigger> triggers = store.acquireNextTriggers (noLaterThan, maxCount, timeWindow);
       assertEquals (1, triggers.size ());
       assertEquals ("job" + i, triggers.get (0).getKey ().getName ());
 
@@ -610,11 +610,11 @@ public abstract class AbstractJobStoreTest
   @Test
   public void testAcquireTriggersInBatch () throws Exception
   {
-    final SchedulerSignaler schedSignaler = new SampleSignaler ();
-    final ClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
+    final ISchedulerSignaler schedSignaler = new SampleSignaler ();
+    final IClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
     loadHelper.initialize ();
 
-    final JobStore store = createJobStore ("testAcquireTriggersInBatch");
+    final IJobStore store = createJobStore ("testAcquireTriggersInBatch");
     store.initialize (loadHelper, schedSignaler);
 
     // Setup: Store jobs and triggers.
@@ -628,9 +628,9 @@ public abstract class AbstractJobStoreTest
       final Date startTime = new Date (startTime0.getTime () + i * MIN); // a
                                                                          // min
                                                                          // apart
-      final JobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i).build ();
+      final IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i).build ();
       final SimpleScheduleBuilder schedule = SimpleScheduleBuilder.repeatMinutelyForever (2);
-      final OperableTrigger trigger = (OperableTrigger) TriggerBuilder.newTrigger ()
+      final IOperableTrigger trigger = (IOperableTrigger) TriggerBuilder.newTrigger ()
                                                                       .withIdentity ("job" + i)
                                                                       .withSchedule (schedule)
                                                                       .forJob (job)
@@ -652,7 +652,7 @@ public abstract class AbstractJobStoreTest
     // time window needs to be big to be able to pick up multiple triggers when
     // they are a minute apart
     final long timeWindow = 8 * MIN;
-    final List <OperableTrigger> triggers = store.acquireNextTriggers (noLaterThan, maxCount, timeWindow);
+    final List <IOperableTrigger> triggers = store.acquireNextTriggers (noLaterThan, maxCount, timeWindow);
     assertEquals (7, triggers.size ());
     for (int i = 0; i < 7; i++)
     {
@@ -660,11 +660,11 @@ public abstract class AbstractJobStoreTest
     }
   }
 
-  public static class SampleSignaler implements SchedulerSignaler
+  public static class SampleSignaler implements ISchedulerSignaler
   {
     volatile int fMisfireCount = 0;
 
-    public void notifyTriggerListenersMisfired (final Trigger trigger)
+    public void notifyTriggerListenersMisfired (final ITrigger trigger)
     {
       System.out.println ("Trigger misfired: " + trigger.getKey () + ", fire time: " + trigger.getNextFireTime ());
       fMisfireCount++;
@@ -673,7 +673,7 @@ public abstract class AbstractJobStoreTest
     public void signalSchedulingChange (final long candidateNewNextFireTime)
     {}
 
-    public void notifySchedulerListenersFinalized (final Trigger trigger)
+    public void notifySchedulerListenersFinalized (final ITrigger trigger)
     {}
 
     public void notifySchedulerListenersJobDeleted (final JobKey jobKey)
@@ -684,9 +684,9 @@ public abstract class AbstractJobStoreTest
   }
 
   /** An empty job for testing purpose. */
-  public static class MyJob implements Job
+  public static class MyJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       //
     }

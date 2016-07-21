@@ -43,10 +43,10 @@ import com.helger.quartz.utils.StringKeyDirtyFlagMap;
  * (if any).
  * </p>
  *
- * @see Job
+ * @see IJob
  * @see PersistJobDataAfterExecution
- * @see Trigger
- * @see JobExecutionContext
+ * @see ITrigger
+ * @see IJobExecutionContext
  * @author James House
  */
 public class JobDataMap extends StringKeyDirtyFlagMap

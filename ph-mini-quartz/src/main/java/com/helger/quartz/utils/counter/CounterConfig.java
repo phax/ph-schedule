@@ -52,7 +52,7 @@ public class CounterConfig
    *
    * @return The counter created by this config
    */
-  public Counter createCounter ()
+  public ICounter createCounter ()
   {
     return new CounterImpl (initialValue);
   }

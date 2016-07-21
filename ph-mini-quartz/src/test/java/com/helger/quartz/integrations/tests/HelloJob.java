@@ -22,8 +22,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Job;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 
 /**
@@ -33,7 +33,7 @@ import com.helger.quartz.JobExecutionException;
  *
  * @author Bill Kratzer
  */
-public class HelloJob implements Job
+public class HelloJob implements IJob
 {
 
   private static Logger _log = LoggerFactory.getLogger (HelloJob.class);
@@ -52,15 +52,15 @@ public class HelloJob implements Job
 
   /**
    * <p>
-   * Called by the <code>{@link com.helger.quartz.Scheduler}</code> when a
-   * <code>{@link com.helger.quartz.Trigger}</code> fires that is associated with the
+   * Called by the <code>{@link com.helger.quartz.IScheduler}</code> when a
+   * <code>{@link com.helger.quartz.ITrigger}</code> fires that is associated with the
    * <code>Job</code>.
    * </p>
    * 
    * @throws JobExecutionException
    *         if there is an exception while executing the job.
    */
-  public void execute (final JobExecutionContext context) throws JobExecutionException
+  public void execute (final IJobExecutionContext context) throws JobExecutionException
   {
 
     // Say Hello to the World and display the date/time

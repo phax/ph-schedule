@@ -20,10 +20,10 @@ package com.helger.quartz.impl;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SchedulerFactory;
-import com.helger.quartz.listeners.SchedulerListenerSupport;
+import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 
 /**
  * <p>
@@ -39,9 +39,9 @@ import com.helger.quartz.listeners.SchedulerListenerSupport;
  * <p>
  * Future versions of this server should allow additional configuration for
  * responding to scheduler events by allowing the user to specify
- * <code>{@link com.helger.quartz.JobListener}</code>,
- * <code>{@link com.helger.quartz.TriggerListener}</code> and
- * <code>{@link com.helger.quartz.SchedulerListener}</code> classes.
+ * <code>{@link com.helger.quartz.IJobListener}</code>,
+ * <code>{@link com.helger.quartz.ITriggerListener}</code> and
+ * <code>{@link com.helger.quartz.ISchedulerListener}</code> classes.
  * </p>
  * <p>
  * Please read the Quartz FAQ entries about RMI before asking questions in the
@@ -50,7 +50,7 @@ import com.helger.quartz.listeners.SchedulerListenerSupport;
  *
  * @author James House
  */
-public class QuartzServer extends SchedulerListenerSupport
+public class QuartzServer extends AbstractSchedulerListenerSupport
 {
 
   /*
@@ -59,7 +59,7 @@ public class QuartzServer extends SchedulerListenerSupport
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  private Scheduler sched = null;
+  private IScheduler sched = null;
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,7 +76,7 @@ public class QuartzServer extends SchedulerListenerSupport
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  public void serve (final SchedulerFactory schedFact, final boolean console) throws Exception
+  public void serve (final ISchedulerFactory schedFact, final boolean console) throws Exception
   {
     sched = schedFact.getScheduler ();
 
@@ -123,7 +123,7 @@ public class QuartzServer extends SchedulerListenerSupport
 
   /**
    * <p>
-   * Called by the <code>{@link Scheduler}</code> when a serious error has
+   * Called by the <code>{@link IScheduler}</code> when a serious error has
    * occured within the scheduler - such as repeated failures in the
    * <code>JobStore</code>, or the inability to instantiate a <code>Job</code>
    * instance when its <code>Trigger</code> has fired.
@@ -143,7 +143,7 @@ public class QuartzServer extends SchedulerListenerSupport
 
   /**
    * <p>
-   * Called by the <code>{@link Scheduler}</code> to inform the listener that it
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that it
    * has shutdown.
    * </p>
    */

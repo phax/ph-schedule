@@ -26,15 +26,15 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import com.helger.quartz.JobListener;
-import com.helger.quartz.SchedulerListener;
+import com.helger.quartz.IJobListener;
+import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.TriggerListener;
+import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.core.ListenerManagerImpl;
 import com.helger.quartz.impl.matchers.NameMatcher;
-import com.helger.quartz.listeners.JobListenerSupport;
-import com.helger.quartz.listeners.SchedulerListenerSupport;
-import com.helger.quartz.listeners.TriggerListenerSupport;
+import com.helger.quartz.listeners.AbstractJobListenerSupport;
+import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
+import com.helger.quartz.listeners.AbstractTriggerListenerSupport;
 
 /**
  * Test ListenerManagerImpl functionality
@@ -42,7 +42,7 @@ import com.helger.quartz.listeners.TriggerListenerSupport;
 public class ListenerManagerTest
 {
 
-  public static class TestJobListener extends JobListenerSupport
+  public static class TestJobListener extends AbstractJobListenerSupport
   {
 
     private final String name;
@@ -58,7 +58,7 @@ public class ListenerManagerTest
     }
   }
 
-  public static class TestTriggerListener extends TriggerListenerSupport
+  public static class TestTriggerListener extends AbstractTriggerListenerSupport
   {
 
     private final String name;
@@ -74,7 +74,7 @@ public class ListenerManagerTest
     }
   }
 
-  public static class TestSchedulerListener extends SchedulerListenerSupport
+  public static class TestSchedulerListener extends AbstractSchedulerListenerSupport
   {
 
   }
@@ -83,8 +83,8 @@ public class ListenerManagerTest
   public void testManagementOfJobListeners () throws Exception
   {
 
-    final JobListener tl1 = new TestJobListener ("tl1");
-    final JobListener tl2 = new TestJobListener ("tl2");
+    final IJobListener tl1 = new TestJobListener ("tl1");
+    final IJobListener tl2 = new TestJobListener ("tl2");
 
     ListenerManagerImpl manager = new ListenerManagerImpl ();
 
@@ -107,7 +107,7 @@ public class ListenerManagerTest
     // Test ordering of registration is preserved.
     final int numListenersToTestOrderOf = 15;
     manager = new ListenerManagerImpl ();
-    final JobListener [] lstners = new JobListener [numListenersToTestOrderOf];
+    final IJobListener [] lstners = new IJobListener [numListenersToTestOrderOf];
     for (int i = 0; i < numListenersToTestOrderOf; i++)
     {
       // use random name, to help test that order isn't based on naming or
@@ -115,9 +115,9 @@ public class ListenerManagerTest
       lstners[i] = new TestJobListener (UUID.randomUUID ().toString ());
       manager.addJobListener (lstners[i]);
     }
-    final List <JobListener> mls = manager.getJobListeners ();
+    final List <IJobListener> mls = manager.getJobListeners ();
     int i = 0;
-    for (final JobListener lsnr : mls)
+    for (final IJobListener lsnr : mls)
     {
       assertSame ("Unexpected order of listeners", lstners[i], lsnr);
       i++;
@@ -128,8 +128,8 @@ public class ListenerManagerTest
   public void testManagementOfTriggerListeners () throws Exception
   {
 
-    final TriggerListener tl1 = new TestTriggerListener ("tl1");
-    final TriggerListener tl2 = new TestTriggerListener ("tl2");
+    final ITriggerListener tl1 = new TestTriggerListener ("tl1");
+    final ITriggerListener tl2 = new TestTriggerListener ("tl2");
 
     ListenerManagerImpl manager = new ListenerManagerImpl ();
 
@@ -152,7 +152,7 @@ public class ListenerManagerTest
     // Test ordering of registration is preserved.
     final int numListenersToTestOrderOf = 15;
     manager = new ListenerManagerImpl ();
-    final TriggerListener [] lstners = new TriggerListener [numListenersToTestOrderOf];
+    final ITriggerListener [] lstners = new ITriggerListener [numListenersToTestOrderOf];
     for (int i = 0; i < numListenersToTestOrderOf; i++)
     {
       // use random name, to help test that order isn't based on naming or
@@ -160,9 +160,9 @@ public class ListenerManagerTest
       lstners[i] = new TestTriggerListener (UUID.randomUUID ().toString ());
       manager.addTriggerListener (lstners[i]);
     }
-    final List <TriggerListener> mls = manager.getTriggerListeners ();
+    final List <ITriggerListener> mls = manager.getTriggerListeners ();
     int i = 0;
-    for (final TriggerListener lsnr : mls)
+    for (final ITriggerListener lsnr : mls)
     {
       assertSame ("Unexpected order of listeners", lstners[i], lsnr);
       i++;
@@ -173,8 +173,8 @@ public class ListenerManagerTest
   public void testManagementOfSchedulerListeners () throws Exception
   {
 
-    final SchedulerListener tl1 = new TestSchedulerListener ();
-    final SchedulerListener tl2 = new TestSchedulerListener ();
+    final ISchedulerListener tl1 = new TestSchedulerListener ();
+    final ISchedulerListener tl2 = new TestSchedulerListener ();
 
     ListenerManagerImpl manager = new ListenerManagerImpl ();
 
@@ -193,15 +193,15 @@ public class ListenerManagerTest
     // Test ordering of registration is preserved.
     final int numListenersToTestOrderOf = 15;
     manager = new ListenerManagerImpl ();
-    final SchedulerListener [] lstners = new SchedulerListener [numListenersToTestOrderOf];
+    final ISchedulerListener [] lstners = new ISchedulerListener [numListenersToTestOrderOf];
     for (int i = 0; i < numListenersToTestOrderOf; i++)
     {
       lstners[i] = new TestSchedulerListener ();
       manager.addSchedulerListener (lstners[i]);
     }
-    final List <SchedulerListener> mls = manager.getSchedulerListeners ();
+    final List <ISchedulerListener> mls = manager.getSchedulerListeners ();
     int i = 0;
-    for (final SchedulerListener lsnr : mls)
+    for (final ISchedulerListener lsnr : mls)
     {
       assertSame ("Unexpected order of listeners", lstners[i], lsnr);
       i++;

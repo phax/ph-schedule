@@ -118,7 +118,7 @@ public final class CronExpressionTest
   public void testQtz259 () throws Exception
   {
     final CronScheduleBuilder schedBuilder = CronScheduleBuilder.cronSchedule ("0 0 0 L-2 * ? *");
-    final Trigger trigger = TriggerBuilder.newTrigger ().withIdentity ("test").withSchedule (schedBuilder).build ();
+    final ITrigger trigger = TriggerBuilder.newTrigger ().withIdentity ("test").withSchedule (schedBuilder).build ();
 
     int i = 0;
     Date pdate = trigger.getFireTimeAfter (new Date ());
@@ -138,7 +138,7 @@ public final class CronExpressionTest
   public void testQtz259LW () throws Exception
   {
     final CronScheduleBuilder schedBuilder = CronScheduleBuilder.cronSchedule ("0 0 0 LW * ? *");
-    final Trigger trigger = TriggerBuilder.newTrigger ().withIdentity ("test").withSchedule (schedBuilder).build ();
+    final ITrigger trigger = TriggerBuilder.newTrigger ().withIdentity ("test").withSchedule (schedBuilder).build ();
 
     int i = 0;
     Date pdate = trigger.getFireTimeAfter (new Date ());

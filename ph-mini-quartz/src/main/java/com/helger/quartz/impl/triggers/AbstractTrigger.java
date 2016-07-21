@@ -20,21 +20,21 @@ package com.helger.quartz.impl.triggers;
 
 import java.util.Date;
 
-import com.helger.quartz.Calendar;
-import com.helger.quartz.CronTrigger;
+import com.helger.quartz.ICalendar;
+import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.ScheduleBuilder;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SimpleTrigger;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ISimpleTrigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.TriggerUtils;
-import com.helger.quartz.spi.OperableTrigger;
+import com.helger.quartz.spi.IOperableTrigger;
 
 /**
  * <p>
@@ -42,7 +42,7 @@ import com.helger.quartz.spi.OperableTrigger;
  * </p>
  * <p>
  * <code>Triggers</code> s have a name and group associated with them, which
- * should uniquely identify them within a single <code>{@link Scheduler}</code>.
+ * should uniquely identify them within a single <code>{@link IScheduler}</code>.
  * </p>
  * <p>
  * <code>Trigger</code>s are the 'mechanism' by which <code>Job</code> s are
@@ -58,15 +58,15 @@ import com.helger.quartz.spi.OperableTrigger;
  * @author James House
  * @author Sharada Jambula
  */
-public abstract class AbstractTrigger <T extends Trigger> implements OperableTrigger
+public abstract class AbstractTrigger <T extends ITrigger> implements IOperableTrigger
 {
   private String name;
 
-  private String group = Scheduler.DEFAULT_GROUP;
+  private String group = IScheduler.DEFAULT_GROUP;
 
   private String jobName;
 
-  private String jobGroup = Scheduler.DEFAULT_GROUP;
+  private String jobGroup = IScheduler.DEFAULT_GROUP;
 
   private String description;
 
@@ -96,13 +96,13 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
   /**
    * <p>
    * Create a <code>Trigger</code> with no specified name, group, or
-   * <code>{@link com.helger.quartz.JobDetail}</code>.
+   * <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    * <p>
    * Note that the {@link #setName(String)},{@link #setGroup(String)}and the
    * {@link #setJobName(String)}and {@link #setJobGroup(String)}methods must be
    * called before the <code>Trigger</code> can be placed into a
-   * {@link Scheduler}.
+   * {@link IScheduler}.
    * </p>
    */
   public AbstractTrigger ()
@@ -117,7 +117,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * <p>
    * Note that the {@link #setJobName(String)}and
    * {@link #setJobGroup(String)}methods must be called before the
-   * <code>Trigger</code> can be placed into a {@link Scheduler}.
+   * <code>Trigger</code> can be placed into a {@link IScheduler}.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -136,7 +136,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * <p>
    * Note that the {@link #setJobName(String)}and
    * {@link #setJobGroup(String)}methods must be called before the
-   * <code>Trigger</code> can be placed into a {@link Scheduler}.
+   * <code>Trigger</code> can be placed into a {@link IScheduler}.
    * </p>
    *
    * @param group
@@ -231,7 +231,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
     }
 
     if (group == null)
-      this.group = Scheduler.DEFAULT_GROUP;
+      this.group = IScheduler.DEFAULT_GROUP;
     else
       this.group = group;
     this.key = null;
@@ -246,7 +246,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
 
   /**
    * <p>
-   * Get the name of the associated <code>{@link com.helger.quartz.JobDetail}</code>.
+   * Get the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    */
   public String getJobName ()
@@ -256,7 +256,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
 
   /**
    * <p>
-   * Set the name of the associated <code>{@link com.helger.quartz.JobDetail}</code>.
+   * Set the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -274,7 +274,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
 
   /**
    * <p>
-   * Get the name of the associated <code>{@link com.helger.quartz.JobDetail}</code>'s
+   * Get the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>'s
    * group.
    * </p>
    */
@@ -285,7 +285,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
 
   /**
    * <p>
-   * Set the name of the associated <code>{@link com.helger.quartz.JobDetail}</code>'s
+   * Set the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>'s
    * group.
    * </p>
    *
@@ -300,7 +300,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
       throw new IllegalArgumentException ("Group name cannot be null or empty.");
 
     if (jobGroup == null)
-      this.jobGroup = Scheduler.DEFAULT_GROUP;
+      this.jobGroup = IScheduler.DEFAULT_GROUP;
     else
       this.jobGroup = jobGroup;
   }
@@ -380,7 +380,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
 
   /**
    * <p>
-   * Associate the <code>{@link Calendar}</code> with the given name with this
+   * Associate the <code>{@link ICalendar}</code> with the given name with this
    * Trigger.
    * </p>
    *
@@ -394,7 +394,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
 
   /**
    * <p>
-   * Get the name of the <code>{@link Calendar}</code> associated with this
+   * Get the name of the <code>{@link ICalendar}</code> associated with this
    * Trigger.
    * </p>
    *
@@ -471,15 +471,15 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * This method should not be used by the Quartz client.
    * </p>
    * <p>
-   * Called when the <code>{@link Scheduler}</code> has decided to 'fire' the
+   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
    * trigger (execute the associated <code>Job</code>), in order to give the
    * <code>Trigger</code> a chance to update itself for its next triggering (if
    * any).
    * </p>
    *
-   * @see #executionComplete(JobExecutionContext, JobExecutionException)
+   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
-  public abstract void triggered (Calendar calendar);
+  public abstract void triggered (ICalendar calendar);
 
   /**
    * <p>
@@ -501,15 +501,15 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    *         firing of the <code>Trigger</code>).
    *         </p>
    */
-  public abstract Date computeFirstFireTime (Calendar calendar);
+  public abstract Date computeFirstFireTime (ICalendar calendar);
 
   /**
    * <p>
    * This method should not be used by the Quartz client.
    * </p>
    * <p>
-   * Called after the <code>{@link Scheduler}</code> has executed the
-   * <code>{@link com.helger.quartz.JobDetail}</code> associated with the
+   * Called after the <code>{@link IScheduler}</code> has executed the
+   * <code>{@link com.helger.quartz.IJobDetail}</code> associated with the
    * <code>Trigger</code> in order to get the final instruction code from the
    * trigger.
    * </p>
@@ -521,10 +521,10 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    *        is the <code>JobExecutionException</code> thrown by the
    *        <code>Job</code>, if any (may be null).
    * @return one of the CompletedExecutionInstruction constants.
-   * @see com.helger.quartz.Trigger.CompletedExecutionInstruction
-   * @see #triggered(Calendar)
+   * @see com.helger.quartz.ITrigger.CompletedExecutionInstruction
+   * @see #triggered(ICalendar)
    */
-  public CompletedExecutionInstruction executionComplete (final JobExecutionContext context,
+  public CompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
                                                           final JobExecutionException result)
   {
     if (result != null && result.refireImmediately ())
@@ -552,13 +552,13 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
 
   /**
    * <p>
-   * Used by the <code>{@link Scheduler}</code> to determine whether or not it
+   * Used by the <code>{@link IScheduler}</code> to determine whether or not it
    * is possible for this <code>Trigger</code> to fire again.
    * </p>
    * <p>
    * If the returned value is <code>false</code> then the <code>Scheduler</code>
    * may remove the <code>Trigger</code> from the
-   * <code>{@link com.helger.quartz.spi.JobStore}</code>.
+   * <code>{@link com.helger.quartz.spi.IJobStore}</code>.
    * </p>
    */
   public abstract boolean mayFireAgain ();
@@ -592,8 +592,8 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * repeat settings).
    * </p>
    *
-   * @see TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings(com.helger.quartz.spi.OperableTrigger,
-   *      com.helger.quartz.Calendar, int)
+   * @see TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings(com.helger.quartz.spi.IOperableTrigger,
+   *      com.helger.quartz.ICalendar, int)
    */
   public abstract void setEndTime (Date endTime);
 
@@ -622,8 +622,8 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * <code>Trigger</code> has been added to the scheduler.
    * </p>
    *
-   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.OperableTrigger,
-   *      com.helger.quartz.Calendar, java.util.Date, java.util.Date)
+   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
+   *      com.helger.quartz.ICalendar, java.util.Date, java.util.Date)
    */
   public abstract Date getNextFireTime ();
 
@@ -668,9 +668,9 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * </p>
    *
    * @see #MISFIRE_INSTRUCTION_SMART_POLICY
-   * @see #updateAfterMisfire(Calendar)
-   * @see SimpleTrigger
-   * @see CronTrigger
+   * @see #updateAfterMisfire(ICalendar)
+   * @see ISimpleTrigger
+   * @see ICronTrigger
    */
   public void setMisfireInstruction (final int misfireInstruction)
   {
@@ -697,9 +697,9 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * </p>
    *
    * @see #MISFIRE_INSTRUCTION_SMART_POLICY
-   * @see #updateAfterMisfire(Calendar)
-   * @see SimpleTrigger
-   * @see CronTrigger
+   * @see #updateAfterMisfire(ICalendar)
+   * @see ISimpleTrigger
+   * @see ICronTrigger
    */
   public int getMisfireInstruction ()
   {
@@ -719,7 +719,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * was created.
    * </p>
    */
-  public abstract void updateAfterMisfire (Calendar cal);
+  public abstract void updateAfterMisfire (ICalendar cal);
 
   /**
    * <p>
@@ -738,7 +738,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * @param cal
    *        the modifying calendar
    */
-  public abstract void updateWithNewCalendar (Calendar cal, long misfireThreshold);
+  public abstract void updateWithNewCalendar (ICalendar cal, long misfireThreshold);
 
   /**
    * <p>
@@ -776,7 +776,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * This method should not be used by the Quartz client.
    * </p>
    * <p>
-   * Usable by <code>{@link com.helger.quartz.spi.JobStore}</code> implementations, in
+   * Usable by <code>{@link com.helger.quartz.spi.IJobStore}</code> implementations, in
    * order to facilitate 'recognizing' instances of fired <code>Trigger</code> s
    * as their jobs complete execution.
    * </p>
@@ -823,7 +823,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * natural (i.e. alphabetical) order of their keys.
    * </p>
    */
-  public int compareTo (final Trigger other)
+  public int compareTo (final ITrigger other)
   {
 
     if (other.getKey () == null && getKey () == null)
@@ -844,10 +844,10 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
   @Override
   public boolean equals (final Object o)
   {
-    if (!(o instanceof Trigger))
+    if (!(o instanceof ITrigger))
       return false;
 
-    final Trigger other = (Trigger) o;
+    final ITrigger other = (ITrigger) o;
 
     return !(other.getKey () == null || getKey () == null) && getKey ().equals (other.getKey ());
 

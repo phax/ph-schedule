@@ -19,9 +19,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobListener;
+import com.helger.quartz.IJobListener;
 
 /**
  * Holds a List of references to JobListener instances and broadcasts all events
@@ -32,16 +32,16 @@ import com.helger.quartz.JobListener;
  * and provides the flexibility of easily changing which listeners get notified.
  * </p>
  *
- * @see #addListener(com.helger.quartz.JobListener)
- * @see #removeListener(com.helger.quartz.JobListener)
+ * @see #addListener(com.helger.quartz.IJobListener)
+ * @see #removeListener(com.helger.quartz.IJobListener)
  * @see #removeListener(String)
  * @author James House (jhouse AT revolition DOT net)
  */
-public class BroadcastJobListener implements JobListener
+public class BroadcastJobListener implements IJobListener
 {
 
   private final String name;
-  private final List <JobListener> listeners;
+  private final List <IJobListener> listeners;
 
   /**
    * Construct an instance with the given name. (Remember to add some delegate
@@ -68,7 +68,7 @@ public class BroadcastJobListener implements JobListener
    * @param listeners
    *        the initial List of JobListeners to broadcast to.
    */
-  public BroadcastJobListener (final String name, final List <JobListener> listeners)
+  public BroadcastJobListener (final String name, final List <IJobListener> listeners)
   {
     this (name);
     this.listeners.addAll (listeners);
@@ -79,22 +79,22 @@ public class BroadcastJobListener implements JobListener
     return name;
   }
 
-  public void addListener (final JobListener listener)
+  public void addListener (final IJobListener listener)
   {
     listeners.add (listener);
   }
 
-  public boolean removeListener (final JobListener listener)
+  public boolean removeListener (final IJobListener listener)
   {
     return listeners.remove (listener);
   }
 
   public boolean removeListener (final String listenerName)
   {
-    final Iterator <JobListener> itr = listeners.iterator ();
+    final Iterator <IJobListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final JobListener jl = itr.next ();
+      final IJobListener jl = itr.next ();
       if (jl.getName ().equals (listenerName))
       {
         itr.remove ();
@@ -104,40 +104,40 @@ public class BroadcastJobListener implements JobListener
     return false;
   }
 
-  public List <JobListener> getListeners ()
+  public List <IJobListener> getListeners ()
   {
     return java.util.Collections.unmodifiableList (listeners);
   }
 
-  public void jobToBeExecuted (final JobExecutionContext context)
+  public void jobToBeExecuted (final IJobExecutionContext context)
   {
 
-    final Iterator <JobListener> itr = listeners.iterator ();
+    final Iterator <IJobListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final JobListener jl = itr.next ();
+      final IJobListener jl = itr.next ();
       jl.jobToBeExecuted (context);
     }
   }
 
-  public void jobExecutionVetoed (final JobExecutionContext context)
+  public void jobExecutionVetoed (final IJobExecutionContext context)
   {
 
-    final Iterator <JobListener> itr = listeners.iterator ();
+    final Iterator <IJobListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final JobListener jl = itr.next ();
+      final IJobListener jl = itr.next ();
       jl.jobExecutionVetoed (context);
     }
   }
 
-  public void jobWasExecuted (final JobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
 
-    final Iterator <JobListener> itr = listeners.iterator ();
+    final Iterator <IJobListener> itr = listeners.iterator ();
     while (itr.hasNext ())
     {
-      final JobListener jl = itr.next ();
+      final IJobListener jl = itr.next ();
       jl.jobWasExecuted (context, jobException);
     }
   }

@@ -20,7 +20,7 @@ package com.helger.quartz.impl;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 
 /**
@@ -41,7 +41,7 @@ public class SchedulerRepository
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  private final HashMap <String, Scheduler> schedulers;
+  private final HashMap <String, IScheduler> schedulers;
 
   private static SchedulerRepository inst;
 
@@ -72,7 +72,7 @@ public class SchedulerRepository
     return inst;
   }
 
-  public synchronized void bind (final Scheduler sched) throws SchedulerException
+  public synchronized void bind (final IScheduler sched) throws SchedulerException
   {
 
     if (schedulers.get (sched.getSchedulerName ()) != null)
@@ -88,12 +88,12 @@ public class SchedulerRepository
     return (schedulers.remove (schedName) != null);
   }
 
-  public synchronized Scheduler lookup (final String schedName)
+  public synchronized IScheduler lookup (final String schedName)
   {
     return schedulers.get (schedName);
   }
 
-  public synchronized Collection <Scheduler> lookupAll ()
+  public synchronized Collection <IScheduler> lookupAll ()
   {
     return java.util.Collections.unmodifiableCollection (schedulers.values ());
   }

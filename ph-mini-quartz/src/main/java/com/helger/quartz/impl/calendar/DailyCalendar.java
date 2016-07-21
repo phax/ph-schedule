@@ -120,7 +120,7 @@ public class DailyCalendar extends BaseCalendar
    * @param rangeEndingTime
    *        a String representing the ending time for the time range
    */
-  public DailyCalendar (final com.helger.quartz.Calendar baseCalendar,
+  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
                         final String rangeStartingTime,
                         final String rangeEndingTime)
   {
@@ -228,7 +228,7 @@ public class DailyCalendar extends BaseCalendar
    * @param rangeEndingMillis
    *        the millisecond of the start of the time range
    */
-  public DailyCalendar (final com.helger.quartz.Calendar baseCalendar,
+  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
                         final int rangeStartingHourOfDay,
                         final int rangeStartingMinute,
                         final int rangeStartingSecond,
@@ -315,7 +315,7 @@ public class DailyCalendar extends BaseCalendar
    * @param rangeEndingCalendar
    *        a java.util.Calendar representing the ending time for the time range
    */
-  public DailyCalendar (final com.helger.quartz.Calendar baseCalendar,
+  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
                         final Calendar rangeStartingCalendar,
                         final Calendar rangeEndingCalendar)
   {
@@ -341,7 +341,7 @@ public class DailyCalendar extends BaseCalendar
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
    * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>. You should use
-   * <code>{@link #DailyCalendar(com.helger.quartz.Calendar, java.util.TimeZone, long, long)}</code>
+   * <code>{@link #DailyCalendar(com.helger.quartz.ICalendar, java.util.TimeZone, long, long)}</code>
    * if you don't want the given <code>rangeStartingTimeInMillis</code> and
    * <code>rangeEndingTimeInMillis</code> to be evaluated in the default time
    * zone.
@@ -376,7 +376,7 @@ public class DailyCalendar extends BaseCalendar
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
    * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>. You should use
-   * <code>{@link #DailyCalendar(com.helger.quartz.Calendar, java.util.TimeZone, long, long)} </code>
+   * <code>{@link #DailyCalendar(com.helger.quartz.ICalendar, java.util.TimeZone, long, long)} </code>
    * if you don't want the given <code>rangeStartingTimeInMillis</code> and
    * <code>rangeEndingTimeInMillis</code> to be evaluated in the default time
    * zone.
@@ -391,7 +391,7 @@ public class DailyCalendar extends BaseCalendar
    * @param rangeEndingTimeInMillis
    *        a long representing the ending time for the time range
    */
-  public DailyCalendar (final com.helger.quartz.Calendar baseCalendar,
+  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
                         final long rangeStartingTimeInMillis,
                         final long rangeEndingTimeInMillis)
   {
@@ -455,7 +455,7 @@ public class DailyCalendar extends BaseCalendar
    * @param rangeEndingTimeInMillis
    *        a long representing the ending time for the time range
    */
-  public DailyCalendar (final com.helger.quartz.Calendar baseCalendar,
+  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
                         final TimeZone timeZone,
                         final long rangeStartingTimeInMillis,
                         final long rangeEndingTimeInMillis)

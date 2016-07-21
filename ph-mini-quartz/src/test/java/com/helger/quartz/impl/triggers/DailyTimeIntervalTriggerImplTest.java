@@ -29,7 +29,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
-import com.helger.quartz.DailyTimeIntervalTrigger;
+import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.DateBuilder;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
@@ -572,7 +572,7 @@ public class DailyTimeIntervalTriggerImplTest
 
     // Setting this (which is default) should make the trigger just as normal
     // one.
-    trigger.setRepeatCount (DailyTimeIntervalTrigger.REPEAT_INDEFINITELY);
+    trigger.setRepeatCount (IDailyTimeIntervalTrigger.REPEAT_INDEFINITELY);
 
     final List <Date> fireTimes = TriggerUtils.computeFireTimes (trigger, null, 48);
     assertEquals (48, fireTimes.size ());

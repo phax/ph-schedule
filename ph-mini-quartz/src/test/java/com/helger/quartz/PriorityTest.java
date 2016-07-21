@@ -28,7 +28,7 @@ import com.helger.quartz.impl.JobDetailImpl;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.impl.triggers.SimpleTriggerImpl;
 import com.helger.quartz.simpl.SimpleThreadPool;
-import com.helger.quartz.spi.MutableTrigger;
+import com.helger.quartz.spi.IMutableTrigger;
 
 /**
  * Test Trigger priority support.
@@ -41,9 +41,9 @@ public class PriorityTest
 
   @PersistJobDataAfterExecution
   @DisallowConcurrentExecution
-  public static class TestJob implements Job
+  public static class TestJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       result.append (context.getTrigger ().getKey ().getName ());
       latch.countDown ();
@@ -65,15 +65,15 @@ public class PriorityTest
     config.setProperty ("org.quartz.threadPool.threadCount", "1");
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
 
-    final Scheduler sched = new StdSchedulerFactory (config).getScheduler ();
+    final IScheduler sched = new StdSchedulerFactory (config).getScheduler ();
 
     final Calendar cal = Calendar.getInstance ();
     cal.add (Calendar.SECOND, 1);
 
-    final MutableTrigger trig1 = new SimpleTriggerImpl ("T1", null, cal.getTime ());
-    final MutableTrigger trig2 = new SimpleTriggerImpl ("T2", null, cal.getTime ());
+    final IMutableTrigger trig1 = new SimpleTriggerImpl ("T1", null, cal.getTime ());
+    final IMutableTrigger trig2 = new SimpleTriggerImpl ("T2", null, cal.getTime ());
 
-    final JobDetail jobDetail = new JobDetailImpl ("JD", null, TestJob.class);
+    final IJobDetail jobDetail = new JobDetailImpl ("JD", null, TestJob.class);
 
     sched.scheduleJob (jobDetail, trig1);
 
@@ -97,18 +97,18 @@ public class PriorityTest
     config.setProperty ("org.quartz.threadPool.threadCount", "1");
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
 
-    final Scheduler sched = new StdSchedulerFactory (config).getScheduler ();
+    final IScheduler sched = new StdSchedulerFactory (config).getScheduler ();
 
     final Calendar cal = Calendar.getInstance ();
     cal.add (Calendar.SECOND, 1);
 
-    final MutableTrigger trig1 = new SimpleTriggerImpl ("T1", null, cal.getTime ());
+    final IMutableTrigger trig1 = new SimpleTriggerImpl ("T1", null, cal.getTime ());
     trig1.setPriority (5);
 
-    final MutableTrigger trig2 = new SimpleTriggerImpl ("T2", null, cal.getTime ());
+    final IMutableTrigger trig2 = new SimpleTriggerImpl ("T2", null, cal.getTime ());
     trig2.setPriority (10);
 
-    final JobDetail jobDetail = new JobDetailImpl ("JD", null, TestJob.class);
+    final IJobDetail jobDetail = new JobDetailImpl ("JD", null, TestJob.class);
 
     sched.scheduleJob (jobDetail, trig1);
 

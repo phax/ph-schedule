@@ -24,7 +24,7 @@ import javax.servlet.ServletContextListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
@@ -124,7 +124,7 @@ public class QuartzInitializerListener implements ServletContextListener
   private boolean performShutdown = true;
   private boolean waitOnShutdown = false;
 
-  private Scheduler scheduler = null;
+  private IScheduler scheduler = null;
 
   private final Logger log = LoggerFactory.getLogger (getClass ());
 

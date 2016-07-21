@@ -19,16 +19,16 @@ package com.helger.quartz.simpl;
 import java.net.InetAddress;
 
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.spi.InstanceIdGenerator;
+import com.helger.quartz.spi.IInstanceIdGenerator;
 
 /**
  * The default InstanceIdGenerator used by Quartz when instance id is to be
  * automatically generated. Instance id is of the form HOSTNAME + CURRENT_TIME.
  *
- * @see InstanceIdGenerator
+ * @see IInstanceIdGenerator
  * @see HostnameInstanceIdGenerator
  */
-public class SimpleInstanceIdGenerator implements InstanceIdGenerator
+public class SimpleInstanceIdGenerator implements IInstanceIdGenerator
 {
   public String generateInstanceId () throws SchedulerException
   {

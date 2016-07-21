@@ -22,9 +22,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.Job;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.impl.JobDetailImpl;
@@ -36,10 +36,10 @@ public class JobDetailTest
 {
 
   @PersistJobDataAfterExecution
-  public class SomePersistentJob implements Job
+  public class SomePersistentJob implements IJob
   {
     @Override
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
@@ -47,10 +47,10 @@ public class JobDetailTest
   {}
 
   @DisallowConcurrentExecution
-  public class SomeNonConcurrentJob implements Job
+  public class SomeNonConcurrentJob implements IJob
   {
     @Override
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
@@ -59,10 +59,10 @@ public class JobDetailTest
 
   @DisallowConcurrentExecution
   @PersistJobDataAfterExecution
-  public class SomeNonConcurrentPersistentJob implements Job
+  public class SomeNonConcurrentPersistentJob implements IJob
   {
     @Override
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
@@ -71,10 +71,10 @@ public class JobDetailTest
 
   @PersistJobDataAfterExecution
   @DisallowConcurrentExecution
-  public class SomeStatefulJob implements Job
+  public class SomeStatefulJob implements IJob
   {
     @Override
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
@@ -87,7 +87,7 @@ public class JobDetailTest
     final JobDetailImpl jobDetail = new JobDetailImpl ();
     jobDetail.setName ("hi");
 
-    final JobDetail clonedJobDetail = (JobDetail) jobDetail.clone ();
+    final IJobDetail clonedJobDetail = (IJobDetail) jobDetail.clone ();
     assertEquals (clonedJobDetail, jobDetail);
 
   }

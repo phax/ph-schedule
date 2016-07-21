@@ -31,15 +31,15 @@ import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.scope.IScope;
 import com.helger.commons.scope.singleton.AbstractGlobalSingleton;
 import com.helger.commons.state.EChange;
-import com.helger.quartz.Job;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobBuilder;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobListener;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobListener;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
@@ -56,7 +56,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalQuartzScheduler.class);
 
-  private final Scheduler m_aScheduler;
+  private final IScheduler m_aScheduler;
   private String m_sGroupName = GROUP_NAME;
 
   @Deprecated
@@ -106,7 +106,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @param aJobListener
    *        The job listener to be added. May not be <code>null</code>.
    */
-  public void addJobListener (@Nonnull final JobListener aJobListener)
+  public void addJobListener (@Nonnull final IJobListener aJobListener)
   {
     ValueEnforcer.notNull (aJobListener, "JobListener");
 
@@ -124,7 +124,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @return The underlying Quartz scheduler object. Never <code>null</code>.
    */
   @Nonnull
-  public Scheduler getScheduler ()
+  public IScheduler getScheduler ()
   {
     return m_aScheduler;
   }
@@ -145,8 +145,8 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    */
   @Nonnull
   public TriggerKey scheduleJob (@Nonnull final String sJobName,
-                                 @Nonnull final JDK8TriggerBuilder <? extends Trigger> aTriggerBuilder,
-                                 @Nonnull final Class <? extends Job> aJobClass,
+                                 @Nonnull final JDK8TriggerBuilder <? extends ITrigger> aTriggerBuilder,
+                                 @Nonnull final Class <? extends IJob> aJobClass,
                                  @Nullable final Map <String, ? extends Object> aJobData)
   {
     ValueEnforcer.notNull (sJobName, "JobName");
@@ -154,7 +154,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     ValueEnforcer.notNull (aJobClass, "JobClass");
 
     // what to do
-    final JobDetail aJobDetail = JobBuilder.newJob (aJobClass).withIdentity (sJobName, m_sGroupName).build ();
+    final IJobDetail aJobDetail = JobBuilder.newJob (aJobClass).withIdentity (sJobName, m_sGroupName).build ();
 
     // add custom parameters
     final JobDataMap aJobDataMap = aJobDetail.getJobDataMap ();
@@ -165,7 +165,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     try
     {
       // Schedule now
-      final Trigger aTrigger = aTriggerBuilder.build ();
+      final ITrigger aTrigger = aTriggerBuilder.build ();
       m_aScheduler.scheduleJob (aJobDetail, aTrigger);
 
       final TriggerKey ret = aTrigger.getKey ();
@@ -196,7 +196,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    */
   @Nonnull
   public TriggerKey scheduleJobNowOnce (@Nonnull final String sJobName,
-                                        @Nonnull final Class <? extends Job> aJobClass,
+                                        @Nonnull final Class <? extends IJob> aJobClass,
                                         @Nullable final Map <String, ? extends Object> aJobData)
   {
     return scheduleJob (sJobName,

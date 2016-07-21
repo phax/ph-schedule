@@ -24,25 +24,25 @@ import java.util.TimeZone;
 
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.CronScheduleBuilder;
-import com.helger.quartz.CronTrigger;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.ICronTrigger;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.ScheduleBuilder;
-import com.helger.quartz.Scheduler;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.IScheduler;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerUtils;
 
 /**
  * <p>
- * A concrete <code>{@link Trigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.JobDetail}</code> at given moments in time,
+ * A concrete <code>{@link ITrigger}</code> that is used to fire a
+ * <code>{@link com.helger.quartz.IJobDetail}</code> at given moments in time,
  * defined with Unix 'cron-like' definitions.
  * </p>
  *
  * @author Sharada Jambula, James House
  * @author Contributions from Mads Henderson
  */
-public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements CronTrigger, CoreTrigger
+public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements ICronTrigger, ICoreTrigger
 {
   protected static final int YEAR_TO_GIVEUP_SCHEDULING_AT = CronExpression.MAX_YEAR;
 
@@ -191,7 +191,7 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    * </p>
    *
    * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.OperableTrigger,
-   *      com.helger.quartz.Calendar, Date, Date)
+   *      com.helger.quartz.ICalendar, Date, Date)
    */
   @Override
   public Date getNextFireTime ()
@@ -275,7 +275,7 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    * </p>
    * <p>
    * Note that the date returned is NOT validated against the related
-   * {@link com.helger.quartz.Calendar} (if any)
+   * {@link com.helger.quartz.ICalendar} (if any)
    * </p>
    *
    * @param aAfterTime
@@ -313,7 +313,7 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    * </p>
    * <p>
    * Note that the return time *may* be in the past. and the date returned is
-   * not validated against {@link com.helger.quartz.Calendar}
+   * not validated against {@link com.helger.quartz.ICalendar}
    * </p>
    */
   @Override
@@ -371,11 +371,11 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    * </p>
    */
   @Override
-  public void updateAfterMisfire (final com.helger.quartz.Calendar cal)
+  public void updateAfterMisfire (final com.helger.quartz.ICalendar cal)
   {
     int instr = getMisfireInstruction ();
 
-    if (instr == Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+    if (instr == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
       return;
 
     if (instr == MISFIRE_INSTRUCTION_SMART_POLICY)
@@ -424,7 +424,7 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    * </p>
    * <p>
    * Note that the value returned is NOT validated against the related
-   * {@link com.helger.quartz.Calendar} (if any)
+   * {@link com.helger.quartz.ICalendar} (if any)
    * </p>
    *
    * @param test
@@ -478,16 +478,16 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
 
   /**
    * <p>
-   * Called when the <code>{@link Scheduler}</code> has decided to 'fire' the
+   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
    * trigger (execute the associated <code>Job</code>), in order to give the
    * <code>Trigger</code> a chance to update itself for its next triggering (if
    * any).
    * </p>
    *
-   * @see #executionComplete(JobExecutionContext, JobExecutionException)
+   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
   @Override
-  public void triggered (final com.helger.quartz.Calendar calendar)
+  public void triggered (final com.helger.quartz.ICalendar calendar)
   {
     previousFireTime = nextFireTime;
     nextFireTime = getFireTimeAfter (nextFireTime);
@@ -499,11 +499,11 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
   }
 
   /**
-   * @see AbstractTrigger#updateWithNewCalendar(com.helger.quartz.Calendar,
+   * @see AbstractTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
   @Override
-  public void updateWithNewCalendar (final com.helger.quartz.Calendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (final com.helger.quartz.ICalendar calendar, final long misfireThreshold)
   {
     nextFireTime = getFireTimeAfter (previousFireTime);
 
@@ -559,7 +559,7 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    *         </p>
    */
   @Override
-  public Date computeFirstFireTime (final com.helger.quartz.Calendar calendar)
+  public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)
   {
     nextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000l));
 
@@ -593,7 +593,7 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    * @see #getTriggerBuilder()
    */
   @Override
-  public ScheduleBuilder <CronTrigger> getScheduleBuilder ()
+  public ScheduleBuilder <ICronTrigger> getScheduleBuilder ()
   {
 
     final CronScheduleBuilder cb = CronScheduleBuilder.cronSchedule (getCronExpression ()).inTimeZone (getTimeZone ());

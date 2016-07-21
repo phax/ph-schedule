@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * An annotation that marks a {@link Job} class as one that makes updates to its
+ * An annotation that marks a {@link IJob} class as one that makes updates to its
  * {@link JobDataMap} during execution, and wishes the scheduler to re-store the
  * <code>JobDataMap</code> when execution completes.
  * <p>

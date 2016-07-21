@@ -21,13 +21,13 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.impl.DirectSchedulerFactory;
 import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.simpl.SimpleThreadPool;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.SchedulerPlugin;
-import com.helger.quartz.spi.ThreadPool;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.ISchedulerPlugin;
+import com.helger.quartz.spi.IThreadPool;
 
 public class DirectSchedulerFactoryTest
 {
@@ -36,11 +36,11 @@ public class DirectSchedulerFactoryTest
   {
     final StringBuffer result = new StringBuffer ();
 
-    final SchedulerPlugin testPlugin = new SchedulerPlugin ()
+    final ISchedulerPlugin testPlugin = new ISchedulerPlugin ()
     {
       public void initialize (final String name,
-                              final com.helger.quartz.Scheduler scheduler,
-                              final ClassLoadHelper classLoadHelper) throws com.helger.quartz.SchedulerException
+                              final com.helger.quartz.IScheduler scheduler,
+                              final IClassLoadHelper classLoadHelper) throws com.helger.quartz.SchedulerException
       {
         result.append (name).append ("|").append (scheduler.getSchedulerName ());
       }
@@ -56,7 +56,7 @@ public class DirectSchedulerFactoryTest
       }
     };
 
-    final ThreadPool threadPool = new SimpleThreadPool (1, 5);
+    final IThreadPool threadPool = new SimpleThreadPool (1, 5);
     threadPool.initialize ();
     DirectSchedulerFactory.getInstance ().createScheduler ("MyScheduler",
                                                            "Instance1",
@@ -65,7 +65,7 @@ public class DirectSchedulerFactoryTest
                                                            Collections.singletonMap ("TestPlugin", testPlugin),
                                                            -1);
 
-    final Scheduler scheduler = DirectSchedulerFactory.getInstance ().getScheduler ("MyScheduler");
+    final IScheduler scheduler = DirectSchedulerFactory.getInstance ().getScheduler ("MyScheduler");
     scheduler.start ();
     scheduler.shutdown ();
 

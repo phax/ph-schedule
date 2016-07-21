@@ -1,6 +1,6 @@
 package com.helger.quartz.impl;
 
-import com.helger.quartz.spi.ThreadExecutor;
+import com.helger.quartz.spi.IThreadExecutor;
 
 /**
  * Schedules work on a newly spawned thread. This is the default Quartz
@@ -9,7 +9,7 @@ import com.helger.quartz.spi.ThreadExecutor;
  * @author matt.accola
  * @version $Revision$ $Date$
  */
-public class DefaultThreadExecutor implements ThreadExecutor
+public class DefaultThreadExecutor implements IThreadExecutor
 {
 
   public void initialize ()

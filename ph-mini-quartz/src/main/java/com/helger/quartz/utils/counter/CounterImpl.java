@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8
  */
-public class CounterImpl implements Counter, Serializable
+public class CounterImpl implements ICounter, Serializable
 {
   private final AtomicLong value;
 

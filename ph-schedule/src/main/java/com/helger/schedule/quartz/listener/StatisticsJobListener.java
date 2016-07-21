@@ -21,9 +21,9 @@ import javax.annotation.Nonnull;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.lang.ClassHelper;
 import com.helger.commons.statistics.StatisticsManager;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobListener;
+import com.helger.quartz.IJobListener;
 
 /**
  * A Quartz job listener that handles statistics for job executions. It handles
@@ -31,7 +31,7 @@ import com.helger.quartz.JobListener;
  *
  * @author Philip Helger
  */
-public class StatisticsJobListener implements JobListener
+public class StatisticsJobListener implements IJobListener
 {
   @Nonnull
   @Nonempty
@@ -42,20 +42,20 @@ public class StatisticsJobListener implements JobListener
 
   @Nonnull
   @Nonempty
-  protected String getStatisticsName (@Nonnull final JobExecutionContext aContext)
+  protected String getStatisticsName (@Nonnull final IJobExecutionContext aContext)
   {
     return "quartz." + ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
   }
 
-  public void jobToBeExecuted (@Nonnull final JobExecutionContext aContext)
+  public void jobToBeExecuted (@Nonnull final IJobExecutionContext aContext)
   {}
 
-  public void jobExecutionVetoed (@Nonnull final JobExecutionContext aContext)
+  public void jobExecutionVetoed (@Nonnull final IJobExecutionContext aContext)
   {
     StatisticsManager.getCounterHandler (getStatisticsName (aContext) + "$VETOED").increment ();
   }
 
-  public void jobWasExecuted (@Nonnull final JobExecutionContext aContext, final JobExecutionException aJobException)
+  public void jobWasExecuted (@Nonnull final IJobExecutionContext aContext, final JobExecutionException aJobException)
   {
     StatisticsManager.getCounterHandler (getStatisticsName (aContext) + "$EXEC").increment ();
     if (aJobException != null)

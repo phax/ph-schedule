@@ -24,25 +24,25 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SchedulerFactory;
-import com.helger.quartz.core.JobRunShellFactory;
+import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.core.IJobRunShellFactory;
 import com.helger.quartz.core.QuartzScheduler;
 import com.helger.quartz.core.QuartzSchedulerResources;
 import com.helger.quartz.simpl.CascadingClassLoadHelper;
 import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.simpl.SimpleThreadPool;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.JobStore;
-import com.helger.quartz.spi.SchedulerPlugin;
-import com.helger.quartz.spi.ThreadExecutor;
-import com.helger.quartz.spi.ThreadPool;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.IJobStore;
+import com.helger.quartz.spi.ISchedulerPlugin;
+import com.helger.quartz.spi.IThreadExecutor;
+import com.helger.quartz.spi.IThreadPool;
 
 /**
  * <p>
  * A singleton implementation of
- * <code>{@link com.helger.quartz.SchedulerFactory}</code>.
+ * <code>{@link com.helger.quartz.ISchedulerFactory}</code>.
  * </p>
  * <p>
  * Here are some examples of using this class:
@@ -98,10 +98,10 @@ import com.helger.quartz.spi.ThreadPool;
  *
  * @author Mohammad Rezaei
  * @author James House
- * @see JobStore
- * @see ThreadPool
+ * @see IJobStore
+ * @see IThreadPool
  */
-public class DirectSchedulerFactory implements SchedulerFactory
+public class DirectSchedulerFactory implements ISchedulerFactory
 {
 
   /*
@@ -172,7 +172,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
   {
     final SimpleThreadPool threadPool = new SimpleThreadPool (maxThreads, Thread.NORM_PRIORITY);
     threadPool.initialize ();
-    final JobStore jobStore = new RAMJobStore ();
+    final IJobStore jobStore = new RAMJobStore ();
     this.createScheduler (threadPool, jobStore);
   }
 
@@ -188,14 +188,14 @@ public class DirectSchedulerFactory implements SchedulerFactory
    * @throws SchedulerException
    *         if initialization failed
    */
-  public void createScheduler (final ThreadPool threadPool, final JobStore jobStore) throws SchedulerException
+  public void createScheduler (final IThreadPool threadPool, final IJobStore jobStore) throws SchedulerException
   {
     createScheduler (DEFAULT_SCHEDULER_NAME, DEFAULT_INSTANCE_ID, threadPool, jobStore);
   }
 
   /**
    * Same as
-   * {@link DirectSchedulerFactory#createScheduler(ThreadPool threadPool, JobStore jobStore)},
+   * {@link DirectSchedulerFactory#createScheduler(IThreadPool threadPool, IJobStore jobStore)},
    * with the addition of specifying the scheduler name and instance ID. This
    * scheduler can only be retrieved via
    * {@link DirectSchedulerFactory#getScheduler(String)}
@@ -213,8 +213,8 @@ public class DirectSchedulerFactory implements SchedulerFactory
    */
   public void createScheduler (final String schedulerName,
                                final String schedulerInstanceId,
-                               final ThreadPool threadPool,
-                               final JobStore jobStore) throws SchedulerException
+                               final IThreadPool threadPool,
+                               final IJobStore jobStore) throws SchedulerException
   {
     createScheduler (schedulerName, schedulerInstanceId, threadPool, jobStore, -1);
   }
@@ -239,8 +239,8 @@ public class DirectSchedulerFactory implements SchedulerFactory
    */
   public void createScheduler (final String schedulerName,
                                final String schedulerInstanceId,
-                               final ThreadPool threadPool,
-                               final JobStore jobStore,
+                               final IThreadPool threadPool,
+                               final IJobStore jobStore,
                                final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
@@ -265,7 +265,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.SchedulerPlugin}</code>s. Can use "null"
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null"
    *        if no plugins are required.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
@@ -275,9 +275,9 @@ public class DirectSchedulerFactory implements SchedulerFactory
    */
   public void createScheduler (final String schedulerName,
                                final String schedulerInstanceId,
-                               final ThreadPool threadPool,
-                               final JobStore jobStore,
-                               final Map <String, SchedulerPlugin> schedulerPluginMap,
+                               final IThreadPool threadPool,
+                               final IJobStore jobStore,
+                               final Map <String, ISchedulerPlugin> schedulerPluginMap,
                                final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
@@ -305,7 +305,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.SchedulerPlugin}</code>s. Can use "null"
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null"
    *        if no plugins are required.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
@@ -315,10 +315,10 @@ public class DirectSchedulerFactory implements SchedulerFactory
    */
   public void createScheduler (final String schedulerName,
                                final String schedulerInstanceId,
-                               final ThreadPool threadPool,
-                               final ThreadExecutor threadExecutor,
-                               final JobStore jobStore,
-                               final Map <String, SchedulerPlugin> schedulerPluginMap,
+                               final IThreadPool threadPool,
+                               final IThreadExecutor threadExecutor,
+                               final IJobStore jobStore,
+                               final Map <String, ISchedulerPlugin> schedulerPluginMap,
                                final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
@@ -348,7 +348,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.SchedulerPlugin}</code>s. Can use "null"
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null"
    *        if no plugins are required.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
@@ -363,16 +363,16 @@ public class DirectSchedulerFactory implements SchedulerFactory
    */
   public void createScheduler (final String schedulerName,
                                final String schedulerInstanceId,
-                               final ThreadPool threadPool,
-                               final ThreadExecutor threadExecutor,
-                               final JobStore jobStore,
-                               final Map <String, SchedulerPlugin> schedulerPluginMap,
+                               final IThreadPool threadPool,
+                               final IThreadExecutor threadExecutor,
+                               final IJobStore jobStore,
+                               final Map <String, ISchedulerPlugin> schedulerPluginMap,
                                final long idleWaitTime,
                                final int maxBatchSize,
                                final long batchTimeWindow) throws SchedulerException
   {
     // Currently only one run-shell factory is available...
-    final JobRunShellFactory jrsf = new StdJobRunShellFactory ();
+    final IJobRunShellFactory jrsf = new StdJobRunShellFactory ();
 
     // Fire everything up
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -394,7 +394,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
     // add plugins
     if (schedulerPluginMap != null)
     {
-      for (final SchedulerPlugin schedulerPlugin : schedulerPluginMap.values ())
+      for (final ISchedulerPlugin schedulerPlugin : schedulerPluginMap.values ())
       {
         qrs.addSchedulerPlugin (schedulerPlugin);
       }
@@ -402,14 +402,14 @@ public class DirectSchedulerFactory implements SchedulerFactory
 
     final QuartzScheduler qs = new QuartzScheduler (qrs, idleWaitTime);
 
-    final ClassLoadHelper cch = new CascadingClassLoadHelper ();
+    final IClassLoadHelper cch = new CascadingClassLoadHelper ();
     cch.initialize ();
 
     SchedulerDetailsSetter.setDetails (jobStore, schedulerName, schedulerInstanceId);
 
     jobStore.initialize (cch, qs.getSchedulerSignaler ());
 
-    final Scheduler scheduler = new StdScheduler (qs);
+    final IScheduler scheduler = new StdScheduler (qs);
 
     jrsf.initialize (scheduler);
 
@@ -418,7 +418,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
     // Initialize plugins now that we have a Scheduler instance.
     if (schedulerPluginMap != null)
     {
-      for (final Entry <String, SchedulerPlugin> pluginEntry : schedulerPluginMap.entrySet ())
+      for (final Entry <String, ISchedulerPlugin> pluginEntry : schedulerPluginMap.entrySet ())
       {
         pluginEntry.getValue ().initialize (pluginEntry.getKey (), scheduler, cch);
       }
@@ -455,7 +455,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
    * calling getScheduler()
    * </p>
    */
-  public Scheduler getScheduler () throws SchedulerException
+  public IScheduler getScheduler () throws SchedulerException
   {
     if (!initialized)
     {
@@ -470,7 +470,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
    * Returns a handle to the Scheduler with the given name, if it exists.
    * </p>
    */
-  public Scheduler getScheduler (final String schedName) throws SchedulerException
+  public IScheduler getScheduler (final String schedName) throws SchedulerException
   {
     final SchedulerRepository schedRep = SchedulerRepository.getInstance ();
 
@@ -483,7 +483,7 @@ public class DirectSchedulerFactory implements SchedulerFactory
    * instance.).
    * </p>
    */
-  public Collection <Scheduler> getAllSchedulers () throws SchedulerException
+  public Collection <IScheduler> getAllSchedulers () throws SchedulerException
   {
     return SchedulerRepository.getInstance ().lookupAll ();
   }

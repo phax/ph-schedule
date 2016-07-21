@@ -17,7 +17,7 @@
 package com.helger.quartz.impl.matchers;
 
 import com.helger.commons.hashcode.HashCodeGenerator;
-import com.helger.quartz.Matcher;
+import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
 
 /**
@@ -25,12 +25,12 @@ import com.helger.quartz.utils.Key;
  *
  * @author jhouse
  */
-public class AndMatcher <T extends Key <T>> implements Matcher <T>
+public class AndMatcher <T extends Key <T>> implements IMatcher <T>
 {
-  private final Matcher <T> leftOperand;
-  private final Matcher <T> rightOperand;
+  private final IMatcher <T> leftOperand;
+  private final IMatcher <T> rightOperand;
 
-  public AndMatcher (final Matcher <T> leftOperand, final Matcher <T> rightOperand)
+  public AndMatcher (final IMatcher <T> leftOperand, final IMatcher <T> rightOperand)
   {
     if (leftOperand == null || rightOperand == null)
       throw new IllegalArgumentException ("Two non-null operands required!");
@@ -44,12 +44,12 @@ public class AndMatcher <T extends Key <T>> implements Matcher <T>
     return leftOperand.isMatch (key) && rightOperand.isMatch (key);
   }
 
-  public Matcher <T> getLeftOperand ()
+  public IMatcher <T> getLeftOperand ()
   {
     return leftOperand;
   }
 
-  public Matcher <T> getRightOperand ()
+  public IMatcher <T> getRightOperand ()
   {
     return rightOperand;
   }

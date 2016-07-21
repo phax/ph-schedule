@@ -24,9 +24,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.Map;
 
-import com.helger.quartz.Job;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerContext;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.TriggerFiredBundle;
@@ -49,10 +49,10 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  * throw exceptions on unmatched JobDataMap keys.
  * </p>
  *
- * @see com.helger.quartz.spi.JobFactory
+ * @see com.helger.quartz.spi.IJobFactory
  * @see SimpleJobFactory
  * @see SchedulerContext
- * @see com.helger.quartz.JobExecutionContext#getMergedJobDataMap()
+ * @see com.helger.quartz.IJobExecutionContext#getMergedJobDataMap()
  * @see #setWarnIfPropertyNotFound(boolean)
  * @see #setThrowIfPropertyNotFound(boolean)
  * @author jhouse
@@ -63,10 +63,10 @@ public class PropertySettingJobFactory extends SimpleJobFactory
   private boolean throwIfNotFound = false;
 
   @Override
-  public Job newJob (final TriggerFiredBundle bundle, final Scheduler scheduler) throws SchedulerException
+  public IJob newJob (final TriggerFiredBundle bundle, final IScheduler scheduler) throws SchedulerException
   {
 
-    final Job job = super.newJob (bundle, scheduler);
+    final IJob job = super.newJob (bundle, scheduler);
 
     final JobDataMap jobDataMap = new JobDataMap ();
     jobDataMap.putAll (scheduler.getContext ());

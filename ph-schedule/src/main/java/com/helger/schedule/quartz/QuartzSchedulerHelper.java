@@ -19,9 +19,9 @@ package com.helger.schedule.quartz;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SchedulerFactory;
+import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.SchedulerMetaData;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
@@ -34,7 +34,7 @@ import com.helger.quartz.impl.StdSchedulerFactory;
 public final class QuartzSchedulerHelper
 {
   public static final boolean DEFAULT_START_AUTOMATICALLY = true;
-  private static final SchedulerFactory s_aSchedulerFactory = new StdSchedulerFactory ();
+  private static final ISchedulerFactory s_aSchedulerFactory = new StdSchedulerFactory ();
 
   private QuartzSchedulerHelper ()
   {}
@@ -44,18 +44,18 @@ public final class QuartzSchedulerHelper
    * @since 1.8.2
    */
   @Nonnull
-  public static SchedulerFactory getSchedulerFactory ()
+  public static ISchedulerFactory getSchedulerFactory ()
   {
     return s_aSchedulerFactory;
   }
 
   /**
-   * @return The single {@link Scheduler} instance that is ensured to be
+   * @return The single {@link IScheduler} instance that is ensured to be
    *         started. Never <code>null</code>.
    * @see #getScheduler(boolean)
    */
   @Nonnull
-  public static Scheduler getScheduler ()
+  public static IScheduler getScheduler ()
   {
     return getScheduler (DEFAULT_START_AUTOMATICALLY);
   }
@@ -69,12 +69,12 @@ public final class QuartzSchedulerHelper
    * @return The underlying Quartz scheduler. Never <code>null</code>.
    */
   @Nonnull
-  public static Scheduler getScheduler (final boolean bStartAutomatically)
+  public static IScheduler getScheduler (final boolean bStartAutomatically)
   {
     try
     {
       // Don't try to use a name - results in NPE
-      final Scheduler aScheduler = s_aSchedulerFactory.getScheduler ();
+      final IScheduler aScheduler = s_aSchedulerFactory.getScheduler ();
       if (bStartAutomatically && !aScheduler.isStarted ())
         aScheduler.start ();
       return aScheduler;
@@ -117,7 +117,7 @@ public final class QuartzSchedulerHelper
     try
     {
       // Get the scheduler without starting it
-      final Scheduler aScheduler = s_aSchedulerFactory.getScheduler ();
+      final IScheduler aScheduler = s_aSchedulerFactory.getScheduler ();
       if (aScheduler.isStarted ())
         return ESchedulerState.STARTED;
       if (aScheduler.isInStandbyMode ())

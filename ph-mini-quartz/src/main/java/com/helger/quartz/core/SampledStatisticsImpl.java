@@ -2,20 +2,20 @@ package com.helger.quartz.core;
 
 import java.util.Timer;
 
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobListener;
-import com.helger.quartz.Trigger;
-import com.helger.quartz.listeners.SchedulerListenerSupport;
+import com.helger.quartz.IJobListener;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.utils.counter.CounterConfig;
-import com.helger.quartz.utils.counter.CounterManager;
+import com.helger.quartz.utils.counter.ICounterManager;
 import com.helger.quartz.utils.counter.CounterManagerImpl;
-import com.helger.quartz.utils.counter.sampled.SampledCounter;
+import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounterConfig;
 import com.helger.quartz.utils.counter.sampled.SampledRateCounterConfig;
 
-public class SampledStatisticsImpl extends SchedulerListenerSupport implements SampledStatistics, JobListener
+public class SampledStatisticsImpl extends AbstractSchedulerListenerSupport implements ISampledStatistics, IJobListener
 {
   @SuppressWarnings ("unused")
   private final QuartzScheduler scheduler;
@@ -33,10 +33,10 @@ public class SampledStatisticsImpl extends SchedulerListenerSupport implements S
                                                                                                                     DEFAULT_HISTORY_SIZE,
                                                                                                                     true);
 
-  private volatile CounterManager counterManager;
-  private final SampledCounter jobsScheduledCount;
-  private final SampledCounter jobsExecutingCount;
-  private final SampledCounter jobsCompletedCount;
+  private volatile ICounterManager counterManager;
+  private final ISampledCounter jobsScheduledCount;
+  private final ISampledCounter jobsExecutingCount;
+  private final ISampledCounter jobsCompletedCount;
 
   SampledStatisticsImpl (final QuartzScheduler scheduler)
   {
@@ -56,9 +56,9 @@ public class SampledStatisticsImpl extends SchedulerListenerSupport implements S
     counterManager.shutdown (true);
   }
 
-  private SampledCounter createSampledCounter (final CounterConfig defaultCounterConfig)
+  private ISampledCounter createSampledCounter (final CounterConfig defaultCounterConfig)
   {
-    return (SampledCounter) counterManager.createCounter (defaultCounterConfig);
+    return (ISampledCounter) counterManager.createCounter (defaultCounterConfig);
   }
 
   /**
@@ -92,28 +92,28 @@ public class SampledStatisticsImpl extends SchedulerListenerSupport implements S
   }
 
   @Override
-  public void jobScheduled (final Trigger trigger)
+  public void jobScheduled (final ITrigger trigger)
   {
     jobsScheduledCount.increment ();
   }
 
-  public void jobExecutionVetoed (final JobExecutionContext context)
+  public void jobExecutionVetoed (final IJobExecutionContext context)
   {
     /**/
   }
 
-  public void jobToBeExecuted (final JobExecutionContext context)
+  public void jobToBeExecuted (final IJobExecutionContext context)
   {
     jobsExecutingCount.increment ();
   }
 
-  public void jobWasExecuted (final JobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
     jobsCompletedCount.increment ();
   }
 
   @Override
-  public void jobAdded (final JobDetail jobDetail)
+  public void jobAdded (final IJobDetail jobDetail)
   {
     /**/
   }

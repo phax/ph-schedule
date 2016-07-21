@@ -19,22 +19,22 @@ package com.helger.quartz.simpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.Job;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.spi.JobFactory;
+import com.helger.quartz.spi.IJobFactory;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
 /**
  * The default JobFactory used by Quartz - simply calls
  * <code>newInstance()</code> on the job class.
  *
- * @see JobFactory
+ * @see IJobFactory
  * @see PropertySettingJobFactory
  * @author jhouse
  */
-public class SimpleJobFactory implements JobFactory
+public class SimpleJobFactory implements IJobFactory
 {
 
   private final Logger log = LoggerFactory.getLogger (getClass ());
@@ -44,11 +44,11 @@ public class SimpleJobFactory implements JobFactory
     return log;
   }
 
-  public Job newJob (final TriggerFiredBundle bundle, final Scheduler Scheduler) throws SchedulerException
+  public IJob newJob (final TriggerFiredBundle bundle, final IScheduler Scheduler) throws SchedulerException
   {
 
-    final JobDetail jobDetail = bundle.getJobDetail ();
-    final Class <? extends Job> jobClass = jobDetail.getJobClass ();
+    final IJobDetail jobDetail = bundle.getJobDetail ();
+    final Class <? extends IJob> jobClass = jobDetail.getJobClass ();
     try
     {
       if (log.isDebugEnabled ())

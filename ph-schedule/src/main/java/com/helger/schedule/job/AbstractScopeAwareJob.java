@@ -23,16 +23,16 @@ import javax.annotation.concurrent.ThreadSafe;
 import com.helger.commons.annotation.OverrideOnDemand;
 import com.helger.commons.scope.mgr.ScopeManager;
 import com.helger.commons.state.ESuccess;
-import com.helger.quartz.Job;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.web.mock.MockHttpServletRequest;
 import com.helger.web.mock.MockHttpServletResponse;
 import com.helger.web.mock.OfflineHttpServletRequest;
 import com.helger.web.scope.mgr.WebScopeManager;
 
 /**
- * Abstract {@link Job} implementation that handles request scopes correctly.
+ * Abstract {@link IJob} implementation that handles request scopes correctly.
  * This is required, because each scheduled job runs in its own thread so that
  * no default {@link ScopeManager} information would be available.
  *
@@ -53,7 +53,7 @@ public abstract class AbstractScopeAwareJob extends AbstractJob
    */
   @Nonnull
   protected abstract String getApplicationScopeID (@Nonnull JobDataMap aJobDataMap,
-                                                   @Nonnull JobExecutionContext aContext);
+                                                   @Nonnull IJobExecutionContext aContext);
 
   /**
    * @return The dummy HTTP request to be used for executing this job. By
@@ -88,13 +88,13 @@ public abstract class AbstractScopeAwareJob extends AbstractJob
    */
   @OverrideOnDemand
   protected void beforeExecuteInScope (@Nonnull final JobDataMap aJobDataMap,
-                                       @Nonnull final JobExecutionContext aContext)
+                                       @Nonnull final IJobExecutionContext aContext)
   {}
 
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final JobExecutionContext aContext)
+  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final IJobExecutionContext aContext)
   {
     // Scopes (ensure to create a new scope each time!)
     final String sApplicationScopeID = getApplicationScopeID (aJobDataMap, aContext);
@@ -119,7 +119,7 @@ public abstract class AbstractScopeAwareJob extends AbstractJob
    */
   @OverrideOnDemand
   protected void afterExecuteInScope (@Nonnull final JobDataMap aJobDataMap,
-                                      @Nonnull final JobExecutionContext aContext,
+                                      @Nonnull final IJobExecutionContext aContext,
                                       @Nonnull final ESuccess eExecSuccess)
   {}
 
@@ -127,7 +127,7 @@ public abstract class AbstractScopeAwareJob extends AbstractJob
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
   protected void afterExecute (@Nonnull final JobDataMap aJobDataMap,
-                               @Nonnull final JobExecutionContext aContext,
+                               @Nonnull final IJobExecutionContext aContext,
                                @Nonnull final ESuccess eExecSuccess)
   {
     try

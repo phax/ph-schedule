@@ -22,8 +22,8 @@ import java.text.ParseException;
 
 import org.junit.Test;
 
-import com.helger.quartz.CronTrigger;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ICronTrigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.impl.triggers.CronTriggerImpl;
 
 /**
@@ -38,7 +38,7 @@ public class CronTriggerTest
     trigger.setName ("test");
     trigger.setGroup ("testGroup");
     trigger.setCronExpression ("0 0 12 * * ?");
-    final CronTrigger trigger2 = (CronTrigger) trigger.clone ();
+    final ICronTrigger trigger2 = (ICronTrigger) trigger.clone ();
 
     assertEquals ("Cloning failed", trigger, trigger2);
 
@@ -53,7 +53,7 @@ public class CronTriggerTest
     final CronTriggerImpl trigger = new CronTriggerImpl ();
     trigger.setName ("test");
     trigger.setGroup ("testGroup");
-    final CronTrigger trigger2 = (CronTrigger) trigger.clone ();
+    final ICronTrigger trigger2 = (ICronTrigger) trigger.clone ();
 
     assertEquals ("Cloning failed", trigger, trigger2);
   }
@@ -65,10 +65,10 @@ public class CronTriggerTest
 
     try
     {
-      trigger.setMisfireInstruction (Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
-      trigger.setMisfireInstruction (Trigger.MISFIRE_INSTRUCTION_SMART_POLICY);
-      trigger.setMisfireInstruction (CronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING);
-      trigger.setMisfireInstruction (CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+      trigger.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
+      trigger.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY);
+      trigger.setMisfireInstruction (ICronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING);
+      trigger.setMisfireInstruction (ICronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
     }
     catch (final Exception e)
     {
@@ -77,7 +77,7 @@ public class CronTriggerTest
 
     try
     {
-      trigger.setMisfireInstruction (CronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING + 1);
+      trigger.setMisfireInstruction (ICronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING + 1);
 
       fail ("Expected exception while setting invalid misfire instruction but did not get it.");
     }

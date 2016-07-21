@@ -37,16 +37,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.Job;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.Scheduler;
-import com.helger.quartz.SchedulerFactory;
-import com.helger.quartz.SimpleTrigger;
+import com.helger.quartz.IScheduler;
+import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.simpl.RAMJobStore;
-import com.helger.quartz.spi.OperableTrigger;
+import com.helger.quartz.spi.IOperableTrigger;
 
 /**
  * Integration test for reproducing QTZ-336 where we don't check for the
@@ -68,15 +68,15 @@ public class QTZ336_MissSchedulingChangeSignalTest
     // Use a custom RAMJobStore to produce context switches leading to the race
     // condition
     properties.setProperty (StdSchedulerFactory.PROP_JOB_STORE_CLASS, SlowRAMJobStore.class.getName ());
-    final SchedulerFactory sf = new StdSchedulerFactory (properties);
-    final Scheduler sched = sf.getScheduler ();
+    final ISchedulerFactory sf = new StdSchedulerFactory (properties);
+    final IScheduler sched = sf.getScheduler ();
     LOG.info ("------- Initialization Complete -----------");
 
     LOG.info ("------- Scheduling Job  -------------------");
 
-    final JobDetail job = newJob (CollectDuractionBetweenFireTimesJob.class).withIdentity ("job", "group").build ();
+    final IJobDetail job = newJob (CollectDuractionBetweenFireTimesJob.class).withIdentity ("job", "group").build ();
 
-    final SimpleTrigger trigger = newTrigger ().withIdentity ("trigger1", "group1")
+    final ISimpleTrigger trigger = newTrigger ().withIdentity ("trigger1", "group1")
                                                .startAt (new Date (System.currentTimeMillis () + 1000))
                                                .withSchedule (simpleSchedule ().withIntervalInSeconds (1)
                                                                                .repeatForever ()
@@ -126,13 +126,13 @@ public class QTZ336_MissSchedulingChangeSignalTest
    * not allowing concurrent executions.
    */
   @DisallowConcurrentExecution
-  public static class CollectDuractionBetweenFireTimesJob implements Job
+  public static class CollectDuractionBetweenFireTimesJob implements IJob
   {
     private static final Logger log = LoggerFactory.getLogger (CollectDuractionBetweenFireTimesJob.class);
     private static final List <Long> durationBetweenFireTimes = Collections.synchronizedList (new ArrayList <Long> ());
     private static Long lastFireTime = null;
 
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       final Date now = new Date ();
       log.info ("Fire time: " + now);
@@ -164,11 +164,11 @@ public class QTZ336_MissSchedulingChangeSignalTest
   public static class SlowRAMJobStore extends RAMJobStore
   {
     @Override
-    public List <OperableTrigger> acquireNextTriggers (final long noLaterThan,
+    public List <IOperableTrigger> acquireNextTriggers (final long noLaterThan,
                                                        final int maxCount,
                                                        final long timeWindow)
     {
-      final List <OperableTrigger> nextTriggers = super.acquireNextTriggers (noLaterThan, maxCount, timeWindow);
+      final List <IOperableTrigger> nextTriggers = super.acquireNextTriggers (noLaterThan, maxCount, timeWindow);
       try
       {
         // Wait just a bit for hopefully having a context switch leading to the

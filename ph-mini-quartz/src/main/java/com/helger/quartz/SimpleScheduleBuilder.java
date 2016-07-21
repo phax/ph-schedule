@@ -43,18 +43,18 @@ import com.helger.quartz.impl.triggers.SimpleTriggerImpl;
  *
  * <pre>
  *
- * @see SimpleTrigger
+ * @see ISimpleTrigger
  * @see CalendarIntervalScheduleBuilder
  * @see CronScheduleBuilder
  * @see ScheduleBuilder
  * @see TriggerBuilder
  */
-public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
+public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
 {
 
   private long interval = 0;
   private int repeatCount = 0;
-  private int misfireInstruction = Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   protected SimpleScheduleBuilder ()
   {}
@@ -268,7 +268,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
    * @param intervalInMillis
    *        the number of seconds at which the trigger should repeat.
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#getRepeatInterval()
+   * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
   public SimpleScheduleBuilder withIntervalInMilliseconds (final long intervalInMillis)
@@ -284,7 +284,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
    * @param intervalInSeconds
    *        the number of seconds at which the trigger should repeat.
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#getRepeatInterval()
+   * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
   public SimpleScheduleBuilder withIntervalInSeconds (final int intervalInSeconds)
@@ -300,7 +300,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
    * @param intervalInMinutes
    *        the number of seconds at which the trigger should repeat.
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#getRepeatInterval()
+   * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
   public SimpleScheduleBuilder withIntervalInMinutes (final int intervalInMinutes)
@@ -316,7 +316,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
    * @param intervalInHours
    *        the number of seconds at which the trigger should repeat.
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#getRepeatInterval()
+   * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
   public SimpleScheduleBuilder withIntervalInHours (final int intervalInHours)
@@ -332,7 +332,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
    * @param triggerRepeatCount
    *        the number of seconds at which the trigger should repeat.
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#getRepeatCount()
+   * @see ISimpleTrigger#getRepeatCount()
    * @see #repeatForever()
    */
   public SimpleScheduleBuilder withRepeatCount (final int triggerRepeatCount)
@@ -345,8 +345,8 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
    * Specify that the trigger will repeat indefinitely.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#getRepeatCount()
-   * @see SimpleTrigger#REPEAT_INDEFINITELY
+   * @see ISimpleTrigger#getRepeatCount()
+   * @see ISimpleTrigger#REPEAT_INDEFINITELY
    * @see #withIntervalInMilliseconds(long)
    * @see #withIntervalInSeconds(int)
    * @see #withIntervalInMinutes(int)
@@ -354,90 +354,90 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
    */
   public SimpleScheduleBuilder repeatForever ()
   {
-    this.repeatCount = SimpleTrigger.REPEAT_INDEFINITELY;
+    this.repeatCount = ISimpleTrigger.REPEAT_INDEFINITELY;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
+   * {@link ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
+   * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
   public SimpleScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    misfireInstruction = Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link SimpleTrigger#MISFIRE_INSTRUCTION_FIRE_NOW} instruction.
+   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_FIRE_NOW} instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#MISFIRE_INSTRUCTION_FIRE_NOW
+   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_FIRE_NOW
    */
 
   public SimpleScheduleBuilder withMisfireHandlingInstructionFireNow ()
   {
-    misfireInstruction = SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW;
+    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link SimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT}
+   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT}
    * instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT
+   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT
    */
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithExistingCount ()
   {
-    misfireInstruction = SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT;
+    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link SimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT}
+   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT}
    * instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT
+   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT
    */
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithRemainingCount ()
   {
-    misfireInstruction = SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
+    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link SimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT}
+   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT}
    * instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT
+   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT
    */
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithExistingCount ()
   {
-    misfireInstruction = SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
+    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
     return this;
   }
 
   /**
    * If the Trigger misfires, use the
-   * {@link SimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT}
+   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT}
    * instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see SimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT
+   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT
    */
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithRemainingCount ()
   {
-    misfireInstruction = SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;
+    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;
     return this;
   }
 

@@ -20,7 +20,7 @@ package com.helger.quartz.impl.calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.helger.quartz.Calendar;
+import com.helger.quartz.ICalendar;
 
 /**
  * <p>
@@ -36,14 +36,14 @@ import com.helger.quartz.Calendar;
  * calendar for HolidayCalendar instance.
  * </p>
  *
- * @see com.helger.quartz.Calendar
+ * @see com.helger.quartz.ICalendar
  * @author Juergen Donnerstag
  * @author James House
  */
-public class BaseCalendar implements Calendar
+public class BaseCalendar implements ICalendar
 {
   // <p>A optional base calendar.</p>
-  private Calendar baseCalendar;
+  private ICalendar baseCalendar;
 
   private String description;
 
@@ -52,7 +52,7 @@ public class BaseCalendar implements Calendar
   public BaseCalendar ()
   {}
 
-  public BaseCalendar (final Calendar baseCalendar)
+  public BaseCalendar (final ICalendar baseCalendar)
   {
     setBaseCalendar (baseCalendar);
   }
@@ -72,7 +72,7 @@ public class BaseCalendar implements Calendar
    *        The time zone to use for this Calendar, <code>null</code> if
    *        <code>{@link TimeZone#getDefault()}</code> should be used
    */
-  public BaseCalendar (final Calendar baseCalendar, final TimeZone timeZone)
+  public BaseCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
   {
     setBaseCalendar (baseCalendar);
     setTimeZone (timeZone);
@@ -86,7 +86,7 @@ public class BaseCalendar implements Calendar
       final BaseCalendar clone = (BaseCalendar) super.clone ();
       if (getBaseCalendar () != null)
       {
-        clone.baseCalendar = (Calendar) getBaseCalendar ().clone ();
+        clone.baseCalendar = (ICalendar) getBaseCalendar ().clone ();
       }
       if (getTimeZone () != null)
         clone.timeZone = (TimeZone) getTimeZone ().clone ();
@@ -103,7 +103,7 @@ public class BaseCalendar implements Calendar
    * Set a new base calendar or remove the existing one
    * </p>
    */
-  public void setBaseCalendar (final Calendar baseCalendar)
+  public void setBaseCalendar (final ICalendar baseCalendar)
   {
     this.baseCalendar = baseCalendar;
   }
@@ -113,7 +113,7 @@ public class BaseCalendar implements Calendar
    * Get the base calendar. Will be null, if not set.
    * </p>
    */
-  public Calendar getBaseCalendar ()
+  public ICalendar getBaseCalendar ()
   {
     return this.baseCalendar;
   }
@@ -174,7 +174,7 @@ public class BaseCalendar implements Calendar
    * isTimeIncluded() method if base calendar is set.
    * </p>
    *
-   * @see com.helger.quartz.Calendar#isTimeIncluded(long)
+   * @see com.helger.quartz.ICalendar#isTimeIncluded(long)
    */
   public boolean isTimeIncluded (final long timeStamp)
   {
@@ -202,7 +202,7 @@ public class BaseCalendar implements Calendar
    * included. Return 0 if all days are excluded.
    * </p>
    *
-   * @see com.helger.quartz.Calendar#getNextIncludedTime(long)
+   * @see com.helger.quartz.ICalendar#getNextIncludedTime(long)
    */
   public long getNextIncludedTime (final long timeStamp)
   {

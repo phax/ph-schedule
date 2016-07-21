@@ -23,9 +23,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.Job;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJob;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.utils.Key;
@@ -37,23 +37,23 @@ public class JobBuilderTest
 {
   @PersistJobDataAfterExecution
   @DisallowConcurrentExecution
-  public static class TestStatefulJob implements Job
+  public static class TestStatefulJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
-  public static class TestJob implements Job
+  public static class TestJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
   @DisallowConcurrentExecution
   @PersistJobDataAfterExecution
-  public static class TestAnnotatedJob implements Job
+  public static class TestAnnotatedJob implements IJob
   {
-    public void execute (final JobExecutionContext context) throws JobExecutionException
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
     {}
   }
 
@@ -61,7 +61,7 @@ public class JobBuilderTest
   public void testJobBuilder () throws Exception
   {
 
-    JobDetail job = newJob ().ofType (TestJob.class).withIdentity ("j1").storeDurably ().build ();
+    IJobDetail job = newJob ().ofType (TestJob.class).withIdentity ("j1").storeDurably ().build ();
 
     assertTrue ("Unexpected job name: " + job.getKey ().getName (), job.getKey ().getName ().equals ("j1"));
     assertTrue ("Unexpected job group: " +

@@ -1,7 +1,7 @@
 package com.helger.quartz.simpl;
 
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.spi.InstanceIdGenerator;
+import com.helger.quartz.spi.IInstanceIdGenerator;
 
 /**
  * InstanceIdGenerator that will use a
@@ -15,7 +15,7 @@ import com.helger.quartz.spi.InstanceIdGenerator;
  *
  * @author Alex Snaps
  */
-public class SystemPropertyInstanceIdGenerator implements InstanceIdGenerator
+public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
 {
 
   /**

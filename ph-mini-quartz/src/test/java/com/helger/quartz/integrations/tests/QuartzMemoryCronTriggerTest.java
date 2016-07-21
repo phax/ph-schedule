@@ -30,9 +30,9 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import com.helger.quartz.CronScheduleBuilder;
-import com.helger.quartz.CronTrigger;
+import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.JobBuilder;
-import com.helger.quartz.JobDetail;
+import com.helger.quartz.IJobDetail;
 import com.helger.quartz.TriggerBuilder;
 
 /**
@@ -45,13 +45,13 @@ public class QuartzMemoryCronTriggerTest extends QuartzMemoryTestSupport
   @Test
   public void testCronRepeatCount () throws Exception
   {
-    final CronTrigger trigger = TriggerBuilder.newTrigger ()
+    final ICronTrigger trigger = TriggerBuilder.newTrigger ()
                                               .withIdentity ("test")
                                               .withSchedule (CronScheduleBuilder.cronSchedule ("* * * * * ?"))
                                               .build ();
     final List <Long> scheduledTimes = Collections.synchronizedList (new LinkedList <Long> ());
     scheduler.getContext ().put (SCHEDULED_TIMES_KEY, scheduledTimes);
-    final JobDetail jobDetail = JobBuilder.newJob (TrackingJob.class).withIdentity ("test").build ();
+    final IJobDetail jobDetail = JobBuilder.newJob (TrackingJob.class).withIdentity ("test").build ();
     scheduler.scheduleJob (jobDetail, trigger);
 
     for (int i = 0; i < 20 && scheduledTimes.size () < 3; i++)

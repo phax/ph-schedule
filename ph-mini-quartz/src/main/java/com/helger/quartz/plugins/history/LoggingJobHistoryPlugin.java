@@ -22,16 +22,16 @@ import java.text.MessageFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobListener;
-import com.helger.quartz.Scheduler;
+import com.helger.quartz.IJobListener;
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
-import com.helger.quartz.spi.ClassLoadHelper;
-import com.helger.quartz.spi.SchedulerPlugin;
+import com.helger.quartz.spi.IClassLoadHelper;
+import com.helger.quartz.spi.ISchedulerPlugin;
 
 /**
  * Logs a history of all job executions (and execution vetos) via the Jakarta
@@ -264,7 +264,7 @@ import com.helger.quartz.spi.SchedulerPlugin;
  *
  * @author James House
  */
-public class LoggingJobHistoryPlugin implements SchedulerPlugin, JobListener
+public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
 {
 
   /*
@@ -401,8 +401,8 @@ public class LoggingJobHistoryPlugin implements SchedulerPlugin, JobListener
    *         if there is an error initializing.
    */
   public void initialize (final String pname,
-                          final Scheduler scheduler,
-                          final ClassLoadHelper classLoadHelper) throws SchedulerException
+                          final IScheduler scheduler,
+                          final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
     this.name = pname;
     scheduler.getListenerManager ().addJobListener (this, EverythingMatcher.allJobs ());
@@ -443,16 +443,16 @@ public class LoggingJobHistoryPlugin implements SchedulerPlugin, JobListener
   }
 
   /**
-   * @see com.helger.quartz.JobListener#jobToBeExecuted(JobExecutionContext)
+   * @see com.helger.quartz.IJobListener#jobToBeExecuted(IJobExecutionContext)
    */
-  public void jobToBeExecuted (final JobExecutionContext context)
+  public void jobToBeExecuted (final IJobExecutionContext context)
   {
     if (!getLog ().isInfoEnabled ())
     {
       return;
     }
 
-    final Trigger trigger = context.getTrigger ();
+    final ITrigger trigger = context.getTrigger ();
 
     final Object [] args = { context.getJobDetail ().getKey ().getName (),
                              context.getJobDetail ().getKey ().getGroup (),
@@ -467,13 +467,13 @@ public class LoggingJobHistoryPlugin implements SchedulerPlugin, JobListener
   }
 
   /**
-   * @see com.helger.quartz.JobListener#jobWasExecuted(JobExecutionContext,
+   * @see com.helger.quartz.IJobListener#jobWasExecuted(IJobExecutionContext,
    *      JobExecutionException)
    */
-  public void jobWasExecuted (final JobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
 
-    final Trigger trigger = context.getTrigger ();
+    final ITrigger trigger = context.getTrigger ();
 
     Object [] args = null;
 
@@ -520,9 +520,9 @@ public class LoggingJobHistoryPlugin implements SchedulerPlugin, JobListener
   }
 
   /**
-   * @see com.helger.quartz.JobListener#jobExecutionVetoed(com.helger.quartz.JobExecutionContext)
+   * @see com.helger.quartz.IJobListener#jobExecutionVetoed(com.helger.quartz.IJobExecutionContext)
    */
-  public void jobExecutionVetoed (final JobExecutionContext context)
+  public void jobExecutionVetoed (final IJobExecutionContext context)
   {
 
     if (!getLog ().isInfoEnabled ())
@@ -530,7 +530,7 @@ public class LoggingJobHistoryPlugin implements SchedulerPlugin, JobListener
       return;
     }
 
-    final Trigger trigger = context.getTrigger ();
+    final ITrigger trigger = context.getTrigger ();
 
     final Object [] args = { context.getJobDetail ().getKey ().getName (),
                              context.getJobDetail ().getKey ().getGroup (),

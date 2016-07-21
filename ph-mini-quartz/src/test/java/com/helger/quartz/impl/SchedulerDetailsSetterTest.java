@@ -16,7 +16,7 @@ import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.simpl.SimpleThreadPool;
-import com.helger.quartz.spi.ThreadPool;
+import com.helger.quartz.spi.IThreadPool;
 
 public class SchedulerDetailsSetterTest
 {
@@ -50,7 +50,7 @@ public class SchedulerDetailsSetterTest
   @Test
   public void testUnimplementedMethods () throws Exception
   {
-    final ThreadPool tp = makeIncompleteThreadPool ();
+    final IThreadPool tp = makeIncompleteThreadPool ();
     try
     {
       tp.setInstanceName ("name");
@@ -64,7 +64,7 @@ public class SchedulerDetailsSetterTest
     SchedulerDetailsSetter.setDetails (tp, "name", "id");
   }
 
-  private ThreadPool makeIncompleteThreadPool () throws InstantiationException, IllegalAccessException
+  private IThreadPool makeIncompleteThreadPool () throws InstantiationException, IllegalAccessException
   {
     final String name = "IncompleteThreadPool";
     final ClassWriter cw = new ClassWriter (0);
@@ -73,7 +73,7 @@ public class SchedulerDetailsSetterTest
               name,
               null,
               "java/lang/Object",
-              new String [] { "com/helger/quartz/spi/ThreadPool" });
+              new String [] { "com/helger/quartz/spi/IThreadPool" });
 
     final MethodVisitor mv = cw.visitMethod (Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
     mv.visitCode ();
@@ -85,7 +85,7 @@ public class SchedulerDetailsSetterTest
 
     cw.visitEnd ();
 
-    return (ThreadPool) new ClassLoader ()
+    return (IThreadPool) new ClassLoader ()
     {
       Class <?> defineClass (final String clname, final byte [] b)
       {

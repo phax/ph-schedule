@@ -21,30 +21,30 @@ package com.helger.quartz.impl;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.helger.quartz.Calendar;
-import com.helger.quartz.Job;
+import com.helger.quartz.ICalendar;
+import com.helger.quartz.IJob;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobDetail;
-import com.helger.quartz.JobExecutionContext;
-import com.helger.quartz.Scheduler;
-import com.helger.quartz.Trigger;
+import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduler;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.spi.OperableTrigger;
+import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
-public class JobExecutionContextImpl implements java.io.Serializable, JobExecutionContext
+public class JobExecutionContextImpl implements java.io.Serializable, IJobExecutionContext
 {
-  private transient Scheduler scheduler;
+  private transient IScheduler scheduler;
 
-  private final Trigger trigger;
+  private final ITrigger trigger;
 
-  private final JobDetail jobDetail;
+  private final IJobDetail jobDetail;
 
   private final JobDataMap jobDataMap;
 
-  private transient Job job;
+  private transient IJob job;
 
-  private final Calendar calendar;
+  private final ICalendar calendar;
 
   private boolean recovering = false;
 
@@ -75,7 +75,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
    * Create a JobExcecutionContext with the given context data.
    * </p>
    */
-  public JobExecutionContextImpl (final Scheduler scheduler, final TriggerFiredBundle firedBundle, final Job job)
+  public JobExecutionContextImpl (final IScheduler scheduler, final TriggerFiredBundle firedBundle, final IJob job)
   {
     this.scheduler = scheduler;
     this.trigger = firedBundle.getTrigger ();
@@ -102,7 +102,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
   /**
    * {@inheritDoc}
    */
-  public Scheduler getScheduler ()
+  public IScheduler getScheduler ()
   {
     return scheduler;
   }
@@ -110,7 +110,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
   /**
    * {@inheritDoc}
    */
-  public Trigger getTrigger ()
+  public ITrigger getTrigger ()
   {
     return trigger;
   }
@@ -118,7 +118,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
   /**
    * {@inheritDoc}
    */
-  public Calendar getCalendar ()
+  public ICalendar getCalendar ()
   {
     return calendar;
   }
@@ -135,8 +135,8 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
   {
     if (isRecovering ())
     {
-      return new TriggerKey (jobDataMap.getString (Scheduler.FAILED_JOB_ORIGINAL_TRIGGER_GROUP),
-                             jobDataMap.getString (Scheduler.FAILED_JOB_ORIGINAL_TRIGGER_NAME));
+      return new TriggerKey (jobDataMap.getString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_GROUP),
+                             jobDataMap.getString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_NAME));
     }
     throw new IllegalStateException ("Not a recovering job");
   }
@@ -165,7 +165,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
   /**
    * {@inheritDoc}
    */
-  public JobDetail getJobDetail ()
+  public IJobDetail getJobDetail ()
   {
     return jobDetail;
   }
@@ -173,7 +173,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
   /**
    * {@inheritDoc}
    */
-  public Job getJobInstance ()
+  public IJob getJobInstance ()
   {
     return job;
   }
@@ -286,6 +286,6 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
    */
   public String getFireInstanceId ()
   {
-    return ((OperableTrigger) trigger).getFireInstanceId ();
+    return ((IOperableTrigger) trigger).getFireInstanceId ();
   }
 }

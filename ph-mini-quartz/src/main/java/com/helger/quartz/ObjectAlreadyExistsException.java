@@ -20,8 +20,8 @@ package com.helger.quartz;
 
 /**
  * An exception that is thrown to indicate that an attempt to store a new object
- * (i.e. <code>{@link com.helger.quartz.JobDetail}</code>,<code>{@link Trigger}</code>
- * or <code>{@link Calendar}</code>) in a <code>{@link Scheduler}</code> failed,
+ * (i.e. <code>{@link com.helger.quartz.IJobDetail}</code>,<code>{@link ITrigger}</code>
+ * or <code>{@link ICalendar}</code>) in a <code>{@link IScheduler}</code> failed,
  * because one with the same name & group already exists.
  *
  * @author James House
@@ -49,7 +49,7 @@ public class ObjectAlreadyExistsException extends JobPersistenceException
    * exists with this identification."
    * </p>
    */
-  public ObjectAlreadyExistsException (final JobDetail offendingJob)
+  public ObjectAlreadyExistsException (final IJobDetail offendingJob)
   {
     super ("Unable to store Job : '" +
            offendingJob.getKey () +
@@ -67,7 +67,7 @@ public class ObjectAlreadyExistsException extends JobPersistenceException
    * already exists with this identification."
    * </p>
    */
-  public ObjectAlreadyExistsException (final Trigger offendingTrigger)
+  public ObjectAlreadyExistsException (final ITrigger offendingTrigger)
   {
     super ("Unable to store Trigger with name: '" +
            offendingTrigger.getKey ().getName () +
