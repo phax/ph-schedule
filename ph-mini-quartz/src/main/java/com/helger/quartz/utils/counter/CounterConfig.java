@@ -54,6 +54,6 @@ public class CounterConfig
    */
   public ICounter createCounter ()
   {
-    return new CounterImpl (initialValue);
+    return new Counter (initialValue);
   }
 }

@@ -97,6 +97,6 @@ public class SampledCounterConfig extends CounterConfig
   @Override
   public ICounter createCounter ()
   {
-    return new SampledCounterImpl (this);
+    return new SampledCounter (this);
   }
 }

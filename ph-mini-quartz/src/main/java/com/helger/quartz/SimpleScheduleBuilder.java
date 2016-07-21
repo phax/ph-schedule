@@ -17,7 +17,7 @@
 
 package com.helger.quartz;
 
-import com.helger.quartz.impl.triggers.SimpleTriggerImpl;
+import com.helger.quartz.impl.triggers.SimpleTrigger;
 
 /**
  * <code>SimpleScheduleBuilder</code> is a {@link ScheduleBuilder} that defines
@@ -251,10 +251,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
-  public SimpleTriggerImpl build ()
+  public SimpleTrigger build ()
   {
 
-    final SimpleTriggerImpl st = new SimpleTriggerImpl ();
+    final SimpleTrigger st = new SimpleTrigger ();
     st.setRepeatInterval (interval);
     st.setRepeatCount (repeatCount);
     st.setMisfireInstruction (misfireInstruction);

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.helger.quartz.impl.JobDetailImpl;
 
-public class JobDetailImplTest
+public class JobDetailTest
 {
   @Test
   public void testHashCode ()

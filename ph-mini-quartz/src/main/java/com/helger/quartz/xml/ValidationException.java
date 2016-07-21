@@ -20,6 +20,7 @@ package com.helger.quartz.xml;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Reports JobSchedulingDataLoader validation exceptions.
@@ -28,7 +29,7 @@ import java.util.Collections;
  */
 public class ValidationException extends Exception
 {
-  private Collection <Exception> validationExceptions = new ArrayList<> ();
+  private List <Exception> validationExceptions = new ArrayList<> ();
 
   /**
    * Constructor for ValidationException.
@@ -58,7 +59,7 @@ public class ValidationException extends Exception
   public ValidationException (final Collection <Exception> errors)
   {
     this ();
-    this.validationExceptions = Collections.unmodifiableCollection (validationExceptions);
+    this.validationExceptions = Collections.unmodifiableList (validationExceptions);
     initCause (errors.iterator ().next ());
   }
 
@@ -73,7 +74,7 @@ public class ValidationException extends Exception
   public ValidationException (final String message, final Collection <Exception> errors)
   {
     this (message);
-    this.validationExceptions = Collections.unmodifiableCollection (validationExceptions);
+    this.validationExceptions = Collections.unmodifiableList (validationExceptions);
     initCause (errors.iterator ().next ());
   }
 
@@ -88,7 +89,7 @@ public class ValidationException extends Exception
    *
    * @return collection of errors.
    */
-  public Collection <Exception> getValidationExceptions ()
+  public List <Exception> getValidationExceptions ()
   {
     return validationExceptions;
   }
@@ -101,27 +102,19 @@ public class ValidationException extends Exception
   @Override
   public String getMessage ()
   {
-    if (getValidationExceptions ().size () == 0)
-    {
+    if (getValidationExceptions ().isEmpty ())
       return super.getMessage ();
-    }
 
-    final StringBuffer sb = new StringBuffer ();
-
+    final StringBuilder sb = new StringBuilder ();
     boolean first = true;
-
     for (final Exception e : getValidationExceptions ())
     {
-      if (!first)
-      {
-        sb.append ('\n');
+      if (first)
         first = false;
-      }
-
+      else
+        sb.append ('\n');
       sb.append (e.getMessage ());
     }
-
     return sb.toString ();
   }
-
 }

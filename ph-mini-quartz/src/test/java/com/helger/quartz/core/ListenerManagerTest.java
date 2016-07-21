@@ -30,7 +30,7 @@ import com.helger.quartz.IJobListener;
 import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITriggerListener;
-import com.helger.quartz.core.ListenerManagerImpl;
+import com.helger.quartz.core.ListenerManager;
 import com.helger.quartz.impl.matchers.NameMatcher;
 import com.helger.quartz.listeners.AbstractJobListenerSupport;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
@@ -86,7 +86,7 @@ public class ListenerManagerTest
     final IJobListener tl1 = new TestJobListener ("tl1");
     final IJobListener tl2 = new TestJobListener ("tl2");
 
-    ListenerManagerImpl manager = new ListenerManagerImpl ();
+    ListenerManager manager = new ListenerManager ();
 
     // test adding listener without matcher
     manager.addJobListener (tl1);
@@ -106,7 +106,7 @@ public class ListenerManagerTest
 
     // Test ordering of registration is preserved.
     final int numListenersToTestOrderOf = 15;
-    manager = new ListenerManagerImpl ();
+    manager = new ListenerManager ();
     final IJobListener [] lstners = new IJobListener [numListenersToTestOrderOf];
     for (int i = 0; i < numListenersToTestOrderOf; i++)
     {
@@ -131,7 +131,7 @@ public class ListenerManagerTest
     final ITriggerListener tl1 = new TestTriggerListener ("tl1");
     final ITriggerListener tl2 = new TestTriggerListener ("tl2");
 
-    ListenerManagerImpl manager = new ListenerManagerImpl ();
+    ListenerManager manager = new ListenerManager ();
 
     // test adding listener without matcher
     manager.addTriggerListener (tl1);
@@ -151,7 +151,7 @@ public class ListenerManagerTest
 
     // Test ordering of registration is preserved.
     final int numListenersToTestOrderOf = 15;
-    manager = new ListenerManagerImpl ();
+    manager = new ListenerManager ();
     final ITriggerListener [] lstners = new ITriggerListener [numListenersToTestOrderOf];
     for (int i = 0; i < numListenersToTestOrderOf; i++)
     {
@@ -176,7 +176,7 @@ public class ListenerManagerTest
     final ISchedulerListener tl1 = new TestSchedulerListener ();
     final ISchedulerListener tl2 = new TestSchedulerListener ();
 
-    ListenerManagerImpl manager = new ListenerManagerImpl ();
+    ListenerManager manager = new ListenerManager ();
 
     // test adding listener without matcher
     manager.addSchedulerListener (tl1);
@@ -192,7 +192,7 @@ public class ListenerManagerTest
 
     // Test ordering of registration is preserved.
     final int numListenersToTestOrderOf = 15;
-    manager = new ListenerManagerImpl ();
+    manager = new ListenerManager ();
     final ISchedulerListener [] lstners = new ISchedulerListener [numListenersToTestOrderOf];
     for (int i = 0; i < numListenersToTestOrderOf; i++)
     {

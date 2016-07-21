@@ -15,7 +15,7 @@ import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounterConfig;
 import com.helger.quartz.utils.counter.sampled.SampledRateCounterConfig;
 
-public class SampledStatisticsImpl extends AbstractSchedulerListenerSupport implements ISampledStatistics, IJobListener
+public class SampledStatistics extends AbstractSchedulerListenerSupport implements ISampledStatistics, IJobListener
 {
   @SuppressWarnings ("unused")
   private final QuartzScheduler scheduler;
@@ -38,7 +38,7 @@ public class SampledStatisticsImpl extends AbstractSchedulerListenerSupport impl
   private final ISampledCounter jobsExecutingCount;
   private final ISampledCounter jobsCompletedCount;
 
-  SampledStatisticsImpl (final QuartzScheduler scheduler)
+  SampledStatistics (final QuartzScheduler scheduler)
   {
     this.scheduler = scheduler;
 

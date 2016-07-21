@@ -132,7 +132,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   private final QuartzSchedulerThread schedThread;
   private ThreadGroup threadGroup;
   private final SchedulerContext context = new SchedulerContext ();
-  private final IListenerManager listenerManager = new ListenerManagerImpl ();
+  private final IListenerManager listenerManager = new ListenerManager ();
   private final Map <String, IJobListener> internalJobListeners = new HashMap<> (10);
   private final Map <String, ITriggerListener> internalTriggerListeners = new HashMap<> (10);
   private final List <ISchedulerListener> internalSchedulerListeners = new ArrayList<> (10);
@@ -179,7 +179,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
     errLogger = new ErrorLogger ();
     addInternalSchedulerListener (errLogger);
 
-    signaler = new SchedulerSignalerImpl (this, this.schedThread);
+    signaler = new SchedulerSignaler (this, this.schedThread);
 
     getLog ().info ("Quartz Scheduler v." + getVersion () + " created.");
   }

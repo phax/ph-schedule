@@ -36,12 +36,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.io.resource.ClassPathResource;
+import com.helger.commons.io.stream.StreamHelper;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerConfigException;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.ITriggerListener;
+import com.helger.quartz.SchedulerConfigException;
+import com.helger.quartz.SchedulerException;
 import com.helger.quartz.core.IJobRunShellFactory;
 import com.helger.quartz.core.QuartzScheduler;
 import com.helger.quartz.core.QuartzSchedulerResources;
@@ -206,8 +207,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
-   * the contents of a <code>Properties</code> file and overriding System
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
+   * with the contents of a <code>Properties</code> file and overriding System
    * properties.
    * </p>
    * <p>
@@ -273,7 +274,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       else
         if (requestedFile != null)
         {
-          in = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (requestedFile);
+          in = ClassPathResource.getInputStream (requestedFile);
 
           if (in == null)
           {
@@ -323,15 +324,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
     finally
     {
-      if (in != null)
-      {
-        try
-        {
-          in.close ();
-        }
-        catch (final IOException ignore)
-        { /* ignore */ }
-      }
+      StreamHelper.close (in);
     }
 
     initialize (overrideWithSysProps (props));
@@ -369,8 +362,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
-   * the contents of the <code>Properties</code> file with the given name.
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
+   * with the contents of the <code>Properties</code> file with the given name.
    * </p>
    */
   public void initialize (final String filename) throws SchedulerException
@@ -388,8 +381,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
     final Properties props = new Properties ();
 
-    InputStream is = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (filename);
-
+    InputStream is = ClassPathResource.getInputStream (filename);
     try
     {
       if (is != null)
@@ -411,13 +403,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
     finally
     {
-      if (is != null)
-        try
-        {
-          is.close ();
-        }
-        catch (final IOException ignore)
-        {}
+      StreamHelper.close (is);
     }
 
     initialize (props);
@@ -425,8 +411,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
-   * the contents of the <code>Properties</code> file opened with the given
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
+   * with the contents of the <code>Properties</code> file opened with the given
    * <code>InputStream</code>.
    * </p>
    */
@@ -468,8 +454,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
-   * the contents of the given <code>Properties</code> object.
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
+   * with the contents of the given <code>Properties</code> object.
    *
    * @throws SchedulerException
    */
@@ -624,7 +610,6 @@ public class StdSchedulerFactory implements ISchedulerFactory
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     final String tpClass = cfg.getStringProperty (PROP_THREAD_POOL_CLASS, SimpleThreadPool.class.getName ());
-
     if (tpClass == null)
     {
       initException = new SchedulerException ("ThreadPool class not specified. ");

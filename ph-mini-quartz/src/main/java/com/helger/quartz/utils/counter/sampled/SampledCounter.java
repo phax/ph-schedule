@@ -19,7 +19,7 @@ package com.helger.quartz.utils.counter.sampled;
 import java.util.TimerTask;
 
 import com.helger.quartz.utils.CircularLossyQueue;
-import com.helger.quartz.utils.counter.CounterImpl;
+import com.helger.quartz.utils.counter.Counter;
 
 /**
  * An implementation of {@link ISampledCounter}
@@ -27,7 +27,7 @@ import com.helger.quartz.utils.counter.CounterImpl;
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7
  */
-public class SampledCounterImpl extends CounterImpl implements ISampledCounter
+public class SampledCounter extends Counter implements ISampledCounter
 {
   private static final int MILLIS_PER_SEC = 1000;
 
@@ -48,7 +48,7 @@ public class SampledCounterImpl extends CounterImpl implements ISampledCounter
    *
    * @param config
    */
-  public SampledCounterImpl (final SampledCounterConfig config)
+  public SampledCounter (final SampledCounterConfig config)
   {
     super (config.getInitialValue ());
 

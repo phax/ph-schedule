@@ -72,7 +72,7 @@ public class SampledRateCounterConfig extends SampledCounterConfig
   @Override
   public ICounter createCounter ()
   {
-    final SampledRateCounterImpl sampledRateCounter = new SampledRateCounterImpl (this);
+    final SampledRateCounter sampledRateCounter = new SampledRateCounter (this);
     sampledRateCounter.setValue (initialNumeratorValue, initialDenominatorValue);
     return sampledRateCounter;
   }

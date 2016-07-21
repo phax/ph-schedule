@@ -37,14 +37,14 @@ import com.helger.quartz.TimeOfDay;
 import com.helger.quartz.TriggerUtils;
 import com.helger.quartz.DateBuilder.IntervalUnit;
 import com.helger.quartz.impl.calendar.CronCalendar;
-import com.helger.quartz.impl.triggers.DailyTimeIntervalTriggerImpl;
+import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
 /**
- * Unit test for {@link DailyTimeIntervalTriggerImpl}.
+ * Unit test for {@link DailyTimeIntervalTrigger}.
  *
  * @author Zemian Deng <saltnlight5@gmail.com>
  */
-public class DailyTimeIntervalTriggerImplTest
+public class DailyTimeIntervalTriggerTest
 {
   @Test
   public void testNormalExample () throws Exception
@@ -52,7 +52,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (11, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -70,7 +70,7 @@ public class DailyTimeIntervalTriggerImplTest
   public void testQuartzCalendarExclusion () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (new TimeOfDay (8, 0));
     trigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.MINUTE);
@@ -89,7 +89,7 @@ public class DailyTimeIntervalTriggerImplTest
   @Test
   public void testValidateTimeOfDayOrder () throws Exception
   {
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTimeOfDay (new TimeOfDay (12, 0, 0));
     trigger.setEndTimeOfDay (new TimeOfDay (8, 0, 0));
     try
@@ -106,7 +106,7 @@ public class DailyTimeIntervalTriggerImplTest
   @Test
   public void testValidateInterval () throws Exception
   {
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setName ("test");
     trigger.setGroup ("test");
     trigger.setJobKey (JobKey.jobKey ("test"));
@@ -175,7 +175,7 @@ public class DailyTimeIntervalTriggerImplTest
   public void testStartTimeWithoutStartTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.MINUTE);
     trigger.setRepeatInterval (60);
@@ -191,7 +191,7 @@ public class DailyTimeIntervalTriggerImplTest
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final Date endTime = dateOf (22, 0, 0, 2, 1, 2011);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
     trigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.MINUTE);
@@ -208,7 +208,7 @@ public class DailyTimeIntervalTriggerImplTest
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.MINUTE);
@@ -226,7 +226,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011); // Jan 1, 2011 was a
                                                          // saturday...
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     final Set <Integer> daysOfWeek = new HashSet<> ();
     daysOfWeek.add (DateBuilder.MONDAY);
     daysOfWeek.add (DateBuilder.TUESDAY);
@@ -252,7 +252,7 @@ public class DailyTimeIntervalTriggerImplTest
   {
     final Date startTime = dateOf (9, 23, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.MINUTE);
@@ -270,7 +270,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final Date endTime = dateOf (16, 0, 0, 2, 1, 2011);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -290,7 +290,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final Date endTime = dateOf (18, 0, 0, 2, 1, 2011);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -310,7 +310,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -338,7 +338,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date endTime = dateOf (0, 0, 0, 4, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -370,7 +370,7 @@ public class DailyTimeIntervalTriggerImplTest
                                                                // last second of
                                                                // day, which is
                                                                // default too.
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -390,7 +390,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011); // SAT
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -419,7 +419,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011); // SAT(7)
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -444,7 +444,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011); // SAT(7)
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -470,7 +470,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011); // SAT(7)
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -502,7 +502,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date endTime = dateOf (0, 0, 0, 4, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (10, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -524,7 +524,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date endTime = dateOf (13, 0, 0, 15, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 1, 15);
     final TimeOfDay endTimeOfDay = new TimeOfDay (16, 1, 15);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTime (endTime);
@@ -544,7 +544,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 2);
     final TimeOfDay endTimeOfDay = new TimeOfDay (13, 30, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -563,7 +563,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (11, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -586,7 +586,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (11, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -606,7 +606,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (11, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -625,7 +625,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (13, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -647,7 +647,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2012);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (13, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -676,7 +676,7 @@ public class DailyTimeIntervalTriggerImplTest
     final Date startTime = dateOf (8, 0, 0, 1, 1, 2012);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (13, 0, 0);
-    final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
     trigger.setEndTimeOfDay (endTimeOfDay);
@@ -691,7 +691,7 @@ public class DailyTimeIntervalTriggerImplTest
   {
     // A test case for QTZ-389 - some extra constructors didn't set all
     // parameters
-    DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ("triggerName",
+    DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ("triggerName",
                                                                              "triggerGroup",
                                                                              "jobName",
                                                                              "jobGroup",
@@ -713,7 +713,7 @@ public class DailyTimeIntervalTriggerImplTest
     assertEquals (IntervalUnit.HOUR, trigger.getRepeatIntervalUnit ());
     assertEquals (1, trigger.getRepeatInterval ());
 
-    trigger = new DailyTimeIntervalTriggerImpl ("triggerName",
+    trigger = new DailyTimeIntervalTrigger ("triggerName",
                                                 "triggerGroup",
                                                 dateOf (8, 0, 0, 1, 1, 2012),
                                                 null,

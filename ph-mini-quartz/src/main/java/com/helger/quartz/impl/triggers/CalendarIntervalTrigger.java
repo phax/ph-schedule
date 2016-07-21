@@ -69,7 +69,7 @@ import com.helger.quartz.TriggerUtils;
  * @since 1.7
  * @author James House
  */
-public class CalendarIntervalTriggerImpl extends AbstractTrigger <ICalendarIntervalTrigger>
+public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalTrigger>
                                          implements ICalendarIntervalTrigger, ICoreTrigger
 {
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
@@ -118,7 +118,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <ICalendarInter
    * Create a <code>DateIntervalTrigger</code> with no settings.
    * </p>
    */
-  public CalendarIntervalTriggerImpl ()
+  public CalendarIntervalTrigger ()
   {
     super ();
   }
@@ -129,7 +129,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <ICalendarInter
    * repeat at the the given interval.
    * </p>
    */
-  public CalendarIntervalTriggerImpl (final String name, final IntervalUnit intervalUnit, final int repeatInterval)
+  public CalendarIntervalTrigger (final String name, final IntervalUnit intervalUnit, final int repeatInterval)
   {
     this (name, null, intervalUnit, repeatInterval);
   }
@@ -140,7 +140,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <ICalendarInter
    * repeat at the the given interval.
    * </p>
    */
-  public CalendarIntervalTriggerImpl (final String name,
+  public CalendarIntervalTrigger (final String name,
                                       final String group,
                                       final IntervalUnit intervalUnit,
                                       final int repeatInterval)
@@ -165,7 +165,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <ICalendarInter
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    */
-  public CalendarIntervalTriggerImpl (final String name,
+  public CalendarIntervalTrigger (final String name,
                                       final Date startTime,
                                       final Date endTime,
                                       final IntervalUnit intervalUnit,
@@ -191,7 +191,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <ICalendarInter
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    */
-  public CalendarIntervalTriggerImpl (final String name,
+  public CalendarIntervalTrigger (final String name,
                                       final String group,
                                       final Date startTime,
                                       final Date endTime,
@@ -224,7 +224,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <ICalendarInter
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    */
-  public CalendarIntervalTriggerImpl (final String name,
+  public CalendarIntervalTrigger (final String name,
                                       final String group,
                                       final String jobName,
                                       final String jobGroup,

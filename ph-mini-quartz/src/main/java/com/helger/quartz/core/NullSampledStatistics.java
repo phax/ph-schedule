@@ -1,6 +1,6 @@
 package com.helger.quartz.core;
 
-public class NullSampledStatisticsImpl implements ISampledStatistics
+public class NullSampledStatistics implements ISampledStatistics
 {
   public long getJobsCompletedMostRecentSample ()
   {

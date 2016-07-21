@@ -20,7 +20,7 @@ package com.helger.quartz;
 import java.util.TimeZone;
 
 import com.helger.quartz.DateBuilder.IntervalUnit;
-import com.helger.quartz.impl.triggers.CalendarIntervalTriggerImpl;
+import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
 /**
  * <code>CalendarIntervalScheduleBuilder</code> is a {@link ScheduleBuilder}
@@ -85,10 +85,10 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
-  public CalendarIntervalTriggerImpl build ()
+  public CalendarIntervalTrigger build ()
   {
 
-    final CalendarIntervalTriggerImpl st = new CalendarIntervalTriggerImpl ();
+    final CalendarIntervalTrigger st = new CalendarIntervalTrigger ();
     st.setRepeatInterval (interval);
     st.setRepeatIntervalUnit (intervalUnit);
     st.setMisfireInstruction (misfireInstruction);

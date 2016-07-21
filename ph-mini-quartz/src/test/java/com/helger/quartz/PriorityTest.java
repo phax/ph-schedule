@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import com.helger.quartz.impl.JobDetailImpl;
 import com.helger.quartz.impl.StdSchedulerFactory;
-import com.helger.quartz.impl.triggers.SimpleTriggerImpl;
+import com.helger.quartz.impl.triggers.SimpleTrigger;
 import com.helger.quartz.simpl.SimpleThreadPool;
 import com.helger.quartz.spi.IMutableTrigger;
 
@@ -70,8 +70,8 @@ public class PriorityTest
     final Calendar cal = Calendar.getInstance ();
     cal.add (Calendar.SECOND, 1);
 
-    final IMutableTrigger trig1 = new SimpleTriggerImpl ("T1", null, cal.getTime ());
-    final IMutableTrigger trig2 = new SimpleTriggerImpl ("T2", null, cal.getTime ());
+    final IMutableTrigger trig1 = new SimpleTrigger ("T1", null, cal.getTime ());
+    final IMutableTrigger trig2 = new SimpleTrigger ("T2", null, cal.getTime ());
 
     final IJobDetail jobDetail = new JobDetailImpl ("JD", null, TestJob.class);
 
@@ -102,10 +102,10 @@ public class PriorityTest
     final Calendar cal = Calendar.getInstance ();
     cal.add (Calendar.SECOND, 1);
 
-    final IMutableTrigger trig1 = new SimpleTriggerImpl ("T1", null, cal.getTime ());
+    final IMutableTrigger trig1 = new SimpleTrigger ("T1", null, cal.getTime ());
     trig1.setPriority (5);
 
-    final IMutableTrigger trig2 = new SimpleTriggerImpl ("T2", null, cal.getTime ());
+    final IMutableTrigger trig2 = new SimpleTrigger ("T2", null, cal.getTime ());
     trig2.setPriority (10);
 
     final IJobDetail jobDetail = new JobDetailImpl ("JD", null, TestJob.class);

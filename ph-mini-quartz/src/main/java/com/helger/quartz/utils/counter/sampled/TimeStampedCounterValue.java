@@ -69,5 +69,4 @@ public class TimeStampedCounterValue implements Serializable
   {
     return "value: " + this.counterValue + ", timestamp: " + this.timestamp;
   }
-
 }

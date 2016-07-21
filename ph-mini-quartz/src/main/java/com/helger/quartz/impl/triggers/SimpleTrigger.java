@@ -45,7 +45,7 @@ import com.helger.quartz.TriggerUtils;
  * @author James House
  * @author contributions by Lieven Govaerts of Ebitec Nv, Belgium.
  */
-public class SimpleTriggerImpl extends AbstractTrigger <ISimpleTrigger> implements ISimpleTrigger, ICoreTrigger
+public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements ISimpleTrigger, ICoreTrigger
 {
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
                                                                             .get (java.util.Calendar.YEAR) +
@@ -72,13 +72,13 @@ public class SimpleTriggerImpl extends AbstractTrigger <ISimpleTrigger> implemen
    * Create a <code>SimpleTrigger</code> with no settings.
    * </p>
    */
-  public SimpleTriggerImpl ()
+  public SimpleTrigger ()
   {
     super ();
   }
 
   @Deprecated
-  public SimpleTriggerImpl (final String name, final String group, final Date startTime)
+  public SimpleTrigger (final String name, final String group, final Date startTime)
   {
     super (name, group);
 
@@ -88,7 +88,7 @@ public class SimpleTriggerImpl extends AbstractTrigger <ISimpleTrigger> implemen
   }
 
   @Deprecated
-  public SimpleTriggerImpl (final String name,
+  public SimpleTrigger (final String name,
                             final String group,
                             final String jobName,
                             final String jobGroup,

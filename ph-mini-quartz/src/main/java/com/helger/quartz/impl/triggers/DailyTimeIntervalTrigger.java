@@ -88,7 +88,7 @@ import com.helger.quartz.ITrigger;
  * @author James House
  * @author Zemian Deng <saltnlight5@gmail.com>
  */
-public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <IDailyTimeIntervalTrigger>
+public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeIntervalTrigger>
                                           implements IDailyTimeIntervalTrigger, ICoreTrigger
 {
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
@@ -130,7 +130,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <IDailyTimeInt
    * Create a <code>DailyTimeIntervalTrigger</code> with no settings.
    * </p>
    */
-  public DailyTimeIntervalTriggerImpl ()
+  public DailyTimeIntervalTrigger ()
   {
     super ();
   }
@@ -154,7 +154,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <IDailyTimeInt
    *         if an invalid IntervalUnit is given, or the repeat interval is zero
    *         or less.
    */
-  public DailyTimeIntervalTriggerImpl (final String name,
+  public DailyTimeIntervalTrigger (final String name,
                                        final TimeOfDay startTimeOfDay,
                                        final TimeOfDay endTimeOfDay,
                                        final IntervalUnit intervalUnit,
@@ -182,7 +182,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <IDailyTimeInt
    *         if an invalid IntervalUnit is given, or the repeat interval is zero
    *         or less.
    */
-  public DailyTimeIntervalTriggerImpl (final String name,
+  public DailyTimeIntervalTrigger (final String name,
                                        final String group,
                                        final TimeOfDay startTimeOfDay,
                                        final TimeOfDay endTimeOfDay,
@@ -219,7 +219,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <IDailyTimeInt
    *         if an invalid IntervalUnit is given, or the repeat interval is zero
    *         or less.
    */
-  public DailyTimeIntervalTriggerImpl (final String name,
+  public DailyTimeIntervalTrigger (final String name,
                                        final Date startTime,
                                        final Date endTime,
                                        final TimeOfDay startTimeOfDay,
@@ -257,7 +257,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <IDailyTimeInt
    *         if an invalid IntervalUnit is given, or the repeat interval is zero
    *         or less.
    */
-  public DailyTimeIntervalTriggerImpl (final String name,
+  public DailyTimeIntervalTrigger (final String name,
                                        final String group,
                                        final Date startTime,
                                        final Date endTime,
@@ -304,7 +304,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <IDailyTimeInt
    *         if an invalid IntervalUnit is given, or the repeat interval is zero
    *         or less.
    */
-  public DailyTimeIntervalTriggerImpl (final String name,
+  public DailyTimeIntervalTrigger (final String name,
                                        final String group,
                                        final String jobName,
                                        final String jobGroup,

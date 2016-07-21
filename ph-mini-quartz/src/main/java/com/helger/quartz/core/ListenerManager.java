@@ -18,7 +18,7 @@ import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 
-public class ListenerManagerImpl implements IListenerManager
+public class ListenerManager implements IListenerManager
 {
   private final Map <String, IJobListener> globalJobListeners = new LinkedHashMap<> (10);
   private final Map <String, ITriggerListener> globalTriggerListeners = new LinkedHashMap<> (10);

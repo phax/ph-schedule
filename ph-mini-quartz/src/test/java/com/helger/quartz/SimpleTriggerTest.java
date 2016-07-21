@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.impl.triggers.SimpleTriggerImpl;
+import com.helger.quartz.impl.triggers.SimpleTrigger;
 
 /**
  * Unit test for SimpleTrigger serialization backwards compatibility.
@@ -58,7 +58,7 @@ public class SimpleTriggerTest
     final Calendar endTime = Calendar.getInstance ();
     endTime.set (2005, Calendar.JULY, 5, 10, 0, 0);
 
-    final SimpleTriggerImpl simpleTrigger = new SimpleTriggerImpl ();
+    final SimpleTrigger simpleTrigger = new SimpleTrigger ();
     simpleTrigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
     simpleTrigger.setRepeatCount (5);
     simpleTrigger.setStartTime (startTime.getTime ());
@@ -73,7 +73,7 @@ public class SimpleTriggerTest
   @Test
   public void testGetFireTimeAfter ()
   {
-    final SimpleTriggerImpl simpleTrigger = new SimpleTriggerImpl ();
+    final SimpleTrigger simpleTrigger = new SimpleTrigger ();
 
     simpleTrigger.setStartTime (new Date (0));
     simpleTrigger.setRepeatInterval (10);
@@ -86,7 +86,7 @@ public class SimpleTriggerTest
   @Test
   public void testClone ()
   {
-    final SimpleTriggerImpl simpleTrigger = new SimpleTriggerImpl ();
+    final SimpleTrigger simpleTrigger = new SimpleTrigger ();
 
     // Make sure empty sub-objects are cloned okay
     ITrigger clone = (ITrigger) simpleTrigger.clone ();
@@ -113,13 +113,13 @@ public class SimpleTriggerTest
   // NPE in equals()
   public void testQuartz665 ()
   {
-    new SimpleTriggerImpl ().equals (new SimpleTriggerImpl ());
+    new SimpleTrigger ().equals (new SimpleTrigger ());
   }
 
   @Test
   public void testMisfireInstructionValidity ()
   {
-    final SimpleTriggerImpl trigger = new SimpleTriggerImpl ();
+    final SimpleTrigger trigger = new SimpleTrigger ();
 
     try
     {

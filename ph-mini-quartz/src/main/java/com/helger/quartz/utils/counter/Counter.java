@@ -25,14 +25,14 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8
  */
-public class CounterImpl implements ICounter, Serializable
+public class Counter implements ICounter, Serializable
 {
   private final AtomicLong value;
 
   /**
    * Default Constructor
    */
-  public CounterImpl ()
+  public Counter ()
   {
     this (0L);
   }
@@ -42,7 +42,7 @@ public class CounterImpl implements ICounter, Serializable
    *
    * @param initialValue
    */
-  public CounterImpl (final long initialValue)
+  public Counter (final long initialValue)
   {
     this.value = new AtomicLong (initialValue);
   }

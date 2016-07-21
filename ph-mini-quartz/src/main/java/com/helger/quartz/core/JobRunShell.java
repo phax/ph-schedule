@@ -28,7 +28,7 @@ import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
-import com.helger.quartz.impl.JobExecutionContextImpl;
+import com.helger.quartz.impl.JobExecutionContext;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.TriggerFiredBundle;
@@ -62,7 +62,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  protected JobExecutionContextImpl jec = null;
+  protected JobExecutionContext jec = null;
 
   protected QuartzScheduler qs = null;
 
@@ -145,7 +145,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
       throw se;
     }
 
-    this.jec = new JobExecutionContextImpl (scheduler, firedTriggerBundle, job);
+    this.jec = new JobExecutionContext (scheduler, firedTriggerBundle, job);
   }
 
   public void requestShutdown ()

@@ -32,7 +32,7 @@ import com.helger.quartz.TriggerKey;
 import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
-public class JobExecutionContextImpl implements java.io.Serializable, IJobExecutionContext
+public class JobExecutionContext implements java.io.Serializable, IJobExecutionContext
 {
   private transient IScheduler scheduler;
 
@@ -75,7 +75,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, IJobExecut
    * Create a JobExcecutionContext with the given context data.
    * </p>
    */
-  public JobExecutionContextImpl (final IScheduler scheduler, final TriggerFiredBundle firedBundle, final IJob job)
+  public JobExecutionContext (final IScheduler scheduler, final TriggerFiredBundle firedBundle, final IJob job)
   {
     this.scheduler = scheduler;
     this.trigger = firedBundle.getTrigger ();

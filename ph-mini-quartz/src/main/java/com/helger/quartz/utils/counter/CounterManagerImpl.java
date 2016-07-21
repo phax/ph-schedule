@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Timer;
 
 import com.helger.quartz.utils.counter.sampled.ISampledCounter;
-import com.helger.quartz.utils.counter.sampled.SampledCounterImpl;
+import com.helger.quartz.utils.counter.sampled.SampledCounter;
 
 /**
  * An implementation of a {@link ICounterManager}.
@@ -91,9 +91,9 @@ public class CounterManagerImpl implements ICounterManager
       throw new NullPointerException ("config cannot be null");
     }
     final ICounter counter = config.createCounter ();
-    if (counter instanceof SampledCounterImpl)
+    if (counter instanceof SampledCounter)
     {
-      final SampledCounterImpl sampledCounter = (SampledCounterImpl) counter;
+      final SampledCounter sampledCounter = (SampledCounter) counter;
       timer.schedule (sampledCounter.getTimerTask (),
                       sampledCounter.getIntervalMillis (),
                       sampledCounter.getIntervalMillis ());

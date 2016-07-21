@@ -22,7 +22,7 @@ package com.helger.quartz.utils.counter.sampled;
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8
  */
-public class SampledRateCounterImpl extends SampledCounterImpl implements ISampledRateCounter
+public class SampledRateCounter extends SampledCounter implements ISampledRateCounter
 {
   private static final String OPERATION_NOT_SUPPORTED_MSG = "This operation is not supported. Use SampledCounter Or Counter instead";
 
@@ -34,7 +34,7 @@ public class SampledRateCounterImpl extends SampledCounterImpl implements ISampl
    *
    * @param config
    */
-  public SampledRateCounterImpl (final SampledRateCounterConfig config)
+  public SampledRateCounter (final SampledRateCounterConfig config)
   {
     super (config);
   }

@@ -32,10 +32,10 @@ import com.helger.quartz.spi.ISchedulerSignaler;
  *
  * @author jhouse
  */
-public class SchedulerSignalerImpl implements ISchedulerSignaler
+public class SchedulerSignaler implements ISchedulerSignaler
 {
 
-  Logger log = LoggerFactory.getLogger (SchedulerSignalerImpl.class);
+  Logger log = LoggerFactory.getLogger (SchedulerSignaler.class);
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,7 +52,7 @@ public class SchedulerSignalerImpl implements ISchedulerSignaler
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  public SchedulerSignalerImpl (final QuartzScheduler sched, final QuartzSchedulerThread schedThread)
+  public SchedulerSignaler (final QuartzScheduler sched, final QuartzSchedulerThread schedThread)
   {
     this.sched = sched;
     this.schedThread = schedThread;

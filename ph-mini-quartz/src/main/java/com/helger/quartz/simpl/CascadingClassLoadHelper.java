@@ -19,8 +19,9 @@ package com.helger.quartz.simpl;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 
 import com.helger.quartz.spi.IClassLoadHelper;
 
@@ -48,15 +49,7 @@ import com.helger.quartz.spi.IClassLoadHelper;
  */
 public class CascadingClassLoadHelper implements IClassLoadHelper
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  private LinkedList <IClassLoadHelper> loadHelpers;
-
+  private List <IClassLoadHelper> loadHelpers;
   private IClassLoadHelper bestCandidate;
 
   /*
@@ -72,8 +65,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   public void initialize ()
   {
-    loadHelpers = new LinkedList<> ();
-
+    loadHelpers = new ArrayList<> ();
     loadHelpers.add (new LoadingLoaderClassLoadHelper ());
     loadHelpers.add (new SimpleClassLoadHelper ());
     loadHelpers.add (new ThreadContextClassLoadHelper ());

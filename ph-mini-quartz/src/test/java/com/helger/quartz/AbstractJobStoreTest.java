@@ -44,7 +44,7 @@ import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.impl.JobDetailImpl;
 import com.helger.quartz.impl.matchers.GroupMatcher;
-import com.helger.quartz.impl.triggers.SimpleTriggerImpl;
+import com.helger.quartz.impl.triggers.SimpleTrigger;
 import com.helger.quartz.simpl.CascadingClassLoadHelper;
 import com.helger.quartz.spi.IClassLoadHelper;
 import com.helger.quartz.spi.IJobStore;
@@ -95,7 +95,7 @@ public abstract class AbstractJobStoreTest
     final Date baseFireTimeDate = DateBuilder.evenMinuteDateAfterNow ();
     final long baseFireTime = baseFireTimeDate.getTime ();
 
-    final IOperableTrigger trigger1 = new SimpleTriggerImpl ("trigger1",
+    final IOperableTrigger trigger1 = new SimpleTrigger ("trigger1",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -103,7 +103,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 200000),
                                                             2,
                                                             2000);
-    final IOperableTrigger trigger2 = new SimpleTriggerImpl ("trigger2",
+    final IOperableTrigger trigger2 = new SimpleTrigger ("trigger2",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -111,7 +111,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 200000),
                                                             2,
                                                             2000);
-    final IOperableTrigger trigger3 = new SimpleTriggerImpl ("trigger1",
+    final IOperableTrigger trigger3 = new SimpleTrigger ("trigger1",
                                                             "triggerGroup2",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -155,7 +155,7 @@ public abstract class AbstractJobStoreTest
 
     final long baseFireTime = System.currentTimeMillis () - 1000;
 
-    final IOperableTrigger early = new SimpleTriggerImpl ("early",
+    final IOperableTrigger early = new SimpleTrigger ("early",
                                                          "triggerGroup1",
                                                          this.fJobDetail.getName (),
                                                          this.fJobDetail.getGroup (),
@@ -163,7 +163,7 @@ public abstract class AbstractJobStoreTest
                                                          new Date (baseFireTime + 5),
                                                          2,
                                                          2000);
-    final IOperableTrigger trigger1 = new SimpleTriggerImpl ("trigger1",
+    final IOperableTrigger trigger1 = new SimpleTrigger ("trigger1",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -171,7 +171,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 200005),
                                                             2,
                                                             2000);
-    final IOperableTrigger trigger2 = new SimpleTriggerImpl ("trigger2",
+    final IOperableTrigger trigger2 = new SimpleTrigger ("trigger2",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -179,7 +179,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 210005),
                                                             2,
                                                             2000);
-    final IOperableTrigger trigger3 = new SimpleTriggerImpl ("trigger3",
+    final IOperableTrigger trigger3 = new SimpleTrigger ("trigger3",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -187,7 +187,7 @@ public abstract class AbstractJobStoreTest
                                                             new Date (baseFireTime + 220005),
                                                             2,
                                                             2000);
-    final IOperableTrigger trigger4 = new SimpleTriggerImpl ("trigger4",
+    final IOperableTrigger trigger4 = new SimpleTrigger ("trigger4",
                                                             "triggerGroup1",
                                                             this.fJobDetail.getName (),
                                                             this.fJobDetail.getGroup (),
@@ -196,7 +196,7 @@ public abstract class AbstractJobStoreTest
                                                             2,
                                                             2000);
 
-    final IOperableTrigger trigger10 = new SimpleTriggerImpl ("trigger10",
+    final IOperableTrigger trigger10 = new SimpleTrigger ("trigger10",
                                                              "triggerGroup2",
                                                              this.fJobDetail.getName (),
                                                              this.fJobDetail.getGroup (),
@@ -280,7 +280,7 @@ public abstract class AbstractJobStoreTest
   @Test
   public void testTriggerStates () throws Exception
   {
-    IOperableTrigger trigger = new SimpleTriggerImpl ("trigger1",
+    IOperableTrigger trigger = new SimpleTrigger ("trigger1",
                                                      "triggerGroup1",
                                                      this.fJobDetail.getName (),
                                                      this.fJobDetail.getGroup (),
@@ -332,7 +332,7 @@ public abstract class AbstractJobStoreTest
 
     final String trName = "StoreTriggerReplacesTrigger";
     final String trGroup = "StoreTriggerReplacesTriggerGroup";
-    final IOperableTrigger tr = new SimpleTriggerImpl (trName, trGroup, new Date ());
+    final IOperableTrigger tr = new SimpleTrigger (trName, trGroup, new Date ());
     tr.setJobKey (new JobKey (jobName, jobGroup));
     tr.setCalendarName (null);
 
@@ -376,7 +376,7 @@ public abstract class AbstractJobStoreTest
 
     final String trName = "PauseJobGroupPausesNewJobTrigger";
     final String trGroup = "PauseJobGroupPausesNewJobTriggerGroup";
-    final IOperableTrigger tr = new SimpleTriggerImpl (trName, trGroup, new Date ());
+    final IOperableTrigger tr = new SimpleTrigger (trName, trGroup, new Date ());
     tr.setJobKey (new JobKey (jobName2, jobGroup));
     fJobStore.storeTrigger (tr, false);
     assertEquals (TriggerState.PAUSED, fJobStore.getTriggerState (tr.getKey ()));

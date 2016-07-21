@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.helger.quartz.DateBuilder.IntervalUnit;
-import com.helger.quartz.impl.triggers.DailyTimeIntervalTriggerImpl;
+import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
 /**
  * A {@link ScheduleBuilder} implementation that build schedule for
@@ -136,10 +136,10 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
-  public DailyTimeIntervalTriggerImpl build ()
+  public DailyTimeIntervalTrigger build ()
   {
 
-    final DailyTimeIntervalTriggerImpl st = new DailyTimeIntervalTriggerImpl ();
+    final DailyTimeIntervalTrigger st = new DailyTimeIntervalTrigger ();
     st.setRepeatInterval (interval);
     st.setRepeatIntervalUnit (intervalUnit);
     st.setMisfireInstruction (misfireInstruction);
