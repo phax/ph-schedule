@@ -15,21 +15,24 @@
  */
 package org.quartz.simpl;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Unit test for SystemPropertyInstanceIdGenerator.
  */
-public class SystemPropertyInstanceIdGeneratorTest extends TestCase
+public class SystemPropertyInstanceIdGeneratorTest
 {
-
-  @Override
-  protected void setUp () throws Exception
+  @Before
+  public void setUp () throws Exception
   {
     System.setProperty (SystemPropertyInstanceIdGenerator.SYSTEM_PROPERTY, "foo");
     System.setProperty ("blah.blah", "goo");
   }
 
+  @Test
   public void testGetInstanceId () throws Exception
   {
     final SystemPropertyInstanceIdGenerator gen = new SystemPropertyInstanceIdGenerator ();
@@ -39,6 +42,7 @@ public class SystemPropertyInstanceIdGeneratorTest extends TestCase
     assertEquals ("foo", instId);
   }
 
+  @Test
   public void testGetInstanceIdWithPrepend () throws Exception
   {
     final SystemPropertyInstanceIdGenerator gen = new SystemPropertyInstanceIdGenerator ();
@@ -49,6 +53,7 @@ public class SystemPropertyInstanceIdGeneratorTest extends TestCase
     assertEquals ("1foo", instId);
   }
 
+  @Test
   public void testGetInstanceIdWithPostpend () throws Exception
   {
     final SystemPropertyInstanceIdGenerator gen = new SystemPropertyInstanceIdGenerator ();
@@ -59,6 +64,7 @@ public class SystemPropertyInstanceIdGeneratorTest extends TestCase
     assertEquals ("foo2", instId);
   }
 
+  @Test
   public void testGetInstanceIdWithPrependAndPostpend () throws Exception
   {
     final SystemPropertyInstanceIdGenerator gen = new SystemPropertyInstanceIdGenerator ();
@@ -70,6 +76,7 @@ public class SystemPropertyInstanceIdGeneratorTest extends TestCase
     assertEquals ("1foo2", instId);
   }
 
+  @Test
   public void testGetInstanceIdFromCustomSystemProperty () throws Exception
   {
     final SystemPropertyInstanceIdGenerator gen = new SystemPropertyInstanceIdGenerator ();

@@ -20,7 +20,6 @@ import org.quartz.spi.JobStore;
 
 public class RAMJobStoreTest extends AbstractJobStoreTest
 {
-
   @Override
   protected JobStore createJobStore (final String name)
   {
@@ -30,7 +29,5 @@ public class RAMJobStoreTest extends AbstractJobStoreTest
 
   @Override
   protected void destroyJobStore (final String name)
-  {
-
-  }
+  {}
 }

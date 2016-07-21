@@ -15,14 +15,17 @@
  */
 package org.quartz;
 
-import org.quartz.impl.JobDetailImpl;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import org.quartz.impl.JobDetailImpl;
 
 /**
  * Unit test for JobDetail.
  */
-public class JobDetailTest extends TestCase
+public class JobDetailTest
 {
 
   @PersistJobDataAfterExecution
@@ -71,6 +74,7 @@ public class JobDetailTest extends TestCase
   public class SomeExtendedStatefulJob extends SomeStatefulJob
   {}
 
+  @Test
   public void testClone ()
   {
     final JobDetailImpl jobDetail = new JobDetailImpl ();
@@ -81,6 +85,7 @@ public class JobDetailTest extends TestCase
 
   }
 
+  @Test
   public void testAnnotationDetection ()
   {
     final JobDetailImpl jobDetail = new JobDetailImpl ();

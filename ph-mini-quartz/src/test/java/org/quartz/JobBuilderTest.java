@@ -15,17 +15,18 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.JobKey.jobKey;
 
+import org.junit.Test;
 import org.quartz.utils.Key;
-
-import junit.framework.TestCase;
 
 /**
  * Test JobBuilder functionality
  */
-public class JobBuilderTest extends TestCase
+public class JobBuilderTest
 {
   @PersistJobDataAfterExecution
   @DisallowConcurrentExecution
@@ -49,10 +50,7 @@ public class JobBuilderTest extends TestCase
     {}
   }
 
-  @Override
-  protected void setUp () throws Exception
-  {}
-
+  @Test
   public void testJobBuilder () throws Exception
   {
 

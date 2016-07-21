@@ -15,29 +15,35 @@
  */
 package org.quartz.simpl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Collections;
 import java.util.Map;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.quartz.JobDataMap;
 import org.quartz.SchedulerException;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test for PropertySettingJobFactory.
  */
-public class PropertySettingJobFactoryTest extends TestCase
+public class PropertySettingJobFactoryTest
 {
 
   private PropertySettingJobFactory factory;
 
-  @Override
-  protected void setUp () throws Exception
+  @Before
+  public void setUp () throws Exception
   {
     factory = new PropertySettingJobFactory ();
     factory.setThrowIfPropertyNotFound (true);
   }
 
+  @Test
   public void testSetBeanPropsPrimatives () throws SchedulerException
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -67,6 +73,7 @@ public class PropertySettingJobFactoryTest extends TestCase
     assertTrue (myBean.getMapValue ().containsKey ("A"));
   }
 
+  @Test
   public void testSetBeanPropsUnknownProperty ()
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -81,6 +88,7 @@ public class PropertySettingJobFactoryTest extends TestCase
     }
   }
 
+  @Test
   public void testSetBeanPropsNullPrimative ()
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -96,6 +104,7 @@ public class PropertySettingJobFactoryTest extends TestCase
     }
   }
 
+  @Test
   public void testSetBeanPropsNullNonPrimative () throws SchedulerException
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -106,6 +115,7 @@ public class PropertySettingJobFactoryTest extends TestCase
     assertNull (testBean.getMapValue ());
   }
 
+  @Test
   public void testSetBeanPropsWrongPrimativeType ()
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -121,6 +131,7 @@ public class PropertySettingJobFactoryTest extends TestCase
     }
   }
 
+  @Test
   public void testSetBeanPropsWrongNonPrimativeType ()
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -136,6 +147,7 @@ public class PropertySettingJobFactoryTest extends TestCase
     }
   }
 
+  @Test
   public void testSetBeanPropsCharStringTooShort ()
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -151,6 +163,7 @@ public class PropertySettingJobFactoryTest extends TestCase
     }
   }
 
+  @Test
   public void testSetBeanPropsCharStringTooLong ()
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -166,6 +179,7 @@ public class PropertySettingJobFactoryTest extends TestCase
     }
   }
 
+  @Test
   public void testSetBeanPropsFromStrings () throws SchedulerException
   {
     final JobDataMap jobDataMap = new JobDataMap ();

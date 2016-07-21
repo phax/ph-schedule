@@ -15,17 +15,20 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.text.ParseException;
 
+import org.junit.Test;
 import org.quartz.impl.triggers.CronTriggerImpl;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test for CronTrigger.
  */
-public class CronTriggerTest extends TestCase
+public class CronTriggerTest
 {
+  @Test
   public void testClone () throws ParseException
   {
     final CronTriggerImpl trigger = new CronTriggerImpl ();
@@ -41,6 +44,7 @@ public class CronTriggerTest extends TestCase
   }
 
   // http://jira.opensymphony.com/browse/QUARTZ-558
+  @Test
   public void testQuartz558 ()
   {
     final CronTriggerImpl trigger = new CronTriggerImpl ();
@@ -51,6 +55,7 @@ public class CronTriggerTest extends TestCase
     assertEquals ("Cloning failed", trigger, trigger2);
   }
 
+  @Test
   public void testMisfireInstructionValidity ()
   {
     final CronTriggerImpl trigger = new CronTriggerImpl ();

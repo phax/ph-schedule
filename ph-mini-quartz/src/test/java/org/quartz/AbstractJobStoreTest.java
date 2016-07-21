@@ -15,10 +15,18 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.quartz.Trigger.TriggerState;
 import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -29,21 +37,19 @@ import org.quartz.spi.JobStore;
 import org.quartz.spi.OperableTrigger;
 import org.quartz.spi.SchedulerSignaler;
 
-import junit.framework.TestCase;
-
 /**
  * Unit test for JobStores. These tests were submitted by Johannes Zillmann as
  * part of issue QUARTZ-306.
  */
-public abstract class AbstractJobStoreTest extends TestCase
+public abstract class AbstractJobStoreTest
 {
   private JobStore fJobStore;
   private JobDetailImpl fJobDetail;
   private SampleSignaler fSignaler;
 
   @SuppressWarnings ("deprecation")
-  @Override
-  protected void setUp () throws Exception
+  @Before
+  public void setUp () throws Exception
   {
     this.fSignaler = new SampleSignaler ();
     final ClassLoadHelper loadHelper = new CascadingClassLoadHelper ();
@@ -57,8 +63,8 @@ public abstract class AbstractJobStoreTest extends TestCase
     this.fJobStore.storeJob (this.fJobDetail, false);
   }
 
-  @Override
-  protected void tearDown ()
+  @After
+  public void tearDown ()
   {
     destroyJobStore ("AbstractJobStoreTest");
   }
@@ -68,6 +74,7 @@ public abstract class AbstractJobStoreTest extends TestCase
   protected abstract void destroyJobStore (String name);
 
   @SuppressWarnings ("deprecation")
+  @Test
   public void testAcquireNextTrigger () throws Exception
   {
 
@@ -128,6 +135,7 @@ public abstract class AbstractJobStoreTest extends TestCase
   }
 
   @SuppressWarnings ("deprecation")
+  @Test
   public void testAcquireNextTriggerBatch () throws Exception
   {
 
@@ -255,6 +263,7 @@ public abstract class AbstractJobStoreTest extends TestCase
   }
 
   @SuppressWarnings ("deprecation")
+  @Test
   public void testTriggerStates () throws Exception
   {
     OperableTrigger trigger = new SimpleTriggerImpl ("trigger1",
@@ -298,6 +307,7 @@ public abstract class AbstractJobStoreTest extends TestCase
 
   // See: http://jira.opensymphony.com/browse/QUARTZ-606
   @SuppressWarnings ("deprecation")
+  @Test
   public void testStoreTriggerReplacesTrigger () throws Exception
   {
 
@@ -334,6 +344,7 @@ public abstract class AbstractJobStoreTest extends TestCase
   }
 
   @SuppressWarnings ("deprecation")
+  @Test
   public void testPauseJobGroupPausesNewJob () throws Exception
   {
     final String jobName1 = "PauseJobGroupPausesNewJob";
@@ -357,6 +368,7 @@ public abstract class AbstractJobStoreTest extends TestCase
     assertEquals (TriggerState.PAUSED, fJobStore.getTriggerState (tr.getKey ()));
   }
 
+  @Test
   public void testStoreAndRetrieveJobs () throws Exception
   {
     final SchedulerSignaler schedSignaler = new SampleSignaler ();
@@ -386,6 +398,7 @@ public abstract class AbstractJobStoreTest extends TestCase
     assertEquals ("Wrong number of jobs in group 'b'", store.getJobKeys (GroupMatcher.jobGroupEquals ("b")).size (), 5);
   }
 
+  @Test
   public void testStoreAndRetriveTriggers () throws Exception
   {
     final SchedulerSignaler schedSignaler = new SampleSignaler ();
@@ -430,6 +443,7 @@ public abstract class AbstractJobStoreTest extends TestCase
                   5);
   }
 
+  @Test
   public void testMatchers () throws Exception
   {
     final SchedulerSignaler schedSignaler = new SampleSignaler ();
@@ -525,6 +539,7 @@ public abstract class AbstractJobStoreTest extends TestCase
 
   }
 
+  @Test
   public void testAcquireTriggers () throws Exception
   {
     final SchedulerSignaler schedSignaler = new SampleSignaler ();
@@ -578,6 +593,7 @@ public abstract class AbstractJobStoreTest extends TestCase
     }
   }
 
+  @Test
   public void testAcquireTriggersInBatch () throws Exception
   {
     final SchedulerSignaler schedSignaler = new SampleSignaler ();

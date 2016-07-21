@@ -1,18 +1,20 @@
 package org.quartz.utils;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * Unit tests for PropertiesParser.
  */
-public class PropertiesParserTest extends TestCase
+public class PropertiesParserTest
 {
-
   /**
    * Unit test for full getPropertyGroup() method.
    */
+  @Test
   public void testGetPropertyGroupStringBooleanStringArray ()
   {
     // Test that an empty property does not cause an exception

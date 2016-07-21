@@ -15,8 +15,11 @@
  */
 package org.quartz.impl;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Collections;
 
+import org.junit.Test;
 import org.quartz.Scheduler;
 import org.quartz.simpl.RAMJobStore;
 import org.quartz.simpl.SimpleThreadPool;
@@ -24,10 +27,9 @@ import org.quartz.spi.ClassLoadHelper;
 import org.quartz.spi.SchedulerPlugin;
 import org.quartz.spi.ThreadPool;
 
-import junit.framework.TestCase;
-
-public class DirectSchedulerFactoryTest extends TestCase
+public class DirectSchedulerFactoryTest
 {
+  @Test
   public void testPlugins () throws Exception
   {
     final StringBuffer result = new StringBuffer ();

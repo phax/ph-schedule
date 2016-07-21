@@ -15,23 +15,22 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertTrue;
 import static org.quartz.DateBuilder.evenSecondDateAfterNow;
 import static org.quartz.DateBuilder.futureDate;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 import java.util.Date;
 
+import org.junit.Test;
 import org.quartz.DateBuilder.IntervalUnit;
 import org.quartz.utils.Key;
-
-import junit.framework.TestCase;
 
 /**
  * Test TriggerBuilder functionality
  */
-public class TriggerBuilderTest extends TestCase
+public class TriggerBuilderTest
 {
-
   public static class TestJob implements Job
   {
     public void execute (final JobExecutionContext context) throws JobExecutionException
@@ -46,10 +45,7 @@ public class TriggerBuilderTest extends TestCase
     {}
   }
 
-  @Override
-  protected void setUp () throws Exception
-  {}
-
+  @Test
   public void testTriggerBuilder () throws Exception
   {
 
@@ -91,6 +87,7 @@ public class TriggerBuilderTest extends TestCase
   }
 
   /** QTZ-157 */
+  @Test
   public void testTriggerBuilderWithEndTimePriorCurrrentTime () throws Exception
   {
     TriggerBuilder.newTrigger ()

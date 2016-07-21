@@ -15,21 +15,24 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Calendar;
 
+import org.junit.Test;
 import org.quartz.impl.calendar.AnnualCalendar;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test for AnnualCalendar serialization backwards compatibility.
  */
-public class AnnualCalendarTest extends TestCase
+public class AnnualCalendarTest
 {
   /**
    * Tests if method <code>setDaysExcluded</code> protects the property
    * daysExcluded against nulling. See: QUARTZ-590
    */
+  @Test
   public void testDaysExcluded ()
   {
     final AnnualCalendar annualCalendar = new AnnualCalendar ();
@@ -45,6 +48,7 @@ public class AnnualCalendarTest extends TestCase
    * <code>setDaysExcluded</code> of class
    * <code>org.quartz.impl.calendar.AnnualCalendar</code>
    */
+  @Test
   public void testExclude ()
   {
     final AnnualCalendar annualCalendar = new AnnualCalendar ();
@@ -80,6 +84,7 @@ public class AnnualCalendarTest extends TestCase
   /**
    * QUARTZ-679 Test if the annualCalendar works over years
    */
+  @Test
   public void testDaysExcludedOverTime ()
   {
     final AnnualCalendar annualCalendar = new AnnualCalendar ();
@@ -102,6 +107,7 @@ public class AnnualCalendarTest extends TestCase
   /**
    * Part 2 of the tests of QUARTZ-679
    */
+  @Test
   public void testRemoveInTheFuture ()
   {
     final AnnualCalendar annualCalendar = new AnnualCalendar ();

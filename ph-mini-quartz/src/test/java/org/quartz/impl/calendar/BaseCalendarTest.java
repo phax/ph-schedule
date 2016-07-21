@@ -1,10 +1,13 @@
 package org.quartz.impl.calendar;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class BaseCalendarTest extends TestCase
+import org.junit.Test;
+
+public class BaseCalendarTest
 {
 
+  @Test
   public void testClone ()
   {
     final BaseCalendar base = new BaseCalendar ();

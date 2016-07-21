@@ -16,24 +16,25 @@
  */
 package org.quartz.impl.matchers;
 
+import static org.junit.Assert.assertTrue;
 import static org.quartz.JobKey.jobKey;
 import static org.quartz.TriggerKey.triggerKey;
 import static org.quartz.impl.matchers.GroupMatcher.anyJobGroup;
 import static org.quartz.impl.matchers.GroupMatcher.anyTriggerGroup;
 
+import org.junit.Test;
 import org.quartz.JobKey;
 import org.quartz.TriggerKey;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test for CronScheduleBuilder.
  *
  * @author jhouse
  */
-public class GroupMatcherTest extends TestCase
+public class GroupMatcherTest
 {
 
+  @Test
   public void testAnyGroupMatchers ()
   {
 

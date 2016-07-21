@@ -15,13 +15,16 @@
  */
 package org.quartz.impl.calendar;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 /**
  * Unit test for DailyCalendar.
  */
-public class DailyCalendarTest extends TestCase
+public class DailyCalendarTest
 {
+  @Test
   public void testStringStartEndTimes ()
   {
     DailyCalendar dailyCalendar = new DailyCalendar ("1:20", "14:50");
@@ -31,6 +34,7 @@ public class DailyCalendarTest extends TestCase
     assertTrue (dailyCalendar.toString ().indexOf ("01:20:01:456 - 14:50:15:002") > 0);
   }
 
+  @Test
   public void testStringInvertTimeRange ()
   {
     final DailyCalendar dailyCalendar = new DailyCalendar ("1:20", "14:50");

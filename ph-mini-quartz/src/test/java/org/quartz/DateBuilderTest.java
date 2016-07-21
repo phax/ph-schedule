@@ -15,6 +15,8 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.quartz.DateBuilder.APRIL;
 import static org.quartz.DateBuilder.AUGUST;
 import static org.quartz.DateBuilder.DECEMBER;
@@ -50,14 +52,14 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * Unit test for JobDetail.
  */
-public class DateBuilderTest extends TestCase
+public class DateBuilderTest
 {
-
+  @Test
   public void testBasicBuilding ()
   {
 
@@ -77,6 +79,7 @@ public class DateBuilderTest extends TestCase
     assertEquals ("DateBuilder-produced date is not as expected.", t, v);
   }
 
+  @Test
   public void testBuilder ()
   {
 
@@ -148,6 +151,7 @@ public class DateBuilderTest extends TestCase
 
   }
 
+  @Test
   public void testEvensBuilders ()
   {
 
@@ -219,6 +223,7 @@ public class DateBuilderTest extends TestCase
     assertEquals ("DateBuilder-produced date is not as expected.", 0, vc.get (Calendar.MILLISECOND));
   }
 
+  @Test
   public void testGivenBuilders ()
   {
 
@@ -245,6 +250,7 @@ public class DateBuilderTest extends TestCase
     assertEquals ("DateBuilder-produced date is not as expected.", 0, vc.get (Calendar.MILLISECOND));
   }
 
+  @Test
   public void testAtBuilders ()
   {
 
@@ -279,6 +285,7 @@ public class DateBuilderTest extends TestCase
                   vc.get (Calendar.DAY_OF_YEAR));
   }
 
+  @Test
   public void testTranslate ()
   {
 
@@ -310,6 +317,7 @@ public class DateBuilderTest extends TestCase
     assertEquals ("DateBuilder-produced date is not as expected.", 8, vc.get (Calendar.HOUR_OF_DAY));
   }
 
+  @Test
   public void testMonthTranslations ()
   {
 

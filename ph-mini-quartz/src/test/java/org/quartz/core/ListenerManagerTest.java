@@ -15,6 +15,8 @@
  */
 package org.quartz.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.quartz.impl.matchers.GroupMatcher.jobGroupEquals;
 import static org.quartz.impl.matchers.GroupMatcher.triggerGroupEquals;
 import static org.quartz.impl.matchers.NameMatcher.jobNameContains;
@@ -22,6 +24,7 @@ import static org.quartz.impl.matchers.NameMatcher.jobNameContains;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.Test;
 import org.quartz.JobListener;
 import org.quartz.SchedulerListener;
 import org.quartz.TriggerKey;
@@ -31,12 +34,10 @@ import org.quartz.listeners.JobListenerSupport;
 import org.quartz.listeners.SchedulerListenerSupport;
 import org.quartz.listeners.TriggerListenerSupport;
 
-import junit.framework.TestCase;
-
 /**
  * Test ListenerManagerImpl functionality
  */
-public class ListenerManagerTest extends TestCase
+public class ListenerManagerTest
 {
 
   public static class TestJobListener extends JobListenerSupport
@@ -76,10 +77,7 @@ public class ListenerManagerTest extends TestCase
 
   }
 
-  @Override
-  protected void setUp () throws Exception
-  {}
-
+  @Test
   public void testManagementOfJobListeners () throws Exception
   {
 
@@ -124,6 +122,7 @@ public class ListenerManagerTest extends TestCase
     }
   }
 
+  @Test
   public void testManagementOfTriggerListeners () throws Exception
   {
 
@@ -168,6 +167,7 @@ public class ListenerManagerTest extends TestCase
     }
   }
 
+  @Test
   public void testManagementOfSchedulerListeners () throws Exception
   {
 
@@ -205,5 +205,4 @@ public class ListenerManagerTest extends TestCase
       i++;
     }
   }
-
 }

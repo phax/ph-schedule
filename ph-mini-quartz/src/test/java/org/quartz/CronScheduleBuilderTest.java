@@ -16,19 +16,20 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
 import static org.quartz.CronScheduleBuilder.atHourAndMinuteOnGivenDaysOfWeek;
 import static org.quartz.TriggerBuilder.newTrigger;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * Unit test for CronScheduleBuilder.
  *
  * @author jhouse
  */
-public class CronScheduleBuilderTest extends TestCase
+public class CronScheduleBuilderTest
 {
-
+  @Test
   public void testAtHourAndMinuteOnGivenDaysOfWeek ()
   {
 

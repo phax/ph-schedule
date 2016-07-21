@@ -16,6 +16,8 @@
  */
 package org.quartz.impl.triggers;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.quartz.DateBuilder.dateOf;
 
 import java.util.Calendar;
@@ -24,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Test;
 import org.quartz.DailyTimeIntervalScheduleBuilder;
 import org.quartz.DailyTimeIntervalTrigger;
 import org.quartz.DateBuilder;
@@ -34,16 +37,14 @@ import org.quartz.TimeOfDay;
 import org.quartz.TriggerUtils;
 import org.quartz.impl.calendar.CronCalendar;
 
-import junit.framework.TestCase;
-
 /**
  * Unit test for {@link DailyTimeIntervalTriggerImpl}.
  *
  * @author Zemian Deng <saltnlight5@gmail.com>
  */
-public class DailyTimeIntervalTriggerImplTest extends TestCase
+public class DailyTimeIntervalTriggerImplTest
 {
-
+  @Test
   public void testNormalExample () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -63,6 +64,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (10, 24, 0, 16, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testQuartzCalendarExclusion () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -82,6 +84,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (23, 0, 0, 4, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testValidateTimeOfDayOrder () throws Exception
   {
     final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
@@ -98,6 +101,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     }
   }
 
+  @Test
   public void testValidateInterval () throws Exception
   {
     final DailyTimeIntervalTriggerImpl trigger = new DailyTimeIntervalTriggerImpl ();
@@ -165,6 +169,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     }
   }
 
+  @Test
   public void testStartTimeWithoutStartTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -179,6 +184,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (23, 0, 0, 2, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testEndTimeWithoutEndTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -195,6 +201,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (22, 0, 0, 2, 1, 2011), fireTimes.get (46));
   }
 
+  @Test
   public void testStartTimeBeforeStartTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -211,6 +218,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (23, 0, 0, 3, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testStartTimeBeforeStartTimeOfDayOnInvalidDay () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011); // Jan 1, 2011 was a
@@ -237,6 +245,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (23, 0, 0, 5, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testStartTimeAfterStartTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (9, 23, 0, 1, 1, 2011);
@@ -253,6 +262,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (9, 0, 0, 4, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testEndTimeBeforeEndTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -272,6 +282,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (16, 0, 0, 2, 1, 2011), fireTimes.get (34));
   }
 
+  @Test
   public void testEndTimeAfterEndTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -291,6 +302,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (17, 0, 0, 2, 1, 2011), fireTimes.get (35));
   }
 
+  @Test
   public void testTimeOfDayWithStartTime () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -317,6 +329,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (15, 0, 0, 5, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testTimeOfDayWithEndTime () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -345,6 +358,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (17, 0, 0, 3, 1, 2011), fireTimes.get (29));
   }
 
+  @Test
   public void testTimeOfDayWithEndTime2 () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -367,6 +381,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (23, 23, 0, 3, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testAllDaysOfTheWeek () throws Exception
   {
     final Set <Integer> daysOfWeek = DailyTimeIntervalScheduleBuilder.ALL_DAYS_OF_THE_WEEK;
@@ -395,6 +410,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (15, 0, 0, 5, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testMonThroughFri () throws Exception
   {
     final Set <Integer> daysOfWeek = DailyTimeIntervalScheduleBuilder.MONDAY_THROUGH_FRIDAY;
@@ -412,13 +428,14 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     final List <Date> fireTimes = TriggerUtils.computeFireTimes (trigger, null, 48);
     assertEquals (48, fireTimes.size ());
     assertEquals (dateOf (8, 0, 0, 3, 1, 2011), fireTimes.get (0));
-    assertEquals (Calendar.MONDAY, getDayOfWeek (fireTimes.get (0)));
+    assertEquals (Calendar.MONDAY, _getDayOfWeek (fireTimes.get (0)));
     assertEquals (dateOf (8, 0, 0, 4, 1, 2011), fireTimes.get (10));
-    assertEquals (Calendar.TUESDAY, getDayOfWeek (fireTimes.get (10)));
+    assertEquals (Calendar.TUESDAY, _getDayOfWeek (fireTimes.get (10)));
     assertEquals (dateOf (15, 0, 0, 7, 1, 2011), fireTimes.get (47));
-    assertEquals (Calendar.FRIDAY, getDayOfWeek (fireTimes.get (47)));
+    assertEquals (Calendar.FRIDAY, _getDayOfWeek (fireTimes.get (47)));
   }
 
+  @Test
   public void testSatAndSun () throws Exception
   {
     final Set <Integer> daysOfWeek = DailyTimeIntervalScheduleBuilder.SATURDAY_AND_SUNDAY;
@@ -436,13 +453,14 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     final List <Date> fireTimes = TriggerUtils.computeFireTimes (trigger, null, 48);
     assertEquals (48, fireTimes.size ());
     assertEquals (dateOf (8, 0, 0, 1, 1, 2011), fireTimes.get (0));
-    assertEquals (Calendar.SATURDAY, getDayOfWeek (fireTimes.get (0)));
+    assertEquals (Calendar.SATURDAY, _getDayOfWeek (fireTimes.get (0)));
     assertEquals (dateOf (8, 0, 0, 2, 1, 2011), fireTimes.get (10));
-    assertEquals (Calendar.SUNDAY, getDayOfWeek (fireTimes.get (10)));
+    assertEquals (Calendar.SUNDAY, _getDayOfWeek (fireTimes.get (10)));
     assertEquals (dateOf (15, 0, 0, 15, 1, 2011), fireTimes.get (47));
-    assertEquals (Calendar.SATURDAY, getDayOfWeek (fireTimes.get (47)));
+    assertEquals (Calendar.SATURDAY, _getDayOfWeek (fireTimes.get (47)));
   }
 
+  @Test
   public void testMonOnly () throws Exception
   {
     final Set <Integer> daysOfWeek = new HashSet<> ();
@@ -461,20 +479,21 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     final List <Date> fireTimes = TriggerUtils.computeFireTimes (trigger, null, 48);
     assertEquals (48, fireTimes.size ());
     assertEquals (dateOf (8, 0, 0, 3, 1, 2011), fireTimes.get (0));
-    assertEquals (Calendar.MONDAY, getDayOfWeek (fireTimes.get (0)));
+    assertEquals (Calendar.MONDAY, _getDayOfWeek (fireTimes.get (0)));
     assertEquals (dateOf (8, 0, 0, 10, 1, 2011), fireTimes.get (10));
-    assertEquals (Calendar.MONDAY, getDayOfWeek (fireTimes.get (10)));
+    assertEquals (Calendar.MONDAY, _getDayOfWeek (fireTimes.get (10)));
     assertEquals (dateOf (15, 0, 0, 31, 1, 2011), fireTimes.get (47));
-    assertEquals (Calendar.MONDAY, getDayOfWeek (fireTimes.get (47)));
+    assertEquals (Calendar.MONDAY, _getDayOfWeek (fireTimes.get (47)));
   }
 
-  private int getDayOfWeek (final Date dateTime)
+  private static int _getDayOfWeek (final Date dateTime)
   {
     final Calendar cal = Calendar.getInstance ();
     cal.setTime (dateTime);
     return cal.get (Calendar.DAY_OF_WEEK);
   }
 
+  @Test
   public void testTimeOfDayWithEndTimeOddInterval () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -496,6 +515,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (9, 55, 0, 3, 1, 2011), fireTimes.get (17));
   }
 
+  @Test
   public void testHourInterval () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -516,6 +536,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (12, 1, 15, 10, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testSecondInterval () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -534,6 +555,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (8, 56, 26, 1, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testRepeatCountInf () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -556,6 +578,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (10, 24, 0, 16, 1, 2011), fireTimes.get (47));
   }
 
+  @Test
   public void testRepeatCount () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -575,6 +598,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (9, 12, 0, 3, 1, 2011), fireTimes.get (7));
   }
 
+  @Test
   public void testRepeatCount0 () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -593,6 +617,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (8, 0, 0, 1, 1, 2011), fireTimes.get (0));
   }
 
+  @Test
   public void testGetFireTime () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2011);
@@ -614,6 +639,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (8, 0, 0, 2, 1, 2011), trigger.getFireTimeAfter (dateOf (13, 0, 0, 1, 1, 2011)));
   }
 
+  @Test
   public void testGetFireTimeWithDateBeforeStartTime () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, 1, 2012);
@@ -641,6 +667,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (8, 0, 0, 2, 1, 2012), trigger.getFireTimeAfter (dateOf (13, 0, 0, 1, 1, 2012)));
   }
 
+  @Test
   public void testGetFireTimeWhenStartTimeAndTimeOfDayIsSame () throws Exception
   {
     // A test case for QTZ-369
@@ -657,6 +684,7 @@ public class DailyTimeIntervalTriggerImplTest extends TestCase
     assertEquals (dateOf (8, 0, 0, 1, 1, 2012), trigger.getFireTimeAfter (dateOf (0, 0, 0, 1, 1, 2012)));
   }
 
+  @Test
   public void testExtraConstructors () throws Exception
   {
     // A test case for QTZ-389 - some extra constructors didn't set all

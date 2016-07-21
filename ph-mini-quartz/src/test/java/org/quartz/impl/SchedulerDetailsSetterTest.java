@@ -1,9 +1,13 @@
 package org.quartz.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.Test;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -12,11 +16,9 @@ import org.quartz.simpl.RAMJobStore;
 import org.quartz.simpl.SimpleThreadPool;
 import org.quartz.spi.ThreadPool;
 
-import junit.framework.TestCase;
-
-public class SchedulerDetailsSetterTest extends TestCase
+public class SchedulerDetailsSetterTest
 {
-
+  @Test
   public void testSetter () throws SchedulerException, IOException
   {
     final Properties props = new Properties ();
@@ -37,11 +39,13 @@ public class SchedulerDetailsSetterTest extends TestCase
     assertEquals (5, instanceNameCalls.get ());
   }
 
+  @Test
   public void testMissingSetterMethods () throws SchedulerException
   {
     SchedulerDetailsSetter.setDetails (new Object (), "name", "id");
   }
 
+  @Test
   public void testUnimplementedMethods () throws Exception
   {
     final ThreadPool tp = makeIncompleteThreadPool ();
@@ -115,7 +119,6 @@ public class SchedulerDetailsSetterTest extends TestCase
 
   public static class MyJobStore extends RAMJobStore
   {
-
     @Override
     public void setInstanceId (final String schedInstId)
     {

@@ -1,19 +1,21 @@
 package org.quartz.utils;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.PersistJobDataAfterExecution;
 
-import junit.framework.TestCase;
-
 /**
  * @author Alex Snaps
  */
-public class ClassUtilsTest extends TestCase
+public class ClassUtilsTest
 {
-
+  @Test
   public void testIsAnnotationPresentOnSuperClass () throws Exception
   {
     assertTrue (ClassUtils.isAnnotationPresent (BaseJob.class, DisallowConcurrentExecution.class));

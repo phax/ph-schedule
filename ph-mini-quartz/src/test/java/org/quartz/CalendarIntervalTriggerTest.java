@@ -17,7 +17,11 @@ package org.quartz;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -29,12 +33,10 @@ import org.quartz.DateBuilder.IntervalUnit;
 import org.quartz.impl.calendar.BaseCalendar;
 import org.quartz.impl.triggers.CalendarIntervalTriggerImpl;
 
-import junit.framework.TestCase;
-
 /**
  * Unit tests for DateIntervalTrigger.
  */
-public class CalendarIntervalTriggerTest extends TestCase
+public class CalendarIntervalTriggerTest
 {
   @Test
   public void testQTZ331FireTimeAfterBoundary ()
@@ -58,6 +60,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertThat (trigger.getFireTimeAfter (after), equalTo (triggerTime));
   }
 
+  @Test
   public void testQTZ330DaylightSavingsCornerCase ()
   {
     final TimeZone edt = TimeZone.getTimeZone ("America/New_York");
@@ -87,6 +90,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertThat (fireTime.after (after.getTime ()), is (true));
   }
 
+  @Test
   public void testYearlyIntervalGetFireTimeAfter ()
   {
 
@@ -110,6 +114,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertEquals ("Year increment result not as expected.", targetCalendar.getTime (), secondTime);
   }
 
+  @Test
   public void testMonthlyIntervalGetFireTimeAfter ()
   {
 
@@ -135,6 +140,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertEquals ("Month increment result not as expected.", targetCalendar.getTime (), fifthTime);
   }
 
+  @Test
   public void testWeeklyIntervalGetFireTimeAfter ()
   {
 
@@ -160,6 +166,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertEquals ("Week increment result not as expected.", targetCalendar.getTime (), fifthTime);
   }
 
+  @Test
   public void testDailyIntervalGetFireTimeAfter ()
   {
 
@@ -185,6 +192,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertEquals ("Day increment result not as expected.", targetCalendar.getTime (), fifthTime);
   }
 
+  @Test
   public void testHourlyIntervalGetFireTimeAfter ()
   {
 
@@ -209,6 +217,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertEquals ("Hour increment result not as expected.", targetCalendar.getTime (), fifthTime);
   }
 
+  @Test
   public void testMinutelyIntervalGetFireTimeAfter ()
   {
 
@@ -233,6 +242,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertEquals ("Minutes increment result not as expected.", targetCalendar.getTime (), fifthTime);
   }
 
+  @Test
   public void testSecondlyIntervalGetFireTimeAfter ()
   {
 
@@ -257,6 +267,7 @@ public class CalendarIntervalTriggerTest extends TestCase
     assertEquals ("Seconds increment result not as expected.", targetCalendar.getTime (), fifthTime);
   }
 
+  @Test
   public void testDaylightSavingsTransitions ()
   {
 
@@ -427,6 +438,7 @@ public class CalendarIntervalTriggerTest extends TestCase
                   testTime);
   }
 
+  @Test
   public void testFinalFireTimes ()
   {
 
@@ -478,6 +490,7 @@ public class CalendarIntervalTriggerTest extends TestCase
                 (endCalendar.getTime ().equals (testTime)));
   }
 
+  @Test
   public void testMisfireInstructionValidity ()
   {
     final CalendarIntervalTriggerImpl trigger = new CalendarIntervalTriggerImpl ();

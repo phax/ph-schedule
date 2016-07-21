@@ -15,18 +15,21 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.junit.Test;
 import org.quartz.impl.triggers.SimpleTriggerImpl;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test for SimpleTrigger serialization backwards compatibility.
  */
-public class SimpleTriggerTest extends TestCase
+public class SimpleTriggerTest
 {
   private static final TimeZone EST_TIME_ZONE = TimeZone.getTimeZone ("US/Eastern");
   private static final Calendar START_TIME = Calendar.getInstance ();
@@ -42,6 +45,7 @@ public class SimpleTriggerTest extends TestCase
     END_TIME.setTimeZone (EST_TIME_ZONE);
   }
 
+  @Test
   public void testUpdateAfterMisfire ()
   {
 
@@ -63,6 +67,7 @@ public class SimpleTriggerTest extends TestCase
     assertNull (simpleTrigger.getNextFireTime ());
   }
 
+  @Test
   public void testGetFireTimeAfter ()
   {
     final SimpleTriggerImpl simpleTrigger = new SimpleTriggerImpl ();
@@ -75,6 +80,7 @@ public class SimpleTriggerTest extends TestCase
     assertEquals (40, fireTimeAfter.getTime ());
   }
 
+  @Test
   public void testClone ()
   {
     final SimpleTriggerImpl simpleTrigger = new SimpleTriggerImpl ();
@@ -107,6 +113,7 @@ public class SimpleTriggerTest extends TestCase
     new SimpleTriggerImpl ().equals (new SimpleTriggerImpl ());
   }
 
+  @Test
   public void testMisfireInstructionValidity ()
   {
     final SimpleTriggerImpl trigger = new SimpleTriggerImpl ();

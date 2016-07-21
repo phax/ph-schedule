@@ -17,20 +17,20 @@ package org.quartz;
 
 import java.util.Calendar;
 
+import org.junit.Test;
 import org.quartz.impl.calendar.MonthlyCalendar;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test for MonthlyCalendar
  */
-public class MonthlyCalendarTest extends TestCase
+public class MonthlyCalendarTest
 {
 
   /**
    * Tests whether greater than the 7th of the month causes infinite looping.
    * See: QUARTZ-636
    */
+  @Test
   public void testForInfiniteLoop ()
   {
     final MonthlyCalendar monthlyCalendar = new MonthlyCalendar ();

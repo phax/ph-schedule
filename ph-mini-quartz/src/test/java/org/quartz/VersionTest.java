@@ -15,20 +15,23 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.Test;
 import org.quartz.core.QuartzScheduler;
 
-import junit.framework.TestCase;
-
-public class VersionTest extends TestCase
+public class VersionTest
 {
   @SuppressWarnings ("unused")
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
   @SuppressWarnings ("unused")
   private static final String PROTOTYPE_SUFFIX = "-PROTO";
 
+  @Test
   public void testVersionParsing ()
   {
     assertNonNegativeInteger (QuartzScheduler.getVersionMajor ());

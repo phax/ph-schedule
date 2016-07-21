@@ -15,6 +15,7 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
 import static org.quartz.DateBuilder.futureDate;
 import static org.quartz.DateBuilder.IntervalUnit.MINUTE;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -23,13 +24,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Test;
 import org.quartz.spi.OperableTrigger;
 
-import junit.framework.TestCase;
-
-public class TriggerComparatorTest extends TestCase
+public class TriggerComparatorTest
 {
-
+  @Test
   public void testTriggerSort ()
   {
 
@@ -41,7 +41,7 @@ public class TriggerComparatorTest extends TestCase
     final Trigger t5 = newTrigger ().withIdentity ("a", "b").build ();
     final Trigger t6 = newTrigger ().withIdentity ("a", "c").build ();
 
-    final List <Trigger> ts = new LinkedList <> ();
+    final List <Trigger> ts = new LinkedList<> ();
     // add triggers to list in somewhat randomized order
     ts.add (t5);
     ts.add (t6);
@@ -62,6 +62,7 @@ public class TriggerComparatorTest extends TestCase
     assertEquals (t6, ts.get (5));
   }
 
+  @Test
   public void testTriggerTimeSort ()
   {
 
@@ -85,7 +86,7 @@ public class TriggerComparatorTest extends TestCase
     final Trigger t9 = newTrigger ().withIdentity ("j").startAt (futureDate (7, MINUTE)).build ();
     ((OperableTrigger) t9).computeFirstFireTime (null);
 
-    final List <Trigger> ts = new LinkedList <> ();
+    final List <Trigger> ts = new LinkedList<> ();
     // add triggers to list in somewhat randomized order
     ts.add (t5);
     ts.add (t9);

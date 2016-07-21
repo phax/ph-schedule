@@ -15,21 +15,23 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Calendar;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.triggers.SimpleTriggerImpl;
 import org.quartz.spi.MutableTrigger;
 
-import junit.framework.TestCase;
-
 /**
  * Test Trigger priority support.
  */
-public class PriorityTest extends TestCase
+public class PriorityTest
 {
 
   private static CountDownLatch latch;
@@ -46,14 +48,15 @@ public class PriorityTest extends TestCase
     }
   }
 
-  @Override
-  protected void setUp () throws Exception
+  @Before
+  public void setUp () throws Exception
   {
     PriorityTest.latch = new CountDownLatch (2);
     PriorityTest.result = new StringBuffer ();
   }
 
   @SuppressWarnings ("deprecation")
+  @Test
   public void testSameDefaultPriority () throws Exception
   {
     final Properties config = new Properties ();
@@ -85,6 +88,7 @@ public class PriorityTest extends TestCase
   }
 
   @SuppressWarnings ("deprecation")
+  @Test
   public void testDifferentPriority () throws Exception
   {
     final Properties config = new Properties ();

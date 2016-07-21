@@ -3,17 +3,16 @@ package org.quartz;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Test;
 import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.StdSchedulerFactory;
-
-import junit.framework.TestCase;
 
 /**
  * DefaultSchedulerTest
  */
-public class DefaultSchedulerTest extends TestCase
+public class DefaultSchedulerTest
 {
-
+  @Test
   public void testAddJobNoTrigger () throws Exception
   {
     final Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler ();

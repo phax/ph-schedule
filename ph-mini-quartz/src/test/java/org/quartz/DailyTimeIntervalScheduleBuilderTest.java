@@ -16,6 +16,9 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.quartz.DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule;
 import static org.quartz.DateBuilder.dateOf;
 import static org.quartz.JobBuilder.newJob;
@@ -25,20 +28,19 @@ import static org.quartz.TriggerBuilder.newTrigger;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Test;
 import org.quartz.DateBuilder.IntervalUnit;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.spi.OperableTrigger;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test for DailyTimeIntervalScheduleBuilder.
  *
  * @author Zemian Deng <saltnlight5@gmail.com>
  */
-public class DailyTimeIntervalScheduleBuilderTest extends TestCase
+public class DailyTimeIntervalScheduleBuilderTest
 {
-
+  @Test
   public void testScheduleActualTrigger () throws Exception
   {
     final Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler ();
@@ -52,6 +54,7 @@ public class DailyTimeIntervalScheduleBuilderTest extends TestCase
     scheduler.shutdown ();
   }
 
+  @Test
   public void testScheduleInMiddleOfDailyInterval () throws Exception
   {
 
@@ -106,6 +109,7 @@ public class DailyTimeIntervalScheduleBuilderTest extends TestCase
     scheduler.shutdown ();
   }
 
+  @Test
   public void testHourlyTrigger ()
   {
     final DailyTimeIntervalTrigger trigger = newTrigger ().withIdentity ("test")
@@ -119,6 +123,7 @@ public class DailyTimeIntervalScheduleBuilderTest extends TestCase
     assertEquals (48, fireTimes.size ());
   }
 
+  @Test
   public void testMinutelyTriggerWithTimeOfDay ()
   {
     final DailyTimeIntervalTrigger trigger = newTrigger ().withIdentity ("test", "group")
@@ -141,6 +146,7 @@ public class DailyTimeIntervalScheduleBuilderTest extends TestCase
     assertEquals (48, fireTimes.size ());
   }
 
+  @Test
   public void testSecondlyTriggerWithStartAndEndTime ()
   {
     final Date startTime = DateBuilder.dateOf (0, 0, 0, 1, 1, 2011);
@@ -169,6 +175,7 @@ public class DailyTimeIntervalScheduleBuilderTest extends TestCase
     assertEquals (48, fireTimes.size ());
   }
 
+  @Test
   public void testRepeatCountTrigger ()
   {
     final DailyTimeIntervalTrigger trigger = newTrigger ().withIdentity ("test")
@@ -183,6 +190,7 @@ public class DailyTimeIntervalScheduleBuilderTest extends TestCase
     assertEquals (10, fireTimes.size ());
   }
 
+  @Test
   public void testEndingAtAfterCount ()
   {
     final Date startTime = DateBuilder.dateOf (0, 0, 0, 1, 1, 2011);
@@ -203,6 +211,7 @@ public class DailyTimeIntervalScheduleBuilderTest extends TestCase
     assertEquals (new TimeOfDay (10, 45), trigger.getEndTimeOfDay ());
   }
 
+  @Test
   public void testEndingAtAfterCountOf1 ()
   {
     final Date startTime = DateBuilder.dateOf (0, 0, 0, 1, 1, 2011);
@@ -223,6 +232,7 @@ public class DailyTimeIntervalScheduleBuilderTest extends TestCase
     assertEquals (new TimeOfDay (8, 0), trigger.getEndTimeOfDay ());
   }
 
+  @Test
   public void testEndingAtAfterCountOf0 ()
   {
     try
