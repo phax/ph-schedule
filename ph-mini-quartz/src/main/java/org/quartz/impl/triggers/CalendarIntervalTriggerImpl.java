@@ -730,7 +730,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarInterv
     return getFireTimeAfter (afterTime, false);
   }
 
-  protected Date getFireTimeAfter (Date afterTime, final boolean ignoreEndTime)
+  protected Date getFireTimeAfter (final Date aAfterTime, final boolean ignoreEndTime)
   {
     if (complete)
     {
@@ -739,24 +739,19 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarInterv
 
     // increment afterTme by a second, so that we are
     // comparing against a time after it!
+    Date afterTime = aAfterTime;
     if (afterTime == null)
-    {
       afterTime = new Date ();
-    }
 
     final long startMillis = getStartTime ().getTime ();
     final long afterMillis = afterTime.getTime ();
     final long endMillis = (getEndTime () == null) ? Long.MAX_VALUE : getEndTime ().getTime ();
 
     if (!ignoreEndTime && (endMillis <= afterMillis))
-    {
       return null;
-    }
 
     if (afterMillis < startMillis)
-    {
       return new Date (startMillis);
-    }
 
     final long secondsAfterStart = 1 + (afterMillis - startMillis) / 1000L;
 

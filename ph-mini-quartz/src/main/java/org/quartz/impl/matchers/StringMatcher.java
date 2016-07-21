@@ -19,12 +19,14 @@ package org.quartz.impl.matchers;
 import org.quartz.Matcher;
 import org.quartz.utils.Key;
 
+import com.helger.commons.hashcode.HashCodeGenerator;
+
 /**
  * An abstract base class for some types of matchers.
  *
  * @author jhouse
  */
-public abstract class StringMatcher <T extends Key <?>> implements Matcher <T>
+public abstract class StringMatcher <T extends Key <T>> implements Matcher <T>
 {
   public enum StringOperatorName
   {
@@ -76,8 +78,8 @@ public abstract class StringMatcher <T extends Key <?>> implements Matcher <T>
     public abstract boolean evaluate (String value, String compareTo);
   }
 
-  protected String compareTo;
-  protected StringOperatorName compareWith;
+  private final String compareTo;
+  private final StringOperatorName compareWith;
 
   protected StringMatcher (final String compareTo, final StringOperatorName compareWith)
   {
@@ -90,53 +92,6 @@ public abstract class StringMatcher <T extends Key <?>> implements Matcher <T>
     this.compareWith = compareWith;
   }
 
-  protected abstract String getValue (T key);
-
-  public boolean isMatch (final T key)
-  {
-
-    return compareWith.evaluate (getValue (key), compareTo);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((compareTo == null) ? 0 : compareTo.hashCode ());
-    result = prime * result + ((compareWith == null) ? 0 : compareWith.hashCode ());
-    return result;
-  }
-
-  @Override
-  public boolean equals (final Object obj)
-  {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass () != obj.getClass ())
-      return false;
-    final StringMatcher <?> other = (StringMatcher <?>) obj;
-    if (compareTo == null)
-    {
-      if (other.compareTo != null)
-        return false;
-    }
-    else
-      if (!compareTo.equals (other.compareTo))
-        return false;
-    if (compareWith == null)
-    {
-      if (other.compareWith != null)
-        return false;
-    }
-    else
-      if (!compareWith.equals (other.compareWith))
-        return false;
-    return true;
-  }
-
   public String getCompareToValue ()
   {
     return compareTo;
@@ -147,4 +102,27 @@ public abstract class StringMatcher <T extends Key <?>> implements Matcher <T>
     return compareWith;
   }
 
+  protected abstract String getValue (T key);
+
+  public boolean isMatch (final T key)
+  {
+    return compareWith.evaluate (getValue (key), compareTo);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (compareTo).append (compareWith).getHashCode ();
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (this == o)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final StringMatcher <?> other = (StringMatcher <?>) o;
+    return compareTo.equals (other.compareTo) && compareWith.equals (other.compareWith);
+  }
 }

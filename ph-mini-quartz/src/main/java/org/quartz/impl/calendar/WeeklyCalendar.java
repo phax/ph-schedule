@@ -184,7 +184,7 @@ public class WeeklyCalendar extends BaseCalendar
    * </p>
    */
   @Override
-  public long getNextIncludedTime (long timeStamp)
+  public long getNextIncludedTime (final long nTimeStamp)
   {
     if (excludeAll == true)
     {
@@ -192,6 +192,7 @@ public class WeeklyCalendar extends BaseCalendar
     }
 
     // Call base calendar implementation first
+    long timeStamp = nTimeStamp;
     final long baseTime = super.getNextIncludedTime (timeStamp);
     if ((baseTime > 0) && (baseTime > timeStamp))
     {

@@ -403,15 +403,14 @@ public class PropertiesParser
     }
   }
 
-  public String [] getPropertyGroups (String prefix)
+  public String [] getPropertyGroups (final String sPrefix)
   {
     final Enumeration <?> keys = props.propertyNames ();
     final Set <String> groups = new HashSet<> (10);
 
+    String prefix = sPrefix;
     if (!prefix.endsWith ("."))
-    {
       prefix += ".";
-    }
 
     while (keys.hasMoreElements ())
     {
@@ -439,7 +438,7 @@ public class PropertiesParser
   /**
    * Get all properties that start with the given prefix.
    *
-   * @param prefix
+   * @param sPrefix
    *        The prefix for which to search. If it does not end in a "." then one
    *        will be added to it for search purposes.
    * @param stripPrefix
@@ -453,15 +452,14 @@ public class PropertiesParser
    *         optionally have that prefix removed, and do not include properties
    *         that start with one of the given excluded prefixes.
    */
-  public Properties getPropertyGroup (String prefix, final boolean stripPrefix, final String [] excludedPrefixes)
+  public Properties getPropertyGroup (final String sPrefix, final boolean stripPrefix, final String [] excludedPrefixes)
   {
     final Enumeration <?> keys = props.propertyNames ();
     final Properties group = new Properties ();
 
+    String prefix = sPrefix;
     if (!prefix.endsWith ("."))
-    {
       prefix += ".";
-    }
 
     while (keys.hasMoreElements ())
     {
@@ -483,13 +481,9 @@ public class PropertiesParser
           final String value = getStringProperty (key, "");
 
           if (stripPrefix)
-          {
             group.put (key.substring (prefix.length ()), value);
-          }
           else
-          {
             group.put (key, value);
-          }
         }
       }
     }

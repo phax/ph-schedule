@@ -131,7 +131,7 @@ public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
     return cronSchedule (new CronExpression (cronExpression));
   }
 
-  private static CronScheduleBuilder cronScheduleNoParseException (final String presumedValidCronExpression)
+  private static CronScheduleBuilder _cronScheduleNoParseException (final String presumedValidCronExpression)
   {
     try
     {
@@ -179,7 +179,7 @@ public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
 
     final String cronExpression = String.format ("0 %d %d ? * *", minute, hour);
 
-    return cronScheduleNoParseException (cronExpression);
+    return _cronScheduleNoParseException (cronExpression);
   }
 
   /**
@@ -220,7 +220,7 @@ public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
     for (int i = 1; i < daysOfWeek.length; i++)
       cronExpression = cronExpression + "," + daysOfWeek[i];
 
-    return cronScheduleNoParseException (cronExpression);
+    return _cronScheduleNoParseException (cronExpression);
   }
 
   /**
@@ -251,7 +251,7 @@ public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
 
     final String cronExpression = String.format ("0 %d %d ? * %d", minute, hour, dayOfWeek);
 
-    return cronScheduleNoParseException (cronExpression);
+    return _cronScheduleNoParseException (cronExpression);
   }
 
   /**
@@ -278,7 +278,7 @@ public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
 
     final String cronExpression = String.format ("0 %d %d %d * ?", minute, hour, dayOfMonth);
 
-    return cronScheduleNoParseException (cronExpression);
+    return _cronScheduleNoParseException (cronExpression);
   }
 
   /**

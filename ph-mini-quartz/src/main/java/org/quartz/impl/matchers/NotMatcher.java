@@ -19,16 +19,18 @@ package org.quartz.impl.matchers;
 import org.quartz.Matcher;
 import org.quartz.utils.Key;
 
+import com.helger.commons.hashcode.HashCodeGenerator;
+
 /**
  * Matches using an NOT operator on another Matcher.
  *
  * @author jhouse
  */
-public class NotMatcher <T extends Key <?>> implements Matcher <T>
+public class NotMatcher <T extends Key <T>> implements Matcher <T>
 {
-  protected Matcher <T> operand;
+  private final Matcher <T> operand;
 
-  protected NotMatcher (final Matcher <T> operand)
+  public NotMatcher (final Matcher <T> operand)
   {
     if (operand == null)
       throw new IllegalArgumentException ("Non-null operand required!");
@@ -36,17 +38,8 @@ public class NotMatcher <T extends Key <?>> implements Matcher <T>
     this.operand = operand;
   }
 
-  /**
-   * Create a NotMatcher that reverses the result of the given matcher.
-   */
-  public static <U extends Key <?>> NotMatcher <U> not (final Matcher <U> operand)
-  {
-    return new NotMatcher<> (operand);
-  }
-
   public boolean isMatch (final T key)
   {
-
     return !operand.isMatch (key);
   }
 
@@ -58,30 +51,17 @@ public class NotMatcher <T extends Key <?>> implements Matcher <T>
   @Override
   public int hashCode ()
   {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((operand == null) ? 0 : operand.hashCode ());
-    return result;
+    return new HashCodeGenerator (this).append (operand).getHashCode ();
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object o)
   {
-    if (this == obj)
+    if (this == o)
       return true;
-    if (obj == null)
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    if (getClass () != obj.getClass ())
-      return false;
-    final NotMatcher <?> other = (NotMatcher <?>) obj;
-    if (operand == null)
-    {
-      if (other.operand != null)
-        return false;
-    }
-    else
-      if (!operand.equals (other.operand))
-        return false;
-    return true;
+    final NotMatcher <?> other = (NotMatcher <?>) o;
+    return operand.equals (other.operand);
   }
 }

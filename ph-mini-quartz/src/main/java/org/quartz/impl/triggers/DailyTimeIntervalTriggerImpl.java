@@ -743,9 +743,11 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
    * will fire, after the given time. If the trigger will not fire after the
    * given time, <code>null</code> will be returned.
    * </p>
+   * 
+   * @param aAfterTime
    */
   @Override
-  public Date getFireTimeAfter (Date afterTime)
+  public Date getFireTimeAfter (final Date aAfterTime)
   {
     // Check if trigger has completed or not.
     if (complete)
@@ -761,14 +763,11 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
 
     // a. Increment afterTime by a second, so that we are comparing against a
     // time after it!
+    Date afterTime = aAfterTime;
     if (afterTime == null)
-    {
       afterTime = new Date (System.currentTimeMillis () + 1000L);
-    }
     else
-    {
       afterTime = new Date (afterTime.getTime () + 1000L);
-    }
 
     // make sure afterTime is at least startTime
     if (afterTime.before (startTime))
@@ -867,7 +866,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
    * simply return it unaltered, if not, advance to the next valid week day, and
    * set the time of day to the start time of day
    *
-   * @param fireTime
+   * @param aFireTime
    *        - given next fireTime.
    * @param forceToAdvanceNextDay
    *        - flag to whether to advance day without check existing week day.
@@ -875,10 +874,11 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger <DailyTimeInte
    *        the endTimeOfDay that fireTime should move to next day anyway.
    * @return a next day fireTime.
    */
-  private Date advanceToNextDayOfWeekIfNecessary (Date fireTime, final boolean forceToAdvanceNextDay)
+  private Date advanceToNextDayOfWeekIfNecessary (final Date aFireTime, final boolean forceToAdvanceNextDay)
   {
     // a. Advance or adjust to next dayOfWeek if need to first, starting next
     // day with startTimeOfDay.
+    Date fireTime = aFireTime;
     final TimeOfDay sTimeOfDay = getStartTimeOfDay ();
     final Date fireTimeStartDate = sTimeOfDay.getTimeOfDayForDate (fireTime);
     final Calendar fireTimeStartDateCal = createCalendarTime (fireTimeStartDate);

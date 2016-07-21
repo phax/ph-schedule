@@ -19,14 +19,16 @@ package org.quartz.impl.matchers;
 import org.quartz.Matcher;
 import org.quartz.utils.Key;
 
+import com.helger.commons.hashcode.HashCodeGenerator;
+
 /**
  * Matches on the complete key being equal (both name and group).
  *
  * @author jhouse
  */
-public class KeyMatcher <T extends Key <?>> implements Matcher <T>
+public class KeyMatcher <T extends Key <T>> implements Matcher <T>
 {
-  protected T compareTo;
+  private final T compareTo;
 
   protected KeyMatcher (final T compareTo)
   {
@@ -36,14 +38,13 @@ public class KeyMatcher <T extends Key <?>> implements Matcher <T>
   /**
    * Create a KeyMatcher that matches Keys that equal the given key.
    */
-  public static <U extends Key <?>> KeyMatcher <U> keyEquals (final U compareTo)
+  public static <U extends Key <U>> KeyMatcher <U> keyEquals (final U compareTo)
   {
     return new KeyMatcher<> (compareTo);
   }
 
   public boolean isMatch (final T key)
   {
-
     return compareTo.equals (key);
   }
 
@@ -55,31 +56,17 @@ public class KeyMatcher <T extends Key <?>> implements Matcher <T>
   @Override
   public int hashCode ()
   {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((compareTo == null) ? 0 : compareTo.hashCode ());
-    return result;
+    return new HashCodeGenerator (this).append (compareTo).getHashCode ();
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object o)
   {
-    if (this == obj)
+    if (this == o)
       return true;
-    if (obj == null)
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    if (getClass () != obj.getClass ())
-      return false;
-    final KeyMatcher <?> other = (KeyMatcher <?>) obj;
-    if (compareTo == null)
-    {
-      if (other.compareTo != null)
-        return false;
-    }
-    else
-      if (!compareTo.equals (other.compareTo))
-        return false;
-    return true;
+    final KeyMatcher <?> other = (KeyMatcher <?>) o;
+    return compareTo.equals (other.compareTo);
   }
-
 }

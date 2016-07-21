@@ -55,7 +55,7 @@ public class TimeOfDay implements Serializable
     this.hour = hour;
     this.minute = minute;
     this.second = second;
-    validate ();
+    _validate ();
   }
 
   /**
@@ -74,10 +74,10 @@ public class TimeOfDay implements Serializable
     this.hour = hour;
     this.minute = minute;
     this.second = 0;
-    validate ();
+    _validate ();
   }
 
-  private void validate ()
+  private void _validate ()
   {
     if (hour < 0 || hour > 23)
       throw new IllegalArgumentException ("Hour must be from 0 to 23");

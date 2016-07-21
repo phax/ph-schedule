@@ -57,7 +57,6 @@ import java.util.Date;
  */
 public interface JobExecutionContext
 {
-
   /**
    * <p>
    * Get a handle to the <code>Scheduler</code> instance that fired the

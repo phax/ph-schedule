@@ -19,17 +19,19 @@ package org.quartz.impl.matchers;
 import org.quartz.Matcher;
 import org.quartz.utils.Key;
 
+import com.helger.commons.hashcode.HashCodeGenerator;
+
 /**
  * Matches using an AND operator on two Matcher operands.
  *
  * @author jhouse
  */
-public class AndMatcher <T extends Key <?>> implements Matcher <T>
+public class AndMatcher <T extends Key <T>> implements Matcher <T>
 {
-  protected Matcher <T> leftOperand;
-  protected Matcher <T> rightOperand;
+  private final Matcher <T> leftOperand;
+  private final Matcher <T> rightOperand;
 
-  protected AndMatcher (final Matcher <T> leftOperand, final Matcher <T> rightOperand)
+  public AndMatcher (final Matcher <T> leftOperand, final Matcher <T> rightOperand)
   {
     if (leftOperand == null || rightOperand == null)
       throw new IllegalArgumentException ("Two non-null operands required!");
@@ -38,18 +40,8 @@ public class AndMatcher <T extends Key <?>> implements Matcher <T>
     this.rightOperand = rightOperand;
   }
 
-  /**
-   * Create an AndMatcher that depends upon the result of both of the given
-   * matchers.
-   */
-  public static <U extends Key <?>> AndMatcher <U> and (final Matcher <U> leftOperand, final Matcher <U> rightOperand)
-  {
-    return new AndMatcher<> (leftOperand, rightOperand);
-  }
-
   public boolean isMatch (final T key)
   {
-
     return leftOperand.isMatch (key) && rightOperand.isMatch (key);
   }
 
@@ -66,40 +58,17 @@ public class AndMatcher <T extends Key <?>> implements Matcher <T>
   @Override
   public int hashCode ()
   {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((leftOperand == null) ? 0 : leftOperand.hashCode ());
-    result = prime * result + ((rightOperand == null) ? 0 : rightOperand.hashCode ());
-    return result;
+    return new HashCodeGenerator (this).append (leftOperand).append (rightOperand).getHashCode ();
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object o)
   {
-    if (this == obj)
+    if (this == o)
       return true;
-    if (obj == null)
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    if (getClass () != obj.getClass ())
-      return false;
-    final AndMatcher <?> other = (AndMatcher <?>) obj;
-    if (leftOperand == null)
-    {
-      if (other.leftOperand != null)
-        return false;
-    }
-    else
-      if (!leftOperand.equals (other.leftOperand))
-        return false;
-    if (rightOperand == null)
-    {
-      if (other.rightOperand != null)
-        return false;
-    }
-    else
-      if (!rightOperand.equals (other.rightOperand))
-        return false;
-    return true;
+    final AndMatcher <?> other = (AndMatcher <?>) o;
+    return leftOperand.equals (other.leftOperand) && rightOperand.equals (other.rightOperand);
   }
-
 }

@@ -42,13 +42,6 @@ package org.quartz;
  */
 public interface Job
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Called by the <code>{@link Scheduler}</code> when a
@@ -68,5 +61,4 @@ public interface Job
    *         if there is an exception while executing the job.
    */
   void execute (JobExecutionContext context) throws JobExecutionException;
-
 }

@@ -194,8 +194,9 @@ public class AnnualCalendar extends BaseCalendar
     removeExcludedDay (day, false);
   }
 
-  private void removeExcludedDay (java.util.Calendar day, final boolean isChecked)
+  private void removeExcludedDay (final java.util.Calendar aDay, final boolean isChecked)
   {
+    java.util.Calendar day = aDay;
     if (!isChecked && !isDayExcluded (day))
       return;
 
@@ -263,9 +264,10 @@ public class AnnualCalendar extends BaseCalendar
    * </p>
    */
   @Override
-  public long getNextIncludedTime (long timeStamp)
+  public long getNextIncludedTime (final long nTimeStamp)
   {
     // Call base calendar implementation first
+    long timeStamp = nTimeStamp;
     final long baseTime = super.getNextIncludedTime (timeStamp);
     if ((baseTime > 0) && (baseTime > timeStamp))
     {

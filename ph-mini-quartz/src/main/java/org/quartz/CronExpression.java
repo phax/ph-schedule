@@ -1102,8 +1102,9 @@ public final class CronExpression implements Serializable, Cloneable
     return nIndex++;
   }
 
-  protected void addToSet (final int val, final int end, int incr, final int type) throws ParseException
+  protected void addToSet (final int val, final int end, final int nIncr, final int type) throws ParseException
   {
+    int incr = nIncr;
     final TreeSet <Integer> set = getSet (type);
 
     if (type == SECOND || type == MINUTE)

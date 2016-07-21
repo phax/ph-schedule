@@ -288,14 +288,15 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    * Note that the date returned is NOT validated against the related
    * org.quartz.Calendar (if any)
    * </p>
+   * 
+   * @param aAfterTime
    */
   @Override
-  public Date getFireTimeAfter (Date afterTime)
+  public Date getFireTimeAfter (final Date aAfterTime)
   {
+    Date afterTime = aAfterTime;
     if (afterTime == null)
-    {
       afterTime = new Date ();
-    }
 
     if (getStartTime ().after (afterTime))
     {
@@ -445,10 +446,9 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    *        minutes and seconds will be ignored).
    * @see #willFireOn(Calendar)
    */
-  public boolean willFireOn (Calendar test, final boolean dayOnly)
+  public boolean willFireOn (final Calendar aTest, final boolean dayOnly)
   {
-    test = (Calendar) test.clone ();
-
+    final Calendar test = (Calendar) aTest.clone ();
     test.set (Calendar.MILLISECOND, 0); // don't compare millis.
 
     if (dayOnly)

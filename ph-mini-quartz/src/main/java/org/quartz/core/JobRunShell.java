@@ -183,7 +183,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
         // notify job & trigger listeners...
         try
         {
-          if (!notifyListenersBeginning (jec))
+          if (!_notifyListenersBeginning (jec))
           {
             break;
           }
@@ -243,7 +243,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
         jec.setJobRunTime (endTime - startTime);
 
         // notify all job listeners
-        if (!notifyJobListenersComplete (jec, jobExEx))
+        if (!_notifyJobListenersComplete (jec, jobExEx))
         {
           break;
         }
@@ -263,7 +263,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
         }
 
         // notify all trigger listeners
-        if (!notifyTriggerListenersComplete (jec, instCode))
+        if (!_notifyTriggerListenersComplete (jec, instCode))
         {
           break;
         }
@@ -329,7 +329,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
     qs = null;
   }
 
-  private boolean notifyListenersBeginning (final JobExecutionContext jobExCtxt) throws VetoedException
+  private boolean _notifyListenersBeginning (final JobExecutionContext jobExCtxt) throws VetoedException
   {
 
     boolean vetoed = false;
@@ -391,7 +391,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
     return true;
   }
 
-  private boolean notifyJobListenersComplete (final JobExecutionContext jobExCtxt, final JobExecutionException jobExEx)
+  private boolean _notifyJobListenersComplete (final JobExecutionContext jobExCtxt, final JobExecutionException jobExEx)
   {
     try
     {
@@ -412,7 +412,7 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable
     return true;
   }
 
-  private boolean notifyTriggerListenersComplete (final JobExecutionContext jobExCtxt,
+  private boolean _notifyTriggerListenersComplete (final JobExecutionContext jobExCtxt,
                                                   final CompletedExecutionInstruction instCode)
   {
     try

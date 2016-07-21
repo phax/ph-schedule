@@ -342,7 +342,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     {
       initialStart = new Date ();
       this.resources.getJobStore ().schedulerStarted ();
-      startPlugins ();
+      _startPlugins ();
     }
     else
     {
@@ -519,7 +519,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
     closed = true;
 
-    shutdownPlugins ();
+    _shutdownPlugins ();
 
     resources.getJobStore ().shutdown ();
 
@@ -953,7 +953,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   }
 
-  private String newTriggerId ()
+  private String _newTriggerId ()
   {
     long r = random.nextLong ();
     if (r < 0)
@@ -973,7 +973,8 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   {
     validateState ();
 
-    final OperableTrigger trig = (OperableTrigger) newTrigger ().withIdentity (newTriggerId (), Scheduler.DEFAULT_GROUP)
+    final OperableTrigger trig = (OperableTrigger) newTrigger ().withIdentity (_newTriggerId (),
+                                                                               Scheduler.DEFAULT_GROUP)
                                                                 .forJob (jobKey)
                                                                 .build ();
     trig.computeFirstFireTime (null);
@@ -992,7 +993,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
       }
       catch (final ObjectAlreadyExistsException oaee)
       {
-        trig.setKey (new TriggerKey (newTriggerId (), Scheduler.DEFAULT_GROUP));
+        trig.setKey (new TriggerKey (_newTriggerId (), Scheduler.DEFAULT_GROUP));
       }
     }
 
@@ -1022,7 +1023,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
       }
       catch (final ObjectAlreadyExistsException oaee)
       {
-        trig.setKey (new TriggerKey (newTriggerId (), Scheduler.DEFAULT_GROUP));
+        trig.setKey (new TriggerKey (_newTriggerId (), Scheduler.DEFAULT_GROUP));
       }
     }
 
@@ -1644,7 +1645,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     }
   }
 
-  private List <TriggerListener> buildTriggerListenerList ()
+  private List <TriggerListener> _buildTriggerListenerList ()
   {
     final List <TriggerListener> allListeners = new LinkedList<> ();
     allListeners.addAll (getListenerManager ().getTriggerListeners ());
@@ -1653,7 +1654,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return allListeners;
   }
 
-  private List <JobListener> buildJobListenerList ()
+  private List <JobListener> _buildJobListenerList ()
   {
     final List <JobListener> allListeners = new LinkedList<> ();
     allListeners.addAll (getListenerManager ().getJobListeners ());
@@ -1662,7 +1663,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return allListeners;
   }
 
-  private List <SchedulerListener> buildSchedulerListenerList ()
+  private List <SchedulerListener> _buildSchedulerListenerList ()
   {
     final List <SchedulerListener> allListeners = new ArrayList<> ();
     allListeners.addAll (getListenerManager ().getSchedulerListeners ());
@@ -1671,7 +1672,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return allListeners;
   }
 
-  private boolean matchJobListener (final JobListener listener, final JobKey key)
+  private boolean _matchJobListener (final JobListener listener, final JobKey key)
   {
     final List <Matcher <JobKey>> matchers = getListenerManager ().getJobListenerMatchers (listener.getName ());
     if (matchers == null)
@@ -1684,7 +1685,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return false;
   }
 
-  private boolean matchTriggerListener (final TriggerListener listener, final TriggerKey key)
+  private boolean _matchTriggerListener (final TriggerListener listener, final TriggerKey key)
   {
     final List <Matcher <TriggerKey>> matchers = getListenerManager ().getTriggerListenerMatchers (listener.getName ());
     if (matchers == null)
@@ -1703,14 +1704,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     boolean vetoedExecution = false;
 
     // build a list of all trigger listeners that are to be notified...
-    final List <TriggerListener> triggerListeners = buildTriggerListenerList ();
+    final List <TriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
     for (final TriggerListener tl : triggerListeners)
     {
       try
       {
-        if (!matchTriggerListener (tl, jec.getTrigger ().getKey ()))
+        if (!_matchTriggerListener (tl, jec.getTrigger ().getKey ()))
           continue;
         tl.triggerFired (jec.getTrigger (), jec);
 
@@ -1736,14 +1737,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifyTriggerListenersMisfired (final Trigger trigger) throws SchedulerException
   {
     // build a list of all trigger listeners that are to be notified...
-    final List <TriggerListener> triggerListeners = buildTriggerListenerList ();
+    final List <TriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
     for (final TriggerListener tl : triggerListeners)
     {
       try
       {
-        if (!matchTriggerListener (tl, trigger.getKey ()))
+        if (!_matchTriggerListener (tl, trigger.getKey ()))
           continue;
         tl.triggerMisfired (trigger);
       }
@@ -1763,14 +1764,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
                                               final CompletedExecutionInstruction instCode) throws SchedulerException
   {
     // build a list of all trigger listeners that are to be notified...
-    final List <TriggerListener> triggerListeners = buildTriggerListenerList ();
+    final List <TriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
     for (final TriggerListener tl : triggerListeners)
     {
       try
       {
-        if (!matchTriggerListener (tl, jec.getTrigger ().getKey ()))
+        if (!_matchTriggerListener (tl, jec.getTrigger ().getKey ()))
           continue;
         tl.triggerComplete (jec.getTrigger (), jec, instCode);
       }
@@ -1789,14 +1790,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifyJobListenersToBeExecuted (final JobExecutionContext jec) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <JobListener> jobListeners = buildJobListenerList ();
+    final List <JobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
     for (final JobListener jl : jobListeners)
     {
       try
       {
-        if (!matchJobListener (jl, jec.getJobDetail ().getKey ()))
+        if (!_matchJobListener (jl, jec.getJobDetail ().getKey ()))
           continue;
         jl.jobToBeExecuted (jec);
       }
@@ -1815,14 +1816,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifyJobListenersWasVetoed (final JobExecutionContext jec) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <JobListener> jobListeners = buildJobListenerList ();
+    final List <JobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
     for (final JobListener jl : jobListeners)
     {
       try
       {
-        if (!matchJobListener (jl, jec.getJobDetail ().getKey ()))
+        if (!_matchJobListener (jl, jec.getJobDetail ().getKey ()))
           continue;
         jl.jobExecutionVetoed (jec);
       }
@@ -1842,14 +1843,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler
                                              final JobExecutionException je) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <JobListener> jobListeners = buildJobListenerList ();
+    final List <JobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
     for (final JobListener jl : jobListeners)
     {
       try
       {
-        if (!matchJobListener (jl, jec.getJobDetail ().getKey ()))
+        if (!_matchJobListener (jl, jec.getJobDetail ().getKey ()))
           continue;
         jl.jobWasExecuted (jec, je);
       }
@@ -1868,7 +1869,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersError (final String msg, final SchedulerException se)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -1888,7 +1889,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersSchduled (final Trigger trigger)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -1910,7 +1911,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersUnscheduled (final TriggerKey triggerKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -1935,7 +1936,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersFinalized (final Trigger trigger)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -1957,7 +1958,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersPausedTrigger (final TriggerKey triggerKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -1976,7 +1977,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersPausedTriggers (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -1995,7 +1996,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersResumedTrigger (final TriggerKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2014,7 +2015,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersResumedTriggers (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2033,7 +2034,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersPausedJob (final JobKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2052,7 +2053,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersPausedJobs (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2071,7 +2072,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersResumedJob (final JobKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2090,7 +2091,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersResumedJobs (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2109,7 +2110,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersInStandbyMode ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2128,7 +2129,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersStarted ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2147,7 +2148,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersStarting ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2166,7 +2167,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersShutdown ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2185,7 +2186,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersShuttingdown ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2204,7 +2205,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersJobAdded (final JobDetail jobDetail)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2223,7 +2224,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
   public void notifySchedulerListenersJobDeleted (final JobKey jobKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <SchedulerListener> schedListeners = buildSchedulerListenerList ();
+    final List <SchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final SchedulerListener sl : schedListeners)
@@ -2343,22 +2344,16 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     return false;
   }
 
-  private void shutdownPlugins ()
+  private void _shutdownPlugins ()
   {
     resources.getSchedulerPlugins ().forEach (x -> x.shutdown ());
   }
 
-  private void startPlugins ()
+  private void _startPlugins ()
   {
     resources.getSchedulerPlugins ().forEach (x -> x.start ());
   }
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// ErrorLogger - Scheduler Listener Class
-//
-/////////////////////////////////////////////////////////////////////////////
 
 class ErrorLogger extends SchedulerListenerSupport
 {
@@ -2371,12 +2366,6 @@ class ErrorLogger extends SchedulerListenerSupport
     getLog ().error (msg, cause);
   }
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// ExecutingJobsManager - Job Listener Class
-//
-/////////////////////////////////////////////////////////////////////////////
 
 class ExecutingJobsManager implements JobListener
 {

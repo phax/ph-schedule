@@ -318,33 +318,19 @@ public interface Trigger extends Serializable, Cloneable, Comparable <Trigger>
       if (nextFireTime1 != null || nextFireTime2 != null)
       {
         if (nextFireTime1 == null)
-        {
           return 1;
-        }
-
         if (nextFireTime2 == null)
-        {
           return -1;
-        }
-
         if (nextFireTime1.before (nextFireTime2))
-        {
           return -1;
-        }
-
         if (nextFireTime1.after (nextFireTime2))
-        {
           return 1;
-        }
       }
 
-      final int comp = priority2 - priority1;
-      if (comp != 0)
-      {
-        return comp;
-      }
-
-      return key1.compareTo (key2);
+      int comp = priority2 - priority1;
+      if (comp == 0)
+        comp = key1.compareTo (key2);
+      return comp;
     }
 
     public int compare (final Trigger t1, final Trigger t2)

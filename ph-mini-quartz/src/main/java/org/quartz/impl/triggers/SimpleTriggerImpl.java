@@ -610,9 +610,11 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
    * after the given time. If the trigger will not fire after the given time,
    * <code>null</code> will be returned.
    * </p>
+   * 
+   * @param aAfterTime
    */
   @Override
-  public Date getFireTimeAfter (Date afterTime)
+  public Date getFireTimeAfter (final Date aAfterTime)
   {
     if (complete)
       return null;
@@ -620,6 +622,7 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
     if ((timesTriggered > repeatCount) && (repeatCount != REPEAT_INDEFINITELY))
       return null;
 
+    Date afterTime = aAfterTime;
     if (afterTime == null)
       afterTime = new Date ();
 

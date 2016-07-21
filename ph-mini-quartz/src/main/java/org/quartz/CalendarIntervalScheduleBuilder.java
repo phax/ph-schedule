@@ -114,7 +114,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
   {
     if (unit == null)
       throw new IllegalArgumentException ("TimeUnit must be specified.");
-    validateInterval (timeInterval);
+    _validateInterval (timeInterval);
     this.interval = timeInterval;
     this.intervalUnit = unit;
     return this;
@@ -132,7 +132,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    */
   public CalendarIntervalScheduleBuilder withIntervalInSeconds (final int intervalInSeconds)
   {
-    validateInterval (intervalInSeconds);
+    _validateInterval (intervalInSeconds);
     this.interval = intervalInSeconds;
     this.intervalUnit = IntervalUnit.SECOND;
     return this;
@@ -150,7 +150,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    */
   public CalendarIntervalScheduleBuilder withIntervalInMinutes (final int intervalInMinutes)
   {
-    validateInterval (intervalInMinutes);
+    _validateInterval (intervalInMinutes);
     this.interval = intervalInMinutes;
     this.intervalUnit = IntervalUnit.MINUTE;
     return this;
@@ -168,7 +168,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    */
   public CalendarIntervalScheduleBuilder withIntervalInHours (final int intervalInHours)
   {
-    validateInterval (intervalInHours);
+    _validateInterval (intervalInHours);
     this.interval = intervalInHours;
     this.intervalUnit = IntervalUnit.HOUR;
     return this;
@@ -186,7 +186,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    */
   public CalendarIntervalScheduleBuilder withIntervalInDays (final int intervalInDays)
   {
-    validateInterval (intervalInDays);
+    _validateInterval (intervalInDays);
     this.interval = intervalInDays;
     this.intervalUnit = IntervalUnit.DAY;
     return this;
@@ -204,7 +204,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    */
   public CalendarIntervalScheduleBuilder withIntervalInWeeks (final int intervalInWeeks)
   {
-    validateInterval (intervalInWeeks);
+    _validateInterval (intervalInWeeks);
     this.interval = intervalInWeeks;
     this.intervalUnit = IntervalUnit.WEEK;
     return this;
@@ -222,7 +222,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    */
   public CalendarIntervalScheduleBuilder withIntervalInMonths (final int intervalInMonths)
   {
-    validateInterval (intervalInMonths);
+    _validateInterval (intervalInMonths);
     this.interval = intervalInMonths;
     this.intervalUnit = IntervalUnit.MONTH;
     return this;
@@ -240,7 +240,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    */
   public CalendarIntervalScheduleBuilder withIntervalInYears (final int intervalInYears)
   {
-    validateInterval (intervalInYears);
+    _validateInterval (intervalInYears);
     this.interval = intervalInYears;
     this.intervalUnit = IntervalUnit.YEAR;
     return this;
@@ -354,7 +354,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
     return this;
   }
 
-  private void validateInterval (final int timeInterval)
+  private static void _validateInterval (final int timeInterval)
   {
     if (timeInterval <= 0)
       throw new IllegalArgumentException ("Interval must be a positive value.");

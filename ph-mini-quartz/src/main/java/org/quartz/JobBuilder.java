@@ -54,7 +54,6 @@ import org.quartz.utils.Key;
  */
 public class JobBuilder
 {
-
   private JobKey key;
   private String description;
   private Class <? extends Job> jobClass;

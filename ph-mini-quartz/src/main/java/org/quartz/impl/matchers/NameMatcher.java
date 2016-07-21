@@ -25,7 +25,7 @@ import org.quartz.utils.Key;
  *
  * @author jhouse
  */
-public class NameMatcher <T extends Key <?>> extends StringMatcher <T>
+public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
 {
   protected NameMatcher (final String compareTo, final StringOperatorName compareWith)
   {
@@ -35,7 +35,7 @@ public class NameMatcher <T extends Key <?>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches names equaling the given string.
    */
-  public static <T extends Key <?>> NameMatcher <T> nameEquals (final String compareTo)
+  public static <T extends Key <T>> NameMatcher <T> nameEquals (final String compareTo)
   {
     return new NameMatcher<> (compareTo, StringOperatorName.EQUALS);
   }
@@ -59,7 +59,7 @@ public class NameMatcher <T extends Key <?>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches names starting with the given string.
    */
-  public static <U extends Key <?>> NameMatcher <U> nameStartsWith (final String compareTo)
+  public static <U extends Key <U>> NameMatcher <U> nameStartsWith (final String compareTo)
   {
     return new NameMatcher<> (compareTo, StringOperatorName.STARTS_WITH);
   }
@@ -84,7 +84,7 @@ public class NameMatcher <T extends Key <?>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches names ending with the given string.
    */
-  public static <U extends Key <?>> NameMatcher <U> nameEndsWith (final String compareTo)
+  public static <U extends Key <U>> NameMatcher <U> nameEndsWith (final String compareTo)
   {
     return new NameMatcher<> (compareTo, StringOperatorName.ENDS_WITH);
   }
@@ -109,7 +109,7 @@ public class NameMatcher <T extends Key <?>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches names containing the given string.
    */
-  public static <U extends Key <?>> NameMatcher <U> nameContains (final String compareTo)
+  public static <U extends Key <U>> NameMatcher <U> nameContains (final String compareTo)
   {
     return new NameMatcher<> (compareTo, StringOperatorName.CONTAINS);
   }

@@ -765,12 +765,11 @@ public class RAMJobStore implements JobStore
    *         replaceExisting is set to false.
    */
   public void storeCalendar (final String name,
-                             Calendar calendar,
+                             final Calendar aCalendar,
                              final boolean replaceExisting,
                              final boolean updateTriggers) throws ObjectAlreadyExistsException
   {
-
-    calendar = (Calendar) calendar.clone ();
+    final Calendar calendar = (Calendar) aCalendar.clone ();
 
     synchronized (lock)
     {

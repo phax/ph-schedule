@@ -182,7 +182,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
     if (unit == null ||
         !(unit.equals (IntervalUnit.SECOND) || unit.equals (IntervalUnit.MINUTE) || unit.equals (IntervalUnit.HOUR)))
       throw new IllegalArgumentException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
-    validateInterval (timeInterval);
+    _validateInterval (timeInterval);
     this.interval = timeInterval;
     this.intervalUnit = unit;
     return this;
@@ -447,7 +447,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
     return this;
   }
 
-  private void validateInterval (final int timeInterval)
+  private static void _validateInterval (final int timeInterval)
   {
     if (timeInterval <= 0)
       throw new IllegalArgumentException ("Interval must be a positive value.");

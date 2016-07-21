@@ -15,12 +15,7 @@
  */
 package org.quartz.listeners;
 
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.SchedulerException;
 import org.quartz.SchedulerListener;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,65 +42,4 @@ public abstract class SchedulerListenerSupport implements SchedulerListener
   {
     return log;
   }
-
-  public void jobAdded (final JobDetail jobDetail)
-  {}
-
-  public void jobDeleted (final JobKey jobKey)
-  {}
-
-  public void jobPaused (final JobKey jobKey)
-  {}
-
-  public void jobResumed (final JobKey jobKey)
-  {}
-
-  public void jobScheduled (final Trigger trigger)
-  {}
-
-  public void jobsPaused (final String jobGroup)
-  {}
-
-  public void jobsResumed (final String jobGroup)
-  {}
-
-  public void jobUnscheduled (final TriggerKey triggerKey)
-  {}
-
-  public void schedulerError (final String msg, final SchedulerException cause)
-  {}
-
-  public void schedulerInStandbyMode ()
-  {}
-
-  public void schedulerShutdown ()
-  {}
-
-  public void schedulerShuttingdown ()
-  {}
-
-  public void schedulerStarted ()
-  {}
-
-  public void schedulerStarting ()
-  {}
-
-  public void triggerFinalized (final Trigger trigger)
-  {}
-
-  public void triggerPaused (final TriggerKey triggerKey)
-  {}
-
-  public void triggerResumed (final TriggerKey triggerKey)
-  {}
-
-  public void triggersPaused (final String triggerGroup)
-  {}
-
-  public void triggersResumed (final String triggerGroup)
-  {}
-
-  public void schedulingDataCleared ()
-  {}
-
 }

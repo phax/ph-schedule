@@ -348,12 +348,12 @@ public class DateBuilder
     c.setTime (new Date ());
     c.setLenient (true);
 
-    c.add (translate (unit), interval);
+    c.add (_translate (unit), interval);
 
     return c.getTime ();
   }
 
-  private static int translate (final IntervalUnit unit)
+  private static int _translate (final IntervalUnit unit)
   {
     switch (unit)
     {
@@ -592,15 +592,10 @@ public class DateBuilder
    *        used
    * @return the new rounded date
    */
-  public static Date evenHourDate (Date date)
+  public static Date evenHourDate (final Date date)
   {
-    if (date == null)
-    {
-      date = new Date ();
-    }
-
     final Calendar c = Calendar.getInstance ();
-    c.setTime (date);
+    c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
 
     c.set (Calendar.HOUR_OF_DAY, c.get (Calendar.HOUR_OF_DAY) + 1);
@@ -626,15 +621,10 @@ public class DateBuilder
    *        used
    * @return the new rounded date
    */
-  public static Date evenHourDateBefore (Date date)
+  public static Date evenHourDateBefore (final Date date)
   {
-    if (date == null)
-    {
-      date = new Date ();
-    }
-
     final Calendar c = Calendar.getInstance ();
-    c.setTime (date);
+    c.setTime (date != null ? date : new Date ());
 
     c.set (Calendar.MINUTE, 0);
     c.set (Calendar.SECOND, 0);
@@ -677,21 +667,15 @@ public class DateBuilder
    *        used
    * @return the new rounded date
    */
-  public static Date evenMinuteDate (Date date)
+  public static Date evenMinuteDate (final Date date)
   {
-    if (date == null)
-    {
-      date = new Date ();
-    }
-
     final Calendar c = Calendar.getInstance ();
-    c.setTime (date);
+    c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
 
     c.set (Calendar.MINUTE, c.get (Calendar.MINUTE) + 1);
     c.set (Calendar.SECOND, 0);
     c.set (Calendar.MILLISECOND, 0);
-
     return c.getTime ();
   }
 
@@ -710,19 +694,12 @@ public class DateBuilder
    *        used
    * @return the new rounded date
    */
-  public static Date evenMinuteDateBefore (Date date)
+  public static Date evenMinuteDateBefore (final Date date)
   {
-    if (date == null)
-    {
-      date = new Date ();
-    }
-
     final Calendar c = Calendar.getInstance ();
-    c.setTime (date);
-
+    c.setTime (date != null ? date : new Date ());
     c.set (Calendar.SECOND, 0);
     c.set (Calendar.MILLISECOND, 0);
-
     return c.getTime ();
   }
 
@@ -750,20 +727,13 @@ public class DateBuilder
    *        used
    * @return the new rounded date
    */
-  public static Date evenSecondDate (Date date)
+  public static Date evenSecondDate (final Date date)
   {
-    if (date == null)
-    {
-      date = new Date ();
-    }
-
     final Calendar c = Calendar.getInstance ();
-    c.setTime (date);
+    c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
-
     c.set (Calendar.SECOND, c.get (Calendar.SECOND) + 1);
     c.set (Calendar.MILLISECOND, 0);
-
     return c.getTime ();
   }
 
@@ -782,18 +752,11 @@ public class DateBuilder
    *        used
    * @return the new rounded date
    */
-  public static Date evenSecondDateBefore (Date date)
+  public static Date evenSecondDateBefore (final Date date)
   {
-    if (date == null)
-    {
-      date = new Date ();
-    }
-
     final Calendar c = Calendar.getInstance ();
-    c.setTime (date);
-
+    c.setTime (date != null ? date : new Date ());
     c.set (Calendar.MILLISECOND, 0);
-
     return c.getTime ();
   }
 
@@ -888,20 +851,15 @@ public class DateBuilder
    * @return the new rounded date
    * @see #nextGivenSecondDate(Date, int)
    */
-  public static Date nextGivenMinuteDate (Date date, final int minuteBase)
+  public static Date nextGivenMinuteDate (final Date date, final int minuteBase)
   {
     if (minuteBase < 0 || minuteBase > 59)
     {
       throw new IllegalArgumentException ("minuteBase must be >=0 and <= 59");
     }
 
-    if (date == null)
-    {
-      date = new Date ();
-    }
-
     final Calendar c = Calendar.getInstance ();
-    c.setTime (date);
+    c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
 
     if (minuteBase == 0)
@@ -910,29 +868,27 @@ public class DateBuilder
       c.set (Calendar.MINUTE, 0);
       c.set (Calendar.SECOND, 0);
       c.set (Calendar.MILLISECOND, 0);
-
-      return c.getTime ();
     }
-
-    final int minute = c.get (Calendar.MINUTE);
-
-    final int arItr = minute / minuteBase;
-
-    final int nextMinuteOccurance = minuteBase * (arItr + 1);
-
-    if (nextMinuteOccurance < 60)
+    else
     {
-      c.set (Calendar.MINUTE, nextMinuteOccurance);
-      c.set (Calendar.SECOND, 0);
-      c.set (Calendar.MILLISECOND, 0);
+      final int minute = c.get (Calendar.MINUTE);
+      final int arItr = minute / minuteBase;
+      final int nextMinuteOccurance = minuteBase * (arItr + 1);
 
-      return c.getTime ();
+      if (nextMinuteOccurance < 60)
+      {
+        c.set (Calendar.MINUTE, nextMinuteOccurance);
+        c.set (Calendar.SECOND, 0);
+        c.set (Calendar.MILLISECOND, 0);
+      }
+      else
+      {
+        c.set (Calendar.HOUR_OF_DAY, c.get (Calendar.HOUR_OF_DAY) + 1);
+        c.set (Calendar.MINUTE, 0);
+        c.set (Calendar.SECOND, 0);
+        c.set (Calendar.MILLISECOND, 0);
+      }
     }
-    c.set (Calendar.HOUR_OF_DAY, c.get (Calendar.HOUR_OF_DAY) + 1);
-    c.set (Calendar.MINUTE, 0);
-    c.set (Calendar.SECOND, 0);
-    c.set (Calendar.MILLISECOND, 0);
-
     return c.getTime ();
   }
 
@@ -954,20 +910,13 @@ public class DateBuilder
    * @return the new rounded date
    * @see #nextGivenMinuteDate(Date, int)
    */
-  public static Date nextGivenSecondDate (Date date, final int secondBase)
+  public static Date nextGivenSecondDate (final Date date, final int secondBase)
   {
     if (secondBase < 0 || secondBase > 59)
-    {
       throw new IllegalArgumentException ("secondBase must be >=0 and <= 59");
-    }
-
-    if (date == null)
-    {
-      date = new Date ();
-    }
 
     final Calendar c = Calendar.getInstance ();
-    c.setTime (date);
+    c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
 
     if (secondBase == 0)
@@ -975,26 +924,24 @@ public class DateBuilder
       c.set (Calendar.MINUTE, c.get (Calendar.MINUTE) + 1);
       c.set (Calendar.SECOND, 0);
       c.set (Calendar.MILLISECOND, 0);
-
-      return c.getTime ();
     }
-
-    final int second = c.get (Calendar.SECOND);
-
-    final int arItr = second / secondBase;
-
-    final int nextSecondOccurance = secondBase * (arItr + 1);
-
-    if (nextSecondOccurance < 60)
+    else
     {
-      c.set (Calendar.SECOND, nextSecondOccurance);
-      c.set (Calendar.MILLISECOND, 0);
-
-      return c.getTime ();
+      final int second = c.get (Calendar.SECOND);
+      final int arItr = second / secondBase;
+      final int nextSecondOccurance = secondBase * (arItr + 1);
+      if (nextSecondOccurance < 60)
+      {
+        c.set (Calendar.SECOND, nextSecondOccurance);
+        c.set (Calendar.MILLISECOND, 0);
+      }
+      else
+      {
+        c.set (Calendar.MINUTE, c.get (Calendar.MINUTE) + 1);
+        c.set (Calendar.SECOND, 0);
+        c.set (Calendar.MILLISECOND, 0);
+      }
     }
-    c.set (Calendar.MINUTE, c.get (Calendar.MINUTE) + 1);
-    c.set (Calendar.SECOND, 0);
-    c.set (Calendar.MILLISECOND, 0);
     return c.getTime ();
   }
 
@@ -1005,21 +952,17 @@ public class DateBuilder
    *
    * @param date
    *        the date to translate
-   * @param src
+   * @param aSrcTZ
    *        the original time-zone
-   * @param dest
+   * @param aDestTZ
    *        the destination time-zone
    * @return the translated date
    */
-  public static Date translateTime (final Date date, final TimeZone src, final TimeZone dest)
+  public static Date translateTime (final Date date, final TimeZone aSrcTZ, final TimeZone aDestTZ)
   {
-
     final Date newDate = new Date ();
-
-    final int offset = (dest.getOffset (date.getTime ()) - src.getOffset (date.getTime ()));
-
+    final int offset = aDestTZ.getOffset (date.getTime ()) - aSrcTZ.getOffset (date.getTime ());
     newDate.setTime (date.getTime () - offset);
-
     return newDate;
   }
 
@@ -1082,5 +1025,4 @@ public class DateBuilder
       throw new IllegalArgumentException ("Invalid year (must be >= 0 and <= " + MAX_YEAR);
     }
   }
-
 }

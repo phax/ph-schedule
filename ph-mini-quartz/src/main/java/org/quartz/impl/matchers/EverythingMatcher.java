@@ -21,12 +21,14 @@ import org.quartz.Matcher;
 import org.quartz.TriggerKey;
 import org.quartz.utils.Key;
 
+import com.helger.commons.hashcode.HashCodeGenerator;
+
 /**
  * Matches on the complete key being equal (both name and group).
  *
  * @author jhouse
  */
-public class EverythingMatcher <T extends Key <?>> implements Matcher <T>
+public class EverythingMatcher <T extends Key <T>> implements Matcher <T>
 {
   protected EverythingMatcher ()
   {}
@@ -53,18 +55,18 @@ public class EverythingMatcher <T extends Key <?>> implements Matcher <T>
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public int hashCode ()
   {
-    if (obj == null)
-      return false;
-
-    return obj.getClass ().equals (getClass ());
+    return new HashCodeGenerator (this).getHashCode ();
   }
 
   @Override
-  public int hashCode ()
+  public boolean equals (final Object o)
   {
-    return getClass ().getName ().hashCode ();
+    if (this == o)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    return true;
   }
-
 }
