@@ -20,7 +20,6 @@ package org.quartz.core;
 
 import static org.quartz.TriggerBuilder.newTrigger;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -29,7 +28,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -63,13 +61,18 @@ import org.quartz.listeners.SchedulerListenerSupport;
 import org.quartz.simpl.PropertySettingJobFactory;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.OperableTrigger;
-import org.quartz.spi.SchedulerPlugin;
 import org.quartz.spi.SchedulerSignaler;
 import org.quartz.spi.ThreadExecutor;
+import org.quartz.utils.Key;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.ICommonsMap;
+import com.helger.commons.io.resource.ClassPathResource;
+import com.helger.commons.lang.PropertiesHelper;
 import com.helger.commons.random.RandomHelper;
+import com.helger.commons.string.StringHelper;
 
 /**
  * <p>
@@ -100,49 +103,27 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   static
   {
-    final Properties props = new Properties ();
-    InputStream is = null;
-    try
+    final ICommonsMap <String, String> p = PropertiesHelper.loadProperties (new ClassPathResource ("org/quartz/core/quartz-build.properties"));
+    if (p != null)
     {
-      is = QuartzScheduler.class.getResourceAsStream ("quartz-build.properties");
-      if (is != null)
+      final String version = p.get ("version");
+      if (version != null)
       {
-        props.load (is);
-        final String version = props.getProperty ("version");
-        if (version != null)
-        {
-          final String [] versionComponents = version.split ("\\.");
-          VERSION_MAJOR = versionComponents[0];
-          if (versionComponents.length > 1)
-            VERSION_MINOR = versionComponents[1];
-          else
-            VERSION_MINOR = "0";
-          if (versionComponents.length > 2)
-            VERSION_ITERATION = versionComponents[2];
-          else
-            VERSION_ITERATION = "0";
-        }
+        final String [] versionComponents = StringHelper.getExplodedArray ('.', version);
+        VERSION_MAJOR = versionComponents[0];
+        if (versionComponents.length > 1)
+          VERSION_MINOR = versionComponents[1];
         else
-        {
-          (LoggerFactory.getLogger (QuartzScheduler.class)).error ("Can't parse Quartz version from quartz-build.properties");
-        }
+          VERSION_MINOR = "0";
+        if (versionComponents.length > 2)
+          VERSION_ITERATION = versionComponents[2];
+        else
+          VERSION_ITERATION = "0";
       }
-    }
-    catch (final Exception e)
-    {
-      (LoggerFactory.getLogger (QuartzScheduler.class)).error ("Error loading version info from quartz-build.properties.",
-                                                               e);
-    }
-    finally
-    {
-      if (is != null)
+      else
       {
-        try
-        {
-          is.close ();
-        }
-        catch (final Exception ignore)
-        {}
+        LoggerFactory.getLogger (QuartzScheduler.class)
+                     .error ("Can't parse Quartz version from quartz-build.properties");
       }
     }
   }
@@ -203,6 +184,9 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     getLog ().info ("Quartz Scheduler v." + getVersion () + " created.");
   }
 
+  /**
+   * @throws SchedulerException
+   */
   public void initialize () throws SchedulerException
   {
     getLog ().info ("Scheduler meta-data: " + (new SchedulerMetaData (getSchedulerName (),
@@ -503,28 +487,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     shuttingDown = true;
 
     getLog ().info ("Scheduler " + resources.getUniqueIdentifier () + " shutting down.");
-    // boolean removeMgmtSvr = false;
-    // if (registeredManagementServerBind != null) {
-    // ManagementServer standaloneRestServer =
-    // MGMT_SVR_BY_BIND.get(registeredManagementServerBind);
-    //
-    // try {
-    // standaloneRestServer.unregister(this);
-    //
-    // if (!standaloneRestServer.hasRegistered()) {
-    // removeMgmtSvr = true;
-    // standaloneRestServer.stop();
-    // }
-    // } catch (Exception e) {
-    // getLog().warn("Failed to shutdown the ManagementRESTService", e);
-    // } finally {
-    // if (removeMgmtSvr) {
-    // MGMT_SVR_BY_BIND.remove(registeredManagementServerBind);
-    // }
-    //
-    // registeredManagementServerBind = null;
-    // }
-    // }
 
     standby ();
 
@@ -646,24 +608,16 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     validateState ();
 
     if (jobDetail == null)
-    {
       throw new SchedulerException ("JobDetail cannot be null");
-    }
 
     if (trigger == null)
-    {
       throw new SchedulerException ("Trigger cannot be null");
-    }
 
     if (jobDetail.getKey () == null)
-    {
       throw new SchedulerException ("Job's key cannot be null");
-    }
 
     if (jobDetail.getJobClass () == null)
-    {
       throw new SchedulerException ("Job's class cannot be null");
-    }
 
     final OperableTrigger trig = (OperableTrigger) trigger;
 
@@ -849,13 +803,19 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     for (final Entry <JobDetail, Set <? extends Trigger>> e : triggersAndJobs.entrySet ())
     {
       final JobDetail job = e.getKey ();
-      if (job == null) // there can be one of these (for adding a bulk set of
-                       // triggers for pre-existing jobs)
+      if (job == null)
+      {
+        // there can be one of these (for adding a bulk set of
+        // triggers for pre-existing jobs)
         continue;
+      }
       final Set <? extends Trigger> triggers = e.getValue ();
-      if (triggers == null) // this is possible because the job may be durable,
-                            // and not yet be having triggers
+      if (triggers == null)
+      {
+        // this is possible because the job may be durable,
+        // and not yet be having triggers
         continue;
+      }
       for (final Trigger trigger : triggers)
       {
         final OperableTrigger opt = (OperableTrigger) trigger;
@@ -953,13 +913,9 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     validateState ();
 
     if (triggerKey == null)
-    {
       throw new IllegalArgumentException ("triggerKey cannot be null");
-    }
     if (newTrigger == null)
-    {
       throw new IllegalArgumentException ("newTrigger cannot be null");
-    }
 
     final OperableTrigger trig = (OperableTrigger) newTrigger;
     final Trigger oldTrigger = getTrigger (triggerKey);
@@ -967,10 +923,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     {
       return null;
     }
-    else
-    {
-      trig.setJobKey (oldTrigger.getJobKey ());
-    }
+    trig.setJobKey (oldTrigger.getJobKey ());
     trig.validate ();
 
     Calendar cal = null;
@@ -1091,21 +1044,21 @@ public class QuartzScheduler implements RemotableQuartzScheduler
     notifySchedulerListenersPausedTrigger (triggerKey);
   }
 
+  private <T extends Key <T>> GroupMatcher <T> _getOrDefault (final GroupMatcher <T> matcher)
+  {
+    return matcher != null ? matcher : GroupMatcher.groupEquals (Scheduler.DEFAULT_GROUP);
+  }
+
   /**
    * <p>
    * Pause all of the <code>{@link Trigger}s</code> in the matching groups.
    * </p>
    */
-  public void pauseTriggers (GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public void pauseTriggers (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     validateState ();
 
-    if (matcher == null)
-    {
-      matcher = GroupMatcher.groupEquals (Scheduler.DEFAULT_GROUP);
-    }
-
-    final Collection <String> pausedGroups = resources.getJobStore ().pauseTriggers (matcher);
+    final Collection <String> pausedGroups = resources.getJobStore ().pauseTriggers (_getOrDefault (matcher));
     notifySchedulerThread (0L);
     for (final String pausedGroup : pausedGroups)
     {
@@ -1134,16 +1087,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * groups - by pausing all of their <code>Trigger</code>s.
    * </p>
    */
-  public void pauseJobs (GroupMatcher <JobKey> groupMatcher) throws SchedulerException
+  public void pauseJobs (final GroupMatcher <JobKey> groupMatcher) throws SchedulerException
   {
     validateState ();
 
-    if (groupMatcher == null)
-    {
-      groupMatcher = GroupMatcher.groupEquals (Scheduler.DEFAULT_GROUP);
-    }
-
-    final Collection <String> pausedGroups = resources.getJobStore ().pauseJobs (groupMatcher);
+    final Collection <String> pausedGroups = resources.getJobStore ().pauseJobs (_getOrDefault (groupMatcher));
     notifySchedulerThread (0L);
     for (final String pausedGroup : pausedGroups)
     {
@@ -1179,16 +1127,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * <code>Trigger</code>'s misfire instruction will be applied.
    * </p>
    */
-  public void resumeTriggers (GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public void resumeTriggers (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     validateState ();
 
-    if (matcher == null)
-    {
-      matcher = GroupMatcher.groupEquals (Scheduler.DEFAULT_GROUP);
-    }
-
-    final Collection <String> pausedGroups = resources.getJobStore ().resumeTriggers (matcher);
+    final Collection <String> pausedGroups = resources.getJobStore ().resumeTriggers (_getOrDefault (matcher));
     notifySchedulerThread (0L);
     for (final String pausedGroup : pausedGroups)
     {
@@ -1232,16 +1175,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * will be applied.
    * </p>
    */
-  public void resumeJobs (GroupMatcher <JobKey> matcher) throws SchedulerException
+  public void resumeJobs (final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
     validateState ();
 
-    if (matcher == null)
-    {
-      matcher = GroupMatcher.groupEquals (Scheduler.DEFAULT_GROUP);
-    }
-
-    final Collection <String> resumedGroups = resources.getJobStore ().resumeJobs (matcher);
+    final Collection <String> resumedGroups = resources.getJobStore ().resumeJobs (_getOrDefault (matcher));
     notifySchedulerThread (0L);
     for (final String pausedGroup : resumedGroups)
     {
@@ -1312,16 +1250,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * matching groups.
    * </p>
    */
-  public Set <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws SchedulerException
+  public Set <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
     validateState ();
 
-    if (matcher == null)
-    {
-      matcher = GroupMatcher.groupEquals (Scheduler.DEFAULT_GROUP);
-    }
-
-    return resources.getJobStore ().getJobKeys (matcher);
+    return resources.getJobStore ().getJobKeys (_getOrDefault (matcher));
   }
 
   /**
@@ -1355,16 +1288,11 @@ public class QuartzScheduler implements RemotableQuartzScheduler
    * matching groups.
    * </p>
    */
-  public Set <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public Set <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     validateState ();
 
-    if (matcher == null)
-    {
-      matcher = GroupMatcher.groupEquals (Scheduler.DEFAULT_GROUP);
-    }
-
-    return resources.getJobStore ().getTriggerKeys (matcher);
+    return resources.getJobStore ().getTriggerKeys (_getOrDefault (matcher));
   }
 
   /**
@@ -1736,7 +1664,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   private List <SchedulerListener> buildSchedulerListenerList ()
   {
-    final List <SchedulerListener> allListeners = new LinkedList<> ();
+    final List <SchedulerListener> allListeners = new ArrayList<> ();
     allListeners.addAll (getListenerManager ().getSchedulerListeners ());
     allListeners.addAll (getInternalSchedulerListeners ());
 
@@ -2405,13 +2333,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler
           ((InterruptableJob) job).interrupt ();
           return true;
         }
-        else
-        {
-          throw new UnableToInterruptJobException ("Job " +
-                                                   jec.getJobDetail ().getKey () +
-                                                   " can not be interrupted, since it does not implement " +
-                                                   InterruptableJob.class.getName ());
-        }
+        throw new UnableToInterruptJobException ("Job " +
+                                                 jec.getJobDetail ().getKey () +
+                                                 " can not be interrupted, since it does not implement " +
+                                                 InterruptableJob.class.getName ());
       }
     }
 
@@ -2420,24 +2345,13 @@ public class QuartzScheduler implements RemotableQuartzScheduler
 
   private void shutdownPlugins ()
   {
-    final java.util.Iterator <SchedulerPlugin> itr = resources.getSchedulerPlugins ().iterator ();
-    while (itr.hasNext ())
-    {
-      final SchedulerPlugin plugin = itr.next ();
-      plugin.shutdown ();
-    }
+    resources.getSchedulerPlugins ().forEach (x -> x.shutdown ());
   }
 
   private void startPlugins ()
   {
-    final java.util.Iterator <SchedulerPlugin> itr = resources.getSchedulerPlugins ().iterator ();
-    while (itr.hasNext ())
-    {
-      final SchedulerPlugin plugin = itr.next ();
-      plugin.start ();
-    }
+    resources.getSchedulerPlugins ().forEach (x -> x.start ());
   }
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2456,7 +2370,6 @@ class ErrorLogger extends SchedulerListenerSupport
   {
     getLog ().error (msg, cause);
   }
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2467,9 +2380,8 @@ class ErrorLogger extends SchedulerListenerSupport
 
 class ExecutingJobsManager implements JobListener
 {
-  HashMap <String, JobExecutionContext> executingJobs = new HashMap<> ();
-
-  AtomicInteger numJobsFired = new AtomicInteger (0);
+  private final HashMap <String, JobExecutionContext> executingJobs = new HashMap<> ();
+  private final AtomicInteger numJobsFired = new AtomicInteger (0);
 
   ExecutingJobsManager ()
   {}
@@ -2514,12 +2426,10 @@ class ExecutingJobsManager implements JobListener
   {
     synchronized (executingJobs)
     {
-      return java.util.Collections.unmodifiableList (new ArrayList<> (executingJobs.values ()));
+      return new CommonsArrayList<> (executingJobs.values ()).getAsUnmodifiable ();
     }
   }
 
   public void jobExecutionVetoed (final JobExecutionContext context)
-  {
-
-  }
+  {}
 }

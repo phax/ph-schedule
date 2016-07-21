@@ -30,6 +30,7 @@ public class TrackingJob implements Job
 {
   public static String SCHEDULED_TIMES_KEY = "TrackingJob.ScheduledTimes";
 
+  @SuppressWarnings ("unchecked")
   @Override
   public void execute (final JobExecutionContext context) throws JobExecutionException
   {

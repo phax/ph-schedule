@@ -774,19 +774,13 @@ public class RAMJobStore implements JobStore
 
     synchronized (lock)
     {
-
       final Object obj = calendarsByName.get (name);
 
       if (obj != null && !replaceExisting)
-      {
         throw new ObjectAlreadyExistsException ("Calendar with name '" + name + "' already exists.");
-      }
-      else
-        if (obj != null)
-        {
-          calendarsByName.remove (name);
-        }
 
+      if (obj != null)
+        calendarsByName.remove (name);
       calendarsByName.put (name, calendar);
 
       if (obj != null && updateTriggers)
@@ -1627,14 +1621,10 @@ public class RAMJobStore implements JobStore
         final JobDetail job = jobsByKey.get (tw.trigger.getJobKey ()).jobDetail;
         if (job.isConcurrentExectionDisallowed ())
         {
-          if (acquiredJobKeysForNoConcurrentExec.contains (jobKey))
+          if (!acquiredJobKeysForNoConcurrentExec.add (jobKey))
           {
             excludedTriggers.add (tw);
             continue; // go to next trigger in store.
-          }
-          else
-          {
-            acquiredJobKeysForNoConcurrentExec.add (jobKey);
           }
         }
 

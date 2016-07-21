@@ -25,7 +25,6 @@ import static org.quartz.TriggerBuilder.newTrigger;
 import static org.quartz.TriggerKey.triggerKey;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -390,22 +389,12 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   {
     final File file = new File (fileName); // files in filesystem
     if (file.exists ())
-    {
-      try
-      {
-        new FileInputStream (file).close ();
-        return file.toURI ().toString ();
-      }
-      catch (final IOException ignore)
-      {
-        return fileName;
-      }
-    }
+      return file.toURI ().toString ();
+
     final URL url = getURL (fileName);
     if (url == null)
-    {
       return fileName;
-    }
+
     try
     {
       url.openStream ().close ();

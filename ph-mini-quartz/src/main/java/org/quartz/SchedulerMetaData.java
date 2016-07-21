@@ -29,38 +29,19 @@ import java.util.Date;
 public class SchedulerMetaData implements java.io.Serializable
 {
   private final String schedName;
-
   private final String schedInst;
-
   private final Class <?> schedClass;
-
   private final boolean started;
-
   private final boolean isInStandbyMode;
-
   private final boolean shutdown;
-
   private final Date startTime;
-
   private final int numJobsExec;
-
   private final Class <?> jsClass;
-
   private final boolean jsPersistent;
-
   private final boolean jsClustered;
-
   private final Class <?> tpClass;
-
   private final int tpSize;
-
   private final String version;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   public SchedulerMetaData (final String schedName,
                             final String schedInst,
@@ -92,12 +73,6 @@ public class SchedulerMetaData implements java.io.Serializable
     this.tpSize = tpSize;
     this.version = version;
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
@@ -281,6 +256,8 @@ public class SchedulerMetaData implements java.io.Serializable
    *  Quartz Scheduler 'SchedulerName' with instanceId 'SchedulerInstanceId' Scheduler class: 'org.quartz.impl.StdScheduler' - running locally. Running since: '11:33am on Jul 19, 2002' Not currently paused. Number of Triggers fired: '123' Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with '8' threads Using job-store 'org.quartz.impl.JDBCJobStore' - which supports persistence.
    * </pre>
    * </p>
+   *
+   * @throws SchedulerException
    */
   public String getSummary () throws SchedulerException
   {

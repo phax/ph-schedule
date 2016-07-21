@@ -17,10 +17,13 @@
 
 package org.quartz;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -437,22 +440,20 @@ public final class CronExpression implements Serializable, Cloneable
    */
   public static boolean isValidExpression (final String cronExpression)
   {
-
     try
     {
-      new CronExpression (cronExpression);
+      validateExpression (cronExpression);
+      return true;
     }
     catch (final ParseException pe)
     {
       return false;
     }
-
-    return true;
   }
 
+  @SuppressWarnings ("unused")
   public static void validateExpression (final String cronExpression) throws ParseException
   {
-
     new CronExpression (cronExpression);
   }
 
@@ -957,10 +958,7 @@ public final class CronExpression implements Serializable, Cloneable
         i = vs.pos;
         return i;
       }
-      else
-      {
-        throw new ParseException ("Unexpected character '" + c + "' after '/'", i);
-      }
+      throw new ParseException ("Unexpected character '" + c + "' after '/'", i);
     }
 
     addToSet (val, end, 0, type);
@@ -1325,10 +1323,11 @@ public final class CronExpression implements Serializable, Cloneable
     }
   }
 
-  protected ValueSet getValue (final int v, final String s, int i)
+  protected ValueSet getValue (final int v, final String s, final int nI)
   {
+    int i = nI;
     char c = s.charAt (i);
-    final StringBuilder s1 = new StringBuilder (String.valueOf (v));
+    final StringBuilder s1 = new StringBuilder (Integer.toString (v));
     while (c >= '0' && c <= '9')
     {
       s1.append (c);
@@ -1340,7 +1339,6 @@ public final class CronExpression implements Serializable, Cloneable
       c = s.charAt (i);
     }
     final ValueSet val = new ValueSet ();
-
     val.pos = (i < s.length ()) ? i : i + 1;
     val.value = Integer.parseInt (s1.toString ());
     return val;
@@ -1383,15 +1381,14 @@ public final class CronExpression implements Serializable, Cloneable
   //
   ////////////////////////////////////////////////////////////////////////////
 
-  public Date getTimeAfter (Date afterTime)
+  public Date getTimeAfter (final Date aAfterTime)
   {
-
     // Computation is based on Gregorian year only.
-    final Calendar cl = new java.util.GregorianCalendar (getTimeZone ());
+    final Calendar cl = new GregorianCalendar (getTimeZone ());
 
     // move ahead one second, since we're computing the time *after* the
     // given time
-    afterTime = new Date (afterTime.getTime () + 1000);
+    final Date afterTime = new Date (aAfterTime.getTime () + 1000);
     // CronTrigger does not deal with milliseconds
     cl.setTime (afterTime);
     cl.set (Calendar.MILLISECOND, 0);
@@ -1403,7 +1400,8 @@ public final class CronExpression implements Serializable, Cloneable
 
       // if (endTime != null && cl.getTime().after(endTime)) return null;
       if (cl.get (Calendar.YEAR) > 2999)
-      { // prevent endless loop...
+      {
+        // prevent endless loop...
         return null;
       }
 
@@ -1899,6 +1897,8 @@ public final class CronExpression implements Serializable, Cloneable
   /**
    * NOT YET IMPLEMENTED: Returns the time before the given time that the
    * <code>CronExpression</code> matches.
+   *
+   * @param endTime
    */
   public Date getTimeBefore (final Date endTime)
   {
@@ -1955,9 +1955,8 @@ public final class CronExpression implements Serializable, Cloneable
     }
   }
 
-  private void readObject (final java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException
+  private void readObject (final ObjectInputStream stream) throws IOException, ClassNotFoundException
   {
-
     stream.defaultReadObject ();
     try
     {

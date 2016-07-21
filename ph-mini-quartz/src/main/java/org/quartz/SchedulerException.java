@@ -51,39 +51,12 @@ public class SchedulerException extends Exception
     super (msg, cause);
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  /**
-   * <p>
-   * Return the exception that is the underlying cause of this exception.
-   * </p>
-   * <p>
-   * This may be used to find more detail about the cause of the error.
-   * </p>
-   *
-   * @return the underlying exception, or <code>null</code> if there is not one.
-   */
-  public Throwable getUnderlyingException ()
-  {
-    return super.getCause ();
-  }
-
   @Override
   public String toString ()
   {
-    final Throwable cause = getUnderlyingException ();
+    final Throwable cause = getCause ();
     if (cause == null || cause == this)
-    {
       return super.toString ();
-    }
-    else
-    {
-      return super.toString () + " [See nested exception: " + cause + "]";
-    }
+    return super.toString () + " [See nested exception: " + cause + "]";
   }
-
 }

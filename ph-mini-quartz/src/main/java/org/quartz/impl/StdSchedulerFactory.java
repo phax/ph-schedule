@@ -434,10 +434,9 @@ public class StdSchedulerFactory implements SchedulerFactory
       throw initException;
     }
 
-    InputStream is = null;
     final Properties props = new Properties ();
 
-    is = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (filename);
+    InputStream is = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (filename);
 
     try
     {

@@ -72,7 +72,7 @@ public class CascadingClassLoadHelper implements ClassLoadHelper
    */
   public void initialize ()
   {
-    loadHelpers = new LinkedList <> ();
+    loadHelpers = new LinkedList<> ();
 
     loadHelpers.add (new LoadingLoaderClassLoadHelper ());
     loadHelpers.add (new SimpleClassLoadHelper ());
@@ -129,11 +129,8 @@ public class CascadingClassLoadHelper implements ClassLoadHelper
       {
         throw (ClassNotFoundException) throwable;
       }
-      else
-      {
-        throw new ClassNotFoundException (String.format ("Unable to load class %s by any known loaders.", name),
-                                          throwable);
-      }
+      throw new ClassNotFoundException (String.format ("Unable to load class %s by any known loaders.", name),
+                                        throwable);
     }
 
     bestCandidate = loadHelper;

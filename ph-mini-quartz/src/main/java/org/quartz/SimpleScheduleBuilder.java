@@ -18,7 +18,6 @@
 package org.quartz;
 
 import org.quartz.impl.triggers.SimpleTriggerImpl;
-import org.quartz.spi.MutableTrigger;
 
 /**
  * <code>SimpleScheduleBuilder</code> is a {@link ScheduleBuilder} that defines
@@ -252,7 +251,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <SimpleTrigger>
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
-  public MutableTrigger build ()
+  public SimpleTriggerImpl build ()
   {
 
     final SimpleTriggerImpl st = new SimpleTriggerImpl ();

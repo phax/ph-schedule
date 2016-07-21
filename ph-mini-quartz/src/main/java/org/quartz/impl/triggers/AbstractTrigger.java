@@ -223,7 +223,7 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * @exception IllegalArgumentException
    *            if group is an empty string.
    */
-  public void setGroup (String group)
+  public void setGroup (final String group)
   {
     if (group != null && group.trim ().length () == 0)
     {
@@ -231,11 +231,9 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
     }
 
     if (group == null)
-    {
-      group = Scheduler.DEFAULT_GROUP;
-    }
-
-    this.group = group;
+      this.group = Scheduler.DEFAULT_GROUP;
+    else
+      this.group = group;
     this.key = null;
   }
 
@@ -296,19 +294,15 @@ public abstract class AbstractTrigger <T extends Trigger> implements OperableTri
    * @exception IllegalArgumentException
    *            if group is an empty string.
    */
-  public void setJobGroup (String jobGroup)
+  public void setJobGroup (final String jobGroup)
   {
     if (jobGroup != null && jobGroup.trim ().length () == 0)
-    {
       throw new IllegalArgumentException ("Group name cannot be null or empty.");
-    }
 
     if (jobGroup == null)
-    {
-      jobGroup = Scheduler.DEFAULT_GROUP;
-    }
-
-    this.jobGroup = jobGroup;
+      this.jobGroup = Scheduler.DEFAULT_GROUP;
+    else
+      this.jobGroup = jobGroup;
   }
 
   public void setJobKey (final JobKey key)

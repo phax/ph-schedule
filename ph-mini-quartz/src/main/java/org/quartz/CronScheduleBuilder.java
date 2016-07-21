@@ -21,7 +21,6 @@ import java.text.ParseException;
 import java.util.TimeZone;
 
 import org.quartz.impl.triggers.CronTriggerImpl;
-import org.quartz.spi.MutableTrigger;
 
 /**
  * <code>CronScheduleBuilder</code> is a {@link ScheduleBuilder} that defines
@@ -77,7 +76,7 @@ public class CronScheduleBuilder extends ScheduleBuilder <CronTrigger>
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
-  public MutableTrigger build ()
+  public CronTriggerImpl build ()
   {
 
     final CronTriggerImpl ct = new CronTriggerImpl ();

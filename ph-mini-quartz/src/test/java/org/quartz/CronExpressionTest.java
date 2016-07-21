@@ -15,6 +15,11 @@
  */
 package org.quartz;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -24,15 +29,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class CronExpressionTest extends TestCase
+@SuppressWarnings ("unused")
+public final class CronExpressionTest
 {
   private static final TimeZone EST_TIME_ZONE = TimeZone.getTimeZone ("US/Eastern");
 
   /*
    * Test method for 'org.quartz.CronExpression.isSatisfiedBy(Date)'.
    */
+  @Test
   public void testIsSatisfiedBy () throws Exception
   {
     final CronExpression cronExpression = new CronExpression ("0 15 10 * * ? 2005");
@@ -54,6 +61,7 @@ public class CronExpressionTest extends TestCase
     assertFalse (cronExpression.isSatisfiedBy (cal.getTime ()));
   }
 
+  @Test
   public void testLastDayOffset () throws Exception
   {
     CronExpression cronExpression = new CronExpression ("0 15 10 L-2 * ? 2010");
@@ -88,6 +96,7 @@ public class CronExpressionTest extends TestCase
   /*
    * QUARTZ-571: Showing that expressions with months correctly serialize.
    */
+  @Test
   public void testQuartz571 () throws Exception
   {
     final CronExpression cronExpression = new CronExpression ("19 15 10 4 Apr ? ");
@@ -108,6 +117,7 @@ public class CronExpressionTest extends TestCase
   /**
    * QTZ-259 : last day offset causes repeating fire time
    */
+  @Test
   public void testQtz259 () throws Exception
   {
     final CronScheduleBuilder schedBuilder = CronScheduleBuilder.cronSchedule ("0 0 0 L-2 * ? *");
@@ -127,6 +137,7 @@ public class CronExpressionTest extends TestCase
   /**
    * QTZ-259 : last day offset causes repeating fire time
    */
+  @Test
   public void testQtz259LW () throws Exception
   {
     final CronScheduleBuilder schedBuilder = CronScheduleBuilder.cronSchedule ("0 0 0 LW * ? *");
@@ -147,6 +158,7 @@ public class CronExpressionTest extends TestCase
    * QUARTZ-574: Showing that storeExpressionVals correctly calculates the month
    * number
    */
+  @Test
   public void testQuartz574 ()
   {
     try
@@ -170,6 +182,7 @@ public class CronExpressionTest extends TestCase
     }
   }
 
+  @Test
   public void testQuartz621 ()
   {
     try
@@ -207,6 +220,7 @@ public class CronExpressionTest extends TestCase
     }
   }
 
+  @Test
   public void testQuartz640 ()
   {
     try
@@ -252,6 +266,7 @@ public class CronExpressionTest extends TestCase
     }
   }
 
+  @Test
   public void testQtz96 ()
   {
     try
@@ -267,6 +282,7 @@ public class CronExpressionTest extends TestCase
     }
   }
 
+  @Test
   public void testQtz395_CopyConstructorMustPreserveTimeZone () throws ParseException
   {
     TimeZone nonDefault = TimeZone.getTimeZone ("Europe/Brussels");

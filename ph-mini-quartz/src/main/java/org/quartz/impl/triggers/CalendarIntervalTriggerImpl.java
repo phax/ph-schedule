@@ -946,10 +946,7 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger <CalendarInterv
       {
         return isSkipDayIfHourDoesNotExist ();
       }
-      else
-      {
-        return !newTime.getTime ().after (afterTime);
-      }
+      return !newTime.getTime ().after (afterTime);
     }
     return false;
   }

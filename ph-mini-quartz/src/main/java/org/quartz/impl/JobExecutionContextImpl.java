@@ -138,10 +138,7 @@ public class JobExecutionContextImpl implements java.io.Serializable, JobExecuti
       return new TriggerKey (jobDataMap.getString (Scheduler.FAILED_JOB_ORIGINAL_TRIGGER_GROUP),
                              jobDataMap.getString (Scheduler.FAILED_JOB_ORIGINAL_TRIGGER_NAME));
     }
-    else
-    {
-      throw new IllegalStateException ("Not a recovering job");
-    }
+    throw new IllegalStateException ("Not a recovering job");
   }
 
   public void incrementRefireCount ()

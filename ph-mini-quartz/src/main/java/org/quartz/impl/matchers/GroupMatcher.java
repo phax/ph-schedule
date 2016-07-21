@@ -25,7 +25,7 @@ import org.quartz.utils.Key;
  *
  * @author jhouse
  */
-public class GroupMatcher <T extends Key <?>> extends StringMatcher <T>
+public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
 {
   protected GroupMatcher (final String compareTo, final StringOperatorName compareWith)
   {

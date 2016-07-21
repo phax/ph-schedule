@@ -156,7 +156,7 @@ public class JobDetailImpl implements JobDetail
    * @exception IllegalArgumentException
    *            if the group is an empty string.
    */
-  public void setGroup (String group)
+  public void setGroup (final String group)
   {
     if (group != null && group.trim ().length () == 0)
     {
@@ -164,11 +164,9 @@ public class JobDetailImpl implements JobDetail
     }
 
     if (group == null)
-    {
-      group = Scheduler.DEFAULT_GROUP;
-    }
-
-    this.group = group;
+      this.group = Scheduler.DEFAULT_GROUP;
+    else
+      this.group = group;
     this.key = null;
   }
 

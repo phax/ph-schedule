@@ -197,15 +197,11 @@ public class AnnualCalendar extends BaseCalendar
   private void removeExcludedDay (java.util.Calendar day, final boolean isChecked)
   {
     if (!isChecked && !isDayExcluded (day))
-    {
       return;
-    }
 
     // Fast way, see if exact day object was already in list
     if (this.excludeDays.remove (day))
-    {
       return;
-    }
 
     final int dmonth = day.get (java.util.Calendar.MONTH);
     final int dday = day.get (java.util.Calendar.DAY_OF_MONTH);
@@ -220,14 +216,10 @@ public class AnnualCalendar extends BaseCalendar
       final java.util.Calendar cl = iter.next ();
 
       if (dmonth != cl.get (java.util.Calendar.MONTH))
-      {
         continue;
-      }
 
       if (dday != cl.get (java.util.Calendar.DAY_OF_MONTH))
-      {
         continue;
-      }
 
       day = cl;
       break;

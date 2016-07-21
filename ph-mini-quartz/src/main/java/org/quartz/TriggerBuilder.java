@@ -84,7 +84,7 @@ public class TriggerBuilder <T extends Trigger>
    */
   public static TriggerBuilder <Trigger> newTrigger ()
   {
-    return new TriggerBuilder <> ();
+    return new TriggerBuilder<> ();
   }
 
   /**

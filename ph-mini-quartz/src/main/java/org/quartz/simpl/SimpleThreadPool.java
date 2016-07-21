@@ -372,7 +372,7 @@ public class SimpleThreadPool implements ThreadPool
             {
               nextRunnableLock.wait (100);
             }
-            catch (final InterruptedException _)
+            catch (final InterruptedException ex)
             {
               interrupted = true;
             }
@@ -390,7 +390,7 @@ public class SimpleThreadPool implements ThreadPool
               // application may appear to 'hang'.
               nextRunnableLock.wait (2000);
             }
-            catch (final InterruptedException _)
+            catch (final InterruptedException ex)
             {
               interrupted = true;
             }
@@ -405,7 +405,7 @@ public class SimpleThreadPool implements ThreadPool
               wt.join ();
               workerThreads.remove ();
             }
-            catch (final InterruptedException _)
+            catch (final InterruptedException ex)
             {
               interrupted = true;
             }

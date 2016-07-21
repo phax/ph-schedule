@@ -447,7 +447,6 @@ public class CronTriggerImpl extends AbstractTrigger <CronTrigger> implements Cr
    */
   public boolean willFireOn (Calendar test, final boolean dayOnly)
   {
-
     test = (Calendar) test.clone ();
 
     test.set (Calendar.MILLISECOND, 0); // don't compare millis.

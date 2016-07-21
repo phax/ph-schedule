@@ -161,14 +161,11 @@ public class Key <T> implements Serializable, Comparable <Key <T>>
     return name.compareTo (o.getName ());
   }
 
-  public static String createUniqueName (String group)
+  public static String createUniqueName (final String group)
   {
-    if (group == null)
-      group = DEFAULT_GROUP;
-
     final String n1 = UUID.randomUUID ().toString ();
-    final String n2 = UUID.nameUUIDFromBytes (group.getBytes ()).toString ();
+    final String n2 = UUID.nameUUIDFromBytes ((group != null ? group : DEFAULT_GROUP).getBytes ()).toString ();
 
-    return String.format ("%s-%s", n2.substring (24), n1);
+    return n2.substring (24) + "-" + n1;
   }
 }

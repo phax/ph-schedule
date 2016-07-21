@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -105,7 +106,7 @@ public class PropertiesParser
     }
 
     final StringTokenizer stok = new StringTokenizer (vals, ",");
-    final ArrayList <String> strs = new ArrayList <> ();
+    final ArrayList <String> strs = new ArrayList<> ();
     try
     {
       while (stok.hasMoreTokens ())
@@ -302,7 +303,7 @@ public class PropertiesParser
     }
 
     final StringTokenizer stok = new StringTokenizer (vals, ",");
-    final ArrayList <Integer> ints = new ArrayList <> ();
+    final ArrayList <Integer> ints = new ArrayList<> ();
     try
     {
       while (stok.hasMoreTokens ())
@@ -405,7 +406,7 @@ public class PropertiesParser
   public String [] getPropertyGroups (String prefix)
   {
     final Enumeration <?> keys = props.propertyNames ();
-    final HashSet <String> groups = new HashSet <> (10);
+    final Set <String> groups = new HashSet<> (10);
 
     if (!prefix.endsWith ("."))
     {

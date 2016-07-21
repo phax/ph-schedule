@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.quartz.DateBuilder.IntervalUnit;
 import org.quartz.impl.triggers.DailyTimeIntervalTriggerImpl;
-import org.quartz.spi.MutableTrigger;
 
 /**
  * A {@link ScheduleBuilder} implementation that build schedule for
@@ -137,7 +136,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <DailyTime
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
-  public MutableTrigger build ()
+  public DailyTimeIntervalTriggerImpl build ()
   {
 
     final DailyTimeIntervalTriggerImpl st = new DailyTimeIntervalTriggerImpl ();

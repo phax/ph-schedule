@@ -21,7 +21,6 @@ import java.util.TimeZone;
 
 import org.quartz.DateBuilder.IntervalUnit;
 import org.quartz.impl.triggers.CalendarIntervalTriggerImpl;
-import org.quartz.spi.MutableTrigger;
 
 /**
  * <code>CalendarIntervalScheduleBuilder</code> is a {@link ScheduleBuilder}
@@ -86,7 +85,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <CalendarIn
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
-  public MutableTrigger build ()
+  public CalendarIntervalTriggerImpl build ()
   {
 
     final CalendarIntervalTriggerImpl st = new CalendarIntervalTriggerImpl ();

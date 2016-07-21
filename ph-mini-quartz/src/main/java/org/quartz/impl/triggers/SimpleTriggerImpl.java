@@ -707,10 +707,7 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
     {
       return new Date (lastTrigger);
     }
-    else
-    {
-      return getFireTimeBefore (getEndTime ());
-    }
+    return getFireTimeBefore (getEndTime ());
   }
 
   /**
@@ -762,7 +759,6 @@ public class SimpleTriggerImpl extends AbstractTrigger <SimpleTrigger> implement
   @Override
   public ScheduleBuilder <SimpleTrigger> getScheduleBuilder ()
   {
-
     final SimpleScheduleBuilder sb = SimpleScheduleBuilder.simpleSchedule ()
                                                           .withIntervalInMilliseconds (getRepeatInterval ())
                                                           .withRepeatCount (getRepeatCount ());

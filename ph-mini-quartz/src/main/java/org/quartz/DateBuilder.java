@@ -65,49 +65,28 @@ public class DateBuilder
   }
 
   public static final int SUNDAY = 1;
-
   public static final int MONDAY = 2;
-
   public static final int TUESDAY = 3;
-
   public static final int WEDNESDAY = 4;
-
   public static final int THURSDAY = 5;
-
   public static final int FRIDAY = 6;
-
   public static final int SATURDAY = 7;
-
   public static final int JANUARY = 1;
-
   public static final int FEBRUARY = 2;
-
   public static final int MARCH = 3;
-
   public static final int APRIL = 4;
-
   public static final int MAY = 5;
-
   public static final int JUNE = 6;
-
   public static final int JULY = 7;
-
   public static final int AUGUST = 8;
-
   public static final int SEPTEMBER = 9;
-
   public static final int OCTOBER = 10;
-
   public static final int NOVEMBER = 11;
-
   public static final int DECEMBER = 12;
 
   public static final long MILLISECONDS_IN_MINUTE = 60l * 1000l;
-
   public static final long MILLISECONDS_IN_HOUR = 60l * 60l * 1000l;
-
   public static final long SECONDS_IN_MOST_DAYS = 24l * 60l * 60L;
-
   public static final long MILLISECONDS_IN_DAY = SECONDS_IN_MOST_DAYS * 1000l;
 
   private int month;
@@ -1013,14 +992,10 @@ public class DateBuilder
 
       return c.getTime ();
     }
-    else
-    {
-      c.set (Calendar.MINUTE, c.get (Calendar.MINUTE) + 1);
-      c.set (Calendar.SECOND, 0);
-      c.set (Calendar.MILLISECOND, 0);
-
-      return c.getTime ();
-    }
+    c.set (Calendar.MINUTE, c.get (Calendar.MINUTE) + 1);
+    c.set (Calendar.SECOND, 0);
+    c.set (Calendar.MILLISECOND, 0);
+    return c.getTime ();
   }
 
   /**
