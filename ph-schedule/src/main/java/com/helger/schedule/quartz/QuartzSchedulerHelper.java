@@ -19,11 +19,11 @@ package com.helger.schedule.quartz;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.SchedulerMetaData;
-import org.quartz.impl.StdSchedulerFactory;
+import com.helger.quartz.Scheduler;
+import com.helger.quartz.SchedulerException;
+import com.helger.quartz.SchedulerFactory;
+import com.helger.quartz.SchedulerMetaData;
+import com.helger.quartz.impl.StdSchedulerFactory;
 
 /**
  * Misc utility methods around Quartz schedulers

@@ -20,10 +20,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +31,10 @@ import com.helger.commons.statistics.IMutableStatisticsHandlerKeyedCounter;
 import com.helger.commons.statistics.IMutableStatisticsHandlerKeyedTimer;
 import com.helger.commons.statistics.StatisticsManager;
 import com.helger.commons.timing.StopWatch;
+import com.helger.quartz.Job;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.JobExecutionException;
 
 /**
  * Abstract {@link Job} implementation with an exception handler etc.

@@ -20,20 +20,19 @@ import java.time.LocalDateTime;
 
 import javax.annotation.Nonnull;
 
-import org.quartz.Calendar;
-import org.quartz.DateBuilder;
-import org.quartz.JobBuilder;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.ScheduleBuilder;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
-import org.quartz.spi.MutableTrigger;
-import org.quartz.utils.Key;
-
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.quartz.Calendar;
+import com.helger.quartz.DateBuilder;
+import com.helger.quartz.JobBuilder;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobDetail;
+import com.helger.quartz.JobKey;
+import com.helger.quartz.ScheduleBuilder;
+import com.helger.quartz.SimpleScheduleBuilder;
+import com.helger.quartz.Trigger;
+import com.helger.quartz.TriggerKey;
+import com.helger.quartz.spi.MutableTrigger;
+import com.helger.quartz.utils.Key;
 
 /**
  * <code>JDK8TriggerBuilder</code> is used to instantiate {@link Trigger}s.

@@ -20,7 +20,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
-import org.quartz.SchedulerException;
+
+import com.helger.quartz.SchedulerException;
 
 /**
  * Test class for class {@link QuartzSchedulerHelper}.

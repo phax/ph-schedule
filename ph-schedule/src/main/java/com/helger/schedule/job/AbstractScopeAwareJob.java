@@ -20,13 +20,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobExecutionContext;
-
 import com.helger.commons.annotation.OverrideOnDemand;
 import com.helger.commons.scope.mgr.ScopeManager;
 import com.helger.commons.state.ESuccess;
+import com.helger.quartz.Job;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobExecutionContext;
 import com.helger.web.mock.MockHttpServletRequest;
 import com.helger.web.mock.MockHttpServletResponse;
 import com.helger.web.mock.OfflineHttpServletRequest;

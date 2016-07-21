@@ -18,14 +18,14 @@ package com.helger.schedule.quartz.listener;
 
 import javax.annotation.Nonnull;
 
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.JobListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.lang.ClassHelper;
+import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.JobExecutionException;
+import com.helger.quartz.JobListener;
 
 /**
  * An implementation of the {@link JobListener} interface that logs job

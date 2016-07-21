@@ -21,10 +21,10 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
-import org.quartz.SimpleScheduleBuilder;
 
 import com.helger.commons.mutable.MutableBoolean;
 import com.helger.commons.scope.mock.ScopeTestRule;
+import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
 
 /**

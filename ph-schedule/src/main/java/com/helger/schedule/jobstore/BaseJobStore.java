@@ -30,26 +30,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import org.quartz.Calendar;
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.JobPersistenceException;
-import org.quartz.ObjectAlreadyExistsException;
-import org.quartz.Trigger;
-import org.quartz.Trigger.CompletedExecutionInstruction;
-import org.quartz.Trigger.TriggerState;
-import org.quartz.Trigger.TriggerTimeComparator;
-import org.quartz.TriggerKey;
-import org.quartz.impl.matchers.GroupMatcher;
-import org.quartz.impl.matchers.StringMatcher;
-import org.quartz.spi.ClassLoadHelper;
-import org.quartz.spi.JobStore;
-import org.quartz.spi.OperableTrigger;
-import org.quartz.spi.SchedulerSignaler;
-import org.quartz.spi.TriggerFiredBundle;
-import org.quartz.spi.TriggerFiredResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,9 +49,29 @@ import com.helger.commons.collection.ext.ICommonsNavigableSet;
 import com.helger.commons.collection.ext.ICommonsSet;
 import com.helger.commons.concurrent.SimpleReadWriteLock;
 import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.quartz.Calendar;
+import com.helger.quartz.Job;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobDetail;
+import com.helger.quartz.JobKey;
+import com.helger.quartz.JobPersistenceException;
+import com.helger.quartz.ObjectAlreadyExistsException;
+import com.helger.quartz.Trigger;
+import com.helger.quartz.TriggerKey;
+import com.helger.quartz.Trigger.CompletedExecutionInstruction;
+import com.helger.quartz.Trigger.TriggerState;
+import com.helger.quartz.Trigger.TriggerTimeComparator;
+import com.helger.quartz.impl.matchers.GroupMatcher;
+import com.helger.quartz.impl.matchers.StringMatcher;
+import com.helger.quartz.spi.ClassLoadHelper;
+import com.helger.quartz.spi.JobStore;
+import com.helger.quartz.spi.OperableTrigger;
+import com.helger.quartz.spi.SchedulerSignaler;
+import com.helger.quartz.spi.TriggerFiredBundle;
+import com.helger.quartz.spi.TriggerFiredResult;
 
 /**
- * {@link JobStore} implementation based on {@link org.quartz.simpl.RAMJobStore}
+ * {@link JobStore} implementation based on {@link com.helger.quartz.simpl.RAMJobStore}
  *
  * @author Philip Helger
  */
@@ -342,7 +342,7 @@ public class BaseJobStore implements JobStore
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link org.quartz.Trigger}</code> with the given
+   * Remove (delete) the <code>{@link com.helger.quartz.Trigger}</code> with the given
    * name.
    * </p>
    *
@@ -400,7 +400,7 @@ public class BaseJobStore implements JobStore
   }
 
   /**
-   * @see org.quartz.spi.JobStore#replaceTrigger(TriggerKey triggerKey,
+   * @see com.helger.quartz.spi.JobStore#replaceTrigger(TriggerKey triggerKey,
    *      OperableTrigger newTrigger)
    */
   public boolean replaceTrigger (final TriggerKey aTriggerKey,
@@ -461,8 +461,8 @@ public class BaseJobStore implements JobStore
 
   /**
    * <p>
-   * Retrieve the <code>{@link org.quartz.JobDetail}</code> for the given
-   * <code>{@link org.quartz.Job}</code>.
+   * Retrieve the <code>{@link com.helger.quartz.JobDetail}</code> for the given
+   * <code>{@link com.helger.quartz.Job}</code>.
    * </p>
    *
    * @return The desired <code>Job</code>, or null if there is no match.
@@ -477,7 +477,7 @@ public class BaseJobStore implements JobStore
 
   /**
    * <p>
-   * Retrieve the given <code>{@link org.quartz.Trigger}</code>.
+   * Retrieve the given <code>{@link com.helger.quartz.Trigger}</code>.
    * </p>
    *
    * @return The desired <code>Trigger</code>, or null if there is no match.
@@ -778,7 +778,7 @@ public class BaseJobStore implements JobStore
 
   /**
    * <p>
-   * Pause the <code>{@link org.quartz.JobDetail}</code> with the given name -
+   * Pause the <code>{@link com.helger.quartz.JobDetail}</code> with the given name -
    * by pausing all of its current <code>Trigger</code>s.
    * </p>
    */
@@ -791,7 +791,7 @@ public class BaseJobStore implements JobStore
 
   /**
    * <p>
-   * Pause all of the <code>{@link org.quartz.JobDetail}s</code> in the given
+   * Pause all of the <code>{@link com.helger.quartz.JobDetail}s</code> in the given
    * group - by pausing all of their <code>Trigger</code>s.
    * </p>
    * <p>
@@ -1313,7 +1313,7 @@ public class BaseJobStore implements JobStore
   }
 
   /**
-   * @see org.quartz.spi.JobStore#getPausedTriggerGroups()
+   * @see com.helger.quartz.spi.JobStore#getPausedTriggerGroups()
    */
   public ICommonsSet <String> getPausedTriggerGroups () throws JobPersistenceException
   {

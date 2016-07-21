@@ -18,13 +18,12 @@ package com.helger.schedule.quartz.listener;
 
 import javax.annotation.Nonnull;
 
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.JobListener;
-
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.lang.ClassHelper;
 import com.helger.commons.statistics.StatisticsManager;
+import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.JobExecutionException;
+import com.helger.quartz.JobListener;
 
 /**
  * A Quartz job listener that handles statistics for job executions. It handles

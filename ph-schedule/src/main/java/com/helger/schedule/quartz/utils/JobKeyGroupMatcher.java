@@ -18,8 +18,8 @@ package com.helger.schedule.quartz.utils;
 
 import javax.annotation.Nonnull;
 
-import org.quartz.JobKey;
-import org.quartz.impl.matchers.GroupMatcher;
+import com.helger.quartz.JobKey;
+import com.helger.quartz.impl.matchers.GroupMatcher;
 
 /**
  * Type-safe implementation of GroupMatcher for {@link JobKey}

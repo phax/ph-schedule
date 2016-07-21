@@ -21,17 +21,6 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobListener;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
-import org.quartz.impl.matchers.EverythingMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +31,17 @@ import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.scope.IScope;
 import com.helger.commons.scope.singleton.AbstractGlobalSingleton;
 import com.helger.commons.state.EChange;
+import com.helger.quartz.Job;
+import com.helger.quartz.JobBuilder;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobDetail;
+import com.helger.quartz.JobListener;
+import com.helger.quartz.Scheduler;
+import com.helger.quartz.SchedulerException;
+import com.helger.quartz.SimpleScheduleBuilder;
+import com.helger.quartz.Trigger;
+import com.helger.quartz.TriggerKey;
+import com.helger.quartz.impl.matchers.EverythingMatcher;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
 

@@ -16,11 +16,12 @@
  */
 package com.helger.schedule.quartz;
 
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.helger.quartz.Job;
+import com.helger.quartz.JobExecutionContext;
+import com.helger.quartz.JobExecutionException;
 
 public final class MockJob implements Job
 {

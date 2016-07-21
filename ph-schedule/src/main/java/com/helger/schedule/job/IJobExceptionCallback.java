@@ -19,9 +19,8 @@ package com.helger.schedule.job;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.quartz.Job;
-
 import com.helger.commons.callback.ICallback;
+import com.helger.quartz.Job;
 
 /**
  * Callback interface to handle thrown exception objects from the
