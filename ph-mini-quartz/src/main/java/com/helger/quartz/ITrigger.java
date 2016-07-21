@@ -19,15 +19,18 @@
 package com.helger.quartz;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Date;
+
+import com.helger.commons.annotation.MustImplementEqualsAndHashcode;
+import com.helger.commons.compare.IComparator;
 
 /**
  * The base interface with properties common to all <code>Trigger</code>s - use
  * {@link TriggerBuilder} to instantiate an actual Trigger.
  * <p>
  * <code>Triggers</code>s have a {@link TriggerKey} associated with them, which
- * should uniquely identify them within a single <code>{@link IScheduler}</code>.
+ * should uniquely identify them within a single
+ * <code>{@link IScheduler}</code>.
  * </p>
  * <p>
  * <code>Trigger</code>s are the 'mechanism' by which <code>Job</code>s are
@@ -48,9 +51,10 @@ import java.util.Date;
  * @see ICalendarIntervalTrigger
  * @author James House
  */
+@MustImplementEqualsAndHashcode
 public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
 {
-  public enum TriggerState
+  enum TriggerState
   {
     NONE,
     NORMAL,
@@ -68,15 +72,15 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * <p>
    * <code>RE_EXECUTE_JOB</code> Instructs the <code>{@link IScheduler}</code>
    * that the <code>{@link ITrigger}</code> wants the
-   * <code>{@link com.helger.quartz.IJobDetail}</code> to re-execute immediately. If not
-   * in a 'RECOVERING' or 'FAILED_OVER' situation, the execution context will be
-   * re-used (giving the <code>Job</code> the ability to 'see' anything placed
-   * in the context by its last execution).
+   * <code>{@link com.helger.quartz.IJobDetail}</code> to re-execute
+   * immediately. If not in a 'RECOVERING' or 'FAILED_OVER' situation, the
+   * execution context will be re-used (giving the <code>Job</code> the ability
+   * to 'see' anything placed in the context by its last execution).
    * </p>
    * <p>
    * <code>SET_TRIGGER_COMPLETE</code> Instructs the
-   * <code>{@link IScheduler}</code> that the <code>{@link ITrigger}</code> should
-   * be put in the <code>COMPLETE</code> state.
+   * <code>{@link IScheduler}</code> that the <code>{@link ITrigger}</code>
+   * should be put in the <code>COMPLETE</code> state.
    * </p>
    * <p>
    * <code>DELETE_TRIGGER</code> Instructs the <code>{@link IScheduler}</code>
@@ -85,14 +89,14 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * <p>
    * <code>SET_ALL_JOB_TRIGGERS_COMPLETE</code> Instructs the
    * <code>{@link IScheduler}</code> that all <code>Trigger</code>s referencing
-   * the same <code>{@link com.helger.quartz.IJobDetail}</code> as this one should be
-   * put in the <code>COMPLETE</code> state.
+   * the same <code>{@link com.helger.quartz.IJobDetail}</code> as this one
+   * should be put in the <code>COMPLETE</code> state.
    * </p>
    * <p>
-   * <code>SET_TRIGGER_ERROR</code> Instructs the <code>{@link IScheduler}</code>
-   * that all <code>Trigger</code>s referencing the same
-   * <code>{@link com.helger.quartz.IJobDetail}</code> as this one should be put in the
-   * <code>ERROR</code> state.
+   * <code>SET_TRIGGER_ERROR</code> Instructs the
+   * <code>{@link IScheduler}</code> that all <code>Trigger</code>s referencing
+   * the same <code>{@link com.helger.quartz.IJobDetail}</code> as this one
+   * should be put in the <code>ERROR</code> state.
    * </p>
    * <p>
    * <code>SET_ALL_JOB_TRIGGERS_ERROR</code> Instructs the
@@ -100,7 +104,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * in the <code>ERROR</code> state.
    * </p>
    */
-  public enum CompletedExecutionInstruction
+  enum CompletedExecutionInstruction
   {
     NOOP,
     RE_EXECUTE_JOB,
@@ -122,7 +126,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * particular <code>Trigger</code> implementation you are using.
    * </p>
    */
-  public static final int MISFIRE_INSTRUCTION_SMART_POLICY = 0;
+  static final int MISFIRE_INSTRUCTION_SMART_POLICY = 0;
 
   /**
    * Instructs the <code>{@link IScheduler}</code> that the <code>Trigger</code>
@@ -137,16 +141,16 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * will fire 20 times once it gets the chance to fire.
    * </p>
    */
-  public static final int MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY = -1;
+  static final int MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY = -1;
 
   /**
    * The default value for priority.
    */
-  public static final int DEFAULT_PRIORITY = 5;
+  static final int DEFAULT_PRIORITY = 5;
 
-  public TriggerKey getKey ();
+  TriggerKey getKey ();
 
-  public JobKey getJobKey ();
+  JobKey getJobKey ();
 
   /**
    * Return the description given to the <code>Trigger</code> instance by its
@@ -154,7 +158,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    *
    * @return null if no description was set.
    */
-  public String getDescription ();
+  String getDescription ();
 
   /**
    * Get the name of the <code>{@link ICalendar}</code> associated with this
@@ -162,7 +166,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    *
    * @return <code>null</code> if there is no associated Calendar.
    */
-  public String getCalendarName ();
+  String getCalendarName ();
 
   /**
    * Get the <code>JobDataMap</code> that is associated with the
@@ -172,7 +176,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * fact typically result in an <code>IllegalStateException</code>.
    * </p>
    */
-  public JobDataMap getJobDataMap ();
+  JobDataMap getJobDataMap ();
 
   /**
    * The priority of a <code>Trigger</code> acts as a tiebreaker such that if
@@ -184,7 +188,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    *
    * @see #DEFAULT_PRIORITY
    */
-  public int getPriority ();
+  int getPriority ();
 
   /**
    * Used by the <code>{@link IScheduler}</code> to determine whether or not it
@@ -195,12 +199,12 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * <code>{@link com.helger.quartz.spi.IJobStore}</code>.
    * </p>
    */
-  public boolean mayFireAgain ();
+  boolean mayFireAgain ();
 
   /**
    * Get the time at which the <code>Trigger</code> should occur.
    */
-  public Date getStartTime ();
+  Date getStartTime ();
 
   /**
    * Get the time at which the <code>Trigger</code> should quit repeating -
@@ -209,7 +213,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    *
    * @see #getFinalFireTime()
    */
-  public Date getEndTime ();
+  Date getEndTime ();
 
   /**
    * Returns the next time at which the <code>Trigger</code> is scheduled to
@@ -226,20 +230,20 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.OperableTrigger,
    *      ICalendar, java.util.Date, java.util.Date)
    */
-  public Date getNextFireTime ();
+  Date getNextFireTime ();
 
   /**
    * Returns the previous time at which the <code>Trigger</code> fired. If the
    * trigger has not yet fired, <code>null</code> will be returned.
    */
-  public Date getPreviousFireTime ();
+  Date getPreviousFireTime ();
 
   /**
    * Returns the next time at which the <code>Trigger</code> will fire, after
    * the given time. If the trigger will not fire after the given time,
    * <code>null</code> will be returned.
    */
-  public Date getFireTimeAfter (Date afterTime);
+  Date getFireTimeAfter (Date afterTime);
 
   /**
    * Returns the last time at which the <code>Trigger</code> will fire, if the
@@ -248,7 +252,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * Note that the return time *may* be in the past.
    * </p>
    */
-  public Date getFinalFireTime ();
+  Date getFinalFireTime ();
 
   /**
    * Get the instruction the <code>Scheduler</code> should be given for handling
@@ -265,7 +269,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * @see ISimpleTrigger
    * @see ICronTrigger
    */
-  public int getMisfireInstruction ();
+  int getMisfireInstruction ();
 
   /**
    * Get a {@link TriggerBuilder} that is configured to produce a
@@ -273,7 +277,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    *
    * @see #getScheduleBuilder()
    */
-  public TriggerBuilder <? extends ITrigger> getTriggerBuilder ();
+  TriggerBuilder <? extends ITrigger> getTriggerBuilder ();
 
   /**
    * Get a {@link ScheduleBuilder} that is configured to produce a schedule
@@ -281,14 +285,14 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    *
    * @see #getTriggerBuilder()
    */
-  public ScheduleBuilder <? extends ITrigger> getScheduleBuilder ();
+  ScheduleBuilder <? extends ITrigger> getScheduleBuilder ();
 
   /**
    * Trigger equality is based upon the equality of the TriggerKey.
    *
    * @return true if the key of this Trigger equals that of the given Trigger.
    */
-  public boolean equals (Object other);
+  boolean equals (Object other);
 
   /**
    * <p>
@@ -297,7 +301,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * natural (i.e. alphabetical) order of their keys.
    * </p>
    */
-  public int compareTo (ITrigger other);
+  int compareTo (ITrigger other);
 
   /**
    * A Comparator that compares trigger's next fire times, or in other words,
@@ -305,15 +309,15 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * same, then the triggers are sorted according to priority (highest value
    * first), if the priorities are the same, then they are sorted by key.
    */
-  static class TriggerTimeComparator implements Comparator <ITrigger>, Serializable
+  public static class TriggerTimeComparator implements IComparator <ITrigger>
   {
     // This static method exists for comparator in TC clustered quartz
-    public static int compare (final Date nextFireTime1,
-                               final int priority1,
-                               final TriggerKey key1,
-                               final Date nextFireTime2,
-                               final int priority2,
-                               final TriggerKey key2)
+    static int compare (final Date nextFireTime1,
+                        final int priority1,
+                        final TriggerKey key1,
+                        final Date nextFireTime2,
+                        final int priority2,
+                        final TriggerKey key2)
     {
       if (nextFireTime1 != null || nextFireTime2 != null)
       {

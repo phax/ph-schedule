@@ -24,7 +24,5 @@ import com.helger.quartz.ITrigger;
  */
 public interface ICoreTrigger extends ITrigger
 {
-
-  public boolean hasAdditionalProperties ();
-
+  boolean hasAdditionalProperties ();
 }
