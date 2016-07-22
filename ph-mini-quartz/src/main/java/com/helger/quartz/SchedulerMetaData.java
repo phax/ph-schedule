@@ -252,14 +252,14 @@ public class SchedulerMetaData implements java.io.Serializable
    * </p>
    *
    * <pre>
-   *  Quartz Scheduler 'SchedulerName' with instanceId 'SchedulerInstanceId' Scheduler class: 'org.quartz.impl.StdScheduler' - running locally. Running since: '11:33am on Jul 19, 2002' Not currently paused. Number of Triggers fired: '123' Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with '8' threads Using job-store 'org.quartz.impl.JDBCJobStore' - which supports persistence.
+   *  Mini Quartz Scheduler 'SchedulerName' with instanceId 'SchedulerInstanceId' Scheduler class: 'com.helger.quartz.impl.StdScheduler' - running locally. Running since: '11:33am on Jul 19, 2002' Not currently paused. Number of Triggers fired: '123' Using thread pool 'com.helger.quartz.simpl.SimpleThreadPool' - with '8' threads Using job-store 'com.helger.quartz.impl.JDBCJobStore' - which supports persistence.
    * </pre>
    *
    * @throws SchedulerException
    */
   public String getSummary () throws SchedulerException
   {
-    final StringBuilder str = new StringBuilder ("Quartz Scheduler (v");
+    final StringBuilder str = new StringBuilder ("Mini Quartz Scheduler (v");
     str.append (getVersion ());
     str.append (") '");
 

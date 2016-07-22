@@ -40,22 +40,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.IJob;
-import com.helger.quartz.JobBuilder;
-import com.helger.quartz.IJobDetail;
-import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobKey;
-import com.helger.quartz.PersistJobDataAfterExecution;
-import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerContext;
-import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.ITrigger;
-import com.helger.quartz.TriggerBuilder;
-import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.utils.Key;
@@ -66,6 +53,7 @@ import com.helger.quartz.utils.Key;
  */
 public abstract class AbstractSchedulerTest
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSchedulerTest.class);
 
   private static final String BARRIER = "BARRIER";
   private static final String DATE_STAMPS = "DATE_STAMPS";
@@ -143,10 +131,10 @@ public abstract class AbstractSchedulerTest
     sched.deleteJob (jobKey ("j1"));
 
     ITrigger trigger = newTrigger ().withIdentity ("t1")
-                                   .forJob (job)
-                                   .startNow ()
-                                   .withSchedule (simpleSchedule ().repeatForever ().withIntervalInSeconds (5))
-                                   .build ();
+                                    .forJob (job)
+                                    .startNow ()
+                                    .withSchedule (simpleSchedule ().repeatForever ().withIntervalInSeconds (5))
+                                    .build ();
 
     assertFalse ("Unexpected existence of trigger named '11'.", sched.checkExists (triggerKey ("t1")));
 
@@ -333,7 +321,7 @@ public abstract class AbstractSchedulerTest
     final Map <Thread, StackTraceElement []> allThreadsStart = Thread.getAllStackTraces ();
     final int threadPoolSize = 5;
     final IScheduler scheduler = createScheduler ("testShutdownWithSleepReturnsAfterAllThreadsAreStopped",
-                                                 threadPoolSize);
+                                                  threadPoolSize);
 
     Thread.sleep (500L);
 
@@ -372,32 +360,31 @@ public abstract class AbstractSchedulerTest
       // log the additional threads
       for (final Thread t : allThreadsEnd.keySet ())
       {
-        System.out.println ("*** Found additional thread: " +
-                            t.getName () +
-                            " (of type " +
-                            t.getClass ().getName () +
-                            ")  in group: " +
-                            t.getThreadGroup ().getName () +
-                            " with parent group: " +
-                            (t.getThreadGroup ().getParent () == null ? "-none-"
-                                                                      : t.getThreadGroup ().getParent ().getName ()));
+        s_aLogger.info ("*** Found additional thread: " +
+                        t.getName () +
+                        " (of type " +
+                        t.getClass ().getName () +
+                        ")  in group: " +
+                        t.getThreadGroup ().getName () +
+                        " with parent group: " +
+                        (t.getThreadGroup ().getParent () == null ? "-none-"
+                                                                  : t.getThreadGroup ().getParent ().getName ()));
       }
       // log all threads that were running before shutdown
       for (final Thread t : allThreadsRunning.keySet ())
       {
-        System.out.println ("- Test runtime thread: " +
-                            t.getName () +
-                            " (of type " +
-                            t.getClass ().getName () +
-                            ")  in group: " +
-                            (t.getThreadGroup () == null ? "-none-"
-                                                         : (t.getThreadGroup ().getName () +
-                                                            " with parent group: " +
-                                                            (t.getThreadGroup ()
-                                                              .getParent () == null ? "-none-"
-                                                                                    : t.getThreadGroup ()
-                                                                                       .getParent ()
-                                                                                       .getName ()))));
+        s_aLogger.info ("- Test runtime thread: " +
+                        t.getName () +
+                        " (of type " +
+                        t.getClass ().getName () +
+                        ")  in group: " +
+                        (t.getThreadGroup () == null ? "-none-"
+                                                     : (t.getThreadGroup ().getName () +
+                                                        " with parent group: " +
+                                                        (t.getThreadGroup ().getParent () == null ? "-none-"
+                                                                                                  : t.getThreadGroup ()
+                                                                                                     .getParent ()
+                                                                                                     .getName ()))));
       }
     }
     assertTrue ("Found unexpected new threads (see console output for listing)", allThreadsEnd.size () == 0);
@@ -522,17 +509,17 @@ public abstract class AbstractSchedulerTest
 
     final IJobDetail job = newJob (TestJob.class).withIdentity ("job1", "group1").build ();
     final ITrigger trigger1 = newTrigger ().withIdentity ("trigger1", "group1")
-                                          .startNow ()
-                                          .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
-                                                                              .withIntervalInSeconds (1)
-                                                                              .repeatForever ())
-                                          .build ();
+                                           .startNow ()
+                                           .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
+                                                                               .withIntervalInSeconds (1)
+                                                                               .repeatForever ())
+                                           .build ();
     final ITrigger trigger2 = newTrigger ().withIdentity ("trigger2", "group1")
-                                          .startNow ()
-                                          .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
-                                                                              .withIntervalInSeconds (1)
-                                                                              .repeatForever ())
-                                          .build ();
+                                           .startNow ()
+                                           .withSchedule (SimpleScheduleBuilder.simpleSchedule ()
+                                                                               .withIntervalInSeconds (1)
+                                                                               .repeatForever ())
+                                           .build ();
     final Set <ITrigger> triggersForJob = new HashSet<> ();
     triggersForJob.add (trigger1);
     triggersForJob.add (trigger2);

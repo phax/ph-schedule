@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.AccessControlException;
 import java.util.Collection;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.io.stream.StreamHelper;
+import com.helger.commons.system.SystemProperties;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
@@ -71,8 +73,8 @@ import com.helger.quartz.utils.PropertiesParser;
  * <p>
  * By default a properties file named "quartz.properties" is loaded from the
  * 'current working directory'. If that fails, then the "quartz.properties" file
- * located (as a resource) in the org/quartz package is loaded. If you wish to
- * use a file other than these defaults, you must define the system property
+ * located (as a resource) in the "quartz" package is loaded. If you wish to use
+ * a file other than these defaults, you must define the system property
  * 'org.quartz.properties' to point to the file you want.
  * </p>
  * <p>
@@ -111,13 +113,6 @@ import com.helger.quartz.utils.PropertiesParser;
  */
 public class StdSchedulerFactory implements ISchedulerFactory
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   public static final String PROPERTIES_FILE = "org.quartz.properties";
   public static final String PROP_SCHED_INSTANCE_NAME = "org.quartz.scheduler.instanceName";
   public static final String PROP_SCHED_INSTANCE_ID = "org.quartz.scheduler.instanceId";
@@ -154,7 +149,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
   public static final String PROP_THREAD_EXECUTOR_CLASS = "org.quartz.threadExecutor.class";
   public static final String SYSTEM_PROPERTY_AS_INSTANCE_ID = "SYS_PROP";
 
-  private SchedulerException initException = null;
+  private SchedulerException initException;
   private String propSrc = null;
   private PropertiesParser cfg;
   private final Logger log = LoggerFactory.getLogger (getClass ());
@@ -215,8 +210,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * <p>
    * By default a properties file named "quartz.properties" is loaded from the
    * 'current working directory'. If that fails, then the "quartz.properties"
-   * file located (as a resource) in the org/quartz package is loaded. If you
-   * wish to use a file other than these defaults, you must define the system
+   * file located (as a resource) in the "quartz" package is loaded. If you wish
+   * to use a file other than these defaults, you must define the system
    * property 'org.quartz.properties' to point to the file you want.
    * </p>
    * <p>
@@ -229,9 +224,14 @@ public class StdSchedulerFactory implements ISchedulerFactory
    */
   public void initialize () throws SchedulerException
   {
+    if (log.isDebugEnabled ())
+      log.debug ("StdSchedulerFactory.initalize");
+
     // short-circuit if already initialized
     if (cfg != null)
     {
+      if (log.isDebugEnabled ())
+        log.debug ("StdSchedulerFactory already initalized");
       return;
     }
     if (initException != null)
@@ -239,7 +239,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       throw initException;
     }
 
-    final String requestedFile = System.getProperty (PROPERTIES_FILE);
+    final String requestedFile = SystemProperties.getPropertyValueOrNull (PROPERTIES_FILE);
     final String propFileName = requestedFile != null ? requestedFile : "quartz.properties";
     final File propFile = new File (propFileName);
 
@@ -295,7 +295,6 @@ public class StdSchedulerFactory implements ISchedulerFactory
             initException = new SchedulerException ("Properties file: '" + requestedFile + "' could not be read.", ioe);
             throw initException;
           }
-
         }
         else
         {
@@ -316,7 +315,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
           }
           catch (final IOException ioe)
           {
-            initException = new SchedulerException ("Resource properties file: 'org/quartz/quartz.properties' " +
+            initException = new SchedulerException ("Resource properties file: 'quartz/quartz.properties' " +
                                                     "could not be read from the classpath.",
                                                     ioe);
             throw initException;
@@ -328,14 +327,14 @@ public class StdSchedulerFactory implements ISchedulerFactory
       StreamHelper.close (in);
     }
 
-    initialize (overrideWithSysProps (props));
+    initialize (_overrideWithSysProps (props));
   }
 
   /**
    * Add all System properties to the given <code>props</code>. Will override
    * any properties that already exist in the given <code>props</code>.
    */
-  private Properties overrideWithSysProps (final Properties props)
+  private Properties _overrideWithSysProps (final Properties props)
   {
     Properties sysProps = null;
     try
@@ -470,8 +469,11 @@ public class StdSchedulerFactory implements ISchedulerFactory
     this.cfg = new PropertiesParser (props);
   }
 
-  private IScheduler instantiate () throws SchedulerException
+  private IScheduler _instantiate () throws SchedulerException
   {
+    if (log.isDebugEnabled ())
+      log.debug ("StdSchedulerFactory._instantiate");
+
     if (cfg == null)
     {
       initialize ();
@@ -545,7 +547,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     IClassLoadHelper loadHelper = null;
     try
     {
-      loadHelper = (IClassLoadHelper) loadClass (classLoadHelperClass).newInstance ();
+      loadHelper = (IClassLoadHelper) _loadClass (classLoadHelperClass).newInstance ();
     }
     catch (final Exception e)
     {
@@ -556,6 +558,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
     IJobFactory jobFactory = null;
     if (jobFactoryClass != null)
     {
+      if (log.isDebugEnabled ())
+        log.debug ("Creating jobFactoryClass " + jobFactoryClass);
+
       try
       {
         jobFactory = (IJobFactory) loadHelper.loadClass (jobFactoryClass).newInstance ();
@@ -568,7 +573,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       tProps = cfg.getPropertyGroup (PROP_SCHED_JOB_FACTORY_PREFIX, true);
       try
       {
-        setBeanProps (jobFactory, tProps);
+        _setBeanProps (jobFactory, tProps);
       }
       catch (final Exception e)
       {
@@ -583,6 +588,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
     IInstanceIdGenerator instanceIdGenerator = null;
     if (instanceIdGeneratorClass != null)
     {
+      if (log.isDebugEnabled ())
+        log.debug ("Creating instanceIdGeneratorClass " + instanceIdGeneratorClass);
+
       try
       {
         instanceIdGenerator = (IInstanceIdGenerator) loadHelper.loadClass (instanceIdGeneratorClass).newInstance ();
@@ -595,7 +603,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       tProps = cfg.getPropertyGroup (PROP_SCHED_INSTANCE_ID_GENERATOR_PREFIX, true);
       try
       {
-        setBeanProps (instanceIdGenerator, tProps);
+        _setBeanProps (instanceIdGenerator, tProps);
       }
       catch (final Exception e)
       {
@@ -629,7 +637,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     tProps = cfg.getPropertyGroup (PROP_THREAD_POOL_PREFIX, true);
     try
     {
-      setBeanProps (tp, tProps);
+      _setBeanProps (tp, tProps);
     }
     catch (final Exception e)
     {
@@ -663,7 +671,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     tProps = cfg.getPropertyGroup (PROP_JOB_STORE_PREFIX, true, new String [] { PROP_JOB_STORE_LOCK_HANDLER_PREFIX });
     try
     {
-      setBeanProps (js, tProps);
+      _setBeanProps (js, tProps);
     }
     catch (final Exception e)
     {
@@ -704,7 +712,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       }
       try
       {
-        setBeanProps (plugin, pp);
+        _setBeanProps (plugin, pp);
       }
       catch (final Exception e)
       {
@@ -765,7 +773,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
         {
           nameSetter.invoke (listener, new Object [] { jobListenerNames[i] });
         }
-        setBeanProps (listener, lp);
+        _setBeanProps (listener, lp);
       }
       catch (final Exception e)
       {
@@ -822,7 +830,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
         {
           nameSetter.invoke (listener, new Object [] { triggerListenerNames[i] });
         }
-        setBeanProps (listener, lp);
+        _setBeanProps (listener, lp);
       }
       catch (final Exception e)
       {
@@ -850,7 +858,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
         threadExecutor = (IThreadExecutor) loadHelper.loadClass (threadExecutorClass).newInstance ();
         log.info ("Using custom implementation for ThreadExecutor: " + threadExecutorClass);
 
-        setBeanProps (threadExecutor, tProps);
+        _setBeanProps (threadExecutor, tProps);
       }
       catch (final Exception e)
       {
@@ -1001,25 +1009,25 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
     catch (final SchedulerException e)
     {
-      shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
+      _shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
       throw e;
     }
     catch (final RuntimeException re)
     {
-      shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
+      _shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
       throw re;
     }
     catch (final Error re)
     {
-      shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
+      _shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
       throw re;
     }
   }
 
-  private void shutdownFromInstantiateException (final IThreadPool tp,
-                                                 final QuartzScheduler qs,
-                                                 final boolean tpInited,
-                                                 final boolean qsInited)
+  private void _shutdownFromInstantiateException (final IThreadPool tp,
+                                                  final QuartzScheduler qs,
+                                                  final boolean tpInited,
+                                                  final boolean qsInited)
   {
     try
     {
@@ -1046,11 +1054,11 @@ public class StdSchedulerFactory implements ISchedulerFactory
     return scheduler;
   }
 
-  private void setBeanProps (final Object obj, final Properties props) throws NoSuchMethodException,
-                                                                       IllegalAccessException,
-                                                                       java.lang.reflect.InvocationTargetException,
-                                                                       IntrospectionException,
-                                                                       SchedulerConfigException
+  private void _setBeanProps (final Object obj, final Properties props) throws NoSuchMethodException,
+                                                                        IllegalAccessException,
+                                                                        InvocationTargetException,
+                                                                        IntrospectionException,
+                                                                        SchedulerConfigException
   {
     props.remove ("class");
 
@@ -1065,7 +1073,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       final String c = name.substring (0, 1).toUpperCase (Locale.US);
       final String methName = "set" + c + name.substring (1);
 
-      final java.lang.reflect.Method setMeth = getSetMethod (methName, propDescs);
+      final java.lang.reflect.Method setMeth = _getSetMethod (methName, propDescs);
 
       try
       {
@@ -1136,7 +1144,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
   }
 
-  private java.lang.reflect.Method getSetMethod (final String name, final PropertyDescriptor [] props)
+  private java.lang.reflect.Method _getSetMethod (final String name, final PropertyDescriptor [] props)
   {
     for (final PropertyDescriptor prop : props)
     {
@@ -1151,12 +1159,12 @@ public class StdSchedulerFactory implements ISchedulerFactory
     return null;
   }
 
-  private Class <?> loadClass (final String className) throws ClassNotFoundException, SchedulerConfigException
+  private Class <?> _loadClass (final String className) throws ClassNotFoundException, SchedulerConfigException
   {
 
     try
     {
-      final ClassLoader cl = findClassloader ();
+      final ClassLoader cl = _findClassloader ();
       if (cl != null)
         return cl.loadClass (className);
       throw new SchedulerConfigException ("Unable to find a class loader on the current thread or class.");
@@ -1169,7 +1177,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
   }
 
-  private ClassLoader findClassloader ()
+  private ClassLoader _findClassloader ()
   {
     // work-around set context loader for windows-service started jvms
     // (QUARTZ-748)
@@ -1180,7 +1188,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     return Thread.currentThread ().getContextClassLoader ();
   }
 
-  private String getSchedulerName ()
+  private String _getSchedulerName ()
   {
     return cfg.getStringProperty (PROP_SCHED_INSTANCE_NAME, "MiniQuartzScheduler");
   }
@@ -1202,19 +1210,24 @@ public class StdSchedulerFactory implements ISchedulerFactory
       initialize ();
     }
 
+    if (log.isDebugEnabled ())
+      log.debug ("Looking up scheduler with name '" + _getSchedulerName () + "'");
+
     final SchedulerRepository schedRep = SchedulerRepository.getInstance ();
 
-    IScheduler sched = schedRep.lookup (getSchedulerName ());
+    IScheduler sched = schedRep.lookup (_getSchedulerName ());
     if (sched != null)
     {
+      if (log.isDebugEnabled ())
+        log.debug ("Reusing existing scheduler with name '" + _getSchedulerName () + "'");
+
       if (sched.isShutdown ())
-        schedRep.remove (getSchedulerName ());
+        schedRep.remove (_getSchedulerName ());
       else
         return sched;
     }
 
-    sched = instantiate ();
-
+    sched = _instantiate ();
     return sched;
   }
 

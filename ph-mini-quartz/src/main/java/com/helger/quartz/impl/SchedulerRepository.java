@@ -19,7 +19,9 @@
 package com.helger.quartz.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
@@ -35,58 +37,34 @@ import com.helger.quartz.SchedulerException;
  */
 public class SchedulerRepository
 {
+  private static final class SingletonHolder
+  {
+    static final SchedulerRepository INSTANCE = new SchedulerRepository ();
+  }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  private final HashMap <String, IScheduler> schedulers;
-
-  private static SchedulerRepository inst;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private final Map <String, IScheduler> schedulers;
 
   private SchedulerRepository ()
   {
-    schedulers = new HashMap <> ();
+    schedulers = new HashMap<> ();
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  public static synchronized SchedulerRepository getInstance ()
+  public static SchedulerRepository getInstance ()
   {
-    if (inst == null)
-    {
-      inst = new SchedulerRepository ();
-    }
-
-    return inst;
+    return SingletonHolder.INSTANCE;
   }
 
   public synchronized void bind (final IScheduler sched) throws SchedulerException
   {
-
-    if (schedulers.get (sched.getSchedulerName ()) != null)
-    {
-      throw new SchedulerException ("Scheduler with name '" + sched.getSchedulerName () + "' already exists.");
-    }
-
-    schedulers.put (sched.getSchedulerName (), sched);
+    final String sKey = sched.getSchedulerName ();
+    if (schedulers.containsKey (sKey))
+      throw new SchedulerException ("Scheduler with name '" + sKey + "' already exists.");
+    schedulers.put (sKey, sched);
   }
 
   public synchronized boolean remove (final String schedName)
   {
-    return (schedulers.remove (schedName) != null);
+    return schedulers.remove (schedName) != null;
   }
 
   public synchronized IScheduler lookup (final String schedName)
@@ -96,7 +74,6 @@ public class SchedulerRepository
 
   public synchronized Collection <IScheduler> lookupAll ()
   {
-    return java.util.Collections.unmodifiableCollection (schedulers.values ());
+    return Collections.unmodifiableCollection (schedulers.values ());
   }
-
 }

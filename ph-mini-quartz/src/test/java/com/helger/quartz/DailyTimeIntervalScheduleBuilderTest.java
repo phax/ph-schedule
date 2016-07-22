@@ -32,6 +32,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.DateBuilder.IntervalUnit;
 import com.helger.quartz.impl.StdSchedulerFactory;
@@ -44,6 +46,8 @@ import com.helger.quartz.spi.IOperableTrigger;
  */
 public class DailyTimeIntervalScheduleBuilderTest
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DailyTimeIntervalScheduleBuilderTest.class);
+
   @Test
   public void testScheduleActualTrigger () throws Exception
   {
@@ -85,9 +89,8 @@ public class DailyTimeIntervalScheduleBuilderTest
 
     trigger = scheduler.getTrigger (trigger.getKey ());
 
-    System.out.println ("testScheduleInMiddleOfDailyInterval: currTime = " + currTime.getTime ());
-    System.out.println ("testScheduleInMiddleOfDailyInterval: computed first fire time = " +
-                        trigger.getNextFireTime ());
+    s_aLogger.info ("testScheduleInMiddleOfDailyInterval: currTime = " + currTime.getTime ());
+    s_aLogger.info ("testScheduleInMiddleOfDailyInterval: computed first fire time = " + trigger.getNextFireTime ());
 
     assertTrue ("First fire time is not after now!", trigger.getNextFireTime ().after (currTime.getTime ()));
 
@@ -104,9 +107,8 @@ public class DailyTimeIntervalScheduleBuilderTest
 
     trigger = scheduler.getTrigger (trigger.getKey ());
 
-    System.out.println ("testScheduleInMiddleOfDailyInterval: startTime = " + startTime);
-    System.out.println ("testScheduleInMiddleOfDailyInterval: computed first fire time = " +
-                        trigger.getNextFireTime ());
+    s_aLogger.info ("testScheduleInMiddleOfDailyInterval: startTime = " + startTime);
+    s_aLogger.info ("testScheduleInMiddleOfDailyInterval: computed first fire time = " + trigger.getNextFireTime ());
 
     assertTrue ("First fire time is not after now!", trigger.getNextFireTime ().equals (startTime));
 

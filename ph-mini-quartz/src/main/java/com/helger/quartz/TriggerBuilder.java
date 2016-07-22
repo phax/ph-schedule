@@ -60,7 +60,6 @@ import com.helger.quartz.utils.Key;
  */
 public class TriggerBuilder <T extends ITrigger>
 {
-
   private TriggerKey key;
   private String description;
   private Date startTime = new Date ();

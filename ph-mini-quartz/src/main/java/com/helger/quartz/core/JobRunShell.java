@@ -24,10 +24,10 @@ import org.slf4j.LoggerFactory;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.JobExecutionException;
+import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.JobExecutionContext;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.spi.IOperableTrigger;
@@ -56,29 +56,12 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  */
 public class JobRunShell extends AbstractSchedulerListenerSupport implements Runnable
 {
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   protected JobExecutionContext jec = null;
-
   protected QuartzScheduler qs = null;
-
   protected TriggerFiredBundle firedTriggerBundle = null;
-
   protected IScheduler scheduler = null;
-
   protected volatile boolean shutdownRequested = false;
-
   private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
@@ -392,7 +375,8 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
     return true;
   }
 
-  private boolean _notifyJobListenersComplete (final IJobExecutionContext jobExCtxt, final JobExecutionException jobExEx)
+  private boolean _notifyJobListenersComplete (final IJobExecutionContext jobExCtxt,
+                                               final JobExecutionException jobExEx)
   {
     try
     {
@@ -414,7 +398,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
   }
 
   private boolean _notifyTriggerListenersComplete (final IJobExecutionContext jobExCtxt,
-                                                  final CompletedExecutionInstruction instCode)
+                                                   final CompletedExecutionInstruction instCode)
   {
     try
     {

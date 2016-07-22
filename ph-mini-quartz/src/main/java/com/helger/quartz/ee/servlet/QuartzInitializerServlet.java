@@ -238,7 +238,7 @@ public class QuartzInitializerServlet extends HttpServlet
     }
     catch (final Exception e)
     {
-      log ("Quartz Scheduler failed to initialize: " + e.toString ());
+      log ("Mini Quartz Scheduler failed to initialize: " + e.toString ());
       throw new ServletException (e);
     }
   }
@@ -261,26 +261,21 @@ public class QuartzInitializerServlet extends HttpServlet
   @Override
   public void destroy ()
   {
-
     if (!performShutdown)
-    {
       return;
-    }
 
     try
     {
       if (scheduler != null)
-      {
         scheduler.shutdown (waitOnShutdown);
-      }
     }
     catch (final Exception e)
     {
-      log ("Quartz Scheduler failed to shutdown cleanly: " + e.toString ());
+      log ("Mini Quartz Scheduler failed to shutdown cleanly: " + e.toString ());
       e.printStackTrace ();
     }
 
-    log ("Quartz Scheduler successful shutdown.");
+    log ("Mini Quartz Scheduler successful shutdown.");
   }
 
   @Override

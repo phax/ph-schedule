@@ -19,6 +19,7 @@
 package com.helger.quartz.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -42,12 +43,17 @@ public class SchedulerDetailsSetterTest
   public void testSetter () throws SchedulerException, IOException
   {
     final Properties props = new Properties ();
-    props.load (ClassPathResource.getInputStream ("/quartz/quartz.properties"));
+    props.load (ClassPathResource.getInputStream ("quartz/quartz.properties"));
     props.setProperty (StdSchedulerFactory.PROP_THREAD_POOL_CLASS, MyThreadPool.class.getName ());
     props.setProperty (StdSchedulerFactory.PROP_JOB_STORE_CLASS, MyJobStore.class.getName ());
+    // Separate scheduler instance name is important otherwises tests fail on
+    // the commandline because the scheduler is already instantiated and simply
+    // reused
+    props.setProperty (StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, "MyTestScheduler");
 
     final StdSchedulerFactory factory = new StdSchedulerFactory (props);
-    factory.getScheduler (); // this will initialize all the test fixtures.
+    // this will initialize all the test fixtures.
+    assertNotNull (factory.getScheduler ());
 
     assertEquals (3, instanceIdCalls.get ());
     assertEquals (3, instanceNameCalls.get ());
@@ -68,7 +74,7 @@ public class SchedulerDetailsSetterTest
   @Test
   public void testUnimplementedMethods () throws Exception
   {
-    final IThreadPool tp = makeIncompleteThreadPool ();
+    final IThreadPool tp = _makeIncompleteThreadPool ();
     try
     {
       tp.setInstanceName ("name");
@@ -82,7 +88,7 @@ public class SchedulerDetailsSetterTest
     SchedulerDetailsSetter.setDetails (tp, "name", "id");
   }
 
-  private IThreadPool makeIncompleteThreadPool () throws InstantiationException, IllegalAccessException
+  private IThreadPool _makeIncompleteThreadPool () throws InstantiationException, IllegalAccessException
   {
     final String name = "IncompleteThreadPool";
     final ClassWriter cw = new ClassWriter (0);
@@ -117,7 +123,6 @@ public class SchedulerDetailsSetterTest
 
   public static class MyThreadPool extends SimpleThreadPool
   {
-
     @Override
     public void initialize ()
     {}

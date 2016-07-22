@@ -29,6 +29,8 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.simpl.SimpleThreadPool;
@@ -38,17 +40,17 @@ import com.helger.quartz.simpl.SimpleThreadPool;
  */
 public class InterruptableJobTest
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (InterruptableJobTest.class);
 
   static final CyclicBarrier sync = new CyclicBarrier (2);
 
   public static class TestInterruptableJob implements IInterruptableJob
   {
-
     public static final AtomicBoolean interrupted = new AtomicBoolean (false);
 
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
-      System.out.println ("TestInterruptableJob is executing.");
+      s_aLogger.info ("TestInterruptableJob is executing.");
       try
       {
         sync.await (); // wait for test thread to notice the job is now running
@@ -68,13 +70,13 @@ public class InterruptableJobTest
         {}
         if (TestInterruptableJob.interrupted.get ())
         {
-          System.out.println ("TestInterruptableJob main loop detected interrupt signal.");
+          s_aLogger.info ("TestInterruptableJob main loop detected interrupt signal.");
           break;
         }
       }
       try
       {
-        System.out.println ("TestInterruptableJob exiting with interrupted = " + interrupted);
+        s_aLogger.info ("TestInterruptableJob exiting with interrupted = " + interrupted);
         sync.await ();
       }
       catch (final InterruptedException e)
@@ -86,7 +88,7 @@ public class InterruptableJobTest
     public void interrupt () throws UnableToInterruptJobException
     {
       TestInterruptableJob.interrupted.set (true);
-      System.out.println ("TestInterruptableJob.interrupt() called.");
+      s_aLogger.info ("TestInterruptableJob.interrupt() called.");
     }
   }
 

@@ -22,19 +22,22 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.PersistJobDataAfterExecution;
-import com.helger.quartz.utils.ClassUtils;
 
 /**
  * @author Alex Snaps
  */
 public class ClassUtilsTest
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (ClassUtilsTest.class);
+
   @Test
   public void testIsAnnotationPresentOnSuperClass () throws Exception
   {
@@ -51,7 +54,7 @@ public class ClassUtilsTest
   {
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
-      System.out.println (this.getClass ().getSimpleName ());
+      s_aLogger.info (this.getClass ().getSimpleName ());
     }
   }
 

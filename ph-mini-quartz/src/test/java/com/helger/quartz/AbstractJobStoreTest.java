@@ -30,20 +30,9 @@ import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.DateBuilder;
-import com.helger.quartz.IJob;
-import com.helger.quartz.JobBuilder;
-import com.helger.quartz.IJobDetail;
-import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobKey;
-import com.helger.quartz.ObjectAlreadyExistsException;
-import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.ITrigger;
-import com.helger.quartz.TriggerBuilder;
-import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.matchers.GroupMatcher;
@@ -60,6 +49,8 @@ import com.helger.quartz.spi.ISchedulerSignaler;
  */
 public abstract class AbstractJobStoreTest
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractJobStoreTest.class);
+
   private IJobStore fJobStore;
   private JobDetail fJobDetail;
   private SampleSignaler fSignaler;
@@ -99,29 +90,29 @@ public abstract class AbstractJobStoreTest
     final long baseFireTime = baseFireTimeDate.getTime ();
 
     final IOperableTrigger trigger1 = new SimpleTrigger ("trigger1",
-                                                            "triggerGroup1",
-                                                            this.fJobDetail.getName (),
-                                                            this.fJobDetail.getGroup (),
-                                                            new Date (baseFireTime + 200000),
-                                                            new Date (baseFireTime + 200000),
-                                                            2,
-                                                            2000);
+                                                         "triggerGroup1",
+                                                         this.fJobDetail.getName (),
+                                                         this.fJobDetail.getGroup (),
+                                                         new Date (baseFireTime + 200000),
+                                                         new Date (baseFireTime + 200000),
+                                                         2,
+                                                         2000);
     final IOperableTrigger trigger2 = new SimpleTrigger ("trigger2",
-                                                            "triggerGroup1",
-                                                            this.fJobDetail.getName (),
-                                                            this.fJobDetail.getGroup (),
-                                                            new Date (baseFireTime + 50000),
-                                                            new Date (baseFireTime + 200000),
-                                                            2,
-                                                            2000);
+                                                         "triggerGroup1",
+                                                         this.fJobDetail.getName (),
+                                                         this.fJobDetail.getGroup (),
+                                                         new Date (baseFireTime + 50000),
+                                                         new Date (baseFireTime + 200000),
+                                                         2,
+                                                         2000);
     final IOperableTrigger trigger3 = new SimpleTrigger ("trigger1",
-                                                            "triggerGroup2",
-                                                            this.fJobDetail.getName (),
-                                                            this.fJobDetail.getGroup (),
-                                                            new Date (baseFireTime + 100000),
-                                                            new Date (baseFireTime + 200000),
-                                                            2,
-                                                            2000);
+                                                         "triggerGroup2",
+                                                         this.fJobDetail.getName (),
+                                                         this.fJobDetail.getGroup (),
+                                                         new Date (baseFireTime + 100000),
+                                                         new Date (baseFireTime + 200000),
+                                                         2,
+                                                         2000);
 
     trigger1.computeFirstFireTime (null);
     trigger2.computeFirstFireTime (null);
@@ -159,54 +150,54 @@ public abstract class AbstractJobStoreTest
     final long baseFireTime = System.currentTimeMillis () - 1000;
 
     final IOperableTrigger early = new SimpleTrigger ("early",
+                                                      "triggerGroup1",
+                                                      this.fJobDetail.getName (),
+                                                      this.fJobDetail.getGroup (),
+                                                      new Date (baseFireTime),
+                                                      new Date (baseFireTime + 5),
+                                                      2,
+                                                      2000);
+    final IOperableTrigger trigger1 = new SimpleTrigger ("trigger1",
                                                          "triggerGroup1",
                                                          this.fJobDetail.getName (),
                                                          this.fJobDetail.getGroup (),
-                                                         new Date (baseFireTime),
-                                                         new Date (baseFireTime + 5),
+                                                         new Date (baseFireTime + 200000),
+                                                         new Date (baseFireTime + 200005),
                                                          2,
                                                          2000);
-    final IOperableTrigger trigger1 = new SimpleTrigger ("trigger1",
-                                                            "triggerGroup1",
-                                                            this.fJobDetail.getName (),
-                                                            this.fJobDetail.getGroup (),
-                                                            new Date (baseFireTime + 200000),
-                                                            new Date (baseFireTime + 200005),
-                                                            2,
-                                                            2000);
     final IOperableTrigger trigger2 = new SimpleTrigger ("trigger2",
-                                                            "triggerGroup1",
-                                                            this.fJobDetail.getName (),
-                                                            this.fJobDetail.getGroup (),
-                                                            new Date (baseFireTime + 210000),
-                                                            new Date (baseFireTime + 210005),
-                                                            2,
-                                                            2000);
+                                                         "triggerGroup1",
+                                                         this.fJobDetail.getName (),
+                                                         this.fJobDetail.getGroup (),
+                                                         new Date (baseFireTime + 210000),
+                                                         new Date (baseFireTime + 210005),
+                                                         2,
+                                                         2000);
     final IOperableTrigger trigger3 = new SimpleTrigger ("trigger3",
-                                                            "triggerGroup1",
-                                                            this.fJobDetail.getName (),
-                                                            this.fJobDetail.getGroup (),
-                                                            new Date (baseFireTime + 220000),
-                                                            new Date (baseFireTime + 220005),
-                                                            2,
-                                                            2000);
+                                                         "triggerGroup1",
+                                                         this.fJobDetail.getName (),
+                                                         this.fJobDetail.getGroup (),
+                                                         new Date (baseFireTime + 220000),
+                                                         new Date (baseFireTime + 220005),
+                                                         2,
+                                                         2000);
     final IOperableTrigger trigger4 = new SimpleTrigger ("trigger4",
-                                                            "triggerGroup1",
-                                                            this.fJobDetail.getName (),
-                                                            this.fJobDetail.getGroup (),
-                                                            new Date (baseFireTime + 230000),
-                                                            new Date (baseFireTime + 230005),
-                                                            2,
-                                                            2000);
+                                                         "triggerGroup1",
+                                                         this.fJobDetail.getName (),
+                                                         this.fJobDetail.getGroup (),
+                                                         new Date (baseFireTime + 230000),
+                                                         new Date (baseFireTime + 230005),
+                                                         2,
+                                                         2000);
 
     final IOperableTrigger trigger10 = new SimpleTrigger ("trigger10",
-                                                             "triggerGroup2",
-                                                             this.fJobDetail.getName (),
-                                                             this.fJobDetail.getGroup (),
-                                                             new Date (baseFireTime + 500000),
-                                                             new Date (baseFireTime + 700000),
-                                                             2,
-                                                             2000);
+                                                          "triggerGroup2",
+                                                          this.fJobDetail.getName (),
+                                                          this.fJobDetail.getGroup (),
+                                                          new Date (baseFireTime + 500000),
+                                                          new Date (baseFireTime + 700000),
+                                                          2,
+                                                          2000);
 
     early.computeFirstFireTime (null);
     early.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
@@ -284,13 +275,13 @@ public abstract class AbstractJobStoreTest
   public void testTriggerStates () throws Exception
   {
     IOperableTrigger trigger = new SimpleTrigger ("trigger1",
-                                                     "triggerGroup1",
-                                                     this.fJobDetail.getName (),
-                                                     this.fJobDetail.getGroup (),
-                                                     new Date (System.currentTimeMillis () + 100000),
-                                                     new Date (System.currentTimeMillis () + 200000),
-                                                     2,
-                                                     2000);
+                                                  "triggerGroup1",
+                                                  this.fJobDetail.getName (),
+                                                  this.fJobDetail.getGroup (),
+                                                  new Date (System.currentTimeMillis () + 100000),
+                                                  new Date (System.currentTimeMillis () + 200000),
+                                                  2,
+                                                  2000);
     trigger.computeFirstFireTime (null);
     assertEquals (TriggerState.NONE, this.fJobStore.getTriggerState (trigger.getKey ()));
     this.fJobStore.storeTrigger (trigger, false);
@@ -433,10 +424,10 @@ public abstract class AbstractJobStoreTest
       store.storeJob (job, true);
       final SimpleScheduleBuilder schedule = SimpleScheduleBuilder.simpleSchedule ();
       final ITrigger trigger = TriggerBuilder.newTrigger ()
-                                            .withIdentity ("job" + i, group)
-                                            .withSchedule (schedule)
-                                            .forJob (job)
-                                            .build ();
+                                             .withIdentity ("job" + i, group)
+                                             .withSchedule (schedule)
+                                             .forJob (job)
+                                             .build ();
       store.storeTrigger ((IOperableTrigger) trigger, true);
     }
     // Retrieve job and trigger.
@@ -474,10 +465,10 @@ public abstract class AbstractJobStoreTest
     store.storeJob (job, true);
     SimpleScheduleBuilder schedule = SimpleScheduleBuilder.simpleSchedule ();
     ITrigger trigger = TriggerBuilder.newTrigger ()
-                                    .withIdentity ("trig1", "aaabbbccc")
-                                    .withSchedule (schedule)
-                                    .forJob (job)
-                                    .build ();
+                                     .withIdentity ("trig1", "aaabbbccc")
+                                     .withSchedule (schedule)
+                                     .forJob (job)
+                                     .build ();
     store.storeTrigger ((IOperableTrigger) trigger, true);
 
     job = JobBuilder.newJob (MyJob.class).withIdentity ("job1", "xxxyyyzzz").build ();
@@ -580,11 +571,11 @@ public abstract class AbstractJobStoreTest
       final IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i).build ();
       final SimpleScheduleBuilder schedule = SimpleScheduleBuilder.repeatMinutelyForever (2);
       final IOperableTrigger trigger = (IOperableTrigger) TriggerBuilder.newTrigger ()
-                                                                      .withIdentity ("job" + i)
-                                                                      .withSchedule (schedule)
-                                                                      .forJob (job)
-                                                                      .startAt (startTime)
-                                                                      .build ();
+                                                                        .withIdentity ("job" + i)
+                                                                        .withSchedule (schedule)
+                                                                        .forJob (job)
+                                                                        .startAt (startTime)
+                                                                        .build ();
 
       // Manually trigger the first fire time computation that scheduler would
       // do. Otherwise
@@ -634,11 +625,11 @@ public abstract class AbstractJobStoreTest
       final IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i).build ();
       final SimpleScheduleBuilder schedule = SimpleScheduleBuilder.repeatMinutelyForever (2);
       final IOperableTrigger trigger = (IOperableTrigger) TriggerBuilder.newTrigger ()
-                                                                      .withIdentity ("job" + i)
-                                                                      .withSchedule (schedule)
-                                                                      .forJob (job)
-                                                                      .startAt (startTime)
-                                                                      .build ();
+                                                                        .withIdentity ("job" + i)
+                                                                        .withSchedule (schedule)
+                                                                        .forJob (job)
+                                                                        .startAt (startTime)
+                                                                        .build ();
 
       // Manually trigger the first fire time computation that scheduler would
       // do. Otherwise
@@ -669,7 +660,7 @@ public abstract class AbstractJobStoreTest
 
     public void notifyTriggerListenersMisfired (final ITrigger trigger)
     {
-      System.out.println ("Trigger misfired: " + trigger.getKey () + ", fire time: " + trigger.getNextFireTime ());
+      s_aLogger.info ("Trigger misfired: " + trigger.getKey () + ", fire time: " + trigger.getNextFireTime ());
       fMisfireCount++;
     }
 

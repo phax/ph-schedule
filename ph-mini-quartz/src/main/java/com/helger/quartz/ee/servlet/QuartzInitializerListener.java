@@ -217,7 +217,7 @@ public class QuartzInitializerListener implements ServletContextListener
     }
     catch (final Exception e)
     {
-      log.error ("Quartz Scheduler failed to initialize: " + e.toString ());
+      log.error ("Mini Quartz Scheduler failed to initialize: " + e.toString ());
       e.printStackTrace ();
     }
   }
@@ -254,11 +254,11 @@ public class QuartzInitializerListener implements ServletContextListener
     }
     catch (final Exception e)
     {
-      log.error ("Quartz Scheduler failed to shutdown cleanly: " + e.toString ());
+      log.error ("Mini Quartz Scheduler failed to shutdown cleanly: " + e.toString ());
       e.printStackTrace ();
     }
 
-    log.info ("Quartz Scheduler successful shutdown.");
+    log.info ("Mini Quartz Scheduler successful shutdown.");
   }
 
 }

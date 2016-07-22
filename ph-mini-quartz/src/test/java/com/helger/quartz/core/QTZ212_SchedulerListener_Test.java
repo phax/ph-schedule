@@ -24,14 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.ISchedulerListener;
+import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.StdSchedulerFactory;
-import com.helger.quartz.listeners.BroadcastSchedulerListener;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
+import com.helger.quartz.listeners.BroadcastSchedulerListener;
 
 /**
  * Test that verifies that schedulerStarting() is called before the
@@ -41,6 +43,7 @@ import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
  */
 public class QTZ212_SchedulerListener_Test
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (QTZ212_SchedulerListener_Test.class);
 
   private static final String SCHEDULER_STARTED = "SCHEDULER_STARTED";
   private static final String SCHEDULER_STARTING = "SCHEDULER_STARTING";
@@ -86,14 +89,14 @@ public class QTZ212_SchedulerListener_Test
     public void schedulerStarted ()
     {
       methodsCalledInSchedulerListener.add (SCHEDULER_STARTED);
-      System.out.println ("schedulerStarted was called");
+      s_aLogger.info ("schedulerStarted was called");
     }
 
     @Override
     public void schedulerStarting ()
     {
       methodsCalledInSchedulerListener.add (SCHEDULER_STARTING);
-      System.out.println ("schedulerStarting was called");
+      s_aLogger.info ("schedulerStarting was called");
     }
 
   }

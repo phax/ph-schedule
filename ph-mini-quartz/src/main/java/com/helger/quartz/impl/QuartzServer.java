@@ -21,9 +21,12 @@ package com.helger.quartz.impl;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.SchedulerException;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 
 /**
@@ -53,29 +56,12 @@ import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
  */
 public class QuartzServer extends AbstractSchedulerListenerSupport
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (QuartzServer.class);
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  private IScheduler sched = null;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private IScheduler sched;
 
   QuartzServer ()
   {}
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   public void serve (final ISchedulerFactory schedFact, final boolean console) throws Exception
   {
@@ -90,27 +76,27 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
     catch (final Exception ignore)
     {}
 
-    System.out.println ("\n*** The scheduler successfully started.");
+    s_aLogger.info ("\n*** The scheduler successfully started.");
 
     if (console)
     {
-      System.out.println ("\n");
-      System.out.println ("The scheduler will now run until you type \"exit\"");
-      System.out.println ("   If it was configured to export itself via RMI,");
-      System.out.println ("   then other process may now use it.");
+      s_aLogger.info ("\n");
+      s_aLogger.info ("The scheduler will now run until you type \"exit\"");
+      s_aLogger.info ("   If it was configured to export itself via RMI,");
+      s_aLogger.info ("   then other process may now use it.");
 
       final BufferedReader rdr = new BufferedReader (new InputStreamReader (System.in));
 
       while (true)
       {
-        System.out.print ("Type 'exit' to shutdown the server: ");
+        s_aLogger.info ("Type 'exit' to shutdown the server: ");
         if ("exit".equals (rdr.readLine ()))
         {
           break;
         }
       }
 
-      System.out.println ("\n...Shutting down server...");
+      s_aLogger.info ("\n...Shutting down server...");
 
       sched.shutdown (true);
     }
@@ -144,14 +130,14 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that it
-   * has shutdown.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that
+   * it has shutdown.
    * </p>
    */
   @Override
   public void schedulerShutdown ()
   {
-    System.out.println ("\n*** The scheduler is now shutdown.");
+    s_aLogger.info ("\n*** The scheduler is now shutdown.");
     sched = null;
   }
 
