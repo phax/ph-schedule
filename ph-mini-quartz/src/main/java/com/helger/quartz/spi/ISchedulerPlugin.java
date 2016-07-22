@@ -40,20 +40,14 @@ import com.helger.quartz.SchedulerException;
  * If you need direct access your plugin, you can have it explicitly put a
  * reference to itself in the <code>Scheduler</code>'s
  * <code>SchedulerContext</code> as part of its
- * <code>{@link #initialize(String, IScheduler)}</code> method.
+ * <code>{@link #initialize(String, IScheduler, IClassLoadHelper)}</code>
+ * method.
  * </p>
  *
  * @author James House
  */
 public interface ISchedulerPlugin
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Called during creation of the <code>Scheduler</code> in order to give the

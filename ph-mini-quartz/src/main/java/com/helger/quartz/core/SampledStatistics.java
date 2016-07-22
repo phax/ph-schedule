@@ -10,7 +10,7 @@ import com.helger.quartz.ITrigger;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.utils.counter.CounterConfig;
 import com.helger.quartz.utils.counter.ICounterManager;
-import com.helger.quartz.utils.counter.CounterManagerImpl;
+import com.helger.quartz.utils.counter.CounterManager;
 import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounterConfig;
 import com.helger.quartz.utils.counter.sampled.SampledRateCounterConfig;
@@ -42,7 +42,7 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
   {
     this.scheduler = scheduler;
 
-    counterManager = new CounterManagerImpl (new Timer (NAME + "Timer"));
+    counterManager = new CounterManager (new Timer (NAME + "Timer"));
     jobsScheduledCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
     jobsExecutingCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
     jobsCompletedCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);

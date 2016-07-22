@@ -23,12 +23,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IScheduler;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 import com.helger.quartz.spi.IClassLoadHelper;
 import com.helger.quartz.spi.ISchedulerPlugin;
@@ -43,7 +43,8 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * </p>
  * <p>
  * JobToBeFiredMessage - available message data are:
- * <table>
+ * </p>
+ * <table summary="">
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -90,12 +91,14 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <td>The re-fire count from the JobExecutionContext.</td>
  * </tr>
  * </table>
+ * <p>
  * The default message text is <i>"Job {1}.{0} fired (by trigger {4}.{3}) at:
  * {2, date, HH:mm:ss MM/dd/yyyy}"</i>
  * </p>
  * <p>
  * JobSuccessMessage - available message data are:
- * <table>
+ * </p>
+ * <table summary="">
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -146,15 +149,17 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <td>Object</td>
  * <td>The string value (toString() having been called) of the result (if any)
  * that the Job set on the JobExecutionContext, with on it. "NULL" if no result
- * was set.</td></td>
+ * was set.</td>
  * </tr>
  * </table>
+ * <p>
  * The default message text is <i>"Job {1}.{0} execution complete at {2, date,
  * HH:mm:ss MM/dd/yyyy} and reports: {8}"</i>
  * </p>
  * <p>
  * JobFailedMessage - available message data are:
- * <table>
+ * </p>
+ * <table summary="">
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -206,12 +211,14 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <td>The message from the thrown JobExecution Exception.</td>
  * </tr>
  * </table>
+ * <p>
  * The default message text is <i>"Job {1}.{0} execution failed at {2, date,
  * HH:mm:ss MM/dd/yyyy} and reports: {8}"</i>
  * </p>
  * <p>
  * JobWasVetoedMessage - available message data are:
- * <table>
+ * </p>
+ * <table summary="">
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -258,6 +265,7 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <td>The re-fire count from the JobExecutionContext.</td>
  * </tr>
  * </table>
+ * <p>
  * The default message text is <i>"Job {1}.{0} was vetoed. It was to be fired
  * (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}"</i>
  * </p>
@@ -266,23 +274,11 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  */
 public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private String name;
-
   private String jobToBeFiredMessage = "Job {1}.{0} fired (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}";
-
   private String jobSuccessMessage = "Job {1}.{0} execution complete at {2, date, HH:mm:ss MM/dd/yyyy} and reports: {8}";
-
   private String jobFailedMessage = "Job {1}.{0} execution failed at {2, date, HH:mm:ss MM/dd/yyyy} and reports: {8}";
-
   private String jobWasVetoedMessage = "Job {1}.{0} was vetoed.  It was to be fired (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}";
-
   private final Logger log = LoggerFactory.getLogger (getClass ());
 
   /*

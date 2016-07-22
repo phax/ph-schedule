@@ -31,14 +31,13 @@ import com.helger.quartz.SchedulerException;
  * give the opertunity for dependency injection.
  * </p>
  *
- * @see com.helger.quartz.IScheduler#setJobFactory(JobFactory)
+ * @see com.helger.quartz.IScheduler#setJobFactory(IJobFactory)
  * @see com.helger.quartz.simpl.SimpleJobFactory
  * @see com.helger.quartz.simpl.PropertySettingJobFactory
  * @author James House
  */
 public interface IJobFactory
 {
-
   /**
    * Called by the scheduler at the time of the trigger firing, in order to
    * produce a <code>Job</code> instance on which to call execute.

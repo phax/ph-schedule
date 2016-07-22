@@ -24,7 +24,7 @@ import java.util.concurrent.CountDownLatch;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.helger.quartz.impl.JobDetailImpl;
+import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 import com.helger.quartz.simpl.SimpleThreadPool;
@@ -73,7 +73,7 @@ public class PriorityTest
     final IMutableTrigger trig1 = new SimpleTrigger ("T1", null, cal.getTime ());
     final IMutableTrigger trig2 = new SimpleTrigger ("T2", null, cal.getTime ());
 
-    final IJobDetail jobDetail = new JobDetailImpl ("JD", null, TestJob.class);
+    final IJobDetail jobDetail = new JobDetail ("JD", null, TestJob.class);
 
     sched.scheduleJob (jobDetail, trig1);
 
@@ -108,7 +108,7 @@ public class PriorityTest
     final IMutableTrigger trig2 = new SimpleTrigger ("T2", null, cal.getTime ());
     trig2.setPriority (10);
 
-    final IJobDetail jobDetail = new JobDetailImpl ("JD", null, TestJob.class);
+    final IJobDetail jobDetail = new JobDetail ("JD", null, TestJob.class);
 
     sched.scheduleJob (jobDetail, trig1);
 

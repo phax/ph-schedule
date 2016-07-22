@@ -20,7 +20,7 @@ package com.helger.quartz;
 import java.text.ParseException;
 import java.util.TimeZone;
 
-import com.helger.quartz.impl.triggers.CronTriggerImpl;
+import com.helger.quartz.impl.triggers.CronTrigger;
 
 /**
  * <code>CronScheduleBuilder</code> is a {@link ScheduleBuilder} that defines
@@ -76,10 +76,10 @@ public class CronScheduleBuilder extends ScheduleBuilder <ICronTrigger>
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
-  public CronTriggerImpl build ()
+  public CronTrigger build ()
   {
 
-    final CronTriggerImpl ct = new CronTriggerImpl ();
+    final CronTrigger ct = new CronTrigger ();
 
     ct.setCronExpression (cronExpression);
     ct.setTimeZone (cronExpression.getTimeZone ());

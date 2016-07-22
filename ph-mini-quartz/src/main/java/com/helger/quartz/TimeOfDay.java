@@ -30,7 +30,7 @@ import java.util.TimeZone;
  * @see DailyTimeIntervalScheduleBuilder
  * @since 2.0.3
  * @author James House
- * @author Zemian Deng <saltnlight5@gmail.com>
+ * @author Zemian Deng saltnlight5@gmail.com
  */
 public class TimeOfDay implements Serializable
 {

@@ -25,7 +25,7 @@ import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
  * <code>{@link ITrigger}</code> fires. In general, applications that use a
  * <code>Scheduler</code> will not have use for this mechanism.
  *
- * @see IListenerManager#addTriggerListener(TriggerListener, IMatcher)
+ * @see IListenerManager#addTriggerListener(ITriggerListener, IMatcher)
  * @see IMatcher
  * @see ITrigger
  * @see IJobListener

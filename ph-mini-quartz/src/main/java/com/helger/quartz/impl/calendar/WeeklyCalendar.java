@@ -17,6 +17,7 @@
 
 package com.helger.quartz.impl.calendar;
 
+import java.util.Calendar;
 import java.util.TimeZone;
 
 import com.helger.quartz.ICalendar;
@@ -35,7 +36,7 @@ import com.helger.quartz.ICalendar;
 public class WeeklyCalendar extends BaseCalendar
 {
   // An array to store the week days which are to be excluded.
-  // java.util.Calendar.MONDAY etc. are used as index.
+  // Calendar.MONDAY etc. are used as index.
   private boolean [] excludeDays = new boolean [8];
 
   // Will be set to true, if all week days are excluded
@@ -60,8 +61,8 @@ public class WeeklyCalendar extends BaseCalendar
   {
     super (baseCalendar, timeZone);
 
-    excludeDays[java.util.Calendar.SUNDAY] = true;
-    excludeDays[java.util.Calendar.SATURDAY] = true;
+    excludeDays[Calendar.SUNDAY] = true;
+    excludeDays[Calendar.SATURDAY] = true;
     excludeAll = areAllDaysExcluded ();
   }
 
@@ -97,8 +98,8 @@ public class WeeklyCalendar extends BaseCalendar
   /**
    * <p>
    * Redefine the array of days excluded. The array must of size greater or
-   * equal 8. java.util.Calendar's constants like MONDAY should be used as
-   * index. A value of true is regarded as: exclude it.
+   * equal 8. Calendar's constants like MONDAY should be used as index. A value
+   * of true is regarded as: exclude it.
    * </p>
    */
   public void setDaysExcluded (final boolean [] weekDays)
@@ -115,8 +116,7 @@ public class WeeklyCalendar extends BaseCalendar
   /**
    * <p>
    * Redefine a certain day of the week to be excluded (true) or included
-   * (false). Use java.util.Calendar's constants like MONDAY to determine the
-   * wday.
+   * (false). Use Calendar's constants like MONDAY to determine the wday.
    * </p>
    */
   public void setDayExcluded (final int wday, final boolean exclude)
@@ -134,13 +134,13 @@ public class WeeklyCalendar extends BaseCalendar
    */
   public boolean areAllDaysExcluded ()
   {
-    return isDayExcluded (java.util.Calendar.SUNDAY) &&
-           isDayExcluded (java.util.Calendar.MONDAY) &&
-           isDayExcluded (java.util.Calendar.TUESDAY) &&
-           isDayExcluded (java.util.Calendar.WEDNESDAY) &&
-           isDayExcluded (java.util.Calendar.THURSDAY) &&
-           isDayExcluded (java.util.Calendar.FRIDAY) &&
-           isDayExcluded (java.util.Calendar.SATURDAY);
+    return isDayExcluded (Calendar.SUNDAY) &&
+           isDayExcluded (Calendar.MONDAY) &&
+           isDayExcluded (Calendar.TUESDAY) &&
+           isDayExcluded (Calendar.WEDNESDAY) &&
+           isDayExcluded (Calendar.THURSDAY) &&
+           isDayExcluded (Calendar.FRIDAY) &&
+           isDayExcluded (Calendar.SATURDAY);
   }
 
   /**
@@ -167,8 +167,8 @@ public class WeeklyCalendar extends BaseCalendar
       return false;
     }
 
-    final java.util.Calendar cl = createJavaCalendar (timeStamp);
-    final int wday = cl.get (java.util.Calendar.DAY_OF_WEEK);
+    final Calendar cl = createJavaCalendar (timeStamp);
+    final int wday = cl.get (Calendar.DAY_OF_WEEK);
 
     return !(isDayExcluded (wday));
   }
@@ -200,8 +200,8 @@ public class WeeklyCalendar extends BaseCalendar
     }
 
     // Get timestamp for 00:00:00
-    final java.util.Calendar cl = getStartOfDayJavaCalendar (timeStamp);
-    int wday = cl.get (java.util.Calendar.DAY_OF_WEEK);
+    final Calendar cl = getStartOfDayJavaCalendar (timeStamp);
+    int wday = cl.get (Calendar.DAY_OF_WEEK);
 
     if (!isDayExcluded (wday))
     {
@@ -210,8 +210,8 @@ public class WeeklyCalendar extends BaseCalendar
 
     while (isDayExcluded (wday) == true)
     {
-      cl.add (java.util.Calendar.DATE, 1);
-      wday = cl.get (java.util.Calendar.DAY_OF_WEEK);
+      cl.add (Calendar.DATE, 1);
+      wday = cl.get (Calendar.DAY_OF_WEEK);
     }
 
     return cl.getTime ().getTime ();

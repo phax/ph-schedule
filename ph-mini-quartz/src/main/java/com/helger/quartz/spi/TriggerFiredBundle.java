@@ -43,12 +43,6 @@ public class TriggerFiredBundle implements Serializable
   private final Date prevFireTime;
   private final Date nextFireTime;
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   public TriggerFiredBundle (final IJobDetail job,
                              final IOperableTrigger trigger,
                              final ICalendar cal,

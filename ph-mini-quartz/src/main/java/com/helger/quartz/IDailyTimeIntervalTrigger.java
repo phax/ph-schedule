@@ -72,7 +72,7 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    * ending timestamp.
    * </p>
    */
-  static final int REPEAT_INDEFINITELY = -1;
+  int REPEAT_INDEFINITELY = -1;
 
   /**
    * <p>
@@ -81,7 +81,7 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    * fired now by <code>Scheduler</code>.
    * </p>
    */
-  static final int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
+  int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
 
   /**
    * <p>
@@ -92,7 +92,7 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    * <code>{@link Calendar}</code>, but it does not want to be fired now.
    * </p>
    */
-  static final int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
+  int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
 
   /**
    * <p>
@@ -139,8 +139,8 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    * The days of the week upon which to fire.
    *
    * @return a Set containing the integers representing the days of the week,
-   *         per the values 1-7 as defined by {@link java.util.Calendar#SUNDAY}
-   *         - {@link java.util.Calendar#SATURDAY}.
+   *         per the values 1-7 as defined by {@link Calendar#SUNDAY} -
+   *         {@link Calendar#SATURDAY}.
    */
   Set <Integer> getDaysOfWeek ();
 

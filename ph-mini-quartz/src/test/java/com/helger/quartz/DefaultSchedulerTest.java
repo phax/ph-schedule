@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.impl.JobDetailImpl;
+import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
 /**
@@ -19,7 +19,7 @@ public class DefaultSchedulerTest
   public void testAddJobNoTrigger () throws Exception
   {
     final IScheduler scheduler = StdSchedulerFactory.getDefaultScheduler ();
-    final JobDetailImpl jobDetail = new JobDetailImpl ();
+    final JobDetail jobDetail = new JobDetail ();
     jobDetail.setName ("testjob");
 
     try

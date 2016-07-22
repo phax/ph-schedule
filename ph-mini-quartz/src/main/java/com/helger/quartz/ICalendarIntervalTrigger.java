@@ -24,8 +24,8 @@ import com.helger.quartz.DateBuilder.IntervalUnit;
 
 /**
  * A concrete <code>{@link ITrigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating calendar time
- * intervals.
+ * <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating
+ * calendar time intervals.
  * <p>
  * The trigger will fire every N (see {@link #getRepeatInterval()} ) units of
  * calendar time (see {@link #getRepeatIntervalUnit()}) as specified in the

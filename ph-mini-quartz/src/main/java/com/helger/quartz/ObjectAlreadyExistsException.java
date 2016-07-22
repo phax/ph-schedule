@@ -20,9 +20,10 @@ package com.helger.quartz;
 
 /**
  * An exception that is thrown to indicate that an attempt to store a new object
- * (i.e. <code>{@link com.helger.quartz.IJobDetail}</code>,<code>{@link ITrigger}</code>
- * or <code>{@link ICalendar}</code>) in a <code>{@link IScheduler}</code> failed,
- * because one with the same name & group already exists.
+ * (i.e.
+ * <code>{@link com.helger.quartz.IJobDetail}</code>,<code>{@link ITrigger}</code>
+ * or <code>{@link ICalendar}</code>) in a <code>{@link IScheduler}</code>
+ * failed, because one with the same name &amp; group already exists.
  *
  * @author James House
  */

@@ -26,16 +26,16 @@ import java.util.Map;
 import java.util.Set;
 
 import com.helger.quartz.ICalendar;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerContext;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.UnableToInterruptJobException;
-import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.spi.IOperableTrigger;
 
@@ -44,13 +44,6 @@ import com.helger.quartz.spi.IOperableTrigger;
  */
 public interface IRemotableQuartzScheduler extends Remote
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   String getSchedulerName () throws RemoteException;
 
   String getSchedulerInstanceId () throws RemoteException;
@@ -98,8 +91,8 @@ public interface IRemotableQuartzScheduler extends Remote
   void addJob (IJobDetail jobDetail, boolean replace) throws SchedulerException, RemoteException;
 
   void addJob (IJobDetail jobDetail, boolean replace, boolean storeNonDurableWhileAwaitingScheduling)
-                                                                                                     throws SchedulerException,
-                                                                                                     RemoteException;
+                                                                                                      throws SchedulerException,
+                                                                                                      RemoteException;
 
   boolean deleteJob (JobKey jobKey) throws SchedulerException, RemoteException;
 
@@ -150,8 +143,8 @@ public interface IRemotableQuartzScheduler extends Remote
   TriggerState getTriggerState (TriggerKey triggerKey) throws SchedulerException, RemoteException;
 
   void addCalendar (String calName, ICalendar calendar, boolean replace, boolean updateTriggers)
-                                                                                                throws SchedulerException,
-                                                                                                RemoteException;
+                                                                                                 throws SchedulerException,
+                                                                                                 RemoteException;
 
   boolean deleteCalendar (String calName) throws SchedulerException, RemoteException;
 
@@ -167,15 +160,14 @@ public interface IRemotableQuartzScheduler extends Remote
 
   boolean checkExists (TriggerKey triggerKey) throws SchedulerException, RemoteException;
 
-  public boolean deleteJobs (List <JobKey> jobKeys) throws SchedulerException, RemoteException;
+  boolean deleteJobs (List <JobKey> jobKeys) throws SchedulerException, RemoteException;
 
-  public void scheduleJobs (Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
-                            boolean replace) throws SchedulerException, RemoteException;
+  void scheduleJobs (Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
+                     boolean replace) throws SchedulerException, RemoteException;
 
-  public void scheduleJob (IJobDetail jobDetail,
-                           Set <? extends ITrigger> triggersForJob,
-                           boolean replace) throws SchedulerException, RemoteException;
+  void scheduleJob (IJobDetail jobDetail, Set <? extends ITrigger> triggersForJob, boolean replace)
+                                                                                                    throws SchedulerException,
+                                                                                                    RemoteException;
 
-  public boolean unscheduleJobs (List <TriggerKey> triggerKeys) throws SchedulerException, RemoteException;
-
+  boolean unscheduleJobs (List <TriggerKey> triggerKeys) throws SchedulerException, RemoteException;
 }

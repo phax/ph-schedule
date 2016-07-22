@@ -29,20 +29,19 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
-import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.DateBuilder;
+import com.helger.quartz.DateBuilder.IntervalUnit;
+import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TimeOfDay;
 import com.helger.quartz.TriggerUtils;
-import com.helger.quartz.DateBuilder.IntervalUnit;
 import com.helger.quartz.impl.calendar.CronCalendar;
-import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
 /**
  * Unit test for {@link DailyTimeIntervalTrigger}.
  *
- * @author Zemian Deng <saltnlight5@gmail.com>
+ * @author Zemian Deng saltnlight5@gmail.com
  */
 public class DailyTimeIntervalTriggerTest
 {
@@ -692,15 +691,15 @@ public class DailyTimeIntervalTriggerTest
     // A test case for QTZ-389 - some extra constructors didn't set all
     // parameters
     DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ("triggerName",
-                                                                             "triggerGroup",
-                                                                             "jobName",
-                                                                             "jobGroup",
-                                                                             dateOf (8, 0, 0, 1, 1, 2012),
-                                                                             null,
-                                                                             new TimeOfDay (8, 0, 0),
-                                                                             new TimeOfDay (17, 0, 0),
-                                                                             IntervalUnit.HOUR,
-                                                                             1);
+                                                                     "triggerGroup",
+                                                                     "jobName",
+                                                                     "jobGroup",
+                                                                     dateOf (8, 0, 0, 1, 1, 2012),
+                                                                     null,
+                                                                     new TimeOfDay (8, 0, 0),
+                                                                     new TimeOfDay (17, 0, 0),
+                                                                     IntervalUnit.HOUR,
+                                                                     1);
 
     assertEquals ("triggerName", trigger.getName ());
     assertEquals ("triggerGroup", trigger.getGroup ());
@@ -714,13 +713,13 @@ public class DailyTimeIntervalTriggerTest
     assertEquals (1, trigger.getRepeatInterval ());
 
     trigger = new DailyTimeIntervalTrigger ("triggerName",
-                                                "triggerGroup",
-                                                dateOf (8, 0, 0, 1, 1, 2012),
-                                                null,
-                                                new TimeOfDay (8, 0, 0),
-                                                new TimeOfDay (17, 0, 0),
-                                                IntervalUnit.HOUR,
-                                                1);
+                                            "triggerGroup",
+                                            dateOf (8, 0, 0, 1, 1, 2012),
+                                            null,
+                                            new TimeOfDay (8, 0, 0),
+                                            new TimeOfDay (17, 0, 0),
+                                            IntervalUnit.HOUR,
+                                            1);
 
     assertEquals ("triggerName", trigger.getName ());
     assertEquals ("triggerGroup", trigger.getGroup ());

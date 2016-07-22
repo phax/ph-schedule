@@ -17,9 +17,9 @@
 
 package com.helger.quartz.spi;
 
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.ITrigger;
 
 /**
  * An interface to be used by <code>JobStore</code> instances in order to
@@ -29,13 +29,6 @@ import com.helger.quartz.ITrigger;
  */
 public interface ISchedulerSignaler
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   void notifyTriggerListenersMisfired (ITrigger trigger);
 
   void notifySchedulerListenersFinalized (ITrigger trigger);

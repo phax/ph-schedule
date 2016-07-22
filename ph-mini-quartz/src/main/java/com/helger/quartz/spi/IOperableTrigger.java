@@ -4,13 +4,12 @@ import java.util.Date;
 
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IScheduler;
+import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.SchedulerException;
 
 public interface IOperableTrigger extends IMutableTrigger
 {
-
   /**
    * <p>
    * This method should not be used by the Quartz client.
@@ -24,7 +23,7 @@ public interface IOperableTrigger extends IMutableTrigger
    *
    * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
-  public void triggered (ICalendar calendar);
+  void triggered (ICalendar calendar);
 
   /**
    * <p>
@@ -44,9 +43,8 @@ public interface IOperableTrigger extends IMutableTrigger
    *         the scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
-   *         </p>
    */
-  public Date computeFirstFireTime (ICalendar calendar);
+  Date computeFirstFireTime (ICalendar calendar);
 
   /**
    * <p>
@@ -69,7 +67,7 @@ public interface IOperableTrigger extends IMutableTrigger
    * @see CompletedExecutionInstruction
    * @see #triggered(ICalendar)
    */
-  public CompletedExecutionInstruction executionComplete (IJobExecutionContext context, JobExecutionException result);
+  CompletedExecutionInstruction executionComplete (IJobExecutionContext context, JobExecutionException result);
 
   /**
    * <p>
@@ -84,7 +82,7 @@ public interface IOperableTrigger extends IMutableTrigger
    * was created.
    * </p>
    */
-  public void updateAfterMisfire (ICalendar cal);
+  void updateAfterMisfire (ICalendar cal);
 
   /**
    * <p>
@@ -102,7 +100,7 @@ public interface IOperableTrigger extends IMutableTrigger
    *
    * @param cal
    */
-  public void updateWithNewCalendar (ICalendar cal, long misfireThreshold);
+  void updateWithNewCalendar (ICalendar cal, long misfireThreshold);
 
   /**
    * <p>
@@ -112,28 +110,28 @@ public interface IOperableTrigger extends IMutableTrigger
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.
    */
-  public void validate () throws SchedulerException;
+  void validate () throws SchedulerException;
 
   /**
    * <p>
    * This method should not be used by the Quartz client.
    * </p>
    * <p>
-   * Usable by <code>{@link com.helger.quartz.spi.IJobStore}</code> implementations, in
-   * order to facilitate 'recognizing' instances of fired <code>Trigger</code> s
-   * as their jobs complete execution.
+   * Usable by <code>{@link com.helger.quartz.spi.IJobStore}</code>
+   * implementations, in order to facilitate 'recognizing' instances of fired
+   * <code>Trigger</code> s as their jobs complete execution.
    * </p>
    */
-  public void setFireInstanceId (String id);
+  void setFireInstanceId (String id);
 
   /**
    * <p>
    * This method should not be used by the Quartz client.
    * </p>
    */
-  public String getFireInstanceId ();
+  String getFireInstanceId ();
 
-  public void setNextFireTime (Date nextFireTime);
+  void setNextFireTime (Date nextFireTime);
 
-  public void setPreviousFireTime (Date previousFireTime);
+  void setPreviousFireTime (Date previousFireTime);
 }

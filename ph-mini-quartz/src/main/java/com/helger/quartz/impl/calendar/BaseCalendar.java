@@ -17,6 +17,7 @@
 
 package com.helger.quartz.impl.calendar;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -221,66 +222,62 @@ public class BaseCalendar implements ICalendar
   }
 
   /**
-   * Build a <code>{@link java.util.Calendar}</code> for the given timeStamp.
-   * The new Calendar will use the <code>BaseCalendar</code> time zone if it is
-   * not <code>null</code>.
+   * Build a <code>{@link Calendar}</code> for the given timeStamp. The new
+   * Calendar will use the <code>BaseCalendar</code> time zone if it is not
+   * <code>null</code>.
    */
-  protected java.util.Calendar createJavaCalendar (final long timeStamp)
+  protected Calendar createJavaCalendar (final long timeStamp)
   {
-    final java.util.Calendar calendar = createJavaCalendar ();
+    final Calendar calendar = createJavaCalendar ();
     calendar.setTime (new Date (timeStamp));
     return calendar;
   }
 
   /**
-   * Build a <code>{@link java.util.Calendar}</code> with the current time. The
-   * new Calendar will use the <code>BaseCalendar</code> time zone if it is not
+   * Build a <code>{@link Calendar}</code> with the current time. The new
+   * Calendar will use the <code>BaseCalendar</code> time zone if it is not
    * <code>null</code>.
    */
-  protected java.util.Calendar createJavaCalendar ()
+  protected Calendar createJavaCalendar ()
   {
-    return (getTimeZone () == null) ? java.util.Calendar.getInstance ()
-                                    : java.util.Calendar.getInstance (getTimeZone ());
+    return (getTimeZone () == null) ? Calendar.getInstance () : Calendar.getInstance (getTimeZone ());
   }
 
   /**
-   * Returns the start of the given day as a
-   * <code>{@link java.util.Calendar}</code>. This calculation will take the
-   * <code>BaseCalendar</code> time zone into account if it is not
-   * <code>null</code>.
+   * Returns the start of the given day as a <code>{@link Calendar}</code>. This
+   * calculation will take the <code>BaseCalendar</code> time zone into account
+   * if it is not <code>null</code>.
    *
    * @param timeInMillis
    *        A time containing the desired date for the start-of-day time
-   * @return A <code>{@link java.util.Calendar}</code> set to the start of the
-   *         given day.
+   * @return A <code>{@link Calendar}</code> set to the start of the given day.
    */
-  protected java.util.Calendar getStartOfDayJavaCalendar (final long timeInMillis)
+  protected Calendar getStartOfDayJavaCalendar (final long timeInMillis)
   {
-    final java.util.Calendar startOfDay = createJavaCalendar (timeInMillis);
-    startOfDay.set (java.util.Calendar.HOUR_OF_DAY, 0);
-    startOfDay.set (java.util.Calendar.MINUTE, 0);
-    startOfDay.set (java.util.Calendar.SECOND, 0);
-    startOfDay.set (java.util.Calendar.MILLISECOND, 0);
+    final Calendar startOfDay = createJavaCalendar (timeInMillis);
+    startOfDay.set (Calendar.HOUR_OF_DAY, 0);
+    startOfDay.set (Calendar.MINUTE, 0);
+    startOfDay.set (Calendar.SECOND, 0);
+    startOfDay.set (Calendar.MILLISECOND, 0);
     return startOfDay;
   }
 
   /**
-   * Returns the end of the given day <code>{@link java.util.Calendar}</code>.
-   * This calculation will take the <code>BaseCalendar</code> time zone into
-   * account if it is not <code>null</code>.
+   * Returns the end of the given day <code>{@link Calendar}</code>. This
+   * calculation will take the <code>BaseCalendar</code> time zone into account
+   * if it is not <code>null</code>.
    *
    * @param timeInMillis
    *        a time containing the desired date for the end-of-day time.
-   * @return A <code>{@link java.util.Calendar}</code> set to the end of the
-   *         given day.
+   * @return A <code>{@link Calendar}</code> set to the end of the given day.
    */
-  protected java.util.Calendar getEndOfDayJavaCalendar (final long timeInMillis)
+  protected Calendar getEndOfDayJavaCalendar (final long timeInMillis)
   {
-    final java.util.Calendar endOfDay = createJavaCalendar (timeInMillis);
-    endOfDay.set (java.util.Calendar.HOUR_OF_DAY, 23);
-    endOfDay.set (java.util.Calendar.MINUTE, 59);
-    endOfDay.set (java.util.Calendar.SECOND, 59);
-    endOfDay.set (java.util.Calendar.MILLISECOND, 999);
+    final Calendar endOfDay = createJavaCalendar (timeInMillis);
+    endOfDay.set (Calendar.HOUR_OF_DAY, 23);
+    endOfDay.set (Calendar.MINUTE, 59);
+    endOfDay.set (Calendar.SECOND, 59);
+    endOfDay.set (Calendar.MILLISECOND, 999);
     return endOfDay;
   }
 }

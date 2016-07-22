@@ -918,7 +918,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
   /**
    * Returns a <code>List</code> of jobs loaded from the xml file.
-   * <p/>
    *
    * @return a <code>List</code> of jobs.
    */
@@ -929,7 +928,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
   /**
    * Returns a <code>List</code> of triggers loaded from the xml file.
-   * <p/>
    *
    * @return a <code>List</code> of triggers.
    */

@@ -24,12 +24,13 @@ import java.util.TimeZone;
 
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.CronScheduleBuilder;
+import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.ScheduleBuilder;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.JobExecutionException;
+import com.helger.quartz.ScheduleBuilder;
 import com.helger.quartz.TriggerUtils;
 
 /**
@@ -42,7 +43,7 @@ import com.helger.quartz.TriggerUtils;
  * @author Sharada Jambula, James House
  * @author Contributions from Mads Henderson
  */
-public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements ICronTrigger, ICoreTrigger
+public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICronTrigger, ICoreTrigger
 {
   protected static final int YEAR_TO_GIVEUP_SCHEDULING_AT = CronExpression.MAX_YEAR;
 
@@ -74,7 +75,7 @@ public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements I
    * be set the the system's default time zone.
    * </p>
    */
-  public CronTriggerImpl ()
+  public CronTrigger ()
   {
     super ();
     setStartTime (new Date ());
@@ -84,7 +85,7 @@ public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements I
   @Override
   public Object clone ()
   {
-    final CronTriggerImpl copy = (CronTriggerImpl) super.clone ();
+    final CronTrigger copy = (CronTrigger) super.clone ();
     if (cronEx != null)
     {
       copy.setCronExpression (new CronExpression (cronEx));
@@ -190,7 +191,7 @@ public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements I
    * <code>Trigger</code> has been added to the scheduler.
    * </p>
    *
-   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.OperableTrigger,
+   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
    *      com.helger.quartz.ICalendar, Date, Date)
    */
   @Override
@@ -364,14 +365,14 @@ public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements I
    * <p>
    * If the misfire instruction is set to MISFIRE_INSTRUCTION_SMART_POLICY, then
    * the following scheme will be used: <br>
+   * </p>
    * <ul>
    * <li>The instruction will be interpreted as
-   * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code>
+   * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
-   * </p>
    */
   @Override
-  public void updateAfterMisfire (final com.helger.quartz.ICalendar cal)
+  public void updateAfterMisfire (final ICalendar cal)
   {
     int instr = getMisfireInstruction ();
 
@@ -427,7 +428,7 @@ public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements I
    * {@link com.helger.quartz.ICalendar} (if any)
    * </p>
    *
-   * @param test
+   * @param aTest
    *        the date to compare
    * @param dayOnly
    *        if set to true, the method will only determine if the trigger will
@@ -523,9 +524,9 @@ public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements I
 
       // avoid infinite loop
       // Use gregorian only because the constant is based on Gregorian
-      final java.util.Calendar c = new java.util.GregorianCalendar ();
+      final Calendar c = new java.util.GregorianCalendar ();
       c.setTime (nextFireTime);
-      if (c.get (java.util.Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
         nextFireTime = null;
       }
@@ -556,7 +557,6 @@ public class CronTriggerImpl extends AbstractTrigger <ICronTrigger> implements I
    *         the scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
-   *         </p>
    */
   @Override
   public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)

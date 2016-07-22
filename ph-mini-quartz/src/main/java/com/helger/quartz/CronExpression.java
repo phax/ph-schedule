@@ -193,6 +193,7 @@ import java.util.TreeSet;
  * </p>
  * <p>
  * <b>NOTES:</b>
+ * </p>
  * <ul>
  * <li>Support for specifying both a day-of-week and a day-of-month value is not
  * complete (you'll need to use the '?' character in one of these fields).</li>
@@ -204,7 +205,6 @@ import java.util.TreeSet;
  * interpretation CronExpression chooses. An example would be "0 0 14-6 ? *
  * FRI-MON".</li>
  * </ul>
- * </p>
  *
  * @author Sharada Jambula, James House
  * @author Contributions from Mads Henderson
@@ -1529,7 +1529,7 @@ public final class CronExpression implements Serializable, Cloneable
             day = getLastDayOfMonth (mon, cl.get (Calendar.YEAR));
             day -= lastdayOffset;
 
-            final java.util.Calendar tcal = java.util.Calendar.getInstance (getTimeZone ());
+            final Calendar tcal = Calendar.getInstance (getTimeZone ());
             tcal.set (Calendar.SECOND, 0);
             tcal.set (Calendar.MINUTE, 0);
             tcal.set (Calendar.HOUR_OF_DAY, 0);
@@ -1579,7 +1579,7 @@ public final class CronExpression implements Serializable, Cloneable
             t = day;
             day = daysOfMonth.first ();
 
-            final java.util.Calendar tcal = java.util.Calendar.getInstance (getTimeZone ());
+            final Calendar tcal = Calendar.getInstance (getTimeZone ());
             tcal.set (Calendar.SECOND, 0);
             tcal.set (Calendar.MINUTE, 0);
             tcal.set (Calendar.HOUR_OF_DAY, 0);
@@ -1902,10 +1902,10 @@ public final class CronExpression implements Serializable, Cloneable
    */
   protected void setCalendarHour (final Calendar cal, final int hour)
   {
-    cal.set (java.util.Calendar.HOUR_OF_DAY, hour);
-    if (cal.get (java.util.Calendar.HOUR_OF_DAY) != hour && hour != 24)
+    cal.set (Calendar.HOUR_OF_DAY, hour);
+    if (cal.get (Calendar.HOUR_OF_DAY) != hour && hour != 24)
     {
-      cal.set (java.util.Calendar.HOUR_OF_DAY, hour + 1);
+      cal.set (Calendar.HOUR_OF_DAY, hour + 1);
     }
   }
 

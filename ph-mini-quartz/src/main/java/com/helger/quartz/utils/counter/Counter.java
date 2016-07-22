@@ -102,5 +102,4 @@ public class Counter implements ICounter, Serializable
   {
     value.set (newValue);
   }
-
 }

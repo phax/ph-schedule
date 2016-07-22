@@ -21,19 +21,19 @@ import java.util.Date;
 
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
-import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobKey;
 import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.TriggerUtils;
+import com.helger.quartz.impl.triggers.AbstractTrigger;
 
 public interface IMutableTrigger extends ITrigger
 {
+  void setKey (TriggerKey key);
 
-  public void setKey (TriggerKey key);
-
-  public void setJobKey (JobKey key);
+  void setJobKey (JobKey key);
 
   /**
    * <p>
@@ -42,7 +42,7 @@ public interface IMutableTrigger extends ITrigger
    * has no meaning to Quartz.
    * </p>
    */
-  public void setDescription (String description);
+  void setDescription (String description);
 
   /**
    * <p>
@@ -53,7 +53,7 @@ public interface IMutableTrigger extends ITrigger
    * @param calendarName
    *        use <code>null</code> to dis-associate a Calendar.
    */
-  public void setCalendarName (String calendarName);
+  void setCalendarName (String calendarName);
 
   /**
    * <p>
@@ -61,7 +61,7 @@ public interface IMutableTrigger extends ITrigger
    * <code>Trigger</code>.
    * </p>
    */
-  public void setJobDataMap (JobDataMap jobDataMap);
+  void setJobDataMap (JobDataMap jobDataMap);
 
   /**
    * The priority of a <code>Trigger</code> acts as a tie breaker such that if
@@ -74,7 +74,7 @@ public interface IMutableTrigger extends ITrigger
    *
    * @see #DEFAULT_PRIORITY
    */
-  public void setPriority (int priority);
+  void setPriority (int priority);
 
   /**
    * <p>
@@ -89,7 +89,7 @@ public interface IMutableTrigger extends ITrigger
    * trigger.
    * </p>
    */
-  public void setStartTime (Date startTime);
+  void setStartTime (Date startTime);
 
   /**
    * <p>
@@ -98,10 +98,10 @@ public interface IMutableTrigger extends ITrigger
    * repeat settings).
    * </p>
    *
-   * @see TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings(ITrigger,
+   * @see TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings(IOperableTrigger,
    *      ICalendar, int)
    */
-  public void setEndTime (Date endTime);
+  void setEndTime (Date endTime);
 
   /**
    * <p>
@@ -117,12 +117,11 @@ public interface IMutableTrigger extends ITrigger
    * </p>
    *
    * @see #MISFIRE_INSTRUCTION_SMART_POLICY
-   * @see #updateAfterMisfire(ICalendar)
+   * @see AbstractTrigger#updateAfterMisfire(ICalendar)
    * @see ISimpleTrigger
    * @see ICronTrigger
    */
-  public void setMisfireInstruction (int misfireInstruction);
+  void setMisfireInstruction (int misfireInstruction);
 
-  public Object clone ();
-
+  Object clone ();
 }

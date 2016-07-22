@@ -24,7 +24,6 @@ package com.helger.quartz.utils.counter;
  */
 public interface ICounter
 {
-
   /**
    * Increment the counter by 1
    *
@@ -76,5 +75,4 @@ public interface ICounter
    * @param newValue
    */
   void setValue (long newValue);
-
 }

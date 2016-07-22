@@ -17,7 +17,6 @@
 
 package com.helger.quartz;
 
-import java.util.Calendar;
 import java.util.TimeZone;
 
 /**
@@ -34,7 +33,8 @@ import java.util.TimeZone;
  * {@link com.helger.quartz.CronExpression} class.
  * </p>
  * <p>
- * Here are some full examples: <br>
+ * Here are some full examples:
+ * </p>
  * <table cellspacing="8" summary="">
  * <tr>
  * <th align="left">Expression</th>
@@ -147,13 +147,13 @@ import java.util.TimeZone;
  * "left"><code>Fire at 10:15am on the third Friday of every month</code></td>
  * </tr>
  * </table>
- * </p>
  * <p>
  * Pay attention to the effects of '?' and '*' in the day-of-week and
  * day-of-month fields!
  * </p>
  * <p>
  * <b>NOTES:</b>
+ * </p>
  * <ul>
  * <li>Support for specifying both a day-of-week and a day-of-month value is not
  * complete (you'll need to use the '?' character in on of these fields).</li>
@@ -161,7 +161,6 @@ import java.util.TimeZone;
  * "daylight savings" can cause a skip or a repeat depending on whether the time
  * moves back or jumps forward.</li>
  * </ul>
- * </p>
  *
  * @see CronScheduleBuilder
  * @see TriggerBuilder
@@ -172,35 +171,34 @@ public interface ICronTrigger extends ITrigger
 {
   /**
    * <p>
-   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
-   * situation, the <code>{@link ICronTrigger}</code> wants to be fired now by
-   * <code>Scheduler</code>.
+   * Instructs the {@link IScheduler} that upon a mis-fire situation, the
+   * {@link ICronTrigger} wants to be fired now by {@link IScheduler}.
    * </p>
    */
-  public static final int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
+  int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
 
   /**
    * <p>
-   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
-   * situation, the <code>{@link ICronTrigger}</code> wants to have it's
-   * next-fire-time updated to the next time in the schedule after the current
-   * time (taking into account any associated <code>{@link Calendar}</code>, but
-   * it does not want to be fired now.
+   * Instructs the {@link IScheduler} that upon a mis-fire situation, the
+   * {@link ICronTrigger} wants to have it's next-fire-time updated to the next
+   * time in the schedule after the current time (taking into account any
+   * associated {@link java.util.Calendar}, but it does not want to be fired
+   * now.
    * </p>
    */
-  public static final int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
+  int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
 
-  public String getCronExpression ();
+  String getCronExpression ();
 
   /**
    * <p>
    * Returns the time zone for which the <code>cronExpression</code> of this
-   * <code>CronTrigger</code> will be resolved.
+   * {@link ICronTrigger} will be resolved.
    * </p>
    */
-  public TimeZone getTimeZone ();
+  TimeZone getTimeZone ();
 
-  public String getExpressionSummary ();
+  String getExpressionSummary ();
 
   TriggerBuilder <ICronTrigger> getTriggerBuilder ();
 }

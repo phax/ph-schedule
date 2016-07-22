@@ -33,7 +33,9 @@ import com.helger.quartz.impl.StdSchedulerFactory;
  * A ServletContextListner that can be used to initialize Quartz.
  * </p>
  * <p>
- * You'll want to add something like this to your WEB-INF/web.xml file:
+ * You'll want to add something like this to your <code>WEB-INF/web.xml</code>
+ * file:
+ * </p>
  *
  * <pre>
  *     &lt;context-param&gt;
@@ -59,7 +61,6 @@ import com.helger.quartz.impl.StdSchedulerFactory;
  *         &lt;/listener-class&gt;
  *     &lt;/listener&gt;
  * </pre>
- * </p>
  * <p>
  * The init parameter 'quartz:config-file' can be used to specify the path (and
  * filename) of your Quartz properties file. If you leave out this parameter,
@@ -118,21 +119,13 @@ import com.helger.quartz.impl.StdSchedulerFactory;
  */
 public class QuartzInitializerListener implements ServletContextListener
 {
-
-  public static final String QUARTZ_FACTORY_KEY = "org.quartz.impl.StdSchedulerFactory.KEY";
+  public static final String QUARTZ_FACTORY_KEY = "com.helger.quartz.impl.StdSchedulerFactory.KEY";
 
   private boolean performShutdown = true;
   private boolean waitOnShutdown = false;
-
   private IScheduler scheduler = null;
 
   private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   public void contextInitialized (final ServletContextEvent sce)
   {

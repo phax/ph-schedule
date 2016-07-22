@@ -26,17 +26,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.IJob;
-import com.helger.quartz.IJobDetail;
-import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobKey;
-import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerException;
-import com.helger.quartz.ISchedulerListener;
-import com.helger.quartz.ITrigger;
-import com.helger.quartz.TriggerKey;
-import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
@@ -44,7 +33,7 @@ import com.helger.quartz.impl.StdSchedulerFactory;
  * A unit test to reproduce QTZ-205 bug: A TriggerListener vetoed job will
  * affect SchedulerListener's triggerFinalized() notification.
  *
- * @author Zemian Deng <saltnlight5@gmail.com>
+ * @author Zemian Deng saltnlight5@gmail.com
  */
 public class Qtz205SchedulerListenerTest
 {
@@ -195,9 +184,9 @@ public class Qtz205SchedulerListenerTest
 
     final IJobDetail job = newJob (Qtz205Job.class).withIdentity ("test").build ();
     final ITrigger trigger = newTrigger ().withIdentity ("test")
-                                         .withSchedule (simpleSchedule ().withIntervalInMilliseconds (250)
-                                                                         .withRepeatCount (2))
-                                         .build ();
+                                          .withSchedule (simpleSchedule ().withIntervalInMilliseconds (250)
+                                                                          .withRepeatCount (2))
+                                          .build ();
     scheduler.scheduleJob (job, trigger);
     scheduler.start ();
     Thread.sleep (5000);

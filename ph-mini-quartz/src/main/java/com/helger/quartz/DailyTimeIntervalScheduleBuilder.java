@@ -62,38 +62,35 @@ import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
  *
  * @since 2.1.0
  * @author James House
- * @author Zemian Deng <saltnlight5@gmail.com>
+ * @author Zemian Deng saltnlight5@gmail.com
  */
 public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTimeIntervalTrigger>
 {
-
   private int interval = 1;
   private IntervalUnit intervalUnit = IntervalUnit.MINUTE;
   private Set <Integer> daysOfWeek;
   private TimeOfDay startTimeOfDay;
   private TimeOfDay endTimeOfDay;
   private int repeatCount = IDailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
-
   private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   /**
    * A set of all days of the week. The set contains all values between
-   * {@link java.util.Calendar#SUNDAY} and {@link java.util.Calendar#SATURDAY}
-   * (the integers from 1 through 7).
+   * {@link Calendar#SUNDAY} and {@link Calendar#SATURDAY} (the integers from 1
+   * through 7).
    */
   public static final Set <Integer> ALL_DAYS_OF_THE_WEEK;
 
   /**
    * A set of the business days of the week (for locales similar to the USA).
-   * The set contains all values between {@link java.util.Calendar#MONDAY} and
-   * {@link java.util.Calendar#FRIDAY} (the integers from 2 through 6).
+   * The set contains all values between {@link Calendar#MONDAY} and
+   * {@link Calendar#FRIDAY} (the integers from 2 through 6).
    */
   public static final Set <Integer> MONDAY_THROUGH_FRIDAY;
 
   /**
    * A set of the weekend days of the week (for locales similar to the USA). The
-   * set contains {@link java.util.Calendar#SATURDAY} and
-   * {@link java.util.Calendar#SUNDAY}
+   * set contains {@link Calendar#SATURDAY} and {@link Calendar#SUNDAY}
    */
   public static final Set <Integer> SATURDAY_AND_SUNDAY;
 
@@ -241,8 +238,8 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    *
    * @param onDaysOfWeek
    *        a Set containing the integers representing the days of the week, per
-   *        the values 1-7 as defined by {@link java.util.Calendar#SUNDAY} -
-   *        {@link java.util.Calendar#SATURDAY}.
+   *        the values 1-7 as defined by {@link Calendar#SUNDAY} -
+   *        {@link Calendar#SATURDAY}.
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Set <Integer> onDaysOfWeek)
@@ -262,9 +259,8 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    *
    * @param onDaysOfWeek
    *        a variable length list of Integers representing the days of the
-   *        week, per the values 1-7 as defined by
-   *        {@link java.util.Calendar#SUNDAY} -
-   *        {@link java.util.Calendar#SATURDAY}.
+   *        week, per the values 1-7 as defined by {@link Calendar#SUNDAY} -
+   *        {@link Calendar#SATURDAY}.
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Integer... onDaysOfWeek)

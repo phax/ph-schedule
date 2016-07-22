@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.impl.triggers.CronTriggerImpl;
+import com.helger.quartz.impl.triggers.CronTrigger;
 
 /**
  * Unit test for CronTrigger.
@@ -34,7 +34,7 @@ public class CronTriggerTest
   @Test
   public void testClone () throws ParseException
   {
-    final CronTriggerImpl trigger = new CronTriggerImpl ();
+    final CronTrigger trigger = new CronTrigger ();
     trigger.setName ("test");
     trigger.setGroup ("testGroup");
     trigger.setCronExpression ("0 0 12 * * ?");
@@ -50,7 +50,7 @@ public class CronTriggerTest
   @Test
   public void testQuartz558 ()
   {
-    final CronTriggerImpl trigger = new CronTriggerImpl ();
+    final CronTrigger trigger = new CronTrigger ();
     trigger.setName ("test");
     trigger.setGroup ("testGroup");
     final ICronTrigger trigger2 = (ICronTrigger) trigger.clone ();
@@ -61,7 +61,7 @@ public class CronTriggerTest
   @Test
   public void testMisfireInstructionValidity ()
   {
-    final CronTriggerImpl trigger = new CronTriggerImpl ();
+    final CronTrigger trigger = new CronTrigger ();
 
     try
     {

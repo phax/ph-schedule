@@ -18,6 +18,7 @@
 
 package com.helger.quartz;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,24 +36,11 @@ import com.helger.quartz.spi.IOperableTrigger;
  */
 public class TriggerUtils
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * Private constructor because this is a pure utility class.
    */
   private TriggerUtils ()
   {}
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * Returns a list of Dates that are the next fire times of a
@@ -67,11 +55,9 @@ public class TriggerUtils
    *        The number of next fire times to produce
    * @return List of java.util.Date objects
    */
-  public static List <Date> computeFireTimes (final IOperableTrigger trigg,
-                                              final com.helger.quartz.ICalendar cal,
-                                              final int numTimes)
+  public static List <Date> computeFireTimes (final IOperableTrigger trigg, final ICalendar cal, final int numTimes)
   {
-    final LinkedList <Date> lst = new LinkedList <> ();
+    final LinkedList <Date> lst = new LinkedList<> ();
 
     final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
 
@@ -114,7 +100,7 @@ public class TriggerUtils
    *         fire that many times.
    */
   public static Date computeEndTimeToAllowParticularNumberOfFirings (final IOperableTrigger trigg,
-                                                                     final com.helger.quartz.ICalendar cal,
+                                                                     final ICalendar cal,
                                                                      final int numTimes)
   {
 
@@ -174,11 +160,11 @@ public class TriggerUtils
    * @return List of java.util.Date objects
    */
   public static List <Date> computeFireTimesBetween (final IOperableTrigger trigg,
-                                                     final com.helger.quartz.ICalendar cal,
+                                                     final ICalendar cal,
                                                      final Date from,
                                                      final Date to)
   {
-    final LinkedList <Date> lst = new LinkedList <> ();
+    final LinkedList <Date> lst = new LinkedList<> ();
 
     final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
 
@@ -212,7 +198,6 @@ public class TriggerUtils
       }
     }
 
-    return java.util.Collections.unmodifiableList (lst);
+    return Collections.unmodifiableList (lst);
   }
-
 }

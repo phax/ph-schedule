@@ -106,7 +106,8 @@ public class SimpleThreadPool implements IThreadPool
    * </p>
    *
    * @param threadCount
-   *        the number of worker <code>Threads</code> in the pool, must be > 0.
+   *        the number of worker <code>Threads</code> in the pool, must be &gt;
+   *        0.
    * @param threadPriority
    *        the thread priority for the worker threads.
    * @see java.lang.Thread

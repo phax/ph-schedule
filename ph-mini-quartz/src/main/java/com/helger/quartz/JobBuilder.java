@@ -17,7 +17,7 @@
 
 package com.helger.quartz;
 
-import com.helger.quartz.impl.JobDetailImpl;
+import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.utils.Key;
 
 /**
@@ -40,13 +40,13 @@ import com.helger.quartz.utils.Key;
  * </p>
  *
  * <pre>
- * JobDetail job = newJob(MyJob.class) .withIdentity("myJob") .build(); Trigger
- * trigger = newTrigger() .withIdentity(triggerKey("myTrigger",
- * "myTriggerGroup")) .withSchedule(simpleSchedule() .withIntervalInHours(1)
- * .repeatForever()) .startAt(futureDate(10, MINUTES)) .build();
- * scheduler.scheduleJob(job, trigger);
- *
- * <pre>
+ * JobDetail job = newJob (MyJob.class).withIdentity ("myJob").build ();
+ * Trigger trigger = newTrigger ().withIdentity (triggerKey ("myTrigger", "myTriggerGroup"))
+ *                                .withSchedule (simpleSchedule ().withIntervalInHours (1).repeatForever ())
+ *                                .startAt (futureDate (10, MINUTES))
+ *                                .build ();
+ * scheduler.scheduleJob (job, trigger);
+ * </pre>
  *
  * @see TriggerBuilder
  * @see DateBuilder
@@ -97,7 +97,7 @@ public class JobBuilder
   public IJobDetail build ()
   {
 
-    final JobDetailImpl job = new JobDetailImpl ();
+    final JobDetail job = new JobDetail ();
 
     job.setJobClass (jobClass);
     job.setDescription (description);

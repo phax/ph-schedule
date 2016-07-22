@@ -22,15 +22,15 @@ import java.util.Date;
 
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduler;
+import com.helger.quartz.ISimpleTrigger;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.ScheduleBuilder;
-import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.ISimpleTrigger;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.TriggerUtils;
@@ -42,7 +42,8 @@ import com.helger.quartz.spi.IOperableTrigger;
  * </p>
  * <p>
  * <code>Triggers</code> s have a name and group associated with them, which
- * should uniquely identify them within a single <code>{@link IScheduler}</code>.
+ * should uniquely identify them within a single
+ * <code>{@link IScheduler}</code>.
  * </p>
  * <p>
  * <code>Trigger</code>s are the 'mechanism' by which <code>Job</code> s are
@@ -246,7 +247,8 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
 
   /**
    * <p>
-   * Get the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>.
+   * Get the name of the associated
+   * <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    */
   public String getJobName ()
@@ -256,7 +258,8 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
 
   /**
    * <p>
-   * Set the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>.
+   * Set the name of the associated
+   * <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -274,8 +277,8 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
 
   /**
    * <p>
-   * Get the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>'s
-   * group.
+   * Get the name of the associated
+   * <code>{@link com.helger.quartz.IJobDetail}</code>'s group.
    * </p>
    */
   public String getJobGroup ()
@@ -285,8 +288,8 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
 
   /**
    * <p>
-   * Set the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>'s
-   * group.
+   * Set the name of the associated
+   * <code>{@link com.helger.quartz.IJobDetail}</code>'s group.
    * </p>
    *
    * @param jobGroup
@@ -499,7 +502,6 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    *         the scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
-   *         </p>
    */
   public abstract Date computeFirstFireTime (ICalendar calendar);
 
@@ -776,9 +778,9 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    * This method should not be used by the Quartz client.
    * </p>
    * <p>
-   * Usable by <code>{@link com.helger.quartz.spi.IJobStore}</code> implementations, in
-   * order to facilitate 'recognizing' instances of fired <code>Trigger</code> s
-   * as their jobs complete execution.
+   * Usable by <code>{@link com.helger.quartz.spi.IJobStore}</code>
+   * implementations, in order to facilitate 'recognizing' instances of fired
+   * <code>Trigger</code> s as their jobs complete execution.
    * </p>
    */
   public void setFireInstanceId (final String id)

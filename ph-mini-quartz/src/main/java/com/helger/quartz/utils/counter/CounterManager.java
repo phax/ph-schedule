@@ -29,7 +29,7 @@ import com.helger.quartz.utils.counter.sampled.SampledCounter;
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8
  */
-public class CounterManagerImpl implements ICounterManager
+public class CounterManager implements ICounterManager
 {
 
   private final Timer timer;
@@ -40,7 +40,7 @@ public class CounterManagerImpl implements ICounterManager
    * Constructor that accepts a timer that will be used for scheduling sampled
    * counter if any is created
    */
-  public CounterManagerImpl (final Timer timer)
+  public CounterManager (final Timer timer)
   {
     if (timer == null)
     {

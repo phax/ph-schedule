@@ -39,13 +39,13 @@ import com.helger.quartz.utils.Key;
  * </p>
  *
  * <pre>
- * JobDetail job = newJob(MyJob.class) .withIdentity("myJob") .build(); Trigger
- * trigger = newTrigger() .withIdentity(triggerKey("myTrigger",
- * "myTriggerGroup")) .withSchedule(simpleSchedule() .withIntervalInHours(1)
- * .repeatForever()) .startAt(futureDate(10, MINUTES)) .build();
- * scheduler.scheduleJob(job, trigger);
- *
- * <pre>
+ * JobDetail job = newJob (MyJob.class).withIdentity ("myJob").build ();
+ * Trigger trigger = newTrigger ().withIdentity (triggerKey ("myTrigger", "myTriggerGroup"))
+ *                                .withSchedule (simpleSchedule ().withIntervalInHours (1).repeatForever ())
+ *                                .startAt (futureDate (10, MINUTES))
+ *                                .build ();
+ * scheduler.scheduleJob (job, trigger);
+ * </pre>
  *
  * @see ITrigger
  * @see Key#DEFAULT_GROUP

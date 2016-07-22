@@ -90,13 +90,6 @@ import com.helger.quartz.utils.Key;
  */
 public class QuartzScheduler implements IRemotableQuartzScheduler
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private static String VERSION_MAJOR = "UNKNOWN";
   private static String VERSION_MINOR = "UNKNOWN";
   private static String VERSION_ITERATION = "UNKNOWN";
@@ -905,9 +898,9 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
    *
    * @param newTrigger
    *        The new <code>Trigger</code> to be stored.
-   * @return <code>null</code> if a <code>Trigger</code> with the given name &
-   *         group was not found and removed from the store, otherwise the first
-   *         fire time of the newly scheduled trigger.
+   * @return <code>null</code> if a <code>Trigger</code> with the given name
+   *         &amp; group was not found and removed from the store, otherwise the
+   *         first fire time of the newly scheduled trigger.
    */
   public Date rescheduleJob (final TriggerKey triggerKey, final ITrigger newTrigger) throws SchedulerException
   {
@@ -951,16 +944,13 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
     }
 
     return ft;
-
   }
 
   private String _newTriggerId ()
   {
     long r = random.nextLong ();
     if (r < 0)
-    {
       r = -r;
-    }
     return "MT_" + Long.toString (r, 30 + (int) (System.currentTimeMillis () % 7));
   }
 
@@ -1192,7 +1182,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   /**
    * <p>
    * Pause all triggers - equivalent of calling
-   * <code>pauseTriggers(GroupMatcher<TriggerKey>)</code> with a matcher
+   * <code>pauseTriggers(GroupMatcher&lt;TriggerKey&gt;)</code> with a matcher
    * matching all known groups.
    * </p>
    * <p>
@@ -1201,7 +1191,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
    * </p>
    *
    * @see #resumeAll()
-   * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
+   * @see #pauseTriggers(GroupMatcher)
    * @see #standby()
    */
   public void pauseAll () throws SchedulerException

@@ -11,7 +11,6 @@ package com.helger.quartz.spi;
  */
 public interface IThreadExecutor
 {
-
   /**
    * Submit a task for execution
    *

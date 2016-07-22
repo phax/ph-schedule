@@ -17,6 +17,7 @@
 
 package com.helger.quartz.impl.calendar;
 
+import java.util.Calendar;
 import java.util.TimeZone;
 
 import com.helger.quartz.ICalendar;
@@ -37,7 +38,7 @@ public class MonthlyCalendar extends BaseCalendar
   private static final int MAX_DAYS_IN_MONTH = 31;
 
   // An array to store a months days which are to be excluded.
-  // java.util.Calendar.get( ) as index.
+  // Calendar.get( ) as index.
   private boolean [] excludeDays = new boolean [MAX_DAYS_IN_MONTH];
 
   // Will be set to true, if all week days are excluded
@@ -191,8 +192,8 @@ public class MonthlyCalendar extends BaseCalendar
       return false;
     }
 
-    final java.util.Calendar cl = createJavaCalendar (timeStamp);
-    final int day = cl.get (java.util.Calendar.DAY_OF_MONTH);
+    final Calendar cl = createJavaCalendar (timeStamp);
+    final int day = cl.get (Calendar.DAY_OF_MONTH);
 
     return !(isDayExcluded (day));
   }
@@ -224,8 +225,8 @@ public class MonthlyCalendar extends BaseCalendar
     }
 
     // Get timestamp for 00:00:00
-    final java.util.Calendar cl = getStartOfDayJavaCalendar (timeStamp);
-    int day = cl.get (java.util.Calendar.DAY_OF_MONTH);
+    final Calendar cl = getStartOfDayJavaCalendar (timeStamp);
+    int day = cl.get (Calendar.DAY_OF_MONTH);
 
     if (!isDayExcluded (day))
     {
@@ -234,8 +235,8 @@ public class MonthlyCalendar extends BaseCalendar
 
     while (isDayExcluded (day) == true)
     {
-      cl.add (java.util.Calendar.DATE, 1);
-      day = cl.get (java.util.Calendar.DAY_OF_MONTH);
+      cl.add (Calendar.DATE, 1);
+      day = cl.get (Calendar.DAY_OF_MONTH);
     }
 
     return cl.getTime ().getTime ();

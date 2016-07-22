@@ -55,7 +55,7 @@ import com.helger.quartz.utils.ClassUtils;
  * @author James House
  * @author Sharada Jambula
  */
-public class JobDetailImpl implements IJobDetail
+public class JobDetail implements IJobDetail
 {
   private String name;
 
@@ -90,11 +90,11 @@ public class JobDetailImpl implements IJobDetail
    * placed into a {@link IScheduler}
    * </p>
    */
-  public JobDetailImpl ()
+  public JobDetail ()
   {}
 
   @Deprecated
-  public JobDetailImpl (final String name, final String group, final Class <? extends IJob> jobClass)
+  public JobDetail (final String name, final String group, final Class <? extends IJob> jobClass)
   {
     setName (name);
     setGroup (group);
@@ -380,10 +380,10 @@ public class JobDetailImpl implements IJobDetail
   @Override
   public Object clone ()
   {
-    JobDetailImpl copy;
+    JobDetail copy;
     try
     {
-      copy = (JobDetailImpl) super.clone ();
+      copy = (JobDetail) super.clone ();
       if (jobDataMap != null)
       {
         copy.jobDataMap = (JobDataMap) jobDataMap.clone ();

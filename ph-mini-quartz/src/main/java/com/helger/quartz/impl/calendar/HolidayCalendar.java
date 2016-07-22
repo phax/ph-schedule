@@ -17,6 +17,7 @@
 
 package com.helger.quartz.impl.calendar;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.SortedSet;
@@ -114,10 +115,10 @@ public class HolidayCalendar extends BaseCalendar
     }
 
     // Get timestamp for 00:00:00
-    final java.util.Calendar day = getStartOfDayJavaCalendar (timeStamp);
+    final Calendar day = getStartOfDayJavaCalendar (timeStamp);
     while (isTimeIncluded (day.getTime ().getTime ()) == false)
     {
-      day.add (java.util.Calendar.DATE, 1);
+      day.add (Calendar.DATE, 1);
     }
 
     return day.getTime ().getTime ();

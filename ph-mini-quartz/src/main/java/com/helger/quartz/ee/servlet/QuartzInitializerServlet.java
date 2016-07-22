@@ -41,6 +41,7 @@ import com.helger.quartz.impl.StdSchedulerFactory;
  * </p>
  * <p>
  * You'll want to add something like this to your WEB-INF/web.xml file:
+ * </p>
  *
  * <pre>
  *     &lt;servlet&gt;
@@ -74,7 +75,6 @@ import com.helger.quartz.impl.StdSchedulerFactory;
  *         &lt;/init-param&gt;
  *     &lt;/servlet&gt;
  * </pre>
- * </p>
  * <p>
  * The init parameter 'config-file' can be used to specify the path (and
  * filename) of your Quartz properties file. If you leave out this parameter,

@@ -27,7 +27,7 @@ import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.PersistJobDataAfterExecution;
-import com.helger.quartz.impl.JobDetailImpl;
+import com.helger.quartz.impl.JobDetail;
 
 /**
  * Unit test for JobDetail.
@@ -84,7 +84,7 @@ public class JobDetailTest
   @Test
   public void testClone ()
   {
-    final JobDetailImpl jobDetail = new JobDetailImpl ();
+    final JobDetail jobDetail = new JobDetail ();
     jobDetail.setName ("hi");
 
     final IJobDetail clonedJobDetail = (IJobDetail) jobDetail.clone ();
@@ -95,7 +95,7 @@ public class JobDetailTest
   @Test
   public void testAnnotationDetection ()
   {
-    final JobDetailImpl jobDetail = new JobDetailImpl ();
+    final JobDetail jobDetail = new JobDetail ();
     jobDetail.setName ("hi");
 
     jobDetail.setJobClass (SomePersistentJob.class);

@@ -34,9 +34,9 @@ import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.listeners.AbstractJobListenerSupport;
 
 /**
- * Integration test for using DisallowConcurrentExecution annot.
+ * Integration test for using DisallowConcurrentExecution annotation.
  *
- * @author Zemian Deng <saltnlight5@gmail.com>
+ * @author Zemian Deng saltnlight5@gmail.com
  */
 public class DisallowConcurrentExecutionJobTest
 {
@@ -129,15 +129,15 @@ public class DisallowConcurrentExecutionJobTest
 
     final IJobDetail job1 = JobBuilder.newJob (TestJob.class).withIdentity ("job1").build ();
     final ITrigger trigger1 = TriggerBuilder.newTrigger ()
-                                           .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
-                                           .startAt (startTime)
-                                           .build ();
+                                            .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
+                                            .startAt (startTime)
+                                            .build ();
 
     final ITrigger trigger2 = TriggerBuilder.newTrigger ()
-                                           .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
-                                           .startAt (startTime)
-                                           .forJob (job1.getKey ())
-                                           .build ();
+                                            .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
+                                            .startAt (startTime)
+                                            .forJob (job1.getKey ())
+                                            .build ();
 
     final Properties props = new Properties ();
     props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1500");
@@ -179,15 +179,15 @@ public class DisallowConcurrentExecutionJobTest
 
     final IJobDetail job1 = JobBuilder.newJob (TestJob.class).withIdentity ("job1").build ();
     final ITrigger trigger1 = TriggerBuilder.newTrigger ()
-                                           .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
-                                           .startAt (startTime)
-                                           .build ();
+                                            .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
+                                            .startAt (startTime)
+                                            .build ();
 
     final ITrigger trigger2 = TriggerBuilder.newTrigger ()
-                                           .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
-                                           .startAt (startTime)
-                                           .forJob (job1.getKey ())
-                                           .build ();
+                                            .withSchedule (SimpleScheduleBuilder.simpleSchedule ())
+                                            .startAt (startTime)
+                                            .forJob (job1.getKey ())
+                                            .build ();
 
     final Properties props = new Properties ();
     props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1500");

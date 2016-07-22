@@ -24,11 +24,11 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduler;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.ITrigger;
-import com.helger.quartz.ITriggerListener;
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 import com.helger.quartz.spi.IClassLoadHelper;
 import com.helger.quartz.spi.ISchedulerPlugin;
@@ -43,7 +43,8 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * </p>
  * <p>
  * TriggerFiredMessage - available message data are:
- * <table>
+ * </p>
+ * <table summary="">
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -90,12 +91,14 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <td>The re-fire count from the JobExecutionContext.</td>
  * </tr>
  * </table>
+ * <p>
  * The default message text is <i>"Trigger {1}.{0} fired job {6}.{5} at: {4,
  * date, HH:mm:ss MM/dd/yyyy}"</i>
  * </p>
  * <p>
  * TriggerMisfiredMessage - available message data are:
- * <table>
+ * </p>
+ * <table summary="">
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -137,13 +140,15 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <td>The Job's group.</td>
  * </tr>
  * </table>
+ * <p>
  * The default message text is <i>"Trigger {1}.{0} misfired job {6}.{5} at: {4,
  * date, HH:mm:ss MM/dd/yyyy}. Should have fired at: {3, date, HH:mm:ss
  * MM/dd/yyyy}"</i>
  * </p>
  * <p>
  * TriggerCompleteMessage - available message data are:
- * <table>
+ * </p>
+ * <table summary="">
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -201,6 +206,7 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * code.</td>
  * </tr>
  * </table>
+ * <p>
  * The default message text is <i>"Trigger {1}.{0} completed firing job {6}.{5}
  * at {4, date, HH:mm:ss MM/dd/yyyy} with resulting trigger instruction code:
  * {9}"</i>

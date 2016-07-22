@@ -38,13 +38,13 @@ import java.util.TimeZone;
  * </p>
  *
  * <pre>
- * JobDetail job = newJob(MyJob.class) .withIdentity("myJob") .build(); Trigger
- * trigger = newTrigger() .withIdentity(triggerKey("myTrigger",
- * "myTriggerGroup")) .withSchedule(simpleSchedule() .withIntervalInHours(1)
- * .repeatForever()) .startAt(futureDate(10, MINUTES)) .build();
- * scheduler.scheduleJob(job, trigger);
- *
- * <pre>
+ * JobDetail job = newJob (MyJob.class).withIdentity ("myJob").build ();
+ * Trigger trigger = newTrigger ().withIdentity (triggerKey ("myTrigger", "myTriggerGroup"))
+ *                                .withSchedule (simpleSchedule ().withIntervalInHours (1).repeatForever ())
+ *                                .startAt (futureDate (10, MINUTES))
+ *                                .build ();
+ * scheduler.scheduleJob (job, trigger);
+ * </pre>
  *
  * @see TriggerBuilder
  * @see JobBuilder
@@ -775,7 +775,8 @@ public class DateBuilder
    * </p>
    * <p>
    * More examples:
-   * <table summary="">
+   * </p>
+   * <table summary="examples">
    * <tr>
    * <th>Input Time</th>
    * <th>Minute-Base</th>
@@ -811,38 +812,37 @@ public class DateBuilder
    * <td>17</td>
    * <td>11:17:00</td>
    * </tr>
-   * </tr>
+   * <tr>
    * <td>11:17:41</td>
    * <td>17</td>
    * <td>11:34:00</td>
    * </tr>
-   * </tr>
+   * <tr>
    * <td>11:52:41</td>
    * <td>17</td>
    * <td>12:00:00</td>
    * </tr>
-   * </tr>
+   * <tr>
    * <td>11:52:41</td>
    * <td>5</td>
    * <td>11:55:00</td>
    * </tr>
-   * </tr>
+   * <tr>
    * <td>11:57:41</td>
    * <td>5</td>
    * <td>12:00:00</td>
    * </tr>
-   * </tr>
+   * <tr>
    * <td>11:17:41</td>
    * <td>0</td>
    * <td>12:00:00</td>
    * </tr>
-   * </tr>
+   * <tr>
    * <td>11:17:41</td>
    * <td>1</td>
    * <td>11:08:00</td>
    * </tr>
    * </table>
-   * </p>
    *
    * @param date
    *        the Date to round, if <code>null</code> the current time will be
@@ -900,12 +900,12 @@ public class DateBuilder
    * </p>
    * <p>
    * The rules for calculating the second are the same as those for calculating
-   * the minute in the method <code>getNextGivenMinuteDate(..)<code>.
+   * the minute in the method <code>getNextGivenMinuteDate(..)</code>.
    * </p>
    *
-   * @param date the Date to round, if <code>null</code> the current time will
-   *        be used
-   *
+   * @param date
+   *        the Date to round, if <code>null</code> the current time will be
+   *        used
    * @param secondBase
    *        the base-second to set the time on
    * @return the new rounded date
@@ -947,9 +947,9 @@ public class DateBuilder
   }
 
   /**
-   * Translate a date & time from a users time zone to the another (probably
+   * Translate a date &amp; time from a users time zone to the another (probably
    * server) time zone to assist in creating a simple trigger with the right
-   * date & time.
+   * date &amp; time.
    *
    * @param date
    *        the date to translate

@@ -21,15 +21,16 @@ import java.util.Date;
 import java.util.Set;
 
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
-import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.DateBuilder.IntervalUnit;
+import com.helger.quartz.ICalendar;
+import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduler;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.ScheduleBuilder;
-import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TimeOfDay;
-import com.helger.quartz.ITrigger;
 
 /**
  * A concrete implementation of DailyTimeIntervalTrigger that is used to fire a
@@ -86,44 +87,25 @@ import com.helger.quartz.ITrigger;
  * @see DailyTimeIntervalScheduleBuilder
  * @since 2.1.0
  * @author James House
- * @author Zemian Deng <saltnlight5@gmail.com>
+ * @author Zemian Deng saltnlight5@gmail.com
  */
 public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeIntervalTrigger>
-                                          implements IDailyTimeIntervalTrigger, ICoreTrigger
+                                      implements IDailyTimeIntervalTrigger, ICoreTrigger
 {
-  private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = java.util.Calendar.getInstance ()
-                                                                            .get (java.util.Calendar.YEAR) +
-                                                          100;
+  private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = Calendar.getInstance ().get (Calendar.YEAR) + 100;
 
   private Date startTime = null;
-
   private Date endTime = null;
-
   private Date nextFireTime = null;
-
   private Date previousFireTime = null;
-
   private int repeatCount = REPEAT_INDEFINITELY;
-
   private int repeatInterval = 1;
-
   private IntervalUnit repeatIntervalUnit = IntervalUnit.MINUTE;
-
   private Set <Integer> daysOfWeek;
-
   private TimeOfDay startTimeOfDay;
-
   private TimeOfDay endTimeOfDay;
-
   private int timesTriggered = 0;
-
   private boolean complete = false;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
@@ -155,10 +137,10 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *         or less.
    */
   public DailyTimeIntervalTrigger (final String name,
-                                       final TimeOfDay startTimeOfDay,
-                                       final TimeOfDay endTimeOfDay,
-                                       final IntervalUnit intervalUnit,
-                                       final int repeatInterval)
+                                   final TimeOfDay startTimeOfDay,
+                                   final TimeOfDay endTimeOfDay,
+                                   final IntervalUnit intervalUnit,
+                                   final int repeatInterval)
   {
     this (name, null, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
   }
@@ -183,11 +165,11 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *         or less.
    */
   public DailyTimeIntervalTrigger (final String name,
-                                       final String group,
-                                       final TimeOfDay startTimeOfDay,
-                                       final TimeOfDay endTimeOfDay,
-                                       final IntervalUnit intervalUnit,
-                                       final int repeatInterval)
+                                   final String group,
+                                   final TimeOfDay startTimeOfDay,
+                                   final TimeOfDay endTimeOfDay,
+                                   final IntervalUnit intervalUnit,
+                                   final int repeatInterval)
   {
     this (name, group, new Date (), null, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
   }
@@ -220,12 +202,12 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *         or less.
    */
   public DailyTimeIntervalTrigger (final String name,
-                                       final Date startTime,
-                                       final Date endTime,
-                                       final TimeOfDay startTimeOfDay,
-                                       final TimeOfDay endTimeOfDay,
-                                       final IntervalUnit intervalUnit,
-                                       final int repeatInterval)
+                                   final Date startTime,
+                                   final Date endTime,
+                                   final TimeOfDay startTimeOfDay,
+                                   final TimeOfDay endTimeOfDay,
+                                   final IntervalUnit intervalUnit,
+                                   final int repeatInterval)
   {
     this (name, null, startTime, endTime, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
   }
@@ -258,13 +240,13 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *         or less.
    */
   public DailyTimeIntervalTrigger (final String name,
-                                       final String group,
-                                       final Date startTime,
-                                       final Date endTime,
-                                       final TimeOfDay startTimeOfDay,
-                                       final TimeOfDay endTimeOfDay,
-                                       final IntervalUnit intervalUnit,
-                                       final int repeatInterval)
+                                   final String group,
+                                   final Date startTime,
+                                   final Date endTime,
+                                   final TimeOfDay startTimeOfDay,
+                                   final TimeOfDay endTimeOfDay,
+                                   final IntervalUnit intervalUnit,
+                                   final int repeatInterval)
   {
     super (name, group);
 
@@ -305,15 +287,15 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *         or less.
    */
   public DailyTimeIntervalTrigger (final String name,
-                                       final String group,
-                                       final String jobName,
-                                       final String jobGroup,
-                                       final Date startTime,
-                                       final Date endTime,
-                                       final TimeOfDay startTimeOfDay,
-                                       final TimeOfDay endTimeOfDay,
-                                       final IntervalUnit intervalUnit,
-                                       final int repeatInterval)
+                                   final String group,
+                                   final String jobName,
+                                   final String jobGroup,
+                                   final Date startTime,
+                                   final Date endTime,
+                                   final TimeOfDay startTimeOfDay,
+                                   final TimeOfDay endTimeOfDay,
+                                   final IntervalUnit intervalUnit,
+                                   final int repeatInterval)
   {
     super (name, group, jobName, jobGroup);
 
@@ -446,14 +428,12 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    * </p>
    *
    * @exception IllegalArgumentException
-   *            if repeatInterval is < 1
+   *            if repeatInterval is &lt; 0
    */
   public void setRepeatInterval (final int repeatInterval)
   {
     if (repeatInterval < 0)
-    {
-      throw new IllegalArgumentException ("Repeat interval must be >= 1");
-    }
+      throw new IllegalArgumentException ("Repeat interval must be >= 0");
 
     this.repeatInterval = repeatInterval;
   }
@@ -491,14 +471,14 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    * <p>
    * If the misfire instruction is set to MISFIRE_INSTRUCTION_SMART_POLICY, then
    * the following scheme will be used: <br>
+   * </p>
    * <ul>
    * <li>The instruction will be interpreted as
-   * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code>
+   * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
-   * </p>
    */
   @Override
-  public void updateAfterMisfire (final com.helger.quartz.ICalendar cal)
+  public void updateAfterMisfire (final ICalendar cal)
   {
     int instr = getMisfireInstruction ();
 
@@ -558,9 +538,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
         break;
 
       // avoid infinite loop
-      final java.util.Calendar c = java.util.Calendar.getInstance ();
+      final Calendar c = Calendar.getInstance ();
       c.setTime (nextFireTime);
-      if (c.get (java.util.Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
         nextFireTime = null;
       }
@@ -596,9 +576,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
         break;
 
       // avoid infinite loop
-      final java.util.Calendar c = java.util.Calendar.getInstance ();
+      final Calendar c = Calendar.getInstance ();
       c.setTime (nextFireTime);
-      if (c.get (java.util.Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
         nextFireTime = null;
       }
@@ -629,12 +609,10 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *         the scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
-   *         </p>
    */
   @Override
-  public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)
+  public Date computeFirstFireTime (final ICalendar calendar)
   {
-
     nextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000L));
 
     // Check calendar for date-time exclusion
@@ -647,9 +625,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
         break;
 
       // avoid infinite loop
-      final java.util.Calendar c = java.util.Calendar.getInstance ();
+      final Calendar c = Calendar.getInstance ();
       c.setTime (nextFireTime);
-      if (c.get (java.util.Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
         return null;
       }

@@ -251,9 +251,8 @@ public class DailyCalendar extends BaseCalendar
 
   /**
    * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified <CODE>java.util.Calendar</CODE>s and no
-   * <CODE>baseCalendar</CODE>. The Calendars are subject to the following
-   * considerations:
+   * specified <CODE>Calendar</CODE>s and no <CODE>baseCalendar</CODE>. The
+   * Calendars are subject to the following considerations:
    * <UL>
    * <LI>Only the time-of-day fields of the specified Calendars will be used
    * (the date fields will be ignored)</LI>
@@ -272,10 +271,9 @@ public class DailyCalendar extends BaseCalendar
    * </p>
    *
    * @param rangeStartingCalendar
-   *        a java.util.Calendar representing the starting time for the time
-   *        range
+   *        a Calendar representing the starting time for the time range
    * @param rangeEndingCalendar
-   *        a java.util.Calendar representing the ending time for the time range
+   *        a Calendar representing the ending time for the time range
    */
   public DailyCalendar (final Calendar rangeStartingCalendar, final Calendar rangeEndingCalendar)
   {
@@ -285,7 +283,7 @@ public class DailyCalendar extends BaseCalendar
 
   /**
    * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified <CODE>java.util.Calendar</CODE>s and the specified
+   * specified <CODE>Calendar</CODE>s and the specified
    * <CODE>baseCalendar</CODE>. The Calendars are subject to the following
    * considerations:
    * <UL>
@@ -310,10 +308,9 @@ public class DailyCalendar extends BaseCalendar
    *        {@link BaseCalendar} for more information on base calendar
    *        functionality
    * @param rangeStartingCalendar
-   *        a java.util.Calendar representing the starting time for the time
-   *        range
+   *        a Calendar representing the starting time for the time range
    * @param rangeEndingCalendar
-   *        a java.util.Calendar representing the ending time for the time range
+   *        a Calendar representing the ending time for the time range
    */
   public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
                         final Calendar rangeStartingCalendar,
@@ -861,7 +858,7 @@ public class DailyCalendar extends BaseCalendar
 
   /**
    * Sets the time range for the <CODE>DailyCalendar</CODE> to the times
-   * represented in the specified <CODE>java.util.Calendar</CODE>s.
+   * represented in the specified <CODE>Calendar</CODE>s.
    *
    * @param rangeStartingCalendar
    *        a Calendar containing the start time for the

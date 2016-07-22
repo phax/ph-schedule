@@ -17,42 +17,31 @@
 
 package com.helger.quartz.impl;
 
+import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.core.JobRunShell;
 import com.helger.quartz.core.IJobRunShellFactory;
+import com.helger.quartz.core.JobRunShell;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
 /**
  * <p>
  * Responsible for creating the instances of
  * <code>{@link com.helger.quartz.core.JobRunShell}</code> to be used within the
- * <class>{@link com.helger.quartz.core.QuartzScheduler} </code> instance.
+ * <code>{@link com.helger.quartz.core.QuartzScheduler}</code> instance.
  * </p>
  *
  * @author James House
  */
 public class StdJobRunShellFactory implements IJobRunShellFactory
 {
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private IScheduler scheduler;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
-   * Initialize the factory, providing a handle to the <code>Scheduler</code>
-   * that should be made available within the <code>JobRunShell</code> and the
-   * <code>JobExecutionContext</code> s within it.
+   * Initialize the factory, providing a handle to the {@link IScheduler} that
+   * should be made available within the {@link JobRunShell} and the
+   * {@link IJobExecutionContext}s within it.
    * </p>
    */
   public void initialize (final IScheduler sched)
@@ -62,9 +51,8 @@ public class StdJobRunShellFactory implements IJobRunShellFactory
 
   /**
    * <p>
-   * Called by the <class>{@link com.helger.quartz.core.QuartzSchedulerThread} </code>
-   * to obtain instances of <code>
-   * {@link com.helger.quartz.core.JobRunShell}</code>.
+   * Called by the {@link com.helger.quartz.core.QuartzSchedulerThread} to
+   * obtain instances of {@link com.helger.quartz.core.JobRunShell}.
    * </p>
    */
   public JobRunShell createJobRunShell (final TriggerFiredBundle bndle) throws SchedulerException

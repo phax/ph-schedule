@@ -26,20 +26,13 @@ import com.helger.quartz.spi.TriggerFiredBundle;
 /**
  * <p>
  * Responsible for creating the instances of <code>{@link JobRunShell}</code> to
- * be used within the <class>{@link QuartzScheduler}</code> instance.
+ * be used within the <code>{@link QuartzScheduler}</code> instance.
  * </p>
  *
  * @author James House
  */
 public interface IJobRunShellFactory
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Initialize the factory, providing a handle to the <code>Scheduler</code>
@@ -51,8 +44,9 @@ public interface IJobRunShellFactory
 
   /**
    * <p>
-   * Called by the <code>{@link com.helger.quartz.core.QuartzSchedulerThread}</code> to
-   * obtain instances of <code>{@link JobRunShell}</code>.
+   * Called by the
+   * <code>{@link com.helger.quartz.core.QuartzSchedulerThread}</code> to obtain
+   * instances of <code>{@link JobRunShell}</code>.
    * </p>
    */
   JobRunShell createJobRunShell (TriggerFiredBundle bundle) throws SchedulerException;

@@ -42,7 +42,7 @@ import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITrigger.TriggerState;
-import com.helger.quartz.impl.JobDetailImpl;
+import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 import com.helger.quartz.simpl.CascadingClassLoadHelper;
@@ -58,7 +58,7 @@ import com.helger.quartz.spi.ISchedulerSignaler;
 public abstract class AbstractJobStoreTest
 {
   private IJobStore fJobStore;
-  private JobDetailImpl fJobDetail;
+  private JobDetail fJobDetail;
   private SampleSignaler fSignaler;
 
   @SuppressWarnings ("deprecation")
@@ -72,7 +72,7 @@ public abstract class AbstractJobStoreTest
     this.fJobStore.initialize (loadHelper, this.fSignaler);
     this.fJobStore.schedulerStarted ();
 
-    this.fJobDetail = new JobDetailImpl ("job1", "jobGroup1", MyJob.class);
+    this.fJobDetail = new JobDetail ("job1", "jobGroup1", MyJob.class);
     this.fJobDetail.setDurability (true);
     this.fJobStore.storeJob (this.fJobDetail, false);
   }
@@ -327,7 +327,7 @@ public abstract class AbstractJobStoreTest
 
     final String jobName = "StoreTriggerReplacesTrigger";
     final String jobGroup = "StoreTriggerReplacesTriggerGroup";
-    final JobDetailImpl detail = new JobDetailImpl (jobName, jobGroup, MyJob.class);
+    final JobDetail detail = new JobDetail (jobName, jobGroup, MyJob.class);
     fJobStore.storeJob (detail, false);
 
     final String trName = "StoreTriggerReplacesTrigger";
@@ -365,12 +365,12 @@ public abstract class AbstractJobStoreTest
     final String jobName2 = "PauseJobGroupPausesNewJob2";
     final String jobGroup = "PauseJobGroupPausesNewJobGroup";
 
-    JobDetailImpl detail = new JobDetailImpl (jobName1, jobGroup, MyJob.class);
+    JobDetail detail = new JobDetail (jobName1, jobGroup, MyJob.class);
     detail.setDurability (true);
     fJobStore.storeJob (detail, false);
     fJobStore.pauseJobs (GroupMatcher.jobGroupEquals (jobGroup));
 
-    detail = new JobDetailImpl (jobName2, jobGroup, MyJob.class);
+    detail = new JobDetail (jobName2, jobGroup, MyJob.class);
     detail.setDurability (true);
     fJobStore.storeJob (detail, false);
 
