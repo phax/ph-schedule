@@ -497,9 +497,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
     // Get Scheduler Properties
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    final String schedName = cfg.getStringProperty (PROP_SCHED_INSTANCE_NAME, "QuartzScheduler");
+    final String schedName = cfg.getStringProperty (PROP_SCHED_INSTANCE_NAME, "MiniQuartzScheduler");
 
-    final String threadName = cfg.getStringProperty (PROP_SCHED_THREAD_NAME, schedName + "_QuartzSchedulerThread");
+    final String threadName = cfg.getStringProperty (PROP_SCHED_THREAD_NAME, schedName + "_MiniQuartzSchedulerThread");
 
     String schedInstId = cfg.getStringProperty (PROP_SCHED_INSTANCE_ID, DEFAULT_INSTANCE_ID);
 
@@ -1181,7 +1181,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   private String getSchedulerName ()
   {
-    return cfg.getStringProperty (PROP_SCHED_INSTANCE_NAME, "QuartzScheduler");
+    return cfg.getStringProperty (PROP_SCHED_INSTANCE_NAME, "MiniQuartzScheduler");
   }
 
   /**

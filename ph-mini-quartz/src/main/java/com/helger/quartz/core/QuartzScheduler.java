@@ -44,25 +44,25 @@ import com.helger.commons.string.StringHelper;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IInterruptableJob;
 import com.helger.quartz.IJob;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobKey;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IListenerManager;
 import com.helger.quartz.IMatcher;
-import com.helger.quartz.ObjectAlreadyExistsException;
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerContext;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ISchedulerListener;
-import com.helger.quartz.SchedulerMetaData;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
 import com.helger.quartz.ITrigger.TriggerState;
-import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITriggerListener;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobExecutionException;
+import com.helger.quartz.JobKey;
+import com.helger.quartz.ObjectAlreadyExistsException;
+import com.helger.quartz.SchedulerContext;
+import com.helger.quartz.SchedulerException;
+import com.helger.quartz.SchedulerMetaData;
+import com.helger.quartz.TriggerKey;
 import com.helger.quartz.UnableToInterruptJobException;
 import com.helger.quartz.impl.SchedulerRepository;
 import com.helger.quartz.impl.matchers.GroupMatcher;
@@ -181,7 +181,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
     signaler = new SchedulerSignaler (this, this.schedThread);
 
-    getLog ().info ("Quartz Scheduler v." + getVersion () + " created.");
+    getLog ().info ("Mini Quartz Scheduler v." + getVersion () + " created.");
   }
 
   /**
@@ -270,7 +270,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   {
     if (threadGroup == null)
     {
-      threadGroup = new ThreadGroup ("QuartzScheduler:" + getSchedulerName ());
+      threadGroup = new ThreadGroup ("MiniQuartzScheduler:" + getSchedulerName ());
       if (resources.getMakeSchedulerThreadDaemon ())
       {
         threadGroup.setDaemon (true);
@@ -322,8 +322,8 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
    * <code>{@link com.helger.quartz.ITrigger}s</code>.
    * </p>
    * <p>
-   * All <code>{@link com.helger.quartz.ITrigger}s</code> that have misfired will
-   * be passed to the appropriate TriggerListener(s).
+   * All <code>{@link com.helger.quartz.ITrigger}s</code> that have misfired
+   * will be passed to the appropriate TriggerListener(s).
    * </p>
    */
   public void start () throws SchedulerException
@@ -592,7 +592,8 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
    * <p>
    * Add the <code>{@link com.helger.quartz.IJob}</code> identified by the given
    * <code>{@link com.helger.quartz.IJobDetail}</code> to the Scheduler, and
-   * associate the given <code>{@link com.helger.quartz.ITrigger}</code> with it.
+   * associate the given <code>{@link com.helger.quartz.ITrigger}</code> with
+   * it.
    * </p>
    * <p>
    * If the given Trigger does not reference any <code>Job</code>, then it will
@@ -897,9 +898,9 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the
-   * given name, and store the new given one - which must be associated with the
-   * same job.
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
+   * the given name, and store the new given one - which must be associated with
+   * the same job.
    * </p>
    *
    * @param newTrigger
@@ -974,9 +975,9 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
     validateState ();
 
     final IOperableTrigger trig = (IOperableTrigger) newTrigger ().withIdentity (_newTriggerId (),
-                                                                               IScheduler.DEFAULT_GROUP)
-                                                                .forJob (jobKey)
-                                                                .build ();
+                                                                                 IScheduler.DEFAULT_GROUP)
+                                                                  .forJob (jobKey)
+                                                                  .build ();
     trig.computeFirstFireTime (null);
     if (data != null)
     {
@@ -1147,8 +1148,8 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   /**
    * <p>
-   * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code> with
-   * the given name.
+   * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code>
+   * with the given name.
    * </p>
    * <p>
    * If any of the <code>Job</code>'s<code>Trigger</code> s missed one or more
@@ -1248,8 +1249,8 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all the <code>{@link com.helger.quartz.IJob}s</code> in the
-   * matching groups.
+   * Get the names of all the <code>{@link com.helger.quartz.IJob}s</code> in
+   * the matching groups.
    * </p>
    */
   public Set <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
@@ -1287,8 +1288,8 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all the <code>{@link com.helger.quartz.ITrigger}s</code> in
-   * the matching groups.
+   * Get the names of all the <code>{@link com.helger.quartz.ITrigger}s</code>
+   * in the matching groups.
    * </p>
    */
   public Set <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
@@ -1359,8 +1360,8 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   }
 
   /**
-   * Clears (deletes!) all scheduling data - all {@link IJob}s, {@link ITrigger}s
-   * {@link ICalendar}s.
+   * Clears (deletes!) all scheduling data - all {@link IJob}s,
+   * {@link ITrigger}s {@link ICalendar}s.
    *
    * @throws SchedulerException
    */
@@ -1518,8 +1519,8 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   /**
    * <p>
-   * Add the given <code>{@link com.helger.quartz.ITriggerListener}</code> to the
-   * <code>Scheduler</code>'s <i>internal</i> list.
+   * Add the given <code>{@link com.helger.quartz.ITriggerListener}</code> to
+   * the <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
   public void addInternalTriggerListener (final ITriggerListener triggerListener)

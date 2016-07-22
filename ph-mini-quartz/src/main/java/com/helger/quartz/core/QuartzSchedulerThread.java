@@ -26,10 +26,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.JobPersistenceException;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.JobPersistenceException;
+import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
@@ -48,41 +48,20 @@ import com.helger.quartz.spi.TriggerFiredResult;
  */
 public class QuartzSchedulerThread extends Thread
 {
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
   private QuartzScheduler qs;
-
   private QuartzSchedulerResources qsRsrcs;
-
   private final Object sigLock = new Object ();
-
   private boolean signaled;
   private long signaledNextFireTime;
-
   private boolean paused;
-
   private final AtomicBoolean halted;
-
   private final Random random = new Random (System.currentTimeMillis ());
-
   // When the scheduler finds there is no current trigger to fire, how long
   // it should wait until checking again...
   private static long DEFAULT_IDLE_WAIT_TIME = 30L * 1000L;
-
   private long idleWaitTime = DEFAULT_IDLE_WAIT_TIME;
-
   private int idleWaitVariablness = 7 * 1000;
-
   private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
