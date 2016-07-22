@@ -26,7 +26,7 @@
   </parent>
   <artifactId>ph-mini-quartz</artifactId>
   <packaging>bundle</packaging>
-  <name>ph-schedule</name>
+  <name>ph-mini-quartz</name>
   <description>Mini version of Quartz 2.2.3</description>
   <url>https://github.com/phax/ph-schedule/ph-mini-quartz</url>
   <inceptionYear>2016</inceptionYear>
