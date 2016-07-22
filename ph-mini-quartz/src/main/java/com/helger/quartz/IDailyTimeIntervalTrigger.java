@@ -23,8 +23,8 @@ import com.helger.quartz.DateBuilder.IntervalUnit;
 
 /**
  * A <code>{@link ITrigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating time
- * intervals.
+ * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating
+ * time intervals.
  * <p>
  * The trigger will fire every N (see {@link #getRepeatInterval()} ) seconds,
  * minutes or hours (see {@link #getRepeatIntervalUnit()}) during a given time
@@ -61,7 +61,7 @@ import com.helger.quartz.DateBuilder.IntervalUnit;
  * @see DailyTimeIntervalScheduleBuilder
  * @since 2.1.0
  * @author James House
- * @author Zemian Deng <saltnlight5@gmail.com>
+ * @author Zemian Deng saltnlight5@gmail.com
  */
 public interface IDailyTimeIntervalTrigger extends ITrigger
 {

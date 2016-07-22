@@ -38,13 +38,13 @@ import com.helger.quartz.impl.triggers.CronTriggerImpl;
  * </p>
  *
  * <pre>
- * JobDetail job = newJob(MyJob.class).withIdentity(&quot;myJob&quot;).build();
- * Trigger trigger = newTrigger()
- * .withIdentity(triggerKey(&quot;myTrigger&quot;, &quot;myTriggerGroup&quot;))
- * .withSchedule(dailyAtHourAndMinute(10, 0)) .startAt(futureDate(10,
- * MINUTES)).build(); scheduler.scheduleJob(job, trigger);
- *
- * <pre>
+ * JobDetail job = newJob (MyJob.class).withIdentity (&quot;myJob&quot;).build ();
+ * Trigger trigger = newTrigger ().withIdentity (triggerKey (&quot;myTrigger&quot;, &quot;myTriggerGroup&quot;))
+ *                                .withSchedule (dailyAtHourAndMinute (10, 0))
+ *                                .startAt (futureDate (10, MINUTES))
+ *                                .build ();
+ * scheduler.scheduleJob (job, trigger);
+ * </pre>
  *
  * @see CronExpression
  * @see ICronTrigger

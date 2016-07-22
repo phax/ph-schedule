@@ -32,10 +32,10 @@ import com.helger.quartz.utils.Key;
  * This is the main interface of a Quartz Scheduler.
  * <p>
  * A <code>Scheduler</code> maintains a registry of
- * <code>{@link com.helger.quartz.IJobDetail}</code>s and <code>{@link ITrigger}</code>s.
- * Once registered, the <code>Scheduler</code> is responsible for executing
- * <code>Job</code> s when their associated <code>Trigger</code> s fire (when
- * their scheduled time arrives).
+ * <code>{@link com.helger.quartz.IJobDetail}</code>s and
+ * <code>{@link ITrigger}</code>s. Once registered, the <code>Scheduler</code>
+ * is responsible for executing <code>Job</code> s when their associated
+ * <code>Trigger</code> s fire (when their scheduled time arrives).
  * </p>
  * <p>
  * <code>Scheduler</code> instances are produced by a
@@ -47,9 +47,9 @@ import com.helger.quartz.utils.Key;
  * </p>
  * <p>
  * <code>Job</code> s are to be created by the 'client program', by defining a
- * class that implements the <code>{@link com.helger.quartz.IJob}</code> interface.
- * <code>{@link IJobDetail}</code> objects are then created (also by the client)
- * to define a individual instances of the <code>Job</code>.
+ * class that implements the <code>{@link com.helger.quartz.IJob}</code>
+ * interface. <code>{@link IJobDetail}</code> objects are then created (also by
+ * the client) to define a individual instances of the <code>Job</code>.
  * <code>JobDetail</code> instances can then be registered with the
  * <code>Scheduler</code> via the <code>scheduleJob(JobDetail, Trigger)</code>
  * or <code>addJob(JobDetail, boolean)</code> method.
@@ -272,9 +272,9 @@ public interface IScheduler
   boolean isInStandbyMode () throws SchedulerException;
 
   /**
-   * Halts the <code>Scheduler</code>'s firing of <code>{@link ITrigger}s</code>,
-   * and cleans up all resources associated with the Scheduler. Equivalent to
-   * <code>shutdown(false)</code>.
+   * Halts the <code>Scheduler</code>'s firing of
+   * <code>{@link ITrigger}s</code>, and cleans up all resources associated with
+   * the Scheduler. Equivalent to <code>shutdown(false)</code>.
    * <p>
    * The scheduler cannot be re-started.
    * </p>
@@ -284,8 +284,9 @@ public interface IScheduler
   void shutdown () throws SchedulerException;
 
   /**
-   * Halts the <code>Scheduler</code>'s firing of <code>{@link ITrigger}s</code>,
-   * and cleans up all resources associated with the Scheduler.
+   * Halts the <code>Scheduler</code>'s firing of
+   * <code>{@link ITrigger}s</code>, and cleans up all resources associated with
+   * the Scheduler.
    * <p>
    * The scheduler cannot be re-started.
    * </p>
@@ -365,8 +366,8 @@ public interface IScheduler
   ///////////////////////////////////////////////////////////////////////////
 
   /**
-   * Add the given <code>{@link com.helger.quartz.IJobDetail}</code> to the Scheduler,
-   * and associate the given <code>{@link ITrigger}</code> with it.
+   * Add the given <code>{@link com.helger.quartz.IJobDetail}</code> to the
+   * Scheduler, and associate the given <code>{@link ITrigger}</code> with it.
    * <p>
    * If the given Trigger does not reference any <code>Job</code>, then it will
    * be set to reference the Job passed with it into this method.
@@ -445,19 +446,19 @@ public interface IScheduler
   boolean unscheduleJobs (List <TriggerKey> triggerKeys) throws SchedulerException;
 
   /**
-   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the given
-   * key, and store the new given one - which must be associated with the same
-   * job (the new trigger must have the job name & group specified) - however,
-   * the new trigger need not have the same name as the old trigger.
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
+   * the given key, and store the new given one - which must be associated with
+   * the same job (the new trigger must have the job name &amp; group specified)
+   * - however, the new trigger need not have the same name as the old trigger.
    *
    * @param triggerKey
    *        identity of the trigger to replace
    * @param newTrigger
-   *        The new <code>Trigger</code> to be stored.
-   * @return <code>null</code> if a <code>Trigger</code> with the given name &
-   *         group was not found and removed from the store (and the new trigger
-   *         is therefore not stored), otherwise the first fire time of the
-   *         newly scheduled trigger is returned.
+   *        The new {@link ITrigger} to be stored.
+   * @return <code>null</code> if a <code>Trigger</code> with the given name
+   *         &amp; group was not found and removed from the store (and the new
+   *         trigger is therefore not stored), otherwise the first fire time of
+   *         the newly scheduled trigger is returned.
    */
   Date rescheduleJob (TriggerKey triggerKey, ITrigger newTrigger) throws SchedulerException;
 
@@ -528,14 +529,14 @@ public interface IScheduler
   boolean deleteJobs (List <JobKey> jobKeys) throws SchedulerException;
 
   /**
-   * Trigger the identified <code>{@link com.helger.quartz.IJobDetail}</code> (execute
-   * it now).
+   * Trigger the identified <code>{@link com.helger.quartz.IJobDetail}</code>
+   * (execute it now).
    */
   void triggerJob (JobKey jobKey) throws SchedulerException;
 
   /**
-   * Trigger the identified <code>{@link com.helger.quartz.IJobDetail}</code> (execute
-   * it now).
+   * Trigger the identified <code>{@link com.helger.quartz.IJobDetail}</code>
+   * (execute it now).
    *
    * @param data
    *        the (possibly <code>null</code>) JobDataMap to be associated with
@@ -544,16 +545,16 @@ public interface IScheduler
   void triggerJob (JobKey jobKey, JobDataMap data) throws SchedulerException;
 
   /**
-   * Pause the <code>{@link com.helger.quartz.IJobDetail}</code> with the given key - by
-   * pausing all of its current <code>Trigger</code>s.
+   * Pause the <code>{@link com.helger.quartz.IJobDetail}</code> with the given
+   * key - by pausing all of its current <code>Trigger</code>s.
    *
    * @see #resumeJob(JobKey)
    */
   void pauseJob (JobKey jobKey) throws SchedulerException;
 
   /**
-   * Pause all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in the matching
-   * groups - by pausing all of their <code>Trigger</code>s.
+   * Pause all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in the
+   * matching groups - by pausing all of their <code>Trigger</code>s.
    * <p>
    * The Scheduler will "remember" the groups paused, and impose the pause on
    * any new jobs that are added to any of those groups until it is resumed.
@@ -616,8 +617,8 @@ public interface IScheduler
   void pauseTriggers (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
   /**
-   * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code> with the
-   * given key.
+   * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code>
+   * with the given key.
    * <p>
    * If any of the <code>Job</code>'s<code>Trigger</code> s missed one or more
    * fire-times, then the <code>Trigger</code>'s misfire instruction will be
@@ -629,8 +630,8 @@ public interface IScheduler
   void resumeJob (JobKey jobKey) throws SchedulerException;
 
   /**
-   * Resume (un-pause) all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in
-   * matching groups.
+   * Resume (un-pause) all of the
+   * <code>{@link com.helger.quartz.IJobDetail}s</code> in matching groups.
    * <p>
    * If any of the <code>Job</code> s had <code>Trigger</code> s that missed one
    * or more fire-times, then the <code>Trigger</code>'s misfire instruction
@@ -702,14 +703,14 @@ public interface IScheduler
   void resumeAll () throws SchedulerException;
 
   /**
-   * Get the names of all known <code>{@link com.helger.quartz.IJobDetail}</code>
-   * groups.
+   * Get the names of all known
+   * <code>{@link com.helger.quartz.IJobDetail}</code> groups.
    */
   List <String> getJobGroupNames () throws SchedulerException;
 
   /**
-   * Get the keys of all the <code>{@link com.helger.quartz.IJobDetail}s</code> in the
-   * matching groups.
+   * Get the keys of all the <code>{@link com.helger.quartz.IJobDetail}s</code>
+   * in the matching groups.
    *
    * @param matcher
    *        Matcher to evaluate against known groups
@@ -897,8 +898,8 @@ public interface IScheduler
   boolean checkExists (TriggerKey triggerKey) throws SchedulerException;
 
   /**
-   * Clears (deletes!) all scheduling data - all {@link IJob}s, {@link ITrigger}s
-   * {@link ICalendar}s.
+   * Clears (deletes!) all scheduling data - all {@link IJob}s,
+   * {@link ITrigger}s {@link ICalendar}s.
    *
    * @throws SchedulerException
    */

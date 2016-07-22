@@ -227,8 +227,8 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * <code>Trigger</code> has been added to the scheduler.
    * </p>
    *
-   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.OperableTrigger,
-   *      ICalendar, java.util.Date, java.util.Date)
+   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
+   *      ICalendar, Date, Date)
    */
   Date getNextFireTime ();
 

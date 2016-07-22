@@ -24,7 +24,7 @@ package com.helger.quartz;
  * applications that use a <code>Scheduler</code> will not have use for this
  * mechanism.
  *
- * @see IListenerManager#addJobListener(JobListener, IMatcher)
+ * @see IListenerManager#addJobListener(IJobListener, IMatcher)
  * @see IMatcher
  * @see IJob
  * @see IJobExecutionContext
@@ -79,7 +79,7 @@ public interface IJobListener
    * for the associated <code>Trigger</code>'s <code>triggered(xx)</code> method
    * has been called.
    * </p>
-   * 
+   *
    * @param context
    * @param jobException
    */

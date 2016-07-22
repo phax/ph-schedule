@@ -775,7 +775,7 @@ public class DateBuilder
    * </p>
    * <p>
    * More examples:
-   * <table>
+   * <table summary="">
    * <tr>
    * <th>Input Time</th>
    * <th>Minute-Base</th>
@@ -806,6 +806,7 @@ public class DateBuilder
    * <td>30</td>
    * <td>12:00:00</td>
    * </tr>
+   * <tr>
    * <td>11:16:41</td>
    * <td>17</td>
    * <td>11:17:00</td>

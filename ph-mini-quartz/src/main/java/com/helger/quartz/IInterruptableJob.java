@@ -60,7 +60,6 @@ package com.helger.quartz;
  * </p>
  *
  * @see IJob
- * @see StatefulJob
  * @see IScheduler#interrupt(JobKey)
  * @see IScheduler#interrupt(String)
  * @author James House

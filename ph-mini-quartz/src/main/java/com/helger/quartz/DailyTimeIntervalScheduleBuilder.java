@@ -52,13 +52,13 @@ import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
  * </p>
  *
  * <pre>
- * JobDetail job = newJob(MyJob.class) .withIdentity("myJob") .build(); Trigger
- * trigger = newTrigger() .withIdentity(triggerKey("myTrigger",
- * "myTriggerGroup")) .withSchedule(onDaysOfTheWeek(MONDAY, THURSDAY))
- * .startAt(futureDate(10, MINUTES)) .build(); scheduler.scheduleJob(job,
- * trigger);
- *
- * <pre>
+ * JobDetail job = newJob (MyJob.class).withIdentity ("myJob").build ();
+ * Trigger trigger = newTrigger ().withIdentity (triggerKey ("myTrigger", "myTriggerGroup"))
+ *                                .withSchedule (onDaysOfTheWeek (MONDAY, THURSDAY))
+ *                                .startAt (futureDate (10, MINUTES))
+ *                                .build ();
+ * scheduler.scheduleJob (job, trigger);
+ * </pre>
  *
  * @since 2.1.0
  * @author James House

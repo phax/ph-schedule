@@ -39,13 +39,13 @@ import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
  * </p>
  *
  * <pre>
- * JobDetail job = newJob(MyJob.class) .withIdentity("myJob") .build(); Trigger
- * trigger = newTrigger() .withIdentity(triggerKey("myTrigger",
- * "myTriggerGroup")) .withSchedule(withIntervalInDays(3))
- * .startAt(futureDate(10, MINUTES)) .build(); scheduler.scheduleJob(job,
- * trigger);
- *
- * <pre>
+ * JobDetail job = newJob (MyJob.class).withIdentity ("myJob").build ();
+ * Trigger trigger = newTrigger ().withIdentity (triggerKey ("myTrigger", "myTriggerGroup"))
+ *                                .withSchedule (withIntervalInDays (3))
+ *                                .startAt (futureDate (10, MINUTES))
+ *                                .build ();
+ * scheduler.scheduleJob (job, trigger);
+ * </pre>
  *
  * @see DailyTimeIntervalScheduleBuilder
  * @see CronScheduleBuilder
@@ -261,7 +261,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
 
   /**
    * If the Trigger misfires, use the
-   * {@link ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
+   * {@link ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING}
+   * instruction.
    *
    * @return the updated CalendarIntervalScheduleBuilder
    * @see ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
