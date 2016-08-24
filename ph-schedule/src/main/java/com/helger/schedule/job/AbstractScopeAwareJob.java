@@ -21,11 +21,12 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.helger.commons.annotation.OverrideOnDemand;
+import com.helger.commons.lang.ClassHelper;
 import com.helger.commons.scope.mgr.ScopeManager;
 import com.helger.commons.state.ESuccess;
 import com.helger.quartz.IJob;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.JobDataMap;
 import com.helger.web.mock.MockHttpServletRequest;
 import com.helger.web.mock.MockHttpServletResponse;
 import com.helger.web.mock.OfflineHttpServletRequest;
@@ -63,7 +64,13 @@ public abstract class AbstractScopeAwareJob extends AbstractJob
   @OverrideOnDemand
   protected MockHttpServletRequest createMockHttpServletRequest ()
   {
-    return new OfflineHttpServletRequest (WebScopeManager.getGlobalScope ().getServletContext (), false);
+    final OfflineHttpServletRequest ret = new OfflineHttpServletRequest (WebScopeManager.getGlobalScope ()
+                                                                                        .getServletContext (),
+                                                                         false);
+    // Use a fixed session ID, because Quartz jobs regularly use the session and
+    // this avoids spanning too many sessions
+    ret.setSessionID ("quartz.job." + ClassHelper.getClassLocalName (getClass ()));
+    return ret;
   }
 
   /**
