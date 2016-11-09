@@ -32,8 +32,8 @@ import com.helger.commons.statistics.IMutableStatisticsHandlerKeyedTimer;
 import com.helger.commons.statistics.StatisticsManager;
 import com.helger.commons.timing.StopWatch;
 import com.helger.quartz.IJob;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobExecutionException;
 
 /**
@@ -86,8 +86,29 @@ public abstract class AbstractJob implements IJob
    *        The Quartz context
    * @throws JobExecutionException
    *         In case of an error in execution
+   * @deprecated Overwrite {@link #onExecute(JobDataMap, IJobExecutionContext)}
+   *             instead!
    */
-  protected abstract void onExecute (@Nonnull final IJobExecutionContext aContext) throws JobExecutionException;
+  @Deprecated
+  protected void onExecute (@Nonnull final IJobExecutionContext aContext) throws JobExecutionException
+  {}
+
+  /**
+   * This is the method with the main actions to be executed.
+   *
+   * @param aJobDataMap
+   *        The current job data map. Never <code>null</code>.
+   * @param aContext
+   *        The Quartz context
+   * @throws JobExecutionException
+   *         In case of an error in execution
+   */
+  @OverrideOnDemand
+  protected void onExecute (@Nonnull final JobDataMap aJobDataMap,
+                            @Nonnull final IJobExecutionContext aContext) throws JobExecutionException
+  {
+    onExecute (aContext);
+  }
 
   /**
    * Called after the job gets executed. This method is called after the scopes
@@ -144,7 +165,7 @@ public abstract class AbstractJob implements IJob
         final StopWatch aSW = StopWatch.createdStarted ();
 
         // Main execution
-        onExecute (aContext);
+        onExecute (aJobDataMap, aContext);
 
         // Execution without exception -> success
         eExecSuccess = ESuccess.SUCCESS;
