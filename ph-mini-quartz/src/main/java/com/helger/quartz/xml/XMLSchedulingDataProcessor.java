@@ -101,24 +101,24 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   public static final String QUARTZ_SYSTEM_ID_JAR_PREFIX = "jar:";
 
   // pre-processing commands
-  protected List <String> jobGroupsToDelete = new ArrayList<> ();
-  protected List <String> triggerGroupsToDelete = new ArrayList<> ();
-  protected List <JobKey> jobsToDelete = new ArrayList<> ();
-  protected List <TriggerKey> triggersToDelete = new ArrayList<> ();
+  protected List <String> jobGroupsToDelete = new ArrayList <> ();
+  protected List <String> triggerGroupsToDelete = new ArrayList <> ();
+  protected List <JobKey> jobsToDelete = new ArrayList <> ();
+  protected List <TriggerKey> triggersToDelete = new ArrayList <> ();
 
   // scheduling commands
-  protected List <IJobDetail> loadedJobs = new ArrayList<> ();
-  protected List <IMutableTrigger> loadedTriggers = new ArrayList<> ();
+  protected List <IJobDetail> loadedJobs = new ArrayList <> ();
+  protected List <IMutableTrigger> loadedTriggers = new ArrayList <> ();
 
   // directives
   private boolean overWriteExistingData = true;
   private boolean ignoreDuplicates = false;
 
-  protected Collection <Exception> validationExceptions = new ArrayList<> ();
+  protected Collection <Exception> validationExceptions = new ArrayList <> ();
 
   protected IClassLoadHelper classLoadHelper;
-  protected List <String> jobGroupsToNeverDelete = new ArrayList<> ();
-  protected List <String> triggerGroupsToNeverDelete = new ArrayList<> ();
+  protected List <String> jobGroupsToNeverDelete = new ArrayList <> ();
+  protected List <String> triggerGroupsToNeverDelete = new ArrayList <> ();
 
   private DocumentBuilder docBuilder;
   private XPath xpath;
@@ -218,7 +218,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       {
         inputSource = new InputSource (is);
         inputSource.setSystemId (QUARTZ_SCHEMA_WEB_URL);
-        log.debug ("Utilizing schema packaged in local quartz distribution jar.");
+        if (log.isDebugEnabled ())
+          log.debug ("Utilizing schema packaged in local quartz distribution jar.");
       }
       else
       {
@@ -510,7 +511,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                                                     document,
                                                                     XPathConstants.NODESET);
 
-    log.debug ("Found " + deleteJobGroupNodes.getLength () + " delete job group commands.");
+    if (log.isDebugEnabled ())
+      log.debug ("Found " + deleteJobGroupNodes.getLength () + " delete job group commands.");
 
     for (int i = 0; i < deleteJobGroupNodes.getLength (); i++)
     {
@@ -525,7 +527,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                                                         document,
                                                                         XPathConstants.NODESET);
 
-    log.debug ("Found " + deleteTriggerGroupNodes.getLength () + " delete trigger group commands.");
+    if (log.isDebugEnabled ())
+      log.debug ("Found " + deleteTriggerGroupNodes.getLength () + " delete trigger group commands.");
 
     for (int i = 0; i < deleteTriggerGroupNodes.getLength (); i++)
     {
@@ -540,7 +543,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                                                document,
                                                                XPathConstants.NODESET);
 
-    log.debug ("Found " + deleteJobNodes.getLength () + " delete job commands.");
+    if (log.isDebugEnabled ())
+      log.debug ("Found " + deleteJobNodes.getLength () + " delete job commands.");
 
     for (int i = 0; i < deleteJobNodes.getLength (); i++)
     {
@@ -558,7 +562,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                                                    document,
                                                                    XPathConstants.NODESET);
 
-    log.debug ("Found " + deleteTriggerNodes.getLength () + " delete trigger commands.");
+    if (log.isDebugEnabled ())
+      log.debug ("Found " + deleteTriggerNodes.getLength () + " delete trigger commands.");
 
     for (int i = 0; i < deleteTriggerNodes.getLength (); i++)
     {
@@ -581,11 +586,13 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                           document);
     if (overWrite == null)
     {
-      log.debug ("Directive 'overwrite-existing-data' not specified, defaulting to " + isOverWriteExistingData ());
+      if (log.isDebugEnabled ())
+        log.debug ("Directive 'overwrite-existing-data' not specified, defaulting to " + isOverWriteExistingData ());
     }
     else
     {
-      log.debug ("Directive 'overwrite-existing-data' specified as: " + overWrite);
+      if (log.isDebugEnabled ())
+        log.debug ("Directive 'overwrite-existing-data' specified as: " + overWrite);
       setOverWriteExistingData (overWrite);
     }
 
@@ -594,11 +601,13 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                             document);
     if (ignoreDupes == null)
     {
-      log.debug ("Directive 'ignore-duplicates' not specified, defaulting to " + isIgnoreDuplicates ());
+      if (log.isDebugEnabled ())
+        log.debug ("Directive 'ignore-duplicates' not specified, defaulting to " + isIgnoreDuplicates ());
     }
     else
     {
-      log.debug ("Directive 'ignore-duplicates' specified as: " + ignoreDupes);
+      if (log.isDebugEnabled ())
+        log.debug ("Directive 'ignore-duplicates' specified as: " + ignoreDupes);
       setIgnoreDuplicates (ignoreDupes);
     }
 
@@ -610,7 +619,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                                          document,
                                                          XPathConstants.NODESET);
 
-    log.debug ("Found " + jobNodes.getLength () + " job definitions.");
+    if (log.isDebugEnabled ())
+      log.debug ("Found " + jobNodes.getLength () + " job definitions.");
 
     for (int i = 0; i < jobNodes.getLength (); i++)
     {
@@ -660,7 +670,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                                                document,
                                                                XPathConstants.NODESET);
 
-    log.debug ("Found " + triggerEntries.getLength () + " trigger definitions.");
+    if (log.isDebugEnabled ())
+      log.debug ("Found " + triggerEntries.getLength () + " trigger definitions.");
 
     for (int j = 0; j < triggerEntries.getLength (); j++)
     {
@@ -962,14 +973,14 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   private Map <JobKey, List <IMutableTrigger>> buildTriggersByFQJobNameMap (final List <IMutableTrigger> triggers)
   {
 
-    final Map <JobKey, List <IMutableTrigger>> triggersByFQJobName = new HashMap<> ();
+    final Map <JobKey, List <IMutableTrigger>> triggersByFQJobName = new HashMap <> ();
 
     for (final IMutableTrigger trigger : triggers)
     {
       List <IMutableTrigger> triggersOfJob = triggersByFQJobName.get (trigger.getJobKey ());
       if (triggersOfJob == null)
       {
-        triggersOfJob = new ArrayList<> ();
+        triggersOfJob = new ArrayList <> ();
         triggersByFQJobName.put (trigger.getJobKey (), triggersOfJob);
       }
       triggersOfJob.add (trigger);
@@ -1069,8 +1080,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected void scheduleJobs (final IScheduler sched) throws SchedulerException
   {
-    final List <IJobDetail> jobs = new ArrayList<> (getLoadedJobs ());
-    final List <IMutableTrigger> triggers = new ArrayList<> (getLoadedTriggers ());
+    final List <IJobDetail> jobs = new ArrayList <> (getLoadedJobs ());
+    final List <IMutableTrigger> triggers = new ArrayList <> (getLoadedTriggers ());
 
     log.info ("Adding " + jobs.size () + " jobs, " + triggers.size () + " triggers.");
 

@@ -205,7 +205,8 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         // execute the job
         try
         {
-          log.debug ("Calling execute on job " + jobDetail.getKey ());
+          if (log.isDebugEnabled ())
+            log.debug ("Calling execute on job " + jobDetail.getKey ());
           job.execute (jec);
           endTime = System.currentTimeMillis ();
         }

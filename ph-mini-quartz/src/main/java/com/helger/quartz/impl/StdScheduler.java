@@ -24,19 +24,19 @@ import java.util.Map;
 import java.util.Set;
 
 import com.helger.quartz.ICalendar;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobKey;
 import com.helger.quartz.IListenerManager;
 import com.helger.quartz.IScheduler;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerContext;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SchedulerMetaData;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.UnableToInterruptJobException;
-import com.helger.quartz.ITrigger.TriggerState;
 import com.helger.quartz.core.QuartzScheduler;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.spi.IJobFactory;
@@ -54,20 +54,7 @@ import com.helger.quartz.spi.IJobFactory;
  */
 public class StdScheduler implements IScheduler
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  private final QuartzScheduler sched;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private final QuartzScheduler m_aSched;
 
   /**
    * <p>
@@ -78,7 +65,7 @@ public class StdScheduler implements IScheduler
    */
   public StdScheduler (final QuartzScheduler sched)
   {
-    this.sched = sched;
+    m_aSched = sched;
   }
 
   /*
@@ -94,7 +81,7 @@ public class StdScheduler implements IScheduler
    */
   public String getSchedulerName ()
   {
-    return sched.getSchedulerName ();
+    return m_aSched.getSchedulerName ();
   }
 
   /**
@@ -104,7 +91,7 @@ public class StdScheduler implements IScheduler
    */
   public String getSchedulerInstanceId ()
   {
-    return sched.getSchedulerInstanceId ();
+    return m_aSched.getSchedulerInstanceId ();
   }
 
   public SchedulerMetaData getMetaData ()
@@ -115,14 +102,14 @@ public class StdScheduler implements IScheduler
                                   isStarted (),
                                   isInStandbyMode (),
                                   isShutdown (),
-                                  sched.runningSince (),
-                                  sched.numJobsExecuted (),
-                                  sched.getJobStoreClass (),
-                                  sched.supportsPersistence (),
-                                  sched.isClustered (),
-                                  sched.getThreadPoolClass (),
-                                  sched.getThreadPoolSize (),
-                                  sched.getVersion ());
+                                  m_aSched.runningSince (),
+                                  m_aSched.numJobsExecuted (),
+                                  m_aSched.getJobStoreClass (),
+                                  m_aSched.supportsPersistence (),
+                                  m_aSched.isClustered (),
+                                  m_aSched.getThreadPoolClass (),
+                                  m_aSched.getThreadPoolSize (),
+                                  m_aSched.getVersion ());
 
   }
 
@@ -133,7 +120,7 @@ public class StdScheduler implements IScheduler
    */
   public SchedulerContext getContext () throws SchedulerException
   {
-    return sched.getSchedulerContext ();
+    return m_aSched.getSchedulerContext ();
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -149,7 +136,7 @@ public class StdScheduler implements IScheduler
    */
   public void start () throws SchedulerException
   {
-    sched.start ();
+    m_aSched.start ();
   }
 
   /**
@@ -159,7 +146,7 @@ public class StdScheduler implements IScheduler
    */
   public void startDelayed (final int seconds) throws SchedulerException
   {
-    sched.startDelayed (seconds);
+    m_aSched.startDelayed (seconds);
   }
 
   /**
@@ -169,7 +156,7 @@ public class StdScheduler implements IScheduler
    */
   public void standby ()
   {
-    sched.standby ();
+    m_aSched.standby ();
   }
 
   /**
@@ -187,7 +174,7 @@ public class StdScheduler implements IScheduler
    */
   public boolean isStarted ()
   {
-    return (sched.runningSince () != null);
+    return (m_aSched.runningSince () != null);
   }
 
   /**
@@ -197,7 +184,7 @@ public class StdScheduler implements IScheduler
    */
   public boolean isInStandbyMode ()
   {
-    return sched.isInStandbyMode ();
+    return m_aSched.isInStandbyMode ();
   }
 
   /**
@@ -207,7 +194,7 @@ public class StdScheduler implements IScheduler
    */
   public void shutdown ()
   {
-    sched.shutdown ();
+    m_aSched.shutdown ();
   }
 
   /**
@@ -217,7 +204,7 @@ public class StdScheduler implements IScheduler
    */
   public void shutdown (final boolean waitForJobsToComplete)
   {
-    sched.shutdown (waitForJobsToComplete);
+    m_aSched.shutdown (waitForJobsToComplete);
   }
 
   /**
@@ -227,7 +214,7 @@ public class StdScheduler implements IScheduler
    */
   public boolean isShutdown ()
   {
-    return sched.isShutdown ();
+    return m_aSched.isShutdown ();
   }
 
   /**
@@ -237,7 +224,7 @@ public class StdScheduler implements IScheduler
    */
   public List <IJobExecutionContext> getCurrentlyExecutingJobs ()
   {
-    return sched.getCurrentlyExecutingJobs ();
+    return m_aSched.getCurrentlyExecutingJobs ();
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -253,7 +240,7 @@ public class StdScheduler implements IScheduler
    */
   public void clear () throws SchedulerException
   {
-    sched.clear ();
+    m_aSched.clear ();
   }
 
   /**
@@ -263,7 +250,7 @@ public class StdScheduler implements IScheduler
    */
   public Date scheduleJob (final IJobDetail jobDetail, final ITrigger trigger) throws SchedulerException
   {
-    return sched.scheduleJob (jobDetail, trigger);
+    return m_aSched.scheduleJob (jobDetail, trigger);
   }
 
   /**
@@ -273,7 +260,7 @@ public class StdScheduler implements IScheduler
    */
   public Date scheduleJob (final ITrigger trigger) throws SchedulerException
   {
-    return sched.scheduleJob (trigger);
+    return m_aSched.scheduleJob (trigger);
   }
 
   /**
@@ -283,37 +270,37 @@ public class StdScheduler implements IScheduler
    */
   public void addJob (final IJobDetail jobDetail, final boolean replace) throws SchedulerException
   {
-    sched.addJob (jobDetail, replace);
+    m_aSched.addJob (jobDetail, replace);
   }
 
   public void addJob (final IJobDetail jobDetail,
                       final boolean replace,
                       final boolean storeNonDurableWhileAwaitingScheduling) throws SchedulerException
   {
-    sched.addJob (jobDetail, replace, storeNonDurableWhileAwaitingScheduling);
+    m_aSched.addJob (jobDetail, replace, storeNonDurableWhileAwaitingScheduling);
   }
 
   public boolean deleteJobs (final List <JobKey> jobKeys) throws SchedulerException
   {
-    return sched.deleteJobs (jobKeys);
+    return m_aSched.deleteJobs (jobKeys);
   }
 
   public void scheduleJobs (final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                             final boolean replace) throws SchedulerException
   {
-    sched.scheduleJobs (triggersAndJobs, replace);
+    m_aSched.scheduleJobs (triggersAndJobs, replace);
   }
 
   public void scheduleJob (final IJobDetail jobDetail,
                            final Set <? extends ITrigger> triggersForJob,
                            final boolean replace) throws SchedulerException
   {
-    sched.scheduleJob (jobDetail, triggersForJob, replace);
+    m_aSched.scheduleJob (jobDetail, triggersForJob, replace);
   }
 
   public boolean unscheduleJobs (final List <TriggerKey> triggerKeys) throws SchedulerException
   {
-    return sched.unscheduleJobs (triggerKeys);
+    return m_aSched.unscheduleJobs (triggerKeys);
   }
 
   /**
@@ -323,7 +310,7 @@ public class StdScheduler implements IScheduler
    */
   public boolean deleteJob (final JobKey jobKey) throws SchedulerException
   {
-    return sched.deleteJob (jobKey);
+    return m_aSched.deleteJob (jobKey);
   }
 
   /**
@@ -333,7 +320,7 @@ public class StdScheduler implements IScheduler
    */
   public boolean unscheduleJob (final TriggerKey triggerKey) throws SchedulerException
   {
-    return sched.unscheduleJob (triggerKey);
+    return m_aSched.unscheduleJob (triggerKey);
   }
 
   /**
@@ -343,7 +330,7 @@ public class StdScheduler implements IScheduler
    */
   public Date rescheduleJob (final TriggerKey triggerKey, final ITrigger newTrigger) throws SchedulerException
   {
-    return sched.rescheduleJob (triggerKey, newTrigger);
+    return m_aSched.rescheduleJob (triggerKey, newTrigger);
   }
 
   /**
@@ -363,7 +350,7 @@ public class StdScheduler implements IScheduler
    */
   public void triggerJob (final JobKey jobKey, final JobDataMap data) throws SchedulerException
   {
-    sched.triggerJob (jobKey, data);
+    m_aSched.triggerJob (jobKey, data);
   }
 
   /**
@@ -373,7 +360,7 @@ public class StdScheduler implements IScheduler
    */
   public void pauseTrigger (final TriggerKey triggerKey) throws SchedulerException
   {
-    sched.pauseTrigger (triggerKey);
+    m_aSched.pauseTrigger (triggerKey);
   }
 
   /**
@@ -383,7 +370,7 @@ public class StdScheduler implements IScheduler
    */
   public void pauseTriggers (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
-    sched.pauseTriggers (matcher);
+    m_aSched.pauseTriggers (matcher);
   }
 
   /**
@@ -393,7 +380,7 @@ public class StdScheduler implements IScheduler
    */
   public void pauseJob (final JobKey jobKey) throws SchedulerException
   {
-    sched.pauseJob (jobKey);
+    m_aSched.pauseJob (jobKey);
   }
 
   /**
@@ -401,7 +388,7 @@ public class StdScheduler implements IScheduler
    */
   public Set <String> getPausedTriggerGroups () throws SchedulerException
   {
-    return sched.getPausedTriggerGroups ();
+    return m_aSched.getPausedTriggerGroups ();
   }
 
   /**
@@ -411,7 +398,7 @@ public class StdScheduler implements IScheduler
    */
   public void pauseJobs (final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
-    sched.pauseJobs (matcher);
+    m_aSched.pauseJobs (matcher);
   }
 
   /**
@@ -421,7 +408,7 @@ public class StdScheduler implements IScheduler
    */
   public void resumeTrigger (final TriggerKey triggerKey) throws SchedulerException
   {
-    sched.resumeTrigger (triggerKey);
+    m_aSched.resumeTrigger (triggerKey);
   }
 
   /**
@@ -431,7 +418,7 @@ public class StdScheduler implements IScheduler
    */
   public void resumeTriggers (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
-    sched.resumeTriggers (matcher);
+    m_aSched.resumeTriggers (matcher);
   }
 
   /**
@@ -441,7 +428,7 @@ public class StdScheduler implements IScheduler
    */
   public void resumeJob (final JobKey jobKey) throws SchedulerException
   {
-    sched.resumeJob (jobKey);
+    m_aSched.resumeJob (jobKey);
   }
 
   /**
@@ -451,7 +438,7 @@ public class StdScheduler implements IScheduler
    */
   public void resumeJobs (final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
-    sched.resumeJobs (matcher);
+    m_aSched.resumeJobs (matcher);
   }
 
   /**
@@ -461,7 +448,7 @@ public class StdScheduler implements IScheduler
    */
   public void pauseAll () throws SchedulerException
   {
-    sched.pauseAll ();
+    m_aSched.pauseAll ();
   }
 
   /**
@@ -471,7 +458,7 @@ public class StdScheduler implements IScheduler
    */
   public void resumeAll () throws SchedulerException
   {
-    sched.resumeAll ();
+    m_aSched.resumeAll ();
   }
 
   /**
@@ -481,7 +468,7 @@ public class StdScheduler implements IScheduler
    */
   public List <String> getJobGroupNames () throws SchedulerException
   {
-    return sched.getJobGroupNames ();
+    return m_aSched.getJobGroupNames ();
   }
 
   /**
@@ -491,7 +478,7 @@ public class StdScheduler implements IScheduler
    */
   public List <? extends ITrigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
   {
-    return sched.getTriggersOfJob (jobKey);
+    return m_aSched.getTriggersOfJob (jobKey);
   }
 
   /**
@@ -501,7 +488,7 @@ public class StdScheduler implements IScheduler
    */
   public Set <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
-    return sched.getJobKeys (matcher);
+    return m_aSched.getJobKeys (matcher);
   }
 
   /**
@@ -511,7 +498,7 @@ public class StdScheduler implements IScheduler
    */
   public List <String> getTriggerGroupNames () throws SchedulerException
   {
-    return sched.getTriggerGroupNames ();
+    return m_aSched.getTriggerGroupNames ();
   }
 
   /**
@@ -521,7 +508,7 @@ public class StdScheduler implements IScheduler
    */
   public Set <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
-    return sched.getTriggerKeys (matcher);
+    return m_aSched.getTriggerKeys (matcher);
   }
 
   /**
@@ -531,7 +518,7 @@ public class StdScheduler implements IScheduler
    */
   public IJobDetail getJobDetail (final JobKey jobKey) throws SchedulerException
   {
-    return sched.getJobDetail (jobKey);
+    return m_aSched.getJobDetail (jobKey);
   }
 
   /**
@@ -541,7 +528,7 @@ public class StdScheduler implements IScheduler
    */
   public ITrigger getTrigger (final TriggerKey triggerKey) throws SchedulerException
   {
-    return sched.getTrigger (triggerKey);
+    return m_aSched.getTrigger (triggerKey);
   }
 
   /**
@@ -551,7 +538,7 @@ public class StdScheduler implements IScheduler
    */
   public TriggerState getTriggerState (final TriggerKey triggerKey) throws SchedulerException
   {
-    return sched.getTriggerState (triggerKey);
+    return m_aSched.getTriggerState (triggerKey);
   }
 
   /**
@@ -564,7 +551,7 @@ public class StdScheduler implements IScheduler
                            final boolean replace,
                            final boolean updateTriggers) throws SchedulerException
   {
-    sched.addCalendar (calName, calendar, replace, updateTriggers);
+    m_aSched.addCalendar (calName, calendar, replace, updateTriggers);
   }
 
   /**
@@ -574,7 +561,7 @@ public class StdScheduler implements IScheduler
    */
   public boolean deleteCalendar (final String calName) throws SchedulerException
   {
-    return sched.deleteCalendar (calName);
+    return m_aSched.deleteCalendar (calName);
   }
 
   /**
@@ -584,7 +571,7 @@ public class StdScheduler implements IScheduler
    */
   public ICalendar getCalendar (final String calName) throws SchedulerException
   {
-    return sched.getCalendar (calName);
+    return m_aSched.getCalendar (calName);
   }
 
   /**
@@ -594,7 +581,7 @@ public class StdScheduler implements IScheduler
    */
   public List <String> getCalendarNames () throws SchedulerException
   {
-    return sched.getCalendarNames ();
+    return m_aSched.getCalendarNames ();
   }
 
   /**
@@ -604,7 +591,7 @@ public class StdScheduler implements IScheduler
    */
   public boolean checkExists (final JobKey jobKey) throws SchedulerException
   {
-    return sched.checkExists (jobKey);
+    return m_aSched.checkExists (jobKey);
   }
 
   /**
@@ -614,7 +601,7 @@ public class StdScheduler implements IScheduler
    */
   public boolean checkExists (final TriggerKey triggerKey) throws SchedulerException
   {
-    return sched.checkExists (triggerKey);
+    return m_aSched.checkExists (triggerKey);
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -628,7 +615,7 @@ public class StdScheduler implements IScheduler
    */
   public void setJobFactory (final IJobFactory factory) throws SchedulerException
   {
-    sched.setJobFactory (factory);
+    m_aSched.setJobFactory (factory);
   }
 
   /**
@@ -636,17 +623,17 @@ public class StdScheduler implements IScheduler
    */
   public IListenerManager getListenerManager () throws SchedulerException
   {
-    return sched.getListenerManager ();
+    return m_aSched.getListenerManager ();
   }
 
   public boolean interrupt (final JobKey jobKey) throws UnableToInterruptJobException
   {
-    return sched.interrupt (jobKey);
+    return m_aSched.interrupt (jobKey);
   }
 
   public boolean interrupt (final String fireInstanceId) throws UnableToInterruptJobException
   {
-    return sched.interrupt (fireInstanceId);
+    return m_aSched.interrupt (fireInstanceId);
   }
 
 }

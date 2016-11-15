@@ -126,15 +126,15 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   private ThreadGroup threadGroup;
   private final SchedulerContext context = new SchedulerContext ();
   private final IListenerManager listenerManager = new ListenerManager ();
-  private final Map <String, IJobListener> internalJobListeners = new HashMap<> (10);
-  private final Map <String, ITriggerListener> internalTriggerListeners = new HashMap<> (10);
-  private final List <ISchedulerListener> internalSchedulerListeners = new ArrayList<> (10);
+  private final Map <String, IJobListener> internalJobListeners = new HashMap <> (10);
+  private final Map <String, ITriggerListener> internalTriggerListeners = new HashMap <> (10);
+  private final List <ISchedulerListener> internalSchedulerListeners = new ArrayList <> (10);
   private IJobFactory jobFactory = new PropertySettingJobFactory ();
   ExecutingJobsManager jobMgr = null;
   ErrorLogger errLogger = null;
   private final ISchedulerSignaler signaler;
   private final Random random = RandomHelper.getRandom ();
-  private final List <Object> holdToPreventGC = new ArrayList<> (5);
+  private final List <Object> holdToPreventGC = new ArrayList <> (5);
   private boolean signalOnSchedulingChange = true;
   private volatile boolean closed = false;
   private volatile boolean shuttingDown = false;
@@ -599,6 +599,9 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
    */
   public Date scheduleJob (final IJobDetail jobDetail, final ITrigger trigger) throws SchedulerException
   {
+    if (log.isDebugEnabled ())
+      log.debug ("scheduleJob (" + jobDetail + ", " + trigger + ")");
+
     validateState ();
 
     if (jobDetail == null)
@@ -848,7 +851,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
                            final Set <? extends ITrigger> triggersForJob,
                            final boolean replace) throws SchedulerException
   {
-    final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs = new HashMap<> ();
+    final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs = new HashMap <> ();
     triggersAndJobs.put (jobDetail, triggersForJob);
     scheduleJobs (triggersAndJobs, replace);
   }
@@ -1489,7 +1492,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   {
     synchronized (internalJobListeners)
     {
-      return java.util.Collections.unmodifiableList (new LinkedList<> (internalJobListeners.values ()));
+      return java.util.Collections.unmodifiableList (new LinkedList <> (internalJobListeners.values ()));
     }
   }
 
@@ -1553,7 +1556,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   {
     synchronized (internalTriggerListeners)
     {
-      return java.util.Collections.unmodifiableList (new LinkedList<> (internalTriggerListeners.values ()));
+      return java.util.Collections.unmodifiableList (new LinkedList <> (internalTriggerListeners.values ()));
     }
   }
 
@@ -1612,7 +1615,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   {
     synchronized (internalSchedulerListeners)
     {
-      return java.util.Collections.unmodifiableList (new ArrayList<> (internalSchedulerListeners));
+      return java.util.Collections.unmodifiableList (new ArrayList <> (internalSchedulerListeners));
     }
   }
 
@@ -1640,7 +1643,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   private List <ITriggerListener> _buildTriggerListenerList ()
   {
-    final List <ITriggerListener> allListeners = new LinkedList<> ();
+    final List <ITriggerListener> allListeners = new LinkedList <> ();
     allListeners.addAll (getListenerManager ().getTriggerListeners ());
     allListeners.addAll (getInternalTriggerListeners ());
 
@@ -1649,7 +1652,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   private List <IJobListener> _buildJobListenerList ()
   {
-    final List <IJobListener> allListeners = new LinkedList<> ();
+    final List <IJobListener> allListeners = new LinkedList <> ();
     allListeners.addAll (getListenerManager ().getJobListeners ());
     allListeners.addAll (getInternalJobListeners ());
 
@@ -1658,7 +1661,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   private List <ISchedulerListener> _buildSchedulerListenerList ()
   {
-    final List <ISchedulerListener> allListeners = new ArrayList<> ();
+    final List <ISchedulerListener> allListeners = new ArrayList <> ();
     allListeners.addAll (getListenerManager ().getSchedulerListeners ());
     allListeners.addAll (getInternalSchedulerListeners ());
 
@@ -2362,7 +2365,7 @@ class ErrorLogger extends AbstractSchedulerListenerSupport
 
 class ExecutingJobsManager implements IJobListener
 {
-  private final HashMap <String, IJobExecutionContext> executingJobs = new HashMap<> ();
+  private final HashMap <String, IJobExecutionContext> executingJobs = new HashMap <> ();
   private final AtomicInteger numJobsFired = new AtomicInteger (0);
 
   ExecutingJobsManager ()
@@ -2408,7 +2411,7 @@ class ExecutingJobsManager implements IJobListener
   {
     synchronized (executingJobs)
     {
-      return new CommonsArrayList<> (executingJobs.values ()).getAsUnmodifiable ();
+      return new CommonsArrayList <> (executingJobs.values ()).getAsUnmodifiable ();
     }
   }
 
