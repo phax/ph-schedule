@@ -18,6 +18,10 @@
  */
 package com.helger.quartz.utils;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.annotation.ReturnsMutableCopy;
+
 /**
  * <p>
  * An implementation of <code>Map</code> that wraps another <code>Map</code> and
@@ -35,14 +39,19 @@ public class StringKeyDirtyFlagMap extends DirtyFlagMap <String, Object>
     super ();
   }
 
-  public StringKeyDirtyFlagMap (final int initialCapacity)
+  public StringKeyDirtyFlagMap (final int nInitialCapacity)
   {
-    super (initialCapacity);
+    super (nInitialCapacity);
   }
 
-  public StringKeyDirtyFlagMap (final int initialCapacity, final float loadFactor)
+  public StringKeyDirtyFlagMap (final int nInitialCapacity, final float loadFactor)
   {
-    super (initialCapacity, loadFactor);
+    super (nInitialCapacity, loadFactor);
+  }
+
+  public StringKeyDirtyFlagMap (@Nonnull final StringKeyDirtyFlagMap aOther)
+  {
+    super (aOther);
   }
 
   @Override
@@ -325,5 +334,13 @@ public class StringKeyDirtyFlagMap extends DirtyFlagMap <String, Object>
     {
       throw new ClassCastException ("Identified object is not a String.");
     }
+  }
+
+  @Override
+  @Nonnull
+  @ReturnsMutableCopy
+  public StringKeyDirtyFlagMap getClone ()
+  {
+    return new StringKeyDirtyFlagMap (this);
   }
 }

@@ -20,6 +20,9 @@ package com.helger.quartz;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.quartz.utils.StringKeyDirtyFlagMap;
 
 /**
@@ -66,20 +69,16 @@ public class JobDataMap extends StringKeyDirtyFlagMap
    * Create a <code>JobDataMap</code> with the given data.
    * </p>
    */
-  public JobDataMap (final Map <?, ?> map)
+  public JobDataMap (final Map <String, Object> map)
   {
     this ();
-    @SuppressWarnings ("unchecked") // casting to keep API compatible and avoid
-    // compiler errors/warnings.
-    final Map <String, Object> mapTyped = (Map <String, Object>) map;
-    putAll (mapTyped);
+    putAll (map);
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  public JobDataMap (@Nonnull final JobDataMap aOther)
+  {
+    super (aOther);
+  }
 
   /**
    * <p>
@@ -89,7 +88,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
    */
   public void putAsString (final String key, final boolean value)
   {
-    final String strValue = Boolean.valueOf (value).toString ();
+    final String strValue = Boolean.toString (value);
 
     super.put (key, strValue);
   }
@@ -115,7 +114,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
    */
   public void putAsString (final String key, final char value)
   {
-    final String strValue = Character.valueOf (value).toString ();
+    final String strValue = Character.toString (value);
 
     super.put (key, strValue);
   }
@@ -193,7 +192,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
    */
   public void putAsString (final String key, final int value)
   {
-    final String strValue = Integer.valueOf (value).toString ();
+    final String strValue = Integer.toString (value);
 
     super.put (key, strValue);
   }
@@ -219,7 +218,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
    */
   public void putAsString (final String key, final long value)
   {
-    final String strValue = Long.valueOf (value).toString ();
+    final String strValue = Long.toString (value);
 
     super.put (key, strValue);
   }
@@ -250,7 +249,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
   {
     final Object obj = get (key);
 
-    return new Integer ((String) obj);
+    return Integer.parseInt ((String) obj);
   }
 
   /**
@@ -284,7 +283,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
   {
     final Object obj = get (key);
 
-    return new Integer ((String) obj);
+    return Integer.parseInt ((String) obj);
   }
 
   /**
@@ -416,7 +415,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
   {
     final Object obj = get (key);
 
-    return new Double ((String) obj);
+    return Double.parseDouble ((String) obj);
   }
 
   /**
@@ -432,7 +431,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
   {
     final Object obj = get (key);
 
-    return new Float ((String) obj);
+    return Float.parseFloat ((String) obj);
   }
 
   /**
@@ -466,7 +465,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
   {
     final Object obj = get (key);
 
-    return new Float ((String) obj);
+    return Float.parseFloat ((String) obj);
   }
 
   /**
@@ -482,7 +481,7 @@ public class JobDataMap extends StringKeyDirtyFlagMap
   {
     final Object obj = get (key);
 
-    return new Long ((String) obj);
+    return Long.parseLong ((String) obj);
   }
 
   /**
@@ -516,6 +515,14 @@ public class JobDataMap extends StringKeyDirtyFlagMap
   {
     final Object obj = get (key);
 
-    return new Long ((String) obj);
+    return Long.parseLong ((String) obj);
+  }
+
+  @Override
+  @Nonnull
+  @ReturnsMutableCopy
+  public JobDataMap getClone ()
+  {
+    return new JobDataMap (this);
   }
 }

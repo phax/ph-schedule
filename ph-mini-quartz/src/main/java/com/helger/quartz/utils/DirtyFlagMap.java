@@ -20,10 +20,17 @@ package com.helger.quartz.utils;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
+
+import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.collection.ext.CommonsHashMap;
+import com.helger.commons.collection.ext.ICommonsCollection;
+import com.helger.commons.collection.ext.ICommonsMap;
+import com.helger.commons.collection.ext.ICommonsSet;
 
 /**
  * <p>
@@ -33,16 +40,10 @@ import java.util.Set;
  *
  * @author James House
  */
-public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Serializable
+public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
 {
-  private boolean dirty = false;
-  private Map <K, V> map;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private boolean m_bDirty = false;
+  private final ICommonsMap <K, V> m_aMap;
 
   /**
    * <p>
@@ -53,7 +54,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   public DirtyFlagMap ()
   {
-    map = new HashMap<> ();
+    m_aMap = new CommonsHashMap<> ();
   }
 
   /**
@@ -64,9 +65,9 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    *
    * @see java.util.HashMap
    */
-  public DirtyFlagMap (final int initialCapacity)
+  public DirtyFlagMap (final int nInitialCapacity)
   {
-    map = new HashMap<> (initialCapacity);
+    m_aMap = new CommonsHashMap<> (nInitialCapacity);
   }
 
   /**
@@ -77,16 +78,22 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    *
    * @see java.util.HashMap
    */
-  public DirtyFlagMap (final int initialCapacity, final float loadFactor)
+  public DirtyFlagMap (final int nInitialCapacity, final float loadFactor)
   {
-    map = new HashMap<> (initialCapacity, loadFactor);
+    m_aMap = new CommonsHashMap<> (nInitialCapacity, loadFactor);
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /**
+   * Copy constructor
+   *
+   * @param aOther
+   *        The map to copy from. May not be <code>null</code>.
    */
+  public DirtyFlagMap (@Nonnull final DirtyFlagMap <K, V> aOther)
+  {
+    m_bDirty = aOther.m_bDirty;
+    m_aMap = aOther.m_aMap.getClone ();
+  }
 
   /**
    * <p>
@@ -95,7 +102,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   public void clearDirtyFlag ()
   {
-    dirty = false;
+    m_bDirty = false;
   }
 
   /**
@@ -105,7 +112,7 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   public boolean isDirty ()
   {
-    return dirty;
+    return m_bDirty;
   }
 
   /**
@@ -113,33 +120,33 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    * Get a direct handle to the underlying Map.
    * </p>
    */
-  public Map <K, V> getWrappedMap ()
+  public ICommonsMap <K, V> getWrappedMap ()
   {
-    return map;
+    return m_aMap;
   }
 
   public void clear ()
   {
-    if (!map.isEmpty ())
+    if (!m_aMap.isEmpty ())
     {
-      dirty = true;
+      m_bDirty = true;
     }
-    map.clear ();
+    m_aMap.clear ();
   }
 
   public boolean containsKey (final Object key)
   {
-    return map.containsKey (key);
+    return m_aMap.containsKey (key);
   }
 
   public boolean containsValue (final Object val)
   {
-    return map.containsValue (val);
+    return m_aMap.containsValue (val);
   }
 
   public Set <Entry <K, V>> entrySet ()
   {
-    return new DirtyFlagMapEntrySet (map.entrySet ());
+    return new DirtyFlagMapEntrySet (m_aMap.entrySet ());
   }
 
   @Override
@@ -150,54 +157,53 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
       return false;
     }
 
-    return map.equals (((DirtyFlagMap <?, ?>) obj).getWrappedMap ());
+    return m_aMap.equals (((DirtyFlagMap <?, ?>) obj).getWrappedMap ());
   }
 
   @Override
   public int hashCode ()
   {
-    return map.hashCode ();
+    return m_aMap.hashCode ();
   }
 
   public V get (final Object key)
   {
-    return map.get (key);
+    return m_aMap.get (key);
   }
 
   public boolean isEmpty ()
   {
-    return map.isEmpty ();
+    return m_aMap.isEmpty ();
   }
 
-  public Set <K> keySet ()
+  @Nonnull
+  public ICommonsSet <K> keySet ()
   {
-    return new DirtyFlagSet<> (map.keySet ());
+    return new DirtyFlagSet<> (m_aMap.keySet ());
   }
 
   public V put (final K key, final V val)
   {
-    dirty = true;
+    m_bDirty = true;
 
-    return map.put (key, val);
+    return m_aMap.put (key, val);
   }
 
-  public void putAll (final Map <? extends K, ? extends V> t)
+  public void putAll (@Nonnull final Map <? extends K, ? extends V> t)
   {
     if (!t.isEmpty ())
-    {
-      dirty = true;
-    }
+      m_bDirty = true;
 
-    map.putAll (t);
+    m_aMap.putAll (t);
   }
 
   public V remove (final Object key)
   {
-    final V obj = map.remove (key);
+    final V obj = m_aMap.remove (key);
 
     if (obj != null)
     {
-      dirty = true;
+      m_bDirty = true;
     }
 
     return obj;
@@ -205,137 +211,124 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
 
   public int size ()
   {
-    return map.size ();
+    return m_aMap.size ();
   }
 
-  public Collection <V> values ()
+  public ICommonsCollection <V> values ()
   {
-    return new DirtyFlagCollection<> (map.values ());
+    return new DirtyFlagCollection<> (m_aMap.values ());
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public DirtyFlagMap <K, V> getClone ()
+  {
+    return new DirtyFlagMap<> (this);
   }
 
   @Override
-  @SuppressWarnings ("unchecked") // suppress warnings on generic cast of
-                                  // super.clone() and map.clone() lines.
   public Object clone ()
   {
-    DirtyFlagMap <K, V> copy;
-    try
-    {
-      copy = (DirtyFlagMap <K, V>) super.clone ();
-      if (map instanceof HashMap)
-      {
-        copy.map = (Map <K, V>) ((HashMap <K, V>) map).clone ();
-      }
-    }
-    catch (final CloneNotSupportedException ex)
-    {
-      throw new IncompatibleClassChangeError ("Not Cloneable.");
-    }
-
-    return copy;
+    return getClone ();
   }
 
   /**
    * Wrap a Collection so we can mark the DirtyFlagMap as dirty if the
    * underlying Collection is modified.
    */
-  private class DirtyFlagCollection <T> implements Collection <T>
+  private class DirtyFlagCollection <T> implements ICommonsCollection <T>
   {
-    private final Collection <T> collection;
+    private final Collection <T> m_aCollection;
 
-    public DirtyFlagCollection (final Collection <T> c)
+    public DirtyFlagCollection (@Nonnull final Collection <T> c)
     {
-      collection = c;
+      m_aCollection = c;
     }
 
+    @Nonnull
     protected Collection <T> getWrappedCollection ()
     {
-      return collection;
+      return m_aCollection;
     }
 
+    @Nonnull
     public Iterator <T> iterator ()
     {
-      return new DirtyFlagIterator<> (collection.iterator ());
+      return new DirtyFlagIterator<> (m_aCollection.iterator ());
     }
 
     public boolean remove (final Object o)
     {
-      final boolean removed = collection.remove (o);
+      final boolean removed = m_aCollection.remove (o);
       if (removed)
       {
-        dirty = true;
+        m_bDirty = true;
       }
       return removed;
     }
 
     public boolean removeAll (final Collection <?> c)
     {
-      final boolean changed = collection.removeAll (c);
-      if (changed)
-      {
-        dirty = true;
-      }
-      return changed;
+      final boolean bChanged = m_aCollection.removeAll (c);
+      if (bChanged)
+        m_bDirty = true;
+      return bChanged;
     }
 
     public boolean retainAll (final Collection <?> c)
     {
-      final boolean changed = collection.retainAll (c);
-      if (changed)
-      {
-        dirty = true;
-      }
-      return changed;
+      final boolean bChanged = m_aCollection.retainAll (c);
+      if (bChanged)
+        m_bDirty = true;
+      return bChanged;
     }
 
     public void clear ()
     {
-      if (collection.isEmpty () == false)
-      {
-        dirty = true;
-      }
-      collection.clear ();
+      if (m_aCollection.isEmpty () == false)
+        m_bDirty = true;
+      m_aCollection.clear ();
     }
 
     // Pure wrapper methods
     public int size ()
     {
-      return collection.size ();
+      return m_aCollection.size ();
     }
 
     public boolean isEmpty ()
     {
-      return collection.isEmpty ();
+      return m_aCollection.isEmpty ();
     }
 
     public boolean contains (final Object o)
     {
-      return collection.contains (o);
+      return m_aCollection.contains (o);
     }
 
     public boolean add (final T o)
     {
-      return collection.add (o);
+      return m_aCollection.add (o);
     } // Not supported
 
     public boolean addAll (final Collection <? extends T> c)
     {
-      return collection.addAll (c);
+      return m_aCollection.addAll (c);
     } // Not supported
 
     public boolean containsAll (final Collection <?> c)
     {
-      return collection.containsAll (c);
+      return m_aCollection.containsAll (c);
     }
 
     public Object [] toArray ()
     {
-      return collection.toArray ();
+      return m_aCollection.toArray ();
     }
 
     public <U> U [] toArray (final U [] array)
     {
-      return collection.toArray (array);
+      return m_aCollection.toArray (array);
     }
   }
 
@@ -343,16 +336,23 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    * Wrap a Set so we can mark the DirtyFlagMap as dirty if the underlying
    * Collection is modified.
    */
-  private class DirtyFlagSet <T> extends DirtyFlagCollection <T> implements Set <T>
+  private class DirtyFlagSet <T> extends DirtyFlagCollection <T> implements ICommonsSet <T>
   {
-    public DirtyFlagSet (final Set <T> set)
+    public DirtyFlagSet (@Nonnull final Set <T> set)
     {
       super (set);
     }
 
+    @Nonnull
     protected Set <T> getWrappedSet ()
     {
       return (Set <T>) getWrappedCollection ();
+    }
+
+    @Nonnull
+    public DirtyFlagSet <T> getClone ()
+    {
+      return new DirtyFlagSet<> (getWrappedSet ());
     }
   }
 
@@ -362,28 +362,28 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   private class DirtyFlagIterator <T> implements Iterator <T>
   {
-    private final Iterator <T> iterator;
+    private final Iterator <T> m_aIterator;
 
     public DirtyFlagIterator (final Iterator <T> iterator)
     {
-      this.iterator = iterator;
+      m_aIterator = iterator;
     }
 
     public void remove ()
     {
-      dirty = true;
-      iterator.remove ();
+      m_bDirty = true;
+      m_aIterator.remove ();
     }
 
     // Pure wrapper methods
     public boolean hasNext ()
     {
-      return iterator.hasNext ();
+      return m_aIterator.hasNext ();
     }
 
     public T next ()
     {
-      return iterator.next ();
+      return m_aIterator.next ();
     }
   }
 
@@ -394,7 +394,6 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   private class DirtyFlagMapEntrySet extends DirtyFlagSet <Map.Entry <K, V>>
   {
-
     public DirtyFlagMapEntrySet (final Set <Map.Entry <K, V>> set)
     {
       super (set);
@@ -467,40 +466,40 @@ public class DirtyFlagMap <K, V> implements Map <K, V>, Cloneable, java.io.Seria
    */
   private class DirtyFlagMapEntry implements Map.Entry <K, V>
   {
-    private final Map.Entry <K, V> entry;
+    private final Map.Entry <K, V> m_aEntry;
 
-    public DirtyFlagMapEntry (final Map.Entry <K, V> entry)
+    public DirtyFlagMapEntry (@Nonnull final Map.Entry <K, V> entry)
     {
-      this.entry = entry;
+      m_aEntry = entry;
     }
 
     public V setValue (final V o)
     {
-      dirty = true;
-      return entry.setValue (o);
+      m_bDirty = true;
+      return m_aEntry.setValue (o);
     }
 
     // Pure wrapper methods
     public K getKey ()
     {
-      return entry.getKey ();
+      return m_aEntry.getKey ();
     }
 
     public V getValue ()
     {
-      return entry.getValue ();
+      return m_aEntry.getValue ();
     }
 
     @Override
     public boolean equals (final Object o)
     {
-      return entry.equals (o);
+      return m_aEntry.equals (o);
     }
 
     @Override
     public int hashCode ()
     {
-      return entry.hashCode ();
+      return m_aEntry.hashCode ();
     }
   }
 }

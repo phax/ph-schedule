@@ -20,6 +20,9 @@ package com.helger.quartz;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.quartz.utils.StringKeyDirtyFlagMap;
 
 /**
@@ -48,11 +51,22 @@ public class SchedulerContext extends StringKeyDirtyFlagMap
   /**
    * Create a <code>SchedulerContext</code> with the given data.
    */
-  public SchedulerContext (final Map <?, ?> map)
+  public SchedulerContext (final Map <String, ?> map)
   {
     this ();
-    @SuppressWarnings ("unchecked") // param must be a String key map.
-    final Map <String, ?> mapTyped = (Map <String, ?>) map;
-    putAll (mapTyped);
+    putAll (map);
+  }
+
+  public SchedulerContext (@Nonnull final SchedulerContext aOther)
+  {
+    super (aOther);
+  }
+
+  @Override
+  @Nonnull
+  @ReturnsMutableCopy
+  public SchedulerContext getClone ()
+  {
+    return new SchedulerContext (this);
   }
 }

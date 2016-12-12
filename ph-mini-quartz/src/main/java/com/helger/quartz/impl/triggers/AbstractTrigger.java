@@ -61,38 +61,17 @@ import com.helger.quartz.spi.IOperableTrigger;
  */
 public abstract class AbstractTrigger <T extends ITrigger> implements IOperableTrigger
 {
-  private String name;
-
-  private String group = IScheduler.DEFAULT_GROUP;
-
-  private String jobName;
-
-  private String jobGroup = IScheduler.DEFAULT_GROUP;
-
-  private String description;
-
-  private JobDataMap jobDataMap;
-
-  @SuppressWarnings ("unused")
-  private final boolean volatility = false; // still here for serialization
-                                            // backward
-  // compatibility
-
-  private String calendarName = null;
-
-  private String fireInstanceId = null;
-
-  private int misfireInstruction = MISFIRE_INSTRUCTION_SMART_POLICY;
-
-  private int priority = DEFAULT_PRIORITY;
-
-  private transient TriggerKey key = null;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private String m_sName;
+  private String m_sGroup = IScheduler.DEFAULT_GROUP;
+  private String m_sJobName;
+  private String m_sJobGroup = IScheduler.DEFAULT_GROUP;
+  private String m_sDescription;
+  private JobDataMap m_aJobDataMap;
+  private String m_sCalendarName;
+  private String m_sFireInstanceId;
+  private int m_nMisfireInstruction = MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int m_nPriority = DEFAULT_PRIORITY;
+  private transient TriggerKey m_aKey;
 
   /**
    * <p>
@@ -169,12 +148,6 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
     setJobGroup (jobGroup);
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Get the name of this <code>Trigger</code>.
@@ -182,7 +155,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   /**
@@ -196,12 +169,10 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
   public void setName (final String name)
   {
     if (name == null || name.trim ().length () == 0)
-    {
       throw new IllegalArgumentException ("Trigger name cannot be null or empty.");
-    }
 
-    this.name = name;
-    this.key = null;
+    this.m_sName = name;
+    this.m_aKey = null;
   }
 
   /**
@@ -211,7 +182,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getGroup ()
   {
-    return group;
+    return m_sGroup;
   }
 
   /**
@@ -227,22 +198,20 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
   public void setGroup (final String group)
   {
     if (group != null && group.trim ().length () == 0)
-    {
       throw new IllegalArgumentException ("Group name cannot be an empty string.");
-    }
 
     if (group == null)
-      this.group = IScheduler.DEFAULT_GROUP;
+      this.m_sGroup = IScheduler.DEFAULT_GROUP;
     else
-      this.group = group;
-    this.key = null;
+      this.m_sGroup = group;
+    this.m_aKey = null;
   }
 
   public void setKey (final TriggerKey key)
   {
     setName (key.getName ());
     setGroup (key.getGroup ());
-    this.key = key;
+    this.m_aKey = key;
   }
 
   /**
@@ -253,7 +222,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getJobName ()
   {
-    return jobName;
+    return m_sJobName;
   }
 
   /**
@@ -272,7 +241,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
       throw new IllegalArgumentException ("Job name cannot be null or empty.");
     }
 
-    this.jobName = jobName;
+    this.m_sJobName = jobName;
   }
 
   /**
@@ -283,7 +252,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getJobGroup ()
   {
-    return jobGroup;
+    return m_sJobGroup;
   }
 
   /**
@@ -303,9 +272,9 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
       throw new IllegalArgumentException ("Group name cannot be null or empty.");
 
     if (jobGroup == null)
-      this.jobGroup = IScheduler.DEFAULT_GROUP;
+      this.m_sJobGroup = IScheduler.DEFAULT_GROUP;
     else
-      this.jobGroup = jobGroup;
+      this.m_sJobGroup = jobGroup;
   }
 
   public void setJobKey (final JobKey key)
@@ -322,19 +291,19 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getFullName ()
   {
-    return group + "." + name;
+    return m_sGroup + "." + m_sName;
   }
 
   public TriggerKey getKey ()
   {
-    if (key == null)
+    if (m_aKey == null)
     {
       if (getName () == null)
         return null;
-      key = new TriggerKey (getName (), getGroup ());
+      m_aKey = new TriggerKey (getName (), getGroup ());
     }
 
-    return key;
+    return m_aKey;
   }
 
   public JobKey getJobKey ()
@@ -353,7 +322,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getFullJobName ()
   {
-    return jobGroup + "." + jobName;
+    return m_sJobGroup + "." + m_sJobName;
   }
 
   /**
@@ -366,7 +335,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getDescription ()
   {
-    return description;
+    return m_sDescription;
   }
 
   /**
@@ -378,7 +347,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public void setDescription (final String description)
   {
-    this.description = description;
+    this.m_sDescription = description;
   }
 
   /**
@@ -392,7 +361,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public void setCalendarName (final String calendarName)
   {
-    this.calendarName = calendarName;
+    this.m_sCalendarName = calendarName;
   }
 
   /**
@@ -405,7 +374,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getCalendarName ()
   {
-    return calendarName;
+    return m_sCalendarName;
   }
 
   /**
@@ -420,11 +389,11 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public JobDataMap getJobDataMap ()
   {
-    if (jobDataMap == null)
+    if (m_aJobDataMap == null)
     {
-      jobDataMap = new JobDataMap ();
+      m_aJobDataMap = new JobDataMap ();
     }
-    return jobDataMap;
+    return m_aJobDataMap;
   }
 
   /**
@@ -435,7 +404,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public void setJobDataMap (final JobDataMap jobDataMap)
   {
-    this.jobDataMap = jobDataMap;
+    this.m_aJobDataMap = jobDataMap;
   }
 
   /**
@@ -450,7 +419,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public int getPriority ()
   {
-    return priority;
+    return m_nPriority;
   }
 
   /**
@@ -466,7 +435,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public void setPriority (final int priority)
   {
-    this.priority = priority;
+    this.m_nPriority = priority;
   }
 
   /**
@@ -680,7 +649,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
     {
       throw new IllegalArgumentException ("The misfire instruction code is invalid for this type of trigger.");
     }
-    this.misfireInstruction = misfireInstruction;
+    this.m_nMisfireInstruction = misfireInstruction;
   }
 
   protected abstract boolean validateMisfireInstruction (int candidateMisfireInstruction);
@@ -705,7 +674,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public int getMisfireInstruction ()
   {
-    return misfireInstruction;
+    return m_nMisfireInstruction;
   }
 
   /**
@@ -752,22 +721,22 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public void validate () throws SchedulerException
   {
-    if (name == null)
+    if (m_sName == null)
     {
       throw new SchedulerException ("Trigger's name cannot be null");
     }
 
-    if (group == null)
+    if (m_sGroup == null)
     {
       throw new SchedulerException ("Trigger's group cannot be null");
     }
 
-    if (jobName == null)
+    if (m_sJobName == null)
     {
       throw new SchedulerException ("Trigger's related Job's name cannot be null");
     }
 
-    if (jobGroup == null)
+    if (m_sJobGroup == null)
     {
       throw new SchedulerException ("Trigger's related Job's group cannot be null");
     }
@@ -785,7 +754,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public void setFireInstanceId (final String id)
   {
-    this.fireInstanceId = id;
+    this.m_sFireInstanceId = id;
   }
 
   /**
@@ -795,7 +764,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    */
   public String getFireInstanceId ()
   {
-    return fireInstanceId;
+    return m_sFireInstanceId;
   }
 
   /**
@@ -875,9 +844,9 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
       // Shallow copy the jobDataMap. Note that this means that if a user
       // modifies a value object in this map from the cloned Trigger
       // they will also be modifying this Trigger.
-      if (jobDataMap != null)
+      if (m_aJobDataMap != null)
       {
-        copy.jobDataMap = (JobDataMap) jobDataMap.clone ();
+        copy.m_aJobDataMap = (JobDataMap) m_aJobDataMap.clone ();
       }
 
     }

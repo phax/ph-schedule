@@ -22,9 +22,9 @@ import java.util.Date;
 
 /**
  * A context bundle containing handles to various environment information, that
- * is given to a <code>{@link com.helger.quartz.IJobDetail}</code> instance as it is
- * executed, and to a <code>{@link ITrigger}</code> instance after the execution
- * completes.
+ * is given to a <code>{@link com.helger.quartz.IJobDetail}</code> instance as
+ * it is executed, and to a <code>{@link ITrigger}</code> instance after the
+ * execution completes.
  * <p>
  * The <code>JobDataMap</code> found on this object (via the
  * <code>getMergedJobDataMap()</code> method) serves as a convenience - it is a
@@ -64,7 +64,7 @@ public interface IJobExecutionContext
    * <code>Job</code>.
    * </p>
    */
-  public IScheduler getScheduler ();
+  IScheduler getScheduler ();
 
   /**
    * <p>
@@ -72,7 +72,7 @@ public interface IJobExecutionContext
    * <code>Job</code>.
    * </p>
    */
-  public ITrigger getTrigger ();
+  ITrigger getTrigger ();
 
   /**
    * <p>
@@ -80,7 +80,7 @@ public interface IJobExecutionContext
    * <code>Trigger</code> instance that fired the <code>Job</code>.
    * </p>
    */
-  public ICalendar getCalendar ();
+  ICalendar getCalendar ();
 
   /**
    * <p>
@@ -88,7 +88,7 @@ public interface IJobExecutionContext
    * situation, this method will return <code>true</code>.
    * </p>
    */
-  public boolean isRecovering ();
+  boolean isRecovering ();
 
   /**
    * Return the {@code TriggerKey} of the originally scheduled and now
@@ -106,9 +106,9 @@ public interface IJobExecutionContext
    * @throws IllegalStateException
    *         if this is not a recovering job.
    */
-  public TriggerKey getRecoveringTriggerKey () throws IllegalStateException;
+  TriggerKey getRecoveringTriggerKey () throws IllegalStateException;
 
-  public int getRefireCount ();
+  int getRefireCount ();
 
   /**
    * <p>
@@ -132,14 +132,14 @@ public interface IJobExecutionContext
    * <code>IllegalStateException</code>.
    * </p>
    */
-  public JobDataMap getMergedJobDataMap ();
+  JobDataMap getMergedJobDataMap ();
 
   /**
    * <p>
    * Get the <code>JobDetail</code> associated with the <code>Job</code>.
    * </p>
    */
-  public IJobDetail getJobDetail ();
+  IJobDetail getJobDetail ();
 
   /**
    * <p>
@@ -151,7 +151,7 @@ public interface IJobExecutionContext
    * interfaces.
    * </p>
    */
-  public IJob getJobInstance ();
+  IJob getJobInstance ();
 
   /**
    * The actual time the trigger fired. For instance the scheduled time may have
@@ -161,7 +161,7 @@ public interface IJobExecutionContext
    * @return Returns the fireTime.
    * @see #getScheduledFireTime()
    */
-  public Date getFireTime ();
+  Date getFireTime ();
 
   /**
    * The scheduled time the trigger fired for. For instance the scheduled time
@@ -171,11 +171,11 @@ public interface IJobExecutionContext
    * @return Returns the scheduledFireTime.
    * @see #getFireTime()
    */
-  public Date getScheduledFireTime ();
+  Date getScheduledFireTime ();
 
-  public Date getPreviousFireTime ();
+  Date getPreviousFireTime ();
 
-  public Date getNextFireTime ();
+  Date getNextFireTime ();
 
   /**
    * Get the unique Id that identifies this particular firing instance of the
@@ -185,7 +185,7 @@ public interface IJobExecutionContext
    * @return the unique fire instance id
    * @see IScheduler#interrupt(String)
    */
-  public String getFireInstanceId ();
+  String getFireInstanceId ();
 
   /**
    * Returns the result (if any) that the <code>Job</code> set before its
@@ -193,24 +193,26 @@ public interface IJobExecutionContext
    * the particular job).
    * <p>
    * The result itself is meaningless to Quartz, but may be informative to
-   * <code>{@link IJobListener}s</code> or <code>{@link ITriggerListener}s</code>
-   * that are watching the job's execution.
+   * <code>{@link IJobListener}s</code> or
+   * <code>{@link ITriggerListener}s</code> that are watching the job's
+   * execution.
    * </p>
    *
    * @return Returns the result.
    */
-  public Object getResult ();
+  Object getResult ();
 
   /**
    * Set the result (if any) of the <code>Job</code>'s execution (the type of
    * object set as the result is entirely up to the particular job).
    * <p>
    * The result itself is meaningless to Quartz, but may be informative to
-   * <code>{@link IJobListener}s</code> or <code>{@link ITriggerListener}s</code>
-   * that are watching the job's execution.
+   * <code>{@link IJobListener}s</code> or
+   * <code>{@link ITriggerListener}s</code> that are watching the job's
+   * execution.
    * </p>
    */
-  public void setResult (Object result);
+  void setResult (Object result);
 
   /**
    * The amount of time the job ran for (in milliseconds). The returned value
@@ -220,7 +222,7 @@ public interface IJobExecutionContext
    *
    * @return Returns the jobRunTime.
    */
-  public long getJobRunTime ();
+  long getJobRunTime ();
 
   /**
    * Put the specified value into the context's data map with the given key.
@@ -235,7 +237,7 @@ public interface IJobExecutionContext
    * @param value
    *        the value to store
    */
-  public void put (Object key, Object value);
+  void put (Object key, Object value);
 
   /**
    * Get the value with the given key from the context's data map.
@@ -243,6 +245,5 @@ public interface IJobExecutionContext
    * @param key
    *        the key for the desired value
    */
-  public Object get (Object key);
-
+  Object get (Object key);
 }
