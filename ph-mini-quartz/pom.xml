@@ -24,7 +24,7 @@
   <parent>
     <groupId>com.helger</groupId>
     <artifactId>ph-schedule-parent-pom</artifactId>
-    <version>3.6.0</version>
+    <version>3.6.1-SNAPSHOT</version>
   </parent>
   <artifactId>ph-mini-quartz</artifactId>
   <packaging>bundle</packaging>
