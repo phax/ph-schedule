@@ -82,20 +82,6 @@ public abstract class AbstractJob implements IJob
   /**
    * This is the method with the main actions to be executed.
    *
-   * @param aContext
-   *        The Quartz context
-   * @throws JobExecutionException
-   *         In case of an error in execution
-   * @deprecated Overwrite {@link #onExecute(JobDataMap, IJobExecutionContext)}
-   *             instead!
-   */
-  @Deprecated
-  protected void onExecute (@Nonnull final IJobExecutionContext aContext) throws JobExecutionException
-  {}
-
-  /**
-   * This is the method with the main actions to be executed.
-   *
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
    * @param aContext
@@ -104,11 +90,8 @@ public abstract class AbstractJob implements IJob
    *         In case of an error in execution
    */
   @OverrideOnDemand
-  protected void onExecute (@Nonnull final JobDataMap aJobDataMap,
-                            @Nonnull final IJobExecutionContext aContext) throws JobExecutionException
-  {
-    onExecute (aContext);
-  }
+  protected abstract void onExecute (@Nonnull final JobDataMap aJobDataMap,
+                                     @Nonnull final IJobExecutionContext aContext) throws JobExecutionException;
 
   /**
    * Called after the job gets executed. This method is called after the scopes
