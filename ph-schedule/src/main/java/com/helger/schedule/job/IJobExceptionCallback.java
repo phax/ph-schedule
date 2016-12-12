@@ -24,7 +24,7 @@ import com.helger.quartz.IJob;
 
 /**
  * Callback interface to handle thrown exception objects from the
- * {@link AbstractScopeAwareJob}.
+ * {@link AbstractJob}.
  *
  * @author Philip Helger
  */
