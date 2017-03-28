@@ -18,12 +18,13 @@
  */
 package com.helger.quartz.impl;
 
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.io.stream.NonBlockingBufferedReader;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.SchedulerException;
@@ -85,8 +86,10 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
       s_aLogger.info ("   If it was configured to export itself via RMI,");
       s_aLogger.info ("   then other process may now use it.");
 
-      final BufferedReader rdr = new BufferedReader (new InputStreamReader (System.in));
-
+      // Don't close System.in
+      @SuppressWarnings ("resource")
+      final NonBlockingBufferedReader rdr = new NonBlockingBufferedReader (new InputStreamReader (System.in,
+                                                                                                  StandardCharsets.ISO_8859_1));
       while (true)
       {
         s_aLogger.info ("Type 'exit' to shutdown the server: ");
@@ -101,12 +104,6 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
       sched.shutdown (true);
     }
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * SchedulerListener Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
@@ -124,8 +121,7 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
   @Override
   public void schedulerError (final String msg, final SchedulerException cause)
   {
-    System.err.println ("*** " + msg);
-    cause.printStackTrace ();
+    s_aLogger.error ("*** " + msg, cause);
   }
 
   /**
@@ -164,21 +160,21 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
       final QuartzServer server = new QuartzServer ();
       if (args.length == 0)
       {
-        server.serve (new com.helger.quartz.impl.StdSchedulerFactory (), false);
+        server.serve (new StdSchedulerFactory (), false);
       }
       else
         if (args.length == 1 && args[0].equalsIgnoreCase ("console"))
         {
-          server.serve (new com.helger.quartz.impl.StdSchedulerFactory (), true);
+          server.serve (new StdSchedulerFactory (), true);
         }
         else
         {
-          System.err.println ("\nUsage: QuartzServer [console]");
+          s_aLogger.info ("\nUsage: QuartzServer [console]");
         }
     }
     catch (final Exception e)
     {
-      e.printStackTrace ();
+      s_aLogger.error ("Internal error", e);
     }
   }
 

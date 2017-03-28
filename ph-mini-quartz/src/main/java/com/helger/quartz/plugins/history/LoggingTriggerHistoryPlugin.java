@@ -19,6 +19,8 @@
 package com.helger.quartz.plugins.history;
 
 import java.text.MessageFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -217,37 +219,15 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  */
 public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerListener
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   private String name;
-
   private String triggerFiredMessage = "Trigger {1}.{0} fired job {6}.{5} at: {4, date, HH:mm:ss MM/dd/yyyy}";
-
   private String triggerMisfiredMessage = "Trigger {1}.{0} misfired job {6}.{5}  at: {4, date, HH:mm:ss MM/dd/yyyy}.  Should have fired at: {3, date, HH:mm:ss MM/dd/yyyy}";
-
   private String triggerCompleteMessage = "Trigger {1}.{0} completed firing job {6}.{5} at {4, date, HH:mm:ss MM/dd/yyyy} with resulting trigger instruction code: {9}";
 
-  private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private static final Logger log = LoggerFactory.getLogger (LoggingTriggerHistoryPlugin.class);
 
   public LoggingTriggerHistoryPlugin ()
   {}
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   protected Logger getLog ()
   {
@@ -358,12 +338,6 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
   }
 
   /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * TriggerListener Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  /*
    * Object[] arguments = { new Integer(7), new
    * Date(System.currentTimeMillis()), "a disturbance in the Force" }; String
    * result = MessageFormat.format( "At {1,time} on {1,date}, there was {2} on
@@ -386,30 +360,28 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
                              trigger.getKey ().getGroup (),
                              trigger.getPreviousFireTime (),
                              trigger.getNextFireTime (),
-                             new java.util.Date (),
+                             new Date (),
                              context.getJobDetail ().getKey ().getName (),
                              context.getJobDetail ().getKey ().getGroup (),
                              Integer.valueOf (context.getRefireCount ()) };
 
-    getLog ().info (MessageFormat.format (getTriggerFiredMessage (), args));
+    getLog ().info (new MessageFormat (getTriggerFiredMessage (), Locale.US).format (args));
   }
 
   public void triggerMisfired (final ITrigger trigger)
   {
     if (!getLog ().isInfoEnabled ())
-    {
       return;
-    }
 
     final Object [] args = { trigger.getKey ().getName (),
                              trigger.getKey ().getGroup (),
                              trigger.getPreviousFireTime (),
                              trigger.getNextFireTime (),
-                             new java.util.Date (),
+                             new Date (),
                              trigger.getJobKey ().getName (),
                              trigger.getJobKey ().getGroup () };
 
-    getLog ().info (MessageFormat.format (getTriggerMisfiredMessage (), args));
+    getLog ().info (new MessageFormat (getTriggerMisfiredMessage (), Locale.US).format (args));
   }
 
   public void triggerComplete (final ITrigger trigger,
@@ -451,14 +423,14 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
                              trigger.getKey ().getGroup (),
                              trigger.getPreviousFireTime (),
                              trigger.getNextFireTime (),
-                             new java.util.Date (),
+                             new Date (),
                              context.getJobDetail ().getKey ().getName (),
                              context.getJobDetail ().getKey ().getGroup (),
                              Integer.valueOf (context.getRefireCount ()),
                              triggerInstructionCode.toString (),
                              instrCode };
 
-    getLog ().info (MessageFormat.format (getTriggerCompleteMessage (), args));
+    getLog ().info (new MessageFormat (getTriggerCompleteMessage (), Locale.US).format (args));
   }
 
   public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)

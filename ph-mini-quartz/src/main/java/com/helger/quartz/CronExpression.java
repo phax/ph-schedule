@@ -31,6 +31,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Locale.Category;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
@@ -42,7 +43,6 @@ import javax.annotation.Nonnull;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.ext.CommonsHashMap;
 import com.helger.commons.collection.ext.ICommonsMap;
-import com.helger.commons.datetime.PDTFactory;
 
 /**
  * <p>
@@ -223,7 +223,7 @@ import com.helger.commons.datetime.PDTFactory;
  */
 public final class CronExpression implements Serializable, Cloneable
 {
-  static final class ValueSet
+  static final class ValueSet implements Serializable
   {
     int m_nValue;
     int m_nPos;
@@ -268,8 +268,6 @@ public final class CronExpression implements Serializable, Cloneable
   protected transient boolean m_bNearestWeekday = false;
   protected transient int m_nLastdayOffset = 0;
   protected transient boolean m_bExpressionParsed = false;
-
-  public static final int MAX_YEAR = PDTFactory.getCurrentYear () + 100;
 
   /**
    * Constructs a new <CODE>CronExpression</CODE> based on the specified
@@ -331,7 +329,7 @@ public final class CronExpression implements Serializable, Cloneable
    */
   public boolean isSatisfiedBy (final Date date)
   {
-    final Calendar testDateCal = Calendar.getInstance (getTimeZone ());
+    final Calendar testDateCal = Calendar.getInstance (getTimeZone (), Locale.getDefault (Locale.Category.FORMAT));
     testDateCal.setTime (date);
     testDateCal.set (Calendar.MILLISECOND, 0);
     final Date originalDate = testDateCal.getTime ();
@@ -371,7 +369,7 @@ public final class CronExpression implements Serializable, Cloneable
     long difference = 1000;
 
     // move back to the nearest second so differences will be accurate
-    final Calendar adjustCal = Calendar.getInstance (getTimeZone ());
+    final Calendar adjustCal = Calendar.getInstance (getTimeZone (), Locale.getDefault (Locale.Category.FORMAT));
     adjustCal.setTime (date);
     adjustCal.set (Calendar.MILLISECOND, 0);
     Date lastDate = adjustCal.getTime ();
@@ -1223,7 +1221,7 @@ public final class CronExpression implements Serializable, Cloneable
               {
                 if (stopAt == -1)
                 {
-                  stopAt = MAX_YEAR;
+                  stopAt = CQuartz.MAX_YEAR;
                 }
                 if (startAt == -1 || startAt == ALL_SPEC_INT)
                 {
@@ -1369,7 +1367,7 @@ public final class CronExpression implements Serializable, Cloneable
   public Date getTimeAfter (final Date aAfterTime)
   {
     // Computation is based on Gregorian year only.
-    final Calendar cl = new GregorianCalendar (getTimeZone ());
+    final Calendar cl = new GregorianCalendar (getTimeZone (), Locale.getDefault (Category.FORMAT));
 
     // move ahead one second, since we're computing the time *after* the
     // given time
@@ -1382,9 +1380,8 @@ public final class CronExpression implements Serializable, Cloneable
     // loop until we've computed the next time, or we've past the endTime
     while (!gotOne)
     {
-
       // if (endTime != null && cl.getTime().after(endTime)) return null;
-      if (cl.get (Calendar.YEAR) > 2999)
+      if (cl.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         // prevent endless loop...
         return null;
@@ -1499,7 +1496,7 @@ public final class CronExpression implements Serializable, Cloneable
             day = getLastDayOfMonth (mon, cl.get (Calendar.YEAR));
             day -= m_nLastdayOffset;
 
-            final Calendar tcal = Calendar.getInstance (getTimeZone ());
+            final Calendar tcal = Calendar.getInstance (getTimeZone (), Locale.getDefault (Locale.Category.FORMAT));
             tcal.set (Calendar.SECOND, 0);
             tcal.set (Calendar.MINUTE, 0);
             tcal.set (Calendar.HOUR_OF_DAY, 0);
@@ -1549,7 +1546,7 @@ public final class CronExpression implements Serializable, Cloneable
             t = day;
             day = m_aDaysOfMonth.first ();
 
-            final Calendar tcal = Calendar.getInstance (getTimeZone ());
+            final Calendar tcal = Calendar.getInstance (getTimeZone (), Locale.getDefault (Locale.Category.FORMAT));
             tcal.set (Calendar.SECOND, 0);
             tcal.set (Calendar.MINUTE, 0);
             tcal.set (Calendar.HOUR_OF_DAY, 0);
@@ -1793,7 +1790,7 @@ public final class CronExpression implements Serializable, Cloneable
 
       // test for expressions that never generate a valid fire date,
       // but keep looping...
-      if (year > MAX_YEAR)
+      if (year > CQuartz.MAX_YEAR)
       {
         return null;
       }

@@ -20,6 +20,7 @@ package com.helger.quartz.impl.calendar;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import com.helger.quartz.ICalendar;
@@ -208,11 +209,8 @@ public class BaseCalendar implements ICalendar
    */
   public long getNextIncludedTime (final long timeStamp)
   {
-
     if (timeStamp <= 0)
-    {
       throw new IllegalArgumentException ("timeStamp must be greater 0");
-    }
 
     if (baseCalendar != null)
     {
@@ -241,7 +239,8 @@ public class BaseCalendar implements ICalendar
    */
   protected Calendar createJavaCalendar ()
   {
-    return (getTimeZone () == null) ? Calendar.getInstance () : Calendar.getInstance (getTimeZone ());
+    return Calendar.getInstance (getTimeZone () != null ? getTimeZone () : TimeZone.getDefault (),
+                                 Locale.getDefault (Locale.Category.FORMAT));
   }
 
   /**

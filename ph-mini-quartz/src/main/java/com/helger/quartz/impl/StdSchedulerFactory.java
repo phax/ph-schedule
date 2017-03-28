@@ -22,7 +22,6 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -176,8 +175,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
   /**
    * <p>
    * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
-   * with the contents of a <code>Properties</code> file and overriding System
-   * properties.
+   * with the contents of a <code>NonBlockingProperties</code> file and
+   * overriding System properties.
    * </p>
    * <p>
    * By default a properties file named "quartz.properties" is loaded from the
@@ -221,7 +220,6 @@ public class StdSchedulerFactory implements ISchedulerFactory
     final NonBlockingProperties props = new NonBlockingProperties ();
 
     InputStream in = null;
-
     try
     {
       if (propFile.exists ())
@@ -229,17 +227,12 @@ public class StdSchedulerFactory implements ISchedulerFactory
         try
         {
           if (requestedFile != null)
-          {
             m_sPropSrc = "specified file: '" + requestedFile + "'";
-          }
           else
-          {
             m_sPropSrc = "default file in current working dir: 'quartz.properties'";
-          }
 
-          in = new BufferedInputStream (new FileInputStream (propFileName));
+          in = new NonBlockingBufferedInputStream (new FileInputStream (propFileName));
           props.load (in);
-
         }
         catch (final IOException ioe)
         {
@@ -251,7 +244,6 @@ public class StdSchedulerFactory implements ISchedulerFactory
         if (requestedFile != null)
         {
           in = ClassPathResource.getInputStream (requestedFile);
-
           if (in == null)
           {
             m_aInitException = new SchedulerException ("Properties file: '" + requestedFile + "' could not be found.");
@@ -260,7 +252,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
           m_sPropSrc = "specified file: '" + requestedFile + "' in the class resource path.";
 
-          in = new BufferedInputStream (in);
+          in = new NonBlockingBufferedInputStream (in);
           try
           {
             props.load (in);
@@ -322,7 +314,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
     catch (final AccessControlException e)
     {
-      getLog ().warn ("Skipping overriding quartz properties with System properties " +
+      getLog ().warn ("Skipping overriding MiniQuartz properties with System properties " +
                       "during initialization because of an AccessControlException.  " +
                       "This is likely due to not having read/write access for " +
                       "java.util.PropertyPermission as required by java.lang.System.getProperties().  " +

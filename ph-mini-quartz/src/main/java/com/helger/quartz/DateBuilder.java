@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+
 import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.datetime.PDTFactory;
@@ -61,14 +63,14 @@ public final class DateBuilder
   public static final long SECONDS_IN_MOST_DAYS = CGlobal.SECONDS_PER_DAY;
   public static final long MILLISECONDS_IN_DAY = SECONDS_IN_MOST_DAYS * CGlobal.MILLISECONDS_PER_SECOND;
 
+  private TimeZone m_aTZ;
+  private Locale m_aLocale;
   private int month;
   private int day;
   private int year;
   private int hour;
   private int minute;
   private int second;
-  private TimeZone tz;
-  private Locale lc;
 
   /**
    * Create a DateBuilder, with initial settings for the current date and time
@@ -76,14 +78,7 @@ public final class DateBuilder
    */
   private DateBuilder ()
   {
-    final Calendar cal = Calendar.getInstance ();
-
-    month = cal.get (Calendar.MONTH) + 1;
-    day = cal.get (Calendar.DAY_OF_MONTH);
-    year = cal.get (Calendar.YEAR);
-    hour = cal.get (Calendar.HOUR_OF_DAY);
-    minute = cal.get (Calendar.MINUTE);
-    second = cal.get (Calendar.SECOND);
+    this (TimeZone.getDefault (), Locale.getDefault (Locale.Category.FORMAT));
   }
 
   /**
@@ -92,15 +87,7 @@ public final class DateBuilder
    */
   private DateBuilder (final TimeZone tz)
   {
-    final Calendar cal = Calendar.getInstance (tz);
-
-    this.tz = tz;
-    month = cal.get (Calendar.MONTH) + 1;
-    day = cal.get (Calendar.DAY_OF_MONTH);
-    year = cal.get (Calendar.YEAR);
-    hour = cal.get (Calendar.HOUR_OF_DAY);
-    minute = cal.get (Calendar.MINUTE);
-    second = cal.get (Calendar.SECOND);
+    this (tz, Locale.getDefault (Locale.Category.FORMAT));
   }
 
   /**
@@ -109,15 +96,7 @@ public final class DateBuilder
    */
   private DateBuilder (final Locale lc)
   {
-    final Calendar cal = Calendar.getInstance (lc);
-
-    this.lc = lc;
-    month = cal.get (Calendar.MONTH) + 1;
-    day = cal.get (Calendar.DAY_OF_MONTH);
-    year = cal.get (Calendar.YEAR);
-    hour = cal.get (Calendar.HOUR_OF_DAY);
-    minute = cal.get (Calendar.MINUTE);
-    second = cal.get (Calendar.SECOND);
+    this (TimeZone.getDefault (), lc);
   }
 
   /**
@@ -128,8 +107,8 @@ public final class DateBuilder
   {
     final Calendar cal = Calendar.getInstance (tz, lc);
 
-    this.tz = tz;
-    this.lc = lc;
+    this.m_aTZ = tz;
+    this.m_aLocale = lc;
     month = cal.get (Calendar.MONTH) + 1;
     day = cal.get (Calendar.DAY_OF_MONTH);
     year = cal.get (Calendar.YEAR);
@@ -177,20 +156,20 @@ public final class DateBuilder
   /**
    * Build the Date defined by this builder instance.
    */
+  @Nonnull
   public Date build ()
   {
     Calendar cal;
-
-    if (tz != null && lc != null)
-      cal = Calendar.getInstance (tz, lc);
+    if (m_aTZ != null && m_aLocale != null)
+      cal = Calendar.getInstance (m_aTZ, m_aLocale);
     else
-      if (tz != null)
-        cal = Calendar.getInstance (tz);
+      if (m_aTZ != null)
+        cal = Calendar.getInstance (m_aTZ, Locale.getDefault (Locale.Category.FORMAT));
       else
-        if (lc != null)
-          cal = Calendar.getInstance (lc);
+        if (m_aLocale != null)
+          cal = Calendar.getInstance (TimeZone.getDefault (), m_aLocale);
         else
-          cal = Calendar.getInstance ();
+          cal = PDTFactory.createCalendar ();
 
     cal.set (Calendar.YEAR, year);
     cal.set (Calendar.MONTH, month - 1);
@@ -199,7 +178,6 @@ public final class DateBuilder
     cal.set (Calendar.MINUTE, minute);
     cal.set (Calendar.SECOND, second);
     cal.set (Calendar.MILLISECOND, 0);
-
     return cal.getTime ();
   }
 
@@ -299,7 +277,7 @@ public final class DateBuilder
    */
   public DateBuilder inTimeZone (final TimeZone timezone)
   {
-    this.tz = timezone;
+    this.m_aTZ = timezone;
     return this;
   }
 
@@ -309,14 +287,14 @@ public final class DateBuilder
    */
   public DateBuilder inLocale (final Locale locale)
   {
-    this.lc = locale;
+    this.m_aLocale = locale;
     return this;
   }
 
   public static Date futureDate (final int interval, final EIntervalUnit unit)
   {
 
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (new Date ());
     c.setLenient (true);
 
@@ -372,7 +350,7 @@ public final class DateBuilder
 
     final Date date = new Date ();
 
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date);
     c.setLenient (true);
 
@@ -428,7 +406,7 @@ public final class DateBuilder
 
     final Date date = new Date ();
 
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date);
     c.setLenient (true);
 
@@ -472,7 +450,7 @@ public final class DateBuilder
 
     final Date date = new Date ();
 
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date);
 
     c.set (Calendar.MONTH, month.getValue () - 1);
@@ -521,7 +499,7 @@ public final class DateBuilder
 
     final Date date = new Date ();
 
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date);
 
     c.set (Calendar.YEAR, year);
@@ -570,7 +548,7 @@ public final class DateBuilder
    */
   public static Date evenHourDate (final Date date)
   {
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
 
@@ -599,7 +577,7 @@ public final class DateBuilder
    */
   public static Date evenHourDateBefore (final Date date)
   {
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
 
     c.set (Calendar.MINUTE, 0);
@@ -645,7 +623,7 @@ public final class DateBuilder
    */
   public static Date evenMinuteDate (final Date date)
   {
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
 
@@ -672,7 +650,7 @@ public final class DateBuilder
    */
   public static Date evenMinuteDateBefore (final Date date)
   {
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
     c.set (Calendar.SECOND, 0);
     c.set (Calendar.MILLISECOND, 0);
@@ -705,7 +683,7 @@ public final class DateBuilder
    */
   public static Date evenSecondDate (final Date date)
   {
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
     c.set (Calendar.SECOND, c.get (Calendar.SECOND) + 1);
@@ -730,7 +708,7 @@ public final class DateBuilder
    */
   public static Date evenSecondDateBefore (final Date date)
   {
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
     c.set (Calendar.MILLISECOND, 0);
     return c.getTime ();
@@ -835,7 +813,7 @@ public final class DateBuilder
       throw new IllegalArgumentException ("minuteBase must be >=0 and <= 59");
     }
 
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
 
@@ -892,7 +870,7 @@ public final class DateBuilder
     if (secondBase < 0 || secondBase > 59)
       throw new IllegalArgumentException ("secondBase must be >=0 and <= 59");
 
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
     c.setLenient (true);
 
@@ -987,13 +965,11 @@ public final class DateBuilder
     ValueEnforcer.notNull (month, "Month");
   }
 
-  private static final int MAX_YEAR = PDTFactory.getCurrentYear () + 100;
-
   public static void validateYear (final int year)
   {
-    if (year < 0 || year > MAX_YEAR)
+    if (year < 0 || year > CQuartz.MAX_YEAR)
     {
-      throw new IllegalArgumentException ("Invalid year (must be >= 0 and <= " + MAX_YEAR);
+      throw new IllegalArgumentException ("Invalid year (must be >= 0 and <= " + CQuartz.MAX_YEAR);
     }
   }
 }

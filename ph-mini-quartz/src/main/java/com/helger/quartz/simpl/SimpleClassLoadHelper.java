@@ -38,13 +38,6 @@ import com.helger.quartz.spi.IClassLoadHelper;
  */
 public class SimpleClassLoadHelper implements IClassLoadHelper
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * Called to give the ClassLoadHelper a chance to initialize itself, including
    * the opportunity to "steal" the class loader off of the calling thread,
@@ -109,8 +102,11 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
       // Create a method instance representing the protected
       // getCallerClassLoader method of class ClassLoader
       final Method mthd = ClassLoader.class.getDeclaredMethod ("getCallerClassLoader", new Class <?> [0]);
-      // Make the method accessible.
-      AccessibleObject.setAccessible (new AccessibleObject [] { mthd }, true);
+      if (false)
+      {
+        // Make the method accessible.
+        AccessibleObject.setAccessible (new AccessibleObject [] { mthd }, true);
+      }
       // Try to get the caller's class-loader
       return (ClassLoader) mthd.invoke (cl, new Object [0]);
     }
@@ -120,5 +116,4 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
       return this.getClass ().getClassLoader ();
     }
   }
-
 }

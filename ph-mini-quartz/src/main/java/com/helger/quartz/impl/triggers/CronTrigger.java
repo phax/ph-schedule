@@ -21,12 +21,16 @@ package com.helger.quartz.impl.triggers;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
+import com.helger.commons.datetime.PDTFactory;
+import com.helger.quartz.CQuartz;
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
+import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
@@ -37,8 +41,8 @@ import com.helger.quartz.TriggerUtils;
 /**
  * <p>
  * A concrete <code>{@link ITrigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.IJobDetail}</code> at given moments in time,
- * defined with Unix 'cron-like' definitions.
+ * <code>{@link IJobDetail}</code> at given moments in time, defined with Unix
+ * 'cron-like' definitions.
  * </p>
  *
  * @author Sharada Jambula, James House
@@ -46,20 +50,14 @@ import com.helger.quartz.TriggerUtils;
  */
 public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICronTrigger, ICoreTrigger
 {
-  protected static final int YEAR_TO_GIVEUP_SCHEDULING_AT = CronExpression.MAX_YEAR;
+  protected static final int YEAR_TO_GIVEUP_SCHEDULING_AT = CQuartz.MAX_YEAR;
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  private CronExpression cronEx = null;
-  private Date startTime = null;
-  private Date endTime = null;
-  private Date nextFireTime = null;
-  private Date previousFireTime = null;
-  private transient TimeZone timeZone = null;
+  private CronExpression cronEx;
+  private Date startTime;
+  private Date endTime;
+  private Date nextFireTime;
+  private Date previousFireTime;
+  private transient TimeZone timeZone;
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -145,7 +143,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
     // Note timeZone is not needed here as parameter for
     // Calendar.getInstance(),
     // since time zone is implicit when using a Date in the setTime method.
-    final Calendar cl = Calendar.getInstance ();
+    final Calendar cl = PDTFactory.createCalendar ();
     cl.setTime (startTime);
     cl.set (Calendar.MILLISECOND, 0);
 
@@ -192,8 +190,8 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * <code>Trigger</code> has been added to the scheduler.
    * </p>
    *
-   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
-   *      com.helger.quartz.ICalendar, Date, Date)
+   * @see TriggerUtils#computeFireTimesBetween(spi.IOperableTrigger, ICalendar,
+   *      Date, Date)
    */
   @Override
   public Date getNextFireTime ()
@@ -277,7 +275,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * </p>
    * <p>
    * Note that the date returned is NOT validated against the related
-   * {@link com.helger.quartz.ICalendar} (if any)
+   * {@link ICalendar} (if any)
    * </p>
    *
    * @param aAfterTime
@@ -315,7 +313,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * </p>
    * <p>
    * Note that the return time *may* be in the past. and the date returned is
-   * not validated against {@link com.helger.quartz.ICalendar}
+   * not validated against {@link ICalendar}
    * </p>
    */
   @Override
@@ -426,7 +424,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * </p>
    * <p>
    * Note that the value returned is NOT validated against the related
-   * {@link com.helger.quartz.ICalendar} (if any)
+   * {@link ICalendar} (if any)
    * </p>
    *
    * @param aTest
@@ -456,7 +454,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
     if (fta == null)
       return false;
 
-    final Calendar p = Calendar.getInstance (test.getTimeZone ());
+    final Calendar p = Calendar.getInstance (test.getTimeZone (), Locale.getDefault (Locale.Category.FORMAT));
     p.setTime (fta);
 
     final int year = p.get (Calendar.YEAR);
@@ -489,7 +487,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
   @Override
-  public void triggered (final com.helger.quartz.ICalendar calendar)
+  public void triggered (final ICalendar calendar)
   {
     previousFireTime = nextFireTime;
     nextFireTime = getFireTimeAfter (nextFireTime);
@@ -501,11 +499,10 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   }
 
   /**
-   * @see AbstractTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
-   *      long)
+   * @see AbstractTrigger#updateWithNewCalendar(ICalendar, long)
    */
   @Override
-  public void updateWithNewCalendar (final com.helger.quartz.ICalendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
   {
     nextFireTime = getFireTimeAfter (previousFireTime);
 
@@ -525,7 +522,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
 
       // avoid infinite loop
       // Use gregorian only because the constant is based on Gregorian
-      final Calendar c = new java.util.GregorianCalendar ();
+      final Calendar c = PDTFactory.createCalendar ();
       c.setTime (nextFireTime);
       if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
@@ -560,7 +557,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    *         firing of the <code>Trigger</code>).
    */
   @Override
-  public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)
+  public Date computeFirstFireTime (final ICalendar calendar)
   {
     nextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000l));
 

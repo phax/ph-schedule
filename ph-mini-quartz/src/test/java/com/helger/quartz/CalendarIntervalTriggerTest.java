@@ -29,13 +29,11 @@ import static org.junit.Assert.fail;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.junit.Test;
 
-import com.helger.quartz.ICalendarIntervalTrigger;
-import com.helger.quartz.ITrigger;
-import com.helger.quartz.TriggerUtils;
 import com.helger.quartz.impl.calendar.BaseCalendar;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
@@ -55,11 +53,7 @@ public class CalendarIntervalTriggerTest
     start.add (Calendar.DAY_OF_MONTH, 1);
     final Date triggerTime = start.getTime ();
 
-    final CalendarIntervalTrigger trigger = new CalendarIntervalTrigger ("test",
-                                                                                 startTime,
-                                                                                 null,
-                                                                                 EIntervalUnit.DAY,
-                                                                                 1);
+    final CalendarIntervalTrigger trigger = new CalendarIntervalTrigger ("test", startTime, null, EIntervalUnit.DAY, 1);
     assertThat (trigger.getFireTimeAfter (startTime), equalTo (triggerTime));
 
     final Date after = new Date (start.getTimeInMillis () - 500);
@@ -84,10 +78,10 @@ public class CalendarIntervalTriggerTest
     final BaseCalendar baseCalendar = new BaseCalendar (edt);
 
     final CalendarIntervalTrigger intervalTrigger = new CalendarIntervalTrigger ("QTZ-330",
-                                                                                         start.getTime (),
-                                                                                         null,
-                                                                                         EIntervalUnit.DAY,
-                                                                                         1);
+                                                                                 start.getTime (),
+                                                                                 null,
+                                                                                 EIntervalUnit.DAY,
+                                                                                 1);
     intervalTrigger.setTimeZone (edt);
     intervalTrigger.setPreserveHourOfDayAcrossDaylightSavings (true);
     intervalTrigger.computeFirstFireTime (baseCalendar);
@@ -352,7 +346,7 @@ public class CalendarIntervalTriggerTest
 
     testTime = fireTimes.get (2); // get the third fire time
 
-    Calendar testCal = Calendar.getInstance (TimeZone.getTimeZone ("CET"));
+    Calendar testCal = Calendar.getInstance (TimeZone.getTimeZone ("CET"), Locale.getDefault (Locale.Category.FORMAT));
     testCal.setTimeInMillis (testTime.getTime ());
 
     assertFalse ("Day increment time-of-day result not as expected over spring 2011 daylight savings transition.",
@@ -385,7 +379,7 @@ public class CalendarIntervalTriggerTest
 
     testTime = fireTimes.get (2); // get the third fire time
 
-    testCal = Calendar.getInstance (TimeZone.getTimeZone ("CET"));
+    testCal = Calendar.getInstance (TimeZone.getTimeZone ("CET"), Locale.getDefault (Locale.Category.FORMAT));
     testCal.setTimeInMillis (testTime.getTime ());
 
     assertTrue ("Day increment time-of-day result not as expected over spring 2011 daylight savings transition.",

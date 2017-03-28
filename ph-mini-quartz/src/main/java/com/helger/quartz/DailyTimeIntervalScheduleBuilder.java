@@ -29,6 +29,7 @@ import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.ext.CommonsHashSet;
 import com.helger.commons.collection.ext.ICommonsSet;
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
 /**
@@ -369,7 +370,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
                                           " is too large! The max you can set is " +
                                           maxNumOfCount);
 
-    final Calendar cal = Calendar.getInstance ();
+    final Calendar cal = PDTFactory.createCalendar ();
     cal.setTime (endTimeOfDayDate);
     final int hour = cal.get (Calendar.HOUR_OF_DAY);
     final int minute = cal.get (Calendar.MINUTE);

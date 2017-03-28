@@ -22,6 +22,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.helger.commons.datetime.PDTFactory;
+import com.helger.quartz.CQuartz;
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
@@ -73,8 +75,6 @@ import com.helger.quartz.TriggerUtils;
 public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalTrigger>
                                      implements ICalendarIntervalTrigger, ICoreTrigger
 {
-  private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = Calendar.getInstance ().get (Calendar.YEAR) + 100;
-
   private Date startTime;
   private Date endTime;
   private Date nextFireTime;
@@ -522,9 +522,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
+      final Calendar c = PDTFactory.createCalendar ();
       c.setTime (nextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         nextFireTime = null;
       }
@@ -555,9 +555,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
+      final Calendar c = PDTFactory.createCalendar ();
       c.setTime (nextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         nextFireTime = null;
       }
@@ -602,9 +602,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
+      final Calendar c = PDTFactory.createCalendar ();
       c.setTime (nextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         return null;
       }
@@ -713,10 +713,10 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     Date time = null;
     final long repeatLong = getRepeatInterval ();
 
-    final Calendar aTime = Calendar.getInstance ();
+    final Calendar aTime = PDTFactory.createCalendar ();
     aTime.setTime (afterTime);
 
-    final Calendar sTime = Calendar.getInstance ();
+    final Calendar sTime = PDTFactory.createCalendar ();
     if (timeZone != null)
       sTime.setTimeZone (timeZone);
     sTime.setTime (getStartTime ());
@@ -783,12 +783,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
             }
 
             // now baby-step the rest of the way there...
-            while (!sTime.getTime ().after (afterTime) && (sTime.get (Calendar.YEAR) < YEAR_TO_GIVEUP_SCHEDULING_AT))
+            while (!sTime.getTime ().after (afterTime) && (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
             {
               sTime.add (Calendar.DAY_OF_YEAR, getRepeatInterval ());
             }
             while (daylightSavingHourShiftOccurredAndAdvanceNeeded (sTime, initialHourOfDay, afterTime) &&
-                   (sTime.get (Calendar.YEAR) < YEAR_TO_GIVEUP_SCHEDULING_AT))
+                   (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
             {
               sTime.add (Calendar.DAY_OF_YEAR, getRepeatInterval ());
             }
@@ -825,12 +825,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
                 sTime.add (Calendar.WEEK_OF_YEAR, (int) (getRepeatInterval () * jumpCount));
               }
 
-              while (!sTime.getTime ().after (afterTime) && (sTime.get (Calendar.YEAR) < YEAR_TO_GIVEUP_SCHEDULING_AT))
+              while (!sTime.getTime ().after (afterTime) && (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
               {
                 sTime.add (Calendar.WEEK_OF_YEAR, getRepeatInterval ());
               }
               while (daylightSavingHourShiftOccurredAndAdvanceNeeded (sTime, initialHourOfDay, afterTime) &&
-                     (sTime.get (Calendar.YEAR) < YEAR_TO_GIVEUP_SCHEDULING_AT))
+                     (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
               {
                 sTime.add (Calendar.WEEK_OF_YEAR, getRepeatInterval ());
               }
@@ -846,12 +846,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
                 // just advance via brute-force iteration.
 
                 while (!sTime.getTime ().after (afterTime) &&
-                       (sTime.get (Calendar.YEAR) < YEAR_TO_GIVEUP_SCHEDULING_AT))
+                       (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
                 {
                   sTime.add (Calendar.MONTH, getRepeatInterval ());
                 }
                 while (daylightSavingHourShiftOccurredAndAdvanceNeeded (sTime, initialHourOfDay, afterTime) &&
-                       (sTime.get (Calendar.YEAR) < YEAR_TO_GIVEUP_SCHEDULING_AT))
+                       (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
                 {
                   sTime.add (Calendar.MONTH, getRepeatInterval ());
                 }
@@ -862,12 +862,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
                 {
 
                   while (!sTime.getTime ().after (afterTime) &&
-                         (sTime.get (Calendar.YEAR) < YEAR_TO_GIVEUP_SCHEDULING_AT))
+                         (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
                   {
                     sTime.add (Calendar.YEAR, getRepeatInterval ());
                   }
                   while (daylightSavingHourShiftOccurredAndAdvanceNeeded (sTime, initialHourOfDay, afterTime) &&
-                         (sTime.get (Calendar.YEAR) < YEAR_TO_GIVEUP_SCHEDULING_AT))
+                         (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
                   {
                     sTime.add (Calendar.YEAR, getRepeatInterval ());
                   }
@@ -928,7 +928,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     // otherwise we have to back up one interval from the fire time after the
     // end time
 
-    final Calendar lTime = Calendar.getInstance ();
+    final Calendar lTime = PDTFactory.createCalendar ();
     if (timeZone != null)
       lTime.setTimeZone (timeZone);
     lTime.setTime (fTime);

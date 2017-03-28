@@ -21,14 +21,16 @@ package com.helger.quartz.impl.triggers;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.helger.commons.datetime.PDTFactory;
+import com.helger.quartz.CQuartz;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerUtils;
@@ -48,23 +50,14 @@ import com.helger.quartz.TriggerUtils;
  */
 public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements ISimpleTrigger, ICoreTrigger
 {
-  private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = Calendar.getInstance ().get (Calendar.YEAR) + 100;
-
-  private Date startTime = null;
-
-  private Date endTime = null;
-
-  private Date nextFireTime = null;
-
-  private Date previousFireTime = null;
-
-  private int repeatCount = 0;
-
-  private long repeatInterval = 0;
-
-  private int timesTriggered = 0;
-
-  private final boolean complete = false;
+  private Date m_aStartTime;
+  private Date m_aEndTime;
+  private Date m_aNextFireTime;
+  private Date m_aPreviousFireTime;
+  private int m_nRepeatCount = 0;
+  private long m_nRepeatInterval = 0;
+  private int m_nTimesTriggered = 0;
+  private final boolean m_bComplete = false;
 
   /**
    * <p>
@@ -112,7 +105,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public Date getStartTime ()
   {
-    return startTime;
+    return m_aStartTime;
   }
 
   /**
@@ -133,7 +126,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
     if (eTime != null && eTime.before (startTime))
       throw new IllegalArgumentException ("End time cannot be before start time");
 
-    this.startTime = startTime;
+    this.m_aStartTime = startTime;
   }
 
   /**
@@ -147,7 +140,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public Date getEndTime ()
   {
-    return endTime;
+    return m_aEndTime;
   }
 
   /**
@@ -168,12 +161,12 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
       throw new IllegalArgumentException ("End time cannot be before start time");
     }
 
-    this.endTime = endTime;
+    this.m_aEndTime = endTime;
   }
 
   public int getRepeatCount ()
   {
-    return repeatCount;
+    return m_nRepeatCount;
   }
 
   /**
@@ -194,12 +187,12 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
                                           "constant REPEAT_INDEFINITELY for infinite.");
     }
 
-    this.repeatCount = repeatCount;
+    this.m_nRepeatCount = repeatCount;
   }
 
   public long getRepeatInterval ()
   {
-    return repeatInterval;
+    return m_nRepeatInterval;
   }
 
   /**
@@ -218,7 +211,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
       throw new IllegalArgumentException ("Repeat interval must be >= 0");
     }
 
-    this.repeatInterval = repeatInterval;
+    this.m_nRepeatInterval = repeatInterval;
   }
 
   /**
@@ -228,7 +221,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
    */
   public int getTimesTriggered ()
   {
-    return timesTriggered;
+    return m_nTimesTriggered;
   }
 
   /**
@@ -238,7 +231,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
    */
   public void setTimesTriggered (final int timesTriggered)
   {
-    this.timesTriggered = timesTriggered;
+    this.m_nTimesTriggered = timesTriggered;
   }
 
   @Override
@@ -330,9 +323,9 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
             break;
 
           // avoid infinite loop
-          final Calendar c = Calendar.getInstance ();
+          final Calendar c = PDTFactory.createCalendar ();
           c.setTime (newFireTime);
-          if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+          if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
           {
             newFireTime = null;
           }
@@ -351,16 +344,16 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
               break;
 
             // avoid infinite loop
-            final Calendar c = Calendar.getInstance ();
+            final Calendar c = PDTFactory.createCalendar ();
             c.setTime (newFireTime);
-            if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+            if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
             {
               newFireTime = null;
             }
           }
           if (newFireTime != null)
           {
-            final int timesMissed = computeNumTimesFiredBetween (nextFireTime, newFireTime);
+            final int timesMissed = computeNumTimesFiredBetween (m_aNextFireTime, newFireTime);
             setTimesTriggered (getTimesTriggered () + timesMissed);
           }
 
@@ -370,7 +363,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
           if (instr == MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT)
           {
             final Date newFireTime = new Date ();
-            if (repeatCount != 0 && repeatCount != REPEAT_INDEFINITELY)
+            if (m_nRepeatCount != 0 && m_nRepeatCount != REPEAT_INDEFINITELY)
             {
               setRepeatCount (getRepeatCount () - getTimesTriggered ());
               setTimesTriggered (0);
@@ -391,9 +384,9 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
             {
               final Date newFireTime = new Date ();
 
-              final int timesMissed = computeNumTimesFiredBetween (nextFireTime, newFireTime);
+              final int timesMissed = computeNumTimesFiredBetween (m_aNextFireTime, newFireTime);
 
-              if (repeatCount != 0 && repeatCount != REPEAT_INDEFINITELY)
+              if (m_nRepeatCount != 0 && m_nRepeatCount != REPEAT_INDEFINITELY)
               {
                 int remainingCount = getRepeatCount () - (getTimesTriggered () + timesMissed);
                 if (remainingCount <= 0)
@@ -430,24 +423,24 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public void triggered (final ICalendar calendar)
   {
-    timesTriggered++;
-    previousFireTime = nextFireTime;
-    nextFireTime = getFireTimeAfter (nextFireTime);
+    m_nTimesTriggered++;
+    m_aPreviousFireTime = m_aNextFireTime;
+    m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-    while (nextFireTime != null && calendar != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
 
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-      if (nextFireTime == null)
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
-      c.setTime (nextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      final Calendar c = PDTFactory.createCalendar ();
+      c.setTime (m_aNextFireTime);
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
-        nextFireTime = null;
+        m_aNextFireTime = null;
       }
     }
   }
@@ -459,36 +452,36 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
   {
-    nextFireTime = getFireTimeAfter (previousFireTime);
+    m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
 
-    if (nextFireTime == null || calendar == null)
+    if (m_aNextFireTime == null || calendar == null)
     {
       return;
     }
 
     final Date now = new Date ();
-    while (nextFireTime != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
 
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-      if (nextFireTime == null)
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
-      c.setTime (nextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      final Calendar c = PDTFactory.createCalendar ();
+      c.setTime (m_aNextFireTime);
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
-        nextFireTime = null;
+        m_aNextFireTime = null;
       }
 
-      if (nextFireTime != null && nextFireTime.before (now))
+      if (m_aNextFireTime != null && m_aNextFireTime.before (now))
       {
-        final long diff = now.getTime () - nextFireTime.getTime ();
+        final long diff = now.getTime () - m_aNextFireTime.getTime ();
         if (diff >= misfireThreshold)
         {
-          nextFireTime = getFireTimeAfter (nextFireTime);
+          m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
         }
       }
     }
@@ -513,25 +506,25 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public Date computeFirstFireTime (final ICalendar calendar)
   {
-    nextFireTime = getStartTime ();
+    m_aNextFireTime = getStartTime ();
 
-    while (nextFireTime != null && calendar != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-      if (nextFireTime == null)
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
-      c.setTime (nextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      final Calendar c = PDTFactory.createCalendar ();
+      c.setTime (m_aNextFireTime);
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         return null;
       }
     }
 
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
   /**
@@ -554,7 +547,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public Date getNextFireTime ()
   {
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
   /**
@@ -565,7 +558,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public Date getPreviousFireTime ()
   {
-    return previousFireTime;
+    return m_aPreviousFireTime;
   }
 
   /**
@@ -578,7 +571,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
    */
   public void setNextFireTime (final Date nextFireTime)
   {
-    this.nextFireTime = nextFireTime;
+    this.m_aNextFireTime = nextFireTime;
   }
 
   /**
@@ -591,7 +584,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
    */
   public void setPreviousFireTime (final Date previousFireTime)
   {
-    this.previousFireTime = previousFireTime;
+    this.m_aPreviousFireTime = previousFireTime;
   }
 
   /**
@@ -606,17 +599,17 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public Date getFireTimeAfter (final Date aAfterTime)
   {
-    if (complete)
+    if (m_bComplete)
       return null;
 
-    if ((timesTriggered > repeatCount) && (repeatCount != REPEAT_INDEFINITELY))
+    if ((m_nTimesTriggered > m_nRepeatCount) && (m_nRepeatCount != REPEAT_INDEFINITELY))
       return null;
 
     Date afterTime = aAfterTime;
     if (afterTime == null)
       afterTime = new Date ();
 
-    if (repeatCount == 0 && afterTime.compareTo (getStartTime ()) >= 0)
+    if (m_nRepeatCount == 0 && afterTime.compareTo (getStartTime ()) >= 0)
       return null;
 
     final long startMillis = getStartTime ().getTime ();
@@ -629,12 +622,12 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
     if (afterMillis < startMillis)
       return new Date (startMillis);
 
-    final long numberOfTimesExecuted = ((afterMillis - startMillis) / repeatInterval) + 1;
+    final long numberOfTimesExecuted = ((afterMillis - startMillis) / m_nRepeatInterval) + 1;
 
-    if ((numberOfTimesExecuted > repeatCount) && (repeatCount != REPEAT_INDEFINITELY))
+    if ((numberOfTimesExecuted > m_nRepeatCount) && (m_nRepeatCount != REPEAT_INDEFINITELY))
       return null;
 
-    final Date time = new Date (startMillis + (numberOfTimesExecuted * repeatInterval));
+    final Date time = new Date (startMillis + (numberOfTimesExecuted * m_nRepeatInterval));
     if (endMillis <= time.getTime ())
       return null;
     return time;
@@ -656,20 +649,20 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
 
     final int numFires = computeNumTimesFiredBetween (getStartTime (), end);
 
-    return new Date (getStartTime ().getTime () + (numFires * repeatInterval));
+    return new Date (getStartTime ().getTime () + (numFires * m_nRepeatInterval));
   }
 
   public int computeNumTimesFiredBetween (final Date start, final Date end)
   {
 
-    if (repeatInterval < 1)
+    if (m_nRepeatInterval < 1)
     {
       return 0;
     }
 
     final long time = end.getTime () - start.getTime ();
 
-    return (int) (time / repeatInterval);
+    return (int) (time / m_nRepeatInterval);
   }
 
   /**
@@ -684,17 +677,17 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   @Override
   public Date getFinalFireTime ()
   {
-    if (repeatCount == 0)
+    if (m_nRepeatCount == 0)
     {
-      return startTime;
+      return m_aStartTime;
     }
 
-    if (repeatCount == REPEAT_INDEFINITELY)
+    if (m_nRepeatCount == REPEAT_INDEFINITELY)
     {
       return (getEndTime () == null) ? null : getFireTimeBefore (getEndTime ());
     }
 
-    final long lastTrigger = startTime.getTime () + (repeatCount * repeatInterval);
+    final long lastTrigger = m_aStartTime.getTime () + (m_nRepeatCount * m_nRepeatInterval);
 
     if ((getEndTime () == null) || (lastTrigger < getEndTime ().getTime ()))
     {
@@ -727,7 +720,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   {
     super.validate ();
 
-    if (repeatCount != 0 && repeatInterval < 1)
+    if (m_nRepeatCount != 0 && m_nRepeatInterval < 1)
     {
       throw new SchedulerException ("Repeat Interval cannot be zero.");
     }

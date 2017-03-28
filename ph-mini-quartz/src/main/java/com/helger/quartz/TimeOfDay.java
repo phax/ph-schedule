@@ -26,6 +26,7 @@ import java.util.TimeZone;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.hashcode.HashCodeGenerator;
 
 /**
@@ -159,7 +160,7 @@ public class TimeOfDay implements Serializable
   {
     if (dateTime == null)
       return null;
-    final Calendar cal = Calendar.getInstance ();
+    final Calendar cal = PDTFactory.createCalendar ();
     cal.setTime (dateTime);
     cal.set (Calendar.HOUR_OF_DAY, m_nHour);
     cal.set (Calendar.MINUTE, m_nMinute);
@@ -251,7 +252,7 @@ public class TimeOfDay implements Serializable
   {
     if (dateTime == null)
       return null;
-    final Calendar cal = Calendar.getInstance ();
+    final Calendar cal = PDTFactory.createCalendar ();
     cal.setTime (dateTime);
     if (tz != null)
       cal.setTimeZone (tz);
@@ -287,7 +288,7 @@ public class TimeOfDay implements Serializable
   {
     if (dateTime == null)
       return null;
-    final Calendar cal = Calendar.getInstance ();
+    final Calendar cal = PDTFactory.createCalendar ();
     cal.setTime (dateTime);
     if (tz != null)
       cal.setTimeZone (tz);

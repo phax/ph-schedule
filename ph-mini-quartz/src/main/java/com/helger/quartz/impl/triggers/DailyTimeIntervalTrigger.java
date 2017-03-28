@@ -29,6 +29,7 @@ import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.datetime.util.PDTHelper;
+import com.helger.quartz.CQuartz;
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
@@ -101,8 +102,6 @@ import com.helger.quartz.TimeOfDay;
 public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeIntervalTrigger>
                                       implements IDailyTimeIntervalTrigger, ICoreTrigger
 {
-  private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = PDTFactory.getCurrentYear () + 100;
-
   private Date m_aStartTime;
   private Date m_aEndTime;
   private Date m_aNextFireTime;
@@ -539,9 +538,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
+      final Calendar c = PDTFactory.createCalendar ();
       c.setTime (m_aNextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         m_aNextFireTime = null;
       }
@@ -570,9 +569,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
+      final Calendar c = PDTFactory.createCalendar ();
       c.setTime (m_aNextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         m_aNextFireTime = null;
       }
@@ -617,9 +616,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
         break;
 
       // avoid infinite loop
-      final Calendar c = Calendar.getInstance ();
+      final Calendar c = PDTFactory.createCalendar ();
       c.setTime (m_aNextFireTime);
-      if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
+      if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         return null;
       }
@@ -631,7 +630,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   @Nonnull
   private static Calendar _createCalendarTime (final Date dateTime)
   {
-    final Calendar cal = Calendar.getInstance ();
+    final Calendar cal = PDTFactory.createCalendar ();
     cal.setTime (dateTime);
     return cal;
   }

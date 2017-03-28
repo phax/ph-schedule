@@ -294,7 +294,7 @@ public class DateBuilderTest
     final TimeZone tz1 = TimeZone.getTimeZone ("GMT-2:00");
     final TimeZone tz2 = TimeZone.getTimeZone ("GMT-4:00");
 
-    Calendar vc = Calendar.getInstance (tz1);
+    Calendar vc = Calendar.getInstance (tz1, Locale.getDefault (Locale.Category.FORMAT));
     vc.set (Calendar.YEAR, 2013);
     vc.set (Calendar.MONTH, Calendar.JUNE);
     vc.set (Calendar.DAY_OF_MONTH, 1);
@@ -306,7 +306,7 @@ public class DateBuilderTest
     vc.setTime (translateTime (vc.getTime (), tz1, tz2));
     assertEquals ("DateBuilder-produced date is not as expected.", 12, vc.get (Calendar.HOUR_OF_DAY));
 
-    vc = Calendar.getInstance (tz2);
+    vc = Calendar.getInstance (tz2, Locale.getDefault (Locale.Category.FORMAT));
     vc.set (Calendar.YEAR, 2013);
     vc.set (Calendar.MONTH, Calendar.JUNE);
     vc.set (Calendar.DAY_OF_MONTH, 1);

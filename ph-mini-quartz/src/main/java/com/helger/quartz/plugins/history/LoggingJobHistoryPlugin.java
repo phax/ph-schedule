@@ -19,6 +19,8 @@
 package com.helger.quartz.plugins.history;
 
 import java.text.MessageFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -280,22 +282,10 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   private String jobSuccessMessage = "Job {1}.{0} execution complete at {2, date, HH:mm:ss MM/dd/yyyy} and reports: {8}";
   private String jobFailedMessage = "Job {1}.{0} execution failed at {2, date, HH:mm:ss MM/dd/yyyy} and reports: {8}";
   private String jobWasVetoedMessage = "Job {1}.{0} was vetoed.  It was to be fired (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}";
-  private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private static final Logger log = LoggerFactory.getLogger (LoggingJobHistoryPlugin.class);
 
   public LoggingJobHistoryPlugin ()
   {}
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   protected Logger getLog ()
   {
@@ -382,12 +372,6 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
     this.jobWasVetoedMessage = jobWasVetoedMessage;
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * SchedulerPlugin Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Called during creation of the <code>Scheduler</code> in order to give the
@@ -453,14 +437,14 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
 
     final Object [] args = { context.getJobDetail ().getKey ().getName (),
                              context.getJobDetail ().getKey ().getGroup (),
-                             new java.util.Date (),
+                             new Date (),
                              trigger.getKey ().getName (),
                              trigger.getKey ().getGroup (),
                              trigger.getPreviousFireTime (),
                              trigger.getNextFireTime (),
                              Integer.valueOf (context.getRefireCount ()) };
 
-    getLog ().info (MessageFormat.format (getJobToBeFiredMessage (), args));
+    getLog ().info (new MessageFormat (getJobToBeFiredMessage (), Locale.US).format (args));
   }
 
   /**
@@ -484,7 +468,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
       final String errMsg = jobException.getMessage ();
       args = new Object [] { context.getJobDetail ().getKey ().getName (),
                              context.getJobDetail ().getKey ().getGroup (),
-                             new java.util.Date (),
+                             new Date (),
                              trigger.getKey ().getName (),
                              trigger.getKey ().getGroup (),
                              trigger.getPreviousFireTime (),
@@ -492,7 +476,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
                              Integer.valueOf (context.getRefireCount ()),
                              errMsg };
 
-      getLog ().warn (MessageFormat.format (getJobFailedMessage (), args), jobException);
+      getLog ().warn (new MessageFormat (getJobFailedMessage (), Locale.US).format (args), jobException);
     }
     else
     {
@@ -504,7 +488,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
       final String result = String.valueOf (context.getResult ());
       args = new Object [] { context.getJobDetail ().getKey ().getName (),
                              context.getJobDetail ().getKey ().getGroup (),
-                             new java.util.Date (),
+                             new Date (),
                              trigger.getKey ().getName (),
                              trigger.getKey ().getGroup (),
                              trigger.getPreviousFireTime (),
@@ -512,7 +496,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
                              Integer.valueOf (context.getRefireCount ()),
                              result };
 
-      getLog ().info (MessageFormat.format (getJobSuccessMessage (), args));
+      getLog ().info (new MessageFormat (getJobSuccessMessage (), Locale.US).format (args));
     }
   }
 
@@ -531,14 +515,14 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
 
     final Object [] args = { context.getJobDetail ().getKey ().getName (),
                              context.getJobDetail ().getKey ().getGroup (),
-                             new java.util.Date (),
+                             new Date (),
                              trigger.getKey ().getName (),
                              trigger.getKey ().getGroup (),
                              trigger.getPreviousFireTime (),
                              trigger.getNextFireTime (),
                              Integer.valueOf (context.getRefireCount ()) };
 
-    getLog ().info (MessageFormat.format (getJobWasVetoedMessage (), args));
+    getLog ().info (new MessageFormat (getJobWasVetoedMessage (), Locale.US).format (args));
   }
 
 }

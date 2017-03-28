@@ -21,6 +21,9 @@ package com.helger.quartz.impl.calendar;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Locale.Category;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
@@ -661,19 +664,15 @@ public class DailyCalendar extends BaseCalendar
   @Override
   public String toString ()
   {
-    final NumberFormat numberFormatter = NumberFormat.getNumberInstance ();
+    final NumberFormat numberFormatter = NumberFormat.getNumberInstance (Locale.getDefault (Category.FORMAT));
     numberFormatter.setMaximumFractionDigits (0);
     numberFormatter.setMinimumIntegerDigits (2);
     final StringBuffer buffer = new StringBuffer ();
     buffer.append ("base calendar: [");
     if (getBaseCalendar () != null)
-    {
       buffer.append (getBaseCalendar ().toString ());
-    }
     else
-    {
       buffer.append ("null");
-    }
     buffer.append ("], time range: '");
     buffer.append (numberFormatter.format (rangeStartingHourOfDay));
     buffer.append (":");
@@ -702,7 +701,7 @@ public class DailyCalendar extends BaseCalendar
    */
   private String [] split (final String string, final String delim)
   {
-    final ArrayList <String> result = new ArrayList <> ();
+    final List <String> result = new ArrayList <> ();
 
     final StringTokenizer stringTokenizer = new StringTokenizer (string, delim);
     while (stringTokenizer.hasMoreTokens ())

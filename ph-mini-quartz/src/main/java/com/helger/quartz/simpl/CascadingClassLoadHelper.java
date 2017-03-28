@@ -51,7 +51,7 @@ import com.helger.quartz.spi.IClassLoadHelper;
 public class CascadingClassLoadHelper implements IClassLoadHelper
 {
   private List <IClassLoadHelper> loadHelpers;
-  private IClassLoadHelper bestCandidate;
+  private IClassLoadHelper m_aBestCandidate;
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,15 +84,15 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
   public Class <?> loadClass (final String name) throws ClassNotFoundException
   {
 
-    if (bestCandidate != null)
+    if (m_aBestCandidate != null)
     {
       try
       {
-        return bestCandidate.loadClass (name);
+        return m_aBestCandidate.loadClass (name);
       }
       catch (final Throwable t)
       {
-        bestCandidate = null;
+        m_aBestCandidate = null;
       }
     }
 
@@ -119,14 +119,11 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
     if (clazz == null)
     {
       if (throwable instanceof ClassNotFoundException)
-      {
         throw (ClassNotFoundException) throwable;
-      }
-      throw new ClassNotFoundException (String.format ("Unable to load class %s by any known loaders.", name),
-                                        throwable);
+      throw new ClassNotFoundException ("Unable to load class " + name + " by any known loaders.", throwable);
     }
 
-    bestCandidate = loadHelper;
+    m_aBestCandidate = loadHelper;
 
     return clazz;
   }
@@ -150,12 +147,12 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
 
     URL result = null;
 
-    if (bestCandidate != null)
+    if (m_aBestCandidate != null)
     {
-      result = bestCandidate.getResource (name);
+      result = m_aBestCandidate.getResource (name);
       if (result == null)
       {
-        bestCandidate = null;
+        m_aBestCandidate = null;
       }
       else
       {
@@ -177,7 +174,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
       }
     }
 
-    bestCandidate = loadHelper;
+    m_aBestCandidate = loadHelper;
     return result;
   }
 
@@ -194,12 +191,12 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
 
     InputStream result = null;
 
-    if (bestCandidate != null)
+    if (m_aBestCandidate != null)
     {
-      result = bestCandidate.getResourceAsStream (name);
+      result = m_aBestCandidate.getResourceAsStream (name);
       if (result == null)
       {
-        bestCandidate = null;
+        m_aBestCandidate = null;
       }
       else
       {
@@ -221,7 +218,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
       }
     }
 
-    bestCandidate = loadHelper;
+    m_aBestCandidate = loadHelper;
     return result;
   }
 
@@ -232,8 +229,8 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   public ClassLoader getClassLoader ()
   {
-    return (this.bestCandidate == null) ? Thread.currentThread ().getContextClassLoader ()
-                                        : this.bestCandidate.getClassLoader ();
+    return (this.m_aBestCandidate == null) ? Thread.currentThread ().getContextClassLoader ()
+                                        : this.m_aBestCandidate.getClassLoader ();
   }
 
 }

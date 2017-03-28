@@ -266,8 +266,7 @@ public class QuartzInitializerServlet extends HttpServlet
     }
     catch (final Exception e)
     {
-      log ("Mini Quartz Scheduler failed to shutdown cleanly: " + e.toString ());
-      e.printStackTrace ();
+      log ("Mini Quartz Scheduler failed to shutdown cleanly", e);
     }
 
     log ("Mini Quartz Scheduler successful shutdown.");
