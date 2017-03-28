@@ -29,7 +29,7 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerContext;
@@ -140,7 +140,7 @@ public interface IRemotableQuartzScheduler extends Remote
 
   ITrigger getTrigger (TriggerKey triggerKey) throws SchedulerException, RemoteException;
 
-  TriggerState getTriggerState (TriggerKey triggerKey) throws SchedulerException, RemoteException;
+  ETriggerState getTriggerState (TriggerKey triggerKey) throws SchedulerException, RemoteException;
 
   void addCalendar (String calName, ICalendar calendar, boolean replace, boolean updateTriggers)
                                                                                                  throws SchedulerException,

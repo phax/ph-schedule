@@ -27,8 +27,8 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
-import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.ObjectAlreadyExistsException;
@@ -391,9 +391,9 @@ public interface IJobStore
   /**
    * Get the current state of the identified <code>{@link ITrigger}</code>.
    *
-   * @see ITrigger.TriggerState
+   * @see ITrigger.ETriggerState
    */
-  TriggerState getTriggerState (TriggerKey triggerKey) throws JobPersistenceException;
+  ETriggerState getTriggerState (TriggerKey triggerKey) throws JobPersistenceException;
 
   /////////////////////////////////////////////////////////////////////////////
   //
@@ -567,7 +567,7 @@ public interface IJobStore
    */
   void triggeredJobComplete (IOperableTrigger trigger,
                              IJobDetail jobDetail,
-                             CompletedExecutionInstruction triggerInstCode);
+                             ECompletedExecutionInstruction triggerInstCode);
 
   /**
    * Inform the <code>JobStore</code> of the Scheduler instance's Id, prior to

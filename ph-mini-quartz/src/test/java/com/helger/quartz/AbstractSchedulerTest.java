@@ -43,7 +43,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.utils.Key;
 
@@ -189,16 +189,16 @@ public abstract class AbstractSchedulerTest
     assertTrue ("Number of jobs expected in 'g1' group was 2 ", jobKeys.size () == 2);
     assertTrue ("Number of triggers expected in 'g1' group was 2 ", triggerKeys.size () == 2);
 
-    TriggerState s = sched.getTriggerState (triggerKey ("t2", "g1"));
-    assertTrue ("State of trigger t2 expected to be NORMAL ", s.equals (TriggerState.NORMAL));
+    ETriggerState s = sched.getTriggerState (triggerKey ("t2", "g1"));
+    assertTrue ("State of trigger t2 expected to be NORMAL ", s.equals (ETriggerState.NORMAL));
 
     sched.pauseTrigger (triggerKey ("t2", "g1"));
     s = sched.getTriggerState (triggerKey ("t2", "g1"));
-    assertTrue ("State of trigger t2 expected to be PAUSED ", s.equals (TriggerState.PAUSED));
+    assertTrue ("State of trigger t2 expected to be PAUSED ", s.equals (ETriggerState.PAUSED));
 
     sched.resumeTrigger (triggerKey ("t2", "g1"));
     s = sched.getTriggerState (triggerKey ("t2", "g1"));
-    assertTrue ("State of trigger t2 expected to be NORMAL ", s.equals (TriggerState.NORMAL));
+    assertTrue ("State of trigger t2 expected to be NORMAL ", s.equals (ETriggerState.NORMAL));
 
     Set <String> pausedGroups = sched.getPausedTriggerGroups ();
     assertTrue ("Size of paused trigger groups list expected to be 0 ", pausedGroups.size () == 0);
@@ -221,16 +221,16 @@ public abstract class AbstractSchedulerTest
     assertTrue ("Size of paused trigger groups list expected to be 1 ", pausedGroups.size () == 1);
 
     s = sched.getTriggerState (triggerKey ("t2", "g1"));
-    assertTrue ("State of trigger t2 expected to be PAUSED ", s.equals (TriggerState.PAUSED));
+    assertTrue ("State of trigger t2 expected to be PAUSED ", s.equals (ETriggerState.PAUSED));
 
     s = sched.getTriggerState (triggerKey ("t4", "g1"));
-    assertTrue ("State of trigger t4 expected to be PAUSED ", s.equals (TriggerState.PAUSED));
+    assertTrue ("State of trigger t4 expected to be PAUSED ", s.equals (ETriggerState.PAUSED));
 
     sched.resumeTriggers (GroupMatcher.triggerGroupEquals ("g1"));
     s = sched.getTriggerState (triggerKey ("t2", "g1"));
-    assertTrue ("State of trigger t2 expected to be NORMAL ", s.equals (TriggerState.NORMAL));
+    assertTrue ("State of trigger t2 expected to be NORMAL ", s.equals (ETriggerState.NORMAL));
     s = sched.getTriggerState (triggerKey ("t4", "g1"));
-    assertTrue ("State of trigger t4 expected to be NORMAL ", s.equals (TriggerState.NORMAL));
+    assertTrue ("State of trigger t4 expected to be NORMAL ", s.equals (ETriggerState.NORMAL));
     pausedGroups = sched.getPausedTriggerGroups ();
     assertTrue ("Size of paused trigger groups list expected to be 0 ", pausedGroups.size () == 0);
 

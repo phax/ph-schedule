@@ -19,12 +19,16 @@
 package com.helger.quartz;
 
 import java.text.ParseException;
+import java.time.DayOfWeek;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.quartz.impl.triggers.CronTrigger;
 
 /**
- * <code>CronScheduleBuilder</code> is a {@link ScheduleBuilder} that defines
+ * <code>CronScheduleBuilder</code> is a {@link IScheduleBuilder} that defines
  * {@link CronExpression}-based schedules for <code>Trigger</code>s.
  * <p>
  * Quartz provides a builder-style API for constructing scheduling-related
@@ -49,14 +53,13 @@ import com.helger.quartz.impl.triggers.CronTrigger;
  *
  * @see CronExpression
  * @see ICronTrigger
- * @see ScheduleBuilder
+ * @see IScheduleBuilder
  * @see SimpleScheduleBuilder
  * @see CalendarIntervalScheduleBuilder
  * @see TriggerBuilder
  */
-public class CronScheduleBuilder extends ScheduleBuilder <ICronTrigger>
+public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
 {
-
   private final CronExpression cronExpression;
   private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
@@ -74,18 +77,15 @@ public class CronScheduleBuilder extends ScheduleBuilder <ICronTrigger>
    * will rather be invoked by a TriggerBuilder which this ScheduleBuilder is
    * given to.
    *
-   * @see TriggerBuilder#withSchedule(ScheduleBuilder)
+   * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
-  @Override
+  @Nonnull
   public CronTrigger build ()
   {
-
     final CronTrigger ct = new CronTrigger ();
-
     ct.setCronExpression (cronExpression);
     ct.setTimeZone (cronExpression.getTimeZone ());
     ct.setMisfireInstruction (misfireInstruction);
-
     return ct;
   }
 
@@ -178,9 +178,14 @@ public class CronScheduleBuilder extends ScheduleBuilder <ICronTrigger>
     DateBuilder.validateHour (hour);
     DateBuilder.validateMinute (minute);
 
-    final String cronExpression = String.format ("0 %d %d ? * *", minute, hour);
+    final String cronExpression = "0 " + minute + " " + hour + " ? * *";
 
     return _cronScheduleNoParseException (cronExpression);
+  }
+
+  private static int _getDoW (final DayOfWeek d)
+  {
+    return d.getValue () % 7 + 1;
   }
 
   /**
@@ -204,24 +209,20 @@ public class CronScheduleBuilder extends ScheduleBuilder <ICronTrigger>
    * @see DateBuilder#SATURDAY
    * @see DateBuilder#SUNDAY
    */
-
   public static CronScheduleBuilder atHourAndMinuteOnGivenDaysOfWeek (final int hour,
                                                                       final int minute,
-                                                                      final Integer... daysOfWeek)
+                                                                      final DayOfWeek... daysOfWeek)
   {
-    if (daysOfWeek == null || daysOfWeek.length == 0)
-      throw new IllegalArgumentException ("You must specify at least one day of week.");
-    for (final int dayOfWeek : daysOfWeek)
-      DateBuilder.validateDayOfWeek (dayOfWeek);
+    ValueEnforcer.notEmptyNoNullValue (daysOfWeek, "DaysOfWeek");
     DateBuilder.validateHour (hour);
     DateBuilder.validateMinute (minute);
 
-    String cronExpression = String.format ("0 %d %d ? * %d", minute, hour, daysOfWeek[0]);
-
+    final StringBuilder aSB = new StringBuilder ();
+    aSB.append ("0 ").append (minute).append (' ').append (hour).append (" ? * ").append (_getDoW (daysOfWeek[0]));
     for (int i = 1; i < daysOfWeek.length; i++)
-      cronExpression = cronExpression + "," + daysOfWeek[i];
+      aSB.append (',').append (_getDoW (daysOfWeek[i]));
 
-    return _cronScheduleNoParseException (cronExpression);
+    return _cronScheduleNoParseException (aSB.toString ());
   }
 
   /**
@@ -244,13 +245,15 @@ public class CronScheduleBuilder extends ScheduleBuilder <ICronTrigger>
    * @see DateBuilder#SATURDAY
    * @see DateBuilder#SUNDAY
    */
-  public static CronScheduleBuilder weeklyOnDayAndHourAndMinute (final int dayOfWeek, final int hour, final int minute)
+  public static CronScheduleBuilder weeklyOnDayAndHourAndMinute (final DayOfWeek dayOfWeek,
+                                                                 final int hour,
+                                                                 final int minute)
   {
     DateBuilder.validateDayOfWeek (dayOfWeek);
     DateBuilder.validateHour (hour);
     DateBuilder.validateMinute (minute);
 
-    final String cronExpression = String.format ("0 %d %d ? * %d", minute, hour, dayOfWeek);
+    final String cronExpression = "0 " + minute + " " + hour + " ? * " + _getDoW (dayOfWeek);
 
     return _cronScheduleNoParseException (cronExpression);
   }

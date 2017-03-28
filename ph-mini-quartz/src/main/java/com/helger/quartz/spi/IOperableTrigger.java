@@ -82,10 +82,10 @@ public interface IOperableTrigger extends IMutableTrigger
    *        is the <code>JobExecutionException</code> thrown by the
    *        <code>Job</code>, if any (may be null).
    * @return one of the <code>CompletedExecutionInstruction</code> constants.
-   * @see CompletedExecutionInstruction
+   * @see ECompletedExecutionInstruction
    * @see #triggered(ICalendar)
    */
-  CompletedExecutionInstruction executionComplete (IJobExecutionContext context, JobExecutionException result);
+  ECompletedExecutionInstruction executionComplete (IJobExecutionContext context, JobExecutionException result);
 
   /**
    * <p>

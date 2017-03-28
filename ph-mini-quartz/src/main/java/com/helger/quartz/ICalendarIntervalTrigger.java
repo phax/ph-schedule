@@ -53,7 +53,6 @@ import java.util.TimeZone;
  */
 public interface ICalendarIntervalTrigger extends ITrigger
 {
-
   /**
    * <p>
    * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
@@ -61,7 +60,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * fired now by <code>Scheduler</code>.
    * </p>
    */
-  public static final int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
+  int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
   /**
    * <p>
    * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
@@ -71,14 +70,12 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * <code>{@link Calendar}</code>, but it does not want to be fired now.
    * </p>
    */
-  public static final int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
+  int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
 
   /**
-   * <p>
-   * Get the interval unit - the time unit on with the interval applies.
-   * </p>
+   * @return the interval unit - the time unit on with the interval applies.
    */
-  public EIntervalUnit getRepeatIntervalUnit ();
+  EIntervalUnit getRepeatIntervalUnit ();
 
   /**
    * <p>
@@ -87,7 +84,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * unit) in order to calculate the time of the next trigger repeat.
    * </p>
    */
-  public int getRepeatInterval ();
+  int getRepeatInterval ();
 
   /**
    * <p>
@@ -95,7 +92,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * fired.
    * </p>
    */
-  public int getTimesTriggered ();
+  int getTimesTriggered ();
 
   /**
    * <p>
@@ -106,7 +103,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * If null, the system default TimeZone will be used.
    * </p>
    */
-  public TimeZone getTimeZone ();
+  TimeZone getTimeZone ();
 
   /**
    * If intervals are a day or greater, this property (set to true) will cause
@@ -132,7 +129,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * @see #getStartTime()
    * @see #getTimeZone()
    */
-  public boolean isPreserveHourOfDayAcrossDaylightSavings ();
+  boolean isPreserveHourOfDayAcrossDaylightSavings ();
 
   /**
    * If intervals are a day or greater, and
@@ -152,7 +149,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    *
    * @see #isPreserveHourOfDayAcrossDaylightSavings()
    */
-  public boolean isSkipDayIfHourDoesNotExist ();
+  boolean isSkipDayIfHourDoesNotExist ();
 
   TriggerBuilder <ICalendarIntervalTrigger> getTriggerBuilder ();
 }

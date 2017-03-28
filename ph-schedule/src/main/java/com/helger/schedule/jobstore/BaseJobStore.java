@@ -51,16 +51,16 @@ import com.helger.commons.concurrent.SimpleReadWriteLock;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJob;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobDetail;
+import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ETriggerState;
+import com.helger.quartz.ITrigger.TriggerTimeComparator;
+import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.ObjectAlreadyExistsException;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
-import com.helger.quartz.ITrigger.TriggerState;
-import com.helger.quartz.ITrigger.TriggerTimeComparator;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.impl.matchers.StringMatcher;
 import com.helger.quartz.spi.IClassLoadHelper;
@@ -71,7 +71,8 @@ import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
 
 /**
- * {@link IJobStore} implementation based on {@link com.helger.quartz.simpl.RAMJobStore}
+ * {@link IJobStore} implementation based on
+ * {@link com.helger.quartz.simpl.RAMJobStore}
  *
  * @author Philip Helger
  */
@@ -82,16 +83,16 @@ public class BaseJobStore implements IJobStore
 
   private final SimpleReadWriteLock m_aRWLock = new SimpleReadWriteLock ();
   private ISchedulerSignaler m_aSignaler;
-  private final ICommonsMap <JobKey, JobWrapper> m_aJobsByKey = new CommonsHashMap<> (1000);
-  private final ICommonsMap <TriggerKey, TriggerWrapper> m_aTriggersByKey = new CommonsHashMap<> (1000);
-  private final ICommonsMap <String, ICommonsMap <JobKey, JobWrapper>> m_aJobsByGroup = new CommonsHashMap<> (25);
-  private final ICommonsMap <String, ICommonsMap <TriggerKey, TriggerWrapper>> m_aTriggersByGroup = new CommonsHashMap<> (25);
-  private final ICommonsNavigableSet <TriggerWrapper> m_aTimeTriggers = new CommonsTreeSet<> (new TriggerWrapperComparator ());
-  private final ICommonsMap <String, ICalendar> m_aCalendarsByName = new CommonsHashMap<> (25);
-  private final ICommonsList <TriggerWrapper> m_aTriggers = new CommonsArrayList<> (1000);
-  private final ICommonsSet <String> m_aPausedTriggerGroups = new CommonsHashSet<> ();
-  private final ICommonsSet <String> m_aPausedJobGroups = new CommonsHashSet<> ();
-  private final ICommonsSet <JobKey> m_aBlockedJobs = new CommonsHashSet<> ();
+  private final ICommonsMap <JobKey, JobWrapper> m_aJobsByKey = new CommonsHashMap <> (1000);
+  private final ICommonsMap <TriggerKey, TriggerWrapper> m_aTriggersByKey = new CommonsHashMap <> (1000);
+  private final ICommonsMap <String, ICommonsMap <JobKey, JobWrapper>> m_aJobsByGroup = new CommonsHashMap <> (25);
+  private final ICommonsMap <String, ICommonsMap <TriggerKey, TriggerWrapper>> m_aTriggersByGroup = new CommonsHashMap <> (25);
+  private final ICommonsNavigableSet <TriggerWrapper> m_aTimeTriggers = new CommonsTreeSet <> (new TriggerWrapperComparator ());
+  private final ICommonsMap <String, ICalendar> m_aCalendarsByName = new CommonsHashMap <> (25);
+  private final ICommonsList <TriggerWrapper> m_aTriggers = new CommonsArrayList <> (1000);
+  private final ICommonsSet <String> m_aPausedTriggerGroups = new CommonsHashSet <> ();
+  private final ICommonsSet <String> m_aPausedJobGroups = new CommonsHashSet <> ();
+  private final ICommonsSet <JobKey> m_aBlockedJobs = new CommonsHashSet <> ();
   private long m_nMisfireThreshold = 5000L;
 
   public BaseJobStore ()
@@ -205,7 +206,7 @@ public class BaseJobStore implements IJobStore
         // get job group
         final String sGroupName = aKey.getGroup ();
         final ICommonsMap <JobKey, JobWrapper> aMap = m_aJobsByGroup.computeIfAbsent (sGroupName,
-                                                                                      k -> new CommonsHashMap<> (100));
+                                                                                      k -> new CommonsHashMap <> (100));
 
         final JobWrapper jw = new JobWrapper ((IJobDetail) aNewJob.clone ());
         // add to jobs by group
@@ -318,7 +319,7 @@ public class BaseJobStore implements IJobStore
       // add to triggers by group
       final String sTriggerGroupName = aTriggerKey.getGroup ();
       final ICommonsMap <TriggerKey, TriggerWrapper> aGrpMap = m_aTriggersByGroup.computeIfAbsent (sTriggerGroupName,
-                                                                                                   k -> new CommonsHashMap<> (100));
+                                                                                                   k -> new CommonsHashMap <> (100));
       aGrpMap.put (aTriggerKey, tw);
       // add to triggers by FQN map
       m_aTriggersByKey.put (aTriggerKey, tw);
@@ -342,8 +343,8 @@ public class BaseJobStore implements IJobStore
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the given
-   * name.
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
+   * the given name.
    * </p>
    *
    * @return <code>true</code> if a <code>Trigger</code> with the given name and
@@ -461,8 +462,8 @@ public class BaseJobStore implements IJobStore
 
   /**
    * <p>
-   * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the given
-   * <code>{@link com.helger.quartz.IJob}</code>.
+   * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the
+   * given <code>{@link com.helger.quartz.IJob}</code>.
    * </p>
    *
    * @return The desired <code>Job</code>, or null if there is no match.
@@ -500,30 +501,30 @@ public class BaseJobStore implements IJobStore
     return m_aRWLock.readLocked ( () -> m_aTriggersByKey.containsKey (aTriggerKey));
   }
 
-  public TriggerState getTriggerState (final TriggerKey triggerKey) throws JobPersistenceException
+  public ETriggerState getTriggerState (final TriggerKey triggerKey) throws JobPersistenceException
   {
     return m_aRWLock.readLocked ( () -> {
       final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
 
       if (tw == null)
-        return TriggerState.NONE;
+        return ETriggerState.NONE;
 
       if (tw.getState () == TriggerWrapper.STATE_COMPLETE)
-        return TriggerState.COMPLETE;
+        return ETriggerState.COMPLETE;
 
       if (tw.getState () == TriggerWrapper.STATE_PAUSED)
-        return TriggerState.PAUSED;
+        return ETriggerState.PAUSED;
 
       if (tw.getState () == TriggerWrapper.STATE_PAUSED_BLOCKED)
-        return TriggerState.PAUSED;
+        return ETriggerState.PAUSED;
 
       if (tw.getState () == TriggerWrapper.STATE_BLOCKED)
-        return TriggerState.BLOCKED;
+        return ETriggerState.BLOCKED;
 
       if (tw.getState () == TriggerWrapper.STATE_ERROR)
-        return TriggerState.ERROR;
+        return ETriggerState.ERROR;
 
-      return TriggerState.NORMAL;
+      return ETriggerState.NORMAL;
     });
   }
 
@@ -602,7 +603,7 @@ public class BaseJobStore implements IJobStore
 
   public ICommonsSet <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher)
   {
-    final ICommonsSet <JobKey> ret = new CommonsHashSet<> ();
+    final ICommonsSet <JobKey> ret = new CommonsHashSet <> ();
 
     final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
     final String compareToValue = matcher.getCompareToValue ();
@@ -634,12 +635,12 @@ public class BaseJobStore implements IJobStore
   @ReturnsMutableCopy
   public ICommonsList <String> getCalendarNames ()
   {
-    return m_aRWLock.readLocked ( () -> new CommonsArrayList<> (m_aCalendarsByName.keySet ()));
+    return m_aRWLock.readLocked ( () -> new CommonsArrayList <> (m_aCalendarsByName.keySet ()));
   }
 
   public ICommonsSet <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher)
   {
-    final ICommonsSet <TriggerKey> ret = new CommonsHashSet<> ();
+    final ICommonsSet <TriggerKey> ret = new CommonsHashSet <> ();
     final StringMatcher.StringOperatorName operator = matcher.getCompareWithOperator ();
     final String compareToValue = matcher.getCompareToValue ();
 
@@ -668,12 +669,12 @@ public class BaseJobStore implements IJobStore
 
   public ICommonsList <String> getJobGroupNames ()
   {
-    return m_aRWLock.readLocked ( () -> new CommonsArrayList<> (m_aJobsByGroup.keySet ()));
+    return m_aRWLock.readLocked ( () -> new CommonsArrayList <> (m_aJobsByGroup.keySet ()));
   }
 
   public ICommonsList <String> getTriggerGroupNames ()
   {
-    return m_aRWLock.readLocked ( () -> new CommonsArrayList<> (m_aTriggersByGroup.keySet ()));
+    return m_aRWLock.readLocked ( () -> new CommonsArrayList <> (m_aTriggersByGroup.keySet ()));
   }
 
   @Nonnull
@@ -681,7 +682,7 @@ public class BaseJobStore implements IJobStore
   public ICommonsList <IOperableTrigger> getTriggersForJob (final JobKey aJobKey)
   {
     return m_aRWLock.readLocked ( () -> {
-      final ICommonsList <IOperableTrigger> ret = new CommonsArrayList<> ();
+      final ICommonsList <IOperableTrigger> ret = new CommonsArrayList <> ();
       for (final TriggerWrapper aTW : m_aTriggers)
         if (aTW.getJobKey ().equals (aJobKey))
           ret.add ((IOperableTrigger) aTW.getTrigger ().clone ());
@@ -694,7 +695,7 @@ public class BaseJobStore implements IJobStore
   protected ICommonsList <TriggerWrapper> getTriggerWrappersForJob (final JobKey aJobKey)
   {
     return m_aRWLock.readLocked ( () -> {
-      final ICommonsList <TriggerWrapper> ret = new CommonsArrayList<> ();
+      final ICommonsList <TriggerWrapper> ret = new CommonsArrayList <> ();
       for (final TriggerWrapper aTW : m_aTriggers)
         if (aTW.getJobKey ().equals (aJobKey))
           ret.add (aTW);
@@ -707,7 +708,7 @@ public class BaseJobStore implements IJobStore
   protected ICommonsList <TriggerWrapper> getTriggerWrappersForCalendar (final String calName)
   {
     return m_aRWLock.readLocked ( () -> {
-      final ICommonsList <TriggerWrapper> ret = new CommonsArrayList<> ();
+      final ICommonsList <TriggerWrapper> ret = new CommonsArrayList <> ();
       for (final TriggerWrapper tw : m_aTriggers)
       {
         final String tcalName = tw.getTrigger ().getCalendarName ();
@@ -747,7 +748,7 @@ public class BaseJobStore implements IJobStore
 
   public ICommonsList <String> pauseTriggers (final GroupMatcher <TriggerKey> matcher)
   {
-    final ICommonsList <String> ret = new CommonsArrayList<> ();
+    final ICommonsList <String> ret = new CommonsArrayList <> ();
 
     final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
 
@@ -778,8 +779,8 @@ public class BaseJobStore implements IJobStore
 
   /**
    * <p>
-   * Pause the <code>{@link com.helger.quartz.IJobDetail}</code> with the given name -
-   * by pausing all of its current <code>Trigger</code>s.
+   * Pause the <code>{@link com.helger.quartz.IJobDetail}</code> with the given
+   * name - by pausing all of its current <code>Trigger</code>s.
    * </p>
    */
   public void pauseJob (final JobKey jobKey)
@@ -791,8 +792,8 @@ public class BaseJobStore implements IJobStore
 
   /**
    * <p>
-   * Pause all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in the given
-   * group - by pausing all of their <code>Trigger</code>s.
+   * Pause all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in the
+   * given group - by pausing all of their <code>Trigger</code>s.
    * </p>
    * <p>
    * The JobStore should "remember" that the group is paused, and impose the
@@ -802,7 +803,7 @@ public class BaseJobStore implements IJobStore
    */
   public ICommonsList <String> pauseJobs (final GroupMatcher <JobKey> matcher)
   {
-    final ICommonsList <String> pausedGroups = new CommonsArrayList<> ();
+    final ICommonsList <String> pausedGroups = new CommonsArrayList <> ();
     final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
 
     m_aRWLock.writeLocked ( () -> {
@@ -869,7 +870,7 @@ public class BaseJobStore implements IJobStore
 
   public ICommonsList <String> resumeTriggers (final GroupMatcher <TriggerKey> matcher)
   {
-    final ICommonsSet <String> ret = new CommonsHashSet<> ();
+    final ICommonsSet <String> ret = new CommonsHashSet <> ();
     final ICommonsSet <TriggerKey> keys = getTriggerKeys (matcher);
 
     for (final TriggerKey triggerKey : keys)
@@ -909,7 +910,7 @@ public class BaseJobStore implements IJobStore
 
   public ICommonsCollection <String> resumeJobs (final GroupMatcher <JobKey> matcher)
   {
-    final ICommonsSet <String> ret = new CommonsHashSet<> ();
+    final ICommonsSet <String> ret = new CommonsHashSet <> ();
 
     final ICommonsSet <JobKey> keys = getJobKeys (matcher);
 
@@ -982,7 +983,7 @@ public class BaseJobStore implements IJobStore
       cal = retrieveCalendar (tw.getTrigger ().getCalendarName ());
     }
 
-    m_aSignaler.notifyTriggerListenersMisfired ((IOperableTrigger) tw.getTrigger ().clone ());
+    m_aSignaler.notifyTriggerListenersMisfired (tw.getTrigger ().clone ());
 
     tw.getTrigger ().updateAfterMisfire (cal);
 
@@ -1005,13 +1006,13 @@ public class BaseJobStore implements IJobStore
   }
 
   public ICommonsList <IOperableTrigger> acquireNextTriggers (final long noLaterThan,
-                                                             final int maxCount,
-                                                             final long timeWindow)
+                                                              final int maxCount,
+                                                              final long timeWindow)
   {
     return m_aRWLock.writeLocked ( () -> {
-      final ICommonsList <IOperableTrigger> ret = new CommonsArrayList<> ();
-      final ICommonsSet <JobKey> acquiredJobKeysForNoConcurrentExec = new CommonsHashSet<> ();
-      final ICommonsSet <TriggerWrapper> excludedTriggers = new CommonsHashSet<> ();
+      final ICommonsList <IOperableTrigger> ret = new CommonsArrayList <> ();
+      final ICommonsSet <JobKey> acquiredJobKeysForNoConcurrentExec = new CommonsHashSet <> ();
+      final ICommonsSet <TriggerWrapper> excludedTriggers = new CommonsHashSet <> ();
       long firstAcquiredTriggerFireTime = 0;
 
       // return empty list if store has no triggers.
@@ -1114,7 +1115,7 @@ public class BaseJobStore implements IJobStore
   public ICommonsList <TriggerFiredResult> triggersFired (final List <IOperableTrigger> firedTriggers)
   {
     return m_aRWLock.writeLocked ( () -> {
-      final ICommonsList <TriggerFiredResult> ret = new CommonsArrayList<> ();
+      final ICommonsList <TriggerFiredResult> ret = new CommonsArrayList <> ();
 
       for (final IOperableTrigger trigger : firedTriggers)
       {
@@ -1181,7 +1182,7 @@ public class BaseJobStore implements IJobStore
 
   public void triggeredJobComplete (final IOperableTrigger trigger,
                                     final IJobDetail jobDetail,
-                                    final CompletedExecutionInstruction triggerInstCode)
+                                    final ECompletedExecutionInstruction triggerInstCode)
   {
     m_aRWLock.writeLocked ( () -> {
       final JobWrapper jw = m_aJobsByKey.get (jobDetail.getKey ());
@@ -1231,7 +1232,7 @@ public class BaseJobStore implements IJobStore
       // check for trigger deleted during execution...
       if (tw != null)
       {
-        if (triggerInstCode == CompletedExecutionInstruction.DELETE_TRIGGER)
+        if (triggerInstCode == ECompletedExecutionInstruction.DELETE_TRIGGER)
         {
 
           if (trigger.getNextFireTime () == null)
@@ -1250,28 +1251,28 @@ public class BaseJobStore implements IJobStore
           }
         }
         else
-          if (triggerInstCode == CompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
+          if (triggerInstCode == ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
           {
             tw.setState (TriggerWrapper.STATE_COMPLETE);
             m_aTimeTriggers.remove (tw);
             m_aSignaler.signalSchedulingChange (0L);
           }
           else
-            if (triggerInstCode == CompletedExecutionInstruction.SET_TRIGGER_ERROR)
+            if (triggerInstCode == ECompletedExecutionInstruction.SET_TRIGGER_ERROR)
             {
               s_aLogger.info ("Trigger " + trigger.getKey () + " set to ERROR state.");
               tw.setState (TriggerWrapper.STATE_ERROR);
               m_aSignaler.signalSchedulingChange (0L);
             }
             else
-              if (triggerInstCode == CompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR)
+              if (triggerInstCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR)
               {
                 s_aLogger.info ("All triggers of Job " + trigger.getJobKey () + " set to ERROR state.");
                 setAllTriggersOfJobToState (trigger.getJobKey (), TriggerWrapper.STATE_ERROR);
                 m_aSignaler.signalSchedulingChange (0L);
               }
               else
-                if (triggerInstCode == CompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE)
+                if (triggerInstCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE)
                 {
                   setAllTriggersOfJobToState (trigger.getJobKey (), TriggerWrapper.STATE_COMPLETE);
                   m_aSignaler.signalSchedulingChange (0L);

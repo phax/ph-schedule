@@ -54,7 +54,7 @@ import com.helger.commons.compare.IComparator;
 @MustImplementEqualsAndHashcode
 public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
 {
-  enum TriggerState
+  enum ETriggerState
   {
     NONE,
     NORMAL,
@@ -104,7 +104,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * in the <code>ERROR</code> state.
    * </p>
    */
-  enum CompletedExecutionInstruction
+  enum ECompletedExecutionInstruction
   {
     NOOP,
     RE_EXECUTE_JOB,
@@ -280,12 +280,12 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
   TriggerBuilder <? extends ITrigger> getTriggerBuilder ();
 
   /**
-   * Get a {@link ScheduleBuilder} that is configured to produce a schedule
+   * Get a {@link IScheduleBuilder} that is configured to produce a schedule
    * identical to this trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */
-  ScheduleBuilder <? extends ITrigger> getScheduleBuilder ();
+  IScheduleBuilder <? extends ITrigger> getScheduleBuilder ();
 
   /**
    * Trigger equality is based upon the equality of the TriggerKey.

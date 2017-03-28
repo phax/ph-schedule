@@ -33,62 +33,62 @@ public class Quartz601Test
   public void testNormal ()
   {
     for (int i = 0; i < 6; i++)
-      assertParsesForField ("0 15 10 * * ? 2005", i);
+      _assertParsesForField ("0 15 10 * * ? 2005", i);
   }
 
   @Test
   public void testSecond ()
   {
-    assertParsesForField ("58-4 5 21 ? * MON-FRI", 0);
+    _assertParsesForField ("58-4 5 21 ? * MON-FRI", 0);
   }
 
   @Test
   public void testMinute ()
   {
-    assertParsesForField ("0 58-4 21 ? * MON-FRI", 1);
+    _assertParsesForField ("0 58-4 21 ? * MON-FRI", 1);
   }
 
   @Test
   public void testHour ()
   {
-    assertParsesForField ("0 0/5 21-3 ? * MON-FRI", 2);
+    _assertParsesForField ("0 0/5 21-3 ? * MON-FRI", 2);
   }
 
   @Test
   public void testDayOfWeekNumber ()
   {
-    assertParsesForField ("58 5 21 ? * 6-2", 5);
+    _assertParsesForField ("58 5 21 ? * 6-2", 5);
   }
 
   @Test
   public void testDayOfWeek ()
   {
-    assertParsesForField ("58 5 21 ? * FRI-TUE", 5);
+    _assertParsesForField ("58 5 21 ? * FRI-TUE", 5);
   }
 
   @Test
   public void testDayOfMonth ()
   {
-    assertParsesForField ("58 5 21 28-5 1 ?", 3);
+    _assertParsesForField ("58 5 21 28-5 1 ?", 3);
   }
 
   @Test
   public void testMonth ()
   {
-    assertParsesForField ("58 5 21 ? 11-2 FRI", 4);
+    _assertParsesForField ("58 5 21 ? 11-2 FRI", 4);
   }
 
   @Test
   public void testAmbiguous ()
   {
-    assertParsesForField ("0 0 14-6 ? * FRI-MON", 2);
-    assertParsesForField ("0 0 14-6 ? * FRI-MON", 5);
+    _assertParsesForField ("0 0 14-6 ? * FRI-MON", 2);
+    _assertParsesForField ("0 0 14-6 ? * FRI-MON", 5);
 
-    assertParsesForField ("55-3 56-2 6 ? * FRI", 0);
-    assertParsesForField ("55-3 56-2 6 ? * FRI", 1);
+    _assertParsesForField ("55-3 56-2 6 ? * FRI", 0);
+    _assertParsesForField ("55-3 56-2 6 ? * FRI", 1);
   }
 
-  private Set <Integer> assertParsesForField (final String expression, final int constant)
+  private Set <Integer> _assertParsesForField (final String expression, final int constant)
   {
     try
     {

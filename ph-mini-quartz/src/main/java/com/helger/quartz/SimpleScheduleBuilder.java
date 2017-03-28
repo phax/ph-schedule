@@ -25,7 +25,7 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 
 /**
- * <code>SimpleScheduleBuilder</code> is a {@link ScheduleBuilder} that defines
+ * <code>SimpleScheduleBuilder</code> is a {@link IScheduleBuilder} that defines
  * strict/literal interval-based schedules for <code>Trigger</code>s.
  * <p>
  * Quartz provides a builder-style API for constructing scheduling-related
@@ -51,10 +51,10 @@ import com.helger.quartz.impl.triggers.SimpleTrigger;
  * @see ISimpleTrigger
  * @see CalendarIntervalScheduleBuilder
  * @see CronScheduleBuilder
- * @see ScheduleBuilder
+ * @see IScheduleBuilder
  * @see TriggerBuilder
  */
-public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
+public class SimpleScheduleBuilder implements IScheduleBuilder <ISimpleTrigger>
 {
   private long m_nInterval = 0;
   private int m_nRepeatCount = 0;
@@ -244,7 +244,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * will rather be invoked by a TriggerBuilder which this ScheduleBuilder is
    * given to.
    *
-   * @see TriggerBuilder#withSchedule(ScheduleBuilder)
+   * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
   @Override
   @Nonnull

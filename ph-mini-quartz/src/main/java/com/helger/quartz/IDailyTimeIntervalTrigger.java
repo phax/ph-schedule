@@ -18,6 +18,7 @@
  */
 package com.helger.quartz;
 
+import java.time.DayOfWeek;
 import java.util.Calendar;
 import java.util.Set;
 
@@ -142,7 +143,7 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    *         per the values 1-7 as defined by {@link Calendar#SUNDAY} -
    *         {@link Calendar#SATURDAY}.
    */
-  Set <Integer> getDaysOfWeek ();
+  Set <DayOfWeek> getDaysOfWeek ();
 
   /**
    * <p>

@@ -52,8 +52,8 @@ import com.helger.quartz.IMatcher;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
-import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobExecutionException;
@@ -1372,9 +1372,9 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
    * </p>
    * J *
    *
-   * @see TriggerState
+   * @see ETriggerState
    */
-  public TriggerState getTriggerState (final TriggerKey triggerKey) throws SchedulerException
+  public ETriggerState getTriggerState (final TriggerKey triggerKey) throws SchedulerException
   {
     validateState ();
 
@@ -1621,14 +1621,14 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
 
   protected void notifyJobStoreJobComplete (final IOperableTrigger trigger,
                                             final IJobDetail detail,
-                                            final CompletedExecutionInstruction instCode)
+                                            final ECompletedExecutionInstruction instCode)
   {
     resources.getJobStore ().triggeredJobComplete (trigger, detail, instCode);
   }
 
   protected void notifyJobStoreJobVetoed (final IOperableTrigger trigger,
                                           final IJobDetail detail,
-                                          final CompletedExecutionInstruction instCode)
+                                          final ECompletedExecutionInstruction instCode)
   {
     resources.getJobStore ().triggeredJobComplete (trigger, detail, instCode);
   }
@@ -1757,7 +1757,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
   }
 
   public void notifyTriggerListenersComplete (final IJobExecutionContext jec,
-                                              final CompletedExecutionInstruction instCode) throws SchedulerException
+                                              final ECompletedExecutionInstruction instCode) throws SchedulerException
   {
     // build a list of all trigger listeners that are to be notified...
     final List <ITriggerListener> triggerListeners = _buildTriggerListenerList ();

@@ -18,16 +18,21 @@
  */
 package com.helger.quartz;
 
+import java.time.DayOfWeek;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.CGlobal;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.collection.ext.CommonsHashSet;
+import com.helger.commons.collection.ext.ICommonsSet;
 import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
 /**
- * A {@link ScheduleBuilder} implementation that build schedule for
+ * A {@link IScheduleBuilder} implementation that build schedule for
  * DailyTimeIntervalTrigger.
  * <p>
  * This builder provide an extra convenient method for you to set the trigger's
@@ -65,52 +70,44 @@ import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
  * @author James House
  * @author Zemian Deng saltnlight5@gmail.com
  */
-public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTimeIntervalTrigger>
+public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDailyTimeIntervalTrigger>
 {
-  private int interval = 1;
-  private EIntervalUnit intervalUnit = EIntervalUnit.MINUTE;
-  private Set <Integer> daysOfWeek;
-  private TimeOfDay startTimeOfDay;
-  private TimeOfDay endTimeOfDay;
-  private int repeatCount = IDailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
-  private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private int m_nInterval = 1;
+  private EIntervalUnit m_eIntervalUnit = EIntervalUnit.MINUTE;
+  private Set <DayOfWeek> m_aDaysOfWeek;
+  private TimeOfDay m_aStartTimeOfDay;
+  private TimeOfDay m_aEndTimeOfDay;
+  private int m_nRepeatCount = IDailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
+  private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   /**
    * A set of all days of the week. The set contains all values between
-   * {@link Calendar#SUNDAY} and {@link Calendar#SATURDAY} (the integers from 1
-   * through 7).
+   * {@link Calendar#SUNDAY} and {@link Calendar#SATURDAY}.
    */
-  public static final Set <Integer> ALL_DAYS_OF_THE_WEEK;
+  public static final Set <DayOfWeek> ALL_DAYS_OF_THE_WEEK;
 
   /**
    * A set of the business days of the week (for locales similar to the USA).
    * The set contains all values between {@link Calendar#MONDAY} and
-   * {@link Calendar#FRIDAY} (the integers from 2 through 6).
+   * {@link Calendar#FRIDAY}.
    */
-  public static final Set <Integer> MONDAY_THROUGH_FRIDAY;
+  public static final Set <DayOfWeek> MONDAY_THROUGH_FRIDAY;
 
   /**
    * A set of the weekend days of the week (for locales similar to the USA). The
    * set contains {@link Calendar#SATURDAY} and {@link Calendar#SUNDAY}
    */
-  public static final Set <Integer> SATURDAY_AND_SUNDAY;
+  public static final Set <DayOfWeek> SATURDAY_AND_SUNDAY;
 
   static
   {
-    Set <Integer> t = new HashSet<> (7);
-    for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++)
-      t.add (i);
-    ALL_DAYS_OF_THE_WEEK = Collections.unmodifiableSet (t);
-
-    t = new HashSet<> (5);
-    for (int i = Calendar.MONDAY; i <= Calendar.FRIDAY; i++)
-      t.add (i);
-    MONDAY_THROUGH_FRIDAY = Collections.unmodifiableSet (t);
-
-    t = new HashSet<> (2);
-    t.add (Calendar.SUNDAY);
-    t.add (Calendar.SATURDAY);
-    SATURDAY_AND_SUNDAY = Collections.unmodifiableSet (t);
+    ALL_DAYS_OF_THE_WEEK = new CommonsHashSet <> (DayOfWeek.values ()).getAsUnmodifiable ();
+    final ICommonsSet <DayOfWeek> t = new CommonsHashSet <> (5);
+    for (final DayOfWeek e : DayOfWeek.values ())
+      if (e != DayOfWeek.SATURDAY && e != DayOfWeek.SUNDAY)
+        t.add (e);
+    MONDAY_THROUGH_FRIDAY = t.getAsUnmodifiable ();
+    SATURDAY_AND_SUNDAY = new CommonsHashSet <> (DayOfWeek.SUNDAY, DayOfWeek.SATURDAY).getAsUnmodifiable ();
   }
 
   protected DailyTimeIntervalScheduleBuilder ()
@@ -121,6 +118,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    *
    * @return the new DailyTimeIntervalScheduleBuilder
    */
+  @Nonnull
   public static DailyTimeIntervalScheduleBuilder dailyTimeIntervalSchedule ()
   {
     return new DailyTimeIntervalScheduleBuilder ();
@@ -131,30 +129,29 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    * will rather be invoked by a TriggerBuilder which this ScheduleBuilder is
    * given to.
    *
-   * @see TriggerBuilder#withSchedule(ScheduleBuilder)
+   * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
   @Override
   public DailyTimeIntervalTrigger build ()
   {
-
     final DailyTimeIntervalTrigger st = new DailyTimeIntervalTrigger ();
-    st.setRepeatInterval (interval);
-    st.setRepeatIntervalUnit (intervalUnit);
-    st.setMisfireInstruction (misfireInstruction);
-    st.setRepeatCount (repeatCount);
+    st.setRepeatInterval (m_nInterval);
+    st.setRepeatIntervalUnit (m_eIntervalUnit);
+    st.setMisfireInstruction (m_nMisfireInstruction);
+    st.setRepeatCount (m_nRepeatCount);
 
-    if (daysOfWeek != null)
-      st.setDaysOfWeek (daysOfWeek);
+    if (m_aDaysOfWeek != null)
+      st.setDaysOfWeek (m_aDaysOfWeek);
     else
       st.setDaysOfWeek (ALL_DAYS_OF_THE_WEEK);
 
-    if (startTimeOfDay != null)
-      st.setStartTimeOfDay (startTimeOfDay);
+    if (m_aStartTimeOfDay != null)
+      st.setStartTimeOfDay (m_aStartTimeOfDay);
     else
       st.setStartTimeOfDay (TimeOfDay.hourAndMinuteOfDay (0, 0));
 
-    if (endTimeOfDay != null)
-      st.setEndTimeOfDay (endTimeOfDay);
+    if (m_aEndTimeOfDay != null)
+      st.setEndTimeOfDay (m_aEndTimeOfDay);
     else
       st.setEndTimeOfDay (TimeOfDay.hourMinuteAndSecondOfDay (23, 59, 59));
 
@@ -181,8 +178,8 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
         !(unit.equals (EIntervalUnit.SECOND) || unit.equals (EIntervalUnit.MINUTE) || unit.equals (EIntervalUnit.HOUR)))
       throw new IllegalArgumentException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
     _validateInterval (timeInterval);
-    this.interval = timeInterval;
-    this.intervalUnit = unit;
+    this.m_nInterval = timeInterval;
+    this.m_eIntervalUnit = unit;
     return this;
   }
 
@@ -243,15 +240,11 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    *        {@link Calendar#SATURDAY}.
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
-  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Set <Integer> onDaysOfWeek)
+  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Set <DayOfWeek> onDaysOfWeek)
   {
-    if (onDaysOfWeek == null || onDaysOfWeek.size () == 0)
-      throw new IllegalArgumentException ("Days of week must be an non-empty set.");
-    for (final Integer day : onDaysOfWeek)
-      if (!ALL_DAYS_OF_THE_WEEK.contains (day))
-        throw new IllegalArgumentException ("Invalid value for day of week: " + day);
+    ValueEnforcer.notEmpty (onDaysOfWeek, "OnDaysOfWeek");
 
-    this.daysOfWeek = onDaysOfWeek;
+    this.m_aDaysOfWeek = onDaysOfWeek;
     return this;
   }
 
@@ -264,11 +257,9 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    *        {@link Calendar#SATURDAY}.
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
-  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Integer... onDaysOfWeek)
+  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final DayOfWeek... onDaysOfWeek)
   {
-    final Set <Integer> daysAsSet = new HashSet<> (12);
-    Collections.addAll (daysAsSet, onDaysOfWeek);
-    return onDaysOfTheWeek (daysAsSet);
+    return onDaysOfTheWeek (new CommonsHashSet <> (onDaysOfWeek));
   }
 
   /**
@@ -278,7 +269,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder onMondayThroughFriday ()
   {
-    this.daysOfWeek = MONDAY_THROUGH_FRIDAY;
+    this.m_aDaysOfWeek = MONDAY_THROUGH_FRIDAY;
     return this;
   }
 
@@ -289,7 +280,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder onSaturdayAndSunday ()
   {
-    this.daysOfWeek = SATURDAY_AND_SUNDAY;
+    this.m_aDaysOfWeek = SATURDAY_AND_SUNDAY;
     return this;
   }
 
@@ -300,7 +291,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder onEveryDay ()
   {
-    this.daysOfWeek = ALL_DAYS_OF_THE_WEEK;
+    this.m_aDaysOfWeek = ALL_DAYS_OF_THE_WEEK;
     return this;
   }
 
@@ -314,7 +305,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
     if (timeOfDay == null)
       throw new IllegalArgumentException ("Start time of day cannot be null!");
 
-    this.startTimeOfDay = timeOfDay;
+    this.m_aStartTimeOfDay = timeOfDay;
     return this;
   }
 
@@ -326,7 +317,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder endingDailyAt (final TimeOfDay timeOfDay)
   {
-    this.endTimeOfDay = timeOfDay;
+    this.m_aEndTimeOfDay = timeOfDay;
     return this;
   }
 
@@ -338,27 +329,26 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder endingDailyAfterCount (final int count)
   {
-    if (count <= 0)
-      throw new IllegalArgumentException ("Ending daily after count must be a positive number!");
+    ValueEnforcer.isGT0 (count, "Count");
 
-    if (startTimeOfDay == null)
+    if (m_aStartTimeOfDay == null)
       throw new IllegalArgumentException ("You must set the startDailyAt() before calling this endingDailyAfterCount()!");
 
     final Date today = new Date ();
-    final Date startTimeOfDayDate = startTimeOfDay.getTimeOfDayForDate (today);
+    final Date startTimeOfDayDate = m_aStartTimeOfDay.getTimeOfDayForDate (today);
     final Date maxEndTimeOfDayDate = TimeOfDay.hourMinuteAndSecondOfDay (23, 59, 59).getTimeOfDayForDate (today);
     final long remainingMillisInDay = maxEndTimeOfDayDate.getTime () - startTimeOfDayDate.getTime ();
     long intervalInMillis;
-    if (intervalUnit == EIntervalUnit.SECOND)
-      intervalInMillis = interval * 1000L;
+    if (m_eIntervalUnit == EIntervalUnit.SECOND)
+      intervalInMillis = m_nInterval * CGlobal.MILLISECONDS_PER_SECOND;
     else
-      if (intervalUnit == EIntervalUnit.MINUTE)
-        intervalInMillis = interval * 1000L * 60;
+      if (m_eIntervalUnit == EIntervalUnit.MINUTE)
+        intervalInMillis = m_nInterval * CGlobal.MILLISECONDS_PER_MINUTE;
       else
-        if (intervalUnit == EIntervalUnit.HOUR)
-          intervalInMillis = interval * 1000L * 60 * 24;
+        if (m_eIntervalUnit == EIntervalUnit.HOUR)
+          intervalInMillis = m_nInterval * DateBuilder.MILLISECONDS_IN_DAY;
         else
-          throw new IllegalArgumentException ("The IntervalUnit: " + intervalUnit + " is invalid for this trigger.");
+          throw new IllegalArgumentException ("The IntervalUnit: " + m_eIntervalUnit + " is invalid for this trigger.");
 
     if (remainingMillisInDay - intervalInMillis <= 0)
       throw new IllegalArgumentException ("The startTimeOfDay is too late with given Interval and IntervalUnit values.");
@@ -385,7 +375,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
     final int minute = cal.get (Calendar.MINUTE);
     final int second = cal.get (Calendar.SECOND);
 
-    endTimeOfDay = TimeOfDay.hourMinuteAndSecondOfDay (hour, minute, second);
+    m_aEndTimeOfDay = TimeOfDay.hourMinuteAndSecondOfDay (hour, minute, second);
     return this;
   }
 
@@ -398,7 +388,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
@@ -412,7 +402,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    misfireInstruction = IDailyTimeIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    m_nMisfireInstruction = IDailyTimeIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
@@ -426,7 +416,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    misfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    m_nMisfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 
@@ -440,7 +430,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder withRepeatCount (final int repeatCount)
   {
-    this.repeatCount = repeatCount;
+    this.m_nRepeatCount = repeatCount;
     return this;
   }
 

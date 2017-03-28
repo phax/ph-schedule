@@ -54,7 +54,7 @@ import com.helger.quartz.utils.Key;
  * </pre>
  *
  * @see JobBuilder
- * @see ScheduleBuilder
+ * @see IScheduleBuilder
  * @see DateBuilder
  * @see ITrigger
  */
@@ -69,7 +69,7 @@ public class TriggerBuilder <T extends ITrigger>
   private JobKey jobKey;
   private JobDataMap jobDataMap = new JobDataMap ();
 
-  private ScheduleBuilder <?> scheduleBuilder = null;
+  private IScheduleBuilder <?> scheduleBuilder = null;
 
   private TriggerBuilder ()
   {
@@ -84,7 +84,7 @@ public class TriggerBuilder <T extends ITrigger>
    */
   public static TriggerBuilder <ITrigger> newTrigger ()
   {
-    return new TriggerBuilder<> ();
+    return new TriggerBuilder <> ();
   }
 
   /**
@@ -99,7 +99,6 @@ public class TriggerBuilder <T extends ITrigger>
     if (scheduleBuilder == null)
       scheduleBuilder = SimpleScheduleBuilder.simpleSchedule ();
     final IMutableTrigger trig = scheduleBuilder.build ();
-
     trig.setCalendarName (calendarName);
     trig.setDescription (description);
     trig.setStartTime (startTime);
@@ -272,7 +271,7 @@ public class TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the {@link ScheduleBuilder} that will be used to define the Trigger's
+   * Set the {@link IScheduleBuilder} that will be used to define the Trigger's
    * schedule.
    * <p>
    * The particular <code>SchedulerBuilder</code> used will dictate the concrete
@@ -282,13 +281,13 @@ public class TriggerBuilder <T extends ITrigger>
    * @param schedBuilder
    *        the SchedulerBuilder to use.
    * @return the updated TriggerBuilder
-   * @see ScheduleBuilder
+   * @see IScheduleBuilder
    * @see SimpleScheduleBuilder
    * @see CronScheduleBuilder
    * @see CalendarIntervalScheduleBuilder
    */
   @SuppressWarnings ("unchecked")
-  public <SBT extends T> TriggerBuilder <SBT> withSchedule (final ScheduleBuilder <SBT> schedBuilder)
+  public <SBT extends T> TriggerBuilder <SBT> withSchedule (final IScheduleBuilder <SBT> schedBuilder)
   {
     this.scheduleBuilder = schedBuilder;
     return (TriggerBuilder <SBT>) this;

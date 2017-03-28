@@ -18,6 +18,7 @@
  */
 package com.helger.quartz;
 
+import java.time.DayOfWeek;
 import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +27,7 @@ import java.util.TimeZone;
 
 import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.datetime.PDTFactory;
 
 /**
  * <code>DateBuilder</code> is used to conveniently create
@@ -56,14 +58,6 @@ import com.helger.commons.ValueEnforcer;
  */
 public final class DateBuilder
 {
-  public static final int SUNDAY = 1;
-  public static final int MONDAY = 2;
-  public static final int TUESDAY = 3;
-  public static final int WEDNESDAY = 4;
-  public static final int THURSDAY = 5;
-  public static final int FRIDAY = 6;
-  public static final int SATURDAY = 7;
-
   public static final long SECONDS_IN_MOST_DAYS = CGlobal.SECONDS_PER_DAY;
   public static final long MILLISECONDS_IN_DAY = SECONDS_IN_MOST_DAYS * CGlobal.MILLISECONDS_PER_SECOND;
 
@@ -951,12 +945,9 @@ public final class DateBuilder
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public static void validateDayOfWeek (final int dayOfWeek)
+  public static void validateDayOfWeek (final DayOfWeek dayOfWeek)
   {
-    if (dayOfWeek < SUNDAY || dayOfWeek > SATURDAY)
-    {
-      throw new IllegalArgumentException ("Invalid day of week.");
-    }
+    ValueEnforcer.notNull (dayOfWeek, "DayOfWeek");
   }
 
   public static void validateHour (final int hour)
@@ -991,20 +982,12 @@ public final class DateBuilder
     }
   }
 
-  public static void validateMonth (final int month)
-  {
-    if (month < 1 || month > 12)
-    {
-      throw new IllegalArgumentException ("Invalid month (must be >= 1 and <= 12.");
-    }
-  }
-
   public static void validateMonth (final Month month)
   {
     ValueEnforcer.notNull (month, "Month");
   }
 
-  private static final int MAX_YEAR = Calendar.getInstance ().get (Calendar.YEAR) + 100;
+  private static final int MAX_YEAR = PDTFactory.getCurrentYear () + 100;
 
   public static void validateYear (final int year)
   {

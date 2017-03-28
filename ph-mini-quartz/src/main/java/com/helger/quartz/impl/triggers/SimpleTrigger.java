@@ -28,7 +28,7 @@ import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.ScheduleBuilder;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerUtils;
@@ -744,13 +744,13 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   }
 
   /**
-   * Get a {@link ScheduleBuilder} that is configured to produce a schedule
+   * Get a {@link IScheduleBuilder} that is configured to produce a schedule
    * identical to this trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */
   @Override
-  public ScheduleBuilder <ISimpleTrigger> getScheduleBuilder ()
+  public IScheduleBuilder <ISimpleTrigger> getScheduleBuilder ()
   {
     final SimpleScheduleBuilder sb = SimpleScheduleBuilder.simpleSchedule ()
                                                           .withIntervalInMilliseconds (getRepeatInterval ())

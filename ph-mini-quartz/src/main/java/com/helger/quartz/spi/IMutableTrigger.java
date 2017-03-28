@@ -124,5 +124,5 @@ public interface IMutableTrigger extends ITrigger
    */
   void setMisfireInstruction (int misfireInstruction);
 
-  Object clone ();
+  IMutableTrigger clone ();
 }

@@ -23,7 +23,7 @@ import java.util.TimeZone;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
 /**
- * <code>CalendarIntervalScheduleBuilder</code> is a {@link ScheduleBuilder}
+ * <code>CalendarIntervalScheduleBuilder</code> is a {@link IScheduleBuilder}
  * that defines calendar time (day, week, month, year) interval-based schedules
  * for <code>Trigger</code>s.
  * <p>
@@ -49,13 +49,12 @@ import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
  *
  * @see DailyTimeIntervalScheduleBuilder
  * @see CronScheduleBuilder
- * @see ScheduleBuilder
+ * @see IScheduleBuilder
  * @see SimpleScheduleBuilder
  * @see TriggerBuilder
  */
-public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarIntervalTrigger>
+public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalendarIntervalTrigger>
 {
-
   private int interval = 1;
   private EIntervalUnit intervalUnit = EIntervalUnit.DAY;
 
@@ -82,9 +81,8 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
    * will rather be invoked by a TriggerBuilder which this ScheduleBuilder is
    * given to.
    *
-   * @see TriggerBuilder#withSchedule(ScheduleBuilder)
+   * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
-  @Override
   public CalendarIntervalTrigger build ()
   {
 

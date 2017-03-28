@@ -23,13 +23,13 @@ import java.util.Date;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
-import com.helger.quartz.ScheduleBuilder;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
@@ -492,33 +492,33 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    *        is the <code>JobExecutionException</code> thrown by the
    *        <code>Job</code>, if any (may be null).
    * @return one of the CompletedExecutionInstruction constants.
-   * @see com.helger.quartz.ITrigger.CompletedExecutionInstruction
+   * @see com.helger.quartz.ITrigger.ECompletedExecutionInstruction
    * @see #triggered(ICalendar)
    */
-  public CompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
-                                                          final JobExecutionException result)
+  public ECompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
+                                                           final JobExecutionException result)
   {
     if (result != null && result.refireImmediately ())
     {
-      return CompletedExecutionInstruction.RE_EXECUTE_JOB;
+      return ECompletedExecutionInstruction.RE_EXECUTE_JOB;
     }
 
     if (result != null && result.unscheduleFiringTrigger ())
     {
-      return CompletedExecutionInstruction.SET_TRIGGER_COMPLETE;
+      return ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE;
     }
 
     if (result != null && result.unscheduleAllTriggers ())
     {
-      return CompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE;
+      return ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE;
     }
 
     if (!mayFireAgain ())
     {
-      return CompletedExecutionInstruction.DELETE_TRIGGER;
+      return ECompletedExecutionInstruction.DELETE_TRIGGER;
     }
 
-    return CompletedExecutionInstruction.NOOP;
+    return ECompletedExecutionInstruction.NOOP;
   }
 
   /**
@@ -834,13 +834,11 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
   }
 
   @Override
-  public Object clone ()
+  public AbstractTrigger <?> clone ()
   {
-    AbstractTrigger <?> copy;
     try
     {
-      copy = (AbstractTrigger <?>) super.clone ();
-
+      final AbstractTrigger <?> copy = (AbstractTrigger <?>) super.clone ();
       // Shallow copy the jobDataMap. Note that this means that if a user
       // modifies a value object in this map from the cloned Trigger
       // they will also be modifying this Trigger.
@@ -848,13 +846,12 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
       {
         copy.m_aJobDataMap = (JobDataMap) m_aJobDataMap.clone ();
       }
-
+      return copy;
     }
     catch (final CloneNotSupportedException ex)
     {
       throw new IncompatibleClassChangeError ("Not Cloneable.");
     }
-    return copy;
   }
 
   public TriggerBuilder <T> getTriggerBuilder ()
@@ -871,5 +868,5 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
                          .withSchedule (getScheduleBuilder ());
   }
 
-  public abstract ScheduleBuilder <T> getScheduleBuilder ();
+  public abstract IScheduleBuilder <T> getScheduleBuilder ();
 }

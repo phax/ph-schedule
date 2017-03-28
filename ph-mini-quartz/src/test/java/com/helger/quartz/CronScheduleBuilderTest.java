@@ -22,10 +22,9 @@ import static com.helger.quartz.CronScheduleBuilder.atHourAndMinuteOnGivenDaysOf
 import static com.helger.quartz.TriggerBuilder.newTrigger;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
+import java.time.DayOfWeek;
 
-import com.helger.quartz.ICronTrigger;
-import com.helger.quartz.DateBuilder;
+import org.junit.Test;
 
 /**
  * Unit test for CronScheduleBuilder.
@@ -39,16 +38,16 @@ public class CronScheduleBuilderTest
   {
 
     ICronTrigger trigger = newTrigger ().withIdentity ("test")
-                                       .withSchedule (atHourAndMinuteOnGivenDaysOfWeek (10,
-                                                                                        0,
-                                                                                        DateBuilder.MONDAY,
-                                                                                        DateBuilder.THURSDAY,
-                                                                                        DateBuilder.FRIDAY))
-                                       .build ();
+                                        .withSchedule (atHourAndMinuteOnGivenDaysOfWeek (10,
+                                                                                         0,
+                                                                                         DayOfWeek.MONDAY,
+                                                                                         DayOfWeek.THURSDAY,
+                                                                                         DayOfWeek.FRIDAY))
+                                        .build ();
     assertEquals ("0 0 10 ? * 2,5,6", trigger.getCronExpression ());
 
     trigger = newTrigger ().withIdentity ("test")
-                           .withSchedule (atHourAndMinuteOnGivenDaysOfWeek (10, 0, DateBuilder.WEDNESDAY))
+                           .withSchedule (atHourAndMinuteOnGivenDaysOfWeek (10, 0, DayOfWeek.WEDNESDAY))
                            .build ();
     assertEquals ("0 0 10 ? * 4", trigger.getCronExpression ());
   }

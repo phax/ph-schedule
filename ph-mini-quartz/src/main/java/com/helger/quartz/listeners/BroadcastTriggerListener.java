@@ -25,7 +25,7 @@ import java.util.List;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITriggerListener;
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 
 /**
  * Holds a List of references to TriggerListener instances and broadcasts all
@@ -152,7 +152,7 @@ public class BroadcastTriggerListener implements ITriggerListener
 
   public void triggerComplete (final ITrigger trigger,
                                final IJobExecutionContext context,
-                               final CompletedExecutionInstruction triggerInstructionCode)
+                               final ECompletedExecutionInstruction triggerInstructionCode)
   {
 
     final Iterator <ITriggerListener> itr = listeners.iterator ();

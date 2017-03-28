@@ -18,6 +18,10 @@
  */
 package com.helger.quartz;
 
+import java.io.Serializable;
+
+import javax.annotation.Nonnull;
+
 import com.helger.quartz.spi.IMutableTrigger;
 
 /**
@@ -25,7 +29,8 @@ import com.helger.quartz.spi.IMutableTrigger;
  * @param <T>
  *        Trigger class - whysoever
  */
-public abstract class ScheduleBuilder <T extends ITrigger>
+public interface IScheduleBuilder <T extends ITrigger> extends Serializable
 {
-  protected abstract IMutableTrigger build ();
+  @Nonnull
+  IMutableTrigger build ();
 }

@@ -25,7 +25,7 @@ import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.JobExecutionContext;
@@ -176,7 +176,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         {
           try
           {
-            final CompletedExecutionInstruction instCode = trigger.executionComplete (jec, null);
+            final ECompletedExecutionInstruction instCode = trigger.executionComplete (jec, null);
             qs.notifyJobStoreJobVetoed (trigger, jobDetail, instCode);
 
             // QTZ-205
@@ -233,7 +233,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
           break;
         }
 
-        CompletedExecutionInstruction instCode = CompletedExecutionInstruction.NOOP;
+        ECompletedExecutionInstruction instCode = ECompletedExecutionInstruction.NOOP;
 
         // update the trigger
         try
@@ -254,7 +254,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         }
 
         // update job/trigger or re-execute job
-        if (instCode == CompletedExecutionInstruction.RE_EXECUTE_JOB)
+        if (instCode == ECompletedExecutionInstruction.RE_EXECUTE_JOB)
         {
           jec.incrementRefireCount ();
           try
@@ -399,7 +399,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
   }
 
   private boolean _notifyTriggerListenersComplete (final IJobExecutionContext jobExCtxt,
-                                                   final CompletedExecutionInstruction instCode)
+                                                   final ECompletedExecutionInstruction instCode)
   {
     try
     {

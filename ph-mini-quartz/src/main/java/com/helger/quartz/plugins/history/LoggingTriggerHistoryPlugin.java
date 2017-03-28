@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
@@ -414,7 +414,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
 
   public void triggerComplete (final ITrigger trigger,
                                final IJobExecutionContext context,
-                               final CompletedExecutionInstruction triggerInstructionCode)
+                               final ECompletedExecutionInstruction triggerInstructionCode)
   {
     if (!getLog ().isInfoEnabled ())
     {
@@ -422,27 +422,27 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
     }
 
     String instrCode = "UNKNOWN";
-    if (triggerInstructionCode == CompletedExecutionInstruction.DELETE_TRIGGER)
+    if (triggerInstructionCode == ECompletedExecutionInstruction.DELETE_TRIGGER)
     {
       instrCode = "DELETE TRIGGER";
     }
     else
-      if (triggerInstructionCode == CompletedExecutionInstruction.NOOP)
+      if (triggerInstructionCode == ECompletedExecutionInstruction.NOOP)
       {
         instrCode = "DO NOTHING";
       }
       else
-        if (triggerInstructionCode == CompletedExecutionInstruction.RE_EXECUTE_JOB)
+        if (triggerInstructionCode == ECompletedExecutionInstruction.RE_EXECUTE_JOB)
         {
           instrCode = "RE-EXECUTE JOB";
         }
         else
-          if (triggerInstructionCode == CompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE)
+          if (triggerInstructionCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE)
           {
             instrCode = "SET ALL OF JOB'S TRIGGERS COMPLETE";
           }
           else
-            if (triggerInstructionCode == CompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
+            if (triggerInstructionCode == ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
             {
               instrCode = "SET THIS TRIGGER COMPLETE";
             }

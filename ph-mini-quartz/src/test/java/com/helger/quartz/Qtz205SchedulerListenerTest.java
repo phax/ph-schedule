@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
 /**
@@ -89,7 +89,7 @@ public class Qtz205SchedulerListenerTest
 
     public void triggerComplete (final ITrigger trigger,
                                  final IJobExecutionContext context,
-                                 final CompletedExecutionInstruction triggerInstructionCode)
+                                 final ECompletedExecutionInstruction triggerInstructionCode)
     {}
 
   }

@@ -23,6 +23,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.annotation.Nullable;
+
+import com.helger.commons.hashcode.HashCodeGenerator;
+
 /**
  * Represents a time in hour, minute and second of any given day.
  * <p>
@@ -36,9 +40,11 @@ import java.util.TimeZone;
  */
 public class TimeOfDay implements Serializable
 {
-  private final int hour;
-  private final int minute;
-  private final int second;
+  public static final TimeOfDay START_OF_DAY = new TimeOfDay (0, 0, 0);
+
+  private final int m_nHour;
+  private final int m_nMinute;
+  private final int m_nSecond;
 
   /**
    * Create a TimeOfDay instance for the given hour, minute and second.
@@ -54,39 +60,117 @@ public class TimeOfDay implements Serializable
    */
   public TimeOfDay (final int hour, final int minute, final int second)
   {
-    this.hour = hour;
-    this.minute = minute;
-    this.second = second;
-    _validate ();
-  }
-
-  /**
-   * Create a TimeOfDay instance for the given hour and minute (at the zero
-   * second of the minute).
-   *
-   * @param hour
-   *        The hour of day, between 0 and 23.
-   * @param minute
-   *        The minute of the hour, between 0 and 59.
-   * @throws IllegalArgumentException
-   *         if one or more of the input values is out of their valid range.
-   */
-  public TimeOfDay (final int hour, final int minute)
-  {
-    this.hour = hour;
-    this.minute = minute;
-    this.second = 0;
+    m_nHour = hour;
+    m_nMinute = minute;
+    m_nSecond = second;
     _validate ();
   }
 
   private void _validate ()
   {
-    if (hour < 0 || hour > 23)
+    if (m_nHour < 0 || m_nHour > 23)
       throw new IllegalArgumentException ("Hour must be from 0 to 23");
-    if (minute < 0 || minute > 59)
+    if (m_nMinute < 0 || m_nMinute > 59)
       throw new IllegalArgumentException ("Minute must be from 0 to 59");
-    if (second < 0 || second > 59)
+    if (m_nSecond < 0 || m_nSecond > 59)
       throw new IllegalArgumentException ("Second must be from 0 to 59");
+  }
+
+  /**
+   * The hour of the day (between 0 and 23).
+   *
+   * @return The hour of the day (between 0 and 23).
+   */
+  public int getHour ()
+  {
+    return m_nHour;
+  }
+
+  /**
+   * The minute of the hour.
+   *
+   * @return The minute of the hour (between 0 and 59).
+   */
+  public int getMinute ()
+  {
+    return m_nMinute;
+  }
+
+  /**
+   * The second of the minute.
+   *
+   * @return The second of the minute (between 0 and 59).
+   */
+  public int getSecond ()
+  {
+    return m_nSecond;
+  }
+
+  /**
+   * Determine with this time of day is before the given time of day.
+   *
+   * @return true this time of day is before the given time of day.
+   */
+  public boolean before (final TimeOfDay timeOfDay)
+  {
+    if (timeOfDay.m_nHour > m_nHour)
+      return true;
+    if (timeOfDay.m_nHour < m_nHour)
+      return false;
+
+    if (timeOfDay.m_nMinute > m_nMinute)
+      return true;
+    if (timeOfDay.m_nMinute < m_nMinute)
+      return false;
+
+    if (timeOfDay.m_nSecond > m_nSecond)
+      return true;
+    if (timeOfDay.m_nSecond < m_nSecond)
+      return false;
+
+    return false; // must be equal...
+  }
+
+  @Override
+  public boolean equals (final Object obj)
+  {
+    if (obj == this)
+      return true;
+    if (obj == null || !getClass ().equals (TimeOfDay.class))
+      return false;
+
+    final TimeOfDay rhs = (TimeOfDay) obj;
+    return rhs.m_nHour == m_nHour && rhs.m_nMinute == m_nMinute && rhs.m_nSecond == m_nSecond;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_nHour).append (m_nMinute).append (m_nSecond).getHashCode ();
+  }
+
+  /**
+   * Return a date with time of day reset to this object values. The millisecond
+   * value will be zero.
+   */
+  @Nullable
+  public Date getTimeOfDayForDate (final Date dateTime)
+  {
+    if (dateTime == null)
+      return null;
+    final Calendar cal = Calendar.getInstance ();
+    cal.setTime (dateTime);
+    cal.set (Calendar.HOUR_OF_DAY, m_nHour);
+    cal.set (Calendar.MINUTE, m_nMinute);
+    cal.set (Calendar.SECOND, m_nSecond);
+    cal.clear (Calendar.MILLISECOND);
+    return cal.getTime ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return "TimeOfDay[" + m_nHour + ":" + m_nMinute + ":" + m_nSecond + "]";
   }
 
   /**
@@ -119,97 +203,7 @@ public class TimeOfDay implements Serializable
    */
   public static TimeOfDay hourAndMinuteOfDay (final int hour, final int minute)
   {
-    return new TimeOfDay (hour, minute);
-  }
-
-  /**
-   * The hour of the day (between 0 and 23).
-   *
-   * @return The hour of the day (between 0 and 23).
-   */
-  public int getHour ()
-  {
-    return hour;
-  }
-
-  /**
-   * The minute of the hour.
-   *
-   * @return The minute of the hour (between 0 and 59).
-   */
-  public int getMinute ()
-  {
-    return minute;
-  }
-
-  /**
-   * The second of the minute.
-   *
-   * @return The second of the minute (between 0 and 59).
-   */
-  public int getSecond ()
-  {
-    return second;
-  }
-
-  /**
-   * Determine with this time of day is before the given time of day.
-   *
-   * @return true this time of day is before the given time of day.
-   */
-  public boolean before (final TimeOfDay timeOfDay)
-  {
-
-    if (timeOfDay.hour > hour)
-      return true;
-    if (timeOfDay.hour < hour)
-      return false;
-
-    if (timeOfDay.minute > minute)
-      return true;
-    if (timeOfDay.minute < minute)
-      return false;
-
-    if (timeOfDay.second > second)
-      return true;
-    if (timeOfDay.second < second)
-      return false;
-
-    return false; // must be equal...
-  }
-
-  @Override
-  public boolean equals (final Object obj)
-  {
-    if (!(obj instanceof TimeOfDay))
-      return false;
-
-    final TimeOfDay other = (TimeOfDay) obj;
-
-    return (other.hour == hour && other.minute == minute && other.second == second);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return (hour + 1) ^ (minute + 1) ^ (second + 1);
-  }
-
-  /**
-   * Return a date with time of day reset to this object values. The millisecond
-   * value will be zero.
-   */
-  public Date getTimeOfDayForDate (final Date dateTime)
-  {
-    if (dateTime == null)
-      return null;
-    final Calendar cal = Calendar.getInstance ();
-    cal.setTime (dateTime);
-    cal.set (Calendar.HOUR_OF_DAY, hour);
-    cal.set (Calendar.MINUTE, minute);
-    cal.set (Calendar.SECOND, second);
-    cal.clear (Calendar.MILLISECOND);
-    return cal.getTime ();
+    return new TimeOfDay (hour, minute, 0);
   }
 
   /**
@@ -232,6 +226,7 @@ public class TimeOfDay implements Serializable
    *        The TimeZone from which relate Hour, Minute and Second for the given
    *        date. If null, system default TimeZone will be used.
    */
+  @Nullable
   public static TimeOfDay hourAndMinuteAndSecondFromDate (final Date dateTime, final TimeZone tz)
   {
     if (dateTime == null)
@@ -266,7 +261,8 @@ public class TimeOfDay implements Serializable
    *        The TimeZone from which relate Hour and Minute for the given date.
    *        If null, system default TimeZone will be used.
    */
-  public static TimeOfDay hourAndMinuteFromDate (final Date dateTime, final TimeZone tz)
+  @Nullable
+  public static TimeOfDay hourAndMinuteFromDate (@Nullable final Date dateTime, final TimeZone tz)
   {
     if (dateTime == null)
       return null;
@@ -275,12 +271,6 @@ public class TimeOfDay implements Serializable
     if (tz != null)
       cal.setTimeZone (tz);
 
-    return new TimeOfDay (cal.get (Calendar.HOUR_OF_DAY), cal.get (Calendar.MINUTE));
-  }
-
-  @Override
-  public String toString ()
-  {
-    return "TimeOfDay[" + hour + ":" + minute + ":" + second + "]";
+    return new TimeOfDay (cal.get (Calendar.HOUR_OF_DAY), cal.get (Calendar.MINUTE), 0);
   }
 }

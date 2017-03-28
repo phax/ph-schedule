@@ -28,11 +28,11 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICalendarIntervalTrigger;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.ScheduleBuilder;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerUtils;
 
@@ -75,10 +75,10 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 {
   private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = Calendar.getInstance ().get (Calendar.YEAR) + 100;
 
-  private Date startTime = null;
-  private Date endTime = null;
-  private Date nextFireTime = null;
-  private Date previousFireTime = null;
+  private Date startTime;
+  private Date endTime;
+  private Date nextFireTime;
+  private Date previousFireTime;
   private int repeatInterval = 0;
   private EIntervalUnit repeatIntervalUnit = EIntervalUnit.DAY;
   private TimeZone timeZone;
@@ -1004,15 +1004,14 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   }
 
   /**
-   * Get a {@link ScheduleBuilder} that is configured to produce a schedule
+   * Get a {@link IScheduleBuilder} that is configured to produce a schedule
    * identical to this trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */
   @Override
-  public ScheduleBuilder <ICalendarIntervalTrigger> getScheduleBuilder ()
+  public IScheduleBuilder <ICalendarIntervalTrigger> getScheduleBuilder ()
   {
-
     final CalendarIntervalScheduleBuilder cb = CalendarIntervalScheduleBuilder.calendarIntervalSchedule ()
                                                                               .withInterval (getRepeatInterval (),
                                                                                              getRepeatIntervalUnit ());

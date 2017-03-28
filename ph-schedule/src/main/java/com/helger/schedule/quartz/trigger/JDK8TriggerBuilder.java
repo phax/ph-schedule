@@ -28,7 +28,7 @@ import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobBuilder;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
-import com.helger.quartz.ScheduleBuilder;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.spi.IMutableTrigger;
@@ -65,7 +65,7 @@ import com.helger.quartz.utils.Key;
  * </pre>
  *
  * @see JobBuilder
- * @see ScheduleBuilder
+ * @see IScheduleBuilder
  * @see DateBuilder
  * @see ITrigger
  * @param <T>
@@ -279,7 +279,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the {@link ScheduleBuilder} that will be used to define the Trigger's
+   * Set the {@link IScheduleBuilder} that will be used to define the Trigger's
    * schedule.
    * <p>
    * The particular <code>SchedulerBuilder</code> used will dictate the concrete

@@ -72,7 +72,7 @@ import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.ObjectAlreadyExistsException;
-import com.helger.quartz.ScheduleBuilder;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerKey;
@@ -712,7 +712,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
       final TriggerKey triggerKey = triggerKey (triggerName, triggerGroup);
 
-      ScheduleBuilder <?> sched;
+      IScheduleBuilder <?> sched;
 
       if (triggerNode.getNodeName ().equals ("simple"))
       {

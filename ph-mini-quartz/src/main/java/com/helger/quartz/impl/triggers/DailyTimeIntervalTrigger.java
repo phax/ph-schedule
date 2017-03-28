@@ -18,19 +18,25 @@
  */
 package com.helger.quartz.impl.triggers;
 
+import java.time.DayOfWeek;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.CGlobal;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.ScheduleBuilder;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TimeOfDay;
 
@@ -94,30 +100,26 @@ import com.helger.quartz.TimeOfDay;
 public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeIntervalTrigger>
                                       implements IDailyTimeIntervalTrigger, ICoreTrigger
 {
-  private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = Calendar.getInstance ().get (Calendar.YEAR) + 100;
+  private static final int YEAR_TO_GIVEUP_SCHEDULING_AT = PDTFactory.getCurrentYear () + 100;
 
-  private Date startTime = null;
-  private Date endTime = null;
-  private Date nextFireTime = null;
-  private Date previousFireTime = null;
-  private int repeatCount = REPEAT_INDEFINITELY;
-  private int repeatInterval = 1;
-  private EIntervalUnit repeatIntervalUnit = EIntervalUnit.MINUTE;
-  private Set <Integer> daysOfWeek;
-  private TimeOfDay startTimeOfDay;
-  private TimeOfDay endTimeOfDay;
-  private int timesTriggered = 0;
-  private boolean complete = false;
+  private Date m_aStartTime;
+  private Date m_aEndTime;
+  private Date m_aNextFireTime;
+  private Date m_aPreviousFireTime;
+  private int m_nRepeatCount = REPEAT_INDEFINITELY;
+  private int m_nRepeatInterval = 1;
+  private EIntervalUnit m_eRepeatIntervalUnit = EIntervalUnit.MINUTE;
+  private Set <DayOfWeek> m_aDaysOfWeek;
+  private TimeOfDay m_aStartTimeOfDay;
+  private TimeOfDay m_aEndTimeOfDay;
+  private int m_nTimesTriggered = 0;
+  private boolean m_bComplete = false;
 
   /**
-   * <p>
    * Create a <code>DailyTimeIntervalTrigger</code> with no settings.
-   * </p>
    */
   public DailyTimeIntervalTrigger ()
-  {
-    super ();
-  }
+  {}
 
   /**
    * <p>
@@ -324,11 +326,11 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   @Override
   public Date getStartTime ()
   {
-    if (startTime == null)
+    if (m_aStartTime == null)
     {
-      startTime = new Date ();
+      m_aStartTime = new Date ();
     }
-    return startTime;
+    return m_aStartTime;
   }
 
   /**
@@ -354,7 +356,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
       throw new IllegalArgumentException ("End time cannot be before start time");
     }
 
-    this.startTime = startTime;
+    this.m_aStartTime = startTime;
   }
 
   /**
@@ -368,7 +370,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   @Override
   public Date getEndTime ()
   {
-    return endTime;
+    return m_aEndTime;
   }
 
   /**
@@ -389,12 +391,12 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
       throw new IllegalArgumentException ("End time cannot be before start time");
     }
 
-    this.endTime = endTime;
+    this.m_aEndTime = endTime;
   }
 
   public EIntervalUnit getRepeatIntervalUnit ()
   {
-    return repeatIntervalUnit;
+    return m_eRepeatIntervalUnit;
   }
 
   /**
@@ -409,17 +411,17 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    */
   public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
   {
-    if (repeatIntervalUnit == null ||
-        !((repeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
-           repeatIntervalUnit.equals (EIntervalUnit.MINUTE) ||
-           repeatIntervalUnit.equals (EIntervalUnit.HOUR))))
+    if (m_eRepeatIntervalUnit == null ||
+        !((m_eRepeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
+           m_eRepeatIntervalUnit.equals (EIntervalUnit.MINUTE) ||
+           m_eRepeatIntervalUnit.equals (EIntervalUnit.HOUR))))
       throw new IllegalArgumentException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
-    this.repeatIntervalUnit = intervalUnit;
+    this.m_eRepeatIntervalUnit = intervalUnit;
   }
 
   public int getRepeatInterval ()
   {
-    return repeatInterval;
+    return m_nRepeatInterval;
   }
 
   /**
@@ -434,15 +436,13 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    */
   public void setRepeatInterval (final int repeatInterval)
   {
-    if (repeatInterval < 0)
-      throw new IllegalArgumentException ("Repeat interval must be >= 0");
-
-    this.repeatInterval = repeatInterval;
+    ValueEnforcer.isGE0 (repeatInterval, "RepeatInterval");
+    this.m_nRepeatInterval = repeatInterval;
   }
 
   public int getTimesTriggered ()
   {
-    return timesTriggered;
+    return m_nTimesTriggered;
   }
 
   /**
@@ -453,7 +453,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    */
   public void setTimesTriggered (final int timesTriggered)
   {
-    this.timesTriggered = timesTriggered;
+    this.m_nTimesTriggered = timesTriggered;
   }
 
   @Override
@@ -525,33 +525,29 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
   @Override
-  public void triggered (final com.helger.quartz.ICalendar calendar)
+  public void triggered (final ICalendar calendar)
   {
-    timesTriggered++;
-    previousFireTime = nextFireTime;
-    nextFireTime = getFireTimeAfter (nextFireTime);
+    m_nTimesTriggered++;
+    m_aPreviousFireTime = m_aNextFireTime;
+    m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-    while (nextFireTime != null && calendar != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
-
-      nextFireTime = getFireTimeAfter (nextFireTime);
-
-      if (nextFireTime == null)
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
       final Calendar c = Calendar.getInstance ();
-      c.setTime (nextFireTime);
+      c.setTime (m_aNextFireTime);
       if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
-        nextFireTime = null;
+        m_aNextFireTime = null;
       }
     }
 
-    if (nextFireTime == null)
-    {
-      complete = true;
-    }
+    if (m_aNextFireTime == null)
+      m_bComplete = true;
   }
 
   /**
@@ -559,38 +555,33 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *      long)
    */
   @Override
-  public void updateWithNewCalendar (final com.helger.quartz.ICalendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
   {
-    nextFireTime = getFireTimeAfter (previousFireTime);
-
-    if (nextFireTime == null || calendar == null)
-    {
+    m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
+    if (m_aNextFireTime == null || calendar == null)
       return;
-    }
 
     final Date now = new Date ();
-    while (nextFireTime != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
-
-      nextFireTime = getFireTimeAfter (nextFireTime);
-
-      if (nextFireTime == null)
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
       final Calendar c = Calendar.getInstance ();
-      c.setTime (nextFireTime);
+      c.setTime (m_aNextFireTime);
       if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
-        nextFireTime = null;
+        m_aNextFireTime = null;
       }
 
-      if (nextFireTime != null && nextFireTime.before (now))
+      if (m_aNextFireTime != null && m_aNextFireTime.before (now))
       {
-        final long diff = now.getTime () - nextFireTime.getTime ();
+        final long diff = now.getTime () - m_aNextFireTime.getTime ();
         if (diff >= misfireThreshold)
         {
-          nextFireTime = getFireTimeAfter (nextFireTime);
+          m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
         }
       }
     }
@@ -615,30 +606,29 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   @Override
   public Date computeFirstFireTime (final ICalendar calendar)
   {
-    nextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000L));
+    m_aNextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000L));
 
     // Check calendar for date-time exclusion
-    while (nextFireTime != null && calendar != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
-
-      nextFireTime = getFireTimeAfter (nextFireTime);
-
-      if (nextFireTime == null)
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
       final Calendar c = Calendar.getInstance ();
-      c.setTime (nextFireTime);
+      c.setTime (m_aNextFireTime);
       if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
         return null;
       }
     }
 
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
-  private Calendar createCalendarTime (final Date dateTime)
+  @Nonnull
+  private static Calendar _createCalendarTime (final Date dateTime)
   {
     final Calendar cal = Calendar.getInstance ();
     cal.setTime (dateTime);
@@ -662,7 +652,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   @Override
   public Date getNextFireTime ()
   {
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
   /**
@@ -674,7 +664,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   @Override
   public Date getPreviousFireTime ()
   {
-    return previousFireTime;
+    return m_aPreviousFireTime;
   }
 
   /**
@@ -688,7 +678,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    */
   public void setNextFireTime (final Date nextFireTime)
   {
-    this.nextFireTime = nextFireTime;
+    m_aNextFireTime = nextFireTime;
   }
 
   /**
@@ -702,7 +692,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    */
   public void setPreviousFireTime (final Date previousFireTime)
   {
-    this.previousFireTime = previousFireTime;
+    m_aPreviousFireTime = previousFireTime;
   }
 
   /**
@@ -718,53 +708,49 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   public Date getFireTimeAfter (final Date aAfterTime)
   {
     // Check if trigger has completed or not.
-    if (complete)
-    {
+    if (m_bComplete)
       return null;
-    }
 
     // Check repeatCount limit
-    if (repeatCount != REPEAT_INDEFINITELY && timesTriggered > repeatCount)
-    {
+    if (m_nRepeatCount != REPEAT_INDEFINITELY && m_nTimesTriggered > m_nRepeatCount)
       return null;
-    }
 
     // a. Increment afterTime by a second, so that we are comparing against a
     // time after it!
     Date afterTime = aAfterTime;
     if (afterTime == null)
-      afterTime = new Date (System.currentTimeMillis () + 1000L);
+      afterTime = new Date (System.currentTimeMillis () + CGlobal.MILLISECONDS_PER_SECOND);
     else
-      afterTime = new Date (afterTime.getTime () + 1000L);
+      afterTime = new Date (afterTime.getTime () + CGlobal.MILLISECONDS_PER_SECOND);
 
     // make sure afterTime is at least startTime
-    if (afterTime.before (startTime))
-      afterTime = startTime;
+    if (afterTime.before (m_aStartTime))
+      afterTime = m_aStartTime;
 
     // b.Check to see if afterTime is after endTimeOfDay or not. If yes, then we
     // need to advance to next day as well.
     boolean afterTimePastEndTimeOfDay = false;
-    if (endTimeOfDay != null)
+    if (m_aEndTimeOfDay != null)
     {
-      afterTimePastEndTimeOfDay = afterTime.getTime () > endTimeOfDay.getTimeOfDayForDate (afterTime).getTime ();
+      afterTimePastEndTimeOfDay = afterTime.getTime () > m_aEndTimeOfDay.getTimeOfDayForDate (afterTime).getTime ();
     }
     // c. now we need to move move to the next valid day of week if either:
     // the given time is past the end time of day, or given time is not on a
     // valid day of week
-    Date fireTime = advanceToNextDayOfWeekIfNecessary (afterTime, afterTimePastEndTimeOfDay);
+    Date fireTime = _advanceToNextDayOfWeekIfNecessary (afterTime, afterTimePastEndTimeOfDay);
     if (fireTime == null)
       return null;
 
     // d. Calculate and save fireTimeEndDate variable for later use
     Date fireTimeEndDate = null;
-    if (endTimeOfDay == null)
+    if (m_aEndTimeOfDay == null)
       fireTimeEndDate = new TimeOfDay (23, 59, 59).getTimeOfDayForDate (fireTime);
     else
-      fireTimeEndDate = endTimeOfDay.getTimeOfDayForDate (fireTime);
+      fireTimeEndDate = m_aEndTimeOfDay.getTimeOfDayForDate (fireTime);
 
     // e. Check fireTime against startTime or startTimeOfDay to see which go
     // first.
-    final Date fireTimeStartDate = startTimeOfDay.getTimeOfDayForDate (fireTime);
+    final Date fireTimeStartDate = m_aStartTimeOfDay.getTimeOfDayForDate (fireTime);
     if (fireTime.before (fireTimeStartDate))
     {
       return fireTimeStartDate;
@@ -777,7 +763,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
     final long startMillis = fireTimeStartDate.getTime ();
     final long secondsAfterStart = (fireMillis - startMillis) / 1000L;
     final long repeatLong = getRepeatInterval ();
-    final Calendar sTime = createCalendarTime (fireTimeStartDate);
+    final Calendar sTime = _createCalendarTime (fireTimeStartDate);
     final EIntervalUnit repeatUnit = getRepeatIntervalUnit ();
     if (repeatUnit.equals (EIntervalUnit.SECOND))
     {
@@ -810,23 +796,29 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
     // to next day.
     if (fireTime.after (fireTimeEndDate))
     {
-      fireTime = advanceToNextDayOfWeekIfNecessary (fireTime, isSameDay (fireTime, fireTimeEndDate));
+      fireTime = _advanceToNextDayOfWeekIfNecessary (fireTime, _isSameDay (fireTime, fireTimeEndDate));
       // make sure we hit the startTimeOfDay on the new day
-      fireTime = startTimeOfDay.getTimeOfDayForDate (fireTime);
+      fireTime = m_aStartTimeOfDay.getTimeOfDayForDate (fireTime);
     }
 
     // i. Return calculated fireTime.
     return fireTime;
   }
 
-  private boolean isSameDay (final Date d1, final Date d2)
+  private static boolean _isSameDay (final Date d1, final Date d2)
   {
-
-    final Calendar c1 = createCalendarTime (d1);
-    final Calendar c2 = createCalendarTime (d2);
-
+    final Calendar c1 = _createCalendarTime (d1);
+    final Calendar c2 = _createCalendarTime (d2);
     return c1.get (Calendar.YEAR) == c2.get (Calendar.YEAR) &&
            c1.get (Calendar.DAY_OF_YEAR) == c2.get (Calendar.DAY_OF_YEAR);
+  }
+
+  @Nonnull
+  private static DayOfWeek _getAsDoW (final int nCalDay)
+  {
+    // Convert Calendar DoW to enum DoW
+    final int nIndex = (nCalDay + 6) % 7;
+    return DayOfWeek.of (nIndex == 0 ? 7 : nIndex);
   }
 
   /**
@@ -842,27 +834,29 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        the endTimeOfDay that fireTime should move to next day anyway.
    * @return a next day fireTime.
    */
-  private Date advanceToNextDayOfWeekIfNecessary (final Date aFireTime, final boolean forceToAdvanceNextDay)
+  private Date _advanceToNextDayOfWeekIfNecessary (final Date aFireTime, final boolean forceToAdvanceNextDay)
   {
     // a. Advance or adjust to next dayOfWeek if need to first, starting next
     // day with startTimeOfDay.
     Date fireTime = aFireTime;
     final TimeOfDay sTimeOfDay = getStartTimeOfDay ();
     final Date fireTimeStartDate = sTimeOfDay.getTimeOfDayForDate (fireTime);
-    final Calendar fireTimeStartDateCal = createCalendarTime (fireTimeStartDate);
-    int dayOfWeekOfFireTime = fireTimeStartDateCal.get (Calendar.DAY_OF_WEEK);
+    final Calendar fireTimeStartDateCal = _createCalendarTime (fireTimeStartDate);
+    int nDayOfWeekOfFireTime = fireTimeStartDateCal.get (Calendar.DAY_OF_WEEK);
+    DayOfWeek eDayOfWeekOfFireTime = _getAsDoW (nDayOfWeekOfFireTime);
 
     // b2. We need to advance to another day if isAfterTimePassEndTimeOfDay is
     // true, or dayOfWeek is not set.
-    final Set <Integer> daysOfWeekToFire = getDaysOfWeek ();
-    if (forceToAdvanceNextDay || !daysOfWeekToFire.contains (dayOfWeekOfFireTime))
+    final Set <DayOfWeek> daysOfWeekToFire = getDaysOfWeek ();
+    if (forceToAdvanceNextDay || !daysOfWeekToFire.contains (eDayOfWeekOfFireTime))
     {
       // Advance one day at a time until next available date.
       for (int i = 1; i <= 7; i++)
       {
         fireTimeStartDateCal.add (Calendar.DATE, 1);
-        dayOfWeekOfFireTime = fireTimeStartDateCal.get (Calendar.DAY_OF_WEEK);
-        if (daysOfWeekToFire.contains (dayOfWeekOfFireTime))
+        nDayOfWeekOfFireTime = fireTimeStartDateCal.get (Calendar.DAY_OF_WEEK);
+        eDayOfWeekOfFireTime = _getAsDoW (nDayOfWeekOfFireTime);
+        if (daysOfWeekToFire.contains (eDayOfWeekOfFireTime))
         {
           fireTime = fireTimeStartDateCal.getTime ();
           break;
@@ -892,7 +886,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   @Override
   public Date getFinalFireTime ()
   {
-    if (complete || getEndTime () == null)
+    if (m_bComplete || getEndTime () == null)
     {
       return null;
     }
@@ -900,9 +894,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
     // We have an endTime, we still need to check to see if there is a
     // endTimeOfDay if that's applicable.
     Date eTime = getEndTime ();
-    if (endTimeOfDay != null)
+    if (m_aEndTimeOfDay != null)
     {
-      final Date endTimeOfDayDate = endTimeOfDay.getTimeOfDayForDate (eTime);
+      final Date endTimeOfDayDate = m_aEndTimeOfDay.getTimeOfDayForDate (eTime);
       if (eTime.getTime () < endTimeOfDayDate.getTime ())
       {
         eTime = endTimeOfDayDate;
@@ -936,68 +930,63 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   {
     super.validate ();
 
-    if (repeatIntervalUnit == null ||
-        !(repeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
-          repeatIntervalUnit.equals (EIntervalUnit.MINUTE) ||
-          repeatIntervalUnit.equals (EIntervalUnit.HOUR)))
+    if (m_eRepeatIntervalUnit == null ||
+        !(m_eRepeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
+          m_eRepeatIntervalUnit.equals (EIntervalUnit.MINUTE) ||
+          m_eRepeatIntervalUnit.equals (EIntervalUnit.HOUR)))
       throw new SchedulerException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
-    if (repeatInterval < 1)
+    if (m_nRepeatInterval < 1)
     {
       throw new SchedulerException ("Repeat Interval cannot be zero.");
     }
 
     // Ensure interval does not exceed 24 hours
     final long secondsInHour = 24 * 60 * 60L;
-    if (repeatIntervalUnit == EIntervalUnit.SECOND && repeatInterval > secondsInHour)
+    if (m_eRepeatIntervalUnit == EIntervalUnit.SECOND && m_nRepeatInterval > secondsInHour)
     {
       throw new SchedulerException ("repeatInterval can not exceed 24 hours (" +
                                     secondsInHour +
                                     " seconds). Given " +
-                                    repeatInterval);
+                                    m_nRepeatInterval);
     }
-    if (repeatIntervalUnit == EIntervalUnit.MINUTE && repeatInterval > secondsInHour / 60L)
+    if (m_eRepeatIntervalUnit == EIntervalUnit.MINUTE && m_nRepeatInterval > secondsInHour / 60L)
     {
       throw new SchedulerException ("repeatInterval can not exceed 24 hours (" +
                                     secondsInHour / 60L +
                                     " minutes). Given " +
-                                    repeatInterval);
+                                    m_nRepeatInterval);
     }
-    if (repeatIntervalUnit == EIntervalUnit.HOUR && repeatInterval > 24)
+    if (m_eRepeatIntervalUnit == EIntervalUnit.HOUR && m_nRepeatInterval > 24)
     {
-      throw new SchedulerException ("repeatInterval can not exceed 24 hours. Given " + repeatInterval + " hours.");
+      throw new SchedulerException ("repeatInterval can not exceed 24 hours. Given " + m_nRepeatInterval + " hours.");
     }
 
     // Ensure timeOfDay is in order.
     if (getEndTimeOfDay () != null && !getStartTimeOfDay ().before (getEndTimeOfDay ()))
     {
       throw new SchedulerException ("StartTimeOfDay " +
-                                    startTimeOfDay +
+                                    m_aStartTimeOfDay +
                                     " should not come after endTimeOfDay " +
-                                    endTimeOfDay);
+                                    m_aEndTimeOfDay);
     }
   }
 
   /**
    * {@inheritDoc}
    */
-  public Set <Integer> getDaysOfWeek ()
+  public Set <DayOfWeek> getDaysOfWeek ()
   {
-    if (daysOfWeek == null)
+    if (m_aDaysOfWeek == null)
     {
-      daysOfWeek = DailyTimeIntervalScheduleBuilder.ALL_DAYS_OF_THE_WEEK;
+      m_aDaysOfWeek = DailyTimeIntervalScheduleBuilder.ALL_DAYS_OF_THE_WEEK;
     }
-    return daysOfWeek;
+    return m_aDaysOfWeek;
   }
 
-  public void setDaysOfWeek (final Set <Integer> daysOfWeek)
+  public void setDaysOfWeek (final Set <DayOfWeek> daysOfWeek)
   {
-    if (daysOfWeek == null || daysOfWeek.size () == 0)
-      throw new IllegalArgumentException ("DaysOfWeek set must be a set that contains at least one day.");
-    else
-      if (daysOfWeek.size () == 0)
-        throw new IllegalArgumentException ("DaysOfWeek set must contain at least one day.");
-
-    this.daysOfWeek = daysOfWeek;
+    ValueEnforcer.notEmpty (daysOfWeek, "DaysOfWeek");
+    this.m_aDaysOfWeek = daysOfWeek;
   }
 
   /**
@@ -1005,27 +994,20 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    */
   public TimeOfDay getStartTimeOfDay ()
   {
-    if (startTimeOfDay == null)
-    {
-      startTimeOfDay = new TimeOfDay (0, 0, 0);
-    }
-    return startTimeOfDay;
+    if (m_aStartTimeOfDay == null)
+      m_aStartTimeOfDay = new TimeOfDay (0, 0, 0);
+    return m_aStartTimeOfDay;
   }
 
   public void setStartTimeOfDay (final TimeOfDay startTimeOfDay)
   {
-    if (startTimeOfDay == null)
-    {
-      throw new IllegalArgumentException ("Start time of day cannot be null");
-    }
+    ValueEnforcer.notNull (startTimeOfDay, "StartTimeOfDay");
 
-    final TimeOfDay eTime = getEndTimeOfDay ();
-    if (eTime != null && eTime.before (startTimeOfDay))
-    {
+    final TimeOfDay aEndTimeOfDay = getEndTimeOfDay ();
+    if (aEndTimeOfDay != null && aEndTimeOfDay.before (startTimeOfDay))
       throw new IllegalArgumentException ("End time of day cannot be before start time of day");
-    }
 
-    this.startTimeOfDay = startTimeOfDay;
+    m_aStartTimeOfDay = startTimeOfDay;
   }
 
   /**
@@ -1033,30 +1015,26 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    */
   public TimeOfDay getEndTimeOfDay ()
   {
-    return endTimeOfDay;
+    return m_aEndTimeOfDay;
   }
 
-  public void setEndTimeOfDay (final TimeOfDay endTimeOfDay)
+  public void setEndTimeOfDay (final TimeOfDay aEndTimeOfDay)
   {
-    if (endTimeOfDay == null)
-      throw new IllegalArgumentException ("End time of day cannot be null");
-
-    final TimeOfDay sTime = getStartTimeOfDay ();
-    if (sTime != null && endTimeOfDay.before (endTimeOfDay))
-    {
+    ValueEnforcer.notNull (aEndTimeOfDay, "EndTimeOfDay");
+    final TimeOfDay aStartTimeOfDay = getStartTimeOfDay ();
+    if (aStartTimeOfDay != null && aEndTimeOfDay.before (aEndTimeOfDay))
       throw new IllegalArgumentException ("End time of day cannot be before start time of day");
-    }
-    this.endTimeOfDay = endTimeOfDay;
+    m_aEndTimeOfDay = aEndTimeOfDay;
   }
 
   /**
-   * Get a {@link ScheduleBuilder} that is configured to produce a schedule
+   * Get a {@link IScheduleBuilder} that is configured to produce a schedule
    * identical to this trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */
   @Override
-  public ScheduleBuilder <IDailyTimeIntervalTrigger> getScheduleBuilder ()
+  public IScheduleBuilder <IDailyTimeIntervalTrigger> getScheduleBuilder ()
   {
 
     final DailyTimeIntervalScheduleBuilder cb = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule ()
@@ -1090,7 +1068,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   public int getRepeatCount ()
   {
-    return repeatCount;
+    return m_nRepeatCount;
   }
 
   public void setRepeatCount (final int repeatCount)
@@ -1101,6 +1079,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
                                           "constant REPEAT_INDEFINITELY for infinite.");
     }
 
-    this.repeatCount = repeatCount;
+    m_nRepeatCount = repeatCount;
   }
 }

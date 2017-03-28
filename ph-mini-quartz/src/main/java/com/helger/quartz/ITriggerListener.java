@@ -18,7 +18,7 @@
  */
 package com.helger.quartz;
 
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 
 /**
  * The interface to be implemented by classes that want to be informed when a
@@ -121,6 +121,6 @@ public interface ITriggerListener
    */
   default void triggerComplete (final ITrigger trigger,
                                 final IJobExecutionContext context,
-                                final CompletedExecutionInstruction triggerInstructionCode)
+                                final ECompletedExecutionInstruction triggerInstructionCode)
   {}
 }

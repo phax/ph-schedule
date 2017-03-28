@@ -25,8 +25,6 @@ import java.text.ParseException;
 
 import org.junit.Test;
 
-import com.helger.quartz.ICronTrigger;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.impl.triggers.CronTrigger;
 
 /**
@@ -41,7 +39,7 @@ public class CronTriggerTest
     trigger.setName ("test");
     trigger.setGroup ("testGroup");
     trigger.setCronExpression ("0 0 12 * * ?");
-    final ICronTrigger trigger2 = (ICronTrigger) trigger.clone ();
+    final CronTrigger trigger2 = trigger.clone ();
 
     assertEquals ("Cloning failed", trigger, trigger2);
 
@@ -56,7 +54,7 @@ public class CronTriggerTest
     final CronTrigger trigger = new CronTrigger ();
     trigger.setName ("test");
     trigger.setGroup ("testGroup");
-    final ICronTrigger trigger2 = (ICronTrigger) trigger.clone ();
+    final ICronTrigger trigger2 = trigger.clone ();
 
     assertEquals ("Cloning failed", trigger, trigger2);
   }

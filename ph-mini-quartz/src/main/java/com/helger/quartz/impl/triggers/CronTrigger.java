@@ -28,10 +28,10 @@ import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.ScheduleBuilder;
 import com.helger.quartz.TriggerUtils;
 
 /**
@@ -84,7 +84,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   }
 
   @Override
-  public Object clone ()
+  public CronTrigger clone ()
   {
     final CronTrigger copy = (CronTrigger) super.clone ();
     if (cronEx != null)
@@ -588,15 +588,14 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   }
 
   /**
-   * Get a {@link ScheduleBuilder} that is configured to produce a schedule
+   * Get a {@link IScheduleBuilder} that is configured to produce a schedule
    * identical to this trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */
   @Override
-  public ScheduleBuilder <ICronTrigger> getScheduleBuilder ()
+  public IScheduleBuilder <ICronTrigger> getScheduleBuilder ()
   {
-
     final CronScheduleBuilder cb = CronScheduleBuilder.cronSchedule (getCronExpression ()).inTimeZone (getTimeZone ());
 
     switch (getMisfireInstruction ())

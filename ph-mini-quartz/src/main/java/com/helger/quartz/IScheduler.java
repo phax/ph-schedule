@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.spi.IJobFactory;
 import com.helger.quartz.utils.Key;
@@ -776,9 +776,9 @@ public interface IScheduler
   /**
    * Get the current state of the identified <code>{@link ITrigger}</code>.
    *
-   * @see ITrigger.TriggerState
+   * @see ITrigger.ETriggerState
    */
-  TriggerState getTriggerState (TriggerKey triggerKey) throws SchedulerException;
+  ETriggerState getTriggerState (TriggerKey triggerKey) throws SchedulerException;
 
   /**
    * Add (register) the given <code>Calendar</code> to the Scheduler.

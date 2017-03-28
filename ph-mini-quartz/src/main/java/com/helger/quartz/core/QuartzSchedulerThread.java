@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.ITrigger.CompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IOperableTrigger;
@@ -425,7 +425,7 @@ public class QuartzSchedulerThread extends Thread
               {
                 qsRsrcs.getJobStore ().triggeredJobComplete (triggers.get (i),
                                                              bndle.getJobDetail (),
-                                                             CompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
+                                                             ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
                 continue;
               }
 
@@ -438,7 +438,7 @@ public class QuartzSchedulerThread extends Thread
                 getLog ().error ("ThreadPool.runInThread() return false!");
                 qsRsrcs.getJobStore ().triggeredJobComplete (triggers.get (i),
                                                              bndle.getJobDetail (),
-                                                             CompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
+                                                             ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
               }
 
             }

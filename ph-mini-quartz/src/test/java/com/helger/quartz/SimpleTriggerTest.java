@@ -28,8 +28,6 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
-import com.helger.quartz.ISimpleTrigger;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 
 /**
@@ -92,13 +90,13 @@ public class SimpleTriggerTest
     final SimpleTrigger simpleTrigger = new SimpleTrigger ();
 
     // Make sure empty sub-objects are cloned okay
-    ITrigger clone = (ITrigger) simpleTrigger.clone ();
+    ITrigger clone = simpleTrigger.clone ();
     assertEquals (0, clone.getJobDataMap ().size ());
 
     // Make sure non-empty sub-objects are cloned okay
     simpleTrigger.getJobDataMap ().put ("K1", "V1");
     simpleTrigger.getJobDataMap ().put ("K2", "V2");
-    clone = (ITrigger) simpleTrigger.clone ();
+    clone = simpleTrigger.clone ();
     assertEquals (2, clone.getJobDataMap ().size ());
     assertEquals ("V1", clone.getJobDataMap ().get ("K1"));
     assertEquals ("V2", clone.getJobDataMap ().get ("K2"));

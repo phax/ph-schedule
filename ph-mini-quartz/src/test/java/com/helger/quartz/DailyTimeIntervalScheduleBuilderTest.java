@@ -30,7 +30,6 @@ import static org.junit.Assert.fail;
 import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -126,7 +125,7 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals ("DEFAULT", trigger.getKey ().getGroup ());
     assertEquals (EIntervalUnit.HOUR, trigger.getRepeatIntervalUnit ());
     assertEquals (1, trigger.getRepeatInterval ());
-    final List <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
+    final ICommonsList <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
     assertEquals (48, fireTimes.size ());
   }
 
@@ -147,9 +146,9 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals (true, null == trigger.getEndTime ());
     assertEquals (EIntervalUnit.MINUTE, trigger.getRepeatIntervalUnit ());
     assertEquals (72, trigger.getRepeatInterval ());
-    assertEquals (new TimeOfDay (8, 0), trigger.getStartTimeOfDay ());
-    assertEquals (new TimeOfDay (17, 0), trigger.getEndTimeOfDay ());
-    final List <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
+    assertEquals (TimeOfDay.hourAndMinuteOfDay (8, 0), trigger.getStartTimeOfDay ());
+    assertEquals (TimeOfDay.hourAndMinuteOfDay (17, 0), trigger.getEndTimeOfDay ());
+    final ICommonsList <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
     assertEquals (48, fireTimes.size ());
   }
 
@@ -178,7 +177,7 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals (121, trigger.getRepeatInterval ());
     assertEquals (new TimeOfDay (10, 0, 0), trigger.getStartTimeOfDay ());
     assertEquals (new TimeOfDay (23, 59, 59), trigger.getEndTimeOfDay ());
-    final List <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
+    final ICommonsList <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
     assertEquals (48, fireTimes.size ());
   }
 
@@ -193,7 +192,7 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals ("DEFAULT", trigger.getKey ().getGroup ());
     assertEquals (EIntervalUnit.HOUR, trigger.getRepeatIntervalUnit ());
     assertEquals (1, trigger.getRepeatInterval ());
-    final List <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
+    final ICommonsList <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
     assertEquals (10, fireTimes.size ());
   }
 
@@ -215,7 +214,7 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals (48, fireTimes.size ());
     assertEquals (dateOf (8, 0, 0, 1, Month.JANUARY, 2011), fireTimes.get (0));
     assertEquals (dateOf (10, 45, 0, 4, Month.JANUARY, 2011), fireTimes.get (47));
-    assertEquals (new TimeOfDay (10, 45), trigger.getEndTimeOfDay ());
+    assertEquals (TimeOfDay.hourAndMinuteOfDay (10, 45), trigger.getEndTimeOfDay ());
   }
 
   @Test
@@ -236,7 +235,7 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals (48, fireTimes.size ());
     assertEquals (dateOf (8, 0, 0, 1, Month.JANUARY, 2011), fireTimes.get (0));
     assertEquals (dateOf (8, 0, 0, 17, Month.FEBRUARY, 2011), fireTimes.get (47));
-    assertEquals (new TimeOfDay (8, 0), trigger.getEndTimeOfDay ());
+    assertEquals (TimeOfDay.hourAndMinuteOfDay (8, 0), trigger.getEndTimeOfDay ());
   }
 
   @Test

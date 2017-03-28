@@ -29,7 +29,7 @@ import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IListenerManager;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerContext;
@@ -536,7 +536,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public TriggerState getTriggerState (final TriggerKey triggerKey) throws SchedulerException
+  public ETriggerState getTriggerState (final TriggerKey triggerKey) throws SchedulerException
   {
     return m_aSched.getTriggerState (triggerKey);
   }

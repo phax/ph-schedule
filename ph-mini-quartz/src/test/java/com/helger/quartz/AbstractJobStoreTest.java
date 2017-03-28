@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.quartz.ITrigger.TriggerState;
+import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
@@ -283,15 +283,15 @@ public abstract class AbstractJobStoreTest
                                                   2,
                                                   2000);
     trigger.computeFirstFireTime (null);
-    assertEquals (TriggerState.NONE, this.fJobStore.getTriggerState (trigger.getKey ()));
+    assertEquals (ETriggerState.NONE, this.fJobStore.getTriggerState (trigger.getKey ()));
     this.fJobStore.storeTrigger (trigger, false);
-    assertEquals (TriggerState.NORMAL, this.fJobStore.getTriggerState (trigger.getKey ()));
+    assertEquals (ETriggerState.NORMAL, this.fJobStore.getTriggerState (trigger.getKey ()));
 
     this.fJobStore.pauseTrigger (trigger.getKey ());
-    assertEquals (TriggerState.PAUSED, this.fJobStore.getTriggerState (trigger.getKey ()));
+    assertEquals (ETriggerState.PAUSED, this.fJobStore.getTriggerState (trigger.getKey ()));
 
     this.fJobStore.resumeTrigger (trigger.getKey ());
-    assertEquals (TriggerState.NORMAL, this.fJobStore.getTriggerState (trigger.getKey ()));
+    assertEquals (ETriggerState.NORMAL, this.fJobStore.getTriggerState (trigger.getKey ()));
 
     trigger = this.fJobStore.acquireNextTriggers (new Date (trigger.getNextFireTime ().getTime ()).getTime () +
                                                   10000,
@@ -373,7 +373,7 @@ public abstract class AbstractJobStoreTest
     final IOperableTrigger tr = new SimpleTrigger (trName, trGroup, new Date ());
     tr.setJobKey (new JobKey (jobName2, jobGroup));
     fJobStore.storeTrigger (tr, false);
-    assertEquals (TriggerState.PAUSED, fJobStore.getTriggerState (tr.getKey ()));
+    assertEquals (ETriggerState.PAUSED, fJobStore.getTriggerState (tr.getKey ()));
   }
 
   @Test
