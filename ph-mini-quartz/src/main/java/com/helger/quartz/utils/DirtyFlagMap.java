@@ -54,7 +54,7 @@ public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
    */
   public DirtyFlagMap ()
   {
-    m_aMap = new CommonsHashMap<> ();
+    m_aMap = new CommonsHashMap <> ();
   }
 
   /**
@@ -67,7 +67,7 @@ public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
    */
   public DirtyFlagMap (final int nInitialCapacity)
   {
-    m_aMap = new CommonsHashMap<> (nInitialCapacity);
+    m_aMap = new CommonsHashMap <> (nInitialCapacity);
   }
 
   /**
@@ -80,7 +80,7 @@ public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
    */
   public DirtyFlagMap (final int nInitialCapacity, final float loadFactor)
   {
-    m_aMap = new CommonsHashMap<> (nInitialCapacity, loadFactor);
+    m_aMap = new CommonsHashMap <> (nInitialCapacity, loadFactor);
   }
 
   /**
@@ -179,7 +179,7 @@ public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
   @Nonnull
   public ICommonsSet <K> keySet ()
   {
-    return new DirtyFlagSet<> (m_aMap.keySet ());
+    return new DirtyFlagSet <> (m_aMap.keySet ());
   }
 
   public V put (final K key, final V val)
@@ -216,14 +216,14 @@ public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
 
   public ICommonsCollection <V> values ()
   {
-    return new DirtyFlagCollection<> (m_aMap.values ());
+    return new DirtyFlagCollection <> (m_aMap.values ());
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public DirtyFlagMap <K, V> getClone ()
   {
-    return new DirtyFlagMap<> (this);
+    return new DirtyFlagMap <> (this);
   }
 
   @Override
@@ -254,7 +254,7 @@ public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
     @Nonnull
     public Iterator <T> iterator ()
     {
-      return new DirtyFlagIterator<> (m_aCollection.iterator ());
+      return new DirtyFlagIterator <> (m_aCollection.iterator ());
     }
 
     public boolean remove (final Object o)
@@ -352,7 +352,7 @@ public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
     @Nonnull
     public DirtyFlagSet <T> getClone ()
     {
-      return new DirtyFlagSet<> (getWrappedSet ());
+      return new DirtyFlagSet <> (getWrappedSet ());
     }
   }
 

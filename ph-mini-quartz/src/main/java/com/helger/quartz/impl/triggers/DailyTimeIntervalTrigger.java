@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.datetime.util.PDTHelper;
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
@@ -813,14 +814,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
            c1.get (Calendar.DAY_OF_YEAR) == c2.get (Calendar.DAY_OF_YEAR);
   }
 
-  @Nonnull
-  private static DayOfWeek _getAsDoW (final int nCalDay)
-  {
-    // Convert Calendar DoW to enum DoW
-    final int nIndex = (nCalDay + 6) % 7;
-    return DayOfWeek.of (nIndex == 0 ? 7 : nIndex);
-  }
-
   /**
    * Given fireTime time determine if it is on a valid day of week. If so,
    * simply return it unaltered, if not, advance to the next valid week day, and
@@ -843,7 +836,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
     final Date fireTimeStartDate = sTimeOfDay.getTimeOfDayForDate (fireTime);
     final Calendar fireTimeStartDateCal = _createCalendarTime (fireTimeStartDate);
     int nDayOfWeekOfFireTime = fireTimeStartDateCal.get (Calendar.DAY_OF_WEEK);
-    DayOfWeek eDayOfWeekOfFireTime = _getAsDoW (nDayOfWeekOfFireTime);
+    final int nCalDay = nDayOfWeekOfFireTime;
+    DayOfWeek eDayOfWeekOfFireTime = PDTHelper.getAsDayOfWeek (nCalDay);
 
     // b2. We need to advance to another day if isAfterTimePassEndTimeOfDay is
     // true, or dayOfWeek is not set.
@@ -855,7 +849,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
       {
         fireTimeStartDateCal.add (Calendar.DATE, 1);
         nDayOfWeekOfFireTime = fireTimeStartDateCal.get (Calendar.DAY_OF_WEEK);
-        eDayOfWeekOfFireTime = _getAsDoW (nDayOfWeekOfFireTime);
+        final int nCalDay1 = nDayOfWeekOfFireTime;
+        eDayOfWeekOfFireTime = PDTHelper.getAsDayOfWeek (nCalDay1);
         if (daysOfWeekToFire.contains (eDayOfWeekOfFireTime))
         {
           fireTime = fireTimeStartDateCal.getTime ();

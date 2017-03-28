@@ -18,10 +18,12 @@
  */
 package com.helger.quartz.spi;
 
+import java.io.Serializable;
+
 /**
  * @author lorban
  */
-public class TriggerFiredResult
+public class TriggerFiredResult implements Serializable
 {
   private TriggerFiredBundle triggerFiredBundle;
   private Exception exception;

@@ -122,16 +122,15 @@ public class QuartzInitializerListener implements ServletContextListener
 {
   public static final String QUARTZ_FACTORY_KEY = "com.helger.quartz.impl.StdSchedulerFactory.KEY";
 
-  private boolean performShutdown = true;
-  private boolean waitOnShutdown = false;
-  private IScheduler scheduler = null;
+  private boolean m_bPerformShutdown = true;
+  private boolean m_bWaitOnShutdown = false;
+  private IScheduler m_aScheduler;
 
-  private final Logger log = LoggerFactory.getLogger (getClass ());
+  private static final Logger s_aLogger = LoggerFactory.getLogger (QuartzInitializerListener.class);
 
   public void contextInitialized (final ServletContextEvent sce)
   {
-
-    log.info ("Quartz Initializer Servlet loaded, initializing Scheduler...");
+    s_aLogger.info ("Quartz Initializer Servlet loaded, initializing Scheduler...");
 
     final ServletContext servletContext = sce.getServletContext ();
     StdSchedulerFactory factory;
@@ -142,19 +141,19 @@ public class QuartzInitializerListener implements ServletContextListener
       final String shutdownPref = servletContext.getInitParameter ("quartz:shutdown-on-unload");
       if (shutdownPref != null)
       {
-        performShutdown = Boolean.valueOf (shutdownPref).booleanValue ();
+        m_bPerformShutdown = Boolean.valueOf (shutdownPref).booleanValue ();
       }
       final String shutdownWaitPref = servletContext.getInitParameter ("quartz:wait-on-shutdown");
       if (shutdownPref != null)
       {
-        waitOnShutdown = Boolean.valueOf (shutdownWaitPref).booleanValue ();
+        m_bWaitOnShutdown = Boolean.valueOf (shutdownWaitPref).booleanValue ();
       }
 
       factory = getSchedulerFactory (configFile);
 
       // Always want to get the scheduler, even if it isn't starting,
       // to make sure it is both initialized and registered.
-      scheduler = factory.getScheduler ();
+      m_aScheduler = factory.getScheduler ();
 
       // Should the Scheduler being started now or later
       final String startOnLoad = servletContext.getInitParameter ("quartz:start-on-load");
@@ -168,9 +167,9 @@ public class QuartzInitializerListener implements ServletContextListener
       }
       catch (final Exception e)
       {
-        log.error ("Cannot parse value of 'start-delay-seconds' to an integer: " +
-                   startDelayS +
-                   ", defaulting to 5 seconds.");
+        s_aLogger.error ("Cannot parse value of 'start-delay-seconds' to an integer: " +
+                         startDelayS +
+                         ", defaulting to 5 seconds.");
         startDelay = 5;
       }
 
@@ -183,19 +182,19 @@ public class QuartzInitializerListener implements ServletContextListener
         if (startDelay <= 0)
         {
           // Start now
-          scheduler.start ();
-          log.info ("Scheduler has been started...");
+          m_aScheduler.start ();
+          s_aLogger.info ("Scheduler has been started...");
         }
         else
         {
           // Start delayed
-          scheduler.startDelayed (startDelay);
-          log.info ("Scheduler will start in " + startDelay + " seconds.");
+          m_aScheduler.startDelayed (startDelay);
+          s_aLogger.info ("Scheduler will start in " + startDelay + " seconds.");
         }
       }
       else
       {
-        log.info ("Scheduler has not been started. Use scheduler.start()");
+        s_aLogger.info ("Scheduler has not been started. Use scheduler.start()");
       }
 
       String factoryKey = servletContext.getInitParameter ("quartz:servlet-context-factory-key");
@@ -204,61 +203,49 @@ public class QuartzInitializerListener implements ServletContextListener
         factoryKey = QUARTZ_FACTORY_KEY;
       }
 
-      log.info ("Storing the Quartz Scheduler Factory in the servlet context at key: " + factoryKey);
+      s_aLogger.info ("Storing the Quartz Scheduler Factory in the servlet context at key: " + factoryKey);
       servletContext.setAttribute (factoryKey, factory);
 
       final String servletCtxtKey = servletContext.getInitParameter ("quartz:scheduler-context-servlet-context-key");
       if (servletCtxtKey != null)
       {
-        log.info ("Storing the ServletContext in the scheduler context at key: " + servletCtxtKey);
-        scheduler.getContext ().put (servletCtxtKey, servletContext);
+        s_aLogger.info ("Storing the ServletContext in the scheduler context at key: " + servletCtxtKey);
+        m_aScheduler.getContext ().put (servletCtxtKey, servletContext);
       }
 
     }
     catch (final Exception e)
     {
-      log.error ("Mini Quartz Scheduler failed to initialize: " + e.toString ());
+      s_aLogger.error ("Mini Quartz Scheduler failed to initialize: " + e.toString ());
       e.printStackTrace ();
     }
   }
 
   protected StdSchedulerFactory getSchedulerFactory (final String configFile) throws SchedulerException
   {
-    StdSchedulerFactory factory;
+    final StdSchedulerFactory factory = new StdSchedulerFactory ();
     // get Properties
     if (configFile != null)
-    {
-      factory = new StdSchedulerFactory (configFile);
-    }
-    else
-    {
-      factory = new StdSchedulerFactory ();
-    }
+      factory.initialize (configFile);
     return factory;
   }
 
   public void contextDestroyed (final ServletContextEvent sce)
   {
-
-    if (!performShutdown)
-    {
+    if (!m_bPerformShutdown)
       return;
-    }
 
     try
     {
-      if (scheduler != null)
-      {
-        scheduler.shutdown (waitOnShutdown);
-      }
+      if (m_aScheduler != null)
+        m_aScheduler.shutdown (m_bWaitOnShutdown);
     }
     catch (final Exception e)
     {
-      log.error ("Mini Quartz Scheduler failed to shutdown cleanly: " + e.toString ());
+      s_aLogger.error ("Mini Quartz Scheduler failed to shutdown cleanly: " + e.toString ());
       e.printStackTrace ();
     }
 
-    log.info ("Mini Quartz Scheduler successful shutdown.");
+    s_aLogger.info ("Mini Quartz Scheduler successful shutdown.");
   }
-
 }

@@ -363,7 +363,7 @@ public class QuartzSchedulerThread extends Thread
               continue;
 
             // set triggers to 'executing'
-            List <TriggerFiredResult> bndles = new ArrayList<> ();
+            List <TriggerFiredResult> bndles = new ArrayList <> ();
 
             boolean goAhead = true;
             synchronized (sigLock)

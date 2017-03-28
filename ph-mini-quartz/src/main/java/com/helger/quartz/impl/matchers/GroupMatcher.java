@@ -39,7 +39,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> groupEquals (final String compareTo)
   {
-    return new GroupMatcher<> (compareTo, StringOperatorName.EQUALS);
+    return new GroupMatcher <> (compareTo, StringOperatorName.EQUALS);
   }
 
   /**
@@ -64,7 +64,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> groupStartsWith (final String compareTo)
   {
-    return new GroupMatcher<> (compareTo, StringOperatorName.STARTS_WITH);
+    return new GroupMatcher <> (compareTo, StringOperatorName.STARTS_WITH);
   }
 
   /**
@@ -90,7 +90,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> groupEndsWith (final String compareTo)
   {
-    return new GroupMatcher<> (compareTo, StringOperatorName.ENDS_WITH);
+    return new GroupMatcher <> (compareTo, StringOperatorName.ENDS_WITH);
   }
 
   /**
@@ -115,7 +115,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> groupContains (final String compareTo)
   {
-    return new GroupMatcher<> (compareTo, StringOperatorName.CONTAINS);
+    return new GroupMatcher <> (compareTo, StringOperatorName.CONTAINS);
   }
 
   /**
@@ -140,7 +140,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> GroupMatcher <T> anyGroup ()
   {
-    return new GroupMatcher<> ("", StringOperatorName.ANYTHING);
+    return new GroupMatcher <> ("", StringOperatorName.ANYTHING);
   }
 
   /**

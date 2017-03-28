@@ -25,6 +25,7 @@ import java.util.TimeZone;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.datetime.util.PDTHelper;
 import com.helger.quartz.impl.triggers.CronTrigger;
 
 /**
@@ -60,16 +61,13 @@ import com.helger.quartz.impl.triggers.CronTrigger;
  */
 public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
 {
-  private final CronExpression cronExpression;
-  private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private final CronExpression m_aCronExpression;
+  private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
-  protected CronScheduleBuilder (final CronExpression cronExpression)
+  protected CronScheduleBuilder (@Nonnull final CronExpression aCronExpression)
   {
-    if (cronExpression == null)
-    {
-      throw new NullPointerException ("cronExpression cannot be null");
-    }
-    this.cronExpression = cronExpression;
+    ValueEnforcer.notNull (aCronExpression, "CronExpression");
+    m_aCronExpression = aCronExpression;
   }
 
   /**
@@ -83,9 +81,9 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
   public CronTrigger build ()
   {
     final CronTrigger ct = new CronTrigger ();
-    ct.setCronExpression (cronExpression);
-    ct.setTimeZone (cronExpression.getTimeZone ());
-    ct.setMisfireInstruction (misfireInstruction);
+    ct.setCronExpression (m_aCronExpression);
+    ct.setTimeZone (m_aCronExpression.getTimeZone ());
+    ct.setMisfireInstruction (m_nMisfireInstruction);
     return ct;
   }
 
@@ -101,6 +99,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    *         wrapping a ParseException if the expression is invalid
    * @see CronExpression
    */
+  @Nonnull
   public static CronScheduleBuilder cronSchedule (final String cronExpression)
   {
     try
@@ -127,11 +126,13 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    *         if the expression is invalid
    * @see CronExpression
    */
+  @Nonnull
   public static CronScheduleBuilder cronScheduleNonvalidatedExpression (final String cronExpression) throws ParseException
   {
     return cronSchedule (new CronExpression (cronExpression));
   }
 
+  @Nonnull
   private static CronScheduleBuilder _cronScheduleNoParseException (final String presumedValidCronExpression)
   {
     try
@@ -157,6 +158,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @return the new CronScheduleBuilder
    * @see CronExpression
    */
+  @Nonnull
   public static CronScheduleBuilder cronSchedule (final CronExpression cronExpression)
   {
     return new CronScheduleBuilder (cronExpression);
@@ -173,6 +175,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @return the new CronScheduleBuilder
    * @see CronExpression
    */
+  @Nonnull
   public static CronScheduleBuilder dailyAtHourAndMinute (final int hour, final int minute)
   {
     DateBuilder.validateHour (hour);
@@ -181,11 +184,6 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
     final String cronExpression = "0 " + minute + " " + hour + " ? * *";
 
     return _cronScheduleNoParseException (cronExpression);
-  }
-
-  private static int _getDoW (final DayOfWeek d)
-  {
-    return d.getValue () % 7 + 1;
   }
 
   /**
@@ -209,6 +207,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @see DateBuilder#SATURDAY
    * @see DateBuilder#SUNDAY
    */
+  @Nonnull
   public static CronScheduleBuilder atHourAndMinuteOnGivenDaysOfWeek (final int hour,
                                                                       final int minute,
                                                                       final DayOfWeek... daysOfWeek)
@@ -218,9 +217,14 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
     DateBuilder.validateMinute (minute);
 
     final StringBuilder aSB = new StringBuilder ();
-    aSB.append ("0 ").append (minute).append (' ').append (hour).append (" ? * ").append (_getDoW (daysOfWeek[0]));
+    aSB.append ("0 ")
+       .append (minute)
+       .append (' ')
+       .append (hour)
+       .append (" ? * ")
+       .append (PDTHelper.getCalendarDayOfWeek (daysOfWeek[0]));
     for (int i = 1; i < daysOfWeek.length; i++)
-      aSB.append (',').append (_getDoW (daysOfWeek[i]));
+      aSB.append (',').append (PDTHelper.getCalendarDayOfWeek (daysOfWeek[i]));
 
     return _cronScheduleNoParseException (aSB.toString ());
   }
@@ -245,6 +249,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @see DateBuilder#SATURDAY
    * @see DateBuilder#SUNDAY
    */
+  @Nonnull
   public static CronScheduleBuilder weeklyOnDayAndHourAndMinute (final DayOfWeek dayOfWeek,
                                                                  final int hour,
                                                                  final int minute)
@@ -253,7 +258,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
     DateBuilder.validateHour (hour);
     DateBuilder.validateMinute (minute);
 
-    final String cronExpression = "0 " + minute + " " + hour + " ? * " + _getDoW (dayOfWeek);
+    final String cronExpression = "0 " + minute + " " + hour + " ? * " + PDTHelper.getCalendarDayOfWeek (dayOfWeek);
 
     return _cronScheduleNoParseException (cronExpression);
   }
@@ -272,6 +277,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @return the new CronScheduleBuilder
    * @see CronExpression
    */
+  @Nonnull
   public static CronScheduleBuilder monthlyOnDayAndHourAndMinute (final int dayOfMonth,
                                                                   final int hour,
                                                                   final int minute)
@@ -280,8 +286,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
     DateBuilder.validateHour (hour);
     DateBuilder.validateMinute (minute);
 
-    final String cronExpression = String.format ("0 %d %d %d * ?", minute, hour, dayOfMonth);
-
+    final String cronExpression = "0 " + minute + " " + hour + " " + dayOfMonth + " * ?";
     return _cronScheduleNoParseException (cronExpression);
   }
 
@@ -293,9 +298,10 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @return the updated CronScheduleBuilder
    * @see CronExpression#getTimeZone()
    */
+  @Nonnull
   public CronScheduleBuilder inTimeZone (final TimeZone timezone)
   {
-    cronExpression.setTimeZone (timezone);
+    m_aCronExpression.setTimeZone (timezone);
     return this;
   }
 
@@ -306,9 +312,10 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @return the updated CronScheduleBuilder
    * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
+  @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
@@ -319,9 +326,10 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @return the updated CronScheduleBuilder
    * @see ICronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
    */
+  @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    misfireInstruction = ICronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    m_nMisfireInstruction = ICronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
@@ -332,9 +340,10 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    * @return the updated CronScheduleBuilder
    * @see ICronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
+  @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    misfireInstruction = ICronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    m_nMisfireInstruction = ICronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 }

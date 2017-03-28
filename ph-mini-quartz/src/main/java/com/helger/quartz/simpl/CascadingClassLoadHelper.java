@@ -66,7 +66,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   public void initialize ()
   {
-    loadHelpers = new ArrayList<> ();
+    loadHelpers = new ArrayList <> ();
     loadHelpers.add (new LoadingLoaderClassLoadHelper ());
     loadHelpers.add (new SimpleClassLoadHelper ());
     loadHelpers.add (new ThreadContextClassLoadHelper ());

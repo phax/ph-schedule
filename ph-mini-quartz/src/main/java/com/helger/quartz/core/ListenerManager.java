@@ -18,55 +18,55 @@
  */
 package com.helger.quartz.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.ext.CommonsArrayList;
-import com.helger.quartz.JobKey;
+import com.helger.commons.collection.ext.CommonsLinkedHashMap;
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsMap;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IListenerManager;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.ISchedulerListener;
-import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITriggerListener;
+import com.helger.quartz.JobKey;
+import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 
 public class ListenerManager implements IListenerManager
 {
-  private final Map <String, IJobListener> globalJobListeners = new LinkedHashMap<> (10);
-  private final Map <String, ITriggerListener> globalTriggerListeners = new LinkedHashMap<> (10);
-  private final Map <String, List <IMatcher <JobKey>>> globalJobListenersMatchers = new LinkedHashMap<> (10);
-  private final Map <String, List <IMatcher <TriggerKey>>> globalTriggerListenersMatchers = new LinkedHashMap<> (10);
-  private final List <ISchedulerListener> schedulerListeners = new ArrayList<> (10);
+  private final ICommonsMap <String, IJobListener> m_aGlobalJobListeners = new CommonsLinkedHashMap <> (10);
+  private final ICommonsMap <String, ITriggerListener> m_aGlobalTriggerListeners = new CommonsLinkedHashMap <> (10);
+  private final ICommonsMap <String, List <IMatcher <JobKey>>> m_aGlobalJobListenersMatchers = new CommonsLinkedHashMap <> (10);
+  private final ICommonsMap <String, List <IMatcher <TriggerKey>>> m_aGlobalTriggerListenersMatchers = new CommonsLinkedHashMap <> (10);
+  private final ICommonsList <ISchedulerListener> m_aSchedulerListeners = new CommonsArrayList <> (10);
 
   @SafeVarargs
-  public final void addJobListener (final IJobListener jobListener, final IMatcher <JobKey>... matchers)
+  public final void addJobListener (final IJobListener aJobListener, final IMatcher <JobKey>... matchers)
   {
-    addJobListener (jobListener, new CommonsArrayList<> (matchers));
+    addJobListener (aJobListener, new CommonsArrayList <> (matchers));
   }
 
   public void addJobListener (final IJobListener jobListener, final List <IMatcher <JobKey>> matchers)
   {
     if (jobListener.getName () == null || jobListener.getName ().length () == 0)
-    {
       throw new IllegalArgumentException ("JobListener name cannot be empty.");
-    }
 
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      globalJobListeners.put (jobListener.getName (), jobListener);
-      final List <IMatcher <JobKey>> matchersL = new LinkedList<> ();
+      m_aGlobalJobListeners.put (jobListener.getName (), jobListener);
+      final ICommonsList <IMatcher <JobKey>> matchersL = new CommonsArrayList <> ();
       if (matchers != null && matchers.size () > 0)
         matchersL.addAll (matchers);
       else
         matchersL.add (EverythingMatcher.allJobs ());
 
-      globalJobListenersMatchers.put (jobListener.getName (), matchersL);
+      m_aGlobalJobListenersMatchers.put (jobListener.getName (), matchersL);
     }
   }
 
@@ -78,20 +78,18 @@ public class ListenerManager implements IListenerManager
   public void addJobListener (final IJobListener jobListener, final IMatcher <JobKey> matcher)
   {
     if (jobListener.getName () == null || jobListener.getName ().length () == 0)
-    {
       throw new IllegalArgumentException ("JobListener name cannot be empty.");
-    }
 
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      globalJobListeners.put (jobListener.getName (), jobListener);
-      final LinkedList <IMatcher <JobKey>> matchersL = new LinkedList<> ();
+      m_aGlobalJobListeners.put (jobListener.getName (), jobListener);
+      final ICommonsList <IMatcher <JobKey>> matchersL = new CommonsArrayList <> ();
       if (matcher != null)
         matchersL.add (matcher);
       else
         matchersL.add (EverythingMatcher.allJobs ());
 
-      globalJobListenersMatchers.put (jobListener.getName (), matchersL);
+      m_aGlobalJobListenersMatchers.put (jobListener.getName (), matchersL);
     }
   }
 
@@ -100,9 +98,9 @@ public class ListenerManager implements IListenerManager
     if (matcher == null)
       throw new IllegalArgumentException ("Null value not acceptable.");
 
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      final List <IMatcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
+      final List <IMatcher <JobKey>> matchers = m_aGlobalJobListenersMatchers.get (listenerName);
       if (matchers == null)
         return false;
       matchers.add (matcher);
@@ -115,62 +113,61 @@ public class ListenerManager implements IListenerManager
     if (matcher == null)
       throw new IllegalArgumentException ("Non-null value not acceptable.");
 
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      final List <IMatcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
+      final List <IMatcher <JobKey>> matchers = m_aGlobalJobListenersMatchers.get (listenerName);
       if (matchers == null)
         return false;
       return matchers.remove (matcher);
     }
   }
 
-  public List <IMatcher <JobKey>> getJobListenerMatchers (final String listenerName)
+  public ICommonsList <IMatcher <JobKey>> getJobListenerMatchers (final String listenerName)
   {
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      final List <IMatcher <JobKey>> matchers = globalJobListenersMatchers.get (listenerName);
+      final List <IMatcher <JobKey>> matchers = m_aGlobalJobListenersMatchers.get (listenerName);
       if (matchers == null)
         return null;
-      return Collections.unmodifiableList (matchers);
+      return new CommonsArrayList <> (matchers);
     }
   }
 
-  public boolean setJobListenerMatchers (final String listenerName, final List <IMatcher <JobKey>> matchers)
+  public boolean setJobListenerMatchers (final String listenerName, @Nonnull final List <IMatcher <JobKey>> matchers)
   {
-    if (matchers == null)
-      throw new IllegalArgumentException ("Non-null value not acceptable.");
+    ValueEnforcer.notNull (matchers, "Matchers");
 
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      final List <IMatcher <JobKey>> oldMatchers = globalJobListenersMatchers.get (listenerName);
+      final List <IMatcher <JobKey>> oldMatchers = m_aGlobalJobListenersMatchers.get (listenerName);
       if (oldMatchers == null)
         return false;
-      globalJobListenersMatchers.put (listenerName, matchers);
+      m_aGlobalJobListenersMatchers.put (listenerName, matchers);
       return true;
     }
   }
 
   public boolean removeJobListener (final String name)
   {
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      return (globalJobListeners.remove (name) != null);
+      return m_aGlobalJobListeners.remove (name) != null;
     }
   }
 
-  public List <IJobListener> getJobListeners ()
+  public ICommonsList <IJobListener> getJobListeners ()
   {
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      return java.util.Collections.unmodifiableList (new LinkedList<> (globalJobListeners.values ()));
+      return m_aGlobalJobListeners.copyOfValues ();
     }
   }
 
   public IJobListener getJobListener (final String name)
   {
-    synchronized (globalJobListeners)
+    synchronized (m_aGlobalJobListeners)
     {
-      return globalJobListeners.get (name);
+      return m_aGlobalJobListeners.get (name);
     }
   }
 
@@ -187,17 +184,17 @@ public class ListenerManager implements IListenerManager
       throw new IllegalArgumentException ("TriggerListener name cannot be empty.");
     }
 
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      globalTriggerListeners.put (triggerListener.getName (), triggerListener);
+      m_aGlobalTriggerListeners.put (triggerListener.getName (), triggerListener);
 
-      final LinkedList <IMatcher <TriggerKey>> matchersL = new LinkedList<> ();
+      final LinkedList <IMatcher <TriggerKey>> matchersL = new LinkedList <> ();
       if (matchers != null && matchers.size () > 0)
         matchersL.addAll (matchers);
       else
         matchersL.add (EverythingMatcher.allTriggers ());
 
-      globalTriggerListenersMatchers.put (triggerListener.getName (), matchersL);
+      m_aGlobalTriggerListenersMatchers.put (triggerListener.getName (), matchersL);
     }
   }
 
@@ -216,12 +213,12 @@ public class ListenerManager implements IListenerManager
       throw new IllegalArgumentException ("TriggerListener name cannot be empty.");
     }
 
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      globalTriggerListeners.put (triggerListener.getName (), triggerListener);
-      final List <IMatcher <TriggerKey>> matchers = new LinkedList<> ();
+      m_aGlobalTriggerListeners.put (triggerListener.getName (), triggerListener);
+      final List <IMatcher <TriggerKey>> matchers = new LinkedList <> ();
       matchers.add (matcher);
-      globalTriggerListenersMatchers.put (triggerListener.getName (), matchers);
+      m_aGlobalTriggerListenersMatchers.put (triggerListener.getName (), matchers);
     }
   }
 
@@ -230,9 +227,9 @@ public class ListenerManager implements IListenerManager
     if (matcher == null)
       throw new IllegalArgumentException ("Non-null value not acceptable.");
 
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      final List <IMatcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
+      final List <IMatcher <TriggerKey>> matchers = m_aGlobalTriggerListenersMatchers.get (listenerName);
       if (matchers == null)
         return false;
       matchers.add (matcher);
@@ -245,86 +242,86 @@ public class ListenerManager implements IListenerManager
     if (matcher == null)
       throw new IllegalArgumentException ("Non-null value not acceptable.");
 
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      final List <IMatcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
+      final List <IMatcher <TriggerKey>> matchers = m_aGlobalTriggerListenersMatchers.get (listenerName);
       if (matchers == null)
         return false;
       return matchers.remove (matcher);
     }
   }
 
-  public List <IMatcher <TriggerKey>> getTriggerListenerMatchers (final String listenerName)
+  public ICommonsList <IMatcher <TriggerKey>> getTriggerListenerMatchers (final String listenerName)
   {
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      final List <IMatcher <TriggerKey>> matchers = globalTriggerListenersMatchers.get (listenerName);
+      final List <IMatcher <TriggerKey>> matchers = m_aGlobalTriggerListenersMatchers.get (listenerName);
       if (matchers == null)
         return null;
-      return Collections.unmodifiableList (matchers);
+      return new CommonsArrayList <> (matchers);
     }
   }
 
-  public boolean setTriggerListenerMatchers (final String listenerName, final List <IMatcher <TriggerKey>> matchers)
+  public boolean setTriggerListenerMatchers (final String listenerName,
+                                             @Nonnull final List <IMatcher <TriggerKey>> matchers)
   {
-    if (matchers == null)
-      throw new IllegalArgumentException ("Non-null value not acceptable.");
+    ValueEnforcer.noNullValue (matchers, "Matchers");
 
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      final List <IMatcher <TriggerKey>> oldMatchers = globalTriggerListenersMatchers.get (listenerName);
+      final List <IMatcher <TriggerKey>> oldMatchers = m_aGlobalTriggerListenersMatchers.get (listenerName);
       if (oldMatchers == null)
         return false;
-      globalTriggerListenersMatchers.put (listenerName, matchers);
+      m_aGlobalTriggerListenersMatchers.put (listenerName, matchers);
       return true;
     }
   }
 
   public boolean removeTriggerListener (final String name)
   {
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      return (globalTriggerListeners.remove (name) != null);
+      return m_aGlobalTriggerListeners.remove (name) != null;
     }
   }
 
-  public List <ITriggerListener> getTriggerListeners ()
+  public ICommonsList <ITriggerListener> getTriggerListeners ()
   {
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      return java.util.Collections.unmodifiableList (new LinkedList<> (globalTriggerListeners.values ()));
+      return m_aGlobalTriggerListeners.copyOfValues ();
     }
   }
 
   public ITriggerListener getTriggerListener (final String name)
   {
-    synchronized (globalTriggerListeners)
+    synchronized (m_aGlobalTriggerListeners)
     {
-      return globalTriggerListeners.get (name);
+      return m_aGlobalTriggerListeners.get (name);
     }
   }
 
   public void addSchedulerListener (final ISchedulerListener schedulerListener)
   {
-    synchronized (schedulerListeners)
+    synchronized (m_aSchedulerListeners)
     {
-      schedulerListeners.add (schedulerListener);
+      m_aSchedulerListeners.add (schedulerListener);
     }
   }
 
   public boolean removeSchedulerListener (final ISchedulerListener schedulerListener)
   {
-    synchronized (schedulerListeners)
+    synchronized (m_aSchedulerListeners)
     {
-      return schedulerListeners.remove (schedulerListener);
+      return m_aSchedulerListeners.remove (schedulerListener);
     }
   }
 
-  public List <ISchedulerListener> getSchedulerListeners ()
+  public ICommonsList <ISchedulerListener> getSchedulerListeners ()
   {
-    synchronized (schedulerListeners)
+    synchronized (m_aSchedulerListeners)
     {
-      return java.util.Collections.unmodifiableList (new ArrayList<> (schedulerListeners));
+      return m_aSchedulerListeners.getClone ();
     }
   }
 }

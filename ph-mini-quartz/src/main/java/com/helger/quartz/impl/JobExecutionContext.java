@@ -20,55 +20,36 @@ package com.helger.quartz.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJob;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.JobDataMap;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
-public class JobExecutionContext implements java.io.Serializable, IJobExecutionContext
+public class JobExecutionContext implements IJobExecutionContext
 {
   private transient IScheduler scheduler;
-
   private final ITrigger trigger;
-
   private final IJobDetail jobDetail;
-
   private final JobDataMap jobDataMap;
-
   private transient IJob job;
-
   private final ICalendar calendar;
-
   private boolean recovering = false;
-
   private int numRefires = 0;
-
   private final Date fireTime;
-
   private final Date scheduledFireTime;
-
   private final Date prevFireTime;
-
   private final Date nextFireTime;
-
   private long jobRunTime = -1;
-
   private Object result;
-
-  private final HashMap <Object, Object> data = new HashMap<> ();
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private final Map <Object, Object> data = new HashMap <> ();
 
   /**
    * <p>

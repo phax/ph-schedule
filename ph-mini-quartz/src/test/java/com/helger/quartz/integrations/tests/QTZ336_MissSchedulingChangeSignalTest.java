@@ -40,10 +40,10 @@ import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.ISimpleTrigger;
+import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.spi.IOperableTrigger;
@@ -68,7 +68,7 @@ public class QTZ336_MissSchedulingChangeSignalTest
     // Use a custom RAMJobStore to produce context switches leading to the race
     // condition
     properties.setProperty (StdSchedulerFactory.PROP_JOB_STORE_CLASS, SlowRAMJobStore.class.getName ());
-    final ISchedulerFactory sf = new StdSchedulerFactory (properties);
+    final ISchedulerFactory sf = new StdSchedulerFactory ().initialize (properties);
     final IScheduler sched = sf.getScheduler ();
     LOG.info ("------- Initialization Complete -----------");
 
@@ -77,11 +77,11 @@ public class QTZ336_MissSchedulingChangeSignalTest
     final IJobDetail job = newJob (CollectDuractionBetweenFireTimesJob.class).withIdentity ("job", "group").build ();
 
     final ISimpleTrigger trigger = newTrigger ().withIdentity ("trigger1", "group1")
-                                               .startAt (new Date (System.currentTimeMillis () + 1000))
-                                               .withSchedule (simpleSchedule ().withIntervalInSeconds (1)
-                                                                               .repeatForever ()
-                                                                               .withMisfireHandlingInstructionIgnoreMisfires ())
-                                               .build ();
+                                                .startAt (new Date (System.currentTimeMillis () + 1000))
+                                                .withSchedule (simpleSchedule ().withIntervalInSeconds (1)
+                                                                                .repeatForever ()
+                                                                                .withMisfireHandlingInstructionIgnoreMisfires ())
+                                                .build ();
 
     sched.scheduleJob (job, trigger);
 
@@ -152,7 +152,7 @@ public class QTZ336_MissSchedulingChangeSignalTest
     {
       synchronized (durationBetweenFireTimes)
       {
-        return Collections.unmodifiableList (new ArrayList<> (durationBetweenFireTimes));
+        return Collections.unmodifiableList (new ArrayList <> (durationBetweenFireTimes));
       }
     }
 
@@ -165,8 +165,8 @@ public class QTZ336_MissSchedulingChangeSignalTest
   {
     @Override
     public List <IOperableTrigger> acquireNextTriggers (final long noLaterThan,
-                                                       final int maxCount,
-                                                       final long timeWindow)
+                                                        final int maxCount,
+                                                        final long timeWindow)
     {
       final List <IOperableTrigger> nextTriggers = super.acquireNextTriggers (noLaterThan, maxCount, timeWindow);
       try

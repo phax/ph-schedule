@@ -28,8 +28,8 @@ import com.helger.quartz.ISchedulerListener;
  * <code>{@link com.helger.quartz.ISchedulerListener}</code>.
  * <p>
  * The methods in this class are empty so you only need to override the subset
- * for the <code>{@link com.helger.quartz.ISchedulerListener}</code> events you care
- * about.
+ * for the <code>{@link com.helger.quartz.ISchedulerListener}</code> events you
+ * care about.
  * </p>
  *
  * @see com.helger.quartz.ISchedulerListener

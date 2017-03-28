@@ -44,7 +44,7 @@ import com.helger.quartz.ICalendar;
 public class HolidayCalendar extends BaseCalendar
 {
   // A sorted set to store the holidays
-  private TreeSet <Date> dates = new TreeSet<> ();
+  private TreeSet <Date> dates = new TreeSet <> ();
 
   public HolidayCalendar ()
   {}
@@ -68,7 +68,7 @@ public class HolidayCalendar extends BaseCalendar
   public Object clone ()
   {
     final HolidayCalendar clone = (HolidayCalendar) super.clone ();
-    clone.dates = new TreeSet<> (dates);
+    clone.dates = new TreeSet <> (dates);
     return clone;
   }
 

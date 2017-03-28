@@ -101,7 +101,7 @@ public class InterruptableJobTest
     config.setProperty (StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, "AUTO");
     config.setProperty ("org.quartz.threadPool.threadCount", "2");
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
-    final IScheduler sched = new StdSchedulerFactory (config).getScheduler ();
+    final IScheduler sched = new StdSchedulerFactory ().initialize (config).getScheduler ();
     sched.start ();
 
     // add a job with a trigger that will fire immediately

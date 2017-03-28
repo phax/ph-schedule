@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.spi;
 
+import java.io.Serializable;
+
 import com.helger.quartz.SchedulerConfigException;
 
 /**
@@ -39,7 +41,7 @@ import com.helger.quartz.SchedulerConfigException;
  * @see com.helger.quartz.core.QuartzScheduler
  * @author James House
  */
-public interface IThreadPool
+public interface IThreadPool extends Serializable
 {
   /**
    * <p>

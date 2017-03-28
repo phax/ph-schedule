@@ -24,12 +24,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.IJob;
-import com.helger.quartz.IJobDetail;
-import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.impl.JobDetail;
 
 /**
@@ -90,9 +84,8 @@ public class JobDetailTest
     final JobDetail jobDetail = new JobDetail ();
     jobDetail.setName ("hi");
 
-    final IJobDetail clonedJobDetail = (IJobDetail) jobDetail.clone ();
+    final IJobDetail clonedJobDetail = jobDetail.clone ();
     assertEquals (clonedJobDetail, jobDetail);
-
   }
 
   @Test

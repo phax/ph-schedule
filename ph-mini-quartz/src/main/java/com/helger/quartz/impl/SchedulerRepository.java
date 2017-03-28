@@ -18,11 +18,12 @@
  */
 package com.helger.quartz.impl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.Nonnull;
 
+import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.collection.ext.CommonsHashMap;
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsMap;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 
@@ -42,13 +43,12 @@ public class SchedulerRepository
     static final SchedulerRepository INSTANCE = new SchedulerRepository ();
   }
 
-  private final Map <String, IScheduler> schedulers;
+  private final ICommonsMap <String, IScheduler> m_aSchedulers = new CommonsHashMap <> ();
 
   private SchedulerRepository ()
-  {
-    schedulers = new HashMap<> ();
-  }
+  {}
 
+  @Nonnull
   public static SchedulerRepository getInstance ()
   {
     return SingletonHolder.INSTANCE;
@@ -57,23 +57,25 @@ public class SchedulerRepository
   public synchronized void bind (final IScheduler sched) throws SchedulerException
   {
     final String sKey = sched.getSchedulerName ();
-    if (schedulers.containsKey (sKey))
+    if (m_aSchedulers.containsKey (sKey))
       throw new SchedulerException ("Scheduler with name '" + sKey + "' already exists.");
-    schedulers.put (sKey, sched);
+    m_aSchedulers.put (sKey, sched);
   }
 
   public synchronized boolean remove (final String schedName)
   {
-    return schedulers.remove (schedName) != null;
+    return m_aSchedulers.remove (schedName) != null;
   }
 
   public synchronized IScheduler lookup (final String schedName)
   {
-    return schedulers.get (schedName);
+    return m_aSchedulers.get (schedName);
   }
 
-  public synchronized Collection <IScheduler> lookupAll ()
+  @Nonnull
+  @ReturnsMutableCopy
+  public synchronized ICommonsList <IScheduler> lookupAll ()
   {
-    return Collections.unmodifiableCollection (schedulers.values ());
+    return m_aSchedulers.copyOfValues ();
   }
 }

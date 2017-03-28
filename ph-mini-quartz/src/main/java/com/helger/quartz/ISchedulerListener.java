@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import java.io.Serializable;
+
 /**
  * The interface to be implemented by classes that want to be informed of major
  * <code>{@link IScheduler}</code> events.
@@ -27,14 +29,14 @@ package com.helger.quartz;
  * @see ITriggerListener
  * @author James House
  */
-public interface ISchedulerListener
+public interface ISchedulerListener extends Serializable
 {
   /**
    * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link com.helger.quartz.IJobDetail}</code> is scheduled.
    * </p>
-   * 
+   *
    * @param trigger
    */
   default void jobScheduled (final ITrigger trigger)
@@ -58,7 +60,7 @@ public interface ISchedulerListener
    * <code>{@link ITrigger}</code> has reached the condition in which it will
    * never fire again.
    * </p>
-   * 
+   *
    * @param trigger
    */
   default void triggerFinalized (final ITrigger trigger)
@@ -69,7 +71,7 @@ public interface ISchedulerListener
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link ITrigger}</code> has been paused.
    * </p>
-   * 
+   *
    * @param triggerKey
    */
   default void triggerPaused (final TriggerKey triggerKey)
@@ -200,8 +202,8 @@ public interface ISchedulerListener
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that it
-   * has move to standby mode.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that
+   * it has move to standby mode.
    * </p>
    */
   default void schedulerInStandbyMode ()
@@ -209,8 +211,8 @@ public interface ISchedulerListener
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that it
-   * has started.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that
+   * it has started.
    * </p>
    */
   default void schedulerStarted ()
@@ -218,8 +220,8 @@ public interface ISchedulerListener
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that it
-   * is starting.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that
+   * it is starting.
    * </p>
    */
   default void schedulerStarting ()
@@ -227,8 +229,8 @@ public interface ISchedulerListener
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that it
-   * has shutdown.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that
+   * it has shutdown.
    * </p>
    */
   default void schedulerShutdown ()
@@ -236,8 +238,8 @@ public interface ISchedulerListener
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that it
-   * has begun the shutdown sequence.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that
+   * it has begun the shutdown sequence.
    * </p>
    */
   default void schedulerShuttingdown ()

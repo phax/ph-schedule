@@ -18,7 +18,10 @@
  */
 package com.helger.quartz;
 
+import java.io.Serializable;
 import java.util.List;
+
+import com.helger.commons.collection.ext.ICommonsList;
 
 /**
  * Client programs may be interested in the 'listener' interfaces that are
@@ -38,7 +41,7 @@ import java.util.List;
  * @since 2.0 - previously listeners were managed directly on the Scheduler
  *        interface.
  */
-public interface IListenerManager
+public interface IListenerManager extends Serializable
 {
   /**
    * Add the given <code>{@link IJobListener}</code> to the
@@ -134,7 +137,7 @@ public interface IListenerManager
    * @return the matchers registered for selecting events for the identified
    *         listener
    */
-  List <IMatcher <JobKey>> getJobListenerMatchers (String listenerName);
+  ICommonsList <IMatcher <JobKey>> getJobListenerMatchers (String listenerName);
 
   /**
    * Remove the identified <code>{@link IJobListener}</code> from the
@@ -148,7 +151,7 @@ public interface IListenerManager
    * Get a List containing all of the <code>{@link IJobListener}</code>s in the
    * <code>Scheduler</code>, in the order in which they were registered.
    */
-  List <IJobListener> getJobListeners ();
+  ICommonsList <IJobListener> getJobListeners ();
 
   /**
    * Get the <code>{@link IJobListener}</code> that has the given name.
@@ -250,7 +253,7 @@ public interface IListenerManager
    * @return the matchers registered for selecting events for the identified
    *         listener
    */
-  List <IMatcher <TriggerKey>> getTriggerListenerMatchers (String listenerName);
+  ICommonsList <IMatcher <TriggerKey>> getTriggerListenerMatchers (String listenerName);
 
   /**
    * Remove the identified <code>{@link ITriggerListener}</code> from the
@@ -264,7 +267,7 @@ public interface IListenerManager
    * Get a List containing all of the <code>{@link ITriggerListener}</code>s in
    * the <code>Scheduler</code>, in the order in which they were registered.
    */
-  List <ITriggerListener> getTriggerListeners ();
+  ICommonsList <ITriggerListener> getTriggerListeners ();
 
   /**
    * Get the <code>{@link ITriggerListener}</code> that has the given name.
@@ -290,5 +293,5 @@ public interface IListenerManager
    * registered with the <code>Scheduler</code>, in the order in which they were
    * registered.
    */
-  List <ISchedulerListener> getSchedulerListeners ();
+  ICommonsList <ISchedulerListener> getSchedulerListeners ();
 }

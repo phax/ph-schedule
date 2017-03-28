@@ -18,7 +18,9 @@
  */
 package com.helger.quartz.core;
 
-public interface ISampledStatistics
+import java.io.Serializable;
+
+public interface ISampledStatistics extends Serializable
 {
   long getJobsScheduledMostRecentSample ();
 

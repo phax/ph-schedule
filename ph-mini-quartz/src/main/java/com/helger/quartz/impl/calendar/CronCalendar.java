@@ -27,17 +27,18 @@ import com.helger.quartz.CronExpression;
 
 /**
  * This implementation of the Calendar excludes the set of times expressed by a
- * given {@link com.helger.quartz.CronExpression CronExpression}. For example, you
- * could use this calendar to exclude all but business hours (8AM - 5PM) every
- * day using the expression &quot;* * 0-7,18-23 ? * *&quot;.
+ * given {@link com.helger.quartz.CronExpression CronExpression}. For example,
+ * you could use this calendar to exclude all but business hours (8AM - 5PM)
+ * every day using the expression &quot;* * 0-7,18-23 ? * *&quot;.
  * <P>
  * It is important to remember that the cron expression here describes a set of
  * times to be <I>excluded</I> from firing. Whereas the cron expression in
- * {@link com.helger.quartz.ICronTrigger CronTrigger} describes a set of times that can
- * be <I>included</I> for firing. Thus, if a <CODE>CronTrigger</CODE> has a
- * given cron expression and is associated with a <CODE>CronCalendar</CODE> with
- * the <I>same</I> expression, the calendar will exclude all the times the
- * trigger includes, and they will cancel each other out.
+ * {@link com.helger.quartz.ICronTrigger CronTrigger} describes a set of times
+ * that can be <I>included</I> for firing. Thus, if a <CODE>CronTrigger</CODE>
+ * has a given cron expression and is associated with a
+ * <CODE>CronCalendar</CODE> with the <I>same</I> expression, the calendar will
+ * exclude all the times the trigger includes, and they will cancel each other
+ * out.
  *
  * @author Aaron Craven
  */

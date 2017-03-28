@@ -18,7 +18,9 @@
  */
 package com.helger.quartz;
 
-import java.util.Collection;
+import java.io.Serializable;
+
+import com.helger.commons.collection.ext.ICommonsCollection;
 
 /**
  * Provides a mechanism for obtaining client-usable handles to
@@ -28,15 +30,8 @@ import java.util.Collection;
  * @see com.helger.quartz.impl.StdSchedulerFactory
  * @author James House
  */
-public interface ISchedulerFactory
+public interface ISchedulerFactory extends Serializable
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Returns a client-usable handle to a <code>Scheduler</code>.
@@ -60,6 +55,5 @@ public interface ISchedulerFactory
    * within this jvm.).
    * </p>
    */
-  Collection <IScheduler> getAllSchedulers () throws SchedulerException;
-
+  ICommonsCollection <IScheduler> getAllSchedulers () throws SchedulerException;
 }

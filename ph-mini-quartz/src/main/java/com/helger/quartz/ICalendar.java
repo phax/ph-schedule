@@ -22,8 +22,8 @@ import java.io.Serializable;
 
 /**
  * An interface to be implemented by objects that define spaces of time during
- * which an associated <code>{@link ITrigger}</code> may (not) fire. Calendars do
- * not define actual fire times, but rather are used to limit a
+ * which an associated <code>{@link ITrigger}</code> may (not) fire. Calendars
+ * do not define actual fire times, but rather are used to limit a
  * <code>Trigger</code> from firing on its normal schedule if necessary. Most
  * Calendars include all times by default and allow the user to specify times to
  * exclude.

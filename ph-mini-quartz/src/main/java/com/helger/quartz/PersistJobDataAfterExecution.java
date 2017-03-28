@@ -25,9 +25,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * An annotation that marks a {@link IJob} class as one that makes updates to its
- * {@link JobDataMap} during execution, and wishes the scheduler to re-store the
- * <code>JobDataMap</code> when execution completes.
+ * An annotation that marks a {@link IJob} class as one that makes updates to
+ * its {@link JobDataMap} during execution, and wishes the scheduler to re-store
+ * the <code>JobDataMap</code> when execution completes.
  * <p>
  * Jobs that are marked with this annotation should also seriously consider
  * using the {@link DisallowConcurrentExecution} annotation, to avoid data

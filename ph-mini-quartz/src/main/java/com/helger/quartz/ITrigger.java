@@ -347,4 +347,6 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
                       t2.getKey ());
     }
   }
+
+  ITrigger clone ();
 }

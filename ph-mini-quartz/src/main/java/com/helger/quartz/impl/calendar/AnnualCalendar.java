@@ -41,7 +41,7 @@ import com.helger.quartz.ICalendar;
  */
 public class AnnualCalendar extends BaseCalendar
 {
-  private List <Calendar> excludeDays = new ArrayList<> ();
+  private List <Calendar> excludeDays = new ArrayList <> ();
 
   // true, if excludeDays is sorted
   private boolean dataSorted = false;
@@ -68,7 +68,7 @@ public class AnnualCalendar extends BaseCalendar
   public Object clone ()
   {
     final AnnualCalendar clone = (AnnualCalendar) super.clone ();
-    clone.excludeDays = new ArrayList<> (excludeDays);
+    clone.excludeDays = new ArrayList <> (excludeDays);
     return clone;
   }
 
@@ -147,7 +147,7 @@ public class AnnualCalendar extends BaseCalendar
   {
     if (days == null)
     {
-      excludeDays = new ArrayList<> ();
+      excludeDays = new ArrayList <> ();
     }
     else
     {

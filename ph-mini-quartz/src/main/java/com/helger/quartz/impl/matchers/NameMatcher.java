@@ -39,7 +39,7 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <T extends Key <T>> NameMatcher <T> nameEquals (final String compareTo)
   {
-    return new NameMatcher<> (compareTo, StringOperatorName.EQUALS);
+    return new NameMatcher <> (compareTo, StringOperatorName.EQUALS);
   }
 
   /**
@@ -63,7 +63,7 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <U extends Key <U>> NameMatcher <U> nameStartsWith (final String compareTo)
   {
-    return new NameMatcher<> (compareTo, StringOperatorName.STARTS_WITH);
+    return new NameMatcher <> (compareTo, StringOperatorName.STARTS_WITH);
   }
 
   /**
@@ -88,7 +88,7 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <U extends Key <U>> NameMatcher <U> nameEndsWith (final String compareTo)
   {
-    return new NameMatcher<> (compareTo, StringOperatorName.ENDS_WITH);
+    return new NameMatcher <> (compareTo, StringOperatorName.ENDS_WITH);
   }
 
   /**
@@ -113,7 +113,7 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
    */
   public static <U extends Key <U>> NameMatcher <U> nameContains (final String compareTo)
   {
-    return new NameMatcher<> (compareTo, StringOperatorName.CONTAINS);
+    return new NameMatcher <> (compareTo, StringOperatorName.CONTAINS);
   }
 
   /**

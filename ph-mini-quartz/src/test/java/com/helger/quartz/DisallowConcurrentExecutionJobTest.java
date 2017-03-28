@@ -145,7 +145,7 @@ public class DisallowConcurrentExecutionJobTest
     final Properties props = new Properties ();
     props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1500");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");
-    final IScheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
+    final IScheduler scheduler = new StdSchedulerFactory ().initialize (props).getScheduler ();
     scheduler.getContext ().put (BARRIER, barrier);
     scheduler.getContext ().put (DATE_STAMPS, jobExecDates);
     scheduler.getListenerManager ().addJobListener (new TestJobListener (2));
@@ -196,7 +196,7 @@ public class DisallowConcurrentExecutionJobTest
     props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1500");
     props.setProperty ("org.quartz.scheduler.batchTriggerAcquisitionMaxCount", "2");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");
-    final IScheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
+    final IScheduler scheduler = new StdSchedulerFactory ().initialize (props).getScheduler ();
     scheduler.getContext ().put (BARRIER, barrier);
     scheduler.getContext ().put (DATE_STAMPS, jobExecDates);
     scheduler.getListenerManager ().addJobListener (new TestJobListener (2));

@@ -18,16 +18,18 @@
  */
 package com.helger.quartz.impl;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.collection.ext.ICommonsCollection;
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.SchedulerException;
 import com.helger.quartz.core.IJobRunShellFactory;
 import com.helger.quartz.core.QuartzScheduler;
 import com.helger.quartz.core.QuartzSchedulerResources;
@@ -104,43 +106,19 @@ import com.helger.quartz.spi.IThreadPool;
  */
 public class DirectSchedulerFactory implements ISchedulerFactory
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constants.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
   public static final String DEFAULT_INSTANCE_ID = "SIMPLE_NON_CLUSTERED";
-
   public static final String DEFAULT_SCHEDULER_NAME = "SimpleQuartzScheduler";
-
   private static final DefaultThreadExecutor DEFAULT_THREAD_EXECUTOR = new DefaultThreadExecutor ();
-
   private static final int DEFAULT_BATCH_MAX_SIZE = 1;
-
   private static final long DEFAULT_BATCH_TIME_WINDOW = 0L;
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  private boolean initialized = false;
-
-  private static DirectSchedulerFactory instance = new DirectSchedulerFactory ();
-
-  private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private boolean m_bInitialized = false;
+  private static DirectSchedulerFactory s_aInstance = new DirectSchedulerFactory ();
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DirectSchedulerFactory.class);
 
   protected Logger getLog ()
   {
-    return log;
+    return s_aLogger;
   }
 
   /**
@@ -149,32 +127,27 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   protected DirectSchedulerFactory ()
   {}
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
+  @Nonnull
   public static DirectSchedulerFactory getInstance ()
   {
-    return instance;
+    return s_aInstance;
   }
 
   /**
    * Creates an in memory job store (<code>{@link RAMJobStore}</code>) The
    * thread priority is set to Thread.NORM_PRIORITY
    *
-   * @param maxThreads
+   * @param nMaxThreads
    *        The number of threads in the thread pool
    * @throws SchedulerException
    *         if initialization failed.
    */
-  public void createVolatileScheduler (final int maxThreads) throws SchedulerException
+  public void createVolatileScheduler (final int nMaxThreads) throws SchedulerException
   {
-    final SimpleThreadPool threadPool = new SimpleThreadPool (maxThreads, Thread.NORM_PRIORITY);
-    threadPool.initialize ();
+    final SimpleThreadPool aThreadPool = new SimpleThreadPool (nMaxThreads, Thread.NORM_PRIORITY);
+    aThreadPool.initialize ();
     final IJobStore jobStore = new RAMJobStore ();
-    this.createScheduler (threadPool, jobStore);
+    createScheduler (aThreadPool, jobStore);
   }
 
   /**
@@ -266,8 +239,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null"
-   *        if no plugins are required.
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can
+   *        use "null" if no plugins are required.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
    *        default value, which is currently 30000 ms.
@@ -306,8 +279,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null"
-   *        if no plugins are required.
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can
+   *        use "null" if no plugins are required.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
    *        default value, which is currently 30000 ms.
@@ -349,8 +322,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null"
-   *        if no plugins are required.
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can
+   *        use "null" if no plugins are required.
    * @param idleWaitTime
    *        The idle wait time in milliseconds. You can specify "-1" for the
    *        default value, which is currently 30000 ms.
@@ -436,7 +409,7 @@ public class DirectSchedulerFactory implements ISchedulerFactory
 
     schedRep.bind (scheduler);
 
-    initialized = true;
+    m_bInitialized = true;
   }
 
   /*
@@ -458,7 +431,7 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    */
   public IScheduler getScheduler () throws SchedulerException
   {
-    if (!initialized)
+    if (!m_bInitialized)
     {
       throw new SchedulerException ("you must call createRemoteScheduler or createScheduler methods before calling getScheduler()");
     }
@@ -484,9 +457,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * instance.).
    * </p>
    */
-  public Collection <IScheduler> getAllSchedulers () throws SchedulerException
+  public ICommonsCollection <IScheduler> getAllSchedulers () throws SchedulerException
   {
     return SchedulerRepository.getInstance ().lookupAll ();
   }
-
 }

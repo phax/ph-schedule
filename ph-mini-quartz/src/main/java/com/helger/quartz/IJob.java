@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * The interface to be implemented by classes which represent a 'job' to be
@@ -40,7 +42,7 @@ package com.helger.quartz;
  * @see IScheduler
  * @author James House
  */
-public interface IJob
+public interface IJob extends Serializable
 {
   /**
    * <p>
@@ -53,8 +55,9 @@ public interface IJob
    * {@link IJobExecutionContext#setResult(Object) result} object on the
    * {@link IJobExecutionContext} before this method exits. The result itself is
    * meaningless to Quartz, but may be informative to
-   * <code>{@link IJobListener}s</code> or <code>{@link ITriggerListener}s</code>
-   * that are watching the job's execution.
+   * <code>{@link IJobListener}s</code> or
+   * <code>{@link ITriggerListener}s</code> that are watching the job's
+   * execution.
    * </p>
    *
    * @throws JobExecutionException

@@ -61,7 +61,7 @@ public class QuartzSchedulerResources
 
   private IJobRunShellFactory jobRunShellFactory;
 
-  private final List <ISchedulerPlugin> schedulerPlugins = new ArrayList<> (10);
+  private final List <ISchedulerPlugin> schedulerPlugins = new ArrayList <> (10);
 
   private boolean makeSchedulerThreadDaemon = false;
 
@@ -290,9 +290,9 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Add the given <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code> for the
-   * <code>{@link QuartzScheduler}</code> to use. This method expects the
-   * plugin's "initialize" method to be invoked externally (either before or
+   * Add the given <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>
+   * for the <code>{@link QuartzScheduler}</code> to use. This method expects
+   * the plugin's "initialize" method to be invoked externally (either before or
    * after this method is called).
    * </p>
    */

@@ -20,14 +20,14 @@ package com.helger.quartz.impl;
 
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
-import com.helger.quartz.JobBuilder;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobKey;
-import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.JobBuilder;
+import com.helger.quartz.JobDataMap;
+import com.helger.quartz.JobKey;
+import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.utils.ClassUtils;
 
 /**
@@ -65,7 +65,7 @@ public class JobDetail implements IJobDetail
 
   private Class <? extends IJob> jobClass;
 
-  private JobDataMap jobDataMap;
+  private JobDataMap m_aJobDataMap;
 
   private boolean durability = false;
 
@@ -250,11 +250,11 @@ public class JobDetail implements IJobDetail
 
   public JobDataMap getJobDataMap ()
   {
-    if (jobDataMap == null)
+    if (m_aJobDataMap == null)
     {
-      jobDataMap = new JobDataMap ();
+      m_aJobDataMap = new JobDataMap ();
     }
-    return jobDataMap;
+    return m_aJobDataMap;
   }
 
   /**
@@ -264,7 +264,7 @@ public class JobDetail implements IJobDetail
    */
   public void setJobDataMap (final JobDataMap jobDataMap)
   {
-    this.jobDataMap = jobDataMap;
+    this.m_aJobDataMap = jobDataMap;
   }
 
   /**
@@ -378,23 +378,19 @@ public class JobDetail implements IJobDetail
   }
 
   @Override
-  public Object clone ()
+  public JobDetail clone ()
   {
-    JobDetail copy;
     try
     {
-      copy = (JobDetail) super.clone ();
-      if (jobDataMap != null)
-      {
-        copy.jobDataMap = (JobDataMap) jobDataMap.clone ();
-      }
+      final JobDetail copy = (JobDetail) super.clone ();
+      if (m_aJobDataMap != null)
+        copy.m_aJobDataMap = (JobDataMap) m_aJobDataMap.clone ();
+      return copy;
     }
     catch (final CloneNotSupportedException ex)
     {
       throw new IncompatibleClassChangeError ("Not Cloneable.");
     }
-
-    return copy;
   }
 
   public JobBuilder getJobBuilder ()

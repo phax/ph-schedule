@@ -41,7 +41,7 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
    */
   public static <U extends Key <U>> KeyMatcher <U> keyEquals (final U compareTo)
   {
-    return new KeyMatcher<> (compareTo);
+    return new KeyMatcher <> (compareTo);
   }
 
   public boolean isMatch (final T key)

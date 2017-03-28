@@ -702,7 +702,7 @@ public class DailyCalendar extends BaseCalendar
    */
   private String [] split (final String string, final String delim)
   {
-    final ArrayList <String> result = new ArrayList<> ();
+    final ArrayList <String> result = new ArrayList <> ();
 
     final StringTokenizer stringTokenizer = new StringTokenizer (string, delim);
     while (stringTokenizer.hasMoreTokens ())

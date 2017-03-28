@@ -38,13 +38,6 @@ import com.helger.quartz.spi.IClassLoadHelper;
  */
 public class ThreadContextClassLoadHelper implements IClassLoadHelper
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * Called to give the ClassLoadHelper a chance to initialize itself, including
    * the opportunity to "steal" the class loader off of the calling thread,

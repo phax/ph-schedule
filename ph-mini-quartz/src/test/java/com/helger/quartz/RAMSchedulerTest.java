@@ -34,6 +34,6 @@ public class RAMSchedulerTest extends AbstractSchedulerTest
     config.setProperty ("org.quartz.scheduler.instanceId", "AUTO");
     config.setProperty ("org.quartz.threadPool.threadCount", Integer.toString (threadPoolSize));
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
-    return new StdSchedulerFactory (config).getScheduler ();
+    return new StdSchedulerFactory ().initialize (config).getScheduler ();
   }
 }

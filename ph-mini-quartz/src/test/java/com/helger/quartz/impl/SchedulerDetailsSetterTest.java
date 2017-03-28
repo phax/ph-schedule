@@ -51,7 +51,7 @@ public class SchedulerDetailsSetterTest
     // reused
     props.setProperty (StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, "MyTestScheduler");
 
-    final StdSchedulerFactory factory = new StdSchedulerFactory (props);
+    final StdSchedulerFactory factory = new StdSchedulerFactory ().initialize (props);
     // this will initialize all the test fixtures.
     assertNotNull (factory.getScheduler ());
 

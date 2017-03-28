@@ -179,7 +179,7 @@ public class Qtz205SchedulerListenerTest
     final Properties props = new Properties ();
     props.setProperty ("org.quartz.scheduler.idleWaitTime", "1500");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");
-    final IScheduler scheduler = new StdSchedulerFactory (props).getScheduler ();
+    final IScheduler scheduler = new StdSchedulerFactory ().initialize (props).getScheduler ();
     scheduler.getListenerManager ().addSchedulerListener (schedulerListener);
     scheduler.getListenerManager ().addTriggerListener (triggerListener);
     scheduler.start ();

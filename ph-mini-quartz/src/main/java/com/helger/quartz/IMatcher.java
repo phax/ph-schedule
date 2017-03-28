@@ -48,7 +48,7 @@ public interface IMatcher <T extends Key <T>> extends Serializable
    */
   static <U extends Key <U>> AndMatcher <U> and (final IMatcher <U> leftOperand, final IMatcher <U> rightOperand)
   {
-    return new AndMatcher<> (leftOperand, rightOperand);
+    return new AndMatcher <> (leftOperand, rightOperand);
   }
 
   default AndMatcher <T> and (final IMatcher <T> rightOperand)
@@ -62,7 +62,7 @@ public interface IMatcher <T extends Key <T>> extends Serializable
    */
   public static <U extends Key <U>> OrMatcher <U> or (final IMatcher <U> leftOperand, final IMatcher <U> rightOperand)
   {
-    return new OrMatcher<> (leftOperand, rightOperand);
+    return new OrMatcher <> (leftOperand, rightOperand);
   }
 
   default OrMatcher <T> or (final IMatcher <T> rightOperand)
@@ -75,7 +75,7 @@ public interface IMatcher <T extends Key <T>> extends Serializable
    */
   public static <U extends Key <U>> NotMatcher <U> not (final IMatcher <U> operand)
   {
-    return new NotMatcher<> (operand);
+    return new NotMatcher <> (operand);
   }
 
   default NotMatcher <T> not ()

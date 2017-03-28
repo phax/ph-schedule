@@ -18,15 +18,17 @@
  */
 package com.helger.quartz.utils;
 
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.CommonsHashSet;
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsSet;
 
 /**
  * <p>
@@ -39,19 +41,18 @@ public class PropertiesParser
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (PropertiesParser.class);
 
-  private final Properties props;
+  private final Properties m_aProps;
 
   public PropertiesParser (final Properties props)
   {
-    this.props = props;
+    m_aProps = props;
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("PropertiesParser ctor: " + props);
-
   }
 
   public Properties getUnderlyingProperties ()
   {
-    return props;
+    return m_aProps;
   }
 
   /**
@@ -71,15 +72,11 @@ public class PropertiesParser
    */
   public String getStringProperty (final String name, final String def)
   {
-    String val = props.getProperty (name, def);
+    String val = m_aProps.getProperty (name, def);
     if (val == null)
-    {
       return def;
-    }
-
     val = val.trim ();
-
-    return (val.length () == 0) ? def : val;
+    return val.length () == 0 ? def : val;
   }
 
   public String [] getStringArrayProperty (final String name)
@@ -91,19 +88,16 @@ public class PropertiesParser
   {
     final String vals = getStringProperty (name);
     if (vals == null)
-    {
       return def;
-    }
 
     final StringTokenizer stok = new StringTokenizer (vals, ",");
-    final ArrayList <String> strs = new ArrayList<> ();
+    final ICommonsList <String> strs = new CommonsArrayList <> ();
     try
     {
       while (stok.hasMoreTokens ())
       {
         strs.add (stok.nextToken ().trim ());
       }
-
       return strs.toArray (new String [strs.size ()]);
     }
     catch (final Exception e)
@@ -120,17 +114,14 @@ public class PropertiesParser
   public boolean getBooleanProperty (final String name, final boolean def)
   {
     final String val = getStringProperty (name);
-
-    return (val == null) ? def : Boolean.valueOf (val).booleanValue ();
+    return val == null ? def : Boolean.parseBoolean (val);
   }
 
   public byte getByteProperty (final String name) throws NumberFormatException
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       throw new NumberFormatException (" null string");
-    }
 
     try
     {
@@ -146,9 +137,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       return def;
-    }
 
     try
     {
@@ -167,17 +156,15 @@ public class PropertiesParser
 
   public char getCharProperty (final String name, final char def)
   {
-    final String param = getStringProperty (name);
-    return (param == null) ? def : param.charAt (0);
+    final String sParam = getStringProperty (name);
+    return sParam == null ? def : sParam.charAt (0);
   }
 
   public double getDoubleProperty (final String name) throws NumberFormatException
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       throw new NumberFormatException (" null string");
-    }
 
     try
     {
@@ -193,9 +180,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       return def;
-    }
 
     try
     {
@@ -211,9 +196,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       throw new NumberFormatException (" null string");
-    }
 
     try
     {
@@ -229,9 +212,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       return def;
-    }
 
     try
     {
@@ -247,9 +228,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       throw new NumberFormatException (" null string");
-    }
 
     try
     {
@@ -265,9 +244,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       return def;
-    }
 
     try
     {
@@ -288,12 +265,10 @@ public class PropertiesParser
   {
     final String vals = getStringProperty (name);
     if (vals == null)
-    {
       return def;
-    }
 
     final StringTokenizer stok = new StringTokenizer (vals, ",");
-    final ArrayList <Integer> ints = new ArrayList<> ();
+    final ICommonsList <Integer> ints = new CommonsArrayList <> ();
     try
     {
       while (stok.hasMoreTokens ())
@@ -310,9 +285,7 @@ public class PropertiesParser
 
       final int [] outInts = new int [ints.size ()];
       for (int i = 0; i < ints.size (); i++)
-      {
         outInts[i] = ints.get (i).intValue ();
-      }
       return outInts;
     }
     catch (final Exception e)
@@ -325,9 +298,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       throw new NumberFormatException (" null string");
-    }
 
     try
     {
@@ -343,9 +314,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       return def;
-    }
 
     try
     {
@@ -361,9 +330,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       throw new NumberFormatException (" null string");
-    }
 
     try
     {
@@ -379,9 +346,7 @@ public class PropertiesParser
   {
     final String val = getStringProperty (name);
     if (val == null)
-    {
       return def;
-    }
 
     try
     {
@@ -395,8 +360,8 @@ public class PropertiesParser
 
   public String [] getPropertyGroups (final String sPrefix)
   {
-    final Enumeration <?> keys = props.propertyNames ();
-    final Set <String> groups = new HashSet<> (10);
+    final Enumeration <?> keys = m_aProps.propertyNames ();
+    final ICommonsSet <String> groups = new CommonsHashSet <> (10);
 
     String prefix = sPrefix;
     if (!prefix.endsWith ("."))
@@ -431,7 +396,7 @@ public class PropertiesParser
    * @param sPrefix
    *        The prefix for which to search. If it does not end in a "." then one
    *        will be added to it for search purposes.
-   * @param stripPrefix
+   * @param bStripPrefix
    *        Whether to strip off the given <code>prefix</code> in the result's
    *        keys.
    * @param excludedPrefixes
@@ -442,9 +407,9 @@ public class PropertiesParser
    *         optionally have that prefix removed, and do not include properties
    *         that start with one of the given excluded prefixes.
    */
-  public Properties getPropertyGroup (final String sPrefix, final boolean stripPrefix, final String [] excludedPrefixes)
+  public Properties getPropertyGroup (final String sPrefix, final boolean bStripPrefix, final String [] excludedPrefixes)
   {
-    final Enumeration <?> keys = props.propertyNames ();
+    final Enumeration <?> keys = m_aProps.propertyNames ();
     final Properties group = new Properties ();
 
     String prefix = sPrefix;
@@ -456,21 +421,19 @@ public class PropertiesParser
       final String key = (String) keys.nextElement ();
       if (key.startsWith (prefix))
       {
-
-        boolean exclude = false;
+        boolean bExclude = false;
         if (excludedPrefixes != null)
         {
-          for (int i = 0; (i < excludedPrefixes.length) && (exclude == false); i++)
+          for (int i = 0; i < excludedPrefixes.length && !bExclude; i++)
           {
-            exclude = key.startsWith (excludedPrefixes[i]);
+            bExclude = key.startsWith (excludedPrefixes[i]);
           }
         }
 
-        if (exclude == false)
+        if (!bExclude)
         {
           final String value = getStringProperty (key, "");
-
-          if (stripPrefix)
+          if (bStripPrefix)
             group.put (key.substring (prefix.length ()), value);
           else
             group.put (key, value);

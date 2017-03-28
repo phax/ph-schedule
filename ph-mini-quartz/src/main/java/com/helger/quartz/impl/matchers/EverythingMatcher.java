@@ -39,7 +39,7 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
    */
   public static EverythingMatcher <JobKey> allJobs ()
   {
-    return new EverythingMatcher<> ();
+    return new EverythingMatcher <> ();
   }
 
   /**
@@ -47,7 +47,7 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
    */
   public static EverythingMatcher <TriggerKey> allTriggers ()
   {
-    return new EverythingMatcher<> ();
+    return new EverythingMatcher <> ();
   }
 
   public boolean isMatch (final T key)

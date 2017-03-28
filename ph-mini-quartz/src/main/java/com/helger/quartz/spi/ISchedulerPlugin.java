@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.spi;
 
+import java.io.Serializable;
+
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 
@@ -47,7 +49,7 @@ import com.helger.quartz.SchedulerException;
  *
  * @author James House
  */
-public interface ISchedulerPlugin
+public interface ISchedulerPlugin extends Serializable
 {
   /**
    * <p>
@@ -92,5 +94,4 @@ public interface ISchedulerPlugin
    * </p>
    */
   void shutdown ();
-
 }

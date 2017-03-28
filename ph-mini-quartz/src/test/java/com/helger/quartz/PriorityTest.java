@@ -68,7 +68,7 @@ public class PriorityTest
     config.setProperty ("org.quartz.threadPool.threadCount", "1");
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
 
-    final IScheduler sched = new StdSchedulerFactory (config).getScheduler ();
+    final IScheduler sched = new StdSchedulerFactory ().initialize (config).getScheduler ();
 
     final Calendar cal = Calendar.getInstance ();
     cal.add (Calendar.SECOND, 1);
@@ -100,7 +100,7 @@ public class PriorityTest
     config.setProperty ("org.quartz.threadPool.threadCount", "1");
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
 
-    final IScheduler sched = new StdSchedulerFactory (config).getScheduler ();
+    final IScheduler sched = new StdSchedulerFactory ().initialize (config).getScheduler ();
 
     final Calendar cal = Calendar.getInstance ();
     cal.add (Calendar.SECOND, 1);

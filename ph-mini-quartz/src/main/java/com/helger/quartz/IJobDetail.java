@@ -46,8 +46,7 @@ import java.io.Serializable;
  */
 public interface IJobDetail extends Serializable, Cloneable
 {
-
-  public JobKey getKey ();
+  JobKey getKey ();
 
   /**
    * <p>
@@ -57,14 +56,14 @@ public interface IJobDetail extends Serializable, Cloneable
    *
    * @return null if no description was set.
    */
-  public String getDescription ();
+  String getDescription ();
 
   /**
    * <p>
    * Get the instance of <code>Job</code> that will be executed.
    * </p>
    */
-  public Class <? extends IJob> getJobClass ();
+  Class <? extends IJob> getJobClass ();
 
   /**
    * <p>
@@ -72,7 +71,7 @@ public interface IJobDetail extends Serializable, Cloneable
    * <code>Job</code>.
    * </p>
    */
-  public JobDataMap getJobDataMap ();
+  JobDataMap getJobDataMap ();
 
   /**
    * <p>
@@ -86,21 +85,21 @@ public interface IJobDetail extends Serializable, Cloneable
    * @return <code>true</code> if the Job should remain persisted after being
    *         orphaned.
    */
-  public boolean isDurable ();
+  boolean isDurable ();
 
   /**
    * @see PersistJobDataAfterExecution
    * @return whether the associated Job class carries the
    *         {@link PersistJobDataAfterExecution} annotation.
    */
-  public boolean isPersistJobDataAfterExecution ();
+  boolean isPersistJobDataAfterExecution ();
 
   /**
    * @see DisallowConcurrentExecution
    * @return whether the associated Job class carries the
    *         {@link DisallowConcurrentExecution} annotation.
    */
-  public boolean isConcurrentExectionDisallowed ();
+  boolean isConcurrentExectionDisallowed ();
 
   /**
    * <p>
@@ -114,14 +113,13 @@ public interface IJobDetail extends Serializable, Cloneable
    *
    * @see IJobExecutionContext#isRecovering()
    */
-  public boolean requestsRecovery ();
+  boolean requestsRecovery ();
 
-  public Object clone ();
+  IJobDetail clone ();
 
   /**
    * Get a {@link JobBuilder} that is configured to produce a
    * <code>JobDetail</code> identical to this one.
    */
-  public JobBuilder getJobBuilder ();
-
+  JobBuilder getJobBuilder ();
 }

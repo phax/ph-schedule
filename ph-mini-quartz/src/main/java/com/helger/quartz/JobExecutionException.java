@@ -19,12 +19,12 @@
 package com.helger.quartz;
 
 /**
- * An exception that can be thrown by a <code>{@link com.helger.quartz.IJob}</code> to
- * indicate to the Quartz <code>{@link IScheduler}</code> that an error occurred
- * while executing, and whether or not the <code>Job</code> requests to be
- * re-fired immediately (using the same
- * <code>{@link IJobExecutionContext}</code>, or whether it wants to be
- * unscheduled.
+ * An exception that can be thrown by a
+ * <code>{@link com.helger.quartz.IJob}</code> to indicate to the Quartz
+ * <code>{@link IScheduler}</code> that an error occurred while executing, and
+ * whether or not the <code>Job</code> requests to be re-fired immediately
+ * (using the same <code>{@link IJobExecutionContext}</code>, or whether it
+ * wants to be unscheduled.
  * <p>
  * Note that if the flag for 'refire immediately' is set, the flags for
  * unscheduling the Job are ignored.

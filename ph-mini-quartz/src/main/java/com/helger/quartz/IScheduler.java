@@ -18,6 +18,7 @@
  */
 package com.helger.quartz;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +102,7 @@ import com.helger.quartz.utils.Key;
  * @author James House
  * @author Sharada Jambula
  */
-public interface IScheduler
+public interface IScheduler extends Serializable
 {
   /**
    * A (possibly) useful constant that can be used for specifying the group that

@@ -20,6 +20,7 @@ package com.helger.quartz.ee.servlet;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -138,7 +139,7 @@ public class QuartzInitializerServlet extends HttpServlet
   private boolean performShutdown = true;
   private boolean waitOnShutdown = false;
 
-  private transient IScheduler scheduler = null;
+  private transient IScheduler m_aScheduler;
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -174,7 +175,7 @@ public class QuartzInitializerServlet extends HttpServlet
 
       // Always want to get the scheduler, even if it isn't starting,
       // to make sure it is both initialized and registered.
-      scheduler = factory.getScheduler ();
+      m_aScheduler = factory.getScheduler ();
 
       // Should the Scheduler being started now or later
       final String startOnLoad = cfg.getInitParameter ("start-scheduler-on-load");
@@ -204,13 +205,13 @@ public class QuartzInitializerServlet extends HttpServlet
         if (startDelay <= 0)
         {
           // Start now
-          scheduler.start ();
+          m_aScheduler.start ();
           log ("Scheduler has been started...");
         }
         else
         {
           // Start delayed
-          scheduler.startDelayed (startDelay);
+          m_aScheduler.startDelayed (startDelay);
           log ("Scheduler will start in " + startDelay + " seconds.");
         }
       }
@@ -232,7 +233,7 @@ public class QuartzInitializerServlet extends HttpServlet
       if (servletCtxtKey != null)
       {
         log ("Storing the ServletContext in the scheduler context at key: " + servletCtxtKey);
-        scheduler.getContext ().put (servletCtxtKey, cfg.getServletContext ());
+        m_aScheduler.getContext ().put (servletCtxtKey, cfg.getServletContext ());
       }
 
     }
@@ -243,18 +244,12 @@ public class QuartzInitializerServlet extends HttpServlet
     }
   }
 
+  @Nonnull
   protected StdSchedulerFactory getSchedulerFactory (final String configFile) throws SchedulerException
   {
-    StdSchedulerFactory factory;
-    // get Properties
+    final StdSchedulerFactory factory = new StdSchedulerFactory ();
     if (configFile != null)
-    {
-      factory = new StdSchedulerFactory (configFile);
-    }
-    else
-    {
-      factory = new StdSchedulerFactory ();
-    }
+      factory.initialize (configFile);
     return factory;
   }
 
@@ -266,8 +261,8 @@ public class QuartzInitializerServlet extends HttpServlet
 
     try
     {
-      if (scheduler != null)
-        scheduler.shutdown (waitOnShutdown);
+      if (m_aScheduler != null)
+        m_aScheduler.shutdown (waitOnShutdown);
     }
     catch (final Exception e)
     {

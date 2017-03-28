@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class ValidationException extends Exception
 {
-  private List <Exception> validationExceptions = new ArrayList<> ();
+  private List <Exception> validationExceptions = new ArrayList <> ();
 
   /**
    * Constructor for ValidationException.

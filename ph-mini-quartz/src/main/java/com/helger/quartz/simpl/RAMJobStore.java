@@ -279,9 +279,8 @@ public class RAMJobStore implements IJobStore
    */
   public void storeJob (final IJobDetail newJob, final boolean replaceExisting) throws ObjectAlreadyExistsException
   {
-    final JobWrapper jw = new JobWrapper ((IJobDetail) newJob.clone ());
-
-    boolean repl = false;
+    final JobWrapper jw = new JobWrapper (newJob.clone ());
+    boolean bReplace = false;
 
     synchronized (lock)
     {
@@ -291,10 +290,10 @@ public class RAMJobStore implements IJobStore
         {
           throw new ObjectAlreadyExistsException (newJob);
         }
-        repl = true;
+        bReplace = true;
       }
 
-      if (!repl)
+      if (!bReplace)
       {
         // get job group
         HashMap <JobKey, JobWrapper> grpMap = jobsByGroup.get (newJob.getKey ().getGroup ());

@@ -18,6 +18,7 @@
  */
 package com.helger.quartz.core;
 
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -42,7 +43,7 @@ import com.helger.quartz.spi.IOperableTrigger;
 /**
  * @author James House
  */
-public interface IRemotableQuartzScheduler extends Remote
+public interface IRemotableQuartzScheduler extends Remote, Serializable
 {
   String getSchedulerName () throws RemoteException;
 

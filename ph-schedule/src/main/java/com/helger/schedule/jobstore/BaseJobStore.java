@@ -208,7 +208,7 @@ public class BaseJobStore implements IJobStore
         final ICommonsMap <JobKey, JobWrapper> aMap = m_aJobsByGroup.computeIfAbsent (sGroupName,
                                                                                       k -> new CommonsHashMap <> (100));
 
-        final JobWrapper jw = new JobWrapper ((IJobDetail) aNewJob.clone ());
+        final JobWrapper jw = new JobWrapper (aNewJob.clone ());
         // add to jobs by group
         aMap.put (aKey, jw);
         // add to jobs by FQN map
@@ -219,7 +219,7 @@ public class BaseJobStore implements IJobStore
     {
       m_aRWLock.writeLocked ( () ->
       // update job detail
-      aOld.setJobDetail ((IJobDetail) aNewJob.clone ()));
+      aOld.setJobDetail (aNewJob.clone ()));
     }
   }
 

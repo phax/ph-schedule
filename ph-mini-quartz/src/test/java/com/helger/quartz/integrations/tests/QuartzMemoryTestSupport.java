@@ -46,7 +46,7 @@ public class QuartzMemoryTestSupport
   public void initSchedulerBeforeTest () throws Exception
   {
     final Properties properties = createSchedulerProperties ();
-    final ISchedulerFactory sf = new StdSchedulerFactory (properties);
+    final ISchedulerFactory sf = new StdSchedulerFactory ().initialize (properties);
     scheduler = sf.getScheduler ();
     afterSchedulerInit ();
   }

@@ -63,12 +63,6 @@ public class TriggerFiredBundle implements Serializable
     this.nextFireTime = nextFireTime;
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   public IJobDetail getJobDetail ()
   {
     return job;
@@ -120,5 +114,4 @@ public class TriggerFiredBundle implements Serializable
   {
     return scheduledFireTime;
   }
-
 }
