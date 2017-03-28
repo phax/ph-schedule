@@ -21,8 +21,6 @@ package com.helger.quartz;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import com.helger.quartz.DateBuilder.IntervalUnit;
-
 /**
  * A concrete <code>{@link ITrigger}</code> that is used to fire a
  * <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating
@@ -80,7 +78,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * Get the interval unit - the time unit on with the interval applies.
    * </p>
    */
-  public IntervalUnit getRepeatIntervalUnit ();
+  public EIntervalUnit getRepeatIntervalUnit ();
 
   /**
    * <p>

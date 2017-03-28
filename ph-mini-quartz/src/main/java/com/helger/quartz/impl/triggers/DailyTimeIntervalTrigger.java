@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
-import com.helger.quartz.DateBuilder.IntervalUnit;
+import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.IJobExecutionContext;
@@ -41,7 +41,7 @@ import com.helger.quartz.TimeOfDay;
  * <p>
  * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) seconds,
  * minutes or hours (see
- * {@link #setRepeatIntervalUnit(com.helger.quartz.DateBuilder.IntervalUnit)})
+ * {@link #setRepeatIntervalUnit(com.helger.quartz.DateBuilder.EIntervalUnit)})
  * during a given time window on specified days of the week.
  * </p>
  * <p>
@@ -102,7 +102,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   private Date previousFireTime = null;
   private int repeatCount = REPEAT_INDEFINITELY;
   private int repeatInterval = 1;
-  private IntervalUnit repeatIntervalUnit = IntervalUnit.MINUTE;
+  private EIntervalUnit repeatIntervalUnit = EIntervalUnit.MINUTE;
   private Set <Integer> daysOfWeek;
   private TimeOfDay startTimeOfDay;
   private TimeOfDay endTimeOfDay;
@@ -132,8 +132,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link IntervalUnit#SECOND},
-   *        {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
+   *        type of trigger are {@link EIntervalUnit#SECOND},
+   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
    * @throws IllegalArgumentException
    *         if an invalid IntervalUnit is given, or the repeat interval is zero
    *         or less.
@@ -141,7 +141,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   public DailyTimeIntervalTrigger (final String name,
                                    final TimeOfDay startTimeOfDay,
                                    final TimeOfDay endTimeOfDay,
-                                   final IntervalUnit intervalUnit,
+                                   final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
     this (name, null, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
@@ -160,8 +160,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link IntervalUnit#SECOND},
-   *        {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
+   *        type of trigger are {@link EIntervalUnit#SECOND},
+   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
    * @throws IllegalArgumentException
    *         if an invalid IntervalUnit is given, or the repeat interval is zero
    *         or less.
@@ -170,7 +170,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
                                    final String group,
                                    final TimeOfDay startTimeOfDay,
                                    final TimeOfDay endTimeOfDay,
-                                   final IntervalUnit intervalUnit,
+                                   final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
     this (name, group, new Date (), null, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
@@ -195,8 +195,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link IntervalUnit#SECOND},
-   *        {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
+   *        type of trigger are {@link EIntervalUnit#SECOND},
+   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    * @throws IllegalArgumentException
@@ -208,7 +208,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
                                    final Date endTime,
                                    final TimeOfDay startTimeOfDay,
                                    final TimeOfDay endTimeOfDay,
-                                   final IntervalUnit intervalUnit,
+                                   final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
     this (name, null, startTime, endTime, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
@@ -233,8 +233,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link IntervalUnit#SECOND},
-   *        {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
+   *        type of trigger are {@link EIntervalUnit#SECOND},
+   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    * @throws IllegalArgumentException
@@ -247,7 +247,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
                                    final Date endTime,
                                    final TimeOfDay startTimeOfDay,
                                    final TimeOfDay endTimeOfDay,
-                                   final IntervalUnit intervalUnit,
+                                   final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
     super (name, group);
@@ -280,8 +280,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link IntervalUnit#SECOND},
-   *        {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
+   *        type of trigger are {@link EIntervalUnit#SECOND},
+   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    * @throws IllegalArgumentException
@@ -296,7 +296,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
                                    final Date endTime,
                                    final TimeOfDay startTimeOfDay,
                                    final TimeOfDay endTimeOfDay,
-                                   final IntervalUnit intervalUnit,
+                                   final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
     super (name, group, jobName, jobGroup);
@@ -392,7 +392,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
     this.endTime = endTime;
   }
 
-  public IntervalUnit getRepeatIntervalUnit ()
+  public EIntervalUnit getRepeatIntervalUnit ()
   {
     return repeatIntervalUnit;
   }
@@ -404,15 +404,15 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link IntervalUnit#SECOND},
-   *        {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
+   *        type of trigger are {@link EIntervalUnit#SECOND},
+   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
    */
-  public void setRepeatIntervalUnit (final IntervalUnit intervalUnit)
+  public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
   {
     if (repeatIntervalUnit == null ||
-        !((repeatIntervalUnit.equals (IntervalUnit.SECOND) ||
-           repeatIntervalUnit.equals (IntervalUnit.MINUTE) ||
-           repeatIntervalUnit.equals (IntervalUnit.HOUR))))
+        !((repeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
+           repeatIntervalUnit.equals (EIntervalUnit.MINUTE) ||
+           repeatIntervalUnit.equals (EIntervalUnit.HOUR))))
       throw new IllegalArgumentException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
     this.repeatIntervalUnit = intervalUnit;
   }
@@ -778,8 +778,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
     final long secondsAfterStart = (fireMillis - startMillis) / 1000L;
     final long repeatLong = getRepeatInterval ();
     final Calendar sTime = createCalendarTime (fireTimeStartDate);
-    final IntervalUnit repeatUnit = getRepeatIntervalUnit ();
-    if (repeatUnit.equals (IntervalUnit.SECOND))
+    final EIntervalUnit repeatUnit = getRepeatIntervalUnit ();
+    if (repeatUnit.equals (EIntervalUnit.SECOND))
     {
       long jumpCount = secondsAfterStart / repeatLong;
       if (secondsAfterStart % repeatLong != 0)
@@ -788,7 +788,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
       fireTime = sTime.getTime ();
     }
     else
-      if (repeatUnit.equals (IntervalUnit.MINUTE))
+      if (repeatUnit.equals (EIntervalUnit.MINUTE))
       {
         long jumpCount = secondsAfterStart / (repeatLong * 60L);
         if (secondsAfterStart % (repeatLong * 60L) != 0)
@@ -797,7 +797,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
         fireTime = sTime.getTime ();
       }
       else
-        if (repeatUnit.equals (IntervalUnit.HOUR))
+        if (repeatUnit.equals (EIntervalUnit.HOUR))
         {
           long jumpCount = secondsAfterStart / (repeatLong * 60L * 60L);
           if (secondsAfterStart % (repeatLong * 60L * 60L) != 0)
@@ -937,9 +937,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
     super.validate ();
 
     if (repeatIntervalUnit == null ||
-        !(repeatIntervalUnit.equals (IntervalUnit.SECOND) ||
-          repeatIntervalUnit.equals (IntervalUnit.MINUTE) ||
-          repeatIntervalUnit.equals (IntervalUnit.HOUR)))
+        !(repeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
+          repeatIntervalUnit.equals (EIntervalUnit.MINUTE) ||
+          repeatIntervalUnit.equals (EIntervalUnit.HOUR)))
       throw new SchedulerException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
     if (repeatInterval < 1)
     {
@@ -948,21 +948,21 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
     // Ensure interval does not exceed 24 hours
     final long secondsInHour = 24 * 60 * 60L;
-    if (repeatIntervalUnit == IntervalUnit.SECOND && repeatInterval > secondsInHour)
+    if (repeatIntervalUnit == EIntervalUnit.SECOND && repeatInterval > secondsInHour)
     {
       throw new SchedulerException ("repeatInterval can not exceed 24 hours (" +
                                     secondsInHour +
                                     " seconds). Given " +
                                     repeatInterval);
     }
-    if (repeatIntervalUnit == IntervalUnit.MINUTE && repeatInterval > secondsInHour / 60L)
+    if (repeatIntervalUnit == EIntervalUnit.MINUTE && repeatInterval > secondsInHour / 60L)
     {
       throw new SchedulerException ("repeatInterval can not exceed 24 hours (" +
                                     secondsInHour / 60L +
                                     " minutes). Given " +
                                     repeatInterval);
     }
-    if (repeatIntervalUnit == IntervalUnit.HOUR && repeatInterval > 24)
+    if (repeatIntervalUnit == EIntervalUnit.HOUR && repeatInterval > 24)
     {
       throw new SchedulerException ("repeatInterval can not exceed 24 hours. Given " + repeatInterval + " hours.");
     }

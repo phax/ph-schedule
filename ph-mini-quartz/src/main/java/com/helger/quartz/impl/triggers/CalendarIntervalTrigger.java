@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
-import com.helger.quartz.DateBuilder.IntervalUnit;
+import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICalendarIntervalTrigger;
 import com.helger.quartz.ICronTrigger;
@@ -45,7 +45,7 @@ import com.helger.quartz.TriggerUtils;
  * <p>
  * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) units of
  * calendar time (see
- * {@link #setRepeatIntervalUnit(com.helger.quartz.DateBuilder.IntervalUnit)})
+ * {@link #setRepeatIntervalUnit(com.helger.quartz.DateBuilder.EIntervalUnit)})
  * as specified in the trigger's definition. This trigger can achieve schedules
  * that are not possible with {@link ISimpleTrigger} (e.g because months are not
  * a fixed number of seconds) or {@link ICronTrigger} (e.g. because "every 5
@@ -80,7 +80,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   private Date nextFireTime = null;
   private Date previousFireTime = null;
   private int repeatInterval = 0;
-  private IntervalUnit repeatIntervalUnit = IntervalUnit.DAY;
+  private EIntervalUnit repeatIntervalUnit = EIntervalUnit.DAY;
   private TimeZone timeZone;
   // false is backward-compatible with behavior
   private boolean preserveHourOfDayAcrossDaylightSavings = false;
@@ -104,7 +104,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    * repeat at the the given interval.
    * </p>
    */
-  public CalendarIntervalTrigger (final String name, final IntervalUnit intervalUnit, final int repeatInterval)
+  public CalendarIntervalTrigger (final String name, final EIntervalUnit intervalUnit, final int repeatInterval)
   {
     this (name, null, intervalUnit, repeatInterval);
   }
@@ -117,7 +117,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public CalendarIntervalTrigger (final String name,
                                   final String group,
-                                  final IntervalUnit intervalUnit,
+                                  final EIntervalUnit intervalUnit,
                                   final int repeatInterval)
   {
     this (name, group, new Date (), null, intervalUnit, repeatInterval);
@@ -143,7 +143,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   public CalendarIntervalTrigger (final String name,
                                   final Date startTime,
                                   final Date endTime,
-                                  final IntervalUnit intervalUnit,
+                                  final EIntervalUnit intervalUnit,
                                   final int repeatInterval)
   {
     this (name, null, startTime, endTime, intervalUnit, repeatInterval);
@@ -170,7 +170,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
                                   final String group,
                                   final Date startTime,
                                   final Date endTime,
-                                  final IntervalUnit intervalUnit,
+                                  final EIntervalUnit intervalUnit,
                                   final int repeatInterval)
   {
     super (name, group);
@@ -205,7 +205,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
                                   final String jobGroup,
                                   final Date startTime,
                                   final Date endTime,
-                                  final IntervalUnit intervalUnit,
+                                  final EIntervalUnit intervalUnit,
                                   final int repeatInterval)
   {
     super (name, group, jobName, jobGroup);
@@ -295,7 +295,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     this.endTime = endTime;
   }
 
-  public IntervalUnit getRepeatIntervalUnit ()
+  public EIntervalUnit getRepeatIntervalUnit ()
   {
     return repeatIntervalUnit;
   }
@@ -305,7 +305,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    * Set the interval unit - the time unit on with the interval applies.
    * </p>
    */
-  public void setRepeatIntervalUnit (final IntervalUnit intervalUnit)
+  public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
   {
     this.repeatIntervalUnit = intervalUnit;
   }
@@ -722,7 +722,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     sTime.setTime (getStartTime ());
     sTime.setLenient (true);
 
-    if (getRepeatIntervalUnit ().equals (IntervalUnit.SECOND))
+    if (getRepeatIntervalUnit ().equals (EIntervalUnit.SECOND))
     {
       long jumpCount = secondsAfterStart / repeatLong;
       if (secondsAfterStart % repeatLong != 0)
@@ -731,7 +731,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
       time = sTime.getTime ();
     }
     else
-      if (getRepeatIntervalUnit ().equals (IntervalUnit.MINUTE))
+      if (getRepeatIntervalUnit ().equals (EIntervalUnit.MINUTE))
       {
         long jumpCount = secondsAfterStart / (repeatLong * 60L);
         if (secondsAfterStart % (repeatLong * 60L) != 0)
@@ -740,7 +740,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
         time = sTime.getTime ();
       }
       else
-        if (getRepeatIntervalUnit ().equals (IntervalUnit.HOUR))
+        if (getRepeatIntervalUnit ().equals (EIntervalUnit.HOUR))
         {
           long jumpCount = secondsAfterStart / (repeatLong * 60L * 60L);
           if (secondsAfterStart % (repeatLong * 60L * 60L) != 0)
@@ -753,7 +753,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
           final int initialHourOfDay = sTime.get (Calendar.HOUR_OF_DAY);
 
-          if (getRepeatIntervalUnit ().equals (IntervalUnit.DAY))
+          if (getRepeatIntervalUnit ().equals (EIntervalUnit.DAY))
           {
             sTime.setLenient (true);
 
@@ -795,7 +795,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
             time = sTime.getTime ();
           }
           else
-            if (getRepeatIntervalUnit ().equals (IntervalUnit.WEEK))
+            if (getRepeatIntervalUnit ().equals (EIntervalUnit.WEEK))
             {
               sTime.setLenient (true);
 
@@ -837,7 +837,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
               time = sTime.getTime ();
             }
             else
-              if (getRepeatIntervalUnit ().equals (IntervalUnit.MONTH))
+              if (getRepeatIntervalUnit ().equals (EIntervalUnit.MONTH))
               {
                 sTime.setLenient (true);
 
@@ -858,7 +858,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
                 time = sTime.getTime ();
               }
               else
-                if (getRepeatIntervalUnit ().equals (IntervalUnit.YEAR))
+                if (getRepeatIntervalUnit ().equals (EIntervalUnit.YEAR))
                 {
 
                   while (!sTime.getTime ().after (afterTime) &&
@@ -934,37 +934,37 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     lTime.setTime (fTime);
     lTime.setLenient (true);
 
-    if (getRepeatIntervalUnit ().equals (IntervalUnit.SECOND))
+    if (getRepeatIntervalUnit ().equals (EIntervalUnit.SECOND))
     {
       lTime.add (Calendar.SECOND, -1 * getRepeatInterval ());
     }
     else
-      if (getRepeatIntervalUnit ().equals (IntervalUnit.MINUTE))
+      if (getRepeatIntervalUnit ().equals (EIntervalUnit.MINUTE))
       {
         lTime.add (Calendar.MINUTE, -1 * getRepeatInterval ());
       }
       else
-        if (getRepeatIntervalUnit ().equals (IntervalUnit.HOUR))
+        if (getRepeatIntervalUnit ().equals (EIntervalUnit.HOUR))
         {
           lTime.add (Calendar.HOUR_OF_DAY, -1 * getRepeatInterval ());
         }
         else
-          if (getRepeatIntervalUnit ().equals (IntervalUnit.DAY))
+          if (getRepeatIntervalUnit ().equals (EIntervalUnit.DAY))
           {
             lTime.add (Calendar.DAY_OF_YEAR, -1 * getRepeatInterval ());
           }
           else
-            if (getRepeatIntervalUnit ().equals (IntervalUnit.WEEK))
+            if (getRepeatIntervalUnit ().equals (EIntervalUnit.WEEK))
             {
               lTime.add (Calendar.WEEK_OF_YEAR, -1 * getRepeatInterval ());
             }
             else
-              if (getRepeatIntervalUnit ().equals (IntervalUnit.MONTH))
+              if (getRepeatIntervalUnit ().equals (EIntervalUnit.MONTH))
               {
                 lTime.add (Calendar.MONTH, -1 * getRepeatInterval ());
               }
               else
-                if (getRepeatIntervalUnit ().equals (IntervalUnit.YEAR))
+                if (getRepeatIntervalUnit ().equals (EIntervalUnit.YEAR))
                 {
                   lTime.add (Calendar.YEAR, -1 * getRepeatInterval ());
                 }

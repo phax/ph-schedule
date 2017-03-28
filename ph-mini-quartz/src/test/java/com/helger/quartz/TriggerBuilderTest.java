@@ -35,7 +35,6 @@ import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerBuilder;
-import com.helger.quartz.DateBuilder.IntervalUnit;
 import com.helger.quartz.utils.Key;
 
 /**
@@ -80,7 +79,7 @@ public class TriggerBuilderTest
     trigger = newTrigger ().withIdentity ("t1")
                            .withDescription ("my description")
                            .withPriority (2)
-                           .endAt (futureDate (10, IntervalUnit.WEEK))
+                           .endAt (futureDate (10, EIntervalUnit.WEEK))
                            .startAt (stime)
                            .build ();
 

@@ -34,10 +34,8 @@ import java.util.TimeZone;
 import org.junit.Test;
 
 import com.helger.quartz.ICalendarIntervalTrigger;
-import com.helger.quartz.DateBuilder;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.TriggerUtils;
-import com.helger.quartz.DateBuilder.IntervalUnit;
 import com.helger.quartz.impl.calendar.BaseCalendar;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
@@ -60,7 +58,7 @@ public class CalendarIntervalTriggerTest
     final CalendarIntervalTrigger trigger = new CalendarIntervalTrigger ("test",
                                                                                  startTime,
                                                                                  null,
-                                                                                 IntervalUnit.DAY,
+                                                                                 EIntervalUnit.DAY,
                                                                                  1);
     assertThat (trigger.getFireTimeAfter (startTime), equalTo (triggerTime));
 
@@ -88,7 +86,7 @@ public class CalendarIntervalTriggerTest
     final CalendarIntervalTrigger intervalTrigger = new CalendarIntervalTrigger ("QTZ-330",
                                                                                          start.getTime (),
                                                                                          null,
-                                                                                         DateBuilder.IntervalUnit.DAY,
+                                                                                         EIntervalUnit.DAY,
                                                                                          1);
     intervalTrigger.setTimeZone (edt);
     intervalTrigger.setPreserveHourOfDayAcrossDaylightSavings (true);
@@ -108,7 +106,7 @@ public class CalendarIntervalTriggerTest
 
     final CalendarIntervalTrigger yearlyTrigger = new CalendarIntervalTrigger ();
     yearlyTrigger.setStartTime (startCalendar.getTime ());
-    yearlyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.YEAR);
+    yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.YEAR);
     yearlyTrigger.setRepeatInterval (2); // every two years;
 
     final Calendar targetCalendar = Calendar.getInstance ();
@@ -132,7 +130,7 @@ public class CalendarIntervalTriggerTest
 
     final CalendarIntervalTrigger yearlyTrigger = new CalendarIntervalTrigger ();
     yearlyTrigger.setStartTime (startCalendar.getTime ());
-    yearlyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.MONTH);
+    yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.MONTH);
     yearlyTrigger.setRepeatInterval (5); // every five months
 
     final Calendar targetCalendar = Calendar.getInstance ();
@@ -158,7 +156,7 @@ public class CalendarIntervalTriggerTest
 
     final CalendarIntervalTrigger yearlyTrigger = new CalendarIntervalTrigger ();
     yearlyTrigger.setStartTime (startCalendar.getTime ());
-    yearlyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.WEEK);
+    yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.WEEK);
     yearlyTrigger.setRepeatInterval (6); // every six weeks
 
     final Calendar targetCalendar = Calendar.getInstance ();
@@ -184,7 +182,7 @@ public class CalendarIntervalTriggerTest
 
     final CalendarIntervalTrigger dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.DAY);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (90); // every ninety days
 
     final Calendar targetCalendar = Calendar.getInstance ();
@@ -210,7 +208,7 @@ public class CalendarIntervalTriggerTest
 
     final CalendarIntervalTrigger yearlyTrigger = new CalendarIntervalTrigger ();
     yearlyTrigger.setStartTime (startCalendar.getTime ());
-    yearlyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.HOUR);
+    yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.HOUR);
     yearlyTrigger.setRepeatInterval (100); // every 100 hours
 
     final Calendar targetCalendar = Calendar.getInstance ();
@@ -235,7 +233,7 @@ public class CalendarIntervalTriggerTest
 
     final CalendarIntervalTrigger yearlyTrigger = new CalendarIntervalTrigger ();
     yearlyTrigger.setStartTime (startCalendar.getTime ());
-    yearlyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.MINUTE);
+    yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.MINUTE);
     yearlyTrigger.setRepeatInterval (100); // every 100 minutes
 
     final Calendar targetCalendar = Calendar.getInstance ();
@@ -260,7 +258,7 @@ public class CalendarIntervalTriggerTest
 
     final CalendarIntervalTrigger yearlyTrigger = new CalendarIntervalTrigger ();
     yearlyTrigger.setStartTime (startCalendar.getTime ());
-    yearlyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.SECOND);
+    yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.SECOND);
     yearlyTrigger.setRepeatInterval (100); // every 100 seconds
 
     final Calendar targetCalendar = Calendar.getInstance ();
@@ -287,7 +285,7 @@ public class CalendarIntervalTriggerTest
 
     CalendarIntervalTrigger dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.DAY);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (5); // every 5 days
 
     Calendar targetCalendar = Calendar.getInstance ();
@@ -312,7 +310,7 @@ public class CalendarIntervalTriggerTest
 
     dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.DAY);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (1); // every day
 
     targetCalendar = Calendar.getInstance ();
@@ -339,7 +337,7 @@ public class CalendarIntervalTriggerTest
 
     dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.DAY);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (1); // every day
     dailyTrigger.setTimeZone (TimeZone.getTimeZone ("EST"));
 
@@ -371,7 +369,7 @@ public class CalendarIntervalTriggerTest
 
     dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.DAY);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (1); // every day
     dailyTrigger.setTimeZone (TimeZone.getTimeZone ("CET"));
     dailyTrigger.setPreserveHourOfDayAcrossDaylightSavings (true);
@@ -401,7 +399,7 @@ public class CalendarIntervalTriggerTest
 
     dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.DAY);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (5); // every 5 days
 
     targetCalendar = Calendar.getInstance ();
@@ -427,7 +425,7 @@ public class CalendarIntervalTriggerTest
 
     dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.DAY);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (1); // every day
     dailyTrigger.setTimeZone (TimeZone.getTimeZone ("EST"));
 
@@ -456,7 +454,7 @@ public class CalendarIntervalTriggerTest
 
     CalendarIntervalTrigger dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.DAY);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (5); // every 5 days
 
     Calendar endCalendar = Calendar.getInstance ();
@@ -476,7 +474,7 @@ public class CalendarIntervalTriggerTest
 
     dailyTrigger = new CalendarIntervalTrigger ();
     dailyTrigger.setStartTime (startCalendar.getTime ());
-    dailyTrigger.setRepeatIntervalUnit (DateBuilder.IntervalUnit.MINUTE);
+    dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.MINUTE);
     dailyTrigger.setRepeatInterval (5); // every 5 minutes
 
     endCalendar = Calendar.getInstance ();

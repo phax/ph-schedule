@@ -21,8 +21,6 @@ package com.helger.quartz;
 import java.util.Calendar;
 import java.util.Set;
 
-import com.helger.quartz.DateBuilder.IntervalUnit;
-
 /**
  * A <code>{@link ITrigger}</code> that is used to fire a
  * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating
@@ -102,11 +100,11 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    * </p>
    * <p>
    * The only intervals that are valid for this type of trigger are
-   * {@link IntervalUnit#SECOND}, {@link IntervalUnit#MINUTE}, and
-   * {@link IntervalUnit#HOUR}.
+   * {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   * {@link EIntervalUnit#HOUR}.
    * </p>
    */
-  IntervalUnit getRepeatIntervalUnit ();
+  EIntervalUnit getRepeatIntervalUnit ();
 
   /**
    * <p>

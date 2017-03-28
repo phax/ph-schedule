@@ -20,7 +20,6 @@ package com.helger.quartz;
 
 import java.util.TimeZone;
 
-import com.helger.quartz.DateBuilder.IntervalUnit;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
 /**
@@ -58,7 +57,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
 {
 
   private int interval = 1;
-  private IntervalUnit intervalUnit = IntervalUnit.DAY;
+  private EIntervalUnit intervalUnit = EIntervalUnit.DAY;
 
   private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
   private TimeZone timeZone;
@@ -111,7 +110,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  public CalendarIntervalScheduleBuilder withInterval (final int timeInterval, final IntervalUnit unit)
+  public CalendarIntervalScheduleBuilder withInterval (final int timeInterval, final EIntervalUnit unit)
   {
     if (unit == null)
       throw new IllegalArgumentException ("TimeUnit must be specified.");
@@ -135,7 +134,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
   {
     _validateInterval (intervalInSeconds);
     this.interval = intervalInSeconds;
-    this.intervalUnit = IntervalUnit.SECOND;
+    this.intervalUnit = EIntervalUnit.SECOND;
     return this;
   }
 
@@ -153,7 +152,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
   {
     _validateInterval (intervalInMinutes);
     this.interval = intervalInMinutes;
-    this.intervalUnit = IntervalUnit.MINUTE;
+    this.intervalUnit = EIntervalUnit.MINUTE;
     return this;
   }
 
@@ -171,7 +170,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
   {
     _validateInterval (intervalInHours);
     this.interval = intervalInHours;
-    this.intervalUnit = IntervalUnit.HOUR;
+    this.intervalUnit = EIntervalUnit.HOUR;
     return this;
   }
 
@@ -189,7 +188,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
   {
     _validateInterval (intervalInDays);
     this.interval = intervalInDays;
-    this.intervalUnit = IntervalUnit.DAY;
+    this.intervalUnit = EIntervalUnit.DAY;
     return this;
   }
 
@@ -207,7 +206,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
   {
     _validateInterval (intervalInWeeks);
     this.interval = intervalInWeeks;
-    this.intervalUnit = IntervalUnit.WEEK;
+    this.intervalUnit = EIntervalUnit.WEEK;
     return this;
   }
 
@@ -225,7 +224,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
   {
     _validateInterval (intervalInMonths);
     this.interval = intervalInMonths;
-    this.intervalUnit = IntervalUnit.MONTH;
+    this.intervalUnit = EIntervalUnit.MONTH;
     return this;
   }
 
@@ -243,7 +242,7 @@ public class CalendarIntervalScheduleBuilder extends ScheduleBuilder <ICalendarI
   {
     _validateInterval (intervalInYears);
     this.interval = intervalInYears;
-    this.intervalUnit = IntervalUnit.YEAR;
+    this.intervalUnit = EIntervalUnit.YEAR;
     return this;
   }
 

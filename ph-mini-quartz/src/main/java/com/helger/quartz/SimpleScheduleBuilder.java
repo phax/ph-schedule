@@ -18,6 +18,10 @@
  */
 package com.helger.quartz;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.CGlobal;
+import com.helger.commons.ValueEnforcer;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 
 /**
@@ -52,10 +56,9 @@ import com.helger.quartz.impl.triggers.SimpleTrigger;
  */
 public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
 {
-
-  private long interval = 0;
-  private int repeatCount = 0;
-  private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private long m_nInterval = 0;
+  private int m_nRepeatCount = 0;
+  private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   protected SimpleScheduleBuilder ()
   {}
@@ -65,6 +68,7 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
+  @Nonnull
   public static SimpleScheduleBuilder simpleSchedule ()
   {
     return new SimpleScheduleBuilder ();
@@ -76,10 +80,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
+  @Nonnull
   public static SimpleScheduleBuilder repeatMinutelyForever ()
   {
-
-    return simpleSchedule ().withIntervalInMinutes (1).repeatForever ();
+    return repeatMinutelyForever (1);
   }
 
   /**
@@ -88,9 +92,9 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
+  @Nonnull
   public static SimpleScheduleBuilder repeatMinutelyForever (final int minutes)
   {
-
     return simpleSchedule ().withIntervalInMinutes (minutes).repeatForever ();
   }
 
@@ -100,10 +104,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
+  @Nonnull
   public static SimpleScheduleBuilder repeatSecondlyForever ()
   {
-
-    return simpleSchedule ().withIntervalInSeconds (1).repeatForever ();
+    return repeatSecondlyForever (1);
   }
 
   /**
@@ -112,9 +116,9 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
+  @Nonnull
   public static SimpleScheduleBuilder repeatSecondlyForever (final int seconds)
   {
-
     return simpleSchedule ().withIntervalInSeconds (seconds).repeatForever ();
   }
 
@@ -124,10 +128,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
+  @Nonnull
   public static SimpleScheduleBuilder repeatHourlyForever ()
   {
-
-    return simpleSchedule ().withIntervalInHours (1).repeatForever ();
+    return repeatHourlyForever (1);
   }
 
   /**
@@ -136,10 +140,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  public static SimpleScheduleBuilder repeatHourlyForever (final int hours)
+  @Nonnull
+  public static SimpleScheduleBuilder repeatHourlyForever (final int nHours)
   {
-
-    return simpleSchedule ().withIntervalInHours (hours).repeatForever ();
+    return simpleSchedule ().withIntervalInHours (nHours).repeatForever ();
   }
 
   /**
@@ -151,12 +155,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  public static SimpleScheduleBuilder repeatMinutelyForTotalCount (final int count)
+  @Nonnull
+  public static SimpleScheduleBuilder repeatMinutelyForTotalCount (final int nCount)
   {
-    if (count < 1)
-      throw new IllegalArgumentException ("Total count of firings must be at least one! Given count: " + count);
-
-    return simpleSchedule ().withIntervalInMinutes (1).withRepeatCount (count - 1);
+    return repeatMinutelyForTotalCount (nCount, 1);
   }
 
   /**
@@ -168,12 +170,11 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  public static SimpleScheduleBuilder repeatMinutelyForTotalCount (final int count, final int minutes)
+  @Nonnull
+  public static SimpleScheduleBuilder repeatMinutelyForTotalCount (final int nCount, final int nMinutes)
   {
-    if (count < 1)
-      throw new IllegalArgumentException ("Total count of firings must be at least one! Given count: " + count);
-
-    return simpleSchedule ().withIntervalInMinutes (minutes).withRepeatCount (count - 1);
+    ValueEnforcer.isGT0 (nCount, "Count");
+    return simpleSchedule ().withIntervalInMinutes (nMinutes).withRepeatCount (nCount - 1);
   }
 
   /**
@@ -185,12 +186,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  public static SimpleScheduleBuilder repeatSecondlyForTotalCount (final int count)
+  @Nonnull
+  public static SimpleScheduleBuilder repeatSecondlyForTotalCount (final int nCount)
   {
-    if (count < 1)
-      throw new IllegalArgumentException ("Total count of firings must be at least one! Given count: " + count);
-
-    return simpleSchedule ().withIntervalInSeconds (1).withRepeatCount (count - 1);
+    return repeatSecondlyForTotalCount (nCount, 1);
   }
 
   /**
@@ -202,12 +201,11 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  public static SimpleScheduleBuilder repeatSecondlyForTotalCount (final int count, final int seconds)
+  @Nonnull
+  public static SimpleScheduleBuilder repeatSecondlyForTotalCount (final int nCount, final int nSeconds)
   {
-    if (count < 1)
-      throw new IllegalArgumentException ("Total count of firings must be at least one! Given count: " + count);
-
-    return simpleSchedule ().withIntervalInSeconds (seconds).withRepeatCount (count - 1);
+    ValueEnforcer.isGT0 (nCount, "Count");
+    return simpleSchedule ().withIntervalInSeconds (nSeconds).withRepeatCount (nCount - 1);
   }
 
   /**
@@ -219,12 +217,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  public static SimpleScheduleBuilder repeatHourlyForTotalCount (final int count)
+  @Nonnull
+  public static SimpleScheduleBuilder repeatHourlyForTotalCount (final int nCount)
   {
-    if (count < 1)
-      throw new IllegalArgumentException ("Total count of firings must be at least one! Given count: " + count);
-
-    return simpleSchedule ().withIntervalInHours (1).withRepeatCount (count - 1);
+    return repeatHourlyForTotalCount (nCount, 1);
   }
 
   /**
@@ -236,12 +232,11 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  public static SimpleScheduleBuilder repeatHourlyForTotalCount (final int count, final int hours)
+  @Nonnull
+  public static SimpleScheduleBuilder repeatHourlyForTotalCount (final int nCount, final int nHours)
   {
-    if (count < 1)
-      throw new IllegalArgumentException ("Total count of firings must be at least one! Given count: " + count);
-
-    return simpleSchedule ().withIntervalInHours (hours).withRepeatCount (count - 1);
+    ValueEnforcer.isGT0 (nCount, "Count");
+    return simpleSchedule ().withIntervalInHours (nHours).withRepeatCount (nCount - 1);
   }
 
   /**
@@ -252,29 +247,29 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @see TriggerBuilder#withSchedule(ScheduleBuilder)
    */
   @Override
+  @Nonnull
   public SimpleTrigger build ()
   {
-
-    final SimpleTrigger st = new SimpleTrigger ();
-    st.setRepeatInterval (interval);
-    st.setRepeatCount (repeatCount);
-    st.setMisfireInstruction (misfireInstruction);
-
-    return st;
+    final SimpleTrigger ret = new SimpleTrigger ();
+    ret.setRepeatInterval (m_nInterval);
+    ret.setRepeatCount (m_nRepeatCount);
+    ret.setMisfireInstruction (m_nMisfireInstruction);
+    return ret;
   }
 
   /**
    * Specify a repeat interval in milliseconds.
    *
-   * @param intervalInMillis
+   * @param nIntervalInMillis
    *        the number of seconds at which the trigger should repeat.
    * @return the updated SimpleScheduleBuilder
    * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
-  public SimpleScheduleBuilder withIntervalInMilliseconds (final long intervalInMillis)
+  @Nonnull
+  public SimpleScheduleBuilder withIntervalInMilliseconds (final long nIntervalInMillis)
   {
-    this.interval = intervalInMillis;
+    m_nInterval = nIntervalInMillis;
     return this;
   }
 
@@ -282,15 +277,16 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * Specify a repeat interval in seconds - which will then be multiplied by
    * 1000 to produce milliseconds.
    *
-   * @param intervalInSeconds
+   * @param nIntervalInSeconds
    *        the number of seconds at which the trigger should repeat.
    * @return the updated SimpleScheduleBuilder
    * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
-  public SimpleScheduleBuilder withIntervalInSeconds (final int intervalInSeconds)
+  @Nonnull
+  public SimpleScheduleBuilder withIntervalInSeconds (final int nIntervalInSeconds)
   {
-    this.interval = intervalInSeconds * 1000L;
+    m_nInterval = nIntervalInSeconds * CGlobal.MILLISECONDS_PER_SECOND;
     return this;
   }
 
@@ -298,15 +294,16 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * Specify a repeat interval in minutes - which will then be multiplied by 60
    * * 1000 to produce milliseconds.
    *
-   * @param intervalInMinutes
+   * @param nIntervalInMinutes
    *        the number of seconds at which the trigger should repeat.
    * @return the updated SimpleScheduleBuilder
    * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
-  public SimpleScheduleBuilder withIntervalInMinutes (final int intervalInMinutes)
+  @Nonnull
+  public SimpleScheduleBuilder withIntervalInMinutes (final int nIntervalInMinutes)
   {
-    this.interval = intervalInMinutes * DateBuilder.MILLISECONDS_IN_MINUTE;
+    m_nInterval = nIntervalInMinutes * CGlobal.MILLISECONDS_PER_MINUTE;
     return this;
   }
 
@@ -320,9 +317,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
+  @Nonnull
   public SimpleScheduleBuilder withIntervalInHours (final int intervalInHours)
   {
-    this.interval = intervalInHours * DateBuilder.MILLISECONDS_IN_HOUR;
+    m_nInterval = intervalInHours * CGlobal.MILLISECONDS_PER_HOUR;
     return this;
   }
 
@@ -336,9 +334,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @see ISimpleTrigger#getRepeatCount()
    * @see #repeatForever()
    */
+  @Nonnull
   public SimpleScheduleBuilder withRepeatCount (final int triggerRepeatCount)
   {
-    this.repeatCount = triggerRepeatCount;
+    m_nRepeatCount = triggerRepeatCount;
     return this;
   }
 
@@ -353,9 +352,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @see #withIntervalInMinutes(int)
    * @see #withIntervalInHours(int)
    */
+  @Nonnull
   public SimpleScheduleBuilder repeatForever ()
   {
-    this.repeatCount = ISimpleTrigger.REPEAT_INDEFINITELY;
+    m_nRepeatCount = ISimpleTrigger.REPEAT_INDEFINITELY;
     return this;
   }
 
@@ -366,9 +366,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @return the updated CronScheduleBuilder
    * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
+  @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
@@ -379,10 +380,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see ISimpleTrigger#MISFIRE_INSTRUCTION_FIRE_NOW
    */
-
+  @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionFireNow ()
   {
-    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW;
+    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW;
     return this;
   }
 
@@ -394,9 +395,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT
    */
+  @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithExistingCount ()
   {
-    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT;
+    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT;
     return this;
   }
 
@@ -408,9 +410,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT
    */
+  @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithRemainingCount ()
   {
-    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
+    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
     return this;
   }
 
@@ -422,9 +425,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT
    */
+  @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithExistingCount ()
   {
-    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
+    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
     return this;
   }
 
@@ -436,10 +440,10 @@ public class SimpleScheduleBuilder extends ScheduleBuilder <ISimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT
    */
+  @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithRemainingCount ()
   {
-    misfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;
+    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;
     return this;
   }
-
 }

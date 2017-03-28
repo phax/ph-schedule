@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.helger.quartz.DateBuilder.IntervalUnit;
 import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
 /**
@@ -69,7 +68,7 @@ import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTimeIntervalTrigger>
 {
   private int interval = 1;
-  private IntervalUnit intervalUnit = IntervalUnit.MINUTE;
+  private EIntervalUnit intervalUnit = EIntervalUnit.MINUTE;
   private Set <Integer> daysOfWeek;
   private TimeOfDay startTimeOfDay;
   private TimeOfDay endTimeOfDay;
@@ -170,16 +169,16 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    * @param unit
    *        the time unit (IntervalUnit) of the interval. The only intervals
    *        that are valid for this type of trigger are
-   *        {@link IntervalUnit#SECOND}, {@link IntervalUnit#MINUTE}, and
-   *        {@link IntervalUnit#HOUR}.
+   *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   *        {@link EIntervalUnit#HOUR}.
    * @return the updated DailyTimeIntervalScheduleBuilder
    * @see IDailyTimeIntervalTrigger#getRepeatInterval()
    * @see IDailyTimeIntervalTrigger#getRepeatIntervalUnit()
    */
-  public DailyTimeIntervalScheduleBuilder withInterval (final int timeInterval, final IntervalUnit unit)
+  public DailyTimeIntervalScheduleBuilder withInterval (final int timeInterval, final EIntervalUnit unit)
   {
     if (unit == null ||
-        !(unit.equals (IntervalUnit.SECOND) || unit.equals (IntervalUnit.MINUTE) || unit.equals (IntervalUnit.HOUR)))
+        !(unit.equals (EIntervalUnit.SECOND) || unit.equals (EIntervalUnit.MINUTE) || unit.equals (EIntervalUnit.HOUR)))
       throw new IllegalArgumentException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
     _validateInterval (timeInterval);
     this.interval = timeInterval;
@@ -199,7 +198,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder withIntervalInSeconds (final int intervalInSeconds)
   {
-    withInterval (intervalInSeconds, IntervalUnit.SECOND);
+    withInterval (intervalInSeconds, EIntervalUnit.SECOND);
     return this;
   }
 
@@ -215,7 +214,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder withIntervalInMinutes (final int intervalInMinutes)
   {
-    withInterval (intervalInMinutes, IntervalUnit.MINUTE);
+    withInterval (intervalInMinutes, EIntervalUnit.MINUTE);
     return this;
   }
 
@@ -231,7 +230,7 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
    */
   public DailyTimeIntervalScheduleBuilder withIntervalInHours (final int intervalInHours)
   {
-    withInterval (intervalInHours, IntervalUnit.HOUR);
+    withInterval (intervalInHours, EIntervalUnit.HOUR);
     return this;
   }
 
@@ -350,13 +349,13 @@ public class DailyTimeIntervalScheduleBuilder extends ScheduleBuilder <IDailyTim
     final Date maxEndTimeOfDayDate = TimeOfDay.hourMinuteAndSecondOfDay (23, 59, 59).getTimeOfDayForDate (today);
     final long remainingMillisInDay = maxEndTimeOfDayDate.getTime () - startTimeOfDayDate.getTime ();
     long intervalInMillis;
-    if (intervalUnit == IntervalUnit.SECOND)
+    if (intervalUnit == EIntervalUnit.SECOND)
       intervalInMillis = interval * 1000L;
     else
-      if (intervalUnit == IntervalUnit.MINUTE)
+      if (intervalUnit == EIntervalUnit.MINUTE)
         intervalInMillis = interval * 1000L * 60;
       else
-        if (intervalUnit == IntervalUnit.HOUR)
+        if (intervalUnit == EIntervalUnit.HOUR)
           intervalInMillis = interval * 1000L * 60 * 24;
         else
           throw new IllegalArgumentException ("The IntervalUnit: " + intervalUnit + " is invalid for this trigger.");

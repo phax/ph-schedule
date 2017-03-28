@@ -19,7 +19,7 @@
 package com.helger.quartz;
 
 import static com.helger.quartz.DateBuilder.futureDate;
-import static com.helger.quartz.DateBuilder.IntervalUnit.MINUTE;
+import static com.helger.quartz.EIntervalUnit.MINUTE;
 import static com.helger.quartz.TriggerBuilder.newTrigger;
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.spi.IOperableTrigger;
 
 public class TriggerComparatorTest
@@ -46,7 +45,7 @@ public class TriggerComparatorTest
     final ITrigger t5 = newTrigger ().withIdentity ("a", "b").build ();
     final ITrigger t6 = newTrigger ().withIdentity ("a", "c").build ();
 
-    final List <ITrigger> ts = new LinkedList<> ();
+    final List <ITrigger> ts = new LinkedList <> ();
     // add triggers to list in somewhat randomized order
     ts.add (t5);
     ts.add (t6);
@@ -91,7 +90,7 @@ public class TriggerComparatorTest
     final ITrigger t9 = newTrigger ().withIdentity ("j").startAt (futureDate (7, MINUTE)).build ();
     ((IOperableTrigger) t9).computeFirstFireTime (null);
 
-    final List <ITrigger> ts = new LinkedList<> ();
+    final List <ITrigger> ts = new LinkedList <> ();
     // add triggers to list in somewhat randomized order
     ts.add (t5);
     ts.add (t9);

@@ -18,11 +18,13 @@
  */
 package com.helger.quartz;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.quartz.spi.IOperableTrigger;
 
 /**
@@ -34,7 +36,7 @@ import com.helger.quartz.spi.IOperableTrigger;
  * @see DateBuilder
  * @author James House
  */
-public class TriggerUtils
+public final class TriggerUtils
 {
   /**
    * Private constructor because this is a pure utility class.
@@ -55,16 +57,17 @@ public class TriggerUtils
    *        The number of next fire times to produce
    * @return List of java.util.Date objects
    */
-  public static List <Date> computeFireTimes (final IOperableTrigger trigg, final ICalendar cal, final int numTimes)
+  @Nonnull
+  @ReturnsMutableCopy
+  public static ICommonsList <Date> computeFireTimes (final IOperableTrigger trigg,
+                                                      final ICalendar cal,
+                                                      final int numTimes)
   {
-    final LinkedList <Date> lst = new LinkedList<> ();
+    final ICommonsList <Date> lst = new CommonsArrayList <> ();
 
     final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
-
     if (t.getNextFireTime () == null)
-    {
       t.computeFirstFireTime (cal);
-    }
 
     for (int i = 0; i < numTimes; i++)
     {
@@ -80,7 +83,7 @@ public class TriggerUtils
       }
     }
 
-    return java.util.Collections.unmodifiableList (lst);
+    return lst;
   }
 
   /**
@@ -103,17 +106,12 @@ public class TriggerUtils
                                                                      final ICalendar cal,
                                                                      final int numTimes)
   {
-
     final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
-
     if (t.getNextFireTime () == null)
-    {
       t.computeFirstFireTime (cal);
-    }
 
     int c = 0;
     Date endTime = null;
-
     for (int i = 0; i < numTimes; i++)
     {
       final Date d = t.getNextFireTime ();
@@ -134,7 +132,6 @@ public class TriggerUtils
       return null;
 
     endTime = new Date (endTime.getTime () + 1000L);
-
     return endTime;
   }
 
@@ -159,15 +156,13 @@ public class TriggerUtils
    *        The ending date at which to stop finding fire times
    * @return List of java.util.Date objects
    */
-  public static List <Date> computeFireTimesBetween (final IOperableTrigger trigg,
-                                                     final ICalendar cal,
-                                                     final Date from,
-                                                     final Date to)
+  public static ICommonsList <Date> computeFireTimesBetween (final IOperableTrigger trigg,
+                                                             final ICalendar cal,
+                                                             final Date from,
+                                                             final Date to)
   {
-    final LinkedList <Date> lst = new LinkedList<> ();
-
+    final ICommonsList <Date> lst = new CommonsArrayList <> ();
     final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
-
     if (t.getNextFireTime () == null)
     {
       t.setStartTime (from);
@@ -198,6 +193,6 @@ public class TriggerUtils
       }
     }
 
-    return Collections.unmodifiableList (lst);
+    return lst;
   }
 }

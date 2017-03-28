@@ -18,10 +18,14 @@
  */
 package com.helger.quartz;
 
+import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import com.helger.commons.CGlobal;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * <code>DateBuilder</code> is used to conveniently create
@@ -50,21 +54,8 @@ import java.util.TimeZone;
  * @see TriggerBuilder
  * @see JobBuilder
  */
-public class DateBuilder
+public final class DateBuilder
 {
-
-  public enum IntervalUnit
-  {
-    MILLISECOND,
-    SECOND,
-    MINUTE,
-    HOUR,
-    DAY,
-    WEEK,
-    MONTH,
-    YEAR
-  }
-
   public static final int SUNDAY = 1;
   public static final int MONDAY = 2;
   public static final int TUESDAY = 3;
@@ -72,23 +63,9 @@ public class DateBuilder
   public static final int THURSDAY = 5;
   public static final int FRIDAY = 6;
   public static final int SATURDAY = 7;
-  public static final int JANUARY = 1;
-  public static final int FEBRUARY = 2;
-  public static final int MARCH = 3;
-  public static final int APRIL = 4;
-  public static final int MAY = 5;
-  public static final int JUNE = 6;
-  public static final int JULY = 7;
-  public static final int AUGUST = 8;
-  public static final int SEPTEMBER = 9;
-  public static final int OCTOBER = 10;
-  public static final int NOVEMBER = 11;
-  public static final int DECEMBER = 12;
 
-  public static final long MILLISECONDS_IN_MINUTE = 60l * 1000l;
-  public static final long MILLISECONDS_IN_HOUR = 60l * 60l * 1000l;
-  public static final long SECONDS_IN_MOST_DAYS = 24l * 60l * 60L;
-  public static final long MILLISECONDS_IN_DAY = SECONDS_IN_MOST_DAYS * 1000l;
+  public static final long SECONDS_IN_MOST_DAYS = CGlobal.SECONDS_PER_DAY;
+  public static final long MILLISECONDS_IN_DAY = SECONDS_IN_MOST_DAYS * CGlobal.MILLISECONDS_PER_SECOND;
 
   private int month;
   private int day;
@@ -293,20 +270,20 @@ public class DateBuilder
   /**
    * Set the month (1-12) for the Date that will be built by this builder.
    */
-  public DateBuilder inMonth (final int inMonth)
+  public DateBuilder inMonth (final Month inMonth)
   {
     validateMonth (inMonth);
 
-    this.month = inMonth;
+    this.month = inMonth.getValue ();
     return this;
   }
 
-  public DateBuilder inMonthOnDay (final int inMonth, final int onDay)
+  public DateBuilder inMonthOnDay (final Month inMonth, final int onDay)
   {
     validateMonth (inMonth);
     validateDayOfMonth (onDay);
 
-    this.month = inMonth;
+    this.month = inMonth.getValue ();
     this.day = onDay;
     return this;
   }
@@ -342,7 +319,7 @@ public class DateBuilder
     return this;
   }
 
-  public static Date futureDate (final int interval, final IntervalUnit unit)
+  public static Date futureDate (final int interval, final EIntervalUnit unit)
   {
 
     final Calendar c = Calendar.getInstance ();
@@ -354,7 +331,7 @@ public class DateBuilder
     return c.getTime ();
   }
 
-  private static int _translate (final IntervalUnit unit)
+  private static int _translate (final EIntervalUnit unit)
   {
     switch (unit)
     {
@@ -487,7 +464,11 @@ public class DateBuilder
    *        The value (1-12) to give the month field of the date
    * @return the new date
    */
-  public static Date dateOf (final int hour, final int minute, final int second, final int dayOfMonth, final int month)
+  public static Date dateOf (final int hour,
+                             final int minute,
+                             final int second,
+                             final int dayOfMonth,
+                             final Month month)
   {
     validateSecond (second);
     validateMinute (minute);
@@ -500,7 +481,7 @@ public class DateBuilder
     final Calendar c = Calendar.getInstance ();
     c.setTime (date);
 
-    c.set (Calendar.MONTH, month - 1);
+    c.set (Calendar.MONTH, month.getValue () - 1);
     c.set (Calendar.DAY_OF_MONTH, dayOfMonth);
     c.set (Calendar.HOUR_OF_DAY, hour);
     c.set (Calendar.MINUTE, minute);
@@ -534,7 +515,7 @@ public class DateBuilder
                              final int minute,
                              final int second,
                              final int dayOfMonth,
-                             final int month,
+                             final Month month,
                              final int year)
   {
     validateSecond (second);
@@ -550,7 +531,7 @@ public class DateBuilder
     c.setTime (date);
 
     c.set (Calendar.YEAR, year);
-    c.set (Calendar.MONTH, month - 1);
+    c.set (Calendar.MONTH, month.getValue () - 1);
     c.set (Calendar.DAY_OF_MONTH, dayOfMonth);
     c.set (Calendar.HOUR_OF_DAY, hour);
     c.set (Calendar.MINUTE, minute);
@@ -1016,6 +997,11 @@ public class DateBuilder
     {
       throw new IllegalArgumentException ("Invalid month (must be >= 1 and <= 12.");
     }
+  }
+
+  public static void validateMonth (final Month month)
+  {
+    ValueEnforcer.notNull (month, "Month");
   }
 
   private static final int MAX_YEAR = Calendar.getInstance ().get (Calendar.YEAR) + 100;

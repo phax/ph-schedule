@@ -64,7 +64,7 @@ import org.xml.sax.SAXParseException;
 
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
 import com.helger.quartz.CronScheduleBuilder;
-import com.helger.quartz.DateBuilder.IntervalUnit;
+import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IScheduler;
@@ -791,7 +791,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
             final int repeatInterval = Integer.parseInt (repeatIntervalString);
 
-            final IntervalUnit repeatUnit = IntervalUnit.valueOf (repeatUnitString);
+            final EIntervalUnit repeatUnit = EIntervalUnit.valueOf (repeatUnitString);
 
             sched = calendarIntervalSchedule ().withInterval (repeatInterval, repeatUnit);
 

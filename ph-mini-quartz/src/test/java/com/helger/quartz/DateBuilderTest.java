@@ -18,19 +18,7 @@
  */
 package com.helger.quartz;
 
-import static com.helger.quartz.DateBuilder.APRIL;
-import static com.helger.quartz.DateBuilder.AUGUST;
-import static com.helger.quartz.DateBuilder.DECEMBER;
-import static com.helger.quartz.DateBuilder.FEBRUARY;
-import static com.helger.quartz.DateBuilder.JANUARY;
-import static com.helger.quartz.DateBuilder.JULY;
-import static com.helger.quartz.DateBuilder.JUNE;
-import static com.helger.quartz.DateBuilder.MARCH;
-import static com.helger.quartz.DateBuilder.MAY;
 import static com.helger.quartz.DateBuilder.MILLISECONDS_IN_DAY;
-import static com.helger.quartz.DateBuilder.NOVEMBER;
-import static com.helger.quartz.DateBuilder.OCTOBER;
-import static com.helger.quartz.DateBuilder.SEPTEMBER;
 import static com.helger.quartz.DateBuilder.dateOf;
 import static com.helger.quartz.DateBuilder.evenHourDate;
 import static com.helger.quartz.DateBuilder.evenHourDateAfterNow;
@@ -47,6 +35,18 @@ import static com.helger.quartz.DateBuilder.nextGivenMinuteDate;
 import static com.helger.quartz.DateBuilder.todayAt;
 import static com.helger.quartz.DateBuilder.tomorrowAt;
 import static com.helger.quartz.DateBuilder.translateTime;
+import static java.time.Month.APRIL;
+import static java.time.Month.AUGUST;
+import static java.time.Month.DECEMBER;
+import static java.time.Month.FEBRUARY;
+import static java.time.Month.JANUARY;
+import static java.time.Month.JULY;
+import static java.time.Month.JUNE;
+import static java.time.Month.MARCH;
+import static java.time.Month.MAY;
+import static java.time.Month.NOVEMBER;
+import static java.time.Month.OCTOBER;
+import static java.time.Month.SEPTEMBER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -65,8 +65,7 @@ public class DateBuilderTest
   @Test
   public void testBasicBuilding ()
   {
-
-    final Date t = dateOf (10, 30, 0, 1, 7, 2013); // july 1 10:30:00 am
+    final Date t = dateOf (10, 30, 0, 1, JULY, 2013); // july 1 10:30:00 am
 
     final Calendar vc = Calendar.getInstance ();
     vc.set (Calendar.YEAR, 2013);
