@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
@@ -32,6 +31,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import com.helger.commons.io.resource.ClassPathResource;
+import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.simpl.SimpleThreadPool;
@@ -42,7 +42,7 @@ public class SchedulerDetailsSetterTest
   @Test
   public void testSetter () throws SchedulerException, IOException
   {
-    final Properties props = new Properties ();
+    final NonBlockingProperties props = new NonBlockingProperties ();
     props.load (ClassPathResource.getInputStream ("quartz/quartz.properties"));
     props.setProperty (StdSchedulerFactory.PROP_THREAD_POOL_CLASS, MyThreadPool.class.getName ());
     props.setProperty (StdSchedulerFactory.PROP_JOB_STORE_CLASS, MyJobStore.class.getName ());

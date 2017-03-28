@@ -20,11 +20,9 @@ package com.helger.quartz.utils;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Properties;
-
 import org.junit.Test;
 
-import com.helger.quartz.utils.PropertiesParser;
+import com.helger.commons.lang.NonBlockingProperties;
 
 /**
  * Unit tests for PropertiesParser.
@@ -38,11 +36,11 @@ public class PropertiesParserTest
   public void testGetPropertyGroupStringBooleanStringArray ()
   {
     // Test that an empty property does not cause an exception
-    final Properties props = new Properties ();
+    final NonBlockingProperties props = new NonBlockingProperties ();
     props.put ("x.y.z", "");
 
     final PropertiesParser propertiesParser = new PropertiesParser (props);
-    final Properties propGroup = propertiesParser.getPropertyGroup ("x.y", true, new String [] {});
+    final NonBlockingProperties propGroup = propertiesParser.getPropertyGroup ("x.y", true, new String [] {});
     assertEquals ("", propGroup.getProperty ("z"));
   }
 }

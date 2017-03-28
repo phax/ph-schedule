@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.listeners.AbstractJobListenerSupport;
 
@@ -142,7 +142,7 @@ public class DisallowConcurrentExecutionJobTest
                                             .forJob (job1.getKey ())
                                             .build ();
 
-    final Properties props = new Properties ();
+    final NonBlockingProperties props = new NonBlockingProperties ();
     props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1500");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");
     final IScheduler scheduler = new StdSchedulerFactory ().initialize (props).getScheduler ();
@@ -192,7 +192,7 @@ public class DisallowConcurrentExecutionJobTest
                                             .forJob (job1.getKey ())
                                             .build ();
 
-    final Properties props = new Properties ();
+    final NonBlockingProperties props = new NonBlockingProperties ();
     props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1500");
     props.setProperty ("org.quartz.scheduler.batchTriggerAcquisitionMaxCount", "2");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");

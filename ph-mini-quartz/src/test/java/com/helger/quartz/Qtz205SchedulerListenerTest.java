@@ -23,12 +23,11 @@ import static com.helger.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static com.helger.quartz.TriggerBuilder.newTrigger;
 import static org.junit.Assert.assertEquals;
 
-import java.util.Properties;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
@@ -176,7 +175,7 @@ public class Qtz205SchedulerListenerTest
   {
     final Qtz205TriggerListener triggerListener = new Qtz205TriggerListener ();
     final Qtz205ScheListener schedulerListener = new Qtz205ScheListener ();
-    final Properties props = new Properties ();
+    final NonBlockingProperties props = new NonBlockingProperties ();
     props.setProperty ("org.quartz.scheduler.idleWaitTime", "1500");
     props.setProperty ("org.quartz.threadPool.threadCount", "2");
     final IScheduler scheduler = new StdSchedulerFactory ().initialize (props).getScheduler ();

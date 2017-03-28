@@ -23,7 +23,6 @@ import static com.helger.quartz.TriggerBuilder.newTrigger;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,6 +31,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.simpl.SimpleThreadPool;
 
@@ -96,7 +96,7 @@ public class InterruptableJobTest
   public void testJobInterruption () throws Exception
   {
     // create a simple scheduler
-    final Properties config = new Properties ();
+    final NonBlockingProperties config = new NonBlockingProperties ();
     config.setProperty (StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, "InterruptableJobTest_Scheduler");
     config.setProperty (StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, "AUTO");
     config.setProperty ("org.quartz.threadPool.threadCount", "2");

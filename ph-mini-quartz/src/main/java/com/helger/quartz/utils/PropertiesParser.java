@@ -18,17 +18,16 @@
  */
 package com.helger.quartz.utils;
 
-import java.util.Enumeration;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.collection.ext.CommonsArrayList;
-import com.helger.commons.collection.ext.CommonsHashSet;
+import com.helger.commons.collection.ext.CommonsLinkedHashSet;
 import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.commons.collection.ext.ICommonsSet;
+import com.helger.commons.lang.NonBlockingProperties;
 
 /**
  * <p>
@@ -41,16 +40,16 @@ public class PropertiesParser
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (PropertiesParser.class);
 
-  private final Properties m_aProps;
+  private final NonBlockingProperties m_aProps;
 
-  public PropertiesParser (final Properties props)
+  public PropertiesParser (final NonBlockingProperties props)
   {
     m_aProps = props;
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("PropertiesParser ctor: " + props);
   }
 
-  public Properties getUnderlyingProperties ()
+  public NonBlockingProperties getUnderlyingProperties ()
   {
     return m_aProps;
   }
@@ -358,34 +357,30 @@ public class PropertiesParser
     }
   }
 
-  public String [] getPropertyGroups (final String sPrefix)
+  public ICommonsList <String> getPropertyGroups (final String sPrefix)
   {
-    final Enumeration <?> keys = m_aProps.propertyNames ();
-    final ICommonsSet <String> groups = new CommonsHashSet <> (10);
+    final ICommonsSet <String> groups = new CommonsLinkedHashSet <> (10);
+    String sRealPrefix = sPrefix;
+    if (!sRealPrefix.endsWith ("."))
+      sRealPrefix += ".";
 
-    String prefix = sPrefix;
-    if (!prefix.endsWith ("."))
-      prefix += ".";
-
-    while (keys.hasMoreElements ())
+    for (final String sKey : m_aProps.keySet ())
     {
-      final String key = (String) keys.nextElement ();
-      if (key.startsWith (prefix))
+      if (sKey.startsWith (sRealPrefix))
       {
-        final String groupName = key.substring (prefix.length (), key.indexOf ('.', prefix.length ()));
+        final String groupName = sKey.substring (sRealPrefix.length (), sKey.indexOf ('.', sRealPrefix.length ()));
         groups.add (groupName);
       }
     }
-
-    return groups.toArray (new String [groups.size ()]);
+    return groups.getCopyAsList ();
   }
 
-  public Properties getPropertyGroup (final String prefix)
+  public NonBlockingProperties getPropertyGroup (final String prefix)
   {
     return getPropertyGroup (prefix, false, null);
   }
 
-  public Properties getPropertyGroup (final String prefix, final boolean stripPrefix)
+  public NonBlockingProperties getPropertyGroup (final String prefix, final boolean stripPrefix)
   {
     return getPropertyGroup (prefix, stripPrefix, null);
   }
@@ -403,22 +398,23 @@ public class PropertiesParser
    *        Optional array of fully qualified prefixes to exclude. For example
    *        if <code>prefix</code> is "a.b.c", then
    *        <code>excludedPrefixes</code> might be "a.b.c.ignore".
-   * @return Group of <code>Properties</code> that start with the given prefix,
-   *         optionally have that prefix removed, and do not include properties
-   *         that start with one of the given excluded prefixes.
+   * @return Group of <code>NonBlockingProperties</code> that start with the
+   *         given prefix, optionally have that prefix removed, and do not
+   *         include properties that start with one of the given excluded
+   *         prefixes.
    */
-  public Properties getPropertyGroup (final String sPrefix, final boolean bStripPrefix, final String [] excludedPrefixes)
+  public NonBlockingProperties getPropertyGroup (final String sPrefix,
+                                                 final boolean bStripPrefix,
+                                                 final String [] excludedPrefixes)
   {
-    final Enumeration <?> keys = m_aProps.propertyNames ();
-    final Properties group = new Properties ();
+    final NonBlockingProperties group = new NonBlockingProperties ();
 
     String prefix = sPrefix;
     if (!prefix.endsWith ("."))
       prefix += ".";
 
-    while (keys.hasMoreElements ())
+    for (final String key : m_aProps.keySet ())
     {
-      final String key = (String) keys.nextElement ();
       if (key.startsWith (prefix))
       {
         boolean bExclude = false;

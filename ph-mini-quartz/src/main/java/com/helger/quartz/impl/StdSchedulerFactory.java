@@ -31,16 +31,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.AccessControlException;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
+import javax.annotation.WillNotClose;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.collection.ext.CommonsArrayList;
 import com.helger.commons.collection.ext.ICommonsCollection;
+import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.commons.io.resource.ClassPathResource;
+import com.helger.commons.io.stream.NonBlockingBufferedInputStream;
 import com.helger.commons.io.stream.StreamHelper;
+import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.commons.system.SystemProperties;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IScheduler;
@@ -212,7 +218,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     final String propFileName = requestedFile != null ? requestedFile : "quartz.properties";
     final File propFile = new File (propFileName);
 
-    final Properties props = new Properties ();
+    final NonBlockingProperties props = new NonBlockingProperties ();
 
     InputStream in = null;
 
@@ -306,7 +312,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * Add all System properties to the given <code>props</code>. Will override
    * any properties that already exist in the given <code>props</code>.
    */
-  private Properties _overrideWithSysProps (final Properties props)
+  @Nonnull
+  private NonBlockingProperties _overrideWithSysProps (@Nonnull final NonBlockingProperties props)
   {
     Properties sysProps = null;
     try
@@ -326,7 +333,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
     if (sysProps != null)
     {
-      props.putAll (sysProps);
+      for (final Map.Entry <?, ?> aEntry : sysProps.entrySet ())
+        props.put ((String) aEntry.getKey (), (String) aEntry.getValue ());
     }
 
     return props;
@@ -350,19 +358,19 @@ public class StdSchedulerFactory implements ISchedulerFactory
     if (m_aInitException != null)
       throw m_aInitException;
 
-    final Properties props = new Properties ();
+    final NonBlockingProperties props = new NonBlockingProperties ();
 
     InputStream is = ClassPathResource.getInputStream (filename);
     try
     {
       if (is != null)
       {
-        is = new BufferedInputStream (is);
+        is = new NonBlockingBufferedInputStream (is);
         m_sPropSrc = "the specified file : '" + filename + "' from the class resource path.";
       }
       else
       {
-        is = new BufferedInputStream (new FileInputStream (filename));
+        is = new NonBlockingBufferedInputStream (new FileInputStream (filename));
         m_sPropSrc = "the specified file : '" + filename + "'";
       }
       props.load (is);
@@ -390,7 +398,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * @return this
    */
   @Nonnull
-  public StdSchedulerFactory initialize (final InputStream propertiesStream) throws SchedulerException
+  public StdSchedulerFactory initialize (@Nonnull @WillNotClose final InputStream propertiesStream) throws SchedulerException
   {
     // short-circuit if already initialized
     if (m_aCfg != null)
@@ -399,7 +407,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     if (m_aInitException != null)
       throw m_aInitException;
 
-    final Properties props = new Properties ();
+    final NonBlockingProperties props = new NonBlockingProperties ();
     if (propertiesStream != null)
     {
       try
@@ -430,7 +438,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * @return this
    */
   @Nonnull
-  public StdSchedulerFactory initialize (final Properties props) throws SchedulerException
+  public StdSchedulerFactory initialize (final NonBlockingProperties props) throws SchedulerException
   {
     if (m_sPropSrc == null)
       m_sPropSrc = "an externally provided properties instance.";
@@ -458,7 +466,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     IThreadPool tp = null;
     QuartzScheduler qs = null;
     String instanceIdGeneratorClass = null;
-    Properties tProps = null;
+    NonBlockingProperties tProps;
     boolean autoId = false;
     long idleWaitTime = -1;
     String classLoadHelperClass;
@@ -512,7 +520,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     final boolean interruptJobsOnShutdownWithWait = m_aCfg.getBooleanProperty (PROP_SCHED_INTERRUPT_JOBS_ON_SHUTDOWN_WITH_WAIT,
                                                                                false);
 
-    final Properties schedCtxtProps = m_aCfg.getPropertyGroup (PROP_SCHED_CONTEXT_PREFIX, true);
+    final NonBlockingProperties schedCtxtProps = m_aCfg.getPropertyGroup (PROP_SCHED_CONTEXT_PREFIX, true);
 
     // Create class load helper
     IClassLoadHelper loadHelper = null;
@@ -658,25 +666,25 @@ public class StdSchedulerFactory implements ISchedulerFactory
     // Set up any SchedulerPlugins
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    final String [] pluginNames = m_aCfg.getPropertyGroups (PROP_PLUGIN_PREFIX);
-    final ISchedulerPlugin [] plugins = new ISchedulerPlugin [pluginNames.length];
-    for (int i = 0; i < pluginNames.length; i++)
+    final ICommonsList <String> pluginNames = m_aCfg.getPropertyGroups (PROP_PLUGIN_PREFIX);
+    final ICommonsList <ISchedulerPlugin> plugins = new CommonsArrayList <> ();
+    for (final String pluginName : pluginNames)
     {
-      final Properties pp = m_aCfg.getPropertyGroup (PROP_PLUGIN_PREFIX + "." + pluginNames[i], true);
+      final NonBlockingProperties pp = m_aCfg.getPropertyGroup (PROP_PLUGIN_PREFIX + "." + pluginName, true);
 
       final String plugInClass = pp.getProperty (PROP_PLUGIN_CLASS, null);
-
       if (plugInClass == null)
       {
         m_aInitException = new SchedulerException ("SchedulerPlugin class not specified for plugin '" +
-                                                   pluginNames[i] +
+                                                   pluginName +
                                                    "'");
         throw m_aInitException;
       }
-      ISchedulerPlugin plugin = null;
+
+      ISchedulerPlugin aPlugin = null;
       try
       {
-        plugin = (ISchedulerPlugin) loadHelper.loadClass (plugInClass).newInstance ();
+        aPlugin = (ISchedulerPlugin) loadHelper.loadClass (plugInClass).newInstance ();
       }
       catch (final Exception e)
       {
@@ -688,7 +696,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       }
       try
       {
-        _setBeanProps (plugin, pp);
+        _setBeanProps (aPlugin, pp);
       }
       catch (final Exception e)
       {
@@ -699,25 +707,25 @@ public class StdSchedulerFactory implements ISchedulerFactory
         throw m_aInitException;
       }
 
-      plugins[i] = plugin;
+      plugins.add (aPlugin);
     }
 
     // Set up any JobListeners
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     final Class <?> [] strArg = new Class [] { String.class };
-    final String [] jobListenerNames = m_aCfg.getPropertyGroups (PROP_JOB_LISTENER_PREFIX);
-    final IJobListener [] jobListeners = new IJobListener [jobListenerNames.length];
-    for (int i = 0; i < jobListenerNames.length; i++)
+    final ICommonsList <String> jobListenerNames = m_aCfg.getPropertyGroups (PROP_JOB_LISTENER_PREFIX);
+    final ICommonsList <IJobListener> jobListeners = new CommonsArrayList <> ();
+    for (final String jobListenerName : jobListenerNames)
     {
-      final Properties lp = m_aCfg.getPropertyGroup (PROP_JOB_LISTENER_PREFIX + "." + jobListenerNames[i], true);
+      final NonBlockingProperties lp = m_aCfg.getPropertyGroup (PROP_JOB_LISTENER_PREFIX + "." + jobListenerName, true);
 
       final String listenerClass = lp.getProperty (PROP_LISTENER_CLASS, null);
 
       if (listenerClass == null)
       {
         m_aInitException = new SchedulerException ("JobListener class not specified for listener '" +
-                                                   jobListenerNames[i] +
+                                                   jobListenerName +
                                                    "'");
         throw m_aInitException;
       }
@@ -747,7 +755,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
         }
         if (nameSetter != null)
         {
-          nameSetter.invoke (listener, new Object [] { jobListenerNames[i] });
+          nameSetter.invoke (listener, new Object [] { jobListenerName });
         }
         _setBeanProps (listener, lp);
       }
@@ -759,27 +767,27 @@ public class StdSchedulerFactory implements ISchedulerFactory
                                                    e);
         throw m_aInitException;
       }
-      jobListeners[i] = listener;
+      jobListeners.add (listener);
     }
 
     // Set up any TriggerListeners
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    final String [] triggerListenerNames = m_aCfg.getPropertyGroups (PROP_TRIGGER_LISTENER_PREFIX);
-    final ITriggerListener [] triggerListeners = new ITriggerListener [triggerListenerNames.length];
-    for (int i = 0; i < triggerListenerNames.length; i++)
+    final ICommonsList <String> triggerListenerNames = m_aCfg.getPropertyGroups (PROP_TRIGGER_LISTENER_PREFIX);
+    final ICommonsList <ITriggerListener> triggerListeners = new CommonsArrayList <> ();
+    for (final String triggerListenerName : triggerListenerNames)
     {
-      final Properties lp = m_aCfg.getPropertyGroup (PROP_TRIGGER_LISTENER_PREFIX +
-                                                     "." +
-                                                     triggerListenerNames[i],
-                                                     true);
+      final NonBlockingProperties lp = m_aCfg.getPropertyGroup (PROP_TRIGGER_LISTENER_PREFIX +
+                                                                "." +
+                                                                triggerListenerName,
+                                                                true);
 
       final String listenerClass = lp.getProperty (PROP_LISTENER_CLASS, null);
 
       if (listenerClass == null)
       {
         m_aInitException = new SchedulerException ("TriggerListener class not specified for listener '" +
-                                                   triggerListenerNames[i] +
+                                                   triggerListenerName +
                                                    "'");
         throw m_aInitException;
       }
@@ -807,7 +815,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
         { /* do nothing */ }
         if (nameSetter != null)
         {
-          nameSetter.invoke (listener, new Object [] { triggerListenerNames[i] });
+          nameSetter.invoke (listener, new Object [] { triggerListenerName });
         }
         _setBeanProps (listener, lp);
       }
@@ -819,7 +827,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
                                                    e);
         throw m_aInitException;
       }
-      triggerListeners[i] = listener;
+      triggerListeners.add (listener);
     }
 
     boolean tpInited = false;
@@ -943,9 +951,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
       }
 
       // Initialize plugins now that we have a Scheduler instance.
-      for (int i = 0; i < plugins.length; i++)
+      for (int i = 0; i < plugins.size (); i++)
       {
-        plugins[i].initialize (pluginNames[i], scheduler, loadHelper);
+        plugins.getAtIndex (i).initialize (pluginNames.getAtIndex (i), scheduler, loadHelper);
       }
 
       // add listeners
@@ -1034,11 +1042,11 @@ public class StdSchedulerFactory implements ISchedulerFactory
     return scheduler;
   }
 
-  private void _setBeanProps (final Object obj, final Properties props) throws NoSuchMethodException,
-                                                                        IllegalAccessException,
-                                                                        InvocationTargetException,
-                                                                        IntrospectionException,
-                                                                        SchedulerConfigException
+  private void _setBeanProps (final Object obj, final NonBlockingProperties props) throws NoSuchMethodException,
+                                                                                   IllegalAccessException,
+                                                                                   InvocationTargetException,
+                                                                                   IntrospectionException,
+                                                                                   SchedulerConfigException
   {
     props.remove ("class");
 
@@ -1046,10 +1054,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
     final PropertyDescriptor [] propDescs = bi.getPropertyDescriptors ();
     final PropertiesParser pp = new PropertiesParser (props);
 
-    final java.util.Enumeration <Object> keys = props.keys ();
-    while (keys.hasMoreElements ())
+    for (final String name : props.keySet ())
     {
-      final String name = (String) keys.nextElement ();
       final String c = name.substring (0, 1).toUpperCase (Locale.US);
       final String methName = "set" + c + name.substring (1);
 

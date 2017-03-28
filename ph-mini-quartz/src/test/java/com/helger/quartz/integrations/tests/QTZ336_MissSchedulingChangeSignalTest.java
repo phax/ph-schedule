@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -60,7 +60,7 @@ public class QTZ336_MissSchedulingChangeSignalTest
   @Ignore ("Takes nearly a minute to execute and works")
   public void simpleScheduleAlwaysFiredUnder50s () throws Exception
   {
-    final Properties properties = new Properties ();
+    final NonBlockingProperties properties = new NonBlockingProperties ();
     try (final InputStream propertiesIs = getClass ().getResourceAsStream ("/quartz/quartz.properties"))
     {
       properties.load (propertiesIs);

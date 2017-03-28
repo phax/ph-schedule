@@ -18,13 +18,12 @@
  */
 package com.helger.quartz.integrations.tests;
 
-import java.util.Properties;
-
 import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.impl.StdSchedulerFactory;
@@ -45,7 +44,7 @@ public class QuartzMemoryTestSupport
   @Before
   public void initSchedulerBeforeTest () throws Exception
   {
-    final Properties properties = createSchedulerProperties ();
+    final NonBlockingProperties properties = createSchedulerProperties ();
     final ISchedulerFactory sf = new StdSchedulerFactory ().initialize (properties);
     scheduler = sf.getScheduler ();
     afterSchedulerInit ();
@@ -58,9 +57,9 @@ public class QuartzMemoryTestSupport
     LOG.info ("Scheduler started.");
   }
 
-  protected Properties createSchedulerProperties ()
+  protected NonBlockingProperties createSchedulerProperties ()
   {
-    final Properties properties = new Properties ();
+    final NonBlockingProperties properties = new NonBlockingProperties ();
     properties.put (StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, "TestScheduler");
     properties.put (StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, "AUTO");
     properties.put (StdSchedulerFactory.PROP_THREAD_POOL_CLASS, SimpleThreadPool.class.getName ());

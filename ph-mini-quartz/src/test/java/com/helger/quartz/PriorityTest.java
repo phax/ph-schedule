@@ -21,12 +21,12 @@ package com.helger.quartz;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
-import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
@@ -64,7 +64,7 @@ public class PriorityTest
   @Test
   public void testSameDefaultPriority () throws Exception
   {
-    final Properties config = new Properties ();
+    final NonBlockingProperties config = new NonBlockingProperties ();
     config.setProperty ("org.quartz.threadPool.threadCount", "1");
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
 
@@ -96,7 +96,7 @@ public class PriorityTest
   @Test
   public void testDifferentPriority () throws Exception
   {
-    final Properties config = new Properties ();
+    final NonBlockingProperties config = new NonBlockingProperties ();
     config.setProperty ("org.quartz.threadPool.threadCount", "1");
     config.setProperty ("org.quartz.threadPool.class", SimpleThreadPool.class.getName ());
 
