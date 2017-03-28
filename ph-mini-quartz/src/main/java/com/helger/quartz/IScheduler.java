@@ -905,5 +905,4 @@ public interface IScheduler extends Serializable
    * @throws SchedulerException
    */
   void clear () throws SchedulerException;
-
 }

@@ -18,9 +18,10 @@
  */
 package com.helger.quartz.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.quartz.spi.IJobStore;
 import com.helger.quartz.spi.ISchedulerPlugin;
 import com.helger.quartz.spi.IThreadExecutor;
@@ -37,50 +38,24 @@ import com.helger.quartz.spi.IThreadPool;
  */
 public class QuartzSchedulerResources
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   public static final String CREATE_REGISTRY_NEVER = "never";
-
   public static final String CREATE_REGISTRY_ALWAYS = "always";
-
   public static final String CREATE_REGISTRY_AS_NEEDED = "as_needed";
 
   private String name;
-
   private String instanceId;
-
   private String threadName;
-
   private IThreadPool threadPool;
   private IJobStore jobStore;
-
   private IJobRunShellFactory jobRunShellFactory;
-
-  private final List <ISchedulerPlugin> schedulerPlugins = new ArrayList <> (10);
-
+  private final ICommonsList <ISchedulerPlugin> schedulerPlugins = new CommonsArrayList <> (10);
   private boolean makeSchedulerThreadDaemon = false;
-
   private boolean threadsInheritInitializersClassLoadContext = false;
-
   private IThreadExecutor threadExecutor;
-
   private long batchTimeWindow = 0;
-
   private int maxBatchSize = 1;
-
   private boolean interruptJobsOnShutdown = false;
   private boolean interruptJobsOnShutdownWithWait = false;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
@@ -91,12 +66,6 @@ public class QuartzSchedulerResources
   {
     // do nothing...
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>

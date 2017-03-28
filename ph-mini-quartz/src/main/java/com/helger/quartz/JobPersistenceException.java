@@ -46,5 +46,4 @@ public class JobPersistenceException extends SchedulerException
   {
     super (msg, cause);
   }
-
 }

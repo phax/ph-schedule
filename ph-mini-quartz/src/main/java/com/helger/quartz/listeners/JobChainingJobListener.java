@@ -18,9 +18,11 @@
  */
 package com.helger.quartz.listeners;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.Nonnull;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.collection.ext.CommonsHashMap;
+import com.helger.commons.collection.ext.ICommonsMap;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
@@ -48,9 +50,8 @@ import com.helger.quartz.SchedulerException;
  */
 public class JobChainingJobListener extends AbstractJobListenerSupport
 {
-
-  private final String name;
-  private final Map <JobKey, JobKey> chainLinks;
+  private final String m_sName;
+  private final ICommonsMap <JobKey, JobKey> chainLinks = new CommonsHashMap <> ();
 
   /**
    * Construct an instance with the given name.
@@ -58,19 +59,15 @@ public class JobChainingJobListener extends AbstractJobListenerSupport
    * @param name
    *        the name of this instance
    */
-  public JobChainingJobListener (final String name)
+  public JobChainingJobListener (@Nonnull final String name)
   {
-    if (name == null)
-    {
-      throw new IllegalArgumentException ("Listener name cannot be null!");
-    }
-    this.name = name;
-    chainLinks = new HashMap <> ();
+    ValueEnforcer.notNull (name, "Name");
+    m_sName = name;
   }
 
   public String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   /**
@@ -84,33 +81,22 @@ public class JobChainingJobListener extends AbstractJobListenerSupport
    */
   public void addJobChainLink (final JobKey firstJob, final JobKey secondJob)
   {
-
-    if (firstJob == null || secondJob == null)
-    {
-      throw new IllegalArgumentException ("Key cannot be null!");
-    }
-
-    if (firstJob.getName () == null || secondJob.getName () == null)
-    {
-      throw new IllegalArgumentException ("Key cannot have a null name!");
-    }
+    ValueEnforcer.notNull (firstJob, "FirstJob");
+    ValueEnforcer.notNull (firstJob.getName (), "FirstJob.Name");
+    ValueEnforcer.notNull (secondJob, "SecondJob");
+    ValueEnforcer.notNull (secondJob.getName (), "SecondJob.Name");
 
     chainLinks.put (firstJob, secondJob);
   }
 
   @Override
-  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (@Nonnull final IJobExecutionContext context, final JobExecutionException jobException)
   {
-
     final JobKey sj = chainLinks.get (context.getJobDetail ().getKey ());
-
     if (sj == null)
-    {
       return;
-    }
 
     getLog ().info ("Job '" + context.getJobDetail ().getKey () + "' will now chain to Job '" + sj + "'");
-
     try
     {
       context.getScheduler ().triggerJob (sj);

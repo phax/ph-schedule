@@ -18,8 +18,10 @@
  */
 package com.helger.quartz.utils;
 
-import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+
+import com.helger.commons.compare.IComparable;
 
 /**
  * <p>
@@ -28,7 +30,7 @@ import java.util.UUID;
  *
  * @author <a href="mailto:jeff@binaryfeed.org">Jeffrey Wescott</a>
  */
-public class Key <T> implements Serializable, Comparable <Key <T>>
+public class Key <T> implements IComparable <Key <T>>
 {
   /**
    * The default group for scheduling entities, with the value "DEFAULT".
@@ -37,12 +39,6 @@ public class Key <T> implements Serializable, Comparable <Key <T>>
 
   private final String name;
   private final String group;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * Construct a new key with the given name and group.
@@ -62,12 +58,6 @@ public class Key <T> implements Serializable, Comparable <Key <T>>
     else
       this.group = DEFAULT_GROUP;
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
@@ -149,7 +139,6 @@ public class Key <T> implements Serializable, Comparable <Key <T>>
 
   public int compareTo (final Key <T> o)
   {
-
     if (group.equals (DEFAULT_GROUP) && !o.group.equals (DEFAULT_GROUP))
       return -1;
     if (!group.equals (DEFAULT_GROUP) && o.group.equals (DEFAULT_GROUP))
@@ -162,10 +151,12 @@ public class Key <T> implements Serializable, Comparable <Key <T>>
     return name.compareTo (o.getName ());
   }
 
-  public static String createUniqueName (final String group)
+  public static String createUniqueName (final String sGroup)
   {
     final String n1 = UUID.randomUUID ().toString ();
-    final String n2 = UUID.nameUUIDFromBytes ((group != null ? group : DEFAULT_GROUP).getBytes ()).toString ();
+    final String n2 = UUID.nameUUIDFromBytes ((sGroup != null ? sGroup : DEFAULT_GROUP)
+                                                                                     .getBytes (StandardCharsets.ISO_8859_1))
+                          .toString ();
 
     return n2.substring (24) + "-" + n1;
   }

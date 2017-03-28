@@ -23,8 +23,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class ClassUtils
+public final class ClassUtils
 {
+  private ClassUtils ()
+  {}
 
   public static boolean isAnnotationPresent (final Class <?> clazz, final Class <? extends Annotation> a)
   {

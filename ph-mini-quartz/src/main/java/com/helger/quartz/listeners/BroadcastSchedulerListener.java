@@ -18,15 +18,17 @@
  */
 package com.helger.quartz.listeners;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import javax.annotation.Nonnull;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.collection.ext.CommonsLinkedList;
+import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.quartz.IJobDetail;
-import com.helger.quartz.JobKey;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.JobKey;
+import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerKey;
 
 /**
@@ -44,13 +46,10 @@ import com.helger.quartz.TriggerKey;
  */
 public class BroadcastSchedulerListener implements ISchedulerListener
 {
-
-  private final List <ISchedulerListener> listeners;
+  private final ICommonsList <ISchedulerListener> m_aListeners = new CommonsLinkedList <> ();
 
   public BroadcastSchedulerListener ()
-  {
-    listeners = new LinkedList <> ();
-  }
+  {}
 
   /**
    * Construct an instance with the given List of listeners.
@@ -58,225 +57,126 @@ public class BroadcastSchedulerListener implements ISchedulerListener
    * @param listeners
    *        the initial List of SchedulerListeners to broadcast to.
    */
-  public BroadcastSchedulerListener (final List <ISchedulerListener> listeners)
+  public BroadcastSchedulerListener (final Iterable <? extends ISchedulerListener> listeners)
   {
-    this ();
-    this.listeners.addAll (listeners);
+    m_aListeners.addAll (listeners);
   }
 
-  public void addListener (final ISchedulerListener listener)
+  public void addListener (@Nonnull final ISchedulerListener listener)
   {
-    listeners.add (listener);
+    ValueEnforcer.notNull (listener, "Listener");
+    m_aListeners.add (listener);
   }
 
   public boolean removeListener (final ISchedulerListener listener)
   {
-    return listeners.remove (listener);
+    return m_aListeners.remove (listener);
   }
 
-  public List <ISchedulerListener> getListeners ()
+  @Nonnull
+  @ReturnsMutableCopy
+  public ICommonsList <ISchedulerListener> getListeners ()
   {
-    return java.util.Collections.unmodifiableList (listeners);
+    return m_aListeners.getClone ();
   }
 
   public void jobAdded (final IJobDetail jobDetail)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.jobAdded (jobDetail);
-    }
+    m_aListeners.forEach (x -> x.jobAdded (jobDetail));
   }
 
   public void jobDeleted (final JobKey jobKey)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.jobDeleted (jobKey);
-    }
+    m_aListeners.forEach (x -> x.jobDeleted (jobKey));
   }
 
   public void jobScheduled (final ITrigger trigger)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.jobScheduled (trigger);
-    }
+    m_aListeners.forEach (x -> x.jobScheduled (trigger));
   }
 
   public void jobUnscheduled (final TriggerKey triggerKey)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.jobUnscheduled (triggerKey);
-    }
+    m_aListeners.forEach (x -> x.jobUnscheduled (triggerKey));
   }
 
   public void triggerFinalized (final ITrigger trigger)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.triggerFinalized (trigger);
-    }
+    m_aListeners.forEach (x -> x.triggerFinalized (trigger));
   }
 
   public void triggerPaused (final TriggerKey key)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.triggerPaused (key);
-    }
+    m_aListeners.forEach (x -> x.triggerPaused (key));
   }
 
   public void triggersPaused (final String triggerGroup)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.triggersPaused (triggerGroup);
-    }
+    m_aListeners.forEach (x -> x.triggersPaused (triggerGroup));
   }
 
   public void triggerResumed (final TriggerKey key)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.triggerResumed (key);
-    }
+    m_aListeners.forEach (x -> x.triggerResumed (key));
   }
 
   public void triggersResumed (final String triggerGroup)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.triggersResumed (triggerGroup);
-    }
+    m_aListeners.forEach (x -> x.triggersResumed (triggerGroup));
   }
 
   public void schedulingDataCleared ()
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.schedulingDataCleared ();
-    }
+    m_aListeners.forEach (x -> x.schedulingDataCleared ());
   }
 
   public void jobPaused (final JobKey key)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.jobPaused (key);
-    }
+    m_aListeners.forEach (x -> x.jobPaused (key));
   }
 
   public void jobsPaused (final String jobGroup)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.jobsPaused (jobGroup);
-    }
+    m_aListeners.forEach (x -> x.jobsPaused (jobGroup));
   }
 
   public void jobResumed (final JobKey key)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.jobResumed (key);
-    }
+    m_aListeners.forEach (x -> x.jobResumed (key));
   }
 
   public void jobsResumed (final String jobGroup)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.jobsResumed (jobGroup);
-    }
+    m_aListeners.forEach (x -> x.jobsResumed (jobGroup));
   }
 
   public void schedulerError (final String msg, final SchedulerException cause)
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.schedulerError (msg, cause);
-    }
+    m_aListeners.forEach (x -> x.schedulerError (msg, cause));
   }
 
   public void schedulerStarted ()
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.schedulerStarted ();
-    }
+    m_aListeners.forEach (x -> x.schedulerStarted ());
   }
 
   public void schedulerStarting ()
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.schedulerStarting ();
-    }
+    m_aListeners.forEach (x -> x.schedulerStarting ());
   }
 
   public void schedulerInStandbyMode ()
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.schedulerInStandbyMode ();
-    }
+    m_aListeners.forEach (x -> x.schedulerInStandbyMode ());
   }
 
   public void schedulerShutdown ()
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.schedulerShutdown ();
-    }
+    m_aListeners.forEach (x -> x.schedulerShutdown ());
   }
 
   public void schedulerShuttingdown ()
   {
-    final Iterator <ISchedulerListener> itr = listeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ISchedulerListener l = itr.next ();
-      l.schedulerShuttingdown ();
-    }
+    m_aListeners.forEach (x -> x.schedulerShuttingdown ());
   }
-
 }

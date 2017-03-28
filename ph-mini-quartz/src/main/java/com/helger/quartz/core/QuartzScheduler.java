@@ -88,7 +88,7 @@ import com.helger.quartz.utils.Key;
  * @see com.helger.quartz.spi.IThreadPool
  * @author James House
  */
-public class QuartzScheduler implements IRemotableQuartzScheduler
+public class QuartzScheduler implements IQuartzScheduler
 {
   private static String VERSION_MAJOR = "UNKNOWN";
   private static String VERSION_MINOR = "UNKNOWN";
@@ -2267,7 +2267,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
    * instance, not across the entire cluster.
    * </p>
    *
-   * @see com.helger.quartz.core.IRemotableQuartzScheduler#interrupt(JobKey)
+   * @see com.helger.quartz.core.IQuartzScheduler#interrupt(JobKey)
    */
   public boolean interrupt (final JobKey jobKey) throws UnableToInterruptJobException
   {
@@ -2312,7 +2312,7 @@ public class QuartzScheduler implements IRemotableQuartzScheduler
    * instance, not across the entire cluster.
    * </p>
    *
-   * @see com.helger.quartz.core.IRemotableQuartzScheduler#interrupt(JobKey)
+   * @see com.helger.quartz.core.IQuartzScheduler#interrupt(JobKey)
    */
   public boolean interrupt (final String fireInstanceId) throws UnableToInterruptJobException
   {

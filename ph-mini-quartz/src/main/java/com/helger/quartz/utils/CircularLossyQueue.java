@@ -32,10 +32,9 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class CircularLossyQueue <T>
 {
-  private final AtomicReference <T> [] circularArray;
-  private final int maxSize;
-
-  private final AtomicLong currentIndex = new AtomicLong (-1);
+  private final AtomicReference <T> [] m_aCircularArray;
+  private final int m_nMaxSize;
+  private final AtomicLong m_aCurrentIndex = new AtomicLong (-1);
 
   /**
    * Constructs the circular queue with the specified capacity
@@ -45,12 +44,10 @@ public class CircularLossyQueue <T>
   @SuppressWarnings ("unchecked")
   public CircularLossyQueue (final int size)
   {
-    this.circularArray = new AtomicReference [size];
+    m_aCircularArray = new AtomicReference [size];
     for (int i = 0; i < size; i++)
-    {
-      this.circularArray[i] = new AtomicReference <> ();
-    }
-    this.maxSize = size;
+      m_aCircularArray[i] = new AtomicReference <> ();
+    m_nMaxSize = size;
   }
 
   /**
@@ -60,8 +57,8 @@ public class CircularLossyQueue <T>
    */
   public void push (final T newVal)
   {
-    final int index = (int) (currentIndex.incrementAndGet () % maxSize);
-    circularArray[index].set (newVal);
+    final int index = (int) (m_aCurrentIndex.incrementAndGet () % m_nMaxSize);
+    m_aCircularArray[index].set (newVal);
   }
 
   /**
@@ -77,23 +74,23 @@ public class CircularLossyQueue <T>
   {
     System.getProperties ();
 
-    if (type.length > maxSize)
+    if (type.length > m_nMaxSize)
     {
-      throw new IllegalArgumentException ("Size of array passed in cannot be greater than " + maxSize);
+      throw new IllegalArgumentException ("Size of array passed in cannot be greater than " + m_nMaxSize);
     }
 
-    final int curIndex = getCurrentIndex ();
+    final int curIndex = _getCurrentIndex ();
     for (int k = 0; k < type.length; k++)
     {
-      final int index = getIndex (curIndex - k);
-      type[k] = circularArray[index].get ();
+      final int index = _getIndex (curIndex - k);
+      type[k] = m_aCircularArray[index].get ();
     }
     return type;
   }
 
-  private int getIndex (final int index)
+  private int _getIndex (final int index)
   {
-    return (index < 0 ? index + maxSize : index);
+    return index < 0 ? index + m_nMaxSize : index;
   }
 
   /**
@@ -104,10 +101,8 @@ public class CircularLossyQueue <T>
   public T peek ()
   {
     if (depth () == 0)
-    {
       return null;
-    }
-    return circularArray[getIndex (getCurrentIndex ())].get ();
+    return m_aCircularArray[_getIndex (_getCurrentIndex ())].get ();
   }
 
   /**
@@ -120,9 +115,9 @@ public class CircularLossyQueue <T>
     return depth () == 0;
   }
 
-  private int getCurrentIndex ()
+  private int _getCurrentIndex ()
   {
-    return (int) (currentIndex.get () % maxSize);
+    return (int) (m_aCurrentIndex.get () % m_nMaxSize);
   }
 
   /**
@@ -132,7 +127,7 @@ public class CircularLossyQueue <T>
    */
   public int depth ()
   {
-    final long currInd = currentIndex.get () + 1;
-    return currInd >= maxSize ? maxSize : (int) currInd;
+    final long currInd = m_aCurrentIndex.get () + 1;
+    return currInd >= m_nMaxSize ? m_nMaxSize : (int) currInd;
   }
 }

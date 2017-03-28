@@ -153,9 +153,7 @@ public class DirtyFlagMap <K, V> implements ICommonsMap <K, V>, Cloneable
   public boolean equals (final Object obj)
   {
     if (obj == null || !(obj instanceof DirtyFlagMap))
-    {
       return false;
-    }
 
     return m_aMap.equals (((DirtyFlagMap <?, ?>) obj).getWrappedMap ());
   }
