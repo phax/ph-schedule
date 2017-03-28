@@ -199,13 +199,6 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    *        the minute of the given hour to fire
    * @return the new CronScheduleBuilder
    * @see CronExpression
-   * @see DateBuilder#MONDAY
-   * @see DateBuilder#TUESDAY
-   * @see DateBuilder#WEDNESDAY
-   * @see DateBuilder#THURSDAY
-   * @see DateBuilder#FRIDAY
-   * @see DateBuilder#SATURDAY
-   * @see DateBuilder#SUNDAY
    */
   @Nonnull
   public static CronScheduleBuilder atHourAndMinuteOnGivenDaysOfWeek (final int hour,
@@ -241,13 +234,6 @@ public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
    *        the minute of the given hour to fire
    * @return the new CronScheduleBuilder
    * @see CronExpression
-   * @see DateBuilder#MONDAY
-   * @see DateBuilder#TUESDAY
-   * @see DateBuilder#WEDNESDAY
-   * @see DateBuilder#THURSDAY
-   * @see DateBuilder#FRIDAY
-   * @see DateBuilder#SATURDAY
-   * @see DateBuilder#SUNDAY
    */
   @Nonnull
   public static CronScheduleBuilder weeklyOnDayAndHourAndMinute (final DayOfWeek dayOfWeek,
