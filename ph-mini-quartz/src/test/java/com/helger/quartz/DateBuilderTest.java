@@ -57,6 +57,8 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
+import com.helger.commons.datetime.PDTFactory;
+
 /**
  * Unit test for JobDetail.
  */
@@ -67,7 +69,7 @@ public class DateBuilderTest
   {
     final Date t = dateOf (10, 30, 0, 1, JULY, 2013); // july 1 10:30:00 am
 
-    final Calendar vc = Calendar.getInstance ();
+    final Calendar vc = PDTFactory.createCalendar ();
     vc.set (Calendar.YEAR, 2013);
     vc.set (Calendar.MONTH, Calendar.JULY);
     vc.set (Calendar.DAY_OF_MONTH, 1);
@@ -85,7 +87,7 @@ public class DateBuilderTest
   public void testBuilder ()
   {
 
-    Calendar vc = Calendar.getInstance ();
+    Calendar vc = PDTFactory.createCalendar ();
     vc.set (Calendar.YEAR, 2013);
     vc.set (Calendar.MONTH, Calendar.JULY);
     vc.set (Calendar.DAY_OF_MONTH, 1);
@@ -157,7 +159,7 @@ public class DateBuilderTest
   public void testEvensBuilders ()
   {
 
-    final Calendar vc = Calendar.getInstance ();
+    final Calendar vc = PDTFactory.createCalendar ();
     vc.set (Calendar.YEAR, 2013);
     vc.set (Calendar.MONTH, Calendar.JUNE);
     vc.set (Calendar.DAY_OF_MONTH, 1);
@@ -229,7 +231,7 @@ public class DateBuilderTest
   public void testGivenBuilders ()
   {
 
-    final Calendar vc = Calendar.getInstance ();
+    final Calendar vc = PDTFactory.createCalendar ();
 
     vc.set (Calendar.SECOND, 54);
     vc.set (Calendar.MINUTE, 13);
@@ -256,8 +258,8 @@ public class DateBuilderTest
   public void testAtBuilders ()
   {
 
-    final Calendar rd = Calendar.getInstance ();
-    final Calendar vc = Calendar.getInstance ();
+    final Calendar rd = PDTFactory.createCalendar ();
+    final Calendar vc = PDTFactory.createCalendar ();
 
     rd.setTime (new Date ());
     Date bd = todayAt (10, 33, 12);
@@ -323,7 +325,7 @@ public class DateBuilderTest
   public void testMonthTranslations ()
   {
 
-    final Calendar vc = Calendar.getInstance ();
+    final Calendar vc = PDTFactory.createCalendar ();
 
     Date bd = newDate ().inYear (2013).inMonthOnDay (JANUARY, 1).atHourMinuteAndSecond (10, 30, 0).build ();
     vc.setTime (bd);

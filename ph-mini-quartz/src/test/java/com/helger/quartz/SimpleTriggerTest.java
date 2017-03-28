@@ -28,6 +28,7 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 
 /**
@@ -36,8 +37,8 @@ import com.helger.quartz.impl.triggers.SimpleTrigger;
 public class SimpleTriggerTest
 {
   private static final TimeZone EST_TIME_ZONE = TimeZone.getTimeZone ("US/Eastern");
-  private static final Calendar START_TIME = Calendar.getInstance ();
-  private static final Calendar END_TIME = Calendar.getInstance ();
+  private static final Calendar START_TIME = PDTFactory.createCalendar ();
+  private static final Calendar END_TIME = PDTFactory.createCalendar ();
 
   static
   {
@@ -53,10 +54,10 @@ public class SimpleTriggerTest
   public void testUpdateAfterMisfire ()
   {
 
-    final Calendar startTime = Calendar.getInstance ();
+    final Calendar startTime = PDTFactory.createCalendar ();
     startTime.set (2005, Calendar.JULY, 5, 9, 0, 0);
 
-    final Calendar endTime = Calendar.getInstance ();
+    final Calendar endTime = PDTFactory.createCalendar ();
     endTime.set (2005, Calendar.JULY, 5, 10, 0, 0);
 
     final SimpleTrigger simpleTrigger = new SimpleTrigger ();

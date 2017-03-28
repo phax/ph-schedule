@@ -34,7 +34,6 @@ import org.junit.Test;
 import com.helger.commons.collection.ext.CommonsHashSet;
 import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.commons.collection.ext.ICommonsSet;
-import com.helger.commons.string.StringHelper;
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
@@ -462,7 +461,6 @@ public class DailyTimeIntervalTriggerTest
 
     final ICommonsList <Date> fireTimes = TriggerUtils.computeFireTimes (trigger, null, 48);
     assertEquals (48, fireTimes.size ());
-    System.out.println (StringHelper.getImploded ('\n', fireTimes));
     assertEquals (dateOf (8, 0, 0, 1, Month.JANUARY, 2011), fireTimes.get (0));
     assertEquals (Calendar.SATURDAY, _getDayOfWeek (fireTimes.get (0)));
     assertEquals (dateOf (8, 0, 0, 2, Month.JANUARY, 2011), fireTimes.get (10));
