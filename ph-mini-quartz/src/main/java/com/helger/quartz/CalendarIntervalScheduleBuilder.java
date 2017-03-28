@@ -20,6 +20,9 @@ package com.helger.quartz;
 
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
 /**
@@ -55,13 +58,13 @@ import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
  */
 public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalendarIntervalTrigger>
 {
-  private int interval = 1;
-  private EIntervalUnit intervalUnit = EIntervalUnit.DAY;
+  private int m_nInterval = 1;
+  private EIntervalUnit m_eIntervalUnit = EIntervalUnit.DAY;
 
-  private int misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
-  private TimeZone timeZone;
-  private boolean preserveHourOfDayAcrossDaylightSavings;
-  private boolean skipDayIfHourDoesNotExist;
+  private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private TimeZone m_aTimeZone;
+  private boolean m_bPreserveHourOfDayAcrossDaylightSavings;
+  private boolean m_bSkipDayIfHourDoesNotExist;
 
   protected CalendarIntervalScheduleBuilder ()
   {}
@@ -71,6 +74,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    *
    * @return the new CalendarIntervalScheduleBuilder
    */
+  @Nonnull
   public static CalendarIntervalScheduleBuilder calendarIntervalSchedule ()
   {
     return new CalendarIntervalScheduleBuilder ();
@@ -83,17 +87,16 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    *
    * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
+  @Nonnull
   public CalendarIntervalTrigger build ()
   {
-
     final CalendarIntervalTrigger st = new CalendarIntervalTrigger ();
-    st.setRepeatInterval (interval);
-    st.setRepeatIntervalUnit (intervalUnit);
-    st.setMisfireInstruction (misfireInstruction);
-    st.setTimeZone (timeZone);
-    st.setPreserveHourOfDayAcrossDaylightSavings (preserveHourOfDayAcrossDaylightSavings);
-    st.setSkipDayIfHourDoesNotExist (skipDayIfHourDoesNotExist);
-
+    st.setRepeatInterval (m_nInterval);
+    st.setRepeatIntervalUnit (m_eIntervalUnit);
+    st.setMisfireInstruction (m_nMisfireInstruction);
+    st.setTimeZone (m_aTimeZone);
+    st.setPreserveHourOfDayAcrossDaylightSavings (m_bPreserveHourOfDayAcrossDaylightSavings);
+    st.setSkipDayIfHourDoesNotExist (m_bSkipDayIfHourDoesNotExist);
     return st;
   }
 
@@ -108,13 +111,13 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  public CalendarIntervalScheduleBuilder withInterval (final int timeInterval, final EIntervalUnit unit)
+  @Nonnull
+  public CalendarIntervalScheduleBuilder withInterval (final int timeInterval, @Nonnull final EIntervalUnit unit)
   {
-    if (unit == null)
-      throw new IllegalArgumentException ("TimeUnit must be specified.");
+    ValueEnforcer.notNull (unit, "Unit");
     _validateInterval (timeInterval);
-    this.interval = timeInterval;
-    this.intervalUnit = unit;
+    m_nInterval = timeInterval;
+    m_eIntervalUnit = unit;
     return this;
   }
 
@@ -128,11 +131,12 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withIntervalInSeconds (final int intervalInSeconds)
   {
     _validateInterval (intervalInSeconds);
-    this.interval = intervalInSeconds;
-    this.intervalUnit = EIntervalUnit.SECOND;
+    m_nInterval = intervalInSeconds;
+    m_eIntervalUnit = EIntervalUnit.SECOND;
     return this;
   }
 
@@ -146,11 +150,12 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withIntervalInMinutes (final int intervalInMinutes)
   {
     _validateInterval (intervalInMinutes);
-    this.interval = intervalInMinutes;
-    this.intervalUnit = EIntervalUnit.MINUTE;
+    m_nInterval = intervalInMinutes;
+    m_eIntervalUnit = EIntervalUnit.MINUTE;
     return this;
   }
 
@@ -164,11 +169,12 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withIntervalInHours (final int intervalInHours)
   {
     _validateInterval (intervalInHours);
-    this.interval = intervalInHours;
-    this.intervalUnit = EIntervalUnit.HOUR;
+    m_nInterval = intervalInHours;
+    m_eIntervalUnit = EIntervalUnit.HOUR;
     return this;
   }
 
@@ -182,11 +188,12 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withIntervalInDays (final int intervalInDays)
   {
     _validateInterval (intervalInDays);
-    this.interval = intervalInDays;
-    this.intervalUnit = EIntervalUnit.DAY;
+    m_nInterval = intervalInDays;
+    m_eIntervalUnit = EIntervalUnit.DAY;
     return this;
   }
 
@@ -200,11 +207,12 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withIntervalInWeeks (final int intervalInWeeks)
   {
     _validateInterval (intervalInWeeks);
-    this.interval = intervalInWeeks;
-    this.intervalUnit = EIntervalUnit.WEEK;
+    m_nInterval = intervalInWeeks;
+    m_eIntervalUnit = EIntervalUnit.WEEK;
     return this;
   }
 
@@ -218,11 +226,12 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withIntervalInMonths (final int intervalInMonths)
   {
     _validateInterval (intervalInMonths);
-    this.interval = intervalInMonths;
-    this.intervalUnit = EIntervalUnit.MONTH;
+    m_nInterval = intervalInMonths;
+    m_eIntervalUnit = EIntervalUnit.MONTH;
     return this;
   }
 
@@ -236,11 +245,12 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withIntervalInYears (final int intervalInYears)
   {
     _validateInterval (intervalInYears);
-    this.interval = intervalInYears;
-    this.intervalUnit = EIntervalUnit.YEAR;
+    m_nInterval = intervalInYears;
+    m_eIntervalUnit = EIntervalUnit.YEAR;
     return this;
   }
 
@@ -251,9 +261,10 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @return the updated CronScheduleBuilder
    * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    misfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
@@ -265,9 +276,10 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @return the updated CalendarIntervalScheduleBuilder
    * @see ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    misfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    m_nMisfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
@@ -279,9 +291,10 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @return the updated CalendarIntervalScheduleBuilder
    * @see ICalendarIntervalTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    misfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    m_nMisfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 
@@ -293,9 +306,10 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @return the updated CalendarIntervalScheduleBuilder
    * @see ICalendarIntervalTrigger#getTimeZone()
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder inTimeZone (final TimeZone timezone)
   {
-    this.timeZone = timezone;
+    m_aTimeZone = timezone;
     return this;
   }
 
@@ -323,9 +337,10 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * @see #inTimeZone(TimeZone)
    * @see TriggerBuilder#startAt(java.util.Date)
    */
-  public CalendarIntervalScheduleBuilder preserveHourOfDayAcrossDaylightSavings (final boolean preserveHourOfDay)
+  @Nonnull
+  public CalendarIntervalScheduleBuilder preserveHourOfDayAcrossDaylightSavings (final boolean bPreserveHourOfDay)
   {
-    this.preserveHourOfDayAcrossDaylightSavings = preserveHourOfDay;
+    m_bPreserveHourOfDayAcrossDaylightSavings = bPreserveHourOfDay;
     return this;
   }
 
@@ -347,15 +362,15 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    *
    * @see #preserveHourOfDayAcrossDaylightSavings(boolean)
    */
+  @Nonnull
   public CalendarIntervalScheduleBuilder skipDayIfHourDoesNotExist (final boolean skipDay)
   {
-    this.skipDayIfHourDoesNotExist = skipDay;
+    m_bSkipDayIfHourDoesNotExist = skipDay;
     return this;
   }
 
   private static void _validateInterval (final int timeInterval)
   {
-    if (timeInterval <= 0)
-      throw new IllegalArgumentException ("Interval must be a positive value.");
+    ValueEnforcer.isGT0 (timeInterval, "TimeInterval");
   }
 }

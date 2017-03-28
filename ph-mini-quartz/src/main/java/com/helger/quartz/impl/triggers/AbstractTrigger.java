@@ -20,6 +20,8 @@ package com.helger.quartz.impl.triggers;
 
 import java.util.Date;
 
+import javax.annotation.Nonnull;
+
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobExecutionContext;
@@ -854,6 +856,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
     }
   }
 
+  @Nonnull
   public TriggerBuilder <T> getTriggerBuilder ()
   {
     return TriggerBuilder.newTrigger ()
@@ -868,5 +871,6 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
                          .withSchedule (getScheduleBuilder ());
   }
 
+  @Nonnull
   public abstract IScheduleBuilder <T> getScheduleBuilder ();
 }

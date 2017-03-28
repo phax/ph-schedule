@@ -1010,7 +1010,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    * @see #getTriggerBuilder()
    */
   @Override
-  public IScheduleBuilder <ICalendarIntervalTrigger> getScheduleBuilder ()
+  public CalendarIntervalScheduleBuilder getScheduleBuilder ()
   {
     final CalendarIntervalScheduleBuilder cb = CalendarIntervalScheduleBuilder.calendarIntervalSchedule ()
                                                                               .withInterval (getRepeatInterval (),

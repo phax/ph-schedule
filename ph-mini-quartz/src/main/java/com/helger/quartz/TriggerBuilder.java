@@ -20,6 +20,9 @@ package com.helger.quartz;
 
 import java.util.Date;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.lang.GenericReflection;
 import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.utils.Key;
 
@@ -60,21 +63,18 @@ import com.helger.quartz.utils.Key;
  */
 public class TriggerBuilder <T extends ITrigger>
 {
-  private TriggerKey key;
-  private String description;
-  private Date startTime = new Date ();
-  private Date endTime;
-  private int priority = ITrigger.DEFAULT_PRIORITY;
-  private String calendarName;
-  private JobKey jobKey;
-  private JobDataMap jobDataMap = new JobDataMap ();
-
-  private IScheduleBuilder <?> scheduleBuilder = null;
+  private TriggerKey m_aKey;
+  private String m_sDescription;
+  private Date m_aStartTime = new Date ();
+  private Date m_aEndTime;
+  private int m_nPriority = ITrigger.DEFAULT_PRIORITY;
+  private String m_sCalendarName;
+  private JobKey m_aJobKey;
+  private JobDataMap m_aJobDataMap = new JobDataMap ();
+  private IScheduleBuilder <? extends ITrigger> m_aScheduleBuilder;
 
   private TriggerBuilder ()
-  {
-
-  }
+  {}
 
   /**
    * Create a new TriggerBuilder with which to define a specification for a
@@ -82,6 +82,7 @@ public class TriggerBuilder <T extends ITrigger>
    *
    * @return the new TriggerBuilder
    */
+  @Nonnull
   public static TriggerBuilder <ITrigger> newTrigger ()
   {
     return new TriggerBuilder <> ();
@@ -92,28 +93,26 @@ public class TriggerBuilder <T extends ITrigger>
    *
    * @return a Trigger that meets the specifications of the builder.
    */
-  @SuppressWarnings ("unchecked")
+  @Nonnull
   public T build ()
   {
+    if (m_aScheduleBuilder == null)
+      m_aScheduleBuilder = SimpleScheduleBuilder.simpleSchedule ();
+    final IMutableTrigger trig = m_aScheduleBuilder.build ();
+    trig.setCalendarName (m_sCalendarName);
+    trig.setDescription (m_sDescription);
+    trig.setStartTime (m_aStartTime);
+    trig.setEndTime (m_aEndTime);
+    if (m_aKey == null)
+      m_aKey = new TriggerKey (Key.createUniqueName (null), null);
+    trig.setKey (m_aKey);
+    if (m_aJobKey != null)
+      trig.setJobKey (m_aJobKey);
+    trig.setPriority (m_nPriority);
 
-    if (scheduleBuilder == null)
-      scheduleBuilder = SimpleScheduleBuilder.simpleSchedule ();
-    final IMutableTrigger trig = scheduleBuilder.build ();
-    trig.setCalendarName (calendarName);
-    trig.setDescription (description);
-    trig.setStartTime (startTime);
-    trig.setEndTime (endTime);
-    if (key == null)
-      key = new TriggerKey (Key.createUniqueName (null), null);
-    trig.setKey (key);
-    if (jobKey != null)
-      trig.setJobKey (jobKey);
-    trig.setPriority (priority);
-
-    if (!jobDataMap.isEmpty ())
-      trig.setJobDataMap (jobDataMap);
-
-    return (T) trig;
+    if (!m_aJobDataMap.isEmpty ())
+      trig.setJobDataMap (m_aJobDataMap);
+    return GenericReflection.uncheckedCast (trig);
   }
 
   /**
@@ -130,9 +129,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see TriggerKey
    * @see ITrigger#getKey()
    */
+  @Nonnull
   public TriggerBuilder <T> withIdentity (final String name)
   {
-    key = new TriggerKey (name, null);
+    m_aKey = new TriggerKey (name, null);
     return this;
   }
 
@@ -151,9 +151,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see TriggerKey
    * @see ITrigger#getKey()
    */
+  @Nonnull
   public TriggerBuilder <T> withIdentity (final String name, final String group)
   {
-    key = new TriggerKey (name, group);
+    m_aKey = new TriggerKey (name, group);
     return this;
   }
 
@@ -170,9 +171,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see TriggerKey
    * @see ITrigger#getKey()
    */
+  @Nonnull
   public TriggerBuilder <T> withIdentity (final TriggerKey triggerKey)
   {
-    this.key = triggerKey;
+    m_aKey = triggerKey;
     return this;
   }
 
@@ -184,9 +186,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getDescription()
    */
+  @Nonnull
   public TriggerBuilder <T> withDescription (final String triggerDescription)
   {
-    this.description = triggerDescription;
+    m_sDescription = triggerDescription;
     return this;
   }
 
@@ -200,9 +203,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#DEFAULT_PRIORITY
    * @see ITrigger#getPriority()
    */
+  @Nonnull
   public TriggerBuilder <T> withPriority (final int triggerPriority)
   {
-    this.priority = triggerPriority;
+    m_nPriority = triggerPriority;
     return this;
   }
 
@@ -216,9 +220,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ICalendar
    * @see ITrigger#getCalendarName()
    */
+  @Nonnull
   public TriggerBuilder <T> modifiedByCalendar (final String calName)
   {
-    this.calendarName = calName;
+    m_sCalendarName = calName;
     return this;
   }
 
@@ -234,9 +239,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getStartTime()
    * @see DateBuilder
    */
+  @Nonnull
   public TriggerBuilder <T> startAt (final Date triggerStartTime)
   {
-    this.startTime = triggerStartTime;
+    m_aStartTime = triggerStartTime;
     return this;
   }
 
@@ -248,10 +254,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getStartTime()
    */
+  @Nonnull
   public TriggerBuilder <T> startNow ()
   {
-    this.startTime = new Date ();
-    return this;
+    return startAt (new Date ());
   }
 
   /**
@@ -264,9 +270,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getEndTime()
    * @see DateBuilder
    */
+  @Nonnull
   public TriggerBuilder <T> endAt (final Date triggerEndTime)
   {
-    this.endTime = triggerEndTime;
+    m_aEndTime = triggerEndTime;
     return this;
   }
 
@@ -287,9 +294,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see CalendarIntervalScheduleBuilder
    */
   @SuppressWarnings ("unchecked")
+  @Nonnull
   public <SBT extends T> TriggerBuilder <SBT> withSchedule (final IScheduleBuilder <SBT> schedBuilder)
   {
-    this.scheduleBuilder = schedBuilder;
+    m_aScheduleBuilder = schedBuilder;
     return (TriggerBuilder <SBT>) this;
   }
 
@@ -301,9 +309,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobKey()
    */
+  @Nonnull
   public TriggerBuilder <T> forJob (final JobKey keyOfJobToFire)
   {
-    this.jobKey = keyOfJobToFire;
+    m_aJobKey = keyOfJobToFire;
     return this;
   }
 
@@ -317,9 +326,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobKey()
    */
+  @Nonnull
   public TriggerBuilder <T> forJob (final String jobName)
   {
-    this.jobKey = new JobKey (jobName, null);
+    m_aJobKey = new JobKey (jobName, null);
     return this;
   }
 
@@ -334,9 +344,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobKey()
    */
+  @Nonnull
   public TriggerBuilder <T> forJob (final String jobName, final String jobGroup)
   {
-    this.jobKey = new JobKey (jobName, jobGroup);
+    m_aJobKey = new JobKey (jobName, jobGroup);
     return this;
   }
 
@@ -349,12 +360,13 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobKey()
    */
-  public TriggerBuilder <T> forJob (final IJobDetail jobDetail)
+  @Nonnull
+  public TriggerBuilder <T> forJob (@Nonnull final IJobDetail jobDetail)
   {
     final JobKey k = jobDetail.getKey ();
     if (k.getName () == null)
       throw new IllegalArgumentException ("The given job has not yet had a name assigned to it.");
-    this.jobKey = k;
+    m_aJobKey = k;
     return this;
   }
 
@@ -364,9 +376,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
+  @Nonnull
   public TriggerBuilder <T> usingJobData (final String dataKey, final String value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -376,9 +389,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
+  @Nonnull
   public TriggerBuilder <T> usingJobData (final String dataKey, final Integer value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -388,9 +402,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
+  @Nonnull
   public TriggerBuilder <T> usingJobData (final String dataKey, final Long value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -400,9 +415,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
+  @Nonnull
   public TriggerBuilder <T> usingJobData (final String dataKey, final Float value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -412,9 +428,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
+  @Nonnull
   public TriggerBuilder <T> usingJobData (final String dataKey, final Double value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -424,9 +441,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
+  @Nonnull
   public TriggerBuilder <T> usingJobData (final String dataKey, final Boolean value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -438,15 +456,12 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
+  @Nonnull
   public TriggerBuilder <T> usingJobData (final JobDataMap newJobDataMap)
   {
     // add any existing data to this new map
-    for (final String dataKey : jobDataMap.keySet ())
-    {
-      newJobDataMap.put (dataKey, jobDataMap.get (dataKey));
-    }
-    jobDataMap = newJobDataMap; // set new map as the map to use
+    newJobDataMap.putAll (m_aJobDataMap);
+    m_aJobDataMap = newJobDataMap; // set new map as the map to use
     return this;
   }
-
 }

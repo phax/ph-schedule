@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.commons.hashcode.HashCodeGenerator;
@@ -174,7 +175,7 @@ public class TimeOfDay implements Serializable
   }
 
   /**
-   * Create a TimeOfDay instance for the given hour, minute and second.
+   * Create a {@link TimeOfDay} instance for the given hour, minute and second.
    *
    * @param hour
    *        The hour of day, between 0 and 23.
@@ -185,14 +186,15 @@ public class TimeOfDay implements Serializable
    * @throws IllegalArgumentException
    *         if one or more of the input values is out of their valid range.
    */
+  @Nonnull
   public static TimeOfDay hourMinuteAndSecondOfDay (final int hour, final int minute, final int second)
   {
     return new TimeOfDay (hour, minute, second);
   }
 
   /**
-   * Create a TimeOfDay instance for the given hour and minute (at the zero
-   * second of the minute).
+   * Create a {@link TimeOfDay} instance for the given hour and minute (at the
+   * zero second of the minute).
    *
    * @param hour
    *        The hour of day, between 0 and 23.
@@ -201,33 +203,51 @@ public class TimeOfDay implements Serializable
    * @throws IllegalArgumentException
    *         if one or more of the input values is out of their valid range.
    */
+  @Nonnull
   public static TimeOfDay hourAndMinuteOfDay (final int hour, final int minute)
   {
     return new TimeOfDay (hour, minute, 0);
   }
 
   /**
-   * Create a TimeOfDay from the given date, in the system default TimeZone.
+   * Create a {@link TimeOfDay} instance for the given hour (at the zero minute
+   * and zero second of the minute).
+   *
+   * @param hour
+   *        The hour of day, between 0 and 23.
+   * @throws IllegalArgumentException
+   *         if one or more of the input values is out of their valid range.
+   */
+  @Nonnull
+  public static TimeOfDay hourOfDay (final int hour)
+  {
+    return new TimeOfDay (hour, 0, 0);
+  }
+
+  /**
+   * Create a {@link TimeOfDay} from the given date, in the system default
+   * TimeZone.
    *
    * @param dateTime
-   *        The java.util.Date from which to extract Hour, Minute and Second.
+   *        The {@link Date} from which to extract Hour, Minute and Second.
    */
-  public static TimeOfDay hourAndMinuteAndSecondFromDate (final Date dateTime)
+  @Nullable
+  public static TimeOfDay hourAndMinuteAndSecondFromDate (@Nullable final Date dateTime)
   {
     return hourAndMinuteAndSecondFromDate (dateTime, null);
   }
 
   /**
-   * Create a TimeOfDay from the given date, in the given TimeZone.
+   * Create a {@link TimeOfDay} from the given date, in the given TimeZone.
    *
    * @param dateTime
-   *        The java.util.Date from which to extract Hour, Minute and Second.
+   *        The {@link Date} from which to extract Hour, Minute and Second.
    * @param tz
-   *        The TimeZone from which relate Hour, Minute and Second for the given
-   *        date. If null, system default TimeZone will be used.
+   *        The {@link TimeZone} from which relate Hour, Minute and Second for
+   *        the given date. If null, system default TimeZone will be used.
    */
   @Nullable
-  public static TimeOfDay hourAndMinuteAndSecondFromDate (final Date dateTime, final TimeZone tz)
+  public static TimeOfDay hourAndMinuteAndSecondFromDate (@Nullable final Date dateTime, @Nullable final TimeZone tz)
   {
     if (dateTime == null)
       return null;
@@ -240,29 +260,30 @@ public class TimeOfDay implements Serializable
   }
 
   /**
-   * Create a TimeOfDay from the given date (at the zero-second), in the system
-   * default TimeZone.
+   * Create a {@link TimeOfDay} from the given date (at the zero-second), in the
+   * system default TimeZone.
    *
    * @param dateTime
-   *        The java.util.Date from which to extract Hour and Minute.
+   *        The {@link Date} from which to extract Hour and Minute.
    */
-  public static TimeOfDay hourAndMinuteFromDate (final Date dateTime)
+  @Nullable
+  public static TimeOfDay hourAndMinuteFromDate (@Nullable final Date dateTime)
   {
     return hourAndMinuteFromDate (dateTime, null);
   }
 
   /**
-   * Create a TimeOfDay from the given date (at the zero-second), in the system
-   * default TimeZone.
+   * Create a {@link TimeOfDay} from the given date (at the zero-second), in the
+   * system default TimeZone.
    *
    * @param dateTime
-   *        The java.util.Date from which to extract Hour and Minute.
+   *        The {@link Date} from which to extract Hour and Minute.
    * @param tz
-   *        The TimeZone from which relate Hour and Minute for the given date.
-   *        If null, system default TimeZone will be used.
+   *        The {@link TimeZone} from which relate Hour and Minute for the given
+   *        date. If null, system default TimeZone will be used.
    */
   @Nullable
-  public static TimeOfDay hourAndMinuteFromDate (@Nullable final Date dateTime, final TimeZone tz)
+  public static TimeOfDay hourAndMinuteFromDate (@Nullable final Date dateTime, @Nullable final TimeZone tz)
   {
     if (dateTime == null)
       return null;

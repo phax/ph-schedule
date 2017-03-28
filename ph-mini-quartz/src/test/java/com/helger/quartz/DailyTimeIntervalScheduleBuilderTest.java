@@ -21,7 +21,9 @@ package com.helger.quartz;
 import static com.helger.quartz.DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule;
 import static com.helger.quartz.DateBuilder.dateOf;
 import static com.helger.quartz.JobBuilder.newJob;
+import static com.helger.quartz.TimeOfDay.hourAndMinuteOfDay;
 import static com.helger.quartz.TimeOfDay.hourMinuteAndSecondOfDay;
+import static com.helger.quartz.TimeOfDay.hourOfDay;
 import static com.helger.quartz.TriggerBuilder.newTrigger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -80,8 +82,8 @@ public class DailyTimeIntervalScheduleBuilderTest
     final IScheduler scheduler = StdSchedulerFactory.getDefaultScheduler ();
     IJobDetail job = newJob (MyJob.class).build ();
     ITrigger trigger = newTrigger ().withIdentity ("test")
-                                    .withSchedule (dailyTimeIntervalSchedule ().startingDailyAt (TimeOfDay.hourAndMinuteOfDay (2,
-                                                                                                                               15))
+                                    .withSchedule (dailyTimeIntervalSchedule ().startingDailyAt (hourAndMinuteOfDay (2,
+                                                                                                                     15))
                                                                                .withIntervalInMinutes (5))
                                     .startAt (currTime.getTime ())
                                     .build ();
@@ -98,8 +100,7 @@ public class DailyTimeIntervalScheduleBuilderTest
 
     job = newJob (MyJob.class).build ();
     trigger = newTrigger ().withIdentity ("test2")
-                           .withSchedule (dailyTimeIntervalSchedule ().startingDailyAt (TimeOfDay.hourAndMinuteOfDay (2,
-                                                                                                                      15))
+                           .withSchedule (dailyTimeIntervalSchedule ().startingDailyAt (hourAndMinuteOfDay (2, 15))
                                                                       .withIntervalInMinutes (5))
                            .startAt (startTime)
                            .build ();
@@ -134,10 +135,8 @@ public class DailyTimeIntervalScheduleBuilderTest
   {
     final IDailyTimeIntervalTrigger trigger = newTrigger ().withIdentity ("test", "group")
                                                            .withSchedule (dailyTimeIntervalSchedule ().withIntervalInMinutes (72)
-                                                                                                      .startingDailyAt (TimeOfDay.hourAndMinuteOfDay (8,
-                                                                                                                                                      0))
-                                                                                                      .endingDailyAt (TimeOfDay.hourAndMinuteOfDay (17,
-                                                                                                                                                    0))
+                                                                                                      .startingDailyAt (hourOfDay (8))
+                                                                                                      .endingDailyAt (hourOfDay (17))
                                                                                                       .onMondayThroughFriday ())
                                                            .build ();
     assertEquals ("test", trigger.getKey ().getName ());
@@ -146,8 +145,8 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals (true, null == trigger.getEndTime ());
     assertEquals (EIntervalUnit.MINUTE, trigger.getRepeatIntervalUnit ());
     assertEquals (72, trigger.getRepeatInterval ());
-    assertEquals (TimeOfDay.hourAndMinuteOfDay (8, 0), trigger.getStartTimeOfDay ());
-    assertEquals (TimeOfDay.hourAndMinuteOfDay (17, 0), trigger.getEndTimeOfDay ());
+    assertEquals (hourOfDay (8), trigger.getStartTimeOfDay ());
+    assertEquals (hourOfDay (17), trigger.getEndTimeOfDay ());
     final ICommonsList <Date> fireTimes = TriggerUtils.computeFireTimes ((IOperableTrigger) trigger, null, 48);
     assertEquals (48, fireTimes.size ());
   }
@@ -159,9 +158,7 @@ public class DailyTimeIntervalScheduleBuilderTest
     final Date endTime = DateBuilder.dateOf (0, 0, 0, 2, Month.JANUARY, 2011);
     final IDailyTimeIntervalTrigger trigger = newTrigger ().withIdentity ("test", "test")
                                                            .withSchedule (dailyTimeIntervalSchedule ().withIntervalInSeconds (121)
-                                                                                                      .startingDailyAt (hourMinuteAndSecondOfDay (10,
-                                                                                                                                                  0,
-                                                                                                                                                  0))
+                                                                                                      .startingDailyAt (hourOfDay (10))
                                                                                                       .endingDailyAt (hourMinuteAndSecondOfDay (23,
                                                                                                                                                 59,
                                                                                                                                                 59))
@@ -202,8 +199,8 @@ public class DailyTimeIntervalScheduleBuilderTest
     final Date startTime = DateBuilder.dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final IDailyTimeIntervalTrigger trigger = newTrigger ().withIdentity ("test")
                                                            .withSchedule (dailyTimeIntervalSchedule ().withIntervalInMinutes (15)
-                                                                                                      .startingDailyAt (TimeOfDay.hourAndMinuteOfDay (8,
-                                                                                                                                                      0))
+                                                                                                      .startingDailyAt (hourAndMinuteOfDay (8,
+                                                                                                                                            0))
                                                                                                       .endingDailyAfterCount (12))
                                                            .startAt (startTime)
                                                            .build ();
@@ -214,7 +211,7 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals (48, fireTimes.size ());
     assertEquals (dateOf (8, 0, 0, 1, Month.JANUARY, 2011), fireTimes.get (0));
     assertEquals (dateOf (10, 45, 0, 4, Month.JANUARY, 2011), fireTimes.get (47));
-    assertEquals (TimeOfDay.hourAndMinuteOfDay (10, 45), trigger.getEndTimeOfDay ());
+    assertEquals (hourAndMinuteOfDay (10, 45), trigger.getEndTimeOfDay ());
   }
 
   @Test
@@ -223,8 +220,8 @@ public class DailyTimeIntervalScheduleBuilderTest
     final Date startTime = DateBuilder.dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final IDailyTimeIntervalTrigger trigger = newTrigger ().withIdentity ("test")
                                                            .withSchedule (dailyTimeIntervalSchedule ().withIntervalInMinutes (15)
-                                                                                                      .startingDailyAt (TimeOfDay.hourAndMinuteOfDay (8,
-                                                                                                                                                      0))
+                                                                                                      .startingDailyAt (hourAndMinuteOfDay (8,
+                                                                                                                                            0))
                                                                                                       .endingDailyAfterCount (1))
                                                            .startAt (startTime)
                                                            .build ();
@@ -235,7 +232,7 @@ public class DailyTimeIntervalScheduleBuilderTest
     assertEquals (48, fireTimes.size ());
     assertEquals (dateOf (8, 0, 0, 1, Month.JANUARY, 2011), fireTimes.get (0));
     assertEquals (dateOf (8, 0, 0, 17, Month.FEBRUARY, 2011), fireTimes.get (47));
-    assertEquals (TimeOfDay.hourAndMinuteOfDay (8, 0), trigger.getEndTimeOfDay ());
+    assertEquals (hourAndMinuteOfDay (8, 0), trigger.getEndTimeOfDay ());
   }
 
   @Test
@@ -246,7 +243,7 @@ public class DailyTimeIntervalScheduleBuilderTest
       final Date startTime = DateBuilder.dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
       newTrigger ().withIdentity ("test")
                    .withSchedule (dailyTimeIntervalSchedule ().withIntervalInMinutes (15)
-                                                              .startingDailyAt (TimeOfDay.hourAndMinuteOfDay (8, 0))
+                                                              .startingDailyAt (hourOfDay (8))
                                                               .endingDailyAfterCount (0))
                    .startAt (startTime)
                    .build ();
