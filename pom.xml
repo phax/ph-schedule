@@ -122,14 +122,14 @@
             <signaturesArtifact>
               <groupId>com.helger</groupId>
               <artifactId>ph-forbidden-apis</artifactId>
-              <version>1.0.0-SNAPSHOT</version>
+              <version>1.0.0</version>
               <type>jar</type>
               <path>forbidden-apis.txt</path>
             </signaturesArtifact>
           </signaturesArtifacts>
           <excludes>
             <!-- uses System.getProperties -->
-            <exclude>**/StdSchedulerFactory*</exclude>
+            <exclude>**/StdSchedulerFactory.class</exclude>
           </excludes>
         </configuration>
         <!-- local executions are ignored -->
