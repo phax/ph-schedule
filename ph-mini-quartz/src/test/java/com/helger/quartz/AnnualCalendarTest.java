@@ -25,6 +25,7 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.impl.calendar.AnnualCalendar;
 
 /**
@@ -55,7 +56,7 @@ public class AnnualCalendarTest
   public void testExclude ()
   {
     final AnnualCalendar annualCalendar = new AnnualCalendar ();
-    final Calendar day = Calendar.getInstance ();
+    final Calendar day = PDTFactory.createCalendar ();
 
     day.set (Calendar.MONTH, 9);
     day.set (Calendar.DAY_OF_MONTH, 15);
@@ -91,7 +92,7 @@ public class AnnualCalendarTest
   public void testDaysExcludedOverTime ()
   {
     final AnnualCalendar annualCalendar = new AnnualCalendar ();
-    final Calendar day = Calendar.getInstance ();
+    final Calendar day = PDTFactory.createCalendar ();
 
     day.set (Calendar.MONTH, Calendar.JUNE);
     day.set (Calendar.YEAR, 2005);
@@ -114,7 +115,7 @@ public class AnnualCalendarTest
   public void testRemoveInTheFuture ()
   {
     final AnnualCalendar annualCalendar = new AnnualCalendar ();
-    final Calendar day = Calendar.getInstance ();
+    final Calendar day = PDTFactory.createCalendar ();
 
     day.set (Calendar.MONTH, Calendar.JUNE);
     day.set (Calendar.YEAR, 2005);

@@ -34,6 +34,7 @@ import org.junit.Test;
 import com.helger.commons.collection.ext.CommonsHashSet;
 import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.commons.collection.ext.ICommonsSet;
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
@@ -497,7 +498,7 @@ public class DailyTimeIntervalTriggerTest
 
   private static int _getDayOfWeek (final Date dateTime)
   {
-    final Calendar cal = Calendar.getInstance ();
+    final Calendar cal = PDTFactory.createCalendar ();
     cal.setTime (dateTime);
     return cal.get (Calendar.DAY_OF_WEEK);
   }

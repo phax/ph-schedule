@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.spi.IOperableTrigger;
 
@@ -67,8 +68,7 @@ public class DailyTimeIntervalScheduleBuilderTest
   @Test
   public void testScheduleInMiddleOfDailyInterval () throws Exception
   {
-
-    final Calendar currTime = Calendar.getInstance ();
+    final Calendar currTime = PDTFactory.createCalendar ();
 
     final int currHour = currTime.get (Calendar.HOUR);
 

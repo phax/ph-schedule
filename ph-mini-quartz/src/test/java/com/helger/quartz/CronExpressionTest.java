@@ -23,8 +23,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
@@ -37,6 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
 @SuppressWarnings ("unused")
 public final class CronExpressionTest
@@ -106,17 +106,22 @@ public final class CronExpressionTest
   {
     final CronExpression cronExpression = new CronExpression ("19 15 10 4 Apr ? ");
 
-    final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
-    final ObjectOutputStream oos = new ObjectOutputStream (baos);
-    oos.writeObject (cronExpression);
-    final ByteArrayInputStream bais = new ByteArrayInputStream (baos.toByteArray ());
-    final ObjectInputStream ois = new ObjectInputStream (bais);
-    final CronExpression newExpression = (CronExpression) ois.readObject ();
+    try (final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ())
+    {
+      try (final ObjectOutputStream oos = new ObjectOutputStream (baos))
+      {
+        oos.writeObject (cronExpression);
+      }
+      try (final NonBlockingByteArrayInputStream bais = new NonBlockingByteArrayInputStream (baos.toByteArray ());
+           final ObjectInputStream ois = new ObjectInputStream (bais))
+      {
+        final CronExpression newExpression = (CronExpression) ois.readObject ();
+        assertEquals (newExpression.getCronExpression (), cronExpression.getCronExpression ());
 
-    assertEquals (newExpression.getCronExpression (), cronExpression.getCronExpression ());
-
-    // if broken, this will throw an exception
-    newExpression.getNextValidTimeAfter (new Date ());
+        // if broken, this will throw an exception
+        newExpression.getNextValidTimeAfter (new Date ());
+      }
+    }
   }
 
   /**

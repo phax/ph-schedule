@@ -31,6 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.impl.StdSchedulerFactory;
@@ -68,26 +70,23 @@ public class DisallowConcurrentExecutionJobTest
           Thread.sleep (sleepFor);
         }
       }
-      catch (final InterruptedException e)
+      catch (final InterruptedException | SchedulerException e)
       {
-        throw new JobExecutionException ("Failed to pause job for testing.");
-      }
-      catch (final SchedulerException e)
-      {
-        throw new JobExecutionException ("Failed to lookup datestamp collection.");
+        throw new JobExecutionException ("Failed to wait/lookup datestamp collection.", e);
       }
     }
   }
 
   public static class TestJobListener extends AbstractJobListenerSupport
   {
+    private static final Logger s_aLogger = LoggerFactory.getLogger (DisallowConcurrentExecutionJobTest.TestJobListener.class);
 
-    private final AtomicInteger jobExCount = new AtomicInteger (0);
-    private final int jobExecutionCountToSyncAfter;
+    private final AtomicInteger m_aJobExCount = new AtomicInteger (0);
+    private final int m_nJobExecutionCountToSyncAfter;
 
     public TestJobListener (final int jobExecutionCountToSyncAfter)
     {
-      this.jobExecutionCountToSyncAfter = jobExecutionCountToSyncAfter;
+      m_nJobExecutionCountToSyncAfter = jobExecutionCountToSyncAfter;
     }
 
     public String getName ()
@@ -98,7 +97,7 @@ public class DisallowConcurrentExecutionJobTest
     @Override
     public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
     {
-      if (jobExCount.incrementAndGet () == jobExecutionCountToSyncAfter)
+      if (m_aJobExCount.incrementAndGet () == m_nJobExecutionCountToSyncAfter)
       {
         try
         {
@@ -107,7 +106,7 @@ public class DisallowConcurrentExecutionJobTest
         }
         catch (final Throwable e)
         {
-          e.printStackTrace ();
+          s_aLogger.error ("Await on barrier was interrupted", e);
           throw new AssertionError ("Await on barrier was interrupted: " + e.toString ());
         }
       }
@@ -117,18 +116,11 @@ public class DisallowConcurrentExecutionJobTest
   @Test
   public void testNoConcurrentExecOnSameJob () throws Exception
   {
-
     final List <Date> jobExecDates = Collections.synchronizedList (new ArrayList <Date> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
-    final Date startTime = new Date (System.currentTimeMillis () + 100); // make
-                                                                         // the
-                                                                         // triggers
-                                                                         // fire
-                                                                         // at
-                                                                         // the
-                                                                         // same
-                                                                         // time.
+    // make the triggers fire at the same time.
+    final Date startTime = new Date (System.currentTimeMillis () + 100);
 
     final IJobDetail job1 = JobBuilder.newJob (TestJob.class).withIdentity ("job1").build ();
     final ITrigger trigger1 = TriggerBuilder.newTrigger ()

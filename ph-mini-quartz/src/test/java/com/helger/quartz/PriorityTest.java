@@ -26,6 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.StdSchedulerFactory;
@@ -38,9 +39,8 @@ import com.helger.quartz.spi.IMutableTrigger;
  */
 public class PriorityTest
 {
-
-  private static CountDownLatch latch;
-  private static StringBuffer result;
+  private static CountDownLatch s_aLatch;
+  private static StringBuffer s_aResult;
 
   @PersistJobDataAfterExecution
   @DisallowConcurrentExecution
@@ -48,16 +48,16 @@ public class PriorityTest
   {
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
-      result.append (context.getTrigger ().getKey ().getName ());
-      latch.countDown ();
+      s_aResult.append (context.getTrigger ().getKey ().getName ());
+      s_aLatch.countDown ();
     }
   }
 
   @Before
   public void setUp () throws Exception
   {
-    PriorityTest.latch = new CountDownLatch (2);
-    PriorityTest.result = new StringBuffer ();
+    PriorityTest.s_aLatch = new CountDownLatch (2);
+    PriorityTest.s_aResult = new StringBuffer ();
   }
 
   @SuppressWarnings ("deprecation")
@@ -70,7 +70,7 @@ public class PriorityTest
 
     final IScheduler sched = new StdSchedulerFactory ().initialize (config).getScheduler ();
 
-    final Calendar cal = Calendar.getInstance ();
+    final Calendar cal = PDTFactory.createCalendar ();
     cal.add (Calendar.SECOND, 1);
 
     final IMutableTrigger trig1 = new SimpleTrigger ("T1", null, cal.getTime ());
@@ -85,9 +85,9 @@ public class PriorityTest
 
     sched.start ();
 
-    latch.await ();
+    s_aLatch.await ();
 
-    assertEquals ("T1T2", result.toString ());
+    assertEquals ("T1T2", s_aResult.toString ());
 
     sched.shutdown ();
   }
@@ -102,7 +102,7 @@ public class PriorityTest
 
     final IScheduler sched = new StdSchedulerFactory ().initialize (config).getScheduler ();
 
-    final Calendar cal = Calendar.getInstance ();
+    final Calendar cal = PDTFactory.createCalendar ();
     cal.add (Calendar.SECOND, 1);
 
     final IMutableTrigger trig1 = new SimpleTrigger ("T1", null, cal.getTime ());
@@ -120,9 +120,9 @@ public class PriorityTest
 
     sched.start ();
 
-    latch.await ();
+    s_aLatch.await ();
 
-    assertEquals ("T2T1", result.toString ());
+    assertEquals ("T2T1", s_aResult.toString ());
 
     sched.shutdown ();
   }

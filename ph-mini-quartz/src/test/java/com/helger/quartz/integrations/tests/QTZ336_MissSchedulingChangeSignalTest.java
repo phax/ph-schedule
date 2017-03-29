@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.lang.NonBlockingProperties;
+import com.helger.commons.thread.ThreadHelper;
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -54,7 +55,7 @@ import com.helger.quartz.spi.IOperableTrigger;
  */
 public class QTZ336_MissSchedulingChangeSignalTest
 {
-  private static final Logger LOG = LoggerFactory.getLogger (QTZ336_MissSchedulingChangeSignalTest.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (QTZ336_MissSchedulingChangeSignalTest.class);
 
   @Test
   @Ignore ("Takes nearly a minute to execute and works")
@@ -70,9 +71,9 @@ public class QTZ336_MissSchedulingChangeSignalTest
     properties.setProperty (StdSchedulerFactory.PROP_JOB_STORE_CLASS, SlowRAMJobStore.class.getName ());
     final ISchedulerFactory sf = new StdSchedulerFactory ().initialize (properties);
     final IScheduler sched = sf.getScheduler ();
-    LOG.info ("------- Initialization Complete -----------");
+    s_aLogger.info ("------- Initialization Complete -----------");
 
-    LOG.info ("------- Scheduling Job  -------------------");
+    s_aLogger.info ("------- Scheduling Job  -------------------");
 
     final IJobDetail job = newJob (CollectDuractionBetweenFireTimesJob.class).withIdentity ("job", "group").build ();
 
@@ -89,18 +90,11 @@ public class QTZ336_MissSchedulingChangeSignalTest
     // scheduler has been started)
     sched.start ();
 
-    LOG.info ("------- Scheduler Started -----------------");
+    s_aLogger.info ("------- Scheduler Started -----------------");
 
     // wait long enough so that the scheduler has an opportunity to
     // run the job in theory around 50 times
-    try
-    {
-      Thread.sleep (50000L);
-    }
-    catch (final Exception e)
-    {
-      e.printStackTrace ();
-    }
+    ThreadHelper.sleep (50000L);
 
     final List <Long> durationBetweenFireTimesInMillis = CollectDuractionBetweenFireTimesJob.getDurations ();
 

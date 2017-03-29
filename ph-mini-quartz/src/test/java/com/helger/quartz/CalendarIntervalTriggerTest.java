@@ -34,6 +34,7 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.impl.calendar.BaseCalendar;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
@@ -45,7 +46,7 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testQTZ331FireTimeAfterBoundary ()
   {
-    final Calendar start = Calendar.getInstance ();
+    final Calendar start = PDTFactory.createCalendar ();
     start.clear ();
     start.set (2013, Calendar.FEBRUARY, 15);
 
@@ -65,12 +66,12 @@ public class CalendarIntervalTriggerTest
   {
     final TimeZone edt = TimeZone.getTimeZone ("America/New_York");
 
-    final Calendar start = Calendar.getInstance ();
+    final Calendar start = PDTFactory.createCalendar ();
     start.clear ();
     start.setTimeZone (edt);
     start.set (2012, Calendar.MARCH, 16, 2, 30, 0);
 
-    final Calendar after = Calendar.getInstance ();
+    final Calendar after = PDTFactory.createCalendar ();
     after.clear ();
     after.setTimeZone (edt);
     after.set (2013, Calendar.APRIL, 19, 2, 30, 0);
@@ -94,7 +95,7 @@ public class CalendarIntervalTriggerTest
   public void testYearlyIntervalGetFireTimeAfter ()
   {
 
-    final Calendar startCalendar = Calendar.getInstance ();
+    final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -103,7 +104,7 @@ public class CalendarIntervalTriggerTest
     yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.YEAR);
     yearlyTrigger.setRepeatInterval (2); // every two years;
 
-    final Calendar targetCalendar = Calendar.getInstance ();
+    final Calendar targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.set (2009, Calendar.JUNE, 1, 9, 30, 17); // jump 4 years (2
                                                             // intervals)
     targetCalendar.clear (Calendar.MILLISECOND);
@@ -118,7 +119,7 @@ public class CalendarIntervalTriggerTest
   public void testMonthlyIntervalGetFireTimeAfter ()
   {
 
-    final Calendar startCalendar = Calendar.getInstance ();
+    final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -127,7 +128,7 @@ public class CalendarIntervalTriggerTest
     yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.MONTH);
     yearlyTrigger.setRepeatInterval (5); // every five months
 
-    final Calendar targetCalendar = Calendar.getInstance ();
+    final Calendar targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.MONTH, 25); // jump 25 five months (5
@@ -144,7 +145,7 @@ public class CalendarIntervalTriggerTest
   public void testWeeklyIntervalGetFireTimeAfter ()
   {
 
-    final Calendar startCalendar = Calendar.getInstance ();
+    final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -153,7 +154,7 @@ public class CalendarIntervalTriggerTest
     yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.WEEK);
     yearlyTrigger.setRepeatInterval (6); // every six weeks
 
-    final Calendar targetCalendar = Calendar.getInstance ();
+    final Calendar targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.DAY_OF_YEAR, 7 * 6 * 4); // jump 24 weeks (4
@@ -170,7 +171,7 @@ public class CalendarIntervalTriggerTest
   public void testDailyIntervalGetFireTimeAfter ()
   {
 
-    final Calendar startCalendar = Calendar.getInstance ();
+    final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -179,7 +180,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (90); // every ninety days
 
-    final Calendar targetCalendar = Calendar.getInstance ();
+    final Calendar targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.DAY_OF_YEAR, 360); // jump 360 days (4
@@ -196,7 +197,7 @@ public class CalendarIntervalTriggerTest
   public void testHourlyIntervalGetFireTimeAfter ()
   {
 
-    final Calendar startCalendar = Calendar.getInstance ();
+    final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -205,7 +206,7 @@ public class CalendarIntervalTriggerTest
     yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.HOUR);
     yearlyTrigger.setRepeatInterval (100); // every 100 hours
 
-    final Calendar targetCalendar = Calendar.getInstance ();
+    final Calendar targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.HOUR, 400); // jump 400 hours (4 intervals)
@@ -221,7 +222,7 @@ public class CalendarIntervalTriggerTest
   public void testMinutelyIntervalGetFireTimeAfter ()
   {
 
-    final Calendar startCalendar = Calendar.getInstance ();
+    final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -230,7 +231,7 @@ public class CalendarIntervalTriggerTest
     yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.MINUTE);
     yearlyTrigger.setRepeatInterval (100); // every 100 minutes
 
-    final Calendar targetCalendar = Calendar.getInstance ();
+    final Calendar targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.MINUTE, 400); // jump 400 minutes (4 intervals)
@@ -246,7 +247,7 @@ public class CalendarIntervalTriggerTest
   public void testSecondlyIntervalGetFireTimeAfter ()
   {
 
-    final Calendar startCalendar = Calendar.getInstance ();
+    final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -255,7 +256,7 @@ public class CalendarIntervalTriggerTest
     yearlyTrigger.setRepeatIntervalUnit (EIntervalUnit.SECOND);
     yearlyTrigger.setRepeatInterval (100); // every 100 seconds
 
-    final Calendar targetCalendar = Calendar.getInstance ();
+    final Calendar targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.SECOND, 400); // jump 400 seconds (4 intervals)
@@ -273,7 +274,7 @@ public class CalendarIntervalTriggerTest
 
     // Pick a day before a spring daylight savings transition...
 
-    Calendar startCalendar = Calendar.getInstance ();
+    Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2010, Calendar.MARCH, 12, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -282,7 +283,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (5); // every 5 days
 
-    Calendar targetCalendar = Calendar.getInstance ();
+    Calendar targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.setTime (startCalendar.getTime ());
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.DAY_OF_YEAR, 10); // jump 10 days (2 intervals)
@@ -298,7 +299,7 @@ public class CalendarIntervalTriggerTest
     // And again, Pick a day before a spring daylight savings transition...
     // (QTZ-240)
 
-    startCalendar = Calendar.getInstance ();
+    startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2011, Calendar.MARCH, 12, 1, 0, 0);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -307,7 +308,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (1); // every day
 
-    targetCalendar = Calendar.getInstance ();
+    targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.setTime (startCalendar.getTime ());
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.DAY_OF_YEAR, 2); // jump 2 days (2 intervals)
@@ -324,7 +325,7 @@ public class CalendarIntervalTriggerTest
     // (QTZ-240) - and prove time of day is not preserved without
     // setPreserveHourOfDayAcrossDaylightSavings(true)
 
-    startCalendar = Calendar.getInstance ();
+    startCalendar = PDTFactory.createCalendar ();
     startCalendar.setTimeZone (TimeZone.getTimeZone ("CET"));
     startCalendar.set (2011, Calendar.MARCH, 26, 4, 0, 0);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -335,7 +336,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setRepeatInterval (1); // every day
     dailyTrigger.setTimeZone (TimeZone.getTimeZone ("EST"));
 
-    targetCalendar = Calendar.getInstance ();
+    targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.setTimeZone (TimeZone.getTimeZone ("CET"));
     targetCalendar.setTime (startCalendar.getTime ());
     targetCalendar.setLenient (true);
@@ -356,7 +357,7 @@ public class CalendarIntervalTriggerTest
     // (QTZ-240) - and prove time of day is preserved with
     // setPreserveHourOfDayAcrossDaylightSavings(true)
 
-    startCalendar = Calendar.getInstance ();
+    startCalendar = PDTFactory.createCalendar ();
     startCalendar.setTimeZone (TimeZone.getTimeZone ("CET"));
     startCalendar.set (2011, Calendar.MARCH, 26, 4, 0, 0);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -368,7 +369,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setTimeZone (TimeZone.getTimeZone ("CET"));
     dailyTrigger.setPreserveHourOfDayAcrossDaylightSavings (true);
 
-    targetCalendar = Calendar.getInstance ();
+    targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.setTimeZone (TimeZone.getTimeZone ("CET"));
     targetCalendar.setTime (startCalendar.getTime ());
     targetCalendar.setLenient (true);
@@ -387,7 +388,7 @@ public class CalendarIntervalTriggerTest
 
     // Pick a day before a fall daylight savings transition...
 
-    startCalendar = Calendar.getInstance ();
+    startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2010, Calendar.OCTOBER, 31, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -396,7 +397,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (5); // every 5 days
 
-    targetCalendar = Calendar.getInstance ();
+    targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.setTime (startCalendar.getTime ());
     targetCalendar.setLenient (true);
     targetCalendar.add (Calendar.DAY_OF_YEAR, 15); // jump 15 days (3 intervals)
@@ -412,7 +413,7 @@ public class CalendarIntervalTriggerTest
     // And again, Pick a day before a fall daylight savings transition...
     // (QTZ-240)
 
-    startCalendar = Calendar.getInstance ();
+    startCalendar = PDTFactory.createCalendar ();
     startCalendar.setTimeZone (TimeZone.getTimeZone ("CEST"));
     startCalendar.set (2011, Calendar.OCTOBER, 29, 1, 30, 00);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -423,7 +424,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setRepeatInterval (1); // every day
     dailyTrigger.setTimeZone (TimeZone.getTimeZone ("EST"));
 
-    targetCalendar = Calendar.getInstance ();
+    targetCalendar = PDTFactory.createCalendar ();
     targetCalendar.setTimeZone (TimeZone.getTimeZone ("CEST"));
     targetCalendar.setTime (startCalendar.getTime ());
     targetCalendar.setLenient (true);
@@ -442,7 +443,7 @@ public class CalendarIntervalTriggerTest
   public void testFinalFireTimes ()
   {
 
-    Calendar startCalendar = Calendar.getInstance ();
+    Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2010, Calendar.MARCH, 12, 9, 0, 0);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -451,7 +452,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.DAY);
     dailyTrigger.setRepeatInterval (5); // every 5 days
 
-    Calendar endCalendar = Calendar.getInstance ();
+    Calendar endCalendar = PDTFactory.createCalendar ();
     endCalendar.setTime (startCalendar.getTime ());
     endCalendar.setLenient (true);
     endCalendar.add (Calendar.DAY_OF_YEAR, 10); // jump 10 days (2 intervals)
@@ -462,7 +463,7 @@ public class CalendarIntervalTriggerTest
 
     assertEquals ("Final fire time not computed correctly for day interval.", endCalendar.getTime (), testTime);
 
-    startCalendar = Calendar.getInstance ();
+    startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2010, Calendar.MARCH, 12, 9, 0, 0);
     startCalendar.clear (Calendar.MILLISECOND);
 
@@ -471,7 +472,7 @@ public class CalendarIntervalTriggerTest
     dailyTrigger.setRepeatIntervalUnit (EIntervalUnit.MINUTE);
     dailyTrigger.setRepeatInterval (5); // every 5 minutes
 
-    endCalendar = Calendar.getInstance ();
+    endCalendar = PDTFactory.createCalendar ();
     endCalendar.setTime (startCalendar.getTime ());
     endCalendar.setLenient (true);
     endCalendar.add (Calendar.DAY_OF_YEAR, 15); // jump 15 days

@@ -22,14 +22,14 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.impl.calendar.MonthlyCalendar;
 
 /**
  * Unit test for MonthlyCalendar
  */
-public class MonthlyCalendarTest
+public final class MonthlyCalendarTest
 {
-
   /**
    * Tests whether greater than the 7th of the month causes infinite looping.
    * See: QUARTZ-636
@@ -43,7 +43,7 @@ public class MonthlyCalendarTest
     {
       monthlyCalendar.setDayExcluded (i, true);
     }
-    final Calendar c = Calendar.getInstance ();
+    final Calendar c = PDTFactory.createCalendar ();
     c.set (2007, 11, 8, 12, 0, 0);
 
     monthlyCalendar.getNextIncludedTime (c.getTime ().getTime ());

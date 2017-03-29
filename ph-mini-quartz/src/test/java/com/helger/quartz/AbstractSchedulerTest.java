@@ -79,7 +79,6 @@ public abstract class AbstractSchedulerTest
   {
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
-
       try
       {
         @SuppressWarnings ("unchecked")
@@ -92,7 +91,7 @@ public abstract class AbstractSchedulerTest
       }
       catch (final Throwable e)
       {
-        e.printStackTrace ();
+        s_aLogger.error ("Await on barrier was interrupted", e);
         throw new AssertionError ("Await on barrier was interrupted: " + e.toString ());
       }
     }
@@ -332,7 +331,7 @@ public abstract class AbstractSchedulerTest
     Thread.sleep (200L);
 
     final Map <Thread, StackTraceElement []> allThreadsEnd = Thread.getAllStackTraces ();
-    final Set <Thread> endingThreads = new HashSet<> (allThreadsEnd.keySet ());
+    final Set <Thread> endingThreads = new HashSet <> (allThreadsEnd.keySet ());
     // remove all pre-existing threads from the set
     for (final Thread t : allThreadsStart.keySet ())
     {
@@ -520,7 +519,7 @@ public abstract class AbstractSchedulerTest
                                                                                .withIntervalInSeconds (1)
                                                                                .repeatForever ())
                                            .build ();
-    final Set <ITrigger> triggersForJob = new HashSet<> ();
+    final Set <ITrigger> triggersForJob = new HashSet <> ();
     triggersForJob.add (trigger1);
     triggersForJob.add (trigger2);
 
@@ -577,7 +576,7 @@ public abstract class AbstractSchedulerTest
       }
       catch (final Throwable e)
       {
-        e.printStackTrace ();
+        s_aLogger.error ("Await on barrier was interrupted", e);
         throw new AssertionError ("Await on barrier was interrupted: " + e.toString ());
       }
     }

@@ -31,21 +31,19 @@ import org.junit.Test;
 
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.simpl.PropertySettingJobFactory;
 
 /**
  * Unit test for PropertySettingJobFactory.
  */
 public class PropertySettingJobFactoryTest
 {
-
-  private PropertySettingJobFactory factory;
+  private PropertySettingJobFactory m_aFactory;
 
   @Before
   public void setUp () throws Exception
   {
-    factory = new PropertySettingJobFactory ();
-    factory.setThrowIfPropertyNotFound (true);
+    m_aFactory = new PropertySettingJobFactory ();
+    m_aFactory.setThrowIfPropertyNotFound (true);
   }
 
   @Test
@@ -64,7 +62,7 @@ public class PropertySettingJobFactoryTest
     jobDataMap.put ("mapValue", Collections.singletonMap ("A", "B"));
 
     final TestBean myBean = new TestBean ();
-    factory.setBeanProps (myBean, jobDataMap);
+    m_aFactory.setBeanProps (myBean, jobDataMap);
 
     assertEquals (1, myBean.getIntValue ());
     assertEquals (2l, myBean.getLongValue ());
@@ -85,7 +83,7 @@ public class PropertySettingJobFactoryTest
     jobDataMap.put ("bogusValue", Integer.valueOf (1));
     try
     {
-      factory.setBeanProps (new TestBean (), jobDataMap);
+      m_aFactory.setBeanProps (new TestBean (), jobDataMap);
       fail ();
     }
     catch (final SchedulerException ignore)
@@ -100,7 +98,7 @@ public class PropertySettingJobFactoryTest
     jobDataMap.put ("intValue", null);
     try
     {
-      factory.setBeanProps (new TestBean (), jobDataMap);
+      m_aFactory.setBeanProps (new TestBean (), jobDataMap);
       fail ();
     }
     catch (final SchedulerException ignore)
@@ -116,7 +114,7 @@ public class PropertySettingJobFactoryTest
     jobDataMap.put ("mapValue", null);
     final TestBean testBean = new TestBean ();
     testBean.setMapValue (Collections.singletonMap ("A", "B"));
-    factory.setBeanProps (testBean, jobDataMap);
+    m_aFactory.setBeanProps (testBean, jobDataMap);
     assertNull (testBean.getMapValue ());
   }
 
@@ -124,10 +122,10 @@ public class PropertySettingJobFactoryTest
   public void testSetBeanPropsWrongPrimativeType ()
   {
     final JobDataMap jobDataMap = new JobDataMap ();
-    jobDataMap.put ("intValue", new Float (7));
+    jobDataMap.put ("intValue", Float.valueOf (7));
     try
     {
-      factory.setBeanProps (new TestBean (), jobDataMap);
+      m_aFactory.setBeanProps (new TestBean (), jobDataMap);
       fail ();
     }
     catch (final SchedulerException ignore)
@@ -140,10 +138,10 @@ public class PropertySettingJobFactoryTest
   public void testSetBeanPropsWrongNonPrimativeType ()
   {
     final JobDataMap jobDataMap = new JobDataMap ();
-    jobDataMap.put ("mapValue", new Float (7));
+    jobDataMap.put ("mapValue", Float.valueOf (7));
     try
     {
-      factory.setBeanProps (new TestBean (), jobDataMap);
+      m_aFactory.setBeanProps (new TestBean (), jobDataMap);
       fail ();
     }
     catch (final SchedulerException ignore)
@@ -159,7 +157,7 @@ public class PropertySettingJobFactoryTest
     jobDataMap.put ("charValue", "");
     try
     {
-      factory.setBeanProps (new TestBean (), jobDataMap);
+      m_aFactory.setBeanProps (new TestBean (), jobDataMap);
       fail ();
     }
     catch (final SchedulerException ignore)
@@ -175,7 +173,7 @@ public class PropertySettingJobFactoryTest
     jobDataMap.put ("charValue", "abba");
     try
     {
-      factory.setBeanProps (new TestBean (), jobDataMap);
+      m_aFactory.setBeanProps (new TestBean (), jobDataMap);
       fail ();
     }
     catch (final SchedulerException ignore)
@@ -198,7 +196,7 @@ public class PropertySettingJobFactoryTest
     jobDataMap.put ("byteValue", "6");
 
     final TestBean myBean = new TestBean ();
-    factory.setBeanProps (myBean, jobDataMap);
+    m_aFactory.setBeanProps (myBean, jobDataMap);
 
     assertEquals (1, myBean.getIntValue ());
     assertEquals (2l, myBean.getLongValue ());
@@ -218,7 +216,7 @@ public class PropertySettingJobFactoryTest
     private double doubleValue;
     private boolean booleanValue;
     private byte byteValue;
-    private short shortValue;
+    private short m_nShortValue;
     private char charValue;
     private String stringValue;
     private Map <?, ?> mapValue;
@@ -323,13 +321,13 @@ public class PropertySettingJobFactoryTest
 
     public short getShortValue ()
     {
-      return shortValue;
+      return m_nShortValue;
     }
 
     @SuppressWarnings ("unused")
     public void setShortValue (final short shortValue)
     {
-      this.shortValue = shortValue;
+      this.m_nShortValue = shortValue;
     }
   }
 }
