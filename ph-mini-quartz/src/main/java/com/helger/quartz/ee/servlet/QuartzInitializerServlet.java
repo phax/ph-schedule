@@ -136,16 +136,10 @@ public class QuartzInitializerServlet extends HttpServlet
 {
   public static final String QUARTZ_FACTORY_KEY = "org.quartz.impl.StdSchedulerFactory.KEY";
 
-  private boolean performShutdown = true;
-  private boolean waitOnShutdown = false;
+  private boolean m_bPerformShutdown = true;
+  private boolean m_bWaitOnShutdown = false;
 
   private transient IScheduler m_aScheduler;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   @Override
   public void init (final ServletConfig cfg) throws javax.servlet.ServletException
@@ -163,12 +157,12 @@ public class QuartzInitializerServlet extends HttpServlet
 
       if (shutdownPref != null)
       {
-        performShutdown = Boolean.valueOf (shutdownPref).booleanValue ();
+        m_bPerformShutdown = Boolean.valueOf (shutdownPref).booleanValue ();
       }
       final String shutdownWaitPref = cfg.getInitParameter ("wait-on-shutdown");
       if (shutdownPref != null)
       {
-        waitOnShutdown = Boolean.valueOf (shutdownWaitPref).booleanValue ();
+        m_bWaitOnShutdown = Boolean.valueOf (shutdownWaitPref).booleanValue ();
       }
 
       factory = getSchedulerFactory (configFile);
@@ -256,13 +250,13 @@ public class QuartzInitializerServlet extends HttpServlet
   @Override
   public void destroy ()
   {
-    if (!performShutdown)
+    if (!m_bPerformShutdown)
       return;
 
     try
     {
       if (m_aScheduler != null)
-        m_aScheduler.shutdown (waitOnShutdown);
+        m_aScheduler.shutdown (m_bWaitOnShutdown);
     }
     catch (final Exception e)
     {
