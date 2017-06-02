@@ -18,10 +18,11 @@
  */
 package com.helger.quartz.xml;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import com.helger.commons.collection.ext.CommonsArrayList;
 
 /**
  * Reports JobSchedulingDataLoader validation exceptions.
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class ValidationException extends Exception
 {
-  private List <Exception> validationExceptions = new ArrayList <> ();
+  private List <Exception> validationExceptions = new CommonsArrayList <> ();
 
   /**
    * Constructor for ValidationException.
@@ -78,12 +79,6 @@ public class ValidationException extends Exception
     this.validationExceptions = Collections.unmodifiableList (validationExceptions);
     initCause (errors.iterator ().next ());
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * Returns collection of errors.

@@ -30,14 +30,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 import javax.xml.XMLConstants;
@@ -62,17 +59,21 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.CommonsHashMap;
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsMap;
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
+import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.ObjectAlreadyExistsException;
-import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerKey;
@@ -101,24 +102,24 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   public static final String QUARTZ_SYSTEM_ID_JAR_PREFIX = "jar:";
 
   // pre-processing commands
-  protected List <String> jobGroupsToDelete = new ArrayList <> ();
-  protected List <String> triggerGroupsToDelete = new ArrayList <> ();
-  protected List <JobKey> jobsToDelete = new ArrayList <> ();
-  protected List <TriggerKey> triggersToDelete = new ArrayList <> ();
+  protected ICommonsList <String> jobGroupsToDelete = new CommonsArrayList <> ();
+  protected ICommonsList <String> triggerGroupsToDelete = new CommonsArrayList <> ();
+  protected ICommonsList <JobKey> jobsToDelete = new CommonsArrayList <> ();
+  protected ICommonsList <TriggerKey> triggersToDelete = new CommonsArrayList <> ();
 
   // scheduling commands
-  protected List <IJobDetail> loadedJobs = new ArrayList <> ();
-  protected List <IMutableTrigger> loadedTriggers = new ArrayList <> ();
+  protected ICommonsList <IJobDetail> loadedJobs = new CommonsArrayList <> ();
+  protected ICommonsList <IMutableTrigger> loadedTriggers = new CommonsArrayList <> ();
 
   // directives
   private boolean overWriteExistingData = true;
   private boolean ignoreDuplicates = false;
 
-  protected Collection <Exception> validationExceptions = new ArrayList <> ();
+  protected Collection <Exception> validationExceptions = new CommonsArrayList <> ();
 
   protected IClassLoadHelper classLoadHelper;
-  protected List <String> jobGroupsToNeverDelete = new ArrayList <> ();
-  protected List <String> triggerGroupsToNeverDelete = new ArrayList <> ();
+  protected ICommonsList <String> jobGroupsToNeverDelete = new CommonsArrayList <> ();
+  protected ICommonsList <String> triggerGroupsToNeverDelete = new CommonsArrayList <> ();
 
   private DocumentBuilder docBuilder;
   private XPath xpath;
@@ -970,28 +971,24 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
     loadedTriggers.add (trigger);
   }
 
-  private Map <JobKey, List <IMutableTrigger>> buildTriggersByFQJobNameMap (final List <IMutableTrigger> triggers)
+  private ICommonsMap <JobKey, ICommonsList <IMutableTrigger>> buildTriggersByFQJobNameMap (final List <IMutableTrigger> triggers)
   {
-
-    final Map <JobKey, List <IMutableTrigger>> triggersByFQJobName = new HashMap <> ();
-
+    final ICommonsMap <JobKey, ICommonsList <IMutableTrigger>> triggersByFQJobName = new CommonsHashMap <> ();
     for (final IMutableTrigger trigger : triggers)
     {
-      List <IMutableTrigger> triggersOfJob = triggersByFQJobName.get (trigger.getJobKey ());
+      ICommonsList <IMutableTrigger> triggersOfJob = triggersByFQJobName.get (trigger.getJobKey ());
       if (triggersOfJob == null)
       {
-        triggersOfJob = new ArrayList <> ();
+        triggersOfJob = new CommonsArrayList <> ();
         triggersByFQJobName.put (trigger.getJobKey (), triggersOfJob);
       }
       triggersOfJob.add (trigger);
     }
-
     return triggersByFQJobName;
   }
 
   protected void executePreProcessCommands (final IScheduler scheduler) throws SchedulerException
   {
-
     for (final String group : jobGroupsToDelete)
     {
       if (group.equals ("*"))
@@ -1080,12 +1077,12 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected void scheduleJobs (final IScheduler sched) throws SchedulerException
   {
-    final List <IJobDetail> jobs = new ArrayList <> (getLoadedJobs ());
-    final List <IMutableTrigger> triggers = new ArrayList <> (getLoadedTriggers ());
+    final ICommonsList <IJobDetail> jobs = new CommonsArrayList <> (getLoadedJobs ());
+    final ICommonsList <IMutableTrigger> triggers = new CommonsArrayList <> (getLoadedTriggers ());
 
     log.info ("Adding " + jobs.size () + " jobs, " + triggers.size () + " triggers.");
 
-    final Map <JobKey, List <IMutableTrigger>> triggersByFQJobName = buildTriggersByFQJobNameMap (triggers);
+    final ICommonsMap <JobKey, ICommonsList <IMutableTrigger>> triggersByFQJobName = buildTriggersByFQJobNameMap (triggers);
 
     // add each job, and it's associated triggers
     final Iterator <IJobDetail> itr = jobs.iterator ();

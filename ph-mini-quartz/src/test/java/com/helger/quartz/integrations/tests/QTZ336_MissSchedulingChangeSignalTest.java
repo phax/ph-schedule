@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.commons.thread.ThreadHelper;
 import com.helger.quartz.DisallowConcurrentExecution;
@@ -158,11 +159,13 @@ public class QTZ336_MissSchedulingChangeSignalTest
   public static class SlowRAMJobStore extends RAMJobStore
   {
     @Override
-    public List <IOperableTrigger> acquireNextTriggers (final long noLaterThan,
-                                                        final int maxCount,
-                                                        final long timeWindow)
+    public ICommonsList <IOperableTrigger> acquireNextTriggers (final long noLaterThan,
+                                                                final int maxCount,
+                                                                final long timeWindow)
     {
-      final List <IOperableTrigger> nextTriggers = super.acquireNextTriggers (noLaterThan, maxCount, timeWindow);
+      final ICommonsList <IOperableTrigger> nextTriggers = super.acquireNextTriggers (noLaterThan,
+                                                                                      maxCount,
+                                                                                      timeWindow);
       try
       {
         // Wait just a bit for hopefully having a context switch leading to the

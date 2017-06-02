@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsSet;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
@@ -222,16 +224,12 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public List <IJobExecutionContext> getCurrentlyExecutingJobs ()
+  public ICommonsList <IJobExecutionContext> getCurrentlyExecutingJobs ()
   {
     return m_aSched.getCurrentlyExecutingJobs ();
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  ///
   /// Scheduling-related Methods
-  ///
-  ///////////////////////////////////////////////////////////////////////////
 
   /**
    * <p>
@@ -386,7 +384,7 @@ public class StdScheduler implements IScheduler
   /**
    * @see com.helger.quartz.IScheduler#getPausedTriggerGroups()
    */
-  public Set <String> getPausedTriggerGroups () throws SchedulerException
+  public ICommonsSet <String> getPausedTriggerGroups () throws SchedulerException
   {
     return m_aSched.getPausedTriggerGroups ();
   }
@@ -466,7 +464,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public List <String> getJobGroupNames () throws SchedulerException
+  public ICommonsList <String> getJobGroupNames () throws SchedulerException
   {
     return m_aSched.getJobGroupNames ();
   }
@@ -476,7 +474,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public List <? extends ITrigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
+  public ICommonsList <? extends ITrigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
   {
     return m_aSched.getTriggersOfJob (jobKey);
   }
@@ -486,7 +484,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Set <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
+  public ICommonsSet <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
     return m_aSched.getJobKeys (matcher);
   }
@@ -496,7 +494,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public List <String> getTriggerGroupNames () throws SchedulerException
+  public ICommonsList <String> getTriggerGroupNames () throws SchedulerException
   {
     return m_aSched.getTriggerGroupNames ();
   }
@@ -506,7 +504,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Set <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public ICommonsSet <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     return m_aSched.getTriggerKeys (matcher);
   }
@@ -579,7 +577,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public List <String> getCalendarNames () throws SchedulerException
+  public ICommonsList <String> getCalendarNames () throws SchedulerException
   {
     return m_aSched.getCalendarNames ();
   }

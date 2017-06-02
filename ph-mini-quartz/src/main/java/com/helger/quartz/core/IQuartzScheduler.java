@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsSet;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
@@ -81,7 +83,7 @@ public interface IQuartzScheduler extends Serializable
 
   void clear () throws SchedulerException;
 
-  List <IJobExecutionContext> getCurrentlyExecutingJobs () throws SchedulerException;
+  ICommonsList <IJobExecutionContext> getCurrentlyExecutingJobs () throws SchedulerException;
 
   Date scheduleJob (IJobDetail jobDetail, ITrigger trigger) throws SchedulerException;
 
@@ -115,7 +117,7 @@ public interface IQuartzScheduler extends Serializable
 
   void resumeTriggers (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
-  Set <String> getPausedTriggerGroups () throws SchedulerException;
+  ICommonsSet <String> getPausedTriggerGroups () throws SchedulerException;
 
   void resumeJob (JobKey jobKey) throws SchedulerException;
 
@@ -125,15 +127,15 @@ public interface IQuartzScheduler extends Serializable
 
   void resumeAll () throws SchedulerException;
 
-  List <String> getJobGroupNames () throws SchedulerException;
+  ICommonsList <String> getJobGroupNames () throws SchedulerException;
 
-  Set <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws SchedulerException;
+  ICommonsSet <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws SchedulerException;
 
-  List <? extends ITrigger> getTriggersOfJob (JobKey jobKey) throws SchedulerException;
+  ICommonsList <? extends ITrigger> getTriggersOfJob (JobKey jobKey) throws SchedulerException;
 
-  List <String> getTriggerGroupNames () throws SchedulerException;
+  ICommonsList <String> getTriggerGroupNames () throws SchedulerException;
 
-  Set <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
+  ICommonsSet <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
   IJobDetail getJobDetail (JobKey jobKey) throws SchedulerException;
 
@@ -150,7 +152,7 @@ public interface IQuartzScheduler extends Serializable
 
   ICalendar getCalendar (String calName) throws SchedulerException;
 
-  List <String> getCalendarNames () throws SchedulerException;
+  ICommonsList <String> getCalendarNames () throws SchedulerException;
 
   boolean interrupt (JobKey jobKey) throws UnableToInterruptJobException;
 

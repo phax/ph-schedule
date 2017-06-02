@@ -20,14 +20,9 @@ package com.helger.quartz.core;
 
 import static com.helger.quartz.TriggerBuilder.newTrigger;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,7 +31,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.CommonsHashMap;
+import com.helger.commons.collection.ext.CommonsLinkedList;
+import com.helger.commons.collection.ext.ICommonsCollection;
+import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.commons.collection.ext.ICommonsMap;
+import com.helger.commons.collection.ext.ICommonsSet;
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.lang.PropertiesHelper;
 import com.helger.commons.random.RandomHelper;
@@ -126,15 +126,15 @@ public class QuartzScheduler implements IQuartzScheduler
   private ThreadGroup threadGroup;
   private final SchedulerContext context = new SchedulerContext ();
   private final IListenerManager listenerManager = new ListenerManager ();
-  private final Map <String, IJobListener> internalJobListeners = new HashMap <> (10);
-  private final Map <String, ITriggerListener> internalTriggerListeners = new HashMap <> (10);
-  private final List <ISchedulerListener> internalSchedulerListeners = new ArrayList <> (10);
+  private final ICommonsMap <String, IJobListener> internalJobListeners = new CommonsHashMap <> (10);
+  private final ICommonsMap <String, ITriggerListener> internalTriggerListeners = new CommonsHashMap <> (10);
+  private final ICommonsList <ISchedulerListener> internalSchedulerListeners = new CommonsArrayList <> (10);
   private IJobFactory jobFactory = new PropertySettingJobFactory ();
   ExecutingJobsManager jobMgr = null;
   ErrorLogger errLogger = null;
   private final ISchedulerSignaler signaler;
   private final Random random = RandomHelper.getRandom ();
-  private final List <Object> holdToPreventGC = new ArrayList <> (5);
+  private final ICommonsList <Object> holdToPreventGC = new CommonsArrayList <> (5);
   private boolean signalOnSchedulingChange = true;
   private volatile boolean closed = false;
   private volatile boolean shuttingDown = false;
@@ -490,7 +490,7 @@ public class QuartzScheduler implements IQuartzScheduler
     if ((resources.isInterruptJobsOnShutdown () && !waitForJobsToComplete) ||
         (resources.isInterruptJobsOnShutdownWithWait () && waitForJobsToComplete))
     {
-      final List <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
+      final ICommonsList <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
       for (final IJobExecutionContext job : jobs)
       {
         if (job.getJobInstance () instanceof IInterruptableJob)
@@ -570,7 +570,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * soon as it's returned, the true list of executing jobs may be different.
    * </p>
    */
-  public List <IJobExecutionContext> getCurrentlyExecutingJobs ()
+  public ICommonsList <IJobExecutionContext> getCurrentlyExecutingJobs ()
   {
     return jobMgr.getExecutingJobs ();
   }
@@ -754,7 +754,7 @@ public class QuartzScheduler implements IQuartzScheduler
 
     boolean result = false;
 
-    final List <? extends ITrigger> triggers = getTriggersOfJob (jobKey);
+    final ICommonsList <? extends ITrigger> triggers = getTriggersOfJob (jobKey);
     for (final ITrigger trigger : triggers)
     {
       if (!unscheduleJob (trigger.getKey ()))
@@ -797,7 +797,7 @@ public class QuartzScheduler implements IQuartzScheduler
     validateState ();
 
     // make sure all triggers refer to their associated job
-    for (final Entry <IJobDetail, Set <? extends ITrigger>> e : triggersAndJobs.entrySet ())
+    for (final Map.Entry <IJobDetail, Set <? extends ITrigger>> e : triggersAndJobs.entrySet ())
     {
       final IJobDetail job = e.getKey ();
       if (job == null)
@@ -851,7 +851,7 @@ public class QuartzScheduler implements IQuartzScheduler
                            final Set <? extends ITrigger> triggersForJob,
                            final boolean replace) throws SchedulerException
   {
-    final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs = new HashMap <> ();
+    final ICommonsMap <IJobDetail, Set <? extends ITrigger>> triggersAndJobs = new CommonsHashMap <> ();
     triggersAndJobs.put (jobDetail, triggersForJob);
     scheduleJobs (triggersAndJobs, replace);
   }
@@ -1053,7 +1053,7 @@ public class QuartzScheduler implements IQuartzScheduler
   {
     validateState ();
 
-    final Collection <String> pausedGroups = resources.getJobStore ().pauseTriggers (_getOrDefault (matcher));
+    final ICommonsCollection <String> pausedGroups = resources.getJobStore ().pauseTriggers (_getOrDefault (matcher));
     notifySchedulerThread (0L);
     for (final String pausedGroup : pausedGroups)
     {
@@ -1086,7 +1086,7 @@ public class QuartzScheduler implements IQuartzScheduler
   {
     validateState ();
 
-    final Collection <String> pausedGroups = resources.getJobStore ().pauseJobs (_getOrDefault (groupMatcher));
+    final ICommonsCollection <String> pausedGroups = resources.getJobStore ().pauseJobs (_getOrDefault (groupMatcher));
     notifySchedulerThread (0L);
     for (final String pausedGroup : pausedGroups)
     {
@@ -1126,7 +1126,7 @@ public class QuartzScheduler implements IQuartzScheduler
   {
     validateState ();
 
-    final Collection <String> pausedGroups = resources.getJobStore ().resumeTriggers (_getOrDefault (matcher));
+    final ICommonsCollection <String> pausedGroups = resources.getJobStore ().resumeTriggers (_getOrDefault (matcher));
     notifySchedulerThread (0L);
     for (final String pausedGroup : pausedGroups)
     {
@@ -1134,7 +1134,7 @@ public class QuartzScheduler implements IQuartzScheduler
     }
   }
 
-  public Set <String> getPausedTriggerGroups () throws SchedulerException
+  public ICommonsSet <String> getPausedTriggerGroups () throws SchedulerException
   {
     return resources.getJobStore ().getPausedTriggerGroups ();
   }
@@ -1174,7 +1174,7 @@ public class QuartzScheduler implements IQuartzScheduler
   {
     validateState ();
 
-    final Collection <String> resumedGroups = resources.getJobStore ().resumeJobs (_getOrDefault (matcher));
+    final ICommonsCollection <String> resumedGroups = resources.getJobStore ().resumeJobs (_getOrDefault (matcher));
     notifySchedulerThread (0L);
     for (final String pausedGroup : resumedGroups)
     {
@@ -1233,7 +1233,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * groups.
    * </p>
    */
-  public List <String> getJobGroupNames () throws SchedulerException
+  public ICommonsList <String> getJobGroupNames () throws SchedulerException
   {
     validateState ();
 
@@ -1246,7 +1246,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * the matching groups.
    * </p>
    */
-  public Set <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
+  public ICommonsSet <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
     validateState ();
 
@@ -1259,7 +1259,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * identified <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    */
-  public List <? extends ITrigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
+  public ICommonsList <? extends ITrigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
   {
     validateState ();
 
@@ -1272,7 +1272,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * groups.
    * </p>
    */
-  public List <String> getTriggerGroupNames () throws SchedulerException
+  public ICommonsList <String> getTriggerGroupNames () throws SchedulerException
   {
     validateState ();
 
@@ -1285,7 +1285,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * in the matching groups.
    * </p>
    */
-  public Set <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public ICommonsSet <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     validateState ();
 
@@ -1434,7 +1434,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * Get the names of all registered <code>{@link ICalendar}s</code>.
    * </p>
    */
-  public List <String> getCalendarNames () throws SchedulerException
+  public ICommonsList <String> getCalendarNames () throws SchedulerException
   {
     validateState ();
 
@@ -1488,11 +1488,11 @@ public class QuartzScheduler implements IQuartzScheduler
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
-  public List <IJobListener> getInternalJobListeners ()
+  public ICommonsList <IJobListener> getInternalJobListeners ()
   {
     synchronized (internalJobListeners)
     {
-      return java.util.Collections.unmodifiableList (new LinkedList <> (internalJobListeners.values ()));
+      return new CommonsLinkedList <> (internalJobListeners.values ());
     }
   }
 
@@ -1552,11 +1552,11 @@ public class QuartzScheduler implements IQuartzScheduler
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
-  public List <ITriggerListener> getInternalTriggerListeners ()
+  public ICommonsList <ITriggerListener> getInternalTriggerListeners ()
   {
     synchronized (internalTriggerListeners)
     {
-      return java.util.Collections.unmodifiableList (new LinkedList <> (internalTriggerListeners.values ()));
+      return new CommonsLinkedList <> (internalTriggerListeners.values ());
     }
   }
 
@@ -1611,11 +1611,11 @@ public class QuartzScheduler implements IQuartzScheduler
    * <code>Scheduler</code>.
    * </p>
    */
-  public List <ISchedulerListener> getInternalSchedulerListeners ()
+  public ICommonsList <ISchedulerListener> getInternalSchedulerListeners ()
   {
     synchronized (internalSchedulerListeners)
     {
-      return java.util.Collections.unmodifiableList (new ArrayList <> (internalSchedulerListeners));
+      return new CommonsArrayList <> (internalSchedulerListeners);
     }
   }
 
@@ -1641,27 +1641,27 @@ public class QuartzScheduler implements IQuartzScheduler
     }
   }
 
-  private List <ITriggerListener> _buildTriggerListenerList ()
+  private ICommonsList <ITriggerListener> _buildTriggerListenerList ()
   {
-    final List <ITriggerListener> allListeners = new LinkedList <> ();
+    final ICommonsList <ITriggerListener> allListeners = new CommonsLinkedList <> ();
     allListeners.addAll (getListenerManager ().getTriggerListeners ());
     allListeners.addAll (getInternalTriggerListeners ());
 
     return allListeners;
   }
 
-  private List <IJobListener> _buildJobListenerList ()
+  private ICommonsList <IJobListener> _buildJobListenerList ()
   {
-    final List <IJobListener> allListeners = new LinkedList <> ();
+    final ICommonsList <IJobListener> allListeners = new CommonsLinkedList <> ();
     allListeners.addAll (getListenerManager ().getJobListeners ());
     allListeners.addAll (getInternalJobListeners ());
 
     return allListeners;
   }
 
-  private List <ISchedulerListener> _buildSchedulerListenerList ()
+  private ICommonsList <ISchedulerListener> _buildSchedulerListenerList ()
   {
-    final List <ISchedulerListener> allListeners = new ArrayList <> ();
+    final ICommonsList <ISchedulerListener> allListeners = new CommonsArrayList <> ();
     allListeners.addAll (getListenerManager ().getSchedulerListeners ());
     allListeners.addAll (getInternalSchedulerListeners ());
 
@@ -1670,20 +1670,19 @@ public class QuartzScheduler implements IQuartzScheduler
 
   private boolean _matchJobListener (final IJobListener listener, final JobKey key)
   {
-    final List <IMatcher <JobKey>> matchers = getListenerManager ().getJobListenerMatchers (listener.getName ());
+    final ICommonsList <IMatcher <JobKey>> matchers = getListenerManager ().getJobListenerMatchers (listener.getName ());
     if (matchers == null)
       return true;
+
     for (final IMatcher <JobKey> matcher : matchers)
-    {
       if (matcher.isMatch (key))
         return true;
-    }
     return false;
   }
 
   private boolean _matchTriggerListener (final ITriggerListener listener, final TriggerKey key)
   {
-    final List <IMatcher <TriggerKey>> matchers = getListenerManager ().getTriggerListenerMatchers (listener.getName ());
+    final ICommonsList <IMatcher <TriggerKey>> matchers = getListenerManager ().getTriggerListenerMatchers (listener.getName ());
     if (matchers == null)
       return true;
     for (final IMatcher <TriggerKey> matcher : matchers)
@@ -1700,7 +1699,7 @@ public class QuartzScheduler implements IQuartzScheduler
     boolean vetoedExecution = false;
 
     // build a list of all trigger listeners that are to be notified...
-    final List <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
+    final ICommonsList <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
     for (final ITriggerListener tl : triggerListeners)
@@ -1733,7 +1732,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifyTriggerListenersMisfired (final ITrigger trigger) throws SchedulerException
   {
     // build a list of all trigger listeners that are to be notified...
-    final List <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
+    final ICommonsList <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
     for (final ITriggerListener tl : triggerListeners)
@@ -1760,7 +1759,7 @@ public class QuartzScheduler implements IQuartzScheduler
                                               final ECompletedExecutionInstruction instCode) throws SchedulerException
   {
     // build a list of all trigger listeners that are to be notified...
-    final List <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
+    final ICommonsList <ITriggerListener> triggerListeners = _buildTriggerListenerList ();
 
     // notify all trigger listeners in the list
     for (final ITriggerListener tl : triggerListeners)
@@ -1786,7 +1785,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifyJobListenersToBeExecuted (final IJobExecutionContext jec) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <IJobListener> jobListeners = _buildJobListenerList ();
+    final ICommonsList <IJobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
     for (final IJobListener jl : jobListeners)
@@ -1812,7 +1811,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifyJobListenersWasVetoed (final IJobExecutionContext jec) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <IJobListener> jobListeners = _buildJobListenerList ();
+    final ICommonsList <IJobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
     for (final IJobListener jl : jobListeners)
@@ -1839,7 +1838,7 @@ public class QuartzScheduler implements IQuartzScheduler
                                              final JobExecutionException je) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
-    final List <IJobListener> jobListeners = _buildJobListenerList ();
+    final ICommonsList <IJobListener> jobListeners = _buildJobListenerList ();
 
     // notify all job listeners
     for (final IJobListener jl : jobListeners)
@@ -1865,7 +1864,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersError (final String msg, final SchedulerException se)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -1885,7 +1884,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersSchduled (final ITrigger trigger)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -1907,7 +1906,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersUnscheduled (final TriggerKey triggerKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -1932,7 +1931,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersFinalized (final ITrigger trigger)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -1954,7 +1953,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersPausedTrigger (final TriggerKey triggerKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -1973,7 +1972,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersPausedTriggers (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -1992,7 +1991,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersResumedTrigger (final TriggerKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2011,7 +2010,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersResumedTriggers (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2030,7 +2029,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersPausedJob (final JobKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2049,7 +2048,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersPausedJobs (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2068,7 +2067,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersResumedJob (final JobKey key)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2087,7 +2086,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersResumedJobs (final String group)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2106,7 +2105,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersInStandbyMode ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2125,7 +2124,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersStarted ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2144,7 +2143,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersStarting ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2163,7 +2162,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersShutdown ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2182,7 +2181,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersShuttingdown ()
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2201,7 +2200,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersJobAdded (final IJobDetail jobDetail)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2220,7 +2219,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void notifySchedulerListenersJobDeleted (final JobKey jobKey)
   {
     // build a list of all scheduler listeners that are to be notified...
-    final List <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
+    final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
 
     // notify all scheduler listeners
     for (final ISchedulerListener sl : schedListeners)
@@ -2272,7 +2271,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public boolean interrupt (final JobKey jobKey) throws UnableToInterruptJobException
   {
 
-    final List <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
+    final ICommonsList <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
 
     IJobDetail jobDetail = null;
     IJob job = null;
@@ -2316,7 +2315,7 @@ public class QuartzScheduler implements IQuartzScheduler
    */
   public boolean interrupt (final String fireInstanceId) throws UnableToInterruptJobException
   {
-    final List <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
+    final ICommonsList <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
 
     IJob job = null;
 
@@ -2365,7 +2364,7 @@ class ErrorLogger extends AbstractSchedulerListenerSupport
 
 class ExecutingJobsManager implements IJobListener
 {
-  private final HashMap <String, IJobExecutionContext> executingJobs = new HashMap <> ();
+  private final ICommonsMap <String, IJobExecutionContext> executingJobs = new CommonsHashMap <> ();
   private final AtomicInteger numJobsFired = new AtomicInteger (0);
 
   ExecutingJobsManager ()
@@ -2407,11 +2406,11 @@ class ExecutingJobsManager implements IJobListener
     return numJobsFired.get ();
   }
 
-  public List <IJobExecutionContext> getExecutingJobs ()
+  public ICommonsList <IJobExecutionContext> getExecutingJobs ()
   {
     synchronized (executingJobs)
     {
-      return new CommonsArrayList <> (executingJobs.values ()).getAsUnmodifiable ();
+      return new CommonsArrayList <> (executingJobs.values ());
     }
   }
 

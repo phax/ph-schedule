@@ -18,7 +18,6 @@
  */
 package com.helger.quartz.core;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,6 +25,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.JobPersistenceException;
@@ -285,7 +286,7 @@ public class QuartzSchedulerThread extends Thread
         { // will always be true, due to semantics of
           // blockForAvailableThreads...
 
-          List <IOperableTrigger> triggers = null;
+          ICommonsList <IOperableTrigger> triggers = null;
 
           long now = System.currentTimeMillis ();
 
@@ -363,7 +364,7 @@ public class QuartzSchedulerThread extends Thread
               continue;
 
             // set triggers to 'executing'
-            List <TriggerFiredResult> bndles = new ArrayList <> ();
+            ICommonsList <TriggerFiredResult> bndles = new CommonsArrayList <> ();
 
             boolean goAhead = true;
             synchronized (sigLock)
@@ -374,7 +375,7 @@ public class QuartzSchedulerThread extends Thread
             {
               try
               {
-                final List <TriggerFiredResult> res = qsRsrcs.getJobStore ().triggersFired (triggers);
+                final ICommonsList <TriggerFiredResult> res = qsRsrcs.getJobStore ().triggersFired (triggers);
                 if (res != null)
                   bndles = res;
               }

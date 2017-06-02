@@ -18,25 +18,28 @@
  */
 package com.helger.quartz.simpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.CommonsHashMap;
+import com.helger.commons.collection.ext.CommonsHashSet;
+import com.helger.commons.collection.ext.CommonsLinkedList;
+import com.helger.commons.collection.ext.CommonsTreeSet;
+import com.helger.commons.collection.ext.ICommonsCollection;
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsMap;
+import com.helger.commons.collection.ext.ICommonsSet;
+import com.helger.commons.collection.ext.ICommonsSortedSet;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -83,27 +86,27 @@ public class RAMJobStore implements IJobStore
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
-  protected HashMap <JobKey, JobWrapper> jobsByKey = new HashMap <> (1000);
+  protected ICommonsMap <JobKey, JobWrapper> jobsByKey = new CommonsHashMap <> (1000);
 
-  protected HashMap <TriggerKey, TriggerWrapper> triggersByKey = new HashMap <> (1000);
+  protected ICommonsMap <TriggerKey, TriggerWrapper> triggersByKey = new CommonsHashMap <> (1000);
 
-  protected HashMap <String, HashMap <JobKey, JobWrapper>> jobsByGroup = new HashMap <> (25);
+  protected ICommonsMap <String, ICommonsMap <JobKey, JobWrapper>> jobsByGroup = new CommonsHashMap <> (25);
 
-  protected HashMap <String, HashMap <TriggerKey, TriggerWrapper>> triggersByGroup = new HashMap <> (25);
+  protected ICommonsMap <String, ICommonsMap <TriggerKey, TriggerWrapper>> triggersByGroup = new CommonsHashMap <> (25);
 
-  protected TreeSet <TriggerWrapper> timeTriggers = new TreeSet <> (new TriggerWrapperComparator ());
+  protected ICommonsSortedSet <TriggerWrapper> timeTriggers = new CommonsTreeSet <> (new TriggerWrapperComparator ());
 
-  protected HashMap <String, ICalendar> calendarsByName = new HashMap <> (25);
+  protected ICommonsMap <String, ICalendar> calendarsByName = new CommonsHashMap <> (25);
 
-  protected ArrayList <TriggerWrapper> triggers = new ArrayList <> (1000);
+  protected ICommonsList <TriggerWrapper> triggers = new CommonsArrayList <> (1000);
 
   protected final Object lock = new Object ();
 
-  protected HashSet <String> pausedTriggerGroups = new HashSet <> ();
+  protected ICommonsSet <String> pausedTriggerGroups = new CommonsHashSet <> ();
 
-  protected HashSet <String> pausedJobGroups = new HashSet <> ();
+  protected ICommonsSet <String> pausedJobGroups = new CommonsHashSet <> ();
 
-  protected HashSet <JobKey> blockedJobs = new HashSet <> ();
+  protected ICommonsSet <JobKey> blockedJobs = new CommonsHashSet <> ();
 
   protected long misfireThreshold = 5000l;
 
@@ -296,10 +299,10 @@ public class RAMJobStore implements IJobStore
       if (!bReplace)
       {
         // get job group
-        HashMap <JobKey, JobWrapper> grpMap = jobsByGroup.get (newJob.getKey ().getGroup ());
+        ICommonsMap <JobKey, JobWrapper> grpMap = jobsByGroup.get (newJob.getKey ().getGroup ());
         if (grpMap == null)
         {
-          grpMap = new HashMap <> (100);
+          grpMap = new CommonsHashMap <> (100);
           jobsByGroup.put (newJob.getKey ().getGroup (), grpMap);
         }
         // add to jobs by group
@@ -344,11 +347,11 @@ public class RAMJobStore implements IJobStore
       if (found)
       {
 
-        final HashMap <JobKey, JobWrapper> grpMap = jobsByGroup.get (jobKey.getGroup ());
+        final ICommonsMap <JobKey, JobWrapper> grpMap = jobsByGroup.get (jobKey.getGroup ());
         if (grpMap != null)
         {
           grpMap.remove (jobKey);
-          if (grpMap.size () == 0)
+          if (grpMap.isEmpty ())
           {
             jobsByGroup.remove (jobKey.getGroup ());
           }
@@ -461,10 +464,10 @@ public class RAMJobStore implements IJobStore
       // add to triggers array
       triggers.add (tw);
       // add to triggers by group
-      HashMap <TriggerKey, TriggerWrapper> grpMap = triggersByGroup.get (newTrigger.getKey ().getGroup ());
+      ICommonsMap <TriggerKey, TriggerWrapper> grpMap = triggersByGroup.get (newTrigger.getKey ().getGroup ());
       if (grpMap == null)
       {
-        grpMap = new HashMap <> (100);
+        grpMap = new CommonsHashMap <> (100);
         triggersByGroup.put (newTrigger.getKey ().getGroup (), grpMap);
       }
       grpMap.put (newTrigger.getKey (), tw);
@@ -519,11 +522,11 @@ public class RAMJobStore implements IJobStore
       {
         TriggerWrapper tw = null;
         // remove from triggers by group
-        final HashMap <TriggerKey, TriggerWrapper> grpMap = triggersByGroup.get (key.getGroup ());
+        final ICommonsMap <TriggerKey, TriggerWrapper> grpMap = triggersByGroup.get (key.getGroup ());
         if (grpMap != null)
         {
           grpMap.remove (key);
-          if (grpMap.size () == 0)
+          if (grpMap.isEmpty ())
           {
             triggersByGroup.remove (key.getGroup ());
           }
@@ -545,7 +548,7 @@ public class RAMJobStore implements IJobStore
         {
           final JobWrapper jw = jobsByKey.get (tw.jobKey);
           final List <IOperableTrigger> trigs = getTriggersForJob (tw.jobKey);
-          if ((trigs == null || trigs.size () == 0) && !jw.jobDetail.isDurable ())
+          if ((trigs == null || trigs.isEmpty ()) && !jw.jobDetail.isDurable ())
           {
             if (removeJob (jw.key))
             {
@@ -585,11 +588,11 @@ public class RAMJobStore implements IJobStore
 
         tw = null;
         // remove from triggers by group
-        final HashMap <TriggerKey, TriggerWrapper> grpMap = triggersByGroup.get (triggerKey.getGroup ());
+        final ICommonsMap <TriggerKey, TriggerWrapper> grpMap = triggersByGroup.get (triggerKey.getGroup ());
         if (grpMap != null)
         {
           grpMap.remove (triggerKey);
-          if (grpMap.size () == 0)
+          if (grpMap.isEmpty ())
           {
             triggersByGroup.remove (triggerKey.getGroup ());
           }
@@ -913,9 +916,9 @@ public class RAMJobStore implements IJobStore
    * that match the given groupMatcher.
    * </p>
    */
-  public Set <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher)
+  public ICommonsSet <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher)
   {
-    Set <JobKey> outList = null;
+    ICommonsSet <JobKey> outList = null;
     synchronized (lock)
     {
 
@@ -925,44 +928,33 @@ public class RAMJobStore implements IJobStore
       switch (operator)
       {
         case EQUALS:
-          final HashMap <JobKey, JobWrapper> grpMap = jobsByGroup.get (compareToValue);
+          final ICommonsMap <JobKey, JobWrapper> grpMap = jobsByGroup.get (compareToValue);
           if (grpMap != null)
           {
-            outList = new HashSet <> ();
-
+            outList = new CommonsHashSet <> ();
             for (final JobWrapper jw : grpMap.values ())
-            {
-
               if (jw != null)
-              {
                 outList.add (jw.jobDetail.getKey ());
-              }
-            }
           }
           break;
 
         default:
-          for (final Map.Entry <String, HashMap <JobKey, JobWrapper>> entry : jobsByGroup.entrySet ())
+          for (final Map.Entry <String, ICommonsMap <JobKey, JobWrapper>> entry : jobsByGroup.entrySet ())
           {
             if (operator.evaluate (entry.getKey (), compareToValue) && entry.getValue () != null)
             {
               if (outList == null)
-              {
-                outList = new HashSet <> ();
-              }
+                outList = new CommonsHashSet <> ();
+
               for (final JobWrapper jobWrapper : entry.getValue ().values ())
-              {
                 if (jobWrapper != null)
-                {
                   outList.add (jobWrapper.jobDetail.getKey ());
-                }
-              }
             }
           }
       }
     }
 
-    return outList == null ? java.util.Collections.<JobKey> emptySet () : outList;
+    return outList == null ? new CommonsHashSet <> () : outList;
   }
 
   /**
@@ -976,11 +968,11 @@ public class RAMJobStore implements IJobStore
    * zero-length array (not <code>null</code>).
    * </p>
    */
-  public List <String> getCalendarNames ()
+  public ICommonsList <String> getCalendarNames ()
   {
     synchronized (lock)
     {
-      return new LinkedList <> (calendarsByName.keySet ());
+      return new CommonsLinkedList <> (calendarsByName.keySet ());
     }
   }
 
@@ -990,9 +982,9 @@ public class RAMJobStore implements IJobStore
    * s that match the given groupMatcher.
    * </p>
    */
-  public Set <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher)
+  public ICommonsSet <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher)
   {
-    Set <TriggerKey> outList = null;
+    ICommonsSet <TriggerKey> outList = null;
     synchronized (lock)
     {
 
@@ -1002,44 +994,34 @@ public class RAMJobStore implements IJobStore
       switch (operator)
       {
         case EQUALS:
-          final HashMap <TriggerKey, TriggerWrapper> grpMap = triggersByGroup.get (compareToValue);
+          final ICommonsMap <TriggerKey, TriggerWrapper> grpMap = triggersByGroup.get (compareToValue);
           if (grpMap != null)
           {
-            outList = new HashSet <> ();
+            outList = new CommonsHashSet <> ();
 
             for (final TriggerWrapper tw : grpMap.values ())
-            {
-
               if (tw != null)
-              {
                 outList.add (tw.trigger.getKey ());
-              }
-            }
           }
           break;
 
         default:
-          for (final Map.Entry <String, HashMap <TriggerKey, TriggerWrapper>> entry : triggersByGroup.entrySet ())
+          for (final Map.Entry <String, ICommonsMap <TriggerKey, TriggerWrapper>> entry : triggersByGroup.entrySet ())
           {
             if (operator.evaluate (entry.getKey (), compareToValue) && entry.getValue () != null)
             {
               if (outList == null)
-              {
-                outList = new HashSet <> ();
-              }
+                outList = new CommonsHashSet <> ();
+
               for (final TriggerWrapper triggerWrapper : entry.getValue ().values ())
-              {
                 if (triggerWrapper != null)
-                {
                   outList.add (triggerWrapper.trigger.getKey ());
-                }
-              }
             }
           }
       }
     }
 
-    return outList == null ? Collections.<TriggerKey> emptySet () : outList;
+    return outList == null ? new CommonsHashSet <> () : outList;
   }
 
   /**
@@ -1048,16 +1030,12 @@ public class RAMJobStore implements IJobStore
    * groups.
    * </p>
    */
-  public List <String> getJobGroupNames ()
+  public ICommonsList <String> getJobGroupNames ()
   {
-    List <String> outList;
-
     synchronized (lock)
     {
-      outList = new LinkedList <> (jobsByGroup.keySet ());
+      return new CommonsLinkedList <> (jobsByGroup.keySet ());
     }
-
-    return outList;
   }
 
   /**
@@ -1066,16 +1044,12 @@ public class RAMJobStore implements IJobStore
    * groups.
    * </p>
    */
-  public List <String> getTriggerGroupNames ()
+  public ICommonsList <String> getTriggerGroupNames ()
   {
-    LinkedList <String> outList;
-
     synchronized (lock)
     {
-      outList = new LinkedList <> (triggersByGroup.keySet ());
+      return new CommonsLinkedList <> (triggersByGroup.keySet ());
     }
-
-    return outList;
   }
 
   /**
@@ -1086,45 +1060,37 @@ public class RAMJobStore implements IJobStore
    * If there are no matches, a zero-length array should be returned.
    * </p>
    */
-  public List <IOperableTrigger> getTriggersForJob (final JobKey jobKey)
+  public ICommonsList <IOperableTrigger> getTriggersForJob (final JobKey jobKey)
   {
-    final ArrayList <IOperableTrigger> trigList = new ArrayList <> ();
+    final ICommonsList <IOperableTrigger> trigList = new CommonsArrayList <> ();
 
     synchronized (lock)
     {
       for (final TriggerWrapper tw : triggers)
-      {
         if (tw.jobKey.equals (jobKey))
-        {
           trigList.add ((IOperableTrigger) tw.trigger.clone ());
-        }
-      }
     }
 
     return trigList;
   }
 
-  protected ArrayList <TriggerWrapper> getTriggerWrappersForJob (final JobKey jobKey)
+  protected ICommonsList <TriggerWrapper> getTriggerWrappersForJob (final JobKey jobKey)
   {
-    final ArrayList <TriggerWrapper> trigList = new ArrayList <> ();
+    final ICommonsList <TriggerWrapper> trigList = new CommonsArrayList <> ();
 
     synchronized (lock)
     {
       for (final TriggerWrapper trigger : triggers)
-      {
         if (trigger.jobKey.equals (jobKey))
-        {
           trigList.add (trigger);
-        }
-      }
     }
 
     return trigList;
   }
 
-  protected ArrayList <TriggerWrapper> getTriggerWrappersForCalendar (final String calName)
+  protected ICommonsList <TriggerWrapper> getTriggerWrappersForCalendar (final String calName)
   {
-    final ArrayList <TriggerWrapper> trigList = new ArrayList <> ();
+    final ICommonsList <TriggerWrapper> trigList = new CommonsArrayList <> ();
 
     synchronized (lock)
     {
@@ -1132,9 +1098,7 @@ public class RAMJobStore implements IJobStore
       {
         final String tcalName = tw.getTrigger ().getCalendarName ();
         if (tcalName != null && tcalName.equals (calName))
-        {
           trigList.add (tw);
-        }
       }
     }
 
@@ -1148,7 +1112,6 @@ public class RAMJobStore implements IJobStore
    */
   public void pauseTrigger (final TriggerKey triggerKey)
   {
-
     synchronized (lock)
     {
       final TriggerWrapper tw = triggersByKey.get (triggerKey);
@@ -1188,13 +1151,13 @@ public class RAMJobStore implements IJobStore
    * paused.
    * </p>
    */
-  public List <String> pauseTriggers (final GroupMatcher <TriggerKey> matcher)
+  public ICommonsList <String> pauseTriggers (final GroupMatcher <TriggerKey> matcher)
   {
 
-    List <String> pausedGroups;
+    ICommonsList <String> pausedGroups;
     synchronized (lock)
     {
-      pausedGroups = new LinkedList <> ();
+      pausedGroups = new CommonsLinkedList <> ();
 
       final StringMatcher.StringOperatorName operator = matcher.getCompareWithOperator ();
       switch (operator)
@@ -1261,9 +1224,9 @@ public class RAMJobStore implements IJobStore
    * paused.
    * </p>
    */
-  public List <String> pauseJobs (final GroupMatcher <JobKey> matcher)
+  public ICommonsList <String> pauseJobs (final GroupMatcher <JobKey> matcher)
   {
-    final List <String> pausedGroups = new LinkedList <> ();
+    final ICommonsList <String> pausedGroups = new CommonsLinkedList <> ();
     synchronized (lock)
     {
 
@@ -1363,14 +1326,13 @@ public class RAMJobStore implements IJobStore
    * <code>Trigger</code>'s misfire instruction will be applied.
    * </p>
    */
-  public List <String> resumeTriggers (final GroupMatcher <TriggerKey> matcher)
+  public ICommonsList <String> resumeTriggers (final GroupMatcher <TriggerKey> matcher)
   {
-    final Set <String> groups = new HashSet <> ();
+    final ICommonsSet <String> groups = new CommonsHashSet <> ();
 
     synchronized (lock)
     {
-      final Set <TriggerKey> keys = getTriggerKeys (matcher);
-
+      final ICommonsSet <TriggerKey> keys = getTriggerKeys (matcher);
       for (final TriggerKey triggerKey : keys)
       {
         groups.add (triggerKey.getGroup ());
@@ -1390,7 +1352,7 @@ public class RAMJobStore implements IJobStore
       }
     }
 
-    return new ArrayList <> (groups);
+    return new CommonsArrayList <> (groups);
   }
 
   /**
@@ -1428,33 +1390,25 @@ public class RAMJobStore implements IJobStore
    * will be applied.
    * </p>
    */
-  public Collection <String> resumeJobs (final GroupMatcher <JobKey> matcher)
+  public ICommonsCollection <String> resumeJobs (final GroupMatcher <JobKey> matcher)
   {
-    final Set <String> resumedGroups = new HashSet <> ();
+    final ICommonsSet <String> resumedGroups = new CommonsHashSet <> ();
     synchronized (lock)
     {
-      final Set <JobKey> keys = getJobKeys (matcher);
+      final ICommonsSet <JobKey> keys = getJobKeys (matcher);
 
       for (final String pausedJobGroup : pausedJobGroups)
-      {
         if (matcher.getCompareWithOperator ().evaluate (pausedJobGroup, matcher.getCompareToValue ()))
-        {
           resumedGroups.add (pausedJobGroup);
-        }
-      }
 
       for (final String resumedGroup : resumedGroups)
-      {
         pausedJobGroups.remove (resumedGroup);
-      }
 
       for (final JobKey key : keys)
       {
-        final List <IOperableTrigger> triggersOfJob = getTriggersForJob (key);
+        final ICommonsList <IOperableTrigger> triggersOfJob = getTriggersForJob (key);
         for (final IOperableTrigger trigger : triggersOfJob)
-        {
           resumeTrigger (trigger.getKey ());
-        }
       }
     }
     return resumedGroups;
@@ -1476,15 +1430,11 @@ public class RAMJobStore implements IJobStore
    */
   public void pauseAll ()
   {
-
     synchronized (lock)
     {
-      final List <String> names = getTriggerGroupNames ();
-
+      final ICommonsList <String> names = getTriggerGroupNames ();
       for (final String name : names)
-      {
         pauseTriggers (GroupMatcher.triggerGroupEquals (name));
-      }
     }
   }
 
@@ -1502,7 +1452,6 @@ public class RAMJobStore implements IJobStore
    */
   public void resumeAll ()
   {
-
     synchronized (lock)
     {
       pausedJobGroups.clear ();
@@ -1567,17 +1516,19 @@ public class RAMJobStore implements IJobStore
    *
    * @see #releaseAcquiredTrigger(IOperableTrigger)
    */
-  public List <IOperableTrigger> acquireNextTriggers (final long noLaterThan, final int maxCount, final long timeWindow)
+  public ICommonsList <IOperableTrigger> acquireNextTriggers (final long noLaterThan,
+                                                              final int maxCount,
+                                                              final long timeWindow)
   {
     synchronized (lock)
     {
-      final List <IOperableTrigger> result = new ArrayList <> ();
-      final Set <JobKey> acquiredJobKeysForNoConcurrentExec = new HashSet <> ();
-      final Set <TriggerWrapper> excludedTriggers = new HashSet <> ();
+      final ICommonsList <IOperableTrigger> result = new CommonsArrayList <> ();
+      final ICommonsSet <JobKey> acquiredJobKeysForNoConcurrentExec = new CommonsHashSet <> ();
+      final ICommonsSet <TriggerWrapper> excludedTriggers = new CommonsHashSet <> ();
       long batchEnd = noLaterThan;
 
       // return empty list if store has no triggers.
-      if (timeTriggers.size () == 0)
+      if (timeTriggers.isEmpty ())
         return result;
 
       while (true)
@@ -1677,12 +1628,11 @@ public class RAMJobStore implements IJobStore
    * had previously acquired (reserved).
    * </p>
    */
-  public List <TriggerFiredResult> triggersFired (final List <IOperableTrigger> firedTriggers)
+  public ICommonsList <TriggerFiredResult> triggersFired (final List <IOperableTrigger> firedTriggers)
   {
-
     synchronized (lock)
     {
-      final List <TriggerFiredResult> results = new ArrayList <> ();
+      final ICommonsList <TriggerFiredResult> results = new CommonsArrayList <> ();
 
       for (final IOperableTrigger trigger : firedTriggers)
       {
@@ -1728,7 +1678,7 @@ public class RAMJobStore implements IJobStore
 
         if (job.isConcurrentExectionDisallowed ())
         {
-          final ArrayList <TriggerWrapper> trigs = getTriggerWrappersForJob (job.getKey ());
+          final ICommonsList <TriggerWrapper> trigs = getTriggerWrappersForJob (job.getKey ());
           for (final TriggerWrapper ttw : trigs)
           {
             if (ttw.state == TriggerWrapper.STATE_WAITING)
@@ -1801,7 +1751,7 @@ public class RAMJobStore implements IJobStore
         if (jd.isConcurrentExectionDisallowed ())
         {
           blockedJobs.remove (jd.getKey ());
-          final ArrayList <TriggerWrapper> trigs = getTriggerWrappersForJob (jd.getKey ());
+          final ICommonsList <TriggerWrapper> trigs = getTriggerWrappersForJob (jd.getKey ());
           for (final TriggerWrapper ttw : trigs)
           {
             if (ttw.state == TriggerWrapper.STATE_BLOCKED)
@@ -1876,7 +1826,7 @@ public class RAMJobStore implements IJobStore
 
   protected void setAllTriggersOfJobToState (final JobKey jobKey, final int state)
   {
-    final ArrayList <TriggerWrapper> tws = getTriggerWrappersForJob (jobKey);
+    final ICommonsList <TriggerWrapper> tws = getTriggerWrappersForJob (jobKey);
     for (final TriggerWrapper tw : tws)
     {
       tw.state = state;
@@ -1916,9 +1866,9 @@ public class RAMJobStore implements IJobStore
   /**
    * @see com.helger.quartz.spi.IJobStore#getPausedTriggerGroups()
    */
-  public Set <String> getPausedTriggerGroups () throws JobPersistenceException
+  public ICommonsSet <String> getPausedTriggerGroups () throws JobPersistenceException
   {
-    final HashSet <String> set = new HashSet <> ();
+    final ICommonsSet <String> set = new CommonsHashSet <> ();
 
     set.addAll (pausedTriggerGroups);
 

@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsSet;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.spi.IJobFactory;
@@ -190,11 +192,7 @@ public interface IScheduler extends Serializable
    */
   SchedulerContext getContext () throws SchedulerException;
 
-  ///////////////////////////////////////////////////////////////////////////
-  ///
   /// Scheduler State Management Methods
-  ///
-  ///////////////////////////////////////////////////////////////////////////
 
   /**
    * Starts the <code>Scheduler</code>'s threads that fire
@@ -331,7 +329,7 @@ public interface IScheduler extends Serializable
    *
    * @see IJobExecutionContext
    */
-  List <IJobExecutionContext> getCurrentlyExecutingJobs () throws SchedulerException;
+  ICommonsList <IJobExecutionContext> getCurrentlyExecutingJobs () throws SchedulerException;
 
   /**
    * Set the <code>JobFactory</code> that will be responsible for producing
@@ -707,7 +705,7 @@ public interface IScheduler extends Serializable
    * Get the names of all known
    * <code>{@link com.helger.quartz.IJobDetail}</code> groups.
    */
-  List <String> getJobGroupNames () throws SchedulerException;
+  ICommonsList <String> getJobGroupNames () throws SchedulerException;
 
   /**
    * Get the keys of all the <code>{@link com.helger.quartz.IJobDetail}s</code>
@@ -719,7 +717,7 @@ public interface IScheduler extends Serializable
    * @throws SchedulerException
    *         On error
    */
-  Set <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws SchedulerException;
+  ICommonsSet <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws SchedulerException;
 
   /**
    * Get all <code>{@link ITrigger}</code> s that are associated with the
@@ -730,12 +728,12 @@ public interface IScheduler extends Serializable
    * afterward (e.g. see {@link #rescheduleJob(TriggerKey, ITrigger)}).
    * </p>
    */
-  List <? extends ITrigger> getTriggersOfJob (JobKey jobKey) throws SchedulerException;
+  ICommonsList <? extends ITrigger> getTriggersOfJob (JobKey jobKey) throws SchedulerException;
 
   /**
    * Get the names of all known <code>{@link ITrigger}</code> groups.
    */
-  List <String> getTriggerGroupNames () throws SchedulerException;
+  ICommonsList <String> getTriggerGroupNames () throws SchedulerException;
 
   /**
    * Get the names of all the <code>{@link ITrigger}s</code> in the given group.
@@ -746,12 +744,12 @@ public interface IScheduler extends Serializable
    * @throws SchedulerException
    *         On error
    */
-  Set <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
+  ICommonsSet <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
   /**
    * Get the names of all <code>{@link ITrigger}</code> groups that are paused.
    */
-  Set <String> getPausedTriggerGroups () throws SchedulerException;
+  ICommonsSet <String> getPausedTriggerGroups () throws SchedulerException;
 
   /**
    * Get the <code>{@link IJobDetail}</code> for the <code>Job</code> instance
@@ -821,7 +819,7 @@ public interface IScheduler extends Serializable
   /**
    * Get the names of all registered <code>{@link ICalendar}s</code>.
    */
-  List <String> getCalendarNames () throws SchedulerException;
+  ICommonsList <String> getCalendarNames () throws SchedulerException;
 
   /**
    * Request the interruption, within this Scheduler instance, of all currently

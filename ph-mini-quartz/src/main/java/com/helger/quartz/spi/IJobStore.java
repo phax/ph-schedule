@@ -19,11 +19,13 @@
 package com.helger.quartz.spi;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.helger.commons.collection.ext.ICommonsCollection;
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.ext.ICommonsSet;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -338,7 +340,7 @@ public interface IJobStore extends Serializable
    * collection (not <code>null</code>).
    * </p>
    */
-  Set <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws JobPersistenceException;
+  ICommonsSet <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws JobPersistenceException;
 
   /**
    * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code>
@@ -348,7 +350,7 @@ public interface IJobStore extends Serializable
    * zero-length array (not <code>null</code>).
    * </p>
    */
-  Set <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
+  ICommonsSet <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
   /**
    * Get the names of all of the <code>{@link com.helger.quartz.IJob}</code>
@@ -358,7 +360,7 @@ public interface IJobStore extends Serializable
    * (not <code>null</code>).
    * </p>
    */
-  List <String> getJobGroupNames () throws JobPersistenceException;
+  ICommonsList <String> getJobGroupNames () throws JobPersistenceException;
 
   /**
    * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code>
@@ -368,7 +370,7 @@ public interface IJobStore extends Serializable
    * (not <code>null</code>).
    * </p>
    */
-  List <String> getTriggerGroupNames () throws JobPersistenceException;
+  ICommonsList <String> getTriggerGroupNames () throws JobPersistenceException;
 
   /**
    * Get the names of all of the
@@ -379,7 +381,7 @@ public interface IJobStore extends Serializable
    * zero-length array (not <code>null</code>).
    * </p>
    */
-  List <String> getCalendarNames () throws JobPersistenceException;
+  ICommonsList <String> getCalendarNames () throws JobPersistenceException;
 
   /**
    * Get all of the Triggers that are associated to the given Job.
@@ -387,7 +389,7 @@ public interface IJobStore extends Serializable
    * If there are no matches, a zero-length array should be returned.
    * </p>
    */
-  List <IOperableTrigger> getTriggersForJob (JobKey jobKey) throws JobPersistenceException;
+  ICommonsList <IOperableTrigger> getTriggersForJob (JobKey jobKey) throws JobPersistenceException;
 
   /**
    * Get the current state of the identified <code>{@link ITrigger}</code>.
@@ -421,7 +423,7 @@ public interface IJobStore extends Serializable
    *
    * @see #resumeTriggers(GroupMatcher)
    */
-  Collection <String> pauseTriggers (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
+  ICommonsCollection <String> pauseTriggers (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
   /**
    * Pause the <code>{@link com.helger.quartz.IJob}</code> with the given name -
@@ -442,7 +444,7 @@ public interface IJobStore extends Serializable
    *
    * @see #resumeJobs(GroupMatcher)
    */
-  Collection <String> pauseJobs (GroupMatcher <JobKey> groupMatcher) throws JobPersistenceException;
+  ICommonsCollection <String> pauseJobs (GroupMatcher <JobKey> groupMatcher) throws JobPersistenceException;
 
   /**
    * Resume (un-pause) the <code>{@link com.helger.quartz.ITrigger}</code> with
@@ -466,9 +468,9 @@ public interface IJobStore extends Serializable
    *
    * @see #pauseTriggers(GroupMatcher)
    */
-  Collection <String> resumeTriggers (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
+  ICommonsCollection <String> resumeTriggers (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
-  Set <String> getPausedTriggerGroups () throws JobPersistenceException;
+  ICommonsSet <String> getPausedTriggerGroups () throws JobPersistenceException;
 
   /**
    * Resume (un-pause) the <code>{@link com.helger.quartz.IJob}</code> with the
@@ -494,7 +496,7 @@ public interface IJobStore extends Serializable
    *
    * @see #pauseJobs(GroupMatcher)
    */
-  Collection <String> resumeJobs (GroupMatcher <JobKey> matcher) throws JobPersistenceException;
+  ICommonsCollection <String> resumeJobs (GroupMatcher <JobKey> matcher) throws JobPersistenceException;
 
   /**
    * Pause all triggers - equivalent of calling
@@ -536,9 +538,9 @@ public interface IJobStore extends Serializable
    *        no later than the time represented in this value as milliseconds.
    * @see #releaseAcquiredTrigger(IOperableTrigger)
    */
-  List <IOperableTrigger> acquireNextTriggers (long noLaterThan,
-                                               int maxCount,
-                                               long timeWindow) throws JobPersistenceException;
+  ICommonsList <IOperableTrigger> acquireNextTriggers (long noLaterThan,
+                                                       int maxCount,
+                                                       long timeWindow) throws JobPersistenceException;
 
   /**
    * Inform the <code>JobStore</code> that the scheduler no longer plans to fire
@@ -556,7 +558,7 @@ public interface IJobStore extends Serializable
    *         'executing' state. Preference is to return an empty list if none of
    *         the triggers could be fired.
    */
-  List <TriggerFiredResult> triggersFired (List <IOperableTrigger> triggers) throws JobPersistenceException;
+  ICommonsList <TriggerFiredResult> triggersFired (List <IOperableTrigger> triggers) throws JobPersistenceException;
 
   /**
    * Inform the <code>JobStore</code> that the scheduler has completed the
