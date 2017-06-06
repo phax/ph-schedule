@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.lang.ClassHelper;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IJobListener;
+import com.helger.quartz.JobExecutionException;
 
 /**
  * An implementation of the {@link IJobListener} interface that logs job
@@ -50,7 +50,9 @@ public class LoggingJobListener implements IJobListener
   @Nonempty
   protected String getJobName (@Nonnull final IJobExecutionContext aContext)
   {
-    return ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
+    return aContext.getJobDetail ().getKey ().toString () +
+           "@" +
+           ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
   }
 
   public void jobToBeExecuted (@Nonnull final IJobExecutionContext aContext)
