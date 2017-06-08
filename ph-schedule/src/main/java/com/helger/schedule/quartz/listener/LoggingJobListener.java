@@ -50,9 +50,11 @@ public class LoggingJobListener implements IJobListener
   @Nonempty
   protected String getJobName (@Nonnull final IJobExecutionContext aContext)
   {
-    return aContext.getJobDetail ().getKey ().toString () +
-           "@" +
-           ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
+    String ret = aContext.getJobDetail ().getKey ().toString ();
+    final String sClassName = ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
+    if (!ret.contains (sClassName))
+      ret += "@" + sClassName;
+    return ret;
   }
 
   public void jobToBeExecuted (@Nonnull final IJobExecutionContext aContext)
