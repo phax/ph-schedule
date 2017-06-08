@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Counter implements ICounter, Serializable
 {
-  private final AtomicLong value;
+  private final AtomicLong m_aValue;
 
   /**
    * Default Constructor
@@ -46,7 +46,7 @@ public class Counter implements ICounter, Serializable
    */
   public Counter (final long initialValue)
   {
-    this.value = new AtomicLong (initialValue);
+    m_aValue = new AtomicLong (initialValue);
   }
 
   /**
@@ -54,7 +54,7 @@ public class Counter implements ICounter, Serializable
    */
   public long increment ()
   {
-    return value.incrementAndGet ();
+    return m_aValue.incrementAndGet ();
   }
 
   /**
@@ -62,7 +62,7 @@ public class Counter implements ICounter, Serializable
    */
   public long decrement ()
   {
-    return value.decrementAndGet ();
+    return m_aValue.decrementAndGet ();
   }
 
   /**
@@ -70,7 +70,7 @@ public class Counter implements ICounter, Serializable
    */
   public long getAndSet (final long newValue)
   {
-    return value.getAndSet (newValue);
+    return m_aValue.getAndSet (newValue);
   }
 
   /**
@@ -78,7 +78,7 @@ public class Counter implements ICounter, Serializable
    */
   public long getValue ()
   {
-    return value.get ();
+    return m_aValue.get ();
   }
 
   /**
@@ -86,15 +86,7 @@ public class Counter implements ICounter, Serializable
    */
   public long increment (final long amount)
   {
-    return value.addAndGet (amount);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public long decrement (final long amount)
-  {
-    return value.addAndGet (amount * -1);
+    return m_aValue.addAndGet (amount);
   }
 
   /**
@@ -102,6 +94,6 @@ public class Counter implements ICounter, Serializable
    */
   public void setValue (final long newValue)
   {
-    value.set (newValue);
+    m_aValue.set (newValue);
   }
 }

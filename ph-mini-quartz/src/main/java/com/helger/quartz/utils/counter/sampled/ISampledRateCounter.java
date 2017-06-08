@@ -34,7 +34,7 @@ public interface ISampledRateCounter extends ISampledCounter
    * @param numerator
    * @param denominator
    */
-  public void increment (long numerator, long denominator);
+  void increment (long numerator, long denominator);
 
   /**
    * Decrements the numerator and denominator by the passed values
@@ -42,7 +42,7 @@ public interface ISampledRateCounter extends ISampledCounter
    * @param numerator
    * @param denominator
    */
-  public void decrement (long numerator, long denominator);
+  void decrement (long numerator, long denominator);
 
   /**
    * Sets the values of the numerator and denominator to the passed values
@@ -50,20 +50,19 @@ public interface ISampledRateCounter extends ISampledCounter
    * @param numerator
    * @param denominator
    */
-  public void setValue (long numerator, long denominator);
+  void setValue (long numerator, long denominator);
 
   /**
    * Sets the value of the numerator to the passed value
    *
    * @param newValue
    */
-  public void setNumeratorValue (long newValue);
+  void setNumeratorValue (long newValue);
 
   /**
    * Sets the value of the denominator to the passed value
    *
    * @param newValue
    */
-  public void setDenominatorValue (long newValue);
-
+  void setDenominatorValue (long newValue);
 }

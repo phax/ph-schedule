@@ -69,7 +69,10 @@ public interface ICounter
    * @param amount
    * @return the value of the counter after decrementing
    */
-  long decrement (long amount);
+  default long decrement (final long amount)
+  {
+    return increment (-amount);
+  }
 
   /**
    * Sets the value of the counter to the supplied value

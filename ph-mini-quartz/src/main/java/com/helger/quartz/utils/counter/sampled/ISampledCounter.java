@@ -53,5 +53,4 @@ public interface ISampledCounter extends ICounter
    * @return current value of the counter
    */
   long getAndReset ();
-
 }

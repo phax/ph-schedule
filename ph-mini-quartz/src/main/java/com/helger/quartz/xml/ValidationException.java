@@ -19,10 +19,14 @@
 package com.helger.quartz.xml;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.collection.CollectionHelper;
 import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.string.StringHelper;
 
 /**
  * Reports JobSchedulingDataLoader validation exceptions.
@@ -31,39 +35,7 @@ import com.helger.commons.collection.ext.CommonsArrayList;
  */
 public class ValidationException extends Exception
 {
-  private List <Exception> validationExceptions = new CommonsArrayList <> ();
-
-  /**
-   * Constructor for ValidationException.
-   */
-  public ValidationException ()
-  {
-    super ();
-  }
-
-  /**
-   * Constructor for ValidationException.
-   *
-   * @param message
-   *        exception message.
-   */
-  public ValidationException (final String message)
-  {
-    super (message);
-  }
-
-  /**
-   * Constructor for ValidationException.
-   *
-   * @param errors
-   *        collection of validation exceptions.
-   */
-  public ValidationException (final Collection <Exception> errors)
-  {
-    this ();
-    this.validationExceptions = Collections.unmodifiableList (validationExceptions);
-    initCause (errors.iterator ().next ());
-  }
+  private final ICommonsList <Exception> m_aValidationExceptions;
 
   /**
    * Constructor for ValidationException.
@@ -73,11 +45,10 @@ public class ValidationException extends Exception
    * @param errors
    *        collection of validation exceptions.
    */
-  public ValidationException (final String message, final Collection <Exception> errors)
+  public ValidationException (final String message, @Nonnull final Collection <Exception> errors)
   {
-    this (message);
-    this.validationExceptions = Collections.unmodifiableList (validationExceptions);
-    initCause (errors.iterator ().next ());
+    super (message, CollectionHelper.getFirstElement (errors));
+    m_aValidationExceptions = new CommonsArrayList <> (errors);
   }
 
   /**
@@ -85,9 +56,11 @@ public class ValidationException extends Exception
    *
    * @return collection of errors.
    */
-  public List <Exception> getValidationExceptions ()
+  @Nonnull
+  @ReturnsMutableCopy
+  public ICommonsList <Exception> getValidationExceptions ()
   {
-    return validationExceptions;
+    return m_aValidationExceptions.getClone ();
   }
 
   /**
@@ -98,19 +71,9 @@ public class ValidationException extends Exception
   @Override
   public String getMessage ()
   {
-    if (getValidationExceptions ().isEmpty ())
+    if (m_aValidationExceptions.isEmpty ())
       return super.getMessage ();
 
-    final StringBuilder sb = new StringBuilder ();
-    boolean first = true;
-    for (final Exception e : getValidationExceptions ())
-    {
-      if (first)
-        first = false;
-      else
-        sb.append ('\n');
-      sb.append (e.getMessage ());
-    }
-    return sb.toString ();
+    return StringHelper.getImplodedMapped ('\n', m_aValidationExceptions, Exception::getMessage);
   }
 }

@@ -28,8 +28,8 @@ import java.io.Serializable;
  */
 public class TimeStampedCounterValue implements Serializable
 {
-  private final long counterValue;
-  private final long timestamp;
+  private final long m_nCounterValue;
+  private final long m_nTimestamp;
 
   /**
    * Constructor accepting the value of both timestamp and the counter value.
@@ -39,8 +39,8 @@ public class TimeStampedCounterValue implements Serializable
    */
   public TimeStampedCounterValue (final long timestamp, final long value)
   {
-    this.timestamp = timestamp;
-    this.counterValue = value;
+    m_nTimestamp = timestamp;
+    m_nCounterValue = value;
   }
 
   /**
@@ -50,7 +50,7 @@ public class TimeStampedCounterValue implements Serializable
    */
   public long getCounterValue ()
   {
-    return this.counterValue;
+    return m_nCounterValue;
   }
 
   /**
@@ -60,7 +60,7 @@ public class TimeStampedCounterValue implements Serializable
    */
   public long getTimestamp ()
   {
-    return this.timestamp;
+    return m_nTimestamp;
   }
 
   /**
@@ -69,6 +69,6 @@ public class TimeStampedCounterValue implements Serializable
   @Override
   public String toString ()
   {
-    return "value: " + this.counterValue + ", timestamp: " + this.timestamp;
+    return "value: " + m_nCounterValue + ", timestamp: " + m_nTimestamp;
   }
 }

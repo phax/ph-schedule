@@ -28,8 +28,8 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
 {
   private static final String OPERATION_NOT_SUPPORTED_MSG = "This operation is not supported. Use SampledCounter Or Counter instead";
 
-  private long numeratorValue;
-  private long denominatorValue;
+  private long m_nNumeratorValue;
+  private long m_nDenominatorValue;
 
   /**
    * Constructor accepting the config
@@ -46,8 +46,8 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
    */
   public synchronized void setValue (final long numerator, final long denominator)
   {
-    this.numeratorValue = numerator;
-    this.denominatorValue = denominator;
+    m_nNumeratorValue = numerator;
+    m_nDenominatorValue = denominator;
   }
 
   /**
@@ -55,8 +55,8 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
    */
   public synchronized void increment (final long numerator, final long denominator)
   {
-    this.numeratorValue += numerator;
-    this.denominatorValue += denominator;
+    m_nNumeratorValue += numerator;
+    m_nDenominatorValue += denominator;
   }
 
   /**
@@ -64,8 +64,8 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
    */
   public synchronized void decrement (final long numerator, final long denominator)
   {
-    this.numeratorValue -= numerator;
-    this.denominatorValue -= denominator;
+    m_nNumeratorValue -= numerator;
+    m_nDenominatorValue -= denominator;
   }
 
   /**
@@ -73,7 +73,7 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
    */
   public synchronized void setDenominatorValue (final long newValue)
   {
-    this.denominatorValue = newValue;
+    m_nDenominatorValue = newValue;
   }
 
   /**
@@ -81,7 +81,7 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
    */
   public synchronized void setNumeratorValue (final long newValue)
   {
-    this.numeratorValue = newValue;
+    m_nNumeratorValue = newValue;
   }
 
   /**
@@ -90,7 +90,7 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
   @Override
   public synchronized long getValue ()
   {
-    return denominatorValue == 0 ? 0 : (numeratorValue / denominatorValue);
+    return m_nDenominatorValue == 0 ? 0 : (m_nNumeratorValue / m_nDenominatorValue);
   }
 
   /**

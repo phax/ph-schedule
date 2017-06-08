@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.utils.counter;
 
+import javax.annotation.Nonnull;
+
 /**
  * Config for a simple Counter
  *
@@ -26,8 +28,7 @@ package com.helger.quartz.utils.counter;
  */
 public class CounterConfig
 {
-
-  private final long initialValue;
+  private final long m_nInitialValue;
 
   /**
    * Creates a config with the initial value
@@ -36,7 +37,7 @@ public class CounterConfig
    */
   public CounterConfig (final long initialValue)
   {
-    this.initialValue = initialValue;
+    m_nInitialValue = initialValue;
   }
 
   /**
@@ -46,7 +47,7 @@ public class CounterConfig
    */
   public final long getInitialValue ()
   {
-    return initialValue;
+    return m_nInitialValue;
   }
 
   /**
@@ -54,8 +55,9 @@ public class CounterConfig
    *
    * @return The counter created by this config
    */
+  @Nonnull
   public ICounter createCounter ()
   {
-    return new Counter (initialValue);
+    return new Counter (m_nInitialValue);
   }
 }

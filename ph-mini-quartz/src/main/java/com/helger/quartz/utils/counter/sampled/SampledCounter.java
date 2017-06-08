@@ -36,14 +36,14 @@ public class SampledCounter extends Counter implements ISampledCounter
   /**
    * The history of this counter
    */
-  protected final CircularLossyQueue <TimeStampedCounterValue> history;
+  protected final CircularLossyQueue <TimeStampedCounterValue> m_aHistory;
 
   /**
    * Should the counter reset on each sample?
    */
-  protected final boolean resetOnSample;
-  private final TimerTask samplerTask;
-  private final long intervalMillis;
+  protected final boolean m_bResetOnSample;
+  private final TimerTask m_aSamplerTask;
+  private final long m_nIntervalMillis;
 
   /**
    * Constructor accepting a {@link SampledCounterConfig}
@@ -54,11 +54,11 @@ public class SampledCounter extends Counter implements ISampledCounter
   {
     super (config.getInitialValue ());
 
-    this.intervalMillis = config.getIntervalSecs () * MILLIS_PER_SEC;
-    this.history = new CircularLossyQueue <> (config.getHistorySize ());
-    this.resetOnSample = config.isResetOnSample ();
+    m_nIntervalMillis = config.getIntervalSecs () * MILLIS_PER_SEC;
+    m_aHistory = new CircularLossyQueue <> (config.getHistorySize ());
+    m_bResetOnSample = config.isResetOnSample ();
 
-    this.samplerTask = new TimerTask ()
+    m_aSamplerTask = new TimerTask ()
     {
       @Override
       public void run ()
@@ -75,7 +75,7 @@ public class SampledCounter extends Counter implements ISampledCounter
    */
   public TimeStampedCounterValue getMostRecentSample ()
   {
-    return this.history.peek ();
+    return m_aHistory.peek ();
   }
 
   /**
@@ -83,7 +83,7 @@ public class SampledCounter extends Counter implements ISampledCounter
    */
   public TimeStampedCounterValue [] getAllSampleValues ()
   {
-    return this.history.toArray (new TimeStampedCounterValue [this.history.depth ()]);
+    return m_aHistory.toArray (new TimeStampedCounterValue [m_aHistory.depth ()]);
   }
 
   /**
@@ -91,9 +91,9 @@ public class SampledCounter extends Counter implements ISampledCounter
    */
   public void shutdown ()
   {
-    if (samplerTask != null)
+    if (m_aSamplerTask != null)
     {
-      samplerTask.cancel ();
+      m_aSamplerTask.cancel ();
     }
   }
 
@@ -104,7 +104,7 @@ public class SampledCounter extends Counter implements ISampledCounter
    */
   public TimerTask getTimerTask ()
   {
-    return this.samplerTask;
+    return m_aSamplerTask;
   }
 
   /**
@@ -114,7 +114,7 @@ public class SampledCounter extends Counter implements ISampledCounter
    */
   public long getIntervalMillis ()
   {
-    return intervalMillis;
+    return m_nIntervalMillis;
   }
 
   /**
@@ -123,19 +123,15 @@ public class SampledCounter extends Counter implements ISampledCounter
   void recordSample ()
   {
     final long sample;
-    if (resetOnSample)
-    {
+    if (m_bResetOnSample)
       sample = getAndReset ();
-    }
     else
-    {
       sample = getValue ();
-    }
 
     final long now = System.currentTimeMillis ();
     final TimeStampedCounterValue timedSample = new TimeStampedCounterValue (now, sample);
 
-    history.push (timedSample);
+    m_aHistory.push (timedSample);
   }
 
   /**

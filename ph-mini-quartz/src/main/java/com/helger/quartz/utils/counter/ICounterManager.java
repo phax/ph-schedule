@@ -46,5 +46,4 @@ public interface ICounterManager
    * @param counter
    */
   void shutdownCounter (ICounter counter);
-
 }

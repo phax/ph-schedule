@@ -28,9 +28,8 @@ import com.helger.quartz.utils.counter.ICounter;
  */
 public class SampledRateCounterConfig extends SampledCounterConfig
 {
-
-  private final long initialNumeratorValue;
-  private final long initialDenominatorValue;
+  private final long m_nInitialNumeratorValue;
+  private final long m_nInitialDenominatorValue;
 
   /**
    * Constructor accepting the interval time in seconds, history-size and
@@ -64,8 +63,8 @@ public class SampledRateCounterConfig extends SampledCounterConfig
                                    final long initialDenominatorValue)
   {
     super (intervalSecs, historySize, isResetOnSample, 0);
-    this.initialNumeratorValue = initialNumeratorValue;
-    this.initialDenominatorValue = initialDenominatorValue;
+    m_nInitialNumeratorValue = initialNumeratorValue;
+    m_nInitialDenominatorValue = initialDenominatorValue;
   }
 
   /**
@@ -75,7 +74,7 @@ public class SampledRateCounterConfig extends SampledCounterConfig
   public ICounter createCounter ()
   {
     final SampledRateCounter sampledRateCounter = new SampledRateCounter (this);
-    sampledRateCounter.setValue (initialNumeratorValue, initialDenominatorValue);
+    sampledRateCounter.setValue (m_nInitialNumeratorValue, m_nInitialDenominatorValue);
     return sampledRateCounter;
   }
 

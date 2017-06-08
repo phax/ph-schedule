@@ -18,10 +18,13 @@
  */
 package com.helger.quartz.utils.counter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.collection.ext.CommonsArrayList;
+import com.helger.commons.collection.ext.ICommonsList;
 import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounter;
 
@@ -33,22 +36,18 @@ import com.helger.quartz.utils.counter.sampled.SampledCounter;
  */
 public class CounterManager implements ICounterManager
 {
-
-  private final Timer timer;
-  private boolean shutdown;
-  private final List <ICounter> counters = new ArrayList <> ();
+  private final Timer m_aTimer;
+  private boolean m_bShutdown;
+  private final ICommonsList <ICounter> m_aCounters = new CommonsArrayList <> ();
 
   /**
    * Constructor that accepts a timer that will be used for scheduling sampled
    * counter if any is created
    */
-  public CounterManager (final Timer timer)
+  public CounterManager (@Nonnull final Timer timer)
   {
-    if (timer == null)
-    {
-      throw new IllegalArgumentException ("Timer cannot be null");
-    }
-    this.timer = timer;
+    ValueEnforcer.notNull (timer, "Timer");
+    m_aTimer = timer;
   }
 
   /**
@@ -56,26 +55,22 @@ public class CounterManager implements ICounterManager
    */
   public synchronized void shutdown (final boolean killTimer)
   {
-    if (shutdown)
+    if (!m_bShutdown)
     {
-      return;
-    }
-    try
-    {
-      // shutdown the counters of this counterManager
-      for (final ICounter counter : counters)
+      try
       {
-        if (counter instanceof ISampledCounter)
-        {
-          ((ISampledCounter) counter).shutdown ();
-        }
+        // shutdown the counters of this counterManager
+        for (final ICounter counter : m_aCounters)
+          if (counter instanceof ISampledCounter)
+            ((ISampledCounter) counter).shutdown ();
+
+        if (killTimer)
+          m_aTimer.cancel ();
       }
-      if (killTimer)
-        timer.cancel ();
-    }
-    finally
-    {
-      shutdown = true;
+      finally
+      {
+        m_bShutdown = true;
+      }
     }
   }
 
@@ -84,24 +79,19 @@ public class CounterManager implements ICounterManager
    */
   public synchronized ICounter createCounter (final CounterConfig config)
   {
-    if (shutdown)
+    ValueEnforcer.notNull (config, "Config");
+    ValueEnforcer.isFalse (m_bShutdown, "counter manager is shutdown");
+
+    final ICounter aCounter = config.createCounter ();
+    if (aCounter instanceof SampledCounter)
     {
-      throw new IllegalStateException ("counter manager is shutdown");
+      final SampledCounter sampledCounter = (SampledCounter) aCounter;
+      m_aTimer.schedule (sampledCounter.getTimerTask (),
+                         sampledCounter.getIntervalMillis (),
+                         sampledCounter.getIntervalMillis ());
     }
-    if (config == null)
-    {
-      throw new NullPointerException ("config cannot be null");
-    }
-    final ICounter counter = config.createCounter ();
-    if (counter instanceof SampledCounter)
-    {
-      final SampledCounter sampledCounter = (SampledCounter) counter;
-      timer.schedule (sampledCounter.getTimerTask (),
-                      sampledCounter.getIntervalMillis (),
-                      sampledCounter.getIntervalMillis ());
-    }
-    counters.add (counter);
-    return counter;
+    m_aCounters.add (aCounter);
+    return aCounter;
   }
 
   /**
@@ -110,10 +100,6 @@ public class CounterManager implements ICounterManager
   public void shutdownCounter (final ICounter counter)
   {
     if (counter instanceof ISampledCounter)
-    {
-      final ISampledCounter sc = (ISampledCounter) counter;
-      sc.shutdown ();
-    }
+      ((ISampledCounter) counter).shutdown ();
   }
-
 }

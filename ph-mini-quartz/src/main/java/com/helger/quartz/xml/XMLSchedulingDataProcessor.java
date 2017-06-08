@@ -30,13 +30,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
 import javax.xml.XMLConstants;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.namespace.NamespaceContext;
@@ -60,9 +62,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.helger.commons.collection.ext.CommonsArrayList;
-import com.helger.commons.collection.ext.CommonsHashMap;
 import com.helger.commons.collection.ext.ICommonsList;
-import com.helger.commons.collection.ext.ICommonsMap;
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
@@ -93,7 +93,7 @@ import com.helger.quartz.spi.IMutableTrigger;
  * @author Past contributions from pl47ypus
  * @since Quartz 1.8
  */
-public class XMLSchedulingDataProcessor implements ErrorHandler
+public class XMLSchedulingDataProcessor
 {
   public static final String QUARTZ_NS = "http://www.quartz-scheduler.org/xml/JobSchedulingData";
   public static final String QUARTZ_SCHEMA_WEB_URL = "http://www.quartz-scheduler.org/xml/job_scheduling_data_2_0.xsd";
@@ -102,35 +102,29 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   public static final String QUARTZ_SYSTEM_ID_JAR_PREFIX = "jar:";
 
   // pre-processing commands
-  protected ICommonsList <String> jobGroupsToDelete = new CommonsArrayList <> ();
-  protected ICommonsList <String> triggerGroupsToDelete = new CommonsArrayList <> ();
-  protected ICommonsList <JobKey> jobsToDelete = new CommonsArrayList <> ();
-  protected ICommonsList <TriggerKey> triggersToDelete = new CommonsArrayList <> ();
+  protected ICommonsList <String> m_aJobGroupsToDelete = new CommonsArrayList <> ();
+  protected ICommonsList <String> m_aTriggerGroupsToDelete = new CommonsArrayList <> ();
+  protected ICommonsList <JobKey> m_aJobsToDelete = new CommonsArrayList <> ();
+  protected ICommonsList <TriggerKey> m_aTriggersToDelete = new CommonsArrayList <> ();
 
   // scheduling commands
-  protected ICommonsList <IJobDetail> loadedJobs = new CommonsArrayList <> ();
-  protected ICommonsList <IMutableTrigger> loadedTriggers = new CommonsArrayList <> ();
+  protected ICommonsList <IJobDetail> m_aLoadedJobs = new CommonsArrayList <> ();
+  protected ICommonsList <IMutableTrigger> m_aLoadedTriggers = new CommonsArrayList <> ();
 
   // directives
-  private boolean overWriteExistingData = true;
-  private boolean ignoreDuplicates = false;
+  private boolean m_bOverWriteExistingData = true;
+  private boolean m_bIgnoreDuplicates = false;
 
-  protected Collection <Exception> validationExceptions = new CommonsArrayList <> ();
+  protected ICommonsList <Exception> m_aValidationExceptions = new CommonsArrayList <> ();
 
-  protected IClassLoadHelper classLoadHelper;
-  protected ICommonsList <String> jobGroupsToNeverDelete = new CommonsArrayList <> ();
-  protected ICommonsList <String> triggerGroupsToNeverDelete = new CommonsArrayList <> ();
+  protected IClassLoadHelper m_aClassLoadHelper;
+  protected ICommonsList <String> m_aJobGroupsToNeverDelete = new CommonsArrayList <> ();
+  protected ICommonsList <String> m_aTriggerGroupsToNeverDelete = new CommonsArrayList <> ();
 
-  private DocumentBuilder docBuilder;
-  private XPath xpath;
+  private DocumentBuilder m_aDocBuilder;
+  private XPath m_aXPath;
 
-  private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private final Logger m_aLog = LoggerFactory.getLogger (getClass ());
 
   /**
    * Constructor for JobSchedulingDataLoader.
@@ -140,9 +134,9 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    * @throws ParserConfigurationException
    *         if the XML parser cannot be configured as needed.
    */
-  public XMLSchedulingDataProcessor (final IClassLoadHelper clh) throws ParserConfigurationException
+  public XMLSchedulingDataProcessor (@Nonnull final IClassLoadHelper clh) throws ParserConfigurationException
   {
-    this.classLoadHelper = clh;
+    m_aClassLoadHelper = clh;
     initDocumentParser ();
   }
 
@@ -153,20 +147,57 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected void initDocumentParser () throws ParserConfigurationException
   {
-
     final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance ();
-
     docBuilderFactory.setNamespaceAware (true);
     docBuilderFactory.setValidating (true);
-
     docBuilderFactory.setAttribute ("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                                     "http://www.w3.org/2001/XMLSchema");
-
     docBuilderFactory.setAttribute ("http://java.sun.com/xml/jaxp/properties/schemaSource", resolveSchemaSource ());
 
-    docBuilder = docBuilderFactory.newDocumentBuilder ();
+    m_aDocBuilder = docBuilderFactory.newDocumentBuilder ();
+    m_aDocBuilder.setErrorHandler (new ErrorHandler ()
+    {
 
-    docBuilder.setErrorHandler (this);
+      /**
+       * ErrorHandler interface. Receive notification of a warning.
+       *
+       * @param e
+       *        The error information encapsulated in a SAX parse exception.
+       * @exception SAXException
+       *            Any SAX exception, possibly wrapping another exception.
+       */
+      public void warning (@Nonnull final SAXParseException e) throws SAXException
+      {
+        addValidationException (e);
+      }
+
+      /**
+       * ErrorHandler interface. Receive notification of a recoverable error.
+       *
+       * @param e
+       *        The error information encapsulated in a SAX parse exception.
+       * @exception SAXException
+       *            Any SAX exception, possibly wrapping another exception.
+       */
+      public void error (@Nonnull final SAXParseException e) throws SAXException
+      {
+        addValidationException (e);
+      }
+
+      /**
+       * ErrorHandler interface. Receive notification of a non-recoverable
+       * error.
+       *
+       * @param e
+       *        The error information encapsulated in a SAX parse exception.
+       * @exception SAXException
+       *            Any SAX exception, possibly wrapping another exception.
+       */
+      public void fatalError (@Nonnull final SAXParseException e) throws SAXException
+      {
+        addValidationException (e);
+      }
+    });
 
     final NamespaceContext nsContext = new NamespaceContext ()
     {
@@ -199,19 +230,17 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
     };
 
-    xpath = XPathFactory.newInstance ().newXPath ();
-    xpath.setNamespaceContext (nsContext);
+    m_aXPath = XPathFactory.newInstance ().newXPath ();
+    m_aXPath.setNamespaceContext (nsContext);
   }
 
   protected Object resolveSchemaSource ()
   {
     InputSource inputSource;
-
     InputStream is = null;
-
     try
     {
-      is = classLoadHelper.getResourceAsStream (QUARTZ_XSD_PATH_IN_JAR);
+      is = m_aClassLoadHelper.getResourceAsStream (QUARTZ_XSD_PATH_IN_JAR);
     }
     finally
     {
@@ -219,18 +248,16 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       {
         inputSource = new InputSource (is);
         inputSource.setSystemId (QUARTZ_SCHEMA_WEB_URL);
-        if (log.isDebugEnabled ())
-          log.debug ("Utilizing schema packaged in local quartz distribution jar.");
+        if (m_aLog.isDebugEnabled ())
+          m_aLog.debug ("Utilizing schema packaged in local quartz distribution jar.");
       }
       else
       {
-        log.info ("Unable to load local schema packaged in quartz distribution jar. Utilizing schema online at " +
-                  QUARTZ_SCHEMA_WEB_URL);
+        m_aLog.info ("Unable to load local schema packaged in quartz distribution jar. Utilizing schema online at " +
+                     QUARTZ_SCHEMA_WEB_URL);
         return QUARTZ_SCHEMA_WEB_URL;
       }
-
     }
-
     return inputSource;
   }
 
@@ -244,7 +271,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   public boolean isOverWriteExistingData ()
   {
-    return overWriteExistingData;
+    return m_bOverWriteExistingData;
   }
 
   /**
@@ -257,7 +284,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected void setOverWriteExistingData (final boolean overWriteExistingData)
   {
-    this.overWriteExistingData = overWriteExistingData;
+    m_bOverWriteExistingData = overWriteExistingData;
   }
 
   /**
@@ -269,7 +296,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   public boolean isIgnoreDuplicates ()
   {
-    return ignoreDuplicates;
+    return m_bIgnoreDuplicates;
   }
 
   /**
@@ -281,7 +308,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   public void setIgnoreDuplicates (final boolean ignoreDuplicates)
   {
-    this.ignoreDuplicates = ignoreDuplicates;
+    m_bIgnoreDuplicates = ignoreDuplicates;
   }
 
   /**
@@ -292,7 +319,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   public void addJobGroupToNeverDelete (final String group)
   {
     if (group != null)
-      jobGroupsToNeverDelete.add (group);
+      m_aJobGroupsToNeverDelete.add (group);
   }
 
   /**
@@ -302,7 +329,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   public boolean removeJobGroupToNeverDelete (final String group)
   {
-    return group != null && jobGroupsToNeverDelete.remove (group);
+    return group != null && m_aJobGroupsToNeverDelete.remove (group);
   }
 
   /**
@@ -312,7 +339,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   public List <String> getJobGroupsToNeverDelete ()
   {
-    return Collections.unmodifiableList (jobGroupsToDelete);
+    return Collections.unmodifiableList (m_aJobGroupsToDelete);
   }
 
   /**
@@ -323,7 +350,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   public void addTriggerGroupToNeverDelete (final String group)
   {
     if (group != null)
-      triggerGroupsToNeverDelete.add (group);
+      m_aTriggerGroupsToNeverDelete.add (group);
   }
 
   /**
@@ -334,7 +361,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   public boolean removeTriggerGroupToNeverDelete (final String group)
   {
     if (group != null)
-      return triggerGroupsToNeverDelete.remove (group);
+      return m_aTriggerGroupsToNeverDelete.remove (group);
     return false;
   }
 
@@ -345,7 +372,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   public List <String> getTriggerGroupsToNeverDelete ()
   {
-    return Collections.unmodifiableList (triggerGroupsToDelete);
+    return Collections.unmodifiableList (m_aTriggerGroupsToDelete);
   }
 
   /*
@@ -414,7 +441,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected URL getURL (final String fileName)
   {
-    return classLoadHelper.getResource (fileName);
+    return m_aClassLoadHelper.getResource (fileName);
   }
 
   protected void prepForProcessing ()
@@ -424,13 +451,13 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
     setOverWriteExistingData (true);
     setIgnoreDuplicates (false);
 
-    jobGroupsToDelete.clear ();
-    jobsToDelete.clear ();
-    triggerGroupsToDelete.clear ();
-    triggersToDelete.clear ();
+    m_aJobGroupsToDelete.clear ();
+    m_aJobsToDelete.clear ();
+    m_aTriggerGroupsToDelete.clear ();
+    m_aTriggersToDelete.clear ();
 
-    loadedJobs.clear ();
-    loadedTriggers.clear ();
+    m_aLoadedJobs.clear ();
+    m_aLoadedTriggers.clear ();
   }
 
   /**
@@ -452,7 +479,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
     prepForProcessing ();
 
-    log.info ("Parsing XML file: " + fileName + " with systemId: " + systemId);
+    m_aLog.info ("Parsing XML file: " + fileName + " with systemId: " + systemId);
     final InputSource is = new InputSource (getInputStream (fileName));
     is.setSystemId (systemId);
 
@@ -482,7 +509,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
     prepForProcessing ();
 
-    log.info ("Parsing XML from stream with systemId: " + systemId);
+    m_aLog.info ("Parsing XML from stream with systemId: " + systemId);
 
     final InputSource is = new InputSource (stream);
     is.setSystemId (systemId);
@@ -502,18 +529,18 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   {
 
     // load the document
-    final Document document = docBuilder.parse (is);
+    final Document document = m_aDocBuilder.parse (is);
 
     //
     // Extract pre-processing commands
     //
 
-    final NodeList deleteJobGroupNodes = (NodeList) xpath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-jobs-in-group",
-                                                                    document,
-                                                                    XPathConstants.NODESET);
+    final NodeList deleteJobGroupNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-jobs-in-group",
+                                                                       document,
+                                                                       XPathConstants.NODESET);
 
-    if (log.isDebugEnabled ())
-      log.debug ("Found " + deleteJobGroupNodes.getLength () + " delete job group commands.");
+    if (m_aLog.isDebugEnabled ())
+      m_aLog.debug ("Found " + deleteJobGroupNodes.getLength () + " delete job group commands.");
 
     for (int i = 0; i < deleteJobGroupNodes.getLength (); i++)
     {
@@ -521,15 +548,15 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       String t = node.getTextContent ();
       if (t == null || (t = t.trim ()).length () == 0)
         continue;
-      jobGroupsToDelete.add (t);
+      m_aJobGroupsToDelete.add (t);
     }
 
-    final NodeList deleteTriggerGroupNodes = (NodeList) xpath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-triggers-in-group",
-                                                                        document,
-                                                                        XPathConstants.NODESET);
+    final NodeList deleteTriggerGroupNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-triggers-in-group",
+                                                                           document,
+                                                                           XPathConstants.NODESET);
 
-    if (log.isDebugEnabled ())
-      log.debug ("Found " + deleteTriggerGroupNodes.getLength () + " delete trigger group commands.");
+    if (m_aLog.isDebugEnabled ())
+      m_aLog.debug ("Found " + deleteTriggerGroupNodes.getLength () + " delete trigger group commands.");
 
     for (int i = 0; i < deleteTriggerGroupNodes.getLength (); i++)
     {
@@ -537,78 +564,78 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       String t = node.getTextContent ();
       if (t == null || (t = t.trim ()).length () == 0)
         continue;
-      triggerGroupsToDelete.add (t);
+      m_aTriggerGroupsToDelete.add (t);
     }
 
-    final NodeList deleteJobNodes = (NodeList) xpath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-job",
-                                                               document,
-                                                               XPathConstants.NODESET);
+    final NodeList deleteJobNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-job",
+                                                                  document,
+                                                                  XPathConstants.NODESET);
 
-    if (log.isDebugEnabled ())
-      log.debug ("Found " + deleteJobNodes.getLength () + " delete job commands.");
+    if (m_aLog.isDebugEnabled ())
+      m_aLog.debug ("Found " + deleteJobNodes.getLength () + " delete job commands.");
 
     for (int i = 0; i < deleteJobNodes.getLength (); i++)
     {
       final Node node = deleteJobNodes.item (i);
 
-      final String name = getTrimmedToNullString (xpath, "q:name", node);
-      final String group = getTrimmedToNullString (xpath, "q:group", node);
+      final String name = getTrimmedToNullString (m_aXPath, "q:name", node);
+      final String group = getTrimmedToNullString (m_aXPath, "q:group", node);
 
       if (name == null)
         throw new ParseException ("Encountered a 'delete-job' command without a name specified.", -1);
-      jobsToDelete.add (new JobKey (name, group));
+      m_aJobsToDelete.add (new JobKey (name, group));
     }
 
-    final NodeList deleteTriggerNodes = (NodeList) xpath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-trigger",
-                                                                   document,
-                                                                   XPathConstants.NODESET);
+    final NodeList deleteTriggerNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-trigger",
+                                                                      document,
+                                                                      XPathConstants.NODESET);
 
-    if (log.isDebugEnabled ())
-      log.debug ("Found " + deleteTriggerNodes.getLength () + " delete trigger commands.");
+    if (m_aLog.isDebugEnabled ())
+      m_aLog.debug ("Found " + deleteTriggerNodes.getLength () + " delete trigger commands.");
 
     for (int i = 0; i < deleteTriggerNodes.getLength (); i++)
     {
       final Node node = deleteTriggerNodes.item (i);
 
-      final String name = getTrimmedToNullString (xpath, "q:name", node);
-      final String group = getTrimmedToNullString (xpath, "q:group", node);
+      final String name = getTrimmedToNullString (m_aXPath, "q:name", node);
+      final String group = getTrimmedToNullString (m_aXPath, "q:group", node);
 
       if (name == null)
         throw new ParseException ("Encountered a 'delete-trigger' command without a name specified.", -1);
-      triggersToDelete.add (new TriggerKey (name, group));
+      m_aTriggersToDelete.add (new TriggerKey (name, group));
     }
 
     //
     // Extract directives
     //
 
-    final Boolean overWrite = getBoolean (xpath,
+    final Boolean overWrite = getBoolean (m_aXPath,
                                           "/q:job-scheduling-data/q:processing-directives/q:overwrite-existing-data",
                                           document);
     if (overWrite == null)
     {
-      if (log.isDebugEnabled ())
-        log.debug ("Directive 'overwrite-existing-data' not specified, defaulting to " + isOverWriteExistingData ());
+      if (m_aLog.isDebugEnabled ())
+        m_aLog.debug ("Directive 'overwrite-existing-data' not specified, defaulting to " + isOverWriteExistingData ());
     }
     else
     {
-      if (log.isDebugEnabled ())
-        log.debug ("Directive 'overwrite-existing-data' specified as: " + overWrite);
+      if (m_aLog.isDebugEnabled ())
+        m_aLog.debug ("Directive 'overwrite-existing-data' specified as: " + overWrite);
       setOverWriteExistingData (overWrite);
     }
 
-    final Boolean ignoreDupes = getBoolean (xpath,
+    final Boolean ignoreDupes = getBoolean (m_aXPath,
                                             "/q:job-scheduling-data/q:processing-directives/q:ignore-duplicates",
                                             document);
     if (ignoreDupes == null)
     {
-      if (log.isDebugEnabled ())
-        log.debug ("Directive 'ignore-duplicates' not specified, defaulting to " + isIgnoreDuplicates ());
+      if (m_aLog.isDebugEnabled ())
+        m_aLog.debug ("Directive 'ignore-duplicates' not specified, defaulting to " + isIgnoreDuplicates ());
     }
     else
     {
-      if (log.isDebugEnabled ())
-        log.debug ("Directive 'ignore-duplicates' specified as: " + ignoreDupes);
+      if (m_aLog.isDebugEnabled ())
+        m_aLog.debug ("Directive 'ignore-duplicates' specified as: " + ignoreDupes);
       setIgnoreDuplicates (ignoreDupes);
     }
 
@@ -616,28 +643,28 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
     // Extract Job definitions...
     //
 
-    final NodeList jobNodes = (NodeList) xpath.evaluate ("/q:job-scheduling-data/q:schedule/q:job",
-                                                         document,
-                                                         XPathConstants.NODESET);
+    final NodeList jobNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:schedule/q:job",
+                                                            document,
+                                                            XPathConstants.NODESET);
 
-    if (log.isDebugEnabled ())
-      log.debug ("Found " + jobNodes.getLength () + " job definitions.");
+    if (m_aLog.isDebugEnabled ())
+      m_aLog.debug ("Found " + jobNodes.getLength () + " job definitions.");
 
     for (int i = 0; i < jobNodes.getLength (); i++)
     {
       final Node jobDetailNode = jobNodes.item (i);
       String t = null;
 
-      final String jobName = getTrimmedToNullString (xpath, "q:name", jobDetailNode);
-      final String jobGroup = getTrimmedToNullString (xpath, "q:group", jobDetailNode);
-      final String jobDescription = getTrimmedToNullString (xpath, "q:description", jobDetailNode);
-      final String jobClassName = getTrimmedToNullString (xpath, "q:job-class", jobDetailNode);
-      t = getTrimmedToNullString (xpath, "q:durability", jobDetailNode);
+      final String jobName = getTrimmedToNullString (m_aXPath, "q:name", jobDetailNode);
+      final String jobGroup = getTrimmedToNullString (m_aXPath, "q:group", jobDetailNode);
+      final String jobDescription = getTrimmedToNullString (m_aXPath, "q:description", jobDetailNode);
+      final String jobClassName = getTrimmedToNullString (m_aXPath, "q:job-class", jobDetailNode);
+      t = getTrimmedToNullString (m_aXPath, "q:durability", jobDetailNode);
       final boolean jobDurability = (t != null) && t.equals ("true");
-      t = getTrimmedToNullString (xpath, "q:recover", jobDetailNode);
+      t = getTrimmedToNullString (m_aXPath, "q:recover", jobDetailNode);
       final boolean jobRecoveryRequested = (t != null) && t.equals ("true");
 
-      final Class <? extends IJob> jobClass = classLoadHelper.loadClass (jobClassName, IJob.class);
+      final Class <? extends IJob> jobClass = m_aClassLoadHelper.loadClass (jobClassName, IJob.class);
 
       final IJobDetail jobDetail = newJob (jobClass).withIdentity (jobName, jobGroup)
                                                     .withDescription (jobDescription)
@@ -645,20 +672,20 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                                     .requestRecovery (jobRecoveryRequested)
                                                     .build ();
 
-      final NodeList jobDataEntries = (NodeList) xpath.evaluate ("q:job-data-map/q:entry",
-                                                                 jobDetailNode,
-                                                                 XPathConstants.NODESET);
+      final NodeList jobDataEntries = (NodeList) m_aXPath.evaluate ("q:job-data-map/q:entry",
+                                                                    jobDetailNode,
+                                                                    XPathConstants.NODESET);
 
       for (int k = 0; k < jobDataEntries.getLength (); k++)
       {
         final Node entryNode = jobDataEntries.item (k);
-        final String key = getTrimmedToNullString (xpath, "q:key", entryNode);
-        final String value = getTrimmedToNullString (xpath, "q:value", entryNode);
+        final String key = getTrimmedToNullString (m_aXPath, "q:key", entryNode);
+        final String value = getTrimmedToNullString (m_aXPath, "q:value", entryNode);
         jobDetail.getJobDataMap ().put (key, value);
       }
 
-      if (log.isDebugEnabled ())
-        log.debug ("Parsed job definition: " + jobDetail);
+      if (m_aLog.isDebugEnabled ())
+        m_aLog.debug ("Parsed job definition: " + jobDetail);
 
       addJobToSchedule (jobDetail);
     }
@@ -667,36 +694,36 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
     // Extract Trigger definitions...
     //
 
-    final NodeList triggerEntries = (NodeList) xpath.evaluate ("/q:job-scheduling-data/q:schedule/q:trigger/*",
-                                                               document,
-                                                               XPathConstants.NODESET);
+    final NodeList triggerEntries = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:schedule/q:trigger/*",
+                                                                  document,
+                                                                  XPathConstants.NODESET);
 
-    if (log.isDebugEnabled ())
-      log.debug ("Found " + triggerEntries.getLength () + " trigger definitions.");
+    if (m_aLog.isDebugEnabled ())
+      m_aLog.debug ("Found " + triggerEntries.getLength () + " trigger definitions.");
 
     for (int j = 0; j < triggerEntries.getLength (); j++)
     {
       final Node triggerNode = triggerEntries.item (j);
-      final String triggerName = getTrimmedToNullString (xpath, "q:name", triggerNode);
-      final String triggerGroup = getTrimmedToNullString (xpath, "q:group", triggerNode);
-      final String triggerDescription = getTrimmedToNullString (xpath, "q:description", triggerNode);
-      final String triggerMisfireInstructionConst = getTrimmedToNullString (xpath,
+      final String triggerName = getTrimmedToNullString (m_aXPath, "q:name", triggerNode);
+      final String triggerGroup = getTrimmedToNullString (m_aXPath, "q:group", triggerNode);
+      final String triggerDescription = getTrimmedToNullString (m_aXPath, "q:description", triggerNode);
+      final String triggerMisfireInstructionConst = getTrimmedToNullString (m_aXPath,
                                                                             "q:misfire-instruction",
                                                                             triggerNode);
-      final String triggerPriorityString = getTrimmedToNullString (xpath, "q:priority", triggerNode);
-      final String triggerCalendarRef = getTrimmedToNullString (xpath, "q:calendar-name", triggerNode);
-      final String triggerJobName = getTrimmedToNullString (xpath, "q:job-name", triggerNode);
-      final String triggerJobGroup = getTrimmedToNullString (xpath, "q:job-group", triggerNode);
+      final String triggerPriorityString = getTrimmedToNullString (m_aXPath, "q:priority", triggerNode);
+      final String triggerCalendarRef = getTrimmedToNullString (m_aXPath, "q:calendar-name", triggerNode);
+      final String triggerJobName = getTrimmedToNullString (m_aXPath, "q:job-name", triggerNode);
+      final String triggerJobGroup = getTrimmedToNullString (m_aXPath, "q:job-group", triggerNode);
 
       int triggerPriority = ITrigger.DEFAULT_PRIORITY;
       if (triggerPriorityString != null)
         triggerPriority = Integer.valueOf (triggerPriorityString);
 
-      final String startTimeString = getTrimmedToNullString (xpath, "q:start-time", triggerNode);
-      final String startTimeFutureSecsString = getTrimmedToNullString (xpath,
+      final String startTimeString = getTrimmedToNullString (m_aXPath, "q:start-time", triggerNode);
+      final String startTimeFutureSecsString = getTrimmedToNullString (m_aXPath,
                                                                        "q:start-time-seconds-in-future",
                                                                        triggerNode);
-      final String endTimeString = getTrimmedToNullString (xpath, "q:end-time", triggerNode);
+      final String endTimeString = getTrimmedToNullString (m_aXPath, "q:end-time", triggerNode);
 
       // QTZ-273 : use of DatatypeConverter.parseDateTime() instead of
       // SimpleDateFormat
@@ -717,8 +744,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
       if (triggerNode.getNodeName ().equals ("simple"))
       {
-        final String repeatCountString = getTrimmedToNullString (xpath, "q:repeat-count", triggerNode);
-        final String repeatIntervalString = getTrimmedToNullString (xpath, "q:repeat-interval", triggerNode);
+        final String repeatCountString = getTrimmedToNullString (m_aXPath, "q:repeat-count", triggerNode);
+        final String repeatIntervalString = getTrimmedToNullString (m_aXPath, "q:repeat-interval", triggerNode);
 
         final int repeatCount = repeatCountString == null ? 0 : Integer.parseInt (repeatCountString);
         final long repeatInterval = repeatIntervalString == null ? 0 : Long.parseLong (repeatIntervalString);
@@ -757,8 +784,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       else
         if (triggerNode.getNodeName ().equals ("cron"))
         {
-          final String cronExpression = getTrimmedToNullString (xpath, "q:cron-expression", triggerNode);
-          final String timezoneString = getTrimmedToNullString (xpath, "q:time-zone", triggerNode);
+          final String cronExpression = getTrimmedToNullString (m_aXPath, "q:cron-expression", triggerNode);
+          final String timezoneString = getTrimmedToNullString (m_aXPath, "q:time-zone", triggerNode);
 
           final TimeZone tz = timezoneString == null ? null : TimeZone.getTimeZone (timezoneString);
 
@@ -787,8 +814,8 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
         else
           if (triggerNode.getNodeName ().equals ("calendar-interval"))
           {
-            final String repeatIntervalString = getTrimmedToNullString (xpath, "q:repeat-interval", triggerNode);
-            final String repeatUnitString = getTrimmedToNullString (xpath, "q:repeat-interval-unit", triggerNode);
+            final String repeatIntervalString = getTrimmedToNullString (m_aXPath, "q:repeat-interval", triggerNode);
+            final String repeatUnitString = getTrimmedToNullString (m_aXPath, "q:repeat-interval-unit", triggerNode);
 
             final int repeatInterval = Integer.parseInt (repeatIntervalString);
 
@@ -831,20 +858,20 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
                                                                      .withSchedule (sched)
                                                                      .build ();
 
-      final NodeList jobDataEntries = (NodeList) xpath.evaluate ("q:job-data-map/q:entry",
-                                                                 triggerNode,
-                                                                 XPathConstants.NODESET);
+      final NodeList jobDataEntries = (NodeList) m_aXPath.evaluate ("q:job-data-map/q:entry",
+                                                                    triggerNode,
+                                                                    XPathConstants.NODESET);
 
       for (int k = 0; k < jobDataEntries.getLength (); k++)
       {
         final Node entryNode = jobDataEntries.item (k);
-        final String key = getTrimmedToNullString (xpath, "q:key", entryNode);
-        final String value = getTrimmedToNullString (xpath, "q:value", entryNode);
+        final String key = getTrimmedToNullString (m_aXPath, "q:key", entryNode);
+        final String value = getTrimmedToNullString (m_aXPath, "q:value", entryNode);
         trigger.getJobDataMap ().put (key, value);
       }
 
-      if (log.isDebugEnabled ())
-        log.debug ("Parsed trigger definition: " + trigger);
+      if (m_aLog.isDebugEnabled ())
+        m_aLog.debug ("Parsed trigger definition: " + trigger);
 
       addTriggerToSchedule (trigger);
     }
@@ -936,7 +963,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected List <IJobDetail> getLoadedJobs ()
   {
-    return Collections.unmodifiableList (loadedJobs);
+    return Collections.unmodifiableList (m_aLoadedJobs);
   }
 
   /**
@@ -946,7 +973,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected List <IMutableTrigger> getLoadedTriggers ()
   {
-    return Collections.unmodifiableList (loadedTriggers);
+    return Collections.unmodifiableList (m_aLoadedTriggers);
   }
 
   /**
@@ -958,25 +985,27 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected InputStream getInputStream (final String fileName)
   {
-    return this.classLoadHelper.getResourceAsStream (fileName);
+    return m_aClassLoadHelper.getResourceAsStream (fileName);
   }
 
   protected void addJobToSchedule (final IJobDetail job)
   {
-    loadedJobs.add (job);
+    m_aLoadedJobs.add (job);
   }
 
   protected void addTriggerToSchedule (final IMutableTrigger trigger)
   {
-    loadedTriggers.add (trigger);
+    m_aLoadedTriggers.add (trigger);
   }
 
-  private ICommonsMap <JobKey, ICommonsList <IMutableTrigger>> buildTriggersByFQJobNameMap (final List <IMutableTrigger> triggers)
+  private Map <JobKey, List <IMutableTrigger>> buildTriggersByFQJobNameMap (final List <IMutableTrigger> triggers)
   {
-    final ICommonsMap <JobKey, ICommonsList <IMutableTrigger>> triggersByFQJobName = new CommonsHashMap <> ();
+
+    final Map <JobKey, List <IMutableTrigger>> triggersByFQJobName = new HashMap <> ();
+
     for (final IMutableTrigger trigger : triggers)
     {
-      ICommonsList <IMutableTrigger> triggersOfJob = triggersByFQJobName.get (trigger.getJobKey ());
+      List <IMutableTrigger> triggersOfJob = triggersByFQJobName.get (trigger.getJobKey ());
       if (triggersOfJob == null)
       {
         triggersOfJob = new CommonsArrayList <> ();
@@ -984,19 +1013,21 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       }
       triggersOfJob.add (trigger);
     }
+
     return triggersByFQJobName;
   }
 
   protected void executePreProcessCommands (final IScheduler scheduler) throws SchedulerException
   {
-    for (final String group : jobGroupsToDelete)
+
+    for (final String group : m_aJobGroupsToDelete)
     {
       if (group.equals ("*"))
       {
-        log.info ("Deleting all jobs in ALL groups.");
+        m_aLog.info ("Deleting all jobs in ALL groups.");
         for (final String groupName : scheduler.getJobGroupNames ())
         {
-          if (!jobGroupsToNeverDelete.contains (groupName))
+          if (!m_aJobGroupsToNeverDelete.contains (groupName))
           {
             for (final JobKey key : scheduler.getJobKeys (GroupMatcher.jobGroupEquals (groupName)))
             {
@@ -1007,9 +1038,9 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       }
       else
       {
-        if (!jobGroupsToNeverDelete.contains (group))
+        if (!m_aJobGroupsToNeverDelete.contains (group))
         {
-          log.info ("Deleting all jobs in group: {}", group);
+          m_aLog.info ("Deleting all jobs in group: {}", group);
           for (final JobKey key : scheduler.getJobKeys (GroupMatcher.jobGroupEquals (group)))
           {
             scheduler.deleteJob (key);
@@ -1018,14 +1049,14 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       }
     }
 
-    for (final String group : triggerGroupsToDelete)
+    for (final String group : m_aTriggerGroupsToDelete)
     {
       if (group.equals ("*"))
       {
-        log.info ("Deleting all triggers in ALL groups.");
+        m_aLog.info ("Deleting all triggers in ALL groups.");
         for (final String groupName : scheduler.getTriggerGroupNames ())
         {
-          if (!triggerGroupsToNeverDelete.contains (groupName))
+          if (!m_aTriggerGroupsToNeverDelete.contains (groupName))
           {
             for (final TriggerKey key : scheduler.getTriggerKeys (GroupMatcher.triggerGroupEquals (groupName)))
             {
@@ -1036,9 +1067,9 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       }
       else
       {
-        if (!triggerGroupsToNeverDelete.contains (group))
+        if (!m_aTriggerGroupsToNeverDelete.contains (group))
         {
-          log.info ("Deleting all triggers in group: {}", group);
+          m_aLog.info ("Deleting all triggers in group: {}", group);
           for (final TriggerKey key : scheduler.getTriggerKeys (GroupMatcher.triggerGroupEquals (group)))
           {
             scheduler.unscheduleJob (key);
@@ -1047,20 +1078,20 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       }
     }
 
-    for (final JobKey key : jobsToDelete)
+    for (final JobKey key : m_aJobsToDelete)
     {
-      if (!jobGroupsToNeverDelete.contains (key.getGroup ()))
+      if (!m_aJobGroupsToNeverDelete.contains (key.getGroup ()))
       {
-        log.info ("Deleting job: {}", key);
+        m_aLog.info ("Deleting job: {}", key);
         scheduler.deleteJob (key);
       }
     }
 
-    for (final TriggerKey key : triggersToDelete)
+    for (final TriggerKey key : m_aTriggersToDelete)
     {
-      if (!triggerGroupsToNeverDelete.contains (key.getGroup ()))
+      if (!m_aTriggerGroupsToNeverDelete.contains (key.getGroup ()))
       {
-        log.info ("Deleting trigger: {}", key);
+        m_aLog.info ("Deleting trigger: {}", key);
         scheduler.unscheduleJob (key);
       }
     }
@@ -1080,9 +1111,9 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
     final ICommonsList <IJobDetail> jobs = new CommonsArrayList <> (getLoadedJobs ());
     final ICommonsList <IMutableTrigger> triggers = new CommonsArrayList <> (getLoadedTriggers ());
 
-    log.info ("Adding " + jobs.size () + " jobs, " + triggers.size () + " triggers.");
+    m_aLog.info ("Adding " + jobs.size () + " jobs, " + triggers.size () + " triggers.");
 
-    final ICommonsMap <JobKey, ICommonsList <IMutableTrigger>> triggersByFQJobName = buildTriggersByFQJobNameMap (triggers);
+    final Map <JobKey, List <IMutableTrigger>> triggersByFQJobName = buildTriggersByFQJobNameMap (triggers);
 
     // add each job, and it's associated triggers
     final Iterator <IJobDetail> itr = jobs.iterator ();
@@ -1104,7 +1135,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
         if (e.getCause () instanceof ClassNotFoundException && isOverWriteExistingData ())
         {
           // We are going to replace jobDetail anyway, so just delete it first.
-          log.info ("Removing job: " + detail.getKey ());
+          m_aLog.info ("Removing job: " + detail.getKey ());
           sched.deleteJob (detail.getKey ());
         }
         else
@@ -1117,7 +1148,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
       {
         if (!isOverWriteExistingData () && isIgnoreDuplicates ())
         {
-          log.info ("Not overwriting existing job: " + dupeJ.getKey ());
+          m_aLog.info ("Not overwriting existing job: " + dupeJ.getKey ());
           continue; // just ignore the entry
         }
         if (!isOverWriteExistingData () && !isIgnoreDuplicates ())
@@ -1128,11 +1159,11 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
       if (dupeJ != null)
       {
-        log.info ("Replacing job: " + detail.getKey ());
+        m_aLog.info ("Replacing job: " + detail.getKey ());
       }
       else
       {
-        log.info ("Adding job: " + detail.getKey ());
+        m_aLog.info ("Adding job: " + detail.getKey ());
       }
 
       final List <IMutableTrigger> triggersOfJob = triggersByFQJobName.get (detail.getKey ());
@@ -1172,24 +1203,25 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
           triggers.remove (trigger); // remove triggers as we handle them...
 
           if (trigger.getStartTime () == null)
-          {
             trigger.setStartTime (new Date ());
-          }
 
           final ITrigger dupeT = sched.getTrigger (trigger.getKey ());
           if (dupeT != null)
           {
             if (isOverWriteExistingData ())
             {
-              if (log.isDebugEnabled ())
+              if (m_aLog.isDebugEnabled ())
               {
-                log.debug ("Rescheduling job: " + trigger.getJobKey () + " with updated trigger: " + trigger.getKey ());
+                m_aLog.debug ("Rescheduling job: " +
+                              trigger.getJobKey () +
+                              " with updated trigger: " +
+                              trigger.getKey ());
               }
             }
             else
               if (isIgnoreDuplicates ())
               {
-                log.info ("Not overwriting existing trigger: " + dupeT.getKey ());
+                m_aLog.info ("Not overwriting existing trigger: " + dupeT.getKey ());
                 continue; // just ignore the trigger (and possibly job)
               }
               else
@@ -1199,16 +1231,16 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
             if (!dupeT.getJobKey ().equals (trigger.getJobKey ()))
             {
-              log.warn ("Possibly duplicately named ({}) triggers in jobs xml file! ", trigger.getKey ());
+              m_aLog.warn ("Possibly duplicately named ({}) triggers in jobs xml file! ", trigger.getKey ());
             }
 
             sched.rescheduleJob (trigger.getKey (), trigger);
           }
           else
           {
-            if (log.isDebugEnabled ())
+            if (m_aLog.isDebugEnabled ())
             {
-              log.debug ("Scheduling job: " + trigger.getJobKey () + " with trigger: " + trigger.getKey ());
+              m_aLog.debug ("Scheduling job: " + trigger.getJobKey () + " with trigger: " + trigger.getKey ());
             }
 
             try
@@ -1226,15 +1258,15 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
             }
             catch (final ObjectAlreadyExistsException e)
             {
-              if (log.isDebugEnabled ())
+              if (m_aLog.isDebugEnabled ())
               {
-                log.debug ("Adding trigger: " +
-                           trigger.getKey () +
-                           " for job: " +
-                           detail.getKey () +
-                           " failed because the trigger already existed.  " +
-                           "This is likely due to a race condition between multiple instances " +
-                           "in the cluster.  Will try to reschedule instead.");
+                m_aLog.debug ("Adding trigger: " +
+                              trigger.getKey () +
+                              " for job: " +
+                              detail.getKey () +
+                              " failed because the trigger already existed.  " +
+                              "This is likely due to a race condition between multiple instances " +
+                              "in the cluster.  Will try to reschedule instead.");
               }
 
               // Let's try one more time as reschedule.
@@ -1249,26 +1281,23 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
     // handled were removed above)
     for (final IMutableTrigger trigger : triggers)
     {
-
       if (trigger.getStartTime () == null)
-      {
         trigger.setStartTime (new Date ());
-      }
 
       final ITrigger dupeT = sched.getTrigger (trigger.getKey ());
       if (dupeT != null)
       {
         if (isOverWriteExistingData ())
         {
-          if (log.isDebugEnabled ())
+          if (m_aLog.isDebugEnabled ())
           {
-            log.debug ("Rescheduling job: " + trigger.getJobKey () + " with updated trigger: " + trigger.getKey ());
+            m_aLog.debug ("Rescheduling job: " + trigger.getJobKey () + " with updated trigger: " + trigger.getKey ());
           }
         }
         else
           if (isIgnoreDuplicates ())
           {
-            log.info ("Not overwriting existing trigger: " + dupeT.getKey ());
+            m_aLog.info ("Not overwriting existing trigger: " + dupeT.getKey ());
             continue; // just ignore the trigger
           }
           else
@@ -1278,16 +1307,16 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
 
         if (!dupeT.getJobKey ().equals (trigger.getJobKey ()))
         {
-          log.warn ("Possibly duplicately named ({}) triggers in jobs xml file! ", trigger.getKey ());
+          m_aLog.warn ("Possibly duplicately named ({}) triggers in jobs xml file! ", trigger.getKey ());
         }
 
         sched.rescheduleJob (trigger.getKey (), trigger);
       }
       else
       {
-        if (log.isDebugEnabled ())
+        if (m_aLog.isDebugEnabled ())
         {
-          log.debug ("Scheduling job: " + trigger.getJobKey () + " with trigger: " + trigger.getKey ());
+          m_aLog.debug ("Scheduling job: " + trigger.getJobKey () + " with trigger: " + trigger.getKey ());
         }
 
         try
@@ -1296,15 +1325,15 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
         }
         catch (final ObjectAlreadyExistsException e)
         {
-          if (log.isDebugEnabled ())
+          if (m_aLog.isDebugEnabled ())
           {
-            log.debug ("Adding trigger: " +
-                       trigger.getKey () +
-                       " for job: " +
-                       trigger.getJobKey () +
-                       " failed because the trigger already existed.  " +
-                       "This is likely due to a race condition between multiple instances " +
-                       "in the cluster.  Will try to reschedule instead.");
+            m_aLog.debug ("Adding trigger: " +
+                          trigger.getKey () +
+                          " for job: " +
+                          trigger.getJobKey () +
+                          " failed because the trigger already existed.  " +
+                          "This is likely due to a race condition between multiple instances " +
+                          "in the cluster.  Will try to reschedule instead.");
           }
 
           // Let's rescheduleJob one more time.
@@ -1315,53 +1344,14 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
   }
 
   /**
-   * ErrorHandler interface. Receive notification of a warning.
-   *
-   * @param e
-   *        The error information encapsulated in a SAX parse exception.
-   * @exception SAXException
-   *            Any SAX exception, possibly wrapping another exception.
-   */
-  public void warning (final SAXParseException e) throws SAXException
-  {
-    addValidationException (e);
-  }
-
-  /**
-   * ErrorHandler interface. Receive notification of a recoverable error.
-   *
-   * @param e
-   *        The error information encapsulated in a SAX parse exception.
-   * @exception SAXException
-   *            Any SAX exception, possibly wrapping another exception.
-   */
-  public void error (final SAXParseException e) throws SAXException
-  {
-    addValidationException (e);
-  }
-
-  /**
-   * ErrorHandler interface. Receive notification of a non-recoverable error.
-   *
-   * @param e
-   *        The error information encapsulated in a SAX parse exception.
-   * @exception SAXException
-   *            Any SAX exception, possibly wrapping another exception.
-   */
-  public void fatalError (final SAXParseException e) throws SAXException
-  {
-    addValidationException (e);
-  }
-
-  /**
    * Adds a detected validation exception.
    *
    * @param e
    *        SAX exception.
    */
-  protected void addValidationException (final SAXException e)
+  protected void addValidationException (@Nonnull final SAXException e)
   {
-    validationExceptions.add (e);
+    m_aValidationExceptions.add (e);
   }
 
   /**
@@ -1369,7 +1359,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected void clearValidationExceptions ()
   {
-    validationExceptions.clear ();
+    m_aValidationExceptions.clear ();
   }
 
   /**
@@ -1381,12 +1371,12 @@ public class XMLSchedulingDataProcessor implements ErrorHandler
    */
   protected void maybeThrowValidationException () throws ValidationException
   {
-    if (validationExceptions.size () > 0)
+    if (m_aValidationExceptions.isNotEmpty ())
     {
       throw new ValidationException ("Encountered " +
-                                     validationExceptions.size () +
+                                     m_aValidationExceptions.size () +
                                      " validation exceptions.",
-                                     validationExceptions);
+                                     m_aValidationExceptions);
     }
   }
 }

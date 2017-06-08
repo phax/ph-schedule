@@ -18,8 +18,9 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
-import com.helger.quartz.utils.counter.ICounter;
+import com.helger.commons.ValueEnforcer;
 import com.helger.quartz.utils.counter.CounterConfig;
+import com.helger.quartz.utils.counter.ICounter;
 
 /**
  * Config for a {@link ISampledCounter}
@@ -29,9 +30,9 @@ import com.helger.quartz.utils.counter.CounterConfig;
  */
 public class SampledCounterConfig extends CounterConfig
 {
-  private final int intervalSecs;
-  private final int historySize;
-  private final boolean isReset;
+  private final int m_nIntervalSecs;
+  private final int m_nHistorySize;
+  private final boolean m_bIsReset;
 
   /**
    * Make a new timed counter config (duh)
@@ -49,18 +50,12 @@ public class SampledCounterConfig extends CounterConfig
                                final long initialValue)
   {
     super (initialValue);
-    if (intervalSecs < 1)
-    {
-      throw new IllegalArgumentException ("Interval (" + intervalSecs + ") must be greater than or equal to 1");
-    }
-    if (historySize < 1)
-    {
-      throw new IllegalArgumentException ("History size (" + historySize + ") must be greater than or equal to 1");
-    }
+    ValueEnforcer.isGT0 (intervalSecs, "Interval");
+    ValueEnforcer.isGT0 (historySize, "HistorySize");
 
-    this.intervalSecs = intervalSecs;
-    this.historySize = historySize;
-    this.isReset = isResetOnSample;
+    m_nIntervalSecs = intervalSecs;
+    m_nHistorySize = historySize;
+    m_bIsReset = isResetOnSample;
   }
 
   /**
@@ -70,7 +65,7 @@ public class SampledCounterConfig extends CounterConfig
    */
   public int getHistorySize ()
   {
-    return historySize;
+    return m_nHistorySize;
   }
 
   /**
@@ -80,7 +75,7 @@ public class SampledCounterConfig extends CounterConfig
    */
   public int getIntervalSecs ()
   {
-    return intervalSecs;
+    return m_nIntervalSecs;
   }
 
   /**
@@ -90,7 +85,7 @@ public class SampledCounterConfig extends CounterConfig
    */
   public boolean isResetOnSample ()
   {
-    return this.isReset;
+    return m_bIsReset;
   }
 
   /**
