@@ -21,9 +21,9 @@ package com.helger.quartz.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.spi.ISchedulerSignaler;
 
 /**

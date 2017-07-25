@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.helger.commons.collection.ext.ICommonsList;
-import com.helger.commons.collection.ext.ICommonsSet;
+import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.spi.IJobFactory;

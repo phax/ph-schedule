@@ -33,8 +33,8 @@ import org.junit.Test;
 
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.ICronTrigger;
-import com.helger.quartz.JobBuilder;
 import com.helger.quartz.IJobDetail;
+import com.helger.quartz.JobBuilder;
 import com.helger.quartz.TriggerBuilder;
 
 /**

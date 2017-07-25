@@ -61,8 +61,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.helger.commons.collection.ext.CommonsArrayList;
-import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;

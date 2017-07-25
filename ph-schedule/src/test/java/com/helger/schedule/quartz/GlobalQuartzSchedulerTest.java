@@ -23,9 +23,9 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import com.helger.commons.mutable.MutableBoolean;
-import com.helger.commons.scope.mock.ScopeTestRule;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
+import com.helger.scope.mock.ScopeTestRule;
 
 /**
  * Test class for class {@link GlobalQuartzScheduler}.

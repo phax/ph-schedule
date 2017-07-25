@@ -25,7 +25,6 @@ import java.util.Collections;
 import org.junit.Test;
 
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.impl.DirectSchedulerFactory;
 import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.simpl.SimpleThreadPool;
 import com.helger.quartz.spi.IClassLoadHelper;

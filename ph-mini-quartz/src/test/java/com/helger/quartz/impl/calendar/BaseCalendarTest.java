@@ -22,8 +22,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.quartz.impl.calendar.BaseCalendar;
-
 public class BaseCalendarTest
 {
 

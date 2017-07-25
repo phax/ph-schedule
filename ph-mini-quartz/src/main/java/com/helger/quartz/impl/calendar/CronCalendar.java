@@ -22,8 +22,8 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.helger.quartz.ICalendar;
 import com.helger.quartz.CronExpression;
+import com.helger.quartz.ICalendar;
 
 /**
  * This implementation of the Calendar excludes the set of times expressed by a

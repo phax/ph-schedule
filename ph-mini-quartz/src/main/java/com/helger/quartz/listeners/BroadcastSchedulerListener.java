@@ -22,8 +22,8 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.collection.ext.CommonsLinkedList;
-import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.impl.CommonsLinkedList;
+import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.ITrigger;

@@ -20,8 +20,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SchedulerMetaData;
 import com.helger.quartz.impl.StdSchedulerFactory;
 

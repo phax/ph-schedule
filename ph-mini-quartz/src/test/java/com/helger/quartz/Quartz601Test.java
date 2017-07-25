@@ -25,8 +25,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.helger.quartz.CronExpression;
-
 public class Quartz601Test
 {
   @Test

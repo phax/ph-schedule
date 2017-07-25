@@ -27,8 +27,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.helger.quartz.IJob;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.IScheduler;
+import com.helger.quartz.JobDataMap;
 import com.helger.quartz.SchedulerContext;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.TriggerFiredBundle;

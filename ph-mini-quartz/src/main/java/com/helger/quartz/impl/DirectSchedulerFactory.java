@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.collection.ext.ICommonsCollection;
+import com.helger.commons.collection.impl.ICommonsCollection;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.SchedulerException;

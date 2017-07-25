@@ -31,9 +31,8 @@ import org.junit.Test;
 
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.ISchedulerListener;
-import com.helger.quartz.TriggerKey;
 import com.helger.quartz.ITriggerListener;
-import com.helger.quartz.core.ListenerManager;
+import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.NameMatcher;
 import com.helger.quartz.listeners.AbstractJobListenerSupport;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;

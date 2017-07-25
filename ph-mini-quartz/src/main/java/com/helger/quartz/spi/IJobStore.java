@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.helger.commons.collection.ext.ICommonsCollection;
-import com.helger.commons.collection.ext.ICommonsList;
-import com.helger.commons.collection.ext.ICommonsSet;
+import com.helger.commons.collection.impl.ICommonsCollection;
+import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;

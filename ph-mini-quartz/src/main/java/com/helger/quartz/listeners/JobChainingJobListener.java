@@ -21,8 +21,8 @@ package com.helger.quartz.listeners;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.collection.ext.CommonsHashMap;
-import com.helger.commons.collection.ext.ICommonsMap;
+import com.helger.commons.collection.impl.CommonsHashMap;
+import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;

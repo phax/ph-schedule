@@ -28,8 +28,6 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.annotation.UsedViaReflection;
 import com.helger.commons.datetime.PDTFactory;
-import com.helger.commons.scope.IScope;
-import com.helger.commons.scope.singleton.AbstractGlobalSingleton;
 import com.helger.commons.state.EChange;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -44,6 +42,8 @@ import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
+import com.helger.scope.IScope;
+import com.helger.scope.singleton.AbstractGlobalSingleton;
 
 /**
  * Global scheduler instance.

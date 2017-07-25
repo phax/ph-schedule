@@ -21,7 +21,7 @@ package com.helger.quartz;
 import java.io.Serializable;
 import java.util.List;
 
-import com.helger.commons.collection.ext.ICommonsList;
+import com.helger.commons.collection.impl.ICommonsList;
 
 /**
  * Client programs may be interested in the 'listener' interfaces that are

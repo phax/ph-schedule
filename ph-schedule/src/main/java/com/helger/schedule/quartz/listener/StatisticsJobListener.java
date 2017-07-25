@@ -22,8 +22,8 @@ import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.lang.ClassHelper;
 import com.helger.commons.statistics.StatisticsManager;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IJobListener;
+import com.helger.quartz.JobExecutionException;
 
 /**
  * A Quartz job listener that handles statistics for job executions. It handles

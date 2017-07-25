@@ -22,8 +22,8 @@ import java.util.List;
 
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IScheduler;
+import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.SchedulerException;
 
 /**

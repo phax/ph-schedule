@@ -22,8 +22,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.helger.quartz.impl.calendar.DailyCalendar;
-
 /**
  * Unit test for DailyCalendar.
  */

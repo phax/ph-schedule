@@ -27,14 +27,6 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import com.helger.quartz.CronScheduleBuilder;
-import com.helger.quartz.DisallowConcurrentExecution;
-import com.helger.quartz.IJob;
-import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.PersistJobDataAfterExecution;
-import com.helger.quartz.ITrigger;
-import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.utils.Key;
 
 /**

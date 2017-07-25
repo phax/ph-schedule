@@ -25,10 +25,10 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.collection.ext.CommonsArrayList;
-import com.helger.commons.collection.ext.CommonsLinkedHashMap;
-import com.helger.commons.collection.ext.ICommonsList;
-import com.helger.commons.collection.ext.ICommonsMap;
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.CommonsLinkedHashMap;
+import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IListenerManager;
 import com.helger.quartz.IMatcher;

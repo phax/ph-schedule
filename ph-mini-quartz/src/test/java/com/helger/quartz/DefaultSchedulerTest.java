@@ -23,8 +23,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.StdSchedulerFactory;
 

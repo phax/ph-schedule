@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.impl.matchers.GroupMatcher;
 
 /**
  * Unit test for CronScheduleBuilder.

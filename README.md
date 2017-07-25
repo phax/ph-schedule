@@ -4,6 +4,8 @@ Java scheduling library based on Quartz with scope support (see [ph-commons](htt
 
 # News and noteworthy
 
+  * v4.0.0 - work in progress
+    * Updated to ph-commons 9.0.0
   * v3.6.1 - 2017-03-29
     * Started updating MiniQuartz API for Java 8
   * v3.6.0 - 2016-12-12

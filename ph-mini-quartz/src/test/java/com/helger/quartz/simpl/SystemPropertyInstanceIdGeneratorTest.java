@@ -23,8 +23,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.helger.quartz.simpl.SystemPropertyInstanceIdGenerator;
-
 /**
  * Unit test for SystemPropertyInstanceIdGenerator.
  */

@@ -19,7 +19,6 @@
 package com.helger.quartz.simpl;
 
 import com.helger.quartz.AbstractJobStoreTest;
-import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.spi.IJobStore;
 
 public class RAMJobStoreTest extends AbstractJobStoreTest

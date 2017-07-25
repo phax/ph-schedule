@@ -22,13 +22,13 @@ import java.util.Timer;
 
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.utils.counter.CounterConfig;
-import com.helger.quartz.utils.counter.ICounterManager;
 import com.helger.quartz.utils.counter.CounterManager;
+import com.helger.quartz.utils.counter.ICounterManager;
 import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounterConfig;
 import com.helger.quartz.utils.counter.sampled.SampledRateCounterConfig;

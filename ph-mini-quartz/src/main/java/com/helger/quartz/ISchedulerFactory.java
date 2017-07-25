@@ -20,7 +20,7 @@ package com.helger.quartz;
 
 import java.io.Serializable;
 
-import com.helger.commons.collection.ext.ICommonsCollection;
+import com.helger.commons.collection.impl.ICommonsCollection;
 
 /**
  * Provides a mechanism for obtaining client-usable handles to

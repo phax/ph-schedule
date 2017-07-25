@@ -23,8 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.IJobListener;
+import com.helger.quartz.JobExecutionException;
 
 /**
  * Holds a List of references to JobListener instances and broadcasts all events
