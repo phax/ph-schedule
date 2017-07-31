@@ -50,7 +50,7 @@ public abstract class AbstractJob implements IJob
                                                                                                                                 "$success");
   private static final IMutableStatisticsHandlerKeyedCounter s_aStatsCounterFailure = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
                                                                                                                                 "$failure");
-  private static final CallbackList <IJobExceptionCallback> s_aExceptionCallbacks = new CallbackList<> ();
+  private static final CallbackList <IJobExceptionCallback> s_aExceptionCallbacks = new CallbackList <> ();
 
   public AbstractJob ()
   {}
@@ -59,8 +59,8 @@ public abstract class AbstractJob implements IJob
    * @return The custom exception handler. Never <code>null</code>.
    */
   @Nonnull
-  @ReturnsMutableObject ("design")
-  public static CallbackList <IJobExceptionCallback> getExceptionCallbacks ()
+  @ReturnsMutableObject
+  public static CallbackList <IJobExceptionCallback> exceptionCallbacks ()
   {
     return s_aExceptionCallbacks;
   }
@@ -124,7 +124,7 @@ public abstract class AbstractJob implements IJob
                                                        @Nullable final String sJobClassName,
                                                        @Nonnull final IJob aJob)
   {
-    getExceptionCallbacks ().forEach (x -> x.onScheduledJobException (t, sJobClassName, aJob));
+    exceptionCallbacks ().forEach (x -> x.onScheduledJobException (t, sJobClassName, aJob));
   }
 
   public final void execute (@Nonnull final IJobExecutionContext aContext) throws JobExecutionException
