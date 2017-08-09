@@ -274,7 +274,7 @@ public class PropertiesParser
       {
         try
         {
-          ints.add (new Integer (stok.nextToken ().trim ()));
+          ints.add (Integer.valueOf (stok.nextToken ().trim ()));
         }
         catch (final NumberFormatException nfe)
         {

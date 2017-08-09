@@ -259,9 +259,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
           }
           catch (final IOException ioe)
           {
-            m_aInitException = new SchedulerException ("Properties file: '" +
-                                                       requestedFile +
-                                                       "' could not be read.",
+            m_aInitException = new SchedulerException ("Properties file: '" + requestedFile + "' could not be read.",
                                                        ioe);
             throw m_aInitException;
           }
@@ -518,7 +516,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     IClassLoadHelper loadHelper = null;
     try
     {
-      loadHelper = (IClassLoadHelper) _loadClass (classLoadHelperClass).newInstance ();
+      loadHelper = (IClassLoadHelper) _loadClass (classLoadHelperClass).getDeclaredConstructor ().newInstance ();
     }
     catch (final Exception e)
     {
@@ -534,7 +532,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
       try
       {
-        jobFactory = (IJobFactory) loadHelper.loadClass (jobFactoryClass).newInstance ();
+        jobFactory = (IJobFactory) loadHelper.loadClass (jobFactoryClass).getDeclaredConstructor ().newInstance ();
       }
       catch (final Exception e)
       {
@@ -564,7 +562,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
       try
       {
-        instanceIdGenerator = (IInstanceIdGenerator) loadHelper.loadClass (instanceIdGeneratorClass).newInstance ();
+        instanceIdGenerator = (IInstanceIdGenerator) loadHelper.loadClass (instanceIdGeneratorClass)
+                                                               .getDeclaredConstructor ()
+                                                               .newInstance ();
       }
       catch (final Exception e)
       {
@@ -598,7 +598,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
     try
     {
-      tp = (IThreadPool) loadHelper.loadClass (tpClass).newInstance ();
+      tp = (IThreadPool) loadHelper.loadClass (tpClass).getDeclaredConstructor ().newInstance ();
     }
     catch (final Exception e)
     {
@@ -612,9 +612,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
     catch (final Exception e)
     {
-      m_aInitException = new SchedulerException ("ThreadPool class '" +
-                                                 tpClass +
-                                                 "' props could not be configured.",
+      m_aInitException = new SchedulerException ("ThreadPool class '" + tpClass + "' props could not be configured.",
                                                  e);
       throw m_aInitException;
     }
@@ -632,7 +630,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
     try
     {
-      js = (IJobStore) loadHelper.loadClass (jsClass).newInstance ();
+      js = (IJobStore) loadHelper.loadClass (jsClass).getDeclaredConstructor ().newInstance ();
     }
     catch (final Exception e)
     {
@@ -676,7 +674,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       ISchedulerPlugin aPlugin = null;
       try
       {
-        aPlugin = (ISchedulerPlugin) loadHelper.loadClass (plugInClass).newInstance ();
+        aPlugin = (ISchedulerPlugin) loadHelper.loadClass (plugInClass).getDeclaredConstructor ().newInstance ();
       }
       catch (final Exception e)
       {
@@ -724,7 +722,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       IJobListener listener = null;
       try
       {
-        listener = (IJobListener) loadHelper.loadClass (listenerClass).newInstance ();
+        listener = (IJobListener) loadHelper.loadClass (listenerClass).getDeclaredConstructor ().newInstance ();
       }
       catch (final Exception e)
       {
@@ -753,9 +751,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       }
       catch (final Exception e)
       {
-        m_aInitException = new SchedulerException ("JobListener '" +
-                                                   listenerClass +
-                                                   "' props could not be configured.",
+        m_aInitException = new SchedulerException ("JobListener '" + listenerClass + "' props could not be configured.",
                                                    e);
         throw m_aInitException;
       }
@@ -786,7 +782,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       ITriggerListener listener = null;
       try
       {
-        listener = (ITriggerListener) loadHelper.loadClass (listenerClass).newInstance ();
+        listener = (ITriggerListener) loadHelper.loadClass (listenerClass).getDeclaredConstructor ().newInstance ();
       }
       catch (final Exception e)
       {
@@ -834,7 +830,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
       tProps = m_aCfg.getPropertyGroup (PROP_THREAD_EXECUTOR, true);
       try
       {
-        threadExecutor = (IThreadExecutor) loadHelper.loadClass (threadExecutorClass).newInstance ();
+        threadExecutor = (IThreadExecutor) loadHelper.loadClass (threadExecutorClass)
+                                                     .getDeclaredConstructor ()
+                                                     .newInstance ();
         s_aLogger.info ("Using custom implementation for ThreadExecutor: " + threadExecutorClass);
 
         _setBeanProps (threadExecutor, tProps);

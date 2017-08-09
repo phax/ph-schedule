@@ -88,7 +88,7 @@ public class SchedulerDetailsSetterTest
     SchedulerDetailsSetter.setDetails (tp, "name", "id");
   }
 
-  private IThreadPool _makeIncompleteThreadPool () throws InstantiationException, IllegalAccessException
+  private IThreadPool _makeIncompleteThreadPool () throws Exception
   {
     final String name = "IncompleteThreadPool";
     final ClassWriter cw = new ClassWriter (0);
@@ -115,7 +115,7 @@ public class SchedulerDetailsSetterTest
       {
         return defineClass (clname, b, 0, b.length);
       }
-    }.defineClass (name, cw.toByteArray ()).newInstance ();
+    }.defineClass (name, cw.toByteArray ()).getDeclaredConstructor ().newInstance ();
   }
 
   private static final AtomicInteger instanceIdCalls = new AtomicInteger ();

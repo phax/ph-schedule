@@ -56,7 +56,7 @@ public class SimpleJobFactory implements IJobFactory
       if (log.isDebugEnabled ())
         log.debug ("Producing instance of Job '" + jobDetail.getKey () + "', class=" + jobClass.getName ());
 
-      return jobClass.newInstance ();
+      return jobClass.getDeclaredConstructor ().newInstance ();
     }
     catch (final Exception e)
     {
