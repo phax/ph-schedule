@@ -19,6 +19,7 @@
 package com.helger.quartz.simpl;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 
 import com.helger.quartz.spi.IClassLoadHelper;
@@ -37,20 +38,7 @@ import com.helger.quartz.spi.IClassLoadHelper;
  */
 public class InitThreadContextClassLoadHelper implements IClassLoadHelper
 {
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  private ClassLoader initClassLoader;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private WeakReference <ClassLoader> m_aInitClassLoader;
 
   /**
    * Called to give the ClassLoadHelper a chance to initialize itself, including
@@ -59,7 +47,7 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
    */
   public void initialize ()
   {
-    initClassLoader = Thread.currentThread ().getContextClassLoader ();
+    m_aInitClassLoader = new WeakReference <> (Thread.currentThread ().getContextClassLoader ());
   }
 
   /**
@@ -67,7 +55,7 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
    */
   public Class <?> loadClass (final String name) throws ClassNotFoundException
   {
-    return initClassLoader.loadClass (name);
+    return getClassLoader ().loadClass (name);
   }
 
   @SuppressWarnings ("unchecked")
@@ -86,7 +74,7 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
    */
   public URL getResource (final String name)
   {
-    return initClassLoader.getResource (name);
+    return getClassLoader ().getResource (name);
   }
 
   /**
@@ -99,7 +87,7 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
    */
   public InputStream getResourceAsStream (final String name)
   {
-    return initClassLoader.getResourceAsStream (name);
+    return getClassLoader ().getResourceAsStream (name);
   }
 
   /**
@@ -109,6 +97,6 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
    */
   public ClassLoader getClassLoader ()
   {
-    return this.initClassLoader;
+    return m_aInitClassLoader.get ();
   }
 }

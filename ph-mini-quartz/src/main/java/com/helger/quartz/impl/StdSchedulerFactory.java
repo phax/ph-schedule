@@ -1157,11 +1157,14 @@ public class StdSchedulerFactory implements ISchedulerFactory
   {
     // work-around set context loader for windows-service started jvms
     // (QUARTZ-748)
-    if (Thread.currentThread ().getContextClassLoader () == null && getClass ().getClassLoader () != null)
+    final Thread t = Thread.currentThread ();
+    ClassLoader ret = t.getContextClassLoader ();
+    if (ret == null)
     {
-      Thread.currentThread ().setContextClassLoader (getClass ().getClassLoader ());
+      ret = getClass ().getClassLoader ();
+      t.setContextClassLoader (ret);
     }
-    return Thread.currentThread ().getContextClassLoader ();
+    return ret;
   }
 
   private String _getSchedulerName ()

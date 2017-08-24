@@ -20,10 +20,10 @@ package com.helger.quartz.simpl;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
@@ -50,14 +50,8 @@ import com.helger.quartz.spi.IClassLoadHelper;
  */
 public class CascadingClassLoadHelper implements IClassLoadHelper
 {
-  private List <IClassLoadHelper> loadHelpers;
+  private ICommonsList <IClassLoadHelper> loadHelpers;
   private IClassLoadHelper m_aBestCandidate;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * Called to give the ClassLoadHelper a chance to initialize itself, including
@@ -66,16 +60,14 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   public void initialize ()
   {
-    loadHelpers = new ArrayList <> ();
+    loadHelpers = new CommonsArrayList <> ();
     loadHelpers.add (new LoadingLoaderClassLoadHelper ());
     loadHelpers.add (new SimpleClassLoadHelper ());
     loadHelpers.add (new ThreadContextClassLoadHelper ());
     loadHelpers.add (new InitThreadContextClassLoadHelper ());
 
     for (final IClassLoadHelper loadHelper : loadHelpers)
-    {
       loadHelper.initialize ();
-    }
   }
 
   /**
@@ -83,7 +75,6 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   public Class <?> loadClass (final String name) throws ClassNotFoundException
   {
-
     if (m_aBestCandidate != null)
     {
       try
@@ -188,20 +179,14 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   public InputStream getResourceAsStream (final String name)
   {
-
     InputStream result = null;
-
     if (m_aBestCandidate != null)
     {
       result = m_aBestCandidate.getResourceAsStream (name);
       if (result == null)
-      {
         m_aBestCandidate = null;
-      }
       else
-      {
         return result;
-      }
     }
 
     IClassLoadHelper loadHelper = null;
@@ -229,8 +214,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   public ClassLoader getClassLoader ()
   {
-    return (this.m_aBestCandidate == null) ? Thread.currentThread ().getContextClassLoader ()
-                                        : this.m_aBestCandidate.getClassLoader ();
+    return m_aBestCandidate == null ? Thread.currentThread ().getContextClassLoader ()
+                                    : this.m_aBestCandidate.getClassLoader ();
   }
-
 }
