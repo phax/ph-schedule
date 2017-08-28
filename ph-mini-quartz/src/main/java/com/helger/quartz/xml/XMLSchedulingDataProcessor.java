@@ -411,24 +411,24 @@ public class XMLSchedulingDataProcessor
    * @see #processFileAndScheduleJobs(IScheduler, boolean)
    * @see #processFileAndScheduleJobs(String, com.helger.quartz.IScheduler)
    */
-  protected String getSystemIdForFileName (final String fileName)
+  protected String getSystemIdForFileName (final String sFilename)
   {
-    final File file = new File (fileName); // files in filesystem
-    if (file.exists ())
-      return file.toURI ().toString ();
+    final File aFile = new File (sFilename); // files in filesystem
+    if (aFile.exists ())
+      return aFile.toURI ().toString ();
 
-    final URL url = getURL (fileName);
-    if (url == null)
-      return fileName;
+    final URL aUrl = getURL (sFilename);
+    if (aUrl == null)
+      return sFilename;
 
     try
     {
-      url.openStream ().close ();
-      return url.toString ();
+      aUrl.openStream ().close ();
+      return aUrl.toExternalForm ();
     }
     catch (final IOException ignore)
     {
-      return fileName;
+      return sFilename;
     }
   }
 
@@ -468,13 +468,12 @@ public class XMLSchedulingDataProcessor
    * @param systemId
    *        system ID.
    */
-  protected void processFile (final String fileName,
-                              final String systemId) throws ValidationException,
-                                                     SAXException,
-                                                     IOException,
-                                                     ClassNotFoundException,
-                                                     ParseException,
-                                                     XPathException
+  protected void processFile (final String fileName, final String systemId) throws ValidationException,
+                                                                            SAXException,
+                                                                            IOException,
+                                                                            ClassNotFoundException,
+                                                                            ParseException,
+                                                                            XPathException
   {
 
     prepForProcessing ();
@@ -731,12 +730,14 @@ public class XMLSchedulingDataProcessor
       if (startTimeFutureSecsString != null)
         triggerStartTime = new Date (System.currentTimeMillis () + (Long.valueOf (startTimeFutureSecsString) * 1000L));
       else
-        triggerStartTime = (startTimeString == null || startTimeString.length () == 0 ? new Date ()
-                                                                                      : DatatypeConverter.parseDateTime (startTimeString)
-                                                                                                         .getTime ());
-      final Date triggerEndTime = endTimeString == null || endTimeString.length () == 0 ? null
-                                                                                        : DatatypeConverter.parseDateTime (endTimeString)
-                                                                                                           .getTime ();
+        triggerStartTime = (startTimeString == null ||
+                            startTimeString.length () == 0 ? new Date ()
+                                                           : DatatypeConverter.parseDateTime (startTimeString)
+                                                                              .getTime ());
+      final Date triggerEndTime = endTimeString == null ||
+                                  endTimeString.length () == 0 ? null
+                                                               : DatatypeConverter.parseDateTime (endTimeString)
+                                                                                  .getTime ();
 
       final TriggerKey triggerKey = triggerKey (triggerName, triggerGroup);
 
@@ -1373,9 +1374,7 @@ public class XMLSchedulingDataProcessor
   {
     if (m_aValidationExceptions.isNotEmpty ())
     {
-      throw new ValidationException ("Encountered " +
-                                     m_aValidationExceptions.size () +
-                                     " validation exceptions.",
+      throw new ValidationException ("Encountered " + m_aValidationExceptions.size () + " validation exceptions.",
                                      m_aValidationExceptions);
     }
   }
