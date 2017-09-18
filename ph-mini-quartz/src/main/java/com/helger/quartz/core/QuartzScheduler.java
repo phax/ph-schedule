@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.CommonsLinkedList;
@@ -182,20 +183,21 @@ public class QuartzScheduler implements IQuartzScheduler
    */
   public void initialize () throws SchedulerException
   {
-    getLog ().info ("Scheduler meta-data: " + (new SchedulerMetaData (getSchedulerName (),
-                                                                      getSchedulerInstanceId (),
-                                                                      getClass (),
-                                                                      runningSince () != null,
-                                                                      isInStandbyMode (),
-                                                                      isShutdown (),
-                                                                      runningSince (),
-                                                                      numJobsExecuted (),
-                                                                      getJobStoreClass (),
-                                                                      supportsPersistence (),
-                                                                      isClustered (),
-                                                                      getThreadPoolClass (),
-                                                                      getThreadPoolSize (),
-                                                                      getVersion ())).toString ());
+    getLog ().info ("Scheduler meta-data: " +
+                    (new SchedulerMetaData (getSchedulerName (),
+                                            getSchedulerInstanceId (),
+                                            getClass (),
+                                            runningSince () != null,
+                                            isInStandbyMode (),
+                                            isShutdown (),
+                                            runningSince (),
+                                            numJobsExecuted (),
+                                            getJobStoreClass (),
+                                            supportsPersistence (),
+                                            isClustered (),
+                                            getThreadPoolClass (),
+                                            getThreadPoolSize (),
+                                            getVersion ())).toString ());
   }
 
   /*
@@ -1895,9 +1897,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of scheduled job." +
-                         "  Triger=" +
-                         trigger.getKey (),
+        getLog ().error ("Error while notifying SchedulerListener of scheduled job." + "  Triger=" + trigger.getKey (),
                          e);
       }
     }
@@ -2236,20 +2236,14 @@ public class QuartzScheduler implements IQuartzScheduler
   }
 
   /**
-   * @param factory
+   * @param aFactory
    * @throws SchedulerException
    */
-  public void setJobFactory (final IJobFactory factory) throws SchedulerException
+  public void setJobFactory (final IJobFactory aFactory) throws SchedulerException
   {
-
-    if (factory == null)
-    {
-      throw new IllegalArgumentException ("JobFactory cannot be set to null!");
-    }
-
-    getLog ().info ("JobFactory set to: " + factory);
-
-    this.jobFactory = factory;
+    ValueEnforcer.notNull (aFactory, "JobFactory");
+    getLog ().info ("JobFactory set to: " + aFactory.toString ());
+    this.jobFactory = aFactory;
   }
 
   public IJobFactory getJobFactory ()
