@@ -35,7 +35,6 @@ import com.helger.quartz.IJobListener;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobBuilder;
-import com.helger.quartz.JobDataMap;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerKey;
@@ -157,10 +156,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     final IJobDetail aJobDetail = JobBuilder.newJob (aJobClass).withIdentity (sJobName, m_sGroupName).build ();
 
     // add custom parameters
-    final JobDataMap aJobDataMap = aJobDetail.getJobDataMap ();
-    if (aJobData != null)
-      for (final Map.Entry <String, ? extends Object> aEntry : aJobData.entrySet ())
-        aJobDataMap.put (aEntry.getKey (), aEntry.getValue ());
+    aJobDetail.getJobDataMap ().putAllIn (aJobData);
 
     try
     {

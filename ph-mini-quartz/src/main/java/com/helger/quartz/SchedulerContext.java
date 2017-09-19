@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.quartz.utils.StringKeyDirtyFlagMap;
+import com.helger.commons.collection.attr.AttributeContainerAny;
 
 /**
  * Holds context/environment data that can be made available to Jobs as they are
@@ -38,23 +38,20 @@ import com.helger.quartz.utils.StringKeyDirtyFlagMap;
  * @see IScheduler#getContext
  * @author James House
  */
-public class SchedulerContext extends StringKeyDirtyFlagMap
+public class SchedulerContext extends AttributeContainerAny <String>
 {
   /**
    * Create an empty <code>SchedulerContext</code>.
    */
   public SchedulerContext ()
-  {
-    super (15);
-  }
+  {}
 
   /**
    * Create a <code>SchedulerContext</code> with the given data.
    */
   public SchedulerContext (final Map <String, ?> map)
   {
-    this ();
-    putAll (map);
+    super (map);
   }
 
   public SchedulerContext (@Nonnull final SchedulerContext aOther)

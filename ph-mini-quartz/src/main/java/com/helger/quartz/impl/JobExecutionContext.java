@@ -116,8 +116,8 @@ public class JobExecutionContext implements IJobExecutionContext
   {
     if (isRecovering ())
     {
-      return new TriggerKey (jobDataMap.getString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_GROUP),
-                             jobDataMap.getString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_NAME));
+      return new TriggerKey (jobDataMap.getAsString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_GROUP),
+                             jobDataMap.getAsString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_NAME));
     }
     throw new IllegalStateException ("Not a recovering job");
   }

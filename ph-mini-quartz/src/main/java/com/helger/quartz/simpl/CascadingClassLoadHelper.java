@@ -50,7 +50,7 @@ import com.helger.quartz.spi.IClassLoadHelper;
  */
 public class CascadingClassLoadHelper implements IClassLoadHelper
 {
-  private ICommonsList <IClassLoadHelper> loadHelpers;
+  private ICommonsList <IClassLoadHelper> m_aLoadHelpers;
   private IClassLoadHelper m_aBestCandidate;
 
   /**
@@ -60,13 +60,13 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   public void initialize ()
   {
-    loadHelpers = new CommonsArrayList <> ();
-    loadHelpers.add (new LoadingLoaderClassLoadHelper ());
-    loadHelpers.add (new SimpleClassLoadHelper ());
-    loadHelpers.add (new ThreadContextClassLoadHelper ());
-    loadHelpers.add (new InitThreadContextClassLoadHelper ());
+    m_aLoadHelpers = new CommonsArrayList <> ();
+    m_aLoadHelpers.add (new LoadingLoaderClassLoadHelper ());
+    m_aLoadHelpers.add (new SimpleClassLoadHelper ());
+    m_aLoadHelpers.add (new ThreadContextClassLoadHelper ());
+    m_aLoadHelpers.add (new InitThreadContextClassLoadHelper ());
 
-    for (final IClassLoadHelper loadHelper : loadHelpers)
+    for (final IClassLoadHelper loadHelper : m_aLoadHelpers)
       loadHelper.initialize ();
   }
 
@@ -91,7 +91,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
     Class <?> clazz = null;
     IClassLoadHelper loadHelper = null;
 
-    final Iterator <IClassLoadHelper> iter = loadHelpers.iterator ();
+    final Iterator <IClassLoadHelper> iter = m_aLoadHelpers.iterator ();
     while (iter.hasNext ())
     {
       loadHelper = iter.next ();
@@ -153,7 +153,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
 
     IClassLoadHelper loadHelper = null;
 
-    final Iterator <IClassLoadHelper> iter = loadHelpers.iterator ();
+    final Iterator <IClassLoadHelper> iter = m_aLoadHelpers.iterator ();
     while (iter.hasNext ())
     {
       loadHelper = iter.next ();
@@ -191,7 +191,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
 
     IClassLoadHelper loadHelper = null;
 
-    final Iterator <IClassLoadHelper> iter = loadHelpers.iterator ();
+    final Iterator <IClassLoadHelper> iter = m_aLoadHelpers.iterator ();
     while (iter.hasNext ())
     {
       loadHelper = iter.next ();
@@ -215,6 +215,6 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
   public ClassLoader getClassLoader ()
   {
     return m_aBestCandidate == null ? Thread.currentThread ().getContextClassLoader ()
-                                    : this.m_aBestCandidate.getClassLoader ();
+                                    : m_aBestCandidate.getClassLoader ();
   }
 }

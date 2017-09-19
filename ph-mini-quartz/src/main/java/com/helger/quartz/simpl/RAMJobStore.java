@@ -1743,7 +1743,7 @@ public class RAMJobStore implements IJobStore
           if (newData != null)
           {
             newData = (JobDataMap) newData.clone ();
-            newData.clearDirtyFlag ();
+            // newData.clearDirtyFlag ();
           }
           jd = jd.getJobBuilder ().setJobData (newData).build ();
           jw.jobDetail = jd;

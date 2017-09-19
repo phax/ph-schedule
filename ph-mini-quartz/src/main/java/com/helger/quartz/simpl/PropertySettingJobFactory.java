@@ -97,7 +97,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
 
     // Get the wrapped entry set so don't have to incur overhead of wrapping for
     // dirty flag checking since this is read only access
-    for (final Object name2 : data.getWrappedMap ().entrySet ())
+    for (final Object name2 : data.entrySet ())
     {
       final Map.Entry <?, ?> entry = (Map.Entry <?, ?>) name2;
 
