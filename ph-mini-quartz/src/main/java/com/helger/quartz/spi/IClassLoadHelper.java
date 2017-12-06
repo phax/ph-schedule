@@ -35,49 +35,65 @@ public interface IClassLoadHelper
    * the opportunity to "steal" the class loader off of the calling thread,
    * which is the thread that is initializing Quartz.
    */
-  void initialize ();
+  default void initialize ()
+  {}
 
   /**
    * Return the class with the given name.
    *
-   * @param name
+   * @param sClassName
    *        the fqcn of the class to load.
    * @return the requested class.
    * @throws ClassNotFoundException
    *         if the class can be found in the classpath.
    */
-  Class <?> loadClass (String name) throws ClassNotFoundException;
+  default Class <?> loadClass (final String sClassName) throws ClassNotFoundException
+  {
+    return getClassLoader ().loadClass (sClassName);
+  }
 
   /**
    * Return the class of the given type with the given name.
    *
    * @param name
    *        the fqcn of the class to load.
+   * @param dummy
+   *        For casting.
    * @return the requested class.
    * @throws ClassNotFoundException
    *         if the class can be found in the classpath.
    */
-  <T> Class <? extends T> loadClass (String name, Class <T> clazz) throws ClassNotFoundException;
+  @SuppressWarnings ("unchecked")
+  default <T> Class <? extends T> loadClass (final String name, final Class <T> dummy) throws ClassNotFoundException
+  {
+    return (Class <? extends T>) loadClass (name);
+  }
 
   /**
    * Finds a resource with a given name. This method returns null if no resource
    * with this name is found.
    *
-   * @param name
+   * @param sName
    *        name of the desired resource
    * @return a java.net.URL object
    */
-  URL getResource (String name);
+  default URL getResource (final String sName)
+  {
+    return getClassLoader ().getResource (sName);
+  }
 
   /**
    * Finds a resource with a given name. This method returns null if no resource
    * with this name is found.
    *
-   * @param name
+   * @param sName
    *        name of the desired resource
    * @return a java.io.InputStream object
    */
-  InputStream getResourceAsStream (String name);
+  default InputStream getResourceAsStream (final String sName)
+  {
+    return getClassLoader ().getResourceAsStream (sName);
+  }
 
   /**
    * Enable sharing of the class-loader with 3rd party (e.g. digester).

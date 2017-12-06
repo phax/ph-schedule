@@ -35,6 +35,7 @@ import com.helger.quartz.SchedulerException;
  *
  * @see com.helger.quartz.simpl.SimpleInstanceIdGenerator
  */
+@FunctionalInterface
 public interface IInstanceIdGenerator extends Serializable
 {
   /**

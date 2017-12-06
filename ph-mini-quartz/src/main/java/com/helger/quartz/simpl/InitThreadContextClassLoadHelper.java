@@ -18,9 +18,9 @@
  */
 package com.helger.quartz.simpl;
 
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.net.URL;
+
+import javax.annotation.Nullable;
 
 import com.helger.quartz.spi.IClassLoadHelper;
 
@@ -51,50 +51,11 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
   }
 
   /**
-   * Return the class with the given name.
-   */
-  public Class <?> loadClass (final String name) throws ClassNotFoundException
-  {
-    return getClassLoader ().loadClass (name);
-  }
-
-  @SuppressWarnings ("unchecked")
-  public <T> Class <? extends T> loadClass (final String name, final Class <T> clazz) throws ClassNotFoundException
-  {
-    return (Class <? extends T>) loadClass (name);
-  }
-
-  /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
-   *
-   * @param name
-   *        name of the desired resource
-   * @return a java.net.URL object
-   */
-  public URL getResource (final String name)
-  {
-    return getClassLoader ().getResource (name);
-  }
-
-  /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
-   *
-   * @param name
-   *        name of the desired resource
-   * @return a java.io.InputStream object
-   */
-  public InputStream getResourceAsStream (final String name)
-  {
-    return getClassLoader ().getResourceAsStream (name);
-  }
-
-  /**
    * Enable sharing of the class-loader with 3rd party.
    *
    * @return the class-loader user be the helper.
    */
+  @Nullable
   public ClassLoader getClassLoader ()
   {
     return m_aInitClassLoader.get ();

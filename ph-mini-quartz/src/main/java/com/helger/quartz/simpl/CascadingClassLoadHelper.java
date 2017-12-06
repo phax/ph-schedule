@@ -22,6 +22,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.quartz.spi.IClassLoadHelper;
@@ -66,20 +69,21 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
     m_aLoadHelpers.add (new ThreadContextClassLoadHelper ());
     m_aLoadHelpers.add (new InitThreadContextClassLoadHelper ());
 
-    for (final IClassLoadHelper loadHelper : m_aLoadHelpers)
-      loadHelper.initialize ();
+    for (final IClassLoadHelper aLoadHelper : m_aLoadHelpers)
+      aLoadHelper.initialize ();
   }
 
   /**
    * Return the class with the given name.
    */
-  public Class <?> loadClass (final String name) throws ClassNotFoundException
+  @Nonnull
+  public Class <?> loadClass (final String sClassName) throws ClassNotFoundException
   {
     if (m_aBestCandidate != null)
     {
       try
       {
-        return m_aBestCandidate.loadClass (name);
+        return m_aBestCandidate.loadClass (sClassName);
       }
       catch (final Throwable t)
       {
@@ -87,42 +91,43 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
       }
     }
 
-    Throwable throwable = null;
-    Class <?> clazz = null;
-    IClassLoadHelper loadHelper = null;
+    Throwable aThrowable = null;
+    Class <?> ret = null;
+    IClassLoadHelper aLoadHelper = null;
 
     final Iterator <IClassLoadHelper> iter = m_aLoadHelpers.iterator ();
     while (iter.hasNext ())
     {
-      loadHelper = iter.next ();
-
+      aLoadHelper = iter.next ();
       try
       {
-        clazz = loadHelper.loadClass (name);
+        ret = aLoadHelper.loadClass (sClassName);
         break;
       }
       catch (final Throwable t)
       {
-        throwable = t;
+        aThrowable = t;
       }
     }
 
-    if (clazz == null)
+    if (ret == null)
     {
-      if (throwable instanceof ClassNotFoundException)
-        throw (ClassNotFoundException) throwable;
-      throw new ClassNotFoundException ("Unable to load class " + name + " by any known loaders.", throwable);
+      if (aThrowable instanceof ClassNotFoundException)
+        throw (ClassNotFoundException) aThrowable;
+      throw new ClassNotFoundException ("Unable to load class " + sClassName + " by any known loaders.", aThrowable);
     }
 
-    m_aBestCandidate = loadHelper;
-
-    return clazz;
+    // Remember
+    m_aBestCandidate = aLoadHelper;
+    return ret;
   }
 
   @SuppressWarnings ("unchecked")
-  public <T> Class <? extends T> loadClass (final String name, final Class <T> clazz) throws ClassNotFoundException
+  @Nonnull
+  public <T> Class <? extends T> loadClass (final String sClassName,
+                                            final Class <T> dummy) throws ClassNotFoundException
   {
-    return (Class <? extends T>) loadClass (name);
+    return (Class <? extends T>) loadClass (sClassName);
   }
 
   /**
@@ -133,40 +138,32 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    *        name of the desired resource
    * @return a java.net.URL object
    */
+  @Nullable
   public URL getResource (final String name)
   {
-
-    URL result = null;
+    URL ret = null;
 
     if (m_aBestCandidate != null)
     {
-      result = m_aBestCandidate.getResource (name);
-      if (result == null)
-      {
-        m_aBestCandidate = null;
-      }
-      else
-      {
-        return result;
-      }
+      ret = m_aBestCandidate.getResource (name);
+      if (ret != null)
+        return ret;
+      m_aBestCandidate = null;
     }
 
-    IClassLoadHelper loadHelper = null;
+    IClassLoadHelper aLoadHelper = null;
 
     final Iterator <IClassLoadHelper> iter = m_aLoadHelpers.iterator ();
     while (iter.hasNext ())
     {
-      loadHelper = iter.next ();
-
-      result = loadHelper.getResource (name);
-      if (result != null)
-      {
+      aLoadHelper = iter.next ();
+      ret = aLoadHelper.getResource (name);
+      if (ret != null)
         break;
-      }
     }
 
-    m_aBestCandidate = loadHelper;
-    return result;
+    m_aBestCandidate = aLoadHelper;
+    return ret;
   }
 
   /**
@@ -177,34 +174,30 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    *        name of the desired resource
    * @return a java.io.InputStream object
    */
+  @Nullable
   public InputStream getResourceAsStream (final String name)
   {
-    InputStream result = null;
+    InputStream ret = null;
     if (m_aBestCandidate != null)
     {
-      result = m_aBestCandidate.getResourceAsStream (name);
-      if (result == null)
-        m_aBestCandidate = null;
-      else
-        return result;
+      ret = m_aBestCandidate.getResourceAsStream (name);
+      if (ret != null)
+        return ret;
+      m_aBestCandidate = null;
     }
 
-    IClassLoadHelper loadHelper = null;
-
+    IClassLoadHelper aLoadHelper = null;
     final Iterator <IClassLoadHelper> iter = m_aLoadHelpers.iterator ();
     while (iter.hasNext ())
     {
-      loadHelper = iter.next ();
-
-      result = loadHelper.getResourceAsStream (name);
-      if (result != null)
-      {
+      aLoadHelper = iter.next ();
+      ret = aLoadHelper.getResourceAsStream (name);
+      if (ret != null)
         break;
-      }
     }
 
-    m_aBestCandidate = loadHelper;
-    return result;
+    m_aBestCandidate = aLoadHelper;
+    return ret;
   }
 
   /**
@@ -212,6 +205,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    *
    * @return the class-loader user be the helper.
    */
+  @Nonnull
   public ClassLoader getClassLoader ()
   {
     return m_aBestCandidate == null ? Thread.currentThread ().getContextClassLoader ()

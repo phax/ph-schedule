@@ -18,9 +18,6 @@
  */
 package com.helger.quartz.simpl;
 
-import java.io.InputStream;
-import java.net.URL;
-
 import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
@@ -39,54 +36,6 @@ import com.helger.quartz.spi.IClassLoadHelper;
 public class ThreadContextClassLoadHelper implements IClassLoadHelper
 {
   /**
-   * Called to give the ClassLoadHelper a chance to initialize itself, including
-   * the opportunity to "steal" the class loader off of the calling thread,
-   * which is the thread that is initializing Quartz.
-   */
-  public void initialize ()
-  {}
-
-  /**
-   * Return the class with the given name.
-   */
-  public Class <?> loadClass (final String name) throws ClassNotFoundException
-  {
-    return getClassLoader ().loadClass (name);
-  }
-
-  @SuppressWarnings ("unchecked")
-  public <T> Class <? extends T> loadClass (final String name, final Class <T> clazz) throws ClassNotFoundException
-  {
-    return (Class <? extends T>) loadClass (name);
-  }
-
-  /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
-   *
-   * @param name
-   *        name of the desired resource
-   * @return a java.net.URL object
-   */
-  public URL getResource (final String name)
-  {
-    return getClassLoader ().getResource (name);
-  }
-
-  /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
-   *
-   * @param name
-   *        name of the desired resource
-   * @return a java.io.InputStream object
-   */
-  public InputStream getResourceAsStream (final String name)
-  {
-    return getClassLoader ().getResourceAsStream (name);
-  }
-
-  /**
    * Enable sharing of the class-loader with 3rd party.
    *
    * @return the class-loader user be the helper.
@@ -95,5 +44,4 @@ public class ThreadContextClassLoadHelper implements IClassLoadHelper
   {
     return Thread.currentThread ().getContextClassLoader ();
   }
-
 }

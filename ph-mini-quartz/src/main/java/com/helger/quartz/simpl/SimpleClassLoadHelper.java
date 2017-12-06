@@ -18,10 +18,8 @@
  */
 package com.helger.quartz.simpl;
 
-import java.io.InputStream;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
-import java.net.URL;
 
 import com.helger.quartz.spi.IClassLoadHelper;
 
@@ -54,38 +52,6 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
     return Class.forName (name);
   }
 
-  @SuppressWarnings ("unchecked")
-  public <T> Class <? extends T> loadClass (final String name, final Class <T> clazz) throws ClassNotFoundException
-  {
-    return (Class <? extends T>) loadClass (name);
-  }
-
-  /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
-   *
-   * @param name
-   *        name of the desired resource
-   * @return a java.net.URL object
-   */
-  public URL getResource (final String name)
-  {
-    return getClassLoader ().getResource (name);
-  }
-
-  /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
-   *
-   * @param name
-   *        name of the desired resource
-   * @return a java.io.InputStream object
-   */
-  public InputStream getResourceAsStream (final String name)
-  {
-    return getClassLoader ().getResourceAsStream (name);
-  }
-
   /**
    * Enable sharing of the class-loader with 3rd party.
    *
@@ -98,7 +64,8 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
     try
     {
       // Get a reference to this class' class-loader
-      final ClassLoader cl = this.getClass ().getClassLoader ();
+      final ClassLoader cl = getClass ().getClassLoader ();
+
       // Create a method instance representing the protected
       // getCallerClassLoader method of class ClassLoader
       final Method mthd = ClassLoader.class.getDeclaredMethod ("getCallerClassLoader", new Class <?> [0]);
@@ -113,7 +80,7 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
     catch (final Throwable all)
     {
       // Use this class' class-loader
-      return this.getClass ().getClassLoader ();
+      return getClass ().getClassLoader ();
     }
   }
 }
