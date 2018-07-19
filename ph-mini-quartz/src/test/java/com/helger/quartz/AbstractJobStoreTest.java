@@ -49,7 +49,7 @@ import com.helger.quartz.spi.ISchedulerSignaler;
  */
 public abstract class AbstractJobStoreTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractJobStoreTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (AbstractJobStoreTest.class);
 
   private IJobStore fJobStore;
   private JobDetail fJobDetail;
@@ -660,7 +660,7 @@ public abstract class AbstractJobStoreTest
 
     public void notifyTriggerListenersMisfired (final ITrigger trigger)
     {
-      s_aLogger.info ("Trigger misfired: " + trigger.getKey () + ", fire time: " + trigger.getNextFireTime ());
+      LOGGER.info ("Trigger misfired: " + trigger.getKey () + ", fire time: " + trigger.getNextFireTime ());
       fMisfireCount++;
     }
 

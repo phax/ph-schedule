@@ -36,7 +36,7 @@ import com.helger.quartz.PersistJobDataAfterExecution;
  */
 public class ClassUtilsTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (ClassUtilsTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (ClassUtilsTest.class);
 
   @Test
   public void testIsAnnotationPresentOnSuperClass () throws Exception
@@ -54,7 +54,7 @@ public class ClassUtilsTest
   {
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
-      s_aLogger.info (this.getClass ().getSimpleName ());
+      LOGGER.info (this.getClass ().getSimpleName ());
     }
   }
 

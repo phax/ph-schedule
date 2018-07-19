@@ -114,11 +114,11 @@ public class DirectSchedulerFactory implements ISchedulerFactory
 
   private boolean m_bInitialized = false;
   private static DirectSchedulerFactory s_aInstance = new DirectSchedulerFactory ();
-  private static final Logger s_aLogger = LoggerFactory.getLogger (DirectSchedulerFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (DirectSchedulerFactory.class);
 
   protected Logger getLog ()
   {
-    return s_aLogger;
+    return LOGGER;
   }
 
   /**

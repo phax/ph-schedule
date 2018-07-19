@@ -53,7 +53,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 {
   public static final String GROUP_NAME = "com.helger";
 
-  private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalQuartzScheduler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (GlobalQuartzScheduler.class);
 
   private final IScheduler m_aScheduler;
   private String m_sGroupName = GROUP_NAME;
@@ -165,7 +165,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
       m_aScheduler.scheduleJob (aJobDetail, aTrigger);
 
       final TriggerKey ret = aTrigger.getKey ();
-      s_aLogger.info ("Succesfully scheduled job '" +
+      LOGGER.info ("Succesfully scheduled job '" +
                       sJobName +
                       "' with TriggerKey " +
                       ret.toString () +
@@ -221,13 +221,13 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     {
       if (m_aScheduler.unscheduleJob (aTriggerKey))
       {
-        s_aLogger.info ("Succesfully unscheduled job with TriggerKey " + aTriggerKey.toString ());
+        LOGGER.info ("Succesfully unscheduled job with TriggerKey " + aTriggerKey.toString ());
         return EChange.CHANGED;
       }
     }
     catch (final SchedulerException ex)
     {
-      s_aLogger.error ("Failed to unschedule job with TriggerKey " + aTriggerKey.toString (), ex);
+      LOGGER.error ("Failed to unschedule job with TriggerKey " + aTriggerKey.toString (), ex);
     }
     return EChange.UNCHANGED;
   }
@@ -246,11 +246,11 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     try
     {
       m_aScheduler.pauseTrigger (aTriggerKey);
-      s_aLogger.info ("Succesfully paused job with TriggerKey " + aTriggerKey.toString ());
+      LOGGER.info ("Succesfully paused job with TriggerKey " + aTriggerKey.toString ());
     }
     catch (final SchedulerException ex)
     {
-      s_aLogger.error ("Failed to pause job with TriggerKey " + aTriggerKey.toString (), ex);
+      LOGGER.error ("Failed to pause job with TriggerKey " + aTriggerKey.toString (), ex);
     }
   }
 
@@ -267,11 +267,11 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     try
     {
       m_aScheduler.resumeTrigger (aTriggerKey);
-      s_aLogger.info ("Succesfully resumed job with TriggerKey " + aTriggerKey.toString ());
+      LOGGER.info ("Succesfully resumed job with TriggerKey " + aTriggerKey.toString ());
     }
     catch (final SchedulerException ex)
     {
-      s_aLogger.error ("Failed to resume job with TriggerKey " + aTriggerKey.toString (), ex);
+      LOGGER.error ("Failed to resume job with TriggerKey " + aTriggerKey.toString (), ex);
     }
   }
 
@@ -287,11 +287,11 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     {
       // Shutdown but wait for jobs to complete
       m_aScheduler.shutdown (true);
-      s_aLogger.info ("Successfully shutdown GlobalQuartzScheduler");
+      LOGGER.info ("Successfully shutdown GlobalQuartzScheduler");
     }
     catch (final SchedulerException ex)
     {
-      s_aLogger.error ("Failed to shutdown GlobalQuartzScheduler", ex);
+      LOGGER.error ("Failed to shutdown GlobalQuartzScheduler", ex);
       throw ex;
     }
   }

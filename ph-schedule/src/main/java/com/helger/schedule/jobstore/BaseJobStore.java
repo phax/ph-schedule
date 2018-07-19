@@ -78,7 +78,7 @@ import com.helger.quartz.spi.TriggerFiredResult;
  */
 public class BaseJobStore implements IJobStore
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (BaseJobStore.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (BaseJobStore.class);
   private static final AtomicLong s_aFiredTriggerRecordID = new AtomicLong (System.currentTimeMillis ());
 
   private final SimpleReadWriteLock m_aRWLock = new SimpleReadWriteLock ();
@@ -101,7 +101,7 @@ public class BaseJobStore implements IJobStore
   public void initialize (final IClassLoadHelper loadHelper, final ISchedulerSignaler aSignaler)
   {
     m_aRWLock.writeLocked ( () -> m_aSignaler = aSignaler);
-    s_aLogger.info ("ph-schedule JobStore initialized.");
+    LOGGER.info ("ph-schedule JobStore initialized.");
   }
 
   public void schedulerStarted ()
@@ -1260,14 +1260,14 @@ public class BaseJobStore implements IJobStore
           else
             if (triggerInstCode == ECompletedExecutionInstruction.SET_TRIGGER_ERROR)
             {
-              s_aLogger.info ("Trigger " + trigger.getKey () + " set to ERROR state.");
+              LOGGER.info ("Trigger " + trigger.getKey () + " set to ERROR state.");
               tw.setState (TriggerWrapper.STATE_ERROR);
               m_aSignaler.signalSchedulingChange (0L);
             }
             else
               if (triggerInstCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR)
               {
-                s_aLogger.info ("All triggers of Job " + trigger.getJobKey () + " set to ERROR state.");
+                LOGGER.info ("All triggers of Job " + trigger.getJobKey () + " set to ERROR state.");
                 setAllTriggersOfJobToState (trigger.getJobKey (), TriggerWrapper.STATE_ERROR);
                 m_aSignaler.signalSchedulingChange (0L);
               }

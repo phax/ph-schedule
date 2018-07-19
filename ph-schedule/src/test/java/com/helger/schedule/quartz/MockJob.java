@@ -25,11 +25,11 @@ import com.helger.quartz.JobExecutionException;
 
 public final class MockJob implements IJob
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (MockJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (MockJob.class);
 
   public void execute (final IJobExecutionContext context) throws JobExecutionException
   {
-    s_aLogger.info ("Scheduled routine executed!");
+    LOGGER.info ("Scheduled routine executed!");
     GlobalQuartzSchedulerTest.EXEC_LOG.set (true);
   }
 }

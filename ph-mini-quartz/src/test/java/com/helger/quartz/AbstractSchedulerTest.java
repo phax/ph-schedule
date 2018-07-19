@@ -53,7 +53,7 @@ import com.helger.quartz.utils.Key;
  */
 public abstract class AbstractSchedulerTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSchedulerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (AbstractSchedulerTest.class);
 
   private static final String BARRIER = "BARRIER";
   private static final String DATE_STAMPS = "DATE_STAMPS";
@@ -91,7 +91,7 @@ public abstract class AbstractSchedulerTest
       }
       catch (final Throwable e)
       {
-        s_aLogger.error ("Await on barrier was interrupted", e);
+        LOGGER.error ("Await on barrier was interrupted", e);
         throw new AssertionError ("Await on barrier was interrupted: " + e.toString ());
       }
     }
@@ -359,7 +359,7 @@ public abstract class AbstractSchedulerTest
       // log the additional threads
       for (final Thread t : allThreadsEnd.keySet ())
       {
-        s_aLogger.info ("*** Found additional thread: " +
+        LOGGER.info ("*** Found additional thread: " +
                         t.getName () +
                         " (of type " +
                         t.getClass ().getName () +
@@ -372,7 +372,7 @@ public abstract class AbstractSchedulerTest
       // log all threads that were running before shutdown
       for (final Thread t : allThreadsRunning.keySet ())
       {
-        s_aLogger.info ("- Test runtime thread: " +
+        LOGGER.info ("- Test runtime thread: " +
                         t.getName () +
                         " (of type " +
                         t.getClass ().getName () +
@@ -576,7 +576,7 @@ public abstract class AbstractSchedulerTest
       }
       catch (final Throwable e)
       {
-        s_aLogger.error ("Await on barrier was interrupted", e);
+        LOGGER.error ("Await on barrier was interrupted", e);
         throw new AssertionError ("Await on barrier was interrupted: " + e.toString ());
       }
     }

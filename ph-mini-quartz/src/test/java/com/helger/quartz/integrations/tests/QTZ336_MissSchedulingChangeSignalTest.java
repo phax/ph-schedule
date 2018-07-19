@@ -56,7 +56,7 @@ import com.helger.quartz.spi.IOperableTrigger;
  */
 public class QTZ336_MissSchedulingChangeSignalTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (QTZ336_MissSchedulingChangeSignalTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (QTZ336_MissSchedulingChangeSignalTest.class);
 
   @Test
   @Ignore ("Takes nearly a minute to execute and works")
@@ -72,9 +72,9 @@ public class QTZ336_MissSchedulingChangeSignalTest
     properties.setProperty (StdSchedulerFactory.PROP_JOB_STORE_CLASS, SlowRAMJobStore.class.getName ());
     final ISchedulerFactory sf = new StdSchedulerFactory ().initialize (properties);
     final IScheduler sched = sf.getScheduler ();
-    s_aLogger.info ("------- Initialization Complete -----------");
+    LOGGER.info ("------- Initialization Complete -----------");
 
-    s_aLogger.info ("------- Scheduling Job  -------------------");
+    LOGGER.info ("------- Scheduling Job  -------------------");
 
     final IJobDetail job = newJob (CollectDuractionBetweenFireTimesJob.class).withIdentity ("job", "group").build ();
 
@@ -91,7 +91,7 @@ public class QTZ336_MissSchedulingChangeSignalTest
     // scheduler has been started)
     sched.start ();
 
-    s_aLogger.info ("------- Scheduler Started -----------------");
+    LOGGER.info ("------- Scheduler Started -----------------");
 
     // wait long enough so that the scheduler has an opportunity to
     // run the job in theory around 50 times

@@ -79,7 +79,7 @@ public class DisallowConcurrentExecutionJobTest
 
   public static class TestJobListener extends AbstractJobListenerSupport
   {
-    private static final Logger s_aLogger = LoggerFactory.getLogger (DisallowConcurrentExecutionJobTest.TestJobListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger (DisallowConcurrentExecutionJobTest.TestJobListener.class);
 
     private final AtomicInteger m_aJobExCount = new AtomicInteger (0);
     private final int m_nJobExecutionCountToSyncAfter;
@@ -106,7 +106,7 @@ public class DisallowConcurrentExecutionJobTest
         }
         catch (final Throwable e)
         {
-          s_aLogger.error ("Await on barrier was interrupted", e);
+          LOGGER.error ("Await on barrier was interrupted", e);
           throw new AssertionError ("Await on barrier was interrupted: " + e.toString ());
         }
       }

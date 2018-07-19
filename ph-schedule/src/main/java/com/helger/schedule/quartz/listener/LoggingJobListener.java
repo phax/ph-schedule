@@ -37,7 +37,7 @@ import com.helger.quartz.JobExecutionException;
  */
 public class LoggingJobListener implements IJobListener
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingJobListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (LoggingJobListener.class);
 
   @Nonnull
   @Nonempty
@@ -59,13 +59,13 @@ public class LoggingJobListener implements IJobListener
 
   public void jobToBeExecuted (@Nonnull final IJobExecutionContext aContext)
   {
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("Job to be executed: " + getJobName (aContext));
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("Job to be executed: " + getJobName (aContext));
   }
 
   public void jobExecutionVetoed (@Nonnull final IJobExecutionContext aContext)
   {
-    s_aLogger.warn ("Job execution vetoed by trigger listener: " + getJobName (aContext));
+    LOGGER.warn ("Job execution vetoed by trigger listener: " + getJobName (aContext));
   }
 
   public void jobWasExecuted (@Nonnull final IJobExecutionContext aContext, final JobExecutionException aJobException)
@@ -79,8 +79,8 @@ public class LoggingJobListener implements IJobListener
                         nRuntimeMilliSecs +
                         "ms";
     if (aJobException == null)
-      s_aLogger.info (sMsg);
+      LOGGER.info (sMsg);
     else
-      s_aLogger.error (sMsg, aJobException);
+      LOGGER.error (sMsg, aJobException);
   }
 }

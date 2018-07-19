@@ -38,15 +38,15 @@ import com.helger.commons.lang.NonBlockingProperties;
  */
 public class PropertiesParser
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (PropertiesParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (PropertiesParser.class);
 
   private final NonBlockingProperties m_aProps;
 
   public PropertiesParser (final NonBlockingProperties props)
   {
     m_aProps = props;
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("PropertiesParser ctor: " + props);
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("PropertiesParser ctor: " + props);
   }
 
   public NonBlockingProperties getUnderlyingProperties ()

@@ -44,7 +44,7 @@ import com.helger.quartz.JobExecutionException;
 @ThreadSafe
 public abstract class AbstractJob implements IJob
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (AbstractJob.class);
   private static final IMutableStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (AbstractJob.class);
   private static final IMutableStatisticsHandlerKeyedCounter s_aStatsCounterSuccess = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
                                                                                                                                 "$success");
@@ -142,8 +142,8 @@ public abstract class AbstractJob implements IJob
       final String sJobClassName = getClass ().getName ();
       try
       {
-        if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("Executing scheduled job " + sJobClassName);
+        if (LOGGER.isDebugEnabled ())
+          LOGGER.debug ("Executing scheduled job " + sJobClassName);
 
         final StopWatch aSW = StopWatch.createdStarted ();
 
@@ -157,8 +157,8 @@ public abstract class AbstractJob implements IJob
         s_aStatsTimer.addTime (sJobClassName, aSW.stopAndGetMillis ());
         s_aStatsCounterSuccess.increment (sJobClassName);
 
-        if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("Successfully finished executing scheduled job " + sJobClassName);
+        if (LOGGER.isDebugEnabled ())
+          LOGGER.debug ("Successfully finished executing scheduled job " + sJobClassName);
       }
       catch (final Throwable t)
       {

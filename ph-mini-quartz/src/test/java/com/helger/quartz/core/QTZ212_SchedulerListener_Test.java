@@ -43,7 +43,7 @@ import com.helger.quartz.listeners.BroadcastSchedulerListener;
  */
 public class QTZ212_SchedulerListener_Test
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (QTZ212_SchedulerListener_Test.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (QTZ212_SchedulerListener_Test.class);
 
   private static final String SCHEDULER_STARTED = "SCHEDULER_STARTED";
   private static final String SCHEDULER_STARTING = "SCHEDULER_STARTING";
@@ -89,14 +89,14 @@ public class QTZ212_SchedulerListener_Test
     public void schedulerStarted ()
     {
       methodsCalledInSchedulerListener.add (SCHEDULER_STARTED);
-      s_aLogger.info ("schedulerStarted was called");
+      LOGGER.info ("schedulerStarted was called");
     }
 
     @Override
     public void schedulerStarting ()
     {
       methodsCalledInSchedulerListener.add (SCHEDULER_STARTING);
-      s_aLogger.info ("schedulerStarting was called");
+      LOGGER.info ("schedulerStarting was called");
     }
 
   }

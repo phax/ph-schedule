@@ -159,7 +159,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
   private SchedulerException m_aInitException;
   private String m_sPropSrc;
   private PropertiesParser m_aCfg;
-  private static final Logger s_aLogger = LoggerFactory.getLogger (StdSchedulerFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (StdSchedulerFactory.class);
 
   /**
    * Create an uninitialized StdSchedulerFactory.
@@ -169,7 +169,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   protected Logger getLog ()
   {
-    return s_aLogger;
+    return LOGGER;
   }
 
   /**
@@ -198,14 +198,14 @@ public class StdSchedulerFactory implements ISchedulerFactory
   @Nonnull
   public StdSchedulerFactory initialize () throws SchedulerException
   {
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("StdSchedulerFactory.initalize");
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("StdSchedulerFactory.initalize");
 
     // short-circuit if already initialized
     if (m_aCfg != null)
     {
-      if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("StdSchedulerFactory already initalized");
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("StdSchedulerFactory already initalized");
       return this;
     }
     if (m_aInitException != null)
@@ -439,8 +439,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   private IScheduler _instantiate () throws SchedulerException
   {
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("StdSchedulerFactory._instantiate");
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("StdSchedulerFactory._instantiate");
 
     if (m_aCfg == null)
     {
@@ -527,8 +527,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
     IJobFactory jobFactory = null;
     if (jobFactoryClass != null)
     {
-      if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("Creating jobFactoryClass " + jobFactoryClass);
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Creating jobFactoryClass " + jobFactoryClass);
 
       try
       {
@@ -557,8 +557,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
     IInstanceIdGenerator instanceIdGenerator = null;
     if (instanceIdGeneratorClass != null)
     {
-      if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("Creating instanceIdGeneratorClass " + instanceIdGeneratorClass);
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Creating instanceIdGeneratorClass " + instanceIdGeneratorClass);
 
       try
       {
@@ -833,7 +833,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
         threadExecutor = (IThreadExecutor) loadHelper.loadClass (threadExecutorClass)
                                                      .getDeclaredConstructor ()
                                                      .newInstance ();
-        s_aLogger.info ("Using custom implementation for ThreadExecutor: " + threadExecutorClass);
+        LOGGER.info ("Using custom implementation for ThreadExecutor: " + threadExecutorClass);
 
         _setBeanProps (threadExecutor, tProps);
       }
@@ -848,7 +848,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
     else
     {
-      s_aLogger.info ("Using default implementation for ThreadExecutor");
+      LOGGER.info ("Using default implementation for ThreadExecutor");
       threadExecutor = new DefaultThreadExecutor ();
     }
 
@@ -1187,16 +1187,16 @@ public class StdSchedulerFactory implements ISchedulerFactory
     if (m_aCfg == null)
       initialize ();
 
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("Looking up scheduler with name '" + _getSchedulerName () + "'");
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("Looking up scheduler with name '" + _getSchedulerName () + "'");
 
     final SchedulerRepository schedRep = SchedulerRepository.getInstance ();
 
     IScheduler sched = schedRep.lookup (_getSchedulerName ());
     if (sched != null)
     {
-      if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("Reusing existing scheduler with name '" + _getSchedulerName () + "'");
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Reusing existing scheduler with name '" + _getSchedulerName () + "'");
 
       if (sched.isShutdown ())
         schedRep.remove (_getSchedulerName ());

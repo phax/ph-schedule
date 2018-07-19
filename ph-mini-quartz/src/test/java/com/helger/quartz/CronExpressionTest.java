@@ -41,7 +41,7 @@ import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 @SuppressWarnings ("unused")
 public final class CronExpressionTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CronExpressionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (CronExpressionTest.class);
   private static final TimeZone EST_TIME_ZONE = TimeZone.getTimeZone ("US/Eastern");
 
   @Test
@@ -138,7 +138,7 @@ public final class CronExpressionTest
     while (++i < 26)
     {
       final Date date = trigger.getFireTimeAfter (pdate);
-      s_aLogger.info ("fireTime: " + date + ", previousFireTime: " + pdate);
+      LOGGER.info ("fireTime: " + date + ", previousFireTime: " + pdate);
       assertFalse ("Next fire time is the same as previous fire time!", pdate.equals (date));
       pdate = date;
     }
@@ -158,7 +158,7 @@ public final class CronExpressionTest
     while (++i < 26)
     {
       final Date date = trigger.getFireTimeAfter (pdate);
-      s_aLogger.info ("fireTime: " + date + ", previousFireTime: " + pdate);
+      LOGGER.info ("fireTime: " + date + ", previousFireTime: " + pdate);
       assertFalse ("Next fire time is the same as previous fire time!", pdate.equals (date));
       pdate = date;
     }

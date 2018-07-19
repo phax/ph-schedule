@@ -40,7 +40,7 @@ import com.helger.quartz.simpl.SimpleThreadPool;
  */
 public class InterruptableJobTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (InterruptableJobTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (InterruptableJobTest.class);
 
   static final CyclicBarrier sync = new CyclicBarrier (2);
 
@@ -50,7 +50,7 @@ public class InterruptableJobTest
 
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
-      s_aLogger.info ("TestInterruptableJob is executing.");
+      LOGGER.info ("TestInterruptableJob is executing.");
       try
       {
         sync.await (); // wait for test thread to notice the job is now running
@@ -70,13 +70,13 @@ public class InterruptableJobTest
         {}
         if (TestInterruptableJob.interrupted.get ())
         {
-          s_aLogger.info ("TestInterruptableJob main loop detected interrupt signal.");
+          LOGGER.info ("TestInterruptableJob main loop detected interrupt signal.");
           break;
         }
       }
       try
       {
-        s_aLogger.info ("TestInterruptableJob exiting with interrupted = " + interrupted);
+        LOGGER.info ("TestInterruptableJob exiting with interrupted = " + interrupted);
         sync.await ();
       }
       catch (final InterruptedException e)
@@ -88,7 +88,7 @@ public class InterruptableJobTest
     public void interrupt () throws UnableToInterruptJobException
     {
       TestInterruptableJob.interrupted.set (true);
-      s_aLogger.info ("TestInterruptableJob.interrupt() called.");
+      LOGGER.info ("TestInterruptableJob.interrupt() called.");
     }
   }
 

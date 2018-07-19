@@ -57,7 +57,7 @@ import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
  */
 public class QuartzServer extends AbstractSchedulerListenerSupport
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (QuartzServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (QuartzServer.class);
 
   private IScheduler sched;
 
@@ -77,14 +77,14 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
     catch (final Exception ignore)
     {}
 
-    s_aLogger.info ("\n*** The scheduler successfully started.");
+    LOGGER.info ("\n*** The scheduler successfully started.");
 
     if (console)
     {
-      s_aLogger.info ("\n");
-      s_aLogger.info ("The scheduler will now run until you type \"exit\"");
-      s_aLogger.info ("   If it was configured to export itself via RMI,");
-      s_aLogger.info ("   then other process may now use it.");
+      LOGGER.info ("\n");
+      LOGGER.info ("The scheduler will now run until you type \"exit\"");
+      LOGGER.info ("   If it was configured to export itself via RMI,");
+      LOGGER.info ("   then other process may now use it.");
 
       // Don't close System.in
       @SuppressWarnings ("resource")
@@ -92,14 +92,14 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
                                                                                                   StandardCharsets.ISO_8859_1));
       while (true)
       {
-        s_aLogger.info ("Type 'exit' to shutdown the server: ");
+        LOGGER.info ("Type 'exit' to shutdown the server: ");
         if ("exit".equals (rdr.readLine ()))
         {
           break;
         }
       }
 
-      s_aLogger.info ("\n...Shutting down server...");
+      LOGGER.info ("\n...Shutting down server...");
 
       sched.shutdown (true);
     }
@@ -121,7 +121,7 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
   @Override
   public void schedulerError (final String msg, final SchedulerException cause)
   {
-    s_aLogger.error ("*** " + msg, cause);
+    LOGGER.error ("*** " + msg, cause);
   }
 
   /**
@@ -133,7 +133,7 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
   @Override
   public void schedulerShutdown ()
   {
-    s_aLogger.info ("\n*** The scheduler is now shutdown.");
+    LOGGER.info ("\n*** The scheduler is now shutdown.");
     sched = null;
   }
 
@@ -169,12 +169,12 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
         }
         else
         {
-          s_aLogger.info ("\nUsage: QuartzServer [console]");
+          LOGGER.info ("\nUsage: QuartzServer [console]");
         }
     }
     catch (final Exception e)
     {
-      s_aLogger.error ("Internal error", e);
+      LOGGER.error ("Internal error", e);
     }
   }
 
