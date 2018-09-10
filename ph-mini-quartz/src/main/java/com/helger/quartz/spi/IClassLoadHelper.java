@@ -21,6 +21,9 @@ package com.helger.quartz.spi;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * An interface for classes wishing to provide the service of loading classes
  * and resources within the scheduler...
@@ -77,6 +80,7 @@ public interface IClassLoadHelper
    *        name of the desired resource
    * @return a java.net.URL object
    */
+  @Nullable
   default URL getResource (final String sName)
   {
     return getClassLoader ().getResource (sName);
@@ -90,6 +94,7 @@ public interface IClassLoadHelper
    *        name of the desired resource
    * @return a java.io.InputStream object
    */
+  @Nullable
   default InputStream getResourceAsStream (final String sName)
   {
     return getClassLoader ().getResourceAsStream (sName);
@@ -100,5 +105,6 @@ public interface IClassLoadHelper
    *
    * @return the class-loader user be the helper.
    */
+  @Nonnull
   ClassLoader getClassLoader ();
 }

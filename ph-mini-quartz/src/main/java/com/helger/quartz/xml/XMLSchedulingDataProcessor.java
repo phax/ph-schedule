@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.xml.XMLConstants;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.namespace.NamespaceContext;
@@ -61,8 +62,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.string.StringHelper;
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
@@ -129,14 +133,14 @@ public class XMLSchedulingDataProcessor
   /**
    * Constructor for JobSchedulingDataLoader.
    *
-   * @param clh
+   * @param aClassLoadHelper
    *        class-loader helper to share with digester.
    * @throws ParserConfigurationException
    *         if the XML parser cannot be configured as needed.
    */
-  public XMLSchedulingDataProcessor (@Nonnull final IClassLoadHelper clh) throws ParserConfigurationException
+  public XMLSchedulingDataProcessor (@Nonnull final IClassLoadHelper aClassLoadHelper) throws ParserConfigurationException
   {
-    m_aClassLoadHelper = clh;
+    m_aClassLoadHelper = aClassLoadHelper;
     initDocumentParser ();
   }
 
@@ -147,14 +151,14 @@ public class XMLSchedulingDataProcessor
    */
   protected void initDocumentParser () throws ParserConfigurationException
   {
-    final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance ();
-    docBuilderFactory.setNamespaceAware (true);
-    docBuilderFactory.setValidating (true);
-    docBuilderFactory.setAttribute ("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                                    "http://www.w3.org/2001/XMLSchema");
-    docBuilderFactory.setAttribute ("http://java.sun.com/xml/jaxp/properties/schemaSource", resolveSchemaSource ());
+    final DocumentBuilderFactory aDocBuilderFactory = DocumentBuilderFactory.newInstance ();
+    aDocBuilderFactory.setNamespaceAware (true);
+    aDocBuilderFactory.setValidating (true);
+    aDocBuilderFactory.setAttribute ("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+                                     "http://www.w3.org/2001/XMLSchema");
+    aDocBuilderFactory.setAttribute ("http://java.sun.com/xml/jaxp/properties/schemaSource", resolveSchemaSource ());
 
-    m_aDocBuilder = docBuilderFactory.newDocumentBuilder ();
+    m_aDocBuilder = aDocBuilderFactory.newDocumentBuilder ();
     m_aDocBuilder.setErrorHandler (new ErrorHandler ()
     {
 
@@ -236,18 +240,18 @@ public class XMLSchedulingDataProcessor
 
   protected Object resolveSchemaSource ()
   {
-    InputSource inputSource;
-    InputStream is = null;
+    InputSource aSource;
+    InputStream aIS = null;
     try
     {
-      is = m_aClassLoadHelper.getResourceAsStream (QUARTZ_XSD_PATH_IN_JAR);
+      aIS = m_aClassLoadHelper.getResourceAsStream (QUARTZ_XSD_PATH_IN_JAR);
     }
     finally
     {
-      if (is != null)
+      if (aIS != null)
       {
-        inputSource = new InputSource (is);
-        inputSource.setSystemId (QUARTZ_SCHEMA_WEB_URL);
+        aSource = new InputSource (aIS);
+        aSource.setSystemId (QUARTZ_SCHEMA_WEB_URL);
         if (m_aLog.isDebugEnabled ())
           m_aLog.debug ("Utilizing schema packaged in local quartz distribution jar.");
       }
@@ -258,7 +262,7 @@ public class XMLSchedulingDataProcessor
         return QUARTZ_SCHEMA_WEB_URL;
       }
     }
-    return inputSource;
+    return aSource;
   }
 
   /**
@@ -306,9 +310,9 @@ public class XMLSchedulingDataProcessor
    *
    * @see #setOverWriteExistingData(boolean)
    */
-  public void setIgnoreDuplicates (final boolean ignoreDuplicates)
+  public void setIgnoreDuplicates (final boolean bIgnoreDuplicates)
   {
-    m_bIgnoreDuplicates = ignoreDuplicates;
+    m_bIgnoreDuplicates = bIgnoreDuplicates;
   }
 
   /**
@@ -316,10 +320,10 @@ public class XMLSchedulingDataProcessor
    * this processor, even if a pre-processing-command to delete the group is
    * encountered.
    */
-  public void addJobGroupToNeverDelete (final String group)
+  public void addJobGroupToNeverDelete (@Nullable final String sGroup)
   {
-    if (group != null)
-      m_aJobGroupsToNeverDelete.add (group);
+    if (sGroup != null)
+      m_aJobGroupsToNeverDelete.add (sGroup);
   }
 
   /**
@@ -327,9 +331,9 @@ public class XMLSchedulingDataProcessor
    * by this processor, even if a pre-processing-command to delete the group is
    * encountered.
    */
-  public boolean removeJobGroupToNeverDelete (final String group)
+  public boolean removeJobGroupToNeverDelete (@Nullable final String sGroup)
   {
-    return group != null && m_aJobGroupsToNeverDelete.remove (group);
+    return sGroup != null && m_aJobGroupsToNeverDelete.remove (sGroup);
   }
 
   /**
@@ -337,9 +341,11 @@ public class XMLSchedulingDataProcessor
    * this processor, even if a pre-processing-command to delete the group is
    * encountered.
    */
-  public List <String> getJobGroupsToNeverDelete ()
+  @Nonnull
+  @ReturnsMutableObject
+  public ICommonsList <String> getJobGroupsToNeverDelete ()
   {
-    return Collections.unmodifiableList (m_aJobGroupsToDelete);
+    return m_aJobGroupsToDelete.getClone ();
   }
 
   /**
@@ -347,10 +353,10 @@ public class XMLSchedulingDataProcessor
    * deleted by this processor, even if a pre-processing-command to delete the
    * group is encountered.
    */
-  public void addTriggerGroupToNeverDelete (final String group)
+  public void addTriggerGroupToNeverDelete (@Nullable final String sGroup)
   {
-    if (group != null)
-      m_aTriggerGroupsToNeverDelete.add (group);
+    if (sGroup != null)
+      m_aTriggerGroupsToNeverDelete.add (sGroup);
   }
 
   /**
@@ -358,10 +364,10 @@ public class XMLSchedulingDataProcessor
    * deleted by this processor, even if a pre-processing-command to delete the
    * group is encountered.
    */
-  public boolean removeTriggerGroupToNeverDelete (final String group)
+  public boolean removeTriggerGroupToNeverDelete (@Nullable final String sGroup)
   {
-    if (group != null)
-      return m_aTriggerGroupsToNeverDelete.remove (group);
+    if (sGroup != null)
+      return m_aTriggerGroupsToNeverDelete.remove (sGroup);
     return false;
   }
 
@@ -370,16 +376,12 @@ public class XMLSchedulingDataProcessor
    * this processor, even if a pre-processing-command to delete the group is
    * encountered.
    */
-  public List <String> getTriggerGroupsToNeverDelete ()
+  @Nonnull
+  @ReturnsMutableCopy
+  public ICommonsList <String> getTriggerGroupsToNeverDelete ()
   {
-    return Collections.unmodifiableList (m_aTriggerGroupsToDelete);
+    return m_aTriggerGroupsToDelete.getClone ();
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * Process the xml file in the default location (a file named
@@ -393,12 +395,12 @@ public class XMLSchedulingDataProcessor
   /**
    * Process the xml file named <code>fileName</code>.
    *
-   * @param fileName
+   * @param sFilename
    *        meta data file name.
    */
-  protected void processFile (final String fileName) throws Exception
+  protected void processFile (@Nonnull final String sFilename) throws Exception
   {
-    processFile (fileName, getSystemIdForFileName (fileName));
+    processFile (sFilename, getSystemIdForFileName (sFilename));
   }
 
   /**
@@ -411,9 +413,9 @@ public class XMLSchedulingDataProcessor
    * @see #processFileAndScheduleJobs(IScheduler, boolean)
    * @see #processFileAndScheduleJobs(String, com.helger.quartz.IScheduler)
    */
-  protected String getSystemIdForFileName (final String sFilename)
+  protected String getSystemIdForFileName (@Nonnull final String sFilename)
   {
-    final File aFile = new File (sFilename); // files in filesystem
+    final File aFile = new File (sFilename);
     if (aFile.exists ())
       return aFile.toURI ().toString ();
 
@@ -435,13 +437,14 @@ public class XMLSchedulingDataProcessor
   /**
    * Returns an <code>URL</code> from the fileName as a resource.
    *
-   * @param fileName
+   * @param sFilename
    *        file name.
    * @return an <code>URL</code> from the fileName as a resource.
    */
-  protected URL getURL (final String fileName)
+  @Nullable
+  protected URL getURL (final String sFilename)
   {
-    return m_aClassLoadHelper.getResource (fileName);
+    return m_aClassLoadHelper.getResource (sFilename);
   }
 
   protected void prepForProcessing ()
@@ -463,24 +466,26 @@ public class XMLSchedulingDataProcessor
   /**
    * Process the xmlfile named <code>fileName</code> with the given system ID.
    *
-   * @param fileName
+   * @param sFilename
    *        meta data file name.
-   * @param systemId
+   * @param sSystemID
    *        system ID.
    */
-  protected void processFile (final String fileName, final String systemId) throws ValidationException,
-                                                                            SAXException,
-                                                                            IOException,
-                                                                            ClassNotFoundException,
-                                                                            ParseException,
-                                                                            XPathException
+  protected void processFile (final String sFilename, final String sSystemID) throws ValidationException,
+                                                                              SAXException,
+                                                                              IOException,
+                                                                              ClassNotFoundException,
+                                                                              ParseException,
+                                                                              XPathException
   {
 
     prepForProcessing ();
 
-    m_aLog.info ("Parsing XML file: " + fileName + " with systemId: " + systemId);
-    final InputSource is = new InputSource (getInputStream (fileName));
-    is.setSystemId (systemId);
+    if (m_aLog.isInfoEnabled ())
+      m_aLog.info ("Parsing XML file: " + sFilename + " with systemId: " + sSystemID);
+
+    final InputSource is = new InputSource (getInputStream (sFilename));
+    is.setSystemId (sSystemID);
 
     process (is);
 
@@ -490,95 +495,92 @@ public class XMLSchedulingDataProcessor
   /**
    * Process the xmlfile named <code>fileName</code> with the given system ID.
    *
-   * @param stream
+   * @param aIS
    *        an input stream containing the xml content.
-   * @param systemId
+   * @param sSystemID
    *        system ID.
    */
-  public void processStreamAndScheduleJobs (final InputStream stream,
-                                            final String systemId,
-                                            final IScheduler sched) throws ValidationException,
-                                                                    SAXException,
-                                                                    XPathException,
-                                                                    IOException,
-                                                                    SchedulerException,
-                                                                    ClassNotFoundException,
-                                                                    ParseException
+  public void processStreamAndScheduleJobs (final InputStream aIS,
+                                            final String sSystemID,
+                                            final IScheduler aScheduler) throws ValidationException,
+                                                                         SAXException,
+                                                                         XPathException,
+                                                                         IOException,
+                                                                         SchedulerException,
+                                                                         ClassNotFoundException,
+                                                                         ParseException
   {
 
     prepForProcessing ();
 
-    m_aLog.info ("Parsing XML from stream with systemId: " + systemId);
+    m_aLog.info ("Parsing XML from stream with systemId: " + sSystemID);
 
-    final InputSource is = new InputSource (stream);
-    is.setSystemId (systemId);
+    final InputSource aSource = new InputSource (aIS);
+    aSource.setSystemId (sSystemID);
 
-    process (is);
-    executePreProcessCommands (sched);
-    scheduleJobs (sched);
+    process (aSource);
+    executePreProcessCommands (aScheduler);
+    scheduleJobs (aScheduler);
 
     maybeThrowValidationException ();
   }
 
-  protected void process (final InputSource is) throws SAXException,
-                                                IOException,
-                                                ParseException,
-                                                XPathException,
-                                                ClassNotFoundException
+  protected void process (@Nonnull final InputSource aSource) throws SAXException,
+                                                              IOException,
+                                                              ParseException,
+                                                              XPathException,
+                                                              ClassNotFoundException
   {
-
     // load the document
-    final Document document = m_aDocBuilder.parse (is);
+    final Document aDoc = m_aDocBuilder.parse (aSource);
 
     //
     // Extract pre-processing commands
     //
 
-    final NodeList deleteJobGroupNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-jobs-in-group",
-                                                                       document,
-                                                                       XPathConstants.NODESET);
+    final NodeList aDeleteJobGroupNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-jobs-in-group",
+                                                                        aDoc,
+                                                                        XPathConstants.NODESET);
 
     if (m_aLog.isDebugEnabled ())
-      m_aLog.debug ("Found " + deleteJobGroupNodes.getLength () + " delete job group commands.");
+      m_aLog.debug ("Found " + aDeleteJobGroupNodes.getLength () + " delete job group commands.");
 
-    for (int i = 0; i < deleteJobGroupNodes.getLength (); i++)
+    for (int i = 0; i < aDeleteJobGroupNodes.getLength (); i++)
     {
-      final Node node = deleteJobGroupNodes.item (i);
-      String t = node.getTextContent ();
-      if (t == null || (t = t.trim ()).length () == 0)
-        continue;
-      m_aJobGroupsToDelete.add (t);
+      final Node aNode = aDeleteJobGroupNodes.item (i);
+      final String sText = StringHelper.trim (aNode.getTextContent ());
+      if (StringHelper.hasText (sText))
+        m_aJobGroupsToDelete.add (sText);
     }
 
-    final NodeList deleteTriggerGroupNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-triggers-in-group",
-                                                                           document,
-                                                                           XPathConstants.NODESET);
+    final NodeList aDeleteTriggerGroupNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-triggers-in-group",
+                                                                            aDoc,
+                                                                            XPathConstants.NODESET);
 
     if (m_aLog.isDebugEnabled ())
-      m_aLog.debug ("Found " + deleteTriggerGroupNodes.getLength () + " delete trigger group commands.");
+      m_aLog.debug ("Found " + aDeleteTriggerGroupNodes.getLength () + " delete trigger group commands.");
 
-    for (int i = 0; i < deleteTriggerGroupNodes.getLength (); i++)
+    for (int i = 0; i < aDeleteTriggerGroupNodes.getLength (); i++)
     {
-      final Node node = deleteTriggerGroupNodes.item (i);
-      String t = node.getTextContent ();
-      if (t == null || (t = t.trim ()).length () == 0)
-        continue;
-      m_aTriggerGroupsToDelete.add (t);
+      final Node aNode = aDeleteTriggerGroupNodes.item (i);
+      final String sText = StringHelper.trim (aNode.getTextContent ());
+      if (StringHelper.hasText (sText))
+        m_aTriggerGroupsToDelete.add (sText);
     }
 
-    final NodeList deleteJobNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-job",
-                                                                  document,
-                                                                  XPathConstants.NODESET);
+    final NodeList aDeleteJobNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-job",
+                                                                   aDoc,
+                                                                   XPathConstants.NODESET);
 
     if (m_aLog.isDebugEnabled ())
-      m_aLog.debug ("Found " + deleteJobNodes.getLength () + " delete job commands.");
+      m_aLog.debug ("Found " + aDeleteJobNodes.getLength () + " delete job commands.");
 
-    for (int i = 0; i < deleteJobNodes.getLength (); i++)
+    for (int i = 0; i < aDeleteJobNodes.getLength (); i++)
     {
-      final Node node = deleteJobNodes.item (i);
+      final Node aNode = aDeleteJobNodes.item (i);
 
-      final String name = getTrimmedToNullString (m_aXPath, "q:name", node);
-      final String group = getTrimmedToNullString (m_aXPath, "q:group", node);
+      final String name = getTrimmedToNullString (m_aXPath, "q:name", aNode);
+      final String group = getTrimmedToNullString (m_aXPath, "q:group", aNode);
 
       if (name == null)
         throw new ParseException ("Encountered a 'delete-job' command without a name specified.", -1);
@@ -586,7 +588,7 @@ public class XMLSchedulingDataProcessor
     }
 
     final NodeList deleteTriggerNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:pre-processing-commands/q:delete-trigger",
-                                                                      document,
+                                                                      aDoc,
                                                                       XPathConstants.NODESET);
 
     if (m_aLog.isDebugEnabled ())
@@ -610,7 +612,7 @@ public class XMLSchedulingDataProcessor
 
     final Boolean overWrite = getBoolean (m_aXPath,
                                           "/q:job-scheduling-data/q:processing-directives/q:overwrite-existing-data",
-                                          document);
+                                          aDoc);
     if (overWrite == null)
     {
       if (m_aLog.isDebugEnabled ())
@@ -625,7 +627,7 @@ public class XMLSchedulingDataProcessor
 
     final Boolean ignoreDupes = getBoolean (m_aXPath,
                                             "/q:job-scheduling-data/q:processing-directives/q:ignore-duplicates",
-                                            document);
+                                            aDoc);
     if (ignoreDupes == null)
     {
       if (m_aLog.isDebugEnabled ())
@@ -643,7 +645,7 @@ public class XMLSchedulingDataProcessor
     //
 
     final NodeList jobNodes = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:schedule/q:job",
-                                                            document,
+                                                            aDoc,
                                                             XPathConstants.NODESET);
 
     if (m_aLog.isDebugEnabled ())
@@ -694,7 +696,7 @@ public class XMLSchedulingDataProcessor
     //
 
     final NodeList triggerEntries = (NodeList) m_aXPath.evaluate ("/q:job-scheduling-data/q:schedule/q:trigger/*",
-                                                                  document,
+                                                                  aDoc,
                                                                   XPathConstants.NODESET);
 
     if (m_aLog.isDebugEnabled ())
@@ -878,22 +880,23 @@ public class XMLSchedulingDataProcessor
     }
   }
 
-  protected String getTrimmedToNullString (final XPath xpathToElement,
+  @Nullable
+  protected String getTrimmedToNullString (@Nonnull final XPath xpathToElement,
                                            final String elementName,
                                            final Node parentNode) throws XPathExpressionException
   {
-    String str = (String) xpathToElement.evaluate (elementName, parentNode, XPathConstants.STRING);
+    String ret = (String) xpathToElement.evaluate (elementName, parentNode, XPathConstants.STRING);
+    if (ret != null)
+      ret = ret.trim ();
 
-    if (str != null)
-      str = str.trim ();
+    if (ret != null && ret.length () == 0)
+      ret = null;
 
-    if (str != null && str.length () == 0)
-      str = null;
-
-    return str;
+    return ret;
   }
 
-  protected Boolean getBoolean (final XPath xpathToElement,
+  @Nullable
+  protected Boolean getBoolean (@Nonnull final XPath xpathToElement,
                                 final String elementName,
                                 final Document document) throws XPathExpressionException
   {
@@ -917,16 +920,16 @@ public class XMLSchedulingDataProcessor
    * Note that we will set overWriteExistingJobs after the default xml is
    * parsed.
    */
-  public void processFileAndScheduleJobs (final IScheduler sched, final boolean overWriteExistingJobs) throws Exception
+  public void processFileAndScheduleJobs (final IScheduler aScheduler, final boolean bOverwriteExistingJobs) throws Exception
   {
-    final String fileName = QUARTZ_XML_DEFAULT_FILE_NAME;
-    processFile (fileName, getSystemIdForFileName (fileName));
+    final String sFilename = QUARTZ_XML_DEFAULT_FILE_NAME;
+    processFile (sFilename, getSystemIdForFileName (sFilename));
     // The overWriteExistingJobs flag was set by processFile() ->
     // prepForProcessing(), then by xml parsing, and then now
     // we need to reset it again here by this method parameter to override it.
-    setOverWriteExistingData (overWriteExistingJobs);
-    executePreProcessCommands (sched);
-    scheduleJobs (sched);
+    setOverWriteExistingData (bOverwriteExistingJobs);
+    executePreProcessCommands (aScheduler);
+    scheduleJobs (aScheduler);
   }
 
   /**

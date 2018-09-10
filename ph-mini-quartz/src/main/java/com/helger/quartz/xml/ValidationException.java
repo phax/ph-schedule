@@ -40,15 +40,15 @@ public class ValidationException extends Exception
   /**
    * Constructor for ValidationException.
    *
-   * @param message
+   * @param sMessage
    *        exception message.
-   * @param errors
+   * @param aErors
    *        collection of validation exceptions.
    */
-  public ValidationException (final String message, @Nonnull final Collection <Exception> errors)
+  public ValidationException (final String sMessage, @Nonnull final Collection <Exception> aErors)
   {
-    super (message, CollectionHelper.getFirstElement (errors));
-    m_aValidationExceptions = new CommonsArrayList <> (errors);
+    super (sMessage, CollectionHelper.getFirstElement (aErors));
+    m_aValidationExceptions = new CommonsArrayList <> (aErors);
   }
 
   /**
