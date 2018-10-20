@@ -141,7 +141,7 @@ public class SimpleThreadPool implements IThreadPool
    * <code>initialize()</code> has been called.
    * </p>
    */
-  public void setThreadCount (final int count)
+  public final void setThreadCount (final int count)
   {
     this.count = count;
   }
@@ -151,7 +151,7 @@ public class SimpleThreadPool implements IThreadPool
    * Get the number of worker threads in the pool.
    * </p>
    */
-  public int getThreadCount ()
+  public final int getThreadCount ()
   {
     return count;
   }
@@ -162,7 +162,7 @@ public class SimpleThreadPool implements IThreadPool
    * <code>initialize()</code> has been called.
    * </p>
    */
-  public void setThreadPriority (final int prio)
+  public final void setThreadPriority (final int prio)
   {
     this.prio = prio;
   }
@@ -172,17 +172,17 @@ public class SimpleThreadPool implements IThreadPool
    * Get the thread priority of worker threads in the pool.
    * </p>
    */
-  public int getThreadPriority ()
+  public final int getThreadPriority ()
   {
     return prio;
   }
 
-  public void setThreadNamePrefix (final String prfx)
+  public final void setThreadNamePrefix (final String prfx)
   {
     this.threadNamePrefix = prfx;
   }
 
-  public String getThreadNamePrefix ()
+  public final String getThreadNamePrefix ()
   {
     return threadNamePrefix;
   }
@@ -190,7 +190,7 @@ public class SimpleThreadPool implements IThreadPool
   /**
    * @return Returns the threadsInheritContextClassLoaderOfInitializingThread.
    */
-  public boolean isThreadsInheritContextClassLoaderOfInitializingThread ()
+  public final boolean isThreadsInheritContextClassLoaderOfInitializingThread ()
   {
     return inheritLoader;
   }
@@ -199,17 +199,17 @@ public class SimpleThreadPool implements IThreadPool
    * @param inheritLoader
    *        The threadsInheritContextClassLoaderOfInitializingThread to set.
    */
-  public void setThreadsInheritContextClassLoaderOfInitializingThread (final boolean inheritLoader)
+  public final void setThreadsInheritContextClassLoaderOfInitializingThread (final boolean inheritLoader)
   {
     this.inheritLoader = inheritLoader;
   }
 
-  public boolean isThreadsInheritGroupOfInitializingThread ()
+  public final boolean isThreadsInheritGroupOfInitializingThread ()
   {
     return inheritGroup;
   }
 
-  public void setThreadsInheritGroupOfInitializingThread (final boolean inheritGroup)
+  public final void setThreadsInheritGroupOfInitializingThread (final boolean inheritGroup)
   {
     this.inheritGroup = inheritGroup;
   }
@@ -217,7 +217,7 @@ public class SimpleThreadPool implements IThreadPool
   /**
    * @return Returns the value of makeThreadsDaemons.
    */
-  public boolean isMakeThreadsDaemons ()
+  public final boolean isMakeThreadsDaemons ()
   {
     return makeThreadsDaemons;
   }
@@ -226,7 +226,7 @@ public class SimpleThreadPool implements IThreadPool
    * @param makeThreadsDaemons
    *        The value of makeThreadsDaemons to set.
    */
-  public void setMakeThreadsDaemons (final boolean makeThreadsDaemons)
+  public final void setMakeThreadsDaemons (final boolean makeThreadsDaemons)
   {
     this.makeThreadsDaemons = makeThreadsDaemons;
   }
@@ -241,7 +241,6 @@ public class SimpleThreadPool implements IThreadPool
 
   public void initialize () throws SchedulerConfigException
   {
-
     if (workers != null && workers.size () > 0) // already initialized...
       return;
 
