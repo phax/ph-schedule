@@ -35,43 +35,41 @@ import com.helger.quartz.spi.TriggerFiredBundle;
 
 public class JobExecutionContext implements IJobExecutionContext
 {
-  private transient IScheduler scheduler;
-  private final ITrigger trigger;
-  private final IJobDetail jobDetail;
-  private final JobDataMap jobDataMap;
-  private transient IJob job;
-  private final ICalendar calendar;
-  private boolean recovering = false;
-  private int numRefires = 0;
-  private final Date fireTime;
-  private final Date scheduledFireTime;
-  private final Date prevFireTime;
-  private final Date nextFireTime;
-  private long jobRunTime = -1;
-  private Object result;
-  private final Map <Object, Object> data = new HashMap <> ();
+  private transient IScheduler m_aScheduler;
+  private final ITrigger m_aTrigger;
+  private final IJobDetail m_aJobDetail;
+  private final JobDataMap m_aJobDataMap;
+  private transient IJob m_aJob;
+  private final ICalendar m_aCalendar;
+  private boolean m_bRecovering = false;
+  private int m_nNumRefires = 0;
+  private final Date m_aFireTime;
+  private final Date m_aScheduledFireTime;
+  private final Date m_aPrevFireTime;
+  private final Date m_aNextFireTime;
+  private long m_nJobRunTime = -1;
+  private Object m_aResult;
+  private final Map <Object, Object> m_aData = new HashMap <> ();
 
   /**
-   * <p>
    * Create a JobExcecutionContext with the given context data.
-   * </p>
    */
   public JobExecutionContext (final IScheduler scheduler, final TriggerFiredBundle firedBundle, final IJob job)
   {
-    this.scheduler = scheduler;
-    this.trigger = firedBundle.getTrigger ();
-    this.calendar = firedBundle.getCalendar ();
-    this.jobDetail = firedBundle.getJobDetail ();
-    this.job = job;
-    this.recovering = firedBundle.isRecovering ();
-    this.fireTime = firedBundle.getFireTime ();
-    this.scheduledFireTime = firedBundle.getScheduledFireTime ();
-    this.prevFireTime = firedBundle.getPrevFireTime ();
-    this.nextFireTime = firedBundle.getNextFireTime ();
+    this.m_aScheduler = scheduler;
+    this.m_aTrigger = firedBundle.getTrigger ();
+    this.m_aCalendar = firedBundle.getCalendar ();
+    this.m_aJobDetail = firedBundle.getJobDetail ();
+    this.m_aJob = job;
+    this.m_bRecovering = firedBundle.isRecovering ();
+    this.m_aFireTime = firedBundle.getFireTime ();
+    this.m_aScheduledFireTime = firedBundle.getScheduledFireTime ();
+    this.m_aPrevFireTime = firedBundle.getPrevFireTime ();
+    this.m_aNextFireTime = firedBundle.getNextFireTime ();
 
-    this.jobDataMap = new JobDataMap ();
-    this.jobDataMap.putAll (jobDetail.getJobDataMap ());
-    this.jobDataMap.putAll (trigger.getJobDataMap ());
+    this.m_aJobDataMap = new JobDataMap ();
+    this.m_aJobDataMap.putAll (m_aJobDetail.getJobDataMap ());
+    this.m_aJobDataMap.putAll (m_aTrigger.getJobDataMap ());
   }
 
   /*
@@ -85,7 +83,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public IScheduler getScheduler ()
   {
-    return scheduler;
+    return m_aScheduler;
   }
 
   /**
@@ -93,7 +91,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public ITrigger getTrigger ()
   {
-    return trigger;
+    return m_aTrigger;
   }
 
   /**
@@ -101,7 +99,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public ICalendar getCalendar ()
   {
-    return calendar;
+    return m_aCalendar;
   }
 
   /**
@@ -109,22 +107,22 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public boolean isRecovering ()
   {
-    return recovering;
+    return m_bRecovering;
   }
 
   public TriggerKey getRecoveringTriggerKey ()
   {
     if (isRecovering ())
     {
-      return new TriggerKey (jobDataMap.getAsString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_GROUP),
-                             jobDataMap.getAsString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_NAME));
+      return new TriggerKey (m_aJobDataMap.getAsString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_GROUP),
+                             m_aJobDataMap.getAsString (IScheduler.FAILED_JOB_ORIGINAL_TRIGGER_NAME));
     }
     throw new IllegalStateException ("Not a recovering job");
   }
 
   public void incrementRefireCount ()
   {
-    numRefires++;
+    m_nNumRefires++;
   }
 
   /**
@@ -132,7 +130,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public int getRefireCount ()
   {
-    return numRefires;
+    return m_nNumRefires;
   }
 
   /**
@@ -140,7 +138,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public JobDataMap getMergedJobDataMap ()
   {
-    return jobDataMap;
+    return m_aJobDataMap;
   }
 
   /**
@@ -148,7 +146,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public IJobDetail getJobDetail ()
   {
-    return jobDetail;
+    return m_aJobDetail;
   }
 
   /**
@@ -156,7 +154,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public IJob getJobInstance ()
   {
-    return job;
+    return m_aJob;
   }
 
   /**
@@ -164,7 +162,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public Date getFireTime ()
   {
-    return fireTime;
+    return m_aFireTime;
   }
 
   /**
@@ -172,7 +170,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public Date getScheduledFireTime ()
   {
-    return scheduledFireTime;
+    return m_aScheduledFireTime;
   }
 
   /**
@@ -180,7 +178,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public Date getPreviousFireTime ()
   {
-    return prevFireTime;
+    return m_aPrevFireTime;
   }
 
   /**
@@ -188,7 +186,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public Date getNextFireTime ()
   {
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
   @Override
@@ -218,7 +216,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public Object getResult ()
   {
-    return result;
+    return m_aResult;
   }
 
   /**
@@ -226,7 +224,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public void setResult (final Object result)
   {
-    this.result = result;
+    this.m_aResult = result;
   }
 
   /**
@@ -234,7 +232,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public long getJobRunTime ()
   {
-    return jobRunTime;
+    return m_nJobRunTime;
   }
 
   /**
@@ -243,7 +241,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public void setJobRunTime (final long jobRunTime)
   {
-    this.jobRunTime = jobRunTime;
+    this.m_nJobRunTime = jobRunTime;
   }
 
   /**
@@ -251,7 +249,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public void put (final Object key, final Object value)
   {
-    data.put (key, value);
+    m_aData.put (key, value);
   }
 
   /**
@@ -259,7 +257,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public Object get (final Object key)
   {
-    return data.get (key);
+    return m_aData.get (key);
   }
 
   /**
@@ -267,6 +265,6 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public String getFireInstanceId ()
   {
-    return ((IOperableTrigger) trigger).getFireInstanceId ();
+    return ((IOperableTrigger) m_aTrigger).getFireInstanceId ();
   }
 }

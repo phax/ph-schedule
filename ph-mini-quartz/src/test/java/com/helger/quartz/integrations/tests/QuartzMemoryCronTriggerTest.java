@@ -19,10 +19,8 @@
 package com.helger.quartz.integrations.tests;
 
 import static com.helger.quartz.integrations.tests.TrackingJob.SCHEDULED_TIMES_KEY;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -39,7 +37,7 @@ import com.helger.quartz.TriggerBuilder;
 
 /**
  * A integration test for Quartz In-Memory Scheduler with Cron Trigger.
- * 
+ *
  * @author Zemian Deng
  */
 public class QuartzMemoryCronTriggerTest extends QuartzMemoryTestSupport
@@ -48,9 +46,9 @@ public class QuartzMemoryCronTriggerTest extends QuartzMemoryTestSupport
   public void testCronRepeatCount () throws Exception
   {
     final ICronTrigger trigger = TriggerBuilder.newTrigger ()
-                                              .withIdentity ("test")
-                                              .withSchedule (CronScheduleBuilder.cronSchedule ("* * * * * ?"))
-                                              .build ();
+                                               .withIdentity ("test")
+                                               .withSchedule (CronScheduleBuilder.cronSchedule ("* * * * * ?"))
+                                               .build ();
     final List <Long> scheduledTimes = Collections.synchronizedList (new LinkedList <Long> ());
     scheduler.getContext ().put (SCHEDULED_TIMES_KEY, scheduledTimes);
     final IJobDetail jobDetail = JobBuilder.newJob (TrackingJob.class).withIdentity ("test").build ();
@@ -60,15 +58,15 @@ public class QuartzMemoryCronTriggerTest extends QuartzMemoryTestSupport
     {
       Thread.sleep (500);
     }
-    assertThat (scheduledTimes, hasSize (greaterThanOrEqualTo (3)));
+    assertTrue (scheduledTimes.size () >= 3);
 
     final Long [] times = scheduledTimes.toArray (new Long [scheduledTimes.size ()]);
 
-    final long baseline = times[0];
-    assertThat (baseline % 1000, is (0L));
+    final long baseline = times[0].longValue ();
+    assertEquals (0, baseline % 1000);
     for (int i = 1; i < times.length; i++)
     {
-      assertThat (times[i], is (baseline + TimeUnit.SECONDS.toMillis (i)));
+      assertEquals (times[i].longValue (), baseline + TimeUnit.SECONDS.toMillis (i));
     }
   }
 }

@@ -44,7 +44,7 @@ import com.helger.quartz.ICalendar;
 public class HolidayCalendar extends BaseCalendar
 {
   // A sorted set to store the holidays
-  private TreeSet <Date> dates = new TreeSet <> ();
+  private TreeSet <Date> m_aDates = new TreeSet <> ();
 
   public HolidayCalendar ()
   {}
@@ -65,10 +65,10 @@ public class HolidayCalendar extends BaseCalendar
   }
 
   @Override
-  public Object clone ()
+  public HolidayCalendar clone ()
   {
     final HolidayCalendar clone = (HolidayCalendar) super.clone ();
-    clone.dates = new TreeSet <> (dates);
+    clone.m_aDates = new TreeSet <> (m_aDates);
     return clone;
   }
 
@@ -91,13 +91,13 @@ public class HolidayCalendar extends BaseCalendar
 
     final Date lookFor = getStartOfDayJavaCalendar (timeStamp).getTime ();
 
-    return !(dates.contains (lookFor));
+    return !(m_aDates.contains (lookFor));
   }
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar
+   * after the given time.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -127,8 +127,8 @@ public class HolidayCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Add the given Date to the list of excluded days. Only the month, day and
-   * year of the returned dates are significant.
+   * Add the given Date to the list of excluded days. Only the month, day and year
+   * of the returned dates are significant.
    * </p>
    */
   public void addExcludedDate (final Date excludedDate)
@@ -138,13 +138,13 @@ public class HolidayCalendar extends BaseCalendar
      * System.err.println( "HolidayCalendar.add(): date=" +
      * excludedDate.toLocaleString());
      */
-    this.dates.add (date);
+    this.m_aDates.add (date);
   }
 
   public void removeExcludedDate (final Date dateToRemove)
   {
     final Date date = getStartOfDayJavaCalendar (dateToRemove.getTime ()).getTime ();
-    dates.remove (date);
+    m_aDates.remove (date);
   }
 
   /**
@@ -155,6 +155,6 @@ public class HolidayCalendar extends BaseCalendar
    */
   public SortedSet <Date> getExcludedDates ()
   {
-    return Collections.unmodifiableSortedSet (dates);
+    return Collections.unmodifiableSortedSet (m_aDates);
   }
 }

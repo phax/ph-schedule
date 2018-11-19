@@ -20,6 +20,8 @@ package com.helger.quartz;
 
 import java.io.Serializable;
 
+import com.helger.commons.lang.IExplicitlyCloneable;
+
 /**
  * An interface to be implemented by objects that define spaces of time during
  * which an associated <code>{@link ITrigger}</code> may (not) fire. Calendars
@@ -42,7 +44,7 @@ import java.io.Serializable;
  * @author James House
  * @author Juergen Donnerstag
  */
-public interface ICalendar extends Serializable, Cloneable
+public interface ICalendar extends Serializable, IExplicitlyCloneable
 {
   int MONTH = 0;
 
@@ -70,8 +72,8 @@ public interface ICalendar extends Serializable, Cloneable
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar
+   * after the given time.
    * </p>
    */
   long getNextIncludedTime (long timeStamp);
@@ -88,12 +90,12 @@ public interface ICalendar extends Serializable, Cloneable
 
   /**
    * <p>
-   * Set a description for the <code>Calendar</code> instance - may be useful
-   * for remembering/displaying the purpose of the calendar, though the
-   * description has no meaning to Quartz.
+   * Set a description for the <code>Calendar</code> instance - may be useful for
+   * remembering/displaying the purpose of the calendar, though the description
+   * has no meaning to Quartz.
    * </p>
    */
   void setDescription (String description);
 
-  Object clone ();
+  ICalendar clone ();
 }

@@ -36,7 +36,7 @@ import com.helger.quartz.utils.counter.sampled.SampledRateCounterConfig;
 public class SampledStatistics extends AbstractSchedulerListenerSupport implements ISampledStatistics, IJobListener
 {
   @SuppressWarnings ("unused")
-  private final QuartzScheduler scheduler;
+  private final QuartzScheduler m_aScheduler;
 
   private static final String NAME = "QuartzSampledStatistics";
 
@@ -51,19 +51,19 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
                                                                                                                     DEFAULT_HISTORY_SIZE,
                                                                                                                     true);
 
-  private volatile ICounterManager counterManager;
-  private final ISampledCounter jobsScheduledCount;
-  private final ISampledCounter jobsExecutingCount;
-  private final ISampledCounter jobsCompletedCount;
+  private volatile ICounterManager m_aCounterManager;
+  private final ISampledCounter m_aJobsScheduledCount;
+  private final ISampledCounter m_aJobsExecutingCount;
+  private final ISampledCounter m_aJobsCompletedCount;
 
   SampledStatistics (final QuartzScheduler scheduler)
   {
-    this.scheduler = scheduler;
+    this.m_aScheduler = scheduler;
 
-    counterManager = new CounterManager (new Timer (NAME + "Timer"));
-    jobsScheduledCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
-    jobsExecutingCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
-    jobsCompletedCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
+    m_aCounterManager = new CounterManager (new Timer (NAME + "Timer"));
+    m_aJobsScheduledCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
+    m_aJobsExecutingCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
+    m_aJobsCompletedCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
 
     scheduler.addInternalSchedulerListener (this);
     scheduler.addInternalJobListener (this);
@@ -71,12 +71,12 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
 
   public void shutdown ()
   {
-    counterManager.shutdown (true);
+    m_aCounterManager.shutdown (true);
   }
 
   private ISampledCounter createSampledCounter (final CounterConfig defaultCounterConfig)
   {
-    return (ISampledCounter) counterManager.createCounter (defaultCounterConfig);
+    return (ISampledCounter) m_aCounterManager.createCounter (defaultCounterConfig);
   }
 
   /**
@@ -84,24 +84,24 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
    */
   public void clearStatistics ()
   {
-    jobsScheduledCount.getAndReset ();
-    jobsExecutingCount.getAndReset ();
-    jobsCompletedCount.getAndReset ();
+    m_aJobsScheduledCount.getAndReset ();
+    m_aJobsExecutingCount.getAndReset ();
+    m_aJobsCompletedCount.getAndReset ();
   }
 
   public long getJobsCompletedMostRecentSample ()
   {
-    return jobsCompletedCount.getMostRecentSample ().getCounterValue ();
+    return m_aJobsCompletedCount.getMostRecentSample ().getCounterValue ();
   }
 
   public long getJobsExecutingMostRecentSample ()
   {
-    return jobsExecutingCount.getMostRecentSample ().getCounterValue ();
+    return m_aJobsExecutingCount.getMostRecentSample ().getCounterValue ();
   }
 
   public long getJobsScheduledMostRecentSample ()
   {
-    return jobsScheduledCount.getMostRecentSample ().getCounterValue ();
+    return m_aJobsScheduledCount.getMostRecentSample ().getCounterValue ();
   }
 
   public String getName ()
@@ -112,7 +112,7 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
   @Override
   public void jobScheduled (final ITrigger trigger)
   {
-    jobsScheduledCount.increment ();
+    m_aJobsScheduledCount.increment ();
   }
 
   public void jobExecutionVetoed (final IJobExecutionContext context)
@@ -122,12 +122,12 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
 
   public void jobToBeExecuted (final IJobExecutionContext context)
   {
-    jobsExecutingCount.increment ();
+    m_aJobsExecutingCount.increment ();
   }
 
   public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
-    jobsCompletedCount.increment ();
+    m_aJobsCompletedCount.increment ();
   }
 
   @Override

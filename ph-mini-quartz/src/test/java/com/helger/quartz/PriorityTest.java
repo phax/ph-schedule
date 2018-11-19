@@ -76,7 +76,7 @@ public class PriorityTest
     final IMutableTrigger trig1 = new SimpleTrigger ("T1", null, cal.getTime ());
     final IMutableTrigger trig2 = new SimpleTrigger ("T2", null, cal.getTime ());
 
-    final IJobDetail jobDetail = new JobDetail ("JD", null, TestJob.class);
+    final IJobDetail jobDetail = JobDetail.create ("JD", null, TestJob.class);
 
     sched.scheduleJob (jobDetail, trig1);
 
@@ -111,7 +111,7 @@ public class PriorityTest
     final IMutableTrigger trig2 = new SimpleTrigger ("T2", null, cal.getTime ());
     trig2.setPriority (10);
 
-    final IJobDetail jobDetail = new JobDetail ("JD", null, TestJob.class);
+    final IJobDetail jobDetail = JobDetail.create ("JD", null, TestJob.class);
 
     sched.scheduleJob (jobDetail, trig1);
 

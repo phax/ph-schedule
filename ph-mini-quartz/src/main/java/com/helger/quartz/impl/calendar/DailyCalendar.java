@@ -472,7 +472,7 @@ public class DailyCalendar extends BaseCalendar
   }
 
   @Override
-  public Object clone ()
+  public DailyCalendar clone ()
   {
     final DailyCalendar clone = (DailyCalendar) super.clone ();
     return clone;
@@ -807,18 +807,18 @@ public class DailyCalendar extends BaseCalendar
    * @param rangeEndingMillis
    *        the millisecond of the start of the time range
    */
-  public void setTimeRange (final int rangeStartingHourOfDay,
-                            final int rangeStartingMinute,
-                            final int rangeStartingSecond,
-                            final int rangeStartingMillis,
-                            final int rangeEndingHourOfDay,
-                            final int rangeEndingMinute,
-                            final int rangeEndingSecond,
-                            final int rangeEndingMillis)
+  public final void setTimeRange (final int rangeStartingHourOfDay,
+                                  final int rangeStartingMinute,
+                                  final int rangeStartingSecond,
+                                  final int rangeStartingMillis,
+                                  final int rangeEndingHourOfDay,
+                                  final int rangeEndingMinute,
+                                  final int rangeEndingSecond,
+                                  final int rangeEndingMillis)
   {
-    validate (rangeStartingHourOfDay, rangeStartingMinute, rangeStartingSecond, rangeStartingMillis);
+    _validate (rangeStartingHourOfDay, rangeStartingMinute, rangeStartingSecond, rangeStartingMillis);
 
-    validate (rangeEndingHourOfDay, rangeEndingMinute, rangeEndingSecond, rangeEndingMillis);
+    _validate (rangeEndingHourOfDay, rangeEndingMinute, rangeEndingSecond, rangeEndingMillis);
 
     final Calendar startCal = createJavaCalendar ();
     startCal.set (Calendar.HOUR_OF_DAY, rangeStartingHourOfDay);
@@ -872,7 +872,7 @@ public class DailyCalendar extends BaseCalendar
    * @param rangeEndingCalendar
    *        a Calendar containing the end time for the <CODE>DailyCalendar</CODE>
    */
-  public void setTimeRange (final Calendar rangeStartingCalendar, final Calendar rangeEndingCalendar)
+  public final void setTimeRange (final Calendar rangeStartingCalendar, final Calendar rangeEndingCalendar)
   {
     setTimeRange (rangeStartingCalendar.get (Calendar.HOUR_OF_DAY),
                   rangeStartingCalendar.get (Calendar.MINUTE),
@@ -893,7 +893,7 @@ public class DailyCalendar extends BaseCalendar
    * @param rangeEndingTime
    *        the ending time (in milliseconds) for the time range
    */
-  public void setTimeRange (final long rangeStartingTime, final long rangeEndingTime)
+  public final void setTimeRange (final long rangeStartingTime, final long rangeEndingTime)
   {
     setTimeRange (createJavaCalendar (rangeStartingTime), createJavaCalendar (rangeEndingTime));
   }
@@ -910,7 +910,7 @@ public class DailyCalendar extends BaseCalendar
    * @param millis
    *        the millisecond of the time to check
    */
-  private void validate (final int hourOfDay, final int minute, final int second, final int millis)
+  private void _validate (final int hourOfDay, final int minute, final int second, final int millis)
   {
     if (hourOfDay < 0 || hourOfDay > 23)
     {

@@ -56,7 +56,7 @@ public class PropertySettingJobFactoryTest
     jobDataMap.put ("doubleValue", Double.valueOf (4.0));
     jobDataMap.put ("booleanValue", Boolean.TRUE);
     jobDataMap.put ("shortValue", Short.valueOf (((short) 5)));
-    jobDataMap.put ("charValue", 'a');
+    jobDataMap.put ("charValue", Character.valueOf ('a'));
     jobDataMap.put ("byteValue", Byte.valueOf ((byte) 6));
     jobDataMap.put ("stringValue", "S1");
     jobDataMap.put ("mapValue", Collections.singletonMap ("A", "B"));
@@ -202,7 +202,7 @@ public class PropertySettingJobFactoryTest
     assertEquals (2l, myBean.getLongValue ());
     assertEquals (3.0f, myBean.getFloatValue (), 0.0001);
     assertEquals (4.0, myBean.getDoubleValue (), 0.0001);
-    assertEquals (true, myBean.getBooleanValue ());
+    assertTrue (myBean.getBooleanValue ());
     assertEquals (5, myBean.getShortValue ());
     assertEquals ('a', myBean.getCharValue ());
     assertEquals ((byte) 6, myBean.getByteValue ());
@@ -210,113 +210,113 @@ public class PropertySettingJobFactoryTest
 
   private static final class TestBean
   {
-    private int intValue;
-    private long longValue;
-    private float floatValue;
-    private double doubleValue;
-    private boolean booleanValue;
-    private byte byteValue;
+    private int m_nIntValue;
+    private long m_nLongValue;
+    private float m_fFloatValue;
+    private double m_dDoubleValue;
+    private boolean m_bBooleanValue;
+    private byte m_nByteValue;
     private short m_nShortValue;
-    private char charValue;
-    private String stringValue;
-    private Map <?, ?> mapValue;
+    private char m_cCharValue;
+    private String m_sStringValue;
+    private Map <?, ?> m_aMapValue;
 
     public boolean getBooleanValue ()
     {
-      return booleanValue;
+      return m_bBooleanValue;
     }
 
     @SuppressWarnings ("unused")
     public void setBooleanValue (final boolean booleanValue)
     {
-      this.booleanValue = booleanValue;
+      this.m_bBooleanValue = booleanValue;
     }
 
     public double getDoubleValue ()
     {
-      return doubleValue;
+      return m_dDoubleValue;
     }
 
     @SuppressWarnings ("unused")
     public void setDoubleValue (final double doubleValue)
     {
-      this.doubleValue = doubleValue;
+      this.m_dDoubleValue = doubleValue;
     }
 
     public float getFloatValue ()
     {
-      return floatValue;
+      return m_fFloatValue;
     }
 
     @SuppressWarnings ("unused")
     public void setFloatValue (final float floatValue)
     {
-      this.floatValue = floatValue;
+      this.m_fFloatValue = floatValue;
     }
 
     public int getIntValue ()
     {
-      return intValue;
+      return m_nIntValue;
     }
 
     @SuppressWarnings ("unused")
     public void setIntValue (final int intValue)
     {
-      this.intValue = intValue;
+      this.m_nIntValue = intValue;
     }
 
     public long getLongValue ()
     {
-      return longValue;
+      return m_nLongValue;
     }
 
     @SuppressWarnings ("unused")
     public void setLongValue (final long longValue)
     {
-      this.longValue = longValue;
+      this.m_nLongValue = longValue;
     }
 
     public Map <?, ?> getMapValue ()
     {
-      return mapValue;
+      return m_aMapValue;
     }
 
     public void setMapValue (final Map <?, ?> mapValue)
     {
-      this.mapValue = mapValue;
+      this.m_aMapValue = mapValue;
     }
 
     public String getStringValue ()
     {
-      return stringValue;
+      return m_sStringValue;
     }
 
     @SuppressWarnings ("unused")
     public void setStringValue (final String stringValue)
     {
-      this.stringValue = stringValue;
+      this.m_sStringValue = stringValue;
     }
 
     public byte getByteValue ()
     {
-      return byteValue;
+      return m_nByteValue;
     }
 
     @SuppressWarnings ("unused")
     public void setByteValue (final byte byteValue)
     {
-      this.byteValue = byteValue;
+      this.m_nByteValue = byteValue;
     }
 
     public char getCharValue ()
     {
-      return charValue;
+      return m_cCharValue;
     }
 
     @SuppressWarnings ("unused")
     public void setCharValue (final char charValue)
     {
-      this.charValue = charValue;
+      this.m_cCharValue = charValue;
     }
 
     public short getShortValue ()

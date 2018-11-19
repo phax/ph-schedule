@@ -39,6 +39,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.impl.CommonsHashMap;
@@ -406,12 +407,11 @@ public final class CronExpression implements Serializable, Cloneable
    * Returns the time zone for which this <code>CronExpression</code> will be
    * resolved.
    */
+  @Nonnull
   public TimeZone getTimeZone ()
   {
     if (m_aTimeZone == null)
-    {
       m_aTimeZone = TimeZone.getDefault ();
-    }
 
     return m_aTimeZone;
   }
@@ -420,9 +420,9 @@ public final class CronExpression implements Serializable, Cloneable
    * Sets the time zone for which this <code>CronExpression</code> will be
    * resolved.
    */
-  public void setTimeZone (final TimeZone timeZone)
+  public void setTimeZone (@Nullable final TimeZone timeZone)
   {
-    this.m_aTimeZone = timeZone;
+    m_aTimeZone = timeZone;
   }
 
   /**

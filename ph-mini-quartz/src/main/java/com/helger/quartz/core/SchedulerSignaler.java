@@ -34,68 +34,49 @@ import com.helger.quartz.spi.ISchedulerSignaler;
  */
 public class SchedulerSignaler implements ISchedulerSignaler
 {
+  private static final Logger log = LoggerFactory.getLogger (SchedulerSignaler.class);
 
-  Logger log = LoggerFactory.getLogger (SchedulerSignaler.class);
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  protected QuartzScheduler sched;
-  protected QuartzSchedulerThread schedThread;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  protected QuartzScheduler m_aScheduler;
+  protected QuartzSchedulerThread m_aSchedulerThread;
 
   public SchedulerSignaler (final QuartzScheduler sched, final QuartzSchedulerThread schedThread)
   {
-    this.sched = sched;
-    this.schedThread = schedThread;
+    this.m_aScheduler = sched;
+    this.m_aSchedulerThread = schedThread;
 
     log.info ("Initialized Scheduler Signaller of type: " + getClass ());
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   public void notifyTriggerListenersMisfired (final ITrigger trigger)
   {
     try
     {
-      sched.notifyTriggerListenersMisfired (trigger);
+      m_aScheduler.notifyTriggerListenersMisfired (trigger);
     }
     catch (final SchedulerException se)
     {
-      sched.getLog ().error ("Error notifying listeners of trigger misfire.", se);
-      sched.notifySchedulerListenersError ("Error notifying listeners of trigger misfire.", se);
+      m_aScheduler.getLog ().error ("Error notifying listeners of trigger misfire.", se);
+      m_aScheduler.notifySchedulerListenersError ("Error notifying listeners of trigger misfire.", se);
     }
   }
 
   public void notifySchedulerListenersFinalized (final ITrigger trigger)
   {
-    sched.notifySchedulerListenersFinalized (trigger);
+    m_aScheduler.notifySchedulerListenersFinalized (trigger);
   }
 
   public void signalSchedulingChange (final long candidateNewNextFireTime)
   {
-    schedThread.signalSchedulingChange (candidateNewNextFireTime);
+    m_aSchedulerThread.signalSchedulingChange (candidateNewNextFireTime);
   }
 
   public void notifySchedulerListenersJobDeleted (final JobKey jobKey)
   {
-    sched.notifySchedulerListenersJobDeleted (jobKey);
+    m_aScheduler.notifySchedulerListenersJobDeleted (jobKey);
   }
 
   public void notifySchedulerListenersError (final String string, final SchedulerException jpe)
   {
-    sched.notifySchedulerListenersError (string, jpe);
+    m_aScheduler.notifySchedulerListenersError (string, jpe);
   }
 }

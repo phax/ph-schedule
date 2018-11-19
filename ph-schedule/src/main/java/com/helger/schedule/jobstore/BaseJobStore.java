@@ -127,8 +127,8 @@ public class BaseJobStore implements IJobStore
 
   /**
    * The number of milliseconds by which a trigger must have missed its
-   * next-fire-time, in order for it to be considered "misfired" and thus have
-   * its misfire instruction applied.
+   * next-fire-time, in order for it to be considered "misfired" and thus have its
+   * misfire instruction applied.
    *
    * @param nMisfireThreshold
    *        the new misfire threshold
@@ -343,8 +343,8 @@ public class BaseJobStore implements IJobStore
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
-   * the given name.
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the
+   * given name.
    * </p>
    *
    * @return <code>true</code> if a <code>Trigger</code> with the given name and
@@ -462,8 +462,8 @@ public class BaseJobStore implements IJobStore
 
   /**
    * <p>
-   * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the
-   * given <code>{@link com.helger.quartz.IJob}</code>.
+   * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the given
+   * <code>{@link com.helger.quartz.IJob}</code>.
    * </p>
    *
    * @return The desired <code>Job</code>, or null if there is no match.
@@ -542,7 +542,7 @@ public class BaseJobStore implements IJobStore
         m_aCalendarsByName.remove (name);
       }
 
-      final ICalendar aCalendarClone = (ICalendar) aCalendar.clone ();
+      final ICalendar aCalendarClone = aCalendar.clone ();
       m_aCalendarsByName.put (name, aCalendarClone);
 
       if (aOld != null && bUpdateTriggers)
@@ -796,9 +796,8 @@ public class BaseJobStore implements IJobStore
    * given group - by pausing all of their <code>Trigger</code>s.
    * </p>
    * <p>
-   * The JobStore should "remember" that the group is paused, and impose the
-   * pause on any new jobs that are added to the group while the group is
-   * paused.
+   * The JobStore should "remember" that the group is paused, and impose the pause
+   * on any new jobs that are added to the group while the group is paused.
    * </p>
    */
   public ICommonsList <String> pauseJobs (final GroupMatcher <JobKey> matcher)
@@ -1108,8 +1107,8 @@ public class BaseJobStore implements IJobStore
   /**
    * <p>
    * Inform the <code>JobStore</code> that the scheduler is now firing the given
-   * <code>Trigger</code> (executing its associated <code>Job</code>), that it
-   * had previously acquired (reserved).
+   * <code>Trigger</code> (executing its associated <code>Job</code>), that it had
+   * previously acquired (reserved).
    * </p>
    */
   public ICommonsList <TriggerFiredResult> triggersFired (final List <IOperableTrigger> firedTriggers)

@@ -57,7 +57,7 @@ public class BaseCalendar implements ICalendar
 
   public BaseCalendar (@Nullable final ICalendar baseCalendar)
   {
-    this (baseCalendar, null);
+    setBaseCalendar (baseCalendar);
   }
 
   /**
@@ -67,7 +67,7 @@ public class BaseCalendar implements ICalendar
    */
   public BaseCalendar (@Nullable final TimeZone timeZone)
   {
-    this (null, timeZone);
+    setTimeZone (timeZone);
   }
 
   /**
@@ -82,13 +82,13 @@ public class BaseCalendar implements ICalendar
   }
 
   @Override
-  public Object clone ()
+  public BaseCalendar clone ()
   {
     try
     {
       final BaseCalendar clone = (BaseCalendar) super.clone ();
       if (getBaseCalendar () != null)
-        clone.m_aBaseCalendar = (ICalendar) getBaseCalendar ().clone ();
+        clone.m_aBaseCalendar = getBaseCalendar ().clone ();
       if (getTimeZone () != null)
         clone.m_aTimeZone = (TimeZone) getTimeZone ().clone ();
       return clone;

@@ -55,7 +55,6 @@ public abstract class AbstractJobStoreTest
   private JobDetail m_aJobDetail;
   private SampleSignaler m_aSignaler;
 
-  @SuppressWarnings ("deprecation")
   @Before
   public void setUp () throws Exception
   {
@@ -66,7 +65,7 @@ public abstract class AbstractJobStoreTest
     this.m_aJobStore.initialize (loadHelper, this.m_aSignaler);
     this.m_aJobStore.schedulerStarted ();
 
-    this.m_aJobDetail = new JobDetail ("job1", "jobGroup1", MyJob.class);
+    this.m_aJobDetail = JobDetail.create ("job1", "jobGroup1", MyJob.class);
     this.m_aJobDetail.setDurability (true);
     this.m_aJobStore.storeJob (this.m_aJobDetail, false);
   }
@@ -319,7 +318,7 @@ public abstract class AbstractJobStoreTest
 
     final String jobName = "StoreTriggerReplacesTrigger";
     final String jobGroup = "StoreTriggerReplacesTriggerGroup";
-    final JobDetail detail = new JobDetail (jobName, jobGroup, MyJob.class);
+    final JobDetail detail = JobDetail.create (jobName, jobGroup, MyJob.class);
     m_aJobStore.storeJob (detail, false);
 
     final String trName = "StoreTriggerReplacesTrigger";
@@ -357,12 +356,12 @@ public abstract class AbstractJobStoreTest
     final String jobName2 = "PauseJobGroupPausesNewJob2";
     final String jobGroup = "PauseJobGroupPausesNewJobGroup";
 
-    JobDetail detail = new JobDetail (jobName1, jobGroup, MyJob.class);
+    JobDetail detail = JobDetail.create (jobName1, jobGroup, MyJob.class);
     detail.setDurability (true);
     m_aJobStore.storeJob (detail, false);
     m_aJobStore.pauseJobs (GroupMatcher.jobGroupEquals (jobGroup));
 
-    detail = new JobDetail (jobName2, jobGroup, MyJob.class);
+    detail = JobDetail.create (jobName2, jobGroup, MyJob.class);
     detail.setDurability (true);
     m_aJobStore.storeJob (detail, false);
 

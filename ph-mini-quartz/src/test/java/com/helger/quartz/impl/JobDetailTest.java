@@ -18,22 +18,23 @@
  */
 package com.helger.quartz.impl;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import org.junit.Test;
 
-public class JobDetailTest
+public final class JobDetailTest
 {
   @Test
   public void testHashCode ()
   {
     final JobDetail job = new JobDetail ();
-    Assert.assertThat (job.hashCode (), Matchers.is (0));
+    assertEquals (0, job.hashCode ());
 
     job.setName ("test");
-    Assert.assertThat (job.hashCode (), Matchers.not (Matchers.is (0)));
+    assertNotEquals (0, job.hashCode ());
 
     job.setGroup ("test");
-    Assert.assertThat (job.hashCode (), Matchers.not (Matchers.is (0)));
+    assertNotEquals (0, job.hashCode ());
   }
 }

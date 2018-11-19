@@ -116,26 +116,26 @@ public class QTZ336_MissSchedulingChangeSignalTest
   }
 
   /**
-   * A simple job for collecting fire times in order to check that we did not
-   * miss one call, for having the race condition the job must be real quick and
-   * not allowing concurrent executions.
+   * A simple job for collecting fire times in order to check that we did not miss
+   * one call, for having the race condition the job must be real quick and not
+   * allowing concurrent executions.
    */
   @DisallowConcurrentExecution
   public static class CollectDuractionBetweenFireTimesJob implements IJob
   {
     private static final Logger log = LoggerFactory.getLogger (CollectDuractionBetweenFireTimesJob.class);
-    private static final List <Long> durationBetweenFireTimes = Collections.synchronizedList (new ArrayList <Long> ());
-    private static Long lastFireTime = null;
+    private static final List <Long> m_aDurationBetweenFireTimes = Collections.synchronizedList (new ArrayList <Long> ());
+    private static Long m_aLastFireTime = null;
 
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       final Date now = new Date ();
       log.info ("Fire time: " + now);
-      if (lastFireTime != null)
+      if (m_aLastFireTime != null)
       {
-        durationBetweenFireTimes.add (now.getTime () - lastFireTime);
+        m_aDurationBetweenFireTimes.add (Long.valueOf (now.getTime () - m_aLastFireTime.longValue ()));
       }
-      lastFireTime = now.getTime ();
+      m_aLastFireTime = Long.valueOf (now.getTime ());
     }
 
     /**
@@ -145,9 +145,9 @@ public class QTZ336_MissSchedulingChangeSignalTest
      */
     public static List <Long> getDurations ()
     {
-      synchronized (durationBetweenFireTimes)
+      synchronized (m_aDurationBetweenFireTimes)
       {
-        return Collections.unmodifiableList (new ArrayList <> (durationBetweenFireTimes));
+        return Collections.unmodifiableList (new ArrayList <> (m_aDurationBetweenFireTimes));
       }
     }
 

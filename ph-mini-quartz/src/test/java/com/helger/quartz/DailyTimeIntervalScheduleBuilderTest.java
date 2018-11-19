@@ -26,6 +26,7 @@ import static com.helger.quartz.TimeOfDay.hourMinuteAndSecondOfDay;
 import static com.helger.quartz.TimeOfDay.hourOfDay;
 import static com.helger.quartz.TriggerBuilder.newTrigger;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -59,9 +60,10 @@ public class DailyTimeIntervalScheduleBuilderTest
     final IDailyTimeIntervalTrigger trigger = newTrigger ().withIdentity ("test")
                                                            .withSchedule (dailyTimeIntervalSchedule ().withIntervalInSeconds (3))
                                                            .build ();
-    scheduler.scheduleJob (job, trigger); // We are not verify anything other
-                                          // than just run through the
-                                          // scheduler.
+    // We are not verify anything other
+    // than just run through the
+    // scheduler.
+    scheduler.scheduleJob (job, trigger);
     scheduler.shutdown ();
   }
 
@@ -141,8 +143,8 @@ public class DailyTimeIntervalScheduleBuilderTest
                                                            .build ();
     assertEquals ("test", trigger.getKey ().getName ());
     assertEquals ("group", trigger.getKey ().getGroup ());
-    assertEquals (true, new Date ().getTime () >= trigger.getStartTime ().getTime ());
-    assertEquals (true, null == trigger.getEndTime ());
+    assertTrue (new Date ().getTime () >= trigger.getStartTime ().getTime ());
+    assertNull (trigger.getEndTime ());
     assertEquals (EIntervalUnit.MINUTE, trigger.getRepeatIntervalUnit ());
     assertEquals (72, trigger.getRepeatInterval ());
     assertEquals (hourOfDay (8), trigger.getStartTimeOfDay ());
@@ -168,8 +170,8 @@ public class DailyTimeIntervalScheduleBuilderTest
                                                            .build ();
     assertEquals ("test", trigger.getKey ().getName ());
     assertEquals ("test", trigger.getKey ().getGroup ());
-    assertEquals (true, startTime.getTime () == trigger.getStartTime ().getTime ());
-    assertEquals (true, endTime.getTime () == trigger.getEndTime ().getTime ());
+    assertEquals (startTime.getTime (), trigger.getStartTime ().getTime ());
+    assertEquals (endTime.getTime (), trigger.getEndTime ().getTime ());
     assertEquals (EIntervalUnit.SECOND, trigger.getRepeatIntervalUnit ());
     assertEquals (121, trigger.getRepeatInterval ());
     assertEquals (new TimeOfDay (10, 0, 0), trigger.getStartTimeOfDay ());

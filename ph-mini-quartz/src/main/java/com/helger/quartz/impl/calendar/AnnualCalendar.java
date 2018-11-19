@@ -41,10 +41,10 @@ import com.helger.quartz.ICalendar;
  */
 public class AnnualCalendar extends BaseCalendar
 {
-  private List <Calendar> excludeDays = new ArrayList <> ();
+  private List <Calendar> m_aExcludeDays = new ArrayList <> ();
 
   // true, if excludeDays is sorted
-  private boolean dataSorted = false;
+  private boolean m_bDataSorted = false;
 
   public AnnualCalendar ()
   {}
@@ -65,10 +65,10 @@ public class AnnualCalendar extends BaseCalendar
   }
 
   @Override
-  public Object clone ()
+  public AnnualCalendar clone ()
   {
     final AnnualCalendar clone = (AnnualCalendar) super.clone ();
-    clone.excludeDays = new ArrayList <> (excludeDays);
+    clone.m_aExcludeDays = new ArrayList <> (m_aExcludeDays);
     return clone;
   }
 
@@ -79,7 +79,7 @@ public class AnnualCalendar extends BaseCalendar
    */
   public List <Calendar> getDaysExcluded ()
   {
-    return excludeDays;
+    return m_aExcludeDays;
   }
 
   /**
@@ -104,13 +104,13 @@ public class AnnualCalendar extends BaseCalendar
     final int dmonth = day.get (Calendar.MONTH);
     final int dday = day.get (Calendar.DAY_OF_MONTH);
 
-    if (dataSorted == false)
+    if (m_bDataSorted == false)
     {
-      Collections.sort (excludeDays, new CalendarComparator ());
-      dataSorted = true;
+      Collections.sort (m_aExcludeDays, new CalendarComparator ());
+      m_bDataSorted = true;
     }
 
-    final Iterator <Calendar> iter = excludeDays.iterator ();
+    final Iterator <Calendar> iter = m_aExcludeDays.iterator ();
     while (iter.hasNext ())
     {
       final Calendar cl = iter.next ();
@@ -147,14 +147,14 @@ public class AnnualCalendar extends BaseCalendar
   {
     if (days == null)
     {
-      excludeDays = new ArrayList <> ();
+      m_aExcludeDays = new ArrayList <> ();
     }
     else
     {
-      excludeDays = days;
+      m_aExcludeDays = days;
     }
 
-    dataSorted = false;
+    m_bDataSorted = false;
   }
 
   /**
@@ -171,8 +171,8 @@ public class AnnualCalendar extends BaseCalendar
         return;
       }
 
-      excludeDays.add (day);
-      dataSorted = false;
+      m_aExcludeDays.add (day);
+      m_bDataSorted = false;
     }
     else
     {
@@ -203,7 +203,7 @@ public class AnnualCalendar extends BaseCalendar
       return;
 
     // Fast way, see if exact day object was already in list
-    if (this.excludeDays.remove (day))
+    if (this.m_aExcludeDays.remove (day))
       return;
 
     final int dmonth = day.get (Calendar.MONTH);
@@ -213,7 +213,7 @@ public class AnnualCalendar extends BaseCalendar
     // the exact same year
     // search for the object based on month and day of month in the list and
     // remove it
-    final Iterator <Calendar> iter = excludeDays.iterator ();
+    final Iterator <Calendar> iter = m_aExcludeDays.iterator ();
     while (iter.hasNext ())
     {
       final Calendar cl = iter.next ();
@@ -228,7 +228,7 @@ public class AnnualCalendar extends BaseCalendar
       break;
     }
 
-    this.excludeDays.remove (day);
+    this.m_aExcludeDays.remove (day);
   }
 
   /**
@@ -257,9 +257,9 @@ public class AnnualCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time. Return the original value if timeStamp is
-   * included. Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar
+   * after the given time. Return the original value if timeStamp is included.
+   * Return 0 if all days are excluded.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.

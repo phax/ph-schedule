@@ -29,7 +29,7 @@ public class BaseCalendarTest
   public void testClone ()
   {
     final BaseCalendar base = new BaseCalendar ();
-    final BaseCalendar clone = (BaseCalendar) base.clone ();
+    final BaseCalendar clone = base.clone ();
 
     assertEquals (base.getDescription (), clone.getDescription ());
     assertEquals (base.getBaseCalendar (), clone.getBaseCalendar ());

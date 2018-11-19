@@ -19,7 +19,6 @@
 package com.helger.quartz;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -88,7 +87,7 @@ public class CalendarIntervalTriggerTest
     intervalTrigger.computeFirstFireTime (baseCalendar);
 
     final Date fireTime = intervalTrigger.getFireTimeAfter (after.getTime ());
-    assertThat (fireTime.after (after.getTime ()), is (true));
+    assertTrue (fireTime.after (after.getTime ()));
   }
 
   @Test

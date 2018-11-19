@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.impl;
 
+import javax.annotation.Nonnull;
+
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -57,27 +59,14 @@ import com.helger.quartz.utils.ClassUtils;
  */
 public class JobDetail implements IJobDetail
 {
-  private String name;
-
-  private String group = IScheduler.DEFAULT_GROUP;
-
-  private String description;
-
-  private Class <? extends IJob> jobClass;
-
+  private String m_sName;
+  private String m_sGroup = IScheduler.DEFAULT_GROUP;
+  private String m_sDescription;
+  private Class <? extends IJob> m_aJobClass;
   private JobDataMap m_aJobDataMap;
-
-  private boolean durability = false;
-
-  private boolean shouldRecover = false;
-
-  private transient JobKey key = null;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private boolean m_bDurability = false;
+  private boolean m_bShouldRecover = false;
+  private transient JobKey m_aKey;
 
   /**
    * <p>
@@ -93,20 +82,6 @@ public class JobDetail implements IJobDetail
   public JobDetail ()
   {}
 
-  @Deprecated
-  public JobDetail (final String name, final String group, final Class <? extends IJob> jobClass)
-  {
-    setName (name);
-    setGroup (group);
-    setJobClass (jobClass);
-  }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Get the name of this <code>Job</code>.
@@ -114,7 +89,7 @@ public class JobDetail implements IJobDetail
    */
   public String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   /**
@@ -132,8 +107,8 @@ public class JobDetail implements IJobDetail
       throw new IllegalArgumentException ("Job name cannot be empty.");
     }
 
-    this.name = name;
-    this.key = null;
+    this.m_sName = name;
+    this.m_aKey = null;
   }
 
   /**
@@ -143,7 +118,7 @@ public class JobDetail implements IJobDetail
    */
   public String getGroup ()
   {
-    return group;
+    return m_sGroup;
   }
 
   /**
@@ -164,10 +139,10 @@ public class JobDetail implements IJobDetail
     }
 
     if (group == null)
-      this.group = IScheduler.DEFAULT_GROUP;
+      this.m_sGroup = IScheduler.DEFAULT_GROUP;
     else
-      this.group = group;
-    this.key = null;
+      this.m_sGroup = group;
+    this.m_aKey = null;
   }
 
   /**
@@ -178,19 +153,19 @@ public class JobDetail implements IJobDetail
    */
   public String getFullName ()
   {
-    return group + "." + name;
+    return m_sGroup + "." + m_sName;
   }
 
   public JobKey getKey ()
   {
-    if (key == null)
+    if (m_aKey == null)
     {
       if (getName () == null)
         return null;
-      key = new JobKey (getName (), getGroup ());
+      m_aKey = new JobKey (getName (), getGroup ());
     }
 
-    return key;
+    return m_aKey;
   }
 
   public void setKey (final JobKey key)
@@ -200,29 +175,29 @@ public class JobDetail implements IJobDetail
 
     setName (key.getName ());
     setGroup (key.getGroup ());
-    this.key = key;
+    this.m_aKey = key;
   }
 
   public String getDescription ()
   {
-    return description;
+    return m_sDescription;
   }
 
   /**
    * <p>
    * Set a description for the <code>Job</code> instance - may be useful for
-   * remembering/displaying the purpose of the job, though the description has
-   * no meaning to Quartz.
+   * remembering/displaying the purpose of the job, though the description has no
+   * meaning to Quartz.
    * </p>
    */
   public void setDescription (final String description)
   {
-    this.description = description;
+    this.m_sDescription = description;
   }
 
   public Class <? extends IJob> getJobClass ()
   {
-    return jobClass;
+    return m_aJobClass;
   }
 
   /**
@@ -245,7 +220,7 @@ public class JobDetail implements IJobDetail
       throw new IllegalArgumentException ("Job class must implement the Job interface.");
     }
 
-    this.jobClass = jobClass;
+    this.m_aJobClass = jobClass;
   }
 
   public JobDataMap getJobDataMap ()
@@ -278,7 +253,7 @@ public class JobDetail implements IJobDetail
    */
   public void setDurability (final boolean durability)
   {
-    this.durability = durability;
+    this.m_bDurability = durability;
   }
 
   /**
@@ -294,12 +269,12 @@ public class JobDetail implements IJobDetail
    */
   public void setRequestsRecovery (final boolean shouldRecover)
   {
-    this.shouldRecover = shouldRecover;
+    this.m_bShouldRecover = shouldRecover;
   }
 
   public boolean isDurable ()
   {
-    return durability;
+    return m_bDurability;
   }
 
   /**
@@ -309,7 +284,7 @@ public class JobDetail implements IJobDetail
   public boolean isPersistJobDataAfterExecution ()
   {
 
-    return ClassUtils.isAnnotationPresent (jobClass, PersistJobDataAfterExecution.class);
+    return ClassUtils.isAnnotationPresent (m_aJobClass, PersistJobDataAfterExecution.class);
   }
 
   /**
@@ -319,12 +294,12 @@ public class JobDetail implements IJobDetail
   public boolean isConcurrentExectionDisallowed ()
   {
 
-    return ClassUtils.isAnnotationPresent (jobClass, DisallowConcurrentExecution.class);
+    return ClassUtils.isAnnotationPresent (m_aJobClass, DisallowConcurrentExecution.class);
   }
 
   public boolean requestsRecovery ()
   {
-    return shouldRecover;
+    return m_bShouldRecover;
   }
 
   /**
@@ -403,5 +378,15 @@ public class JobDetail implements IJobDetail
                                    .withDescription (getDescription ())
                                    .withIdentity (getKey ());
     return b;
+  }
+
+  @Nonnull
+  public static JobDetail create (final String name, final String group, final Class <? extends IJob> jobClass)
+  {
+    final JobDetail ret = new JobDetail ();
+    ret.setName (name);
+    ret.setGroup (group);
+    ret.setJobClass (jobClass);
+    return ret;
   }
 }

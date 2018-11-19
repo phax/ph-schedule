@@ -42,20 +42,20 @@ public class QuartzSchedulerResources
   public static final String CREATE_REGISTRY_ALWAYS = "always";
   public static final String CREATE_REGISTRY_AS_NEEDED = "as_needed";
 
-  private String name;
-  private String instanceId;
-  private String threadName;
-  private IThreadPool threadPool;
-  private IJobStore jobStore;
-  private IJobRunShellFactory jobRunShellFactory;
-  private final ICommonsList <ISchedulerPlugin> schedulerPlugins = new CommonsArrayList <> (10);
-  private boolean makeSchedulerThreadDaemon = false;
-  private boolean threadsInheritInitializersClassLoadContext = false;
-  private IThreadExecutor threadExecutor;
-  private long batchTimeWindow = 0;
-  private int maxBatchSize = 1;
-  private boolean interruptJobsOnShutdown = false;
-  private boolean interruptJobsOnShutdownWithWait = false;
+  private String m_sName;
+  private String m_sInstanceId;
+  private String m_sThreadName;
+  private IThreadPool m_aThreadPool;
+  private IJobStore m_aJobStore;
+  private IJobRunShellFactory m_aJobRunShellFactory;
+  private final ICommonsList <ISchedulerPlugin> m_aSchedulerPlugins = new CommonsArrayList <> (10);
+  private boolean m_bMakeSchedulerThreadDaemon = false;
+  private boolean m_bThreadsInheritInitializersClassLoadContext = false;
+  private IThreadExecutor m_aThreadExecutor;
+  private long m_nBatchTimeWindow = 0;
+  private int m_nMaxBatchSize = 1;
+  private boolean m_bInterruptJobsOnShutdown = false;
+  private boolean m_bInterruptJobsOnShutdownWithWait = false;
 
   /**
    * <p>
@@ -74,7 +74,7 @@ public class QuartzSchedulerResources
    */
   public String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   /**
@@ -92,9 +92,9 @@ public class QuartzSchedulerResources
       throw new IllegalArgumentException ("Scheduler name cannot be empty.");
     }
 
-    this.name = name;
+    this.m_sName = name;
 
-    if (threadName == null)
+    if (m_sThreadName == null)
     {
       // thread name not already set, use default thread name
       setThreadName (name + "_QuartzSchedulerThread");
@@ -108,7 +108,7 @@ public class QuartzSchedulerResources
    */
   public String getInstanceId ()
   {
-    return instanceId;
+    return m_sInstanceId;
   }
 
   /**
@@ -126,7 +126,7 @@ public class QuartzSchedulerResources
       throw new IllegalArgumentException ("Scheduler instanceId cannot be empty.");
     }
 
-    this.instanceId = instanceId;
+    this.m_sInstanceId = instanceId;
   }
 
   public static String getUniqueIdentifier (final String schedName, final String schedInstId)
@@ -136,7 +136,7 @@ public class QuartzSchedulerResources
 
   public String getUniqueIdentifier ()
   {
-    return getUniqueIdentifier (name, instanceId);
+    return getUniqueIdentifier (m_sName, m_sInstanceId);
   }
 
   /**
@@ -146,7 +146,7 @@ public class QuartzSchedulerResources
    */
   public String getThreadName ()
   {
-    return threadName;
+    return m_sThreadName;
   }
 
   /**
@@ -164,7 +164,7 @@ public class QuartzSchedulerResources
       throw new IllegalArgumentException ("Scheduler thread name cannot be empty.");
     }
 
-    this.threadName = threadName;
+    this.m_sThreadName = threadName;
   }
 
   /**
@@ -175,7 +175,7 @@ public class QuartzSchedulerResources
    */
   public IThreadPool getThreadPool ()
   {
-    return threadPool;
+    return m_aThreadPool;
   }
 
   /**
@@ -194,7 +194,7 @@ public class QuartzSchedulerResources
       throw new IllegalArgumentException ("ThreadPool cannot be null.");
     }
 
-    this.threadPool = threadPool;
+    this.m_aThreadPool = threadPool;
   }
 
   /**
@@ -205,7 +205,7 @@ public class QuartzSchedulerResources
    */
   public IJobStore getJobStore ()
   {
-    return jobStore;
+    return m_aJobStore;
   }
 
   /**
@@ -224,7 +224,7 @@ public class QuartzSchedulerResources
       throw new IllegalArgumentException ("JobStore cannot be null.");
     }
 
-    this.jobStore = jobStore;
+    this.m_aJobStore = jobStore;
   }
 
   /**
@@ -235,7 +235,7 @@ public class QuartzSchedulerResources
    */
   public IJobRunShellFactory getJobRunShellFactory ()
   {
-    return jobRunShellFactory;
+    return m_aJobRunShellFactory;
   }
 
   /**
@@ -254,7 +254,7 @@ public class QuartzSchedulerResources
       throw new IllegalArgumentException ("JobRunShellFactory cannot be null.");
     }
 
-    this.jobRunShellFactory = jobRunShellFactory;
+    this.m_aJobRunShellFactory = jobRunShellFactory;
   }
 
   /**
@@ -267,7 +267,7 @@ public class QuartzSchedulerResources
    */
   public void addSchedulerPlugin (final ISchedulerPlugin plugin)
   {
-    schedulerPlugins.add (plugin);
+    m_aSchedulerPlugins.add (plugin);
   }
 
   /**
@@ -279,7 +279,7 @@ public class QuartzSchedulerResources
    */
   public List <ISchedulerPlugin> getSchedulerPlugins ()
   {
-    return schedulerPlugins;
+    return m_aSchedulerPlugins;
   }
 
   /**
@@ -289,7 +289,7 @@ public class QuartzSchedulerResources
    */
   public boolean getMakeSchedulerThreadDaemon ()
   {
-    return makeSchedulerThreadDaemon;
+    return m_bMakeSchedulerThreadDaemon;
   }
 
   /**
@@ -299,7 +299,7 @@ public class QuartzSchedulerResources
    */
   public void setMakeSchedulerThreadDaemon (final boolean makeSchedulerThreadDaemon)
   {
-    this.makeSchedulerThreadDaemon = makeSchedulerThreadDaemon;
+    this.m_bMakeSchedulerThreadDaemon = makeSchedulerThreadDaemon;
   }
 
   /**
@@ -308,7 +308,7 @@ public class QuartzSchedulerResources
    */
   public boolean isThreadsInheritInitializersClassLoadContext ()
   {
-    return threadsInheritInitializersClassLoadContext;
+    return m_bThreadsInheritInitializersClassLoadContext;
   }
 
   /**
@@ -317,7 +317,7 @@ public class QuartzSchedulerResources
    */
   public void setThreadsInheritInitializersClassLoadContext (final boolean threadsInheritInitializersClassLoadContext)
   {
-    this.threadsInheritInitializersClassLoadContext = threadsInheritInitializersClassLoadContext;
+    this.m_bThreadsInheritInitializersClassLoadContext = threadsInheritInitializersClassLoadContext;
   }
 
   /**
@@ -325,7 +325,7 @@ public class QuartzSchedulerResources
    */
   public IThreadExecutor getThreadExecutor ()
   {
-    return threadExecutor;
+    return m_aThreadExecutor;
   }
 
   /**
@@ -333,46 +333,46 @@ public class QuartzSchedulerResources
    */
   public void setThreadExecutor (final IThreadExecutor threadExecutor)
   {
-    this.threadExecutor = threadExecutor;
+    this.m_aThreadExecutor = threadExecutor;
   }
 
   public long getBatchTimeWindow ()
   {
-    return batchTimeWindow;
+    return m_nBatchTimeWindow;
   }
 
   public void setBatchTimeWindow (final long batchTimeWindow)
   {
-    this.batchTimeWindow = batchTimeWindow;
+    this.m_nBatchTimeWindow = batchTimeWindow;
   }
 
   public int getMaxBatchSize ()
   {
-    return maxBatchSize;
+    return m_nMaxBatchSize;
   }
 
   public void setMaxBatchSize (final int maxBatchSize)
   {
-    this.maxBatchSize = maxBatchSize;
+    this.m_nMaxBatchSize = maxBatchSize;
   }
 
   public boolean isInterruptJobsOnShutdown ()
   {
-    return interruptJobsOnShutdown;
+    return m_bInterruptJobsOnShutdown;
   }
 
   public void setInterruptJobsOnShutdown (final boolean interruptJobsOnShutdown)
   {
-    this.interruptJobsOnShutdown = interruptJobsOnShutdown;
+    this.m_bInterruptJobsOnShutdown = interruptJobsOnShutdown;
   }
 
   public boolean isInterruptJobsOnShutdownWithWait ()
   {
-    return interruptJobsOnShutdownWithWait;
+    return m_bInterruptJobsOnShutdownWithWait;
   }
 
   public void setInterruptJobsOnShutdownWithWait (final boolean interruptJobsOnShutdownWithWait)
   {
-    this.interruptJobsOnShutdownWithWait = interruptJobsOnShutdownWithWait;
+    this.m_bInterruptJobsOnShutdownWithWait = interruptJobsOnShutdownWithWait;
   }
 }

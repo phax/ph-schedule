@@ -46,40 +46,36 @@ public class ListenerManagerTest
 
   public static class TestJobListener extends AbstractJobListenerSupport
   {
-
-    private final String name;
+    private final String m_sName;
 
     public TestJobListener (final String name)
     {
-      this.name = name;
+      this.m_sName = name;
     }
 
     public String getName ()
     {
-      return name;
+      return m_sName;
     }
   }
 
   public static class TestTriggerListener extends AbstractTriggerListenerSupport
   {
-
-    private final String name;
+    private final String m_sName;
 
     public TestTriggerListener (final String name)
     {
-      this.name = name;
+      this.m_sName = name;
     }
 
     public String getName ()
     {
-      return name;
+      return m_sName;
     }
   }
 
   public static class TestSchedulerListener extends AbstractSchedulerListenerSupport
-  {
-
-  }
+  {}
 
   @Test
   public void testManagementOfJobListeners () throws Exception

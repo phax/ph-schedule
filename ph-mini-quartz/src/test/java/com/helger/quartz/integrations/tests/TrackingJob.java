@@ -41,7 +41,7 @@ public class TrackingJob implements IJob
     {
       final IScheduler scheduler = context.getScheduler ();
       final List <Long> scheduledFires = (List <Long>) scheduler.getContext ().get (SCHEDULED_TIMES_KEY);
-      scheduledFires.add (context.getScheduledFireTime ().getTime ());
+      scheduledFires.add (Long.valueOf (context.getScheduledFireTime ().getTime ()));
     }
     catch (final SchedulerException e)
     {

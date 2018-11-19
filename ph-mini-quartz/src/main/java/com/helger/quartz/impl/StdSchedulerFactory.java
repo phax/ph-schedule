@@ -174,22 +174,22 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
-   * with the contents of a <code>NonBlockingProperties</code> file and
-   * overriding System properties.
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
+   * the contents of a <code>NonBlockingProperties</code> file and overriding
+   * System properties.
    * </p>
    * <p>
    * By default a properties file named "quartz.properties" is loaded from the
-   * 'current working directory'. If that fails, then the "quartz.properties"
-   * file located (as a resource) in the "quartz" package is loaded. If you wish
-   * to use a file other than these defaults, you must define the system
-   * property 'org.quartz.properties' to point to the file you want.
+   * 'current working directory'. If that fails, then the "quartz.properties" file
+   * located (as a resource) in the "quartz" package is loaded. If you wish to use
+   * a file other than these defaults, you must define the system property
+   * 'org.quartz.properties' to point to the file you want.
    * </p>
    * <p>
    * System properties (environment variables, and -D definitions on the
    * command-line when running the JVM) override any properties in the loaded
-   * file. For this reason, you may want to use a different initialize() method
-   * if your application security policy prohibits access to
+   * file. For this reason, you may want to use a different initialize() method if
+   * your application security policy prohibits access to
    * <code>{@link java.lang.System#getProperties()}</code>.
    * </p>
    *
@@ -299,8 +299,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Add all System properties to the given <code>props</code>. Will override
-   * any properties that already exist in the given <code>props</code>.
+   * Add all System properties to the given <code>props</code>. Will override any
+   * properties that already exist in the given <code>props</code>.
    */
   @Nonnull
   private NonBlockingProperties _overrideWithSysProps (@Nonnull final NonBlockingProperties props)
@@ -332,8 +332,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
-   * with the contents of the <code>Properties</code> file with the given name.
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
+   * the contents of the <code>Properties</code> file with the given name.
    * </p>
    *
    * @return this
@@ -380,8 +380,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
-   * with the contents of the <code>Properties</code> file opened with the given
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
+   * the contents of the <code>Properties</code> file opened with the given
    * <code>InputStream</code>.
    * </p>
    *
@@ -421,10 +421,11 @@ public class StdSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
-   * with the contents of the given <code>Properties</code> object.
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
+   * the contents of the given <code>Properties</code> object.
    *
    * @throws SchedulerException
+   *         on error
    * @return this
    */
   @Nonnull
@@ -448,9 +449,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
 
     if (m_aInitException != null)
-    {
       throw m_aInitException;
-    }
 
     IJobStore js = null;
     IThreadPool tp = null;
@@ -1178,8 +1177,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * </p>
    * <p>
    * If one of the <code>initialize</code> methods has not be previously called,
-   * then the default (no-arg) <code>initialize()</code> method will be called
-   * by this method.
+   * then the default (no-arg) <code>initialize()</code> method will be called by
+   * this method.
    * </p>
    */
   public IScheduler getScheduler () throws SchedulerException

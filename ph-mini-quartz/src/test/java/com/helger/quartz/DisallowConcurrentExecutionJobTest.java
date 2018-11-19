@@ -18,8 +18,8 @@
  */
 package com.helger.quartz;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +29,6 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +44,6 @@ import com.helger.quartz.listeners.AbstractJobListenerSupport;
  */
 public class DisallowConcurrentExecutionJobTest
 {
-
   private static final long JOB_BLOCK_TIME = 300L;
 
   private static final String BARRIER = "BARRIER";
@@ -149,10 +147,10 @@ public class DisallowConcurrentExecutionJobTest
 
     scheduler.shutdown (true);
 
-    Assert.assertThat (jobExecDates, hasSize (2));
+    assertEquals (2, jobExecDates.size ());
     final long fireTimeTrigger1 = jobExecDates.get (0).getTime ();
     final long fireTimeTrigger2 = jobExecDates.get (1).getTime ();
-    Assert.assertThat (fireTimeTrigger2 - fireTimeTrigger1, greaterThanOrEqualTo (JOB_BLOCK_TIME));
+    assertTrue (fireTimeTrigger2 - fireTimeTrigger1 >= JOB_BLOCK_TIME);
   }
 
   /** QTZ-202 */
@@ -163,14 +161,8 @@ public class DisallowConcurrentExecutionJobTest
     final List <Date> jobExecDates = Collections.synchronizedList (new ArrayList <Date> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
-    final Date startTime = new Date (System.currentTimeMillis () + 100); // make
-                                                                         // the
-                                                                         // triggers
-                                                                         // fire
-                                                                         // at
-                                                                         // the
-                                                                         // same
-                                                                         // time.
+    // make the triggers fire at the same time.
+    final Date startTime = new Date (System.currentTimeMillis () + 100);
 
     final IJobDetail job1 = JobBuilder.newJob (TestJob.class).withIdentity ("job1").build ();
     final ITrigger trigger1 = TriggerBuilder.newTrigger ()
@@ -200,9 +192,9 @@ public class DisallowConcurrentExecutionJobTest
 
     scheduler.shutdown (true);
 
-    Assert.assertThat (jobExecDates, hasSize (2));
+    assertEquals (2, jobExecDates.size ());
     final long fireTimeTrigger1 = jobExecDates.get (0).getTime ();
     final long fireTimeTrigger2 = jobExecDates.get (1).getTime ();
-    Assert.assertThat (fireTimeTrigger2 - fireTimeTrigger1, greaterThanOrEqualTo (JOB_BLOCK_TIME));
+    assertTrue (fireTimeTrigger2 - fireTimeTrigger1 >= JOB_BLOCK_TIME);
   }
 }

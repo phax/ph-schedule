@@ -22,6 +22,9 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.ICalendar;
 
@@ -44,7 +47,7 @@ import com.helger.quartz.ICalendar;
  */
 public class CronCalendar extends BaseCalendar
 {
-  CronExpression cronExpression;
+  protected CronExpression m_aCronExpression;
 
   /**
    * Create a <CODE>CronCalendar</CODE> with the given cron expression and no
@@ -86,24 +89,24 @@ public class CronCalendar extends BaseCalendar
    *        a String representation of the desired cron expression
    * @param timeZone
    *        Specifies for which time zone the <code>expression</code> should be
-   *        interpreted, i.e. the expression 0 0 10 * * ?, is resolved to 10:00
-   *        am in this time zone. If <code>timeZone</code> is <code>null</code>
-   *        then <code>TimeZone.getDefault()</code> will be used.
+   *        interpreted, i.e. the expression 0 0 10 * * ?, is resolved to 10:00 am
+   *        in this time zone. If <code>timeZone</code> is <code>null</code> then
+   *        <code>TimeZone.getDefault()</code> will be used.
    */
   public CronCalendar (final ICalendar baseCalendar,
                        final String expression,
                        final TimeZone timeZone) throws ParseException
   {
     super (baseCalendar);
-    this.cronExpression = new CronExpression (expression);
-    this.cronExpression.setTimeZone (timeZone);
+    m_aCronExpression = new CronExpression (expression);
+    m_aCronExpression.setTimeZone (timeZone);
   }
 
   @Override
-  public Object clone ()
+  public CronCalendar clone ()
   {
     final CronCalendar clone = (CronCalendar) super.clone ();
-    clone.cronExpression = new CronExpression (cronExpression);
+    clone.m_aCronExpression = new CronExpression (m_aCronExpression);
     return clone;
   }
 
@@ -118,7 +121,7 @@ public class CronCalendar extends BaseCalendar
   @Override
   public TimeZone getTimeZone ()
   {
-    return cronExpression.getTimeZone ();
+    return m_aCronExpression.getTimeZone ();
   }
 
   /**
@@ -126,14 +129,14 @@ public class CronCalendar extends BaseCalendar
    * <code>CronCalendar</code> will be resolved. If <code>timeZone</code> is
    * <code>null</code> then <code>TimeZone.getDefault()</code> will be used.
    * <p>
-   * Overrides <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code> to defer
-   * to its <code>CronExpression</code>.
+   * Overrides <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code> to defer to
+   * its <code>CronExpression</code>.
    * </p>
    */
   @Override
   public void setTimeZone (final TimeZone timeZone)
   {
-    cronExpression.setTimeZone (timeZone);
+    m_aCronExpression.setTimeZone (timeZone);
   }
 
   /**
@@ -142,23 +145,23 @@ public class CronCalendar extends BaseCalendar
    *
    * @param timeInMillis
    *        the date/time to test
-   * @return a boolean indicating whether the specified time is 'included' by
-   *         the <CODE>CronCalendar</CODE>
+   * @return a boolean indicating whether the specified time is 'included' by the
+   *         <CODE>CronCalendar</CODE>
    */
   @Override
   public boolean isTimeIncluded (final long timeInMillis)
   {
-    if ((getBaseCalendar () != null) && (getBaseCalendar ().isTimeIncluded (timeInMillis) == false))
+    if (getBaseCalendar () != null && !getBaseCalendar ().isTimeIncluded (timeInMillis))
     {
       return false;
     }
 
-    return (!(cronExpression.isSatisfiedBy (new Date (timeInMillis))));
+    return !m_aCronExpression.isSatisfiedBy (new Date (timeInMillis));
   }
 
   /**
-   * Determines the next time included by the <CODE>CronCalendar</CODE> after
-   * the specified time.
+   * Determines the next time included by the <CODE>CronCalendar</CODE> after the
+   * specified time.
    *
    * @param timeInMillis
    *        the initial date/time after which to find an included time
@@ -179,9 +182,9 @@ public class CronCalendar extends BaseCalendar
       // baseCalendar, ask it the next time it includes and begin testing
       // from there. Failing this, add one millisecond and continue
       // testing.
-      if (cronExpression.isSatisfiedBy (new Date (nextIncludedTime)))
+      if (m_aCronExpression.isSatisfiedBy (new Date (nextIncludedTime)))
       {
-        nextIncludedTime = cronExpression.getNextInvalidTimeAfter (new Date (nextIncludedTime)).getTime ();
+        nextIncludedTime = m_aCronExpression.getNextInvalidTimeAfter (new Date (nextIncludedTime)).getTime ();
       }
       else
         if ((getBaseCalendar () != null) && (!getBaseCalendar ().isTimeIncluded (nextIncludedTime)))
@@ -198,15 +201,14 @@ public class CronCalendar extends BaseCalendar
   }
 
   /**
-   * Returns a string representing the properties of the
-   * <CODE>CronCalendar</CODE>
+   * Returns a string representing the properties of the <CODE>CronCalendar</CODE>
    *
    * @return the properteis of the CronCalendar in a String format
    */
   @Override
   public String toString ()
   {
-    final StringBuffer buffer = new StringBuffer ();
+    final StringBuilder buffer = new StringBuilder ();
     buffer.append ("base calendar: [");
     if (getBaseCalendar () != null)
     {
@@ -217,7 +219,7 @@ public class CronCalendar extends BaseCalendar
       buffer.append ("null");
     }
     buffer.append ("], excluded cron expression: '");
-    buffer.append (cronExpression);
+    buffer.append (m_aCronExpression);
     buffer.append ("'");
     return buffer.toString ();
   }
@@ -229,9 +231,10 @@ public class CronCalendar extends BaseCalendar
    * @return the cron expression
    * @see com.helger.quartz.CronExpression
    */
+  @Nonnull
   public CronExpression getCronExpression ()
   {
-    return cronExpression;
+    return m_aCronExpression;
   }
 
   /**
@@ -242,11 +245,11 @@ public class CronCalendar extends BaseCalendar
    * @throws ParseException
    *         if the string expression cannot be parsed
    */
-  public void setCronExpression (final String expression) throws ParseException
+  public void setCronExpression (@Nonnull final String expression) throws ParseException
   {
     final CronExpression newExp = new CronExpression (expression);
 
-    this.cronExpression = newExp;
+    setCronExpression (newExp);
   }
 
   /**
@@ -255,13 +258,10 @@ public class CronCalendar extends BaseCalendar
    * @param expression
    *        the new cron expression
    */
-  public void setCronExpression (final CronExpression expression)
+  public void setCronExpression (@Nonnull final CronExpression expression)
   {
-    if (expression == null)
-    {
-      throw new IllegalArgumentException ("expression cannot be null");
-    }
+    ValueEnforcer.notNull (expression, "Expression");
 
-    this.cronExpression = expression;
+    this.m_aCronExpression = expression;
   }
 }

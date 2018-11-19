@@ -1327,13 +1327,13 @@ public class QuartzScheduler implements IQuartzScheduler
    *        the identifier to check for
    * @return true if a Job exists with the given identifier
    * @throws SchedulerException
+   *         on error
    */
   public boolean checkExists (final JobKey jobKey) throws SchedulerException
   {
     validateState ();
 
     return m_aResources.getJobStore ().checkExists (jobKey);
-
   }
 
   /**
@@ -1344,6 +1344,7 @@ public class QuartzScheduler implements IQuartzScheduler
    *        the identifier to check for
    * @return true if a Trigger exists with the given identifier
    * @throws SchedulerException
+   *         on error
    */
   public boolean checkExists (final TriggerKey triggerKey) throws SchedulerException
   {
@@ -1358,6 +1359,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * {@link ICalendar}s.
    *
    * @throws SchedulerException
+   *         on error
    */
   public void clear () throws SchedulerException
   {
@@ -2235,7 +2237,9 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * @param aFactory
+   *        Factory. May not be <code>null</code>
    * @throws SchedulerException
+   *         on error
    */
   public void setJobFactory (final IJobFactory aFactory) throws SchedulerException
   {

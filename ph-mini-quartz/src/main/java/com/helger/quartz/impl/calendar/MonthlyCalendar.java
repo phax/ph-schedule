@@ -40,10 +40,10 @@ public class MonthlyCalendar extends BaseCalendar
 
   // An array to store a months days which are to be excluded.
   // Calendar.get( ) as index.
-  private boolean [] excludeDays = new boolean [MAX_DAYS_IN_MONTH];
+  private boolean [] m_aExcludeDays = new boolean [MAX_DAYS_IN_MONTH];
 
   // Will be set to true, if all week days are excluded
-  private boolean excludeAll = false;
+  private boolean m_aExcludeAll = false;
 
   public MonthlyCalendar ()
   {
@@ -65,27 +65,27 @@ public class MonthlyCalendar extends BaseCalendar
     super (baseCalendar, timeZone);
 
     // all days are included by default
-    excludeAll = areAllDaysExcluded ();
+    m_aExcludeAll = areAllDaysExcluded ();
   }
 
   @Override
-  public Object clone ()
+  public MonthlyCalendar clone ()
   {
     final MonthlyCalendar clone = (MonthlyCalendar) super.clone ();
-    clone.excludeDays = excludeDays.clone ();
+    clone.m_aExcludeDays = m_aExcludeDays.clone ();
     return clone;
   }
 
   /**
    * <p>
-   * Get the array which defines the exclude-value of each day of month. Only
-   * the first 31 elements of the array are relevant, with the 0 index element
+   * Get the array which defines the exclude-value of each day of month. Only the
+   * first 31 elements of the array are relevant, with the 0 index element
    * representing the first day of the month.
    * </p>
    */
   public boolean [] getDaysExcluded ()
   {
-    return excludeDays;
+    return m_aExcludeDays;
   }
 
   /**
@@ -103,7 +103,7 @@ public class MonthlyCalendar extends BaseCalendar
       throw new IllegalArgumentException ("The day parameter must be in the range of 1 to " + MAX_DAYS_IN_MONTH);
     }
 
-    return excludeDays[day - 1];
+    return m_aExcludeDays[day - 1];
   }
 
   /**
@@ -127,8 +127,8 @@ public class MonthlyCalendar extends BaseCalendar
                                           " elements.");
     }
 
-    excludeDays = days;
-    excludeAll = areAllDaysExcluded ();
+    m_aExcludeDays = days;
+    m_aExcludeAll = areAllDaysExcluded ();
   }
 
   /**
@@ -147,8 +147,8 @@ public class MonthlyCalendar extends BaseCalendar
       throw new IllegalArgumentException ("The day parameter must be in the range of 1 to " + MAX_DAYS_IN_MONTH);
     }
 
-    excludeDays[day - 1] = exclude;
-    excludeAll = areAllDaysExcluded ();
+    m_aExcludeDays[day - 1] = exclude;
+    m_aExcludeAll = areAllDaysExcluded ();
   }
 
   /**
@@ -181,7 +181,7 @@ public class MonthlyCalendar extends BaseCalendar
   @Override
   public boolean isTimeIncluded (final long timeStamp)
   {
-    if (excludeAll == true)
+    if (m_aExcludeAll == true)
     {
       return false;
     }
@@ -201,9 +201,9 @@ public class MonthlyCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time. Return the original value if timeStamp is
-   * included. Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar
+   * after the given time. Return the original value if timeStamp is included.
+   * Return 0 if all days are excluded.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -212,7 +212,7 @@ public class MonthlyCalendar extends BaseCalendar
   @Override
   public long getNextIncludedTime (final long nTimeStamp)
   {
-    if (excludeAll == true)
+    if (m_aExcludeAll == true)
     {
       return 0;
     }
