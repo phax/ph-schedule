@@ -44,6 +44,7 @@ import javax.annotation.Nullable;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
+import com.helger.commons.lang.IExplicitlyCloneable;
 
 /**
  * <p>
@@ -222,7 +223,7 @@ import com.helger.commons.collection.impl.ICommonsMap;
  * @author Contributions from Mads Henderson
  * @author Refactoring from CronTrigger to CronExpression by Aaron Craven
  */
-public final class CronExpression implements Serializable, Cloneable
+public final class CronExpression implements Serializable, IExplicitlyCloneable
 {
   static final class ValueSet implements Serializable
   {
@@ -1954,5 +1955,19 @@ public final class CronExpression implements Serializable, Cloneable
     }
     catch (final Exception ignore)
     {} // never happens
+  }
+
+  @Override
+  public CronExpression clone ()
+  {
+    try
+    {
+      final CronExpression copy = (CronExpression) super.clone ();
+      return copy;
+    }
+    catch (final CloneNotSupportedException ex)
+    {
+      throw new IncompatibleClassChangeError ("Not Cloneable.");
+    }
   }
 }
