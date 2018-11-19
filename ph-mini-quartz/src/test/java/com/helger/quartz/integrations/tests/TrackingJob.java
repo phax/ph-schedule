@@ -35,13 +35,13 @@ public class TrackingJob implements IJob
 
   @SuppressWarnings ("unchecked")
   @Override
-  public void execute (final IJobExecutionContext context) throws JobExecutionException
+  public void execute (final IJobExecutionContext aContext) throws JobExecutionException
   {
     try
     {
-      final IScheduler scheduler = context.getScheduler ();
+      final IScheduler scheduler = aContext.getScheduler ();
       final List <Long> scheduledFires = (List <Long>) scheduler.getContext ().get (SCHEDULED_TIMES_KEY);
-      scheduledFires.add (Long.valueOf (context.getScheduledFireTime ().getTime ()));
+      scheduledFires.add (Long.valueOf (aContext.getScheduledFireTime ().getTime ()));
     }
     catch (final SchedulerException e)
     {
