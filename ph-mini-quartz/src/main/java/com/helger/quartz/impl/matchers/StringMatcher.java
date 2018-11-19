@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
@@ -79,41 +82,35 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     public abstract boolean evaluate (String value, String compareTo);
   }
 
-  private final String compareTo;
-  private final StringOperatorName compareWith;
+  private final String m_sCompareTo;
+  private final StringOperatorName m_sCompareWith;
 
-  protected StringMatcher (final String compareTo, final StringOperatorName compareWith)
+  protected StringMatcher (@Nonnull final String compareTo, @Nonnull final StringOperatorName compareWith)
   {
-    if (compareTo == null)
-      throw new IllegalArgumentException ("CompareTo value cannot be null!");
-    if (compareWith == null)
-      throw new IllegalArgumentException ("CompareWith operator cannot be null!");
+    ValueEnforcer.notNull (compareTo, "CompareTo");
+    ValueEnforcer.notNull (compareWith, "CompareWith");
 
-    this.compareTo = compareTo;
-    this.compareWith = compareWith;
+    m_sCompareTo = compareTo;
+    m_sCompareWith = compareWith;
   }
 
+  @Nonnull
   public String getCompareToValue ()
   {
-    return compareTo;
+    return m_sCompareTo;
   }
 
+  @Nonnull
   public StringOperatorName getCompareWithOperator ()
   {
-    return compareWith;
+    return m_sCompareWith;
   }
 
   protected abstract String getValue (T key);
 
   public boolean isMatch (final T key)
   {
-    return compareWith.evaluate (getValue (key), compareTo);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return new HashCodeGenerator (this).append (compareTo).append (compareWith).getHashCode ();
+    return m_sCompareWith.evaluate (getValue (key), m_sCompareTo);
   }
 
   @Override
@@ -124,6 +121,12 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final StringMatcher <?> other = (StringMatcher <?>) o;
-    return compareTo.equals (other.compareTo) && compareWith.equals (other.compareWith);
+    return m_sCompareTo.equals (other.m_sCompareTo) && m_sCompareWith.equals (other.m_sCompareWith);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_sCompareTo).append (m_sCompareWith).getHashCode ();
   }
 }

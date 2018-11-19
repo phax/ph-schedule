@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
@@ -29,11 +32,12 @@ import com.helger.quartz.utils.Key;
  */
 public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
 {
-  private final T compareTo;
+  private final T m_aCompareTo;
 
-  protected KeyMatcher (final T compareTo)
+  protected KeyMatcher (@Nonnull final T compareTo)
   {
-    this.compareTo = compareTo;
+    ValueEnforcer.notNull (compareTo, "CompareTo");
+    m_aCompareTo = compareTo;
   }
 
   /**
@@ -46,18 +50,19 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
 
   public boolean isMatch (final T key)
   {
-    return compareTo.equals (key);
+    return m_aCompareTo.equals (key);
   }
 
+  @Nonnull
   public T getCompareToValue ()
   {
-    return compareTo;
+    return m_aCompareTo;
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (compareTo).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aCompareTo).getHashCode ();
   }
 
   @Override
@@ -68,6 +73,6 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final KeyMatcher <?> other = (KeyMatcher <?>) o;
-    return compareTo.equals (other.compareTo);
+    return m_aCompareTo.equals (other.m_aCompareTo);
   }
 }

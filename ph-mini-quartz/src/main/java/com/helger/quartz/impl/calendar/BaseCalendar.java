@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.annotation.Nullable;
+
 import com.helger.quartz.ICalendar;
 
 /**
@@ -45,19 +47,17 @@ import com.helger.quartz.ICalendar;
  */
 public class BaseCalendar implements ICalendar
 {
-  // <p>A optional base calendar.</p>
-  private ICalendar baseCalendar;
-
-  private String description;
-
-  private TimeZone timeZone;
+  // A optional base calendar
+  private ICalendar m_aBaseCalendar;
+  private String m_sDescription;
+  private TimeZone m_aTimeZone;
 
   public BaseCalendar ()
   {}
 
-  public BaseCalendar (final ICalendar baseCalendar)
+  public BaseCalendar (@Nullable final ICalendar baseCalendar)
   {
-    setBaseCalendar (baseCalendar);
+    this (baseCalendar, null);
   }
 
   /**
@@ -65,9 +65,9 @@ public class BaseCalendar implements ICalendar
    *        The time zone to use for this Calendar, <code>null</code> if
    *        <code>{@link TimeZone#getDefault()}</code> should be used
    */
-  public BaseCalendar (final TimeZone timeZone)
+  public BaseCalendar (@Nullable final TimeZone timeZone)
   {
-    setTimeZone (timeZone);
+    this (null, timeZone);
   }
 
   /**
@@ -75,7 +75,7 @@ public class BaseCalendar implements ICalendar
    *        The time zone to use for this Calendar, <code>null</code> if
    *        <code>{@link TimeZone#getDefault()}</code> should be used
    */
-  public BaseCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
+  public BaseCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
   {
     setBaseCalendar (baseCalendar);
     setTimeZone (timeZone);
@@ -88,11 +88,9 @@ public class BaseCalendar implements ICalendar
     {
       final BaseCalendar clone = (BaseCalendar) super.clone ();
       if (getBaseCalendar () != null)
-      {
-        clone.baseCalendar = (ICalendar) getBaseCalendar ().clone ();
-      }
+        clone.m_aBaseCalendar = (ICalendar) getBaseCalendar ().clone ();
       if (getTimeZone () != null)
-        clone.timeZone = (TimeZone) getTimeZone ().clone ();
+        clone.m_aTimeZone = (TimeZone) getTimeZone ().clone ();
       return clone;
     }
     catch (final CloneNotSupportedException ex)
@@ -106,9 +104,9 @@ public class BaseCalendar implements ICalendar
    * Set a new base calendar or remove the existing one
    * </p>
    */
-  public void setBaseCalendar (final ICalendar baseCalendar)
+  public final void setBaseCalendar (@Nullable final ICalendar baseCalendar)
   {
-    this.baseCalendar = baseCalendar;
+    this.m_aBaseCalendar = baseCalendar;
   }
 
   /**
@@ -118,7 +116,7 @@ public class BaseCalendar implements ICalendar
    */
   public ICalendar getBaseCalendar ()
   {
-    return this.baseCalendar;
+    return this.m_aBaseCalendar;
   }
 
   /**
@@ -131,31 +129,30 @@ public class BaseCalendar implements ICalendar
    */
   public String getDescription ()
   {
-    return description;
+    return m_sDescription;
   }
 
   /**
    * <p>
-   * Set a description for the <code>Calendar</code> instance - may be useful
-   * for remembering/displaying the purpose of the calendar, though the
-   * description has no meaning to Quartz.
+   * Set a description for the <code>Calendar</code> instance - may be useful for
+   * remembering/displaying the purpose of the calendar, though the description
+   * has no meaning to Quartz.
    * </p>
    */
-  public void setDescription (final String description)
+  public void setDescription (@Nullable final String description)
   {
-    this.description = description;
+    this.m_sDescription = description;
   }
 
   /**
-   * Returns the time zone for which this <code>Calendar</code> will be
-   * resolved.
+   * Returns the time zone for which this <code>Calendar</code> will be resolved.
    *
    * @return This Calendar's timezone, <code>null</code> if Calendar should use
    *         the <code>{@link TimeZone#getDefault()}</code>
    */
   public TimeZone getTimeZone ()
   {
-    return timeZone;
+    return m_aTimeZone;
   }
 
   /**
@@ -165,9 +162,9 @@ public class BaseCalendar implements ICalendar
    *        The time zone to use for this Calendar, <code>null</code> if
    *        <code>{@link TimeZone#getDefault()}</code> should be used
    */
-  public void setTimeZone (final TimeZone timeZone)
+  public void setTimeZone (@Nullable final TimeZone timeZone)
   {
-    this.timeZone = timeZone;
+    this.m_aTimeZone = timeZone;
   }
 
   /**
@@ -187,9 +184,9 @@ public class BaseCalendar implements ICalendar
       throw new IllegalArgumentException ("timeStamp must be greater 0");
     }
 
-    if (baseCalendar != null)
+    if (m_aBaseCalendar != null)
     {
-      if (baseCalendar.isTimeIncluded (timeStamp) == false)
+      if (m_aBaseCalendar.isTimeIncluded (timeStamp) == false)
       {
         return false;
       }
@@ -200,9 +197,9 @@ public class BaseCalendar implements ICalendar
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time. Return the original value if timeStamp is
-   * included. Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar
+   * after the given time. Return the original value if timeStamp is included.
+   * Return 0 if all days are excluded.
    * </p>
    *
    * @see com.helger.quartz.ICalendar#getNextIncludedTime(long)
@@ -212,9 +209,9 @@ public class BaseCalendar implements ICalendar
     if (timeStamp <= 0)
       throw new IllegalArgumentException ("timeStamp must be greater 0");
 
-    if (baseCalendar != null)
+    if (m_aBaseCalendar != null)
     {
-      return baseCalendar.getNextIncludedTime (timeStamp);
+      return m_aBaseCalendar.getNextIncludedTime (timeStamp);
     }
 
     return timeStamp;
@@ -233,8 +230,8 @@ public class BaseCalendar implements ICalendar
   }
 
   /**
-   * Build a <code>{@link Calendar}</code> with the current time. The new
-   * Calendar will use the <code>BaseCalendar</code> time zone if it is not
+   * Build a <code>{@link Calendar}</code> with the current time. The new Calendar
+   * will use the <code>BaseCalendar</code> time zone if it is not
    * <code>null</code>.
    */
   protected Calendar createJavaCalendar ()
@@ -245,8 +242,8 @@ public class BaseCalendar implements ICalendar
 
   /**
    * Returns the start of the given day as a <code>{@link Calendar}</code>. This
-   * calculation will take the <code>BaseCalendar</code> time zone into account
-   * if it is not <code>null</code>.
+   * calculation will take the <code>BaseCalendar</code> time zone into account if
+   * it is not <code>null</code>.
    *
    * @param timeInMillis
    *        A time containing the desired date for the start-of-day time
@@ -264,8 +261,8 @@ public class BaseCalendar implements ICalendar
 
   /**
    * Returns the end of the given day <code>{@link Calendar}</code>. This
-   * calculation will take the <code>BaseCalendar</code> time zone into account
-   * if it is not <code>null</code>.
+   * calculation will take the <code>BaseCalendar</code> time zone into account if
+   * it is not <code>null</code>.
    *
    * @param timeInMillis
    *        a time containing the desired date for the end-of-day time.

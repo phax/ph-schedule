@@ -56,12 +56,6 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
   }
 
   @Override
-  public int hashCode ()
-  {
-    return new HashCodeGenerator (this).getHashCode ();
-  }
-
-  @Override
   public boolean equals (final Object o)
   {
     if (this == o)
@@ -69,5 +63,11 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     return true;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).getHashCode ();
   }
 }

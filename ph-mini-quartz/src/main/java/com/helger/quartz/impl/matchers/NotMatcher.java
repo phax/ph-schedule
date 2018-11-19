@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
@@ -29,30 +32,23 @@ import com.helger.quartz.utils.Key;
  */
 public class NotMatcher <T extends Key <T>> implements IMatcher <T>
 {
-  private final IMatcher <T> operand;
+  private final IMatcher <T> m_aOperand;
 
-  public NotMatcher (final IMatcher <T> operand)
+  public NotMatcher (@Nonnull final IMatcher <T> operand)
   {
-    if (operand == null)
-      throw new IllegalArgumentException ("Non-null operand required!");
-
-    this.operand = operand;
+    ValueEnforcer.notNull (operand, "Operand");
+    this.m_aOperand = operand;
   }
 
   public boolean isMatch (final T key)
   {
-    return !operand.isMatch (key);
+    return !m_aOperand.isMatch (key);
   }
 
+  @Nonnull
   public IMatcher <T> getOperand ()
   {
-    return operand;
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return new HashCodeGenerator (this).append (operand).getHashCode ();
+    return m_aOperand;
   }
 
   @Override
@@ -63,6 +59,12 @@ public class NotMatcher <T extends Key <T>> implements IMatcher <T>
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final NotMatcher <?> other = (NotMatcher <?>) o;
-    return operand.equals (other.operand);
+    return m_aOperand.equals (other.m_aOperand);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aOperand).getHashCode ();
   }
 }
