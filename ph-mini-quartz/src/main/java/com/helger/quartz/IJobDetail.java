@@ -20,6 +20,8 @@ package com.helger.quartz;
 
 import java.io.Serializable;
 
+import com.helger.commons.lang.IExplicitlyCloneable;
+
 /**
  * Conveys the detail properties of a given <code>Job</code> instance.
  * JobDetails are to be created/defined with {@link JobBuilder}.
@@ -44,14 +46,14 @@ import java.io.Serializable;
  * @see ITrigger
  * @author James House
  */
-public interface IJobDetail extends Serializable, Cloneable
+public interface IJobDetail extends Serializable, IExplicitlyCloneable
 {
   JobKey getKey ();
 
   /**
    * <p>
-   * Return the description given to the <code>Job</code> instance by its
-   * creator (if any).
+   * Return the description given to the <code>Job</code> instance by its creator
+   * (if any).
    * </p>
    *
    * @return null if no description was set.
@@ -67,16 +69,15 @@ public interface IJobDetail extends Serializable, Cloneable
 
   /**
    * <p>
-   * Get the <code>JobDataMap</code> that is associated with the
-   * <code>Job</code>.
+   * Get the <code>JobDataMap</code> that is associated with the <code>Job</code>.
    * </p>
    */
   JobDataMap getJobDataMap ();
 
   /**
    * <p>
-   * Whether or not the <code>Job</code> should remain stored after it is
-   * orphaned (no <code>{@link ITrigger}s</code> point to it).
+   * Whether or not the <code>Job</code> should remain stored after it is orphaned
+   * (no <code>{@link ITrigger}s</code> point to it).
    * </p>
    * <p>
    * If not explicitly set, the default value is <code>false</code>.

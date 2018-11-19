@@ -23,6 +23,7 @@ import java.util.Date;
 
 import com.helger.commons.annotation.MustImplementEqualsAndHashcode;
 import com.helger.commons.compare.IComparator;
+import com.helger.commons.lang.IExplicitlyCloneable;
 
 /**
  * The base interface with properties common to all <code>Trigger</code>s - use
@@ -52,7 +53,7 @@ import com.helger.commons.compare.IComparator;
  * @author James House
  */
 @MustImplementEqualsAndHashcode
-public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
+public interface ITrigger extends Serializable, IExplicitlyCloneable, Comparable <ITrigger>
 {
   public enum ETriggerState
   {

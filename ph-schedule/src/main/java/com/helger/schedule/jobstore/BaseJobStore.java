@@ -311,7 +311,7 @@ public class BaseJobStore implements IJobStore
                                          aNewTrigger.getJobKey () +
                                          ") referenced by the trigger does not exist.");
 
-    final TriggerWrapper tw = new TriggerWrapper ((IOperableTrigger) aNewTrigger.clone ());
+    final TriggerWrapper tw = new TriggerWrapper (aNewTrigger.clone ());
 
     m_aRWLock.writeLocked ( () -> {
       // add to triggers array
@@ -472,7 +472,7 @@ public class BaseJobStore implements IJobStore
   {
     return m_aRWLock.readLocked ( () -> {
       final JobWrapper jw = m_aJobsByKey.get (jobKey);
-      return jw != null ? (IJobDetail) jw.getJobDetail ().clone () : null;
+      return jw != null ? jw.getJobDetail ().clone () : null;
     });
   }
 
@@ -487,7 +487,7 @@ public class BaseJobStore implements IJobStore
   {
     return m_aRWLock.readLocked ( () -> {
       final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
-      return tw != null ? (IOperableTrigger) tw.getTrigger ().clone () : null;
+      return tw != null ? tw.getTrigger ().clone () : null;
     });
   }
 
@@ -582,7 +582,7 @@ public class BaseJobStore implements IJobStore
   {
     return m_aRWLock.readLocked ( () -> {
       final ICalendar cal = m_aCalendarsByName.get (calName);
-      return cal != null ? (ICalendar) cal.clone () : null;
+      return cal != null ? cal.clone () : null;
     });
   }
 
@@ -685,7 +685,7 @@ public class BaseJobStore implements IJobStore
       final ICommonsList <IOperableTrigger> ret = new CommonsArrayList <> ();
       for (final TriggerWrapper aTW : m_aTriggers)
         if (aTW.getJobKey ().equals (aJobKey))
-          ret.add ((IOperableTrigger) aTW.getTrigger ().clone ());
+          ret.add (aTW.getTrigger ().clone ());
       return ret;
     });
   }
@@ -1067,7 +1067,7 @@ public class BaseJobStore implements IJobStore
 
         tw.setState (TriggerWrapper.STATE_ACQUIRED);
         tw.getTrigger ().setFireInstanceId (getFiredTriggerRecordId ());
-        final IOperableTrigger trig = (IOperableTrigger) tw.getTrigger ().clone ();
+        final IOperableTrigger trig = tw.getTrigger ().clone ();
         ret.add (trig);
         if (firstAcquiredTriggerFireTime == 0)
           firstAcquiredTriggerFireTime = tw.getTrigger ().getNextFireTime ().getTime ();
@@ -1200,7 +1200,7 @@ public class BaseJobStore implements IJobStore
           JobDataMap newData = jobDetail.getJobDataMap ();
           if (newData != null)
           {
-            newData = (JobDataMap) newData.clone ();
+            newData = newData.getClone ();
             // newData.clearDirtyFlag ();
           }
           jd = jd.getJobBuilder ().setJobData (newData).build ();

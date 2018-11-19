@@ -65,7 +65,7 @@ public final class TriggerUtils
   {
     final ICommonsList <Date> lst = new CommonsArrayList <> ();
 
-    final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
+    final IOperableTrigger t = trigg.clone ();
     if (t.getNextFireTime () == null)
       t.computeFirstFireTime (cal);
 
@@ -90,8 +90,8 @@ public final class TriggerUtils
    * Compute the <code>Date</code> that is 1 second after the Nth firing of the
    * given <code>Trigger</code>, taking the triger's associated
    * <code>Calendar</code> into consideration. The input trigger will be cloned
-   * before any work is done, so you need not worry about its state being
-   * altered by this method.
+   * before any work is done, so you need not worry about its state being altered
+   * by this method.
    *
    * @param trigg
    *        The trigger upon which to do the work
@@ -106,7 +106,7 @@ public final class TriggerUtils
                                                                      final ICalendar cal,
                                                                      final int numTimes)
   {
-    final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
+    final IOperableTrigger t = trigg.clone ();
     if (t.getNextFireTime () == null)
       t.computeFirstFireTime (cal);
 
@@ -137,9 +137,9 @@ public final class TriggerUtils
 
   /**
    * Returns a list of Dates that are the next fire times of a
-   * <code>Trigger</code> that fall within the given date range. The input
-   * trigger will be cloned before any work is done, so you need not worry about
-   * its state being altered by this method.
+   * <code>Trigger</code> that fall within the given date range. The input trigger
+   * will be cloned before any work is done, so you need not worry about its state
+   * being altered by this method.
    * <p>
    * NOTE: if this is a trigger that has previously fired within the given date
    * range, then firings which have already occurred will not be listed in the
@@ -162,7 +162,7 @@ public final class TriggerUtils
                                                              final Date to)
   {
     final ICommonsList <Date> lst = new CommonsArrayList <> ();
-    final IOperableTrigger t = (IOperableTrigger) trigg.clone ();
+    final IOperableTrigger t = trigg.clone ();
     if (t.getNextFireTime () == null)
     {
       t.setStartTime (from);

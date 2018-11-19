@@ -153,4 +153,6 @@ public interface IOperableTrigger extends IMutableTrigger
   void setNextFireTime (Date nextFireTime);
 
   void setPreviousFireTime (Date previousFireTime);
+
+  IOperableTrigger clone ();
 }

@@ -396,7 +396,7 @@ public class RAMJobStore implements IJobStore
    *
    * @param newTrigger
    *        The <code>Trigger</code> to be stored.
-   * @param replaceExisting
+   * @param bReplaceExisting
    *        If <code>true</code>, any <code>Trigger</code> existing in the
    *        <code>JobStore</code> with the same name &amp; group should be
    *        over-written.
@@ -406,15 +406,15 @@ public class RAMJobStore implements IJobStore
    * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
    */
   public void storeTrigger (final IOperableTrigger newTrigger,
-                            final boolean replaceExisting) throws JobPersistenceException
+                            final boolean bReplaceExisting) throws JobPersistenceException
   {
-    final TriggerWrapper tw = new TriggerWrapper ((IOperableTrigger) newTrigger.clone ());
+    final TriggerWrapper tw = new TriggerWrapper (newTrigger.clone ());
 
     synchronized (m_aLock)
     {
       if (m_aTriggersByKey.get (tw.m_aKey) != null)
       {
-        if (!replaceExisting)
+        if (!bReplaceExisting)
         {
           throw new ObjectAlreadyExistsException (newTrigger);
         }
@@ -1036,7 +1036,7 @@ public class RAMJobStore implements IJobStore
     {
       for (final TriggerWrapper tw : m_aTriggers)
         if (tw.m_aJobKey.equals (jobKey))
-          trigList.add ((IOperableTrigger) tw.m_aTrigger.clone ());
+          trigList.add (tw.m_aTrigger.clone ());
     }
 
     return trigList;
@@ -1542,7 +1542,7 @@ public class RAMJobStore implements IJobStore
 
         tw.state = TriggerWrapper.STATE_ACQUIRED;
         tw.m_aTrigger.setFireInstanceId (getFiredTriggerRecordId ());
-        final IOperableTrigger trig = (IOperableTrigger) tw.m_aTrigger.clone ();
+        final IOperableTrigger trig = tw.m_aTrigger.clone ();
         if (result.isEmpty ())
         {
           batchEnd = Math.max (tw.m_aTrigger.getNextFireTime ().getTime (), System.currentTimeMillis ()) + timeWindow;
