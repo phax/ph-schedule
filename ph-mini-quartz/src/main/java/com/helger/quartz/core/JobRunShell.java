@@ -56,12 +56,13 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  */
 public class JobRunShell extends AbstractSchedulerListenerSupport implements Runnable
 {
-  protected JobExecutionContext jec = null;
-  protected QuartzScheduler qs = null;
-  protected TriggerFiredBundle firedTriggerBundle = null;
-  protected IScheduler scheduler = null;
-  protected volatile boolean shutdownRequested = false;
-  private final Logger log = LoggerFactory.getLogger (getClass ());
+  private static final Logger log = LoggerFactory.getLogger (JobRunShell.class);
+
+  protected JobExecutionContext m_aJEC;
+  protected QuartzScheduler m_aQS;
+  protected TriggerFiredBundle m_aFiredTriggerBundle;
+  protected IScheduler m_aScheduler;
+  protected volatile boolean m_bShutdownRequested = false;
 
   /**
    * <p>
@@ -74,8 +75,8 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
    */
   public JobRunShell (final IScheduler scheduler, final TriggerFiredBundle bndle)
   {
-    this.scheduler = scheduler;
-    this.firedTriggerBundle = bndle;
+    m_aScheduler = scheduler;
+    m_aFiredTriggerBundle = bndle;
   }
 
   /*
@@ -98,14 +99,14 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
 
   public void initialize (final QuartzScheduler sched) throws SchedulerException
   {
-    this.qs = sched;
+    m_aQS = sched;
 
     IJob job = null;
-    final IJobDetail jobDetail = firedTriggerBundle.getJobDetail ();
+    final IJobDetail jobDetail = m_aFiredTriggerBundle.getJobDetail ();
 
     try
     {
-      job = sched.getJobFactory ().newJob (firedTriggerBundle, scheduler);
+      job = sched.getJobFactory ().newJob (m_aFiredTriggerBundle, m_aScheduler);
     }
     catch (final SchedulerException se)
     {
@@ -128,28 +129,28 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
       throw se;
     }
 
-    this.jec = new JobExecutionContext (scheduler, firedTriggerBundle, job);
+    m_aJEC = new JobExecutionContext (m_aScheduler, m_aFiredTriggerBundle, job);
   }
 
   public void requestShutdown ()
   {
-    shutdownRequested = true;
+    m_bShutdownRequested = true;
   }
 
   public void run ()
   {
-    qs.addInternalSchedulerListener (this);
+    m_aQS.addInternalSchedulerListener (this);
 
     try
     {
-      final IOperableTrigger trigger = (IOperableTrigger) jec.getTrigger ();
-      final IJobDetail jobDetail = jec.getJobDetail ();
+      final IOperableTrigger trigger = (IOperableTrigger) m_aJEC.getTrigger ();
+      final IJobDetail jobDetail = m_aJEC.getJobDetail ();
 
       do
       {
 
         JobExecutionException jobExEx = null;
-        final IJob job = jec.getJobInstance ();
+        final IJob job = m_aJEC.getJobInstance ();
 
         try
         {
@@ -157,17 +158,17 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         }
         catch (final SchedulerException se)
         {
-          qs.notifySchedulerListenersError ("Error executing Job (" +
-                                            jec.getJobDetail ().getKey () +
-                                            ": couldn't begin execution.",
-                                            se);
+          m_aQS.notifySchedulerListenersError ("Error executing Job (" +
+                                               m_aJEC.getJobDetail ().getKey () +
+                                               ": couldn't begin execution.",
+                                               se);
           break;
         }
 
         // notify job & trigger listeners...
         try
         {
-          if (!_notifyListenersBeginning (jec))
+          if (!_notifyListenersBeginning (m_aJEC))
           {
             break;
           }
@@ -176,25 +177,25 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         {
           try
           {
-            final ECompletedExecutionInstruction instCode = trigger.executionComplete (jec, null);
-            qs.notifyJobStoreJobVetoed (trigger, jobDetail, instCode);
+            final ECompletedExecutionInstruction instCode = trigger.executionComplete (m_aJEC, null);
+            m_aQS.notifyJobStoreJobVetoed (trigger, jobDetail, instCode);
 
             // QTZ-205
             // Even if trigger got vetoed, we still needs to check to see if
             // it's the trigger's finalized run or not.
-            if (jec.getTrigger ().getNextFireTime () == null)
+            if (m_aJEC.getTrigger ().getNextFireTime () == null)
             {
-              qs.notifySchedulerListenersFinalized (jec.getTrigger ());
+              m_aQS.notifySchedulerListenersFinalized (m_aJEC.getTrigger ());
             }
 
             complete (true);
           }
           catch (final SchedulerException se)
           {
-            qs.notifySchedulerListenersError ("Error during veto of Job (" +
-                                              jec.getJobDetail ().getKey () +
-                                              ": couldn't finalize execution.",
-                                              se);
+            m_aQS.notifySchedulerListenersError ("Error during veto of Job (" +
+                                                 m_aJEC.getJobDetail ().getKey () +
+                                                 ": couldn't finalize execution.",
+                                                 se);
           }
           break;
         }
@@ -207,7 +208,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         {
           if (log.isDebugEnabled ())
             log.debug ("Calling execute on job " + jobDetail.getKey ());
-          job.execute (jec);
+          job.execute (m_aJEC);
           endTime = System.currentTimeMillis ();
         }
         catch (final JobExecutionException jee)
@@ -221,14 +222,14 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
           endTime = System.currentTimeMillis ();
           getLog ().error ("Job " + jobDetail.getKey () + " threw an unhandled Exception: ", e);
           final SchedulerException se = new SchedulerException ("Job threw an unhandled exception.", e);
-          qs.notifySchedulerListenersError ("Job (" + jec.getJobDetail ().getKey () + " threw an exception.", se);
+          m_aQS.notifySchedulerListenersError ("Job (" + m_aJEC.getJobDetail ().getKey () + " threw an exception.", se);
           jobExEx = new JobExecutionException (se, false);
         }
 
-        jec.setJobRunTime (endTime - startTime);
+        m_aJEC.setJobRunTime (endTime - startTime);
 
         // notify all job listeners
-        if (!_notifyJobListenersComplete (jec, jobExEx))
+        if (!_notifyJobListenersComplete (m_aJEC, jobExEx))
         {
           break;
         }
@@ -238,17 +239,17 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         // update the trigger
         try
         {
-          instCode = trigger.executionComplete (jec, jobExEx);
+          instCode = trigger.executionComplete (m_aJEC, jobExEx);
         }
         catch (final Exception e)
         {
           // If this happens, there's a bug in the trigger...
           final SchedulerException se = new SchedulerException ("Trigger threw an unhandled exception.", e);
-          qs.notifySchedulerListenersError ("Please report this error to the Quartz developers.", se);
+          m_aQS.notifySchedulerListenersError ("Please report this error to the Quartz developers.", se);
         }
 
         // notify all trigger listeners
-        if (!_notifyTriggerListenersComplete (jec, instCode))
+        if (!_notifyTriggerListenersComplete (m_aJEC, instCode))
         {
           break;
         }
@@ -256,17 +257,17 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         // update job/trigger or re-execute job
         if (instCode == ECompletedExecutionInstruction.RE_EXECUTE_JOB)
         {
-          jec.incrementRefireCount ();
+          m_aJEC.incrementRefireCount ();
           try
           {
             complete (false);
           }
           catch (final SchedulerException se)
           {
-            qs.notifySchedulerListenersError ("Error executing Job (" +
-                                              jec.getJobDetail ().getKey () +
-                                              ": couldn't finalize execution.",
-                                              se);
+            m_aQS.notifySchedulerListenersError ("Error executing Job (" +
+                                                 m_aJEC.getJobDetail ().getKey () +
+                                                 ": couldn't finalize execution.",
+                                                 se);
           }
           continue;
         }
@@ -277,21 +278,21 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         }
         catch (final SchedulerException se)
         {
-          qs.notifySchedulerListenersError ("Error executing Job (" +
-                                            jec.getJobDetail ().getKey () +
-                                            ": couldn't finalize execution.",
-                                            se);
+          m_aQS.notifySchedulerListenersError ("Error executing Job (" +
+                                               m_aJEC.getJobDetail ().getKey () +
+                                               ": couldn't finalize execution.",
+                                               se);
           continue;
         }
 
-        qs.notifyJobStoreJobComplete (trigger, jobDetail, instCode);
+        m_aQS.notifyJobStoreJobComplete (trigger, jobDetail, instCode);
         break;
       } while (true);
 
     }
     finally
     {
-      qs.removeInternalSchedulerListener (this);
+      m_aQS.removeInternalSchedulerListener (this);
     }
   }
 
@@ -310,8 +311,8 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
 
   public void passivate ()
   {
-    jec = null;
-    qs = null;
+    m_aJEC = null;
+    m_aQS = null;
   }
 
   private boolean _notifyListenersBeginning (final IJobExecutionContext jobExCtxt) throws VetoedException
@@ -322,16 +323,16 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
     // notify all trigger listeners
     try
     {
-      vetoed = qs.notifyTriggerListenersFired (jobExCtxt);
+      vetoed = m_aQS.notifyTriggerListenersFired (jobExCtxt);
     }
     catch (final SchedulerException se)
     {
-      qs.notifySchedulerListenersError ("Unable to notify TriggerListener(s) while firing trigger " +
-                                        "(Trigger and Job will NOT be fired!). trigger= " +
-                                        jobExCtxt.getTrigger ().getKey () +
-                                        " job= " +
-                                        jobExCtxt.getJobDetail ().getKey (),
-                                        se);
+      m_aQS.notifySchedulerListenersError ("Unable to notify TriggerListener(s) while firing trigger " +
+                                           "(Trigger and Job will NOT be fired!). trigger= " +
+                                           jobExCtxt.getTrigger ().getKey () +
+                                           " job= " +
+                                           jobExCtxt.getJobDetail ().getKey (),
+                                           se);
 
       return false;
     }
@@ -340,17 +341,17 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
     {
       try
       {
-        qs.notifyJobListenersWasVetoed (jobExCtxt);
+        m_aQS.notifyJobListenersWasVetoed (jobExCtxt);
       }
       catch (final SchedulerException se)
       {
-        qs.notifySchedulerListenersError ("Unable to notify JobListener(s) of vetoed execution " +
-                                          "while firing trigger (Trigger and Job will NOT be " +
-                                          "fired!). trigger= " +
-                                          jobExCtxt.getTrigger ().getKey () +
-                                          " job= " +
-                                          jobExCtxt.getJobDetail ().getKey (),
-                                          se);
+        m_aQS.notifySchedulerListenersError ("Unable to notify JobListener(s) of vetoed execution " +
+                                             "while firing trigger (Trigger and Job will NOT be " +
+                                             "fired!). trigger= " +
+                                             jobExCtxt.getTrigger ().getKey () +
+                                             " job= " +
+                                             jobExCtxt.getJobDetail ().getKey (),
+                                             se);
 
       }
       throw new VetoedException ();
@@ -359,16 +360,16 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
     // notify all job listeners
     try
     {
-      qs.notifyJobListenersToBeExecuted (jobExCtxt);
+      m_aQS.notifyJobListenersToBeExecuted (jobExCtxt);
     }
     catch (final SchedulerException se)
     {
-      qs.notifySchedulerListenersError ("Unable to notify JobListener(s) of Job to be executed: " +
-                                        "(Job will NOT be executed!). trigger= " +
-                                        jobExCtxt.getTrigger ().getKey () +
-                                        " job= " +
-                                        jobExCtxt.getJobDetail ().getKey (),
-                                        se);
+      m_aQS.notifySchedulerListenersError ("Unable to notify JobListener(s) of Job to be executed: " +
+                                           "(Job will NOT be executed!). trigger= " +
+                                           jobExCtxt.getTrigger ().getKey () +
+                                           " job= " +
+                                           jobExCtxt.getJobDetail ().getKey (),
+                                           se);
 
       return false;
     }
@@ -381,16 +382,16 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
   {
     try
     {
-      qs.notifyJobListenersWasExecuted (jobExCtxt, jobExEx);
+      m_aQS.notifyJobListenersWasExecuted (jobExCtxt, jobExEx);
     }
     catch (final SchedulerException se)
     {
-      qs.notifySchedulerListenersError ("Unable to notify JobListener(s) of Job that was executed: " +
-                                        "(error will be ignored). trigger= " +
-                                        jobExCtxt.getTrigger ().getKey () +
-                                        " job= " +
-                                        jobExCtxt.getJobDetail ().getKey (),
-                                        se);
+      m_aQS.notifySchedulerListenersError ("Unable to notify JobListener(s) of Job that was executed: " +
+                                           "(error will be ignored). trigger= " +
+                                           jobExCtxt.getTrigger ().getKey () +
+                                           " job= " +
+                                           jobExCtxt.getJobDetail ().getKey (),
+                                           se);
 
       return false;
     }
@@ -403,23 +404,23 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
   {
     try
     {
-      qs.notifyTriggerListenersComplete (jobExCtxt, instCode);
+      m_aQS.notifyTriggerListenersComplete (jobExCtxt, instCode);
 
     }
     catch (final SchedulerException se)
     {
-      qs.notifySchedulerListenersError ("Unable to notify TriggerListener(s) of Job that was executed: " +
-                                        "(error will be ignored). trigger= " +
-                                        jobExCtxt.getTrigger ().getKey () +
-                                        " job= " +
-                                        jobExCtxt.getJobDetail ().getKey (),
-                                        se);
+      m_aQS.notifySchedulerListenersError ("Unable to notify TriggerListener(s) of Job that was executed: " +
+                                           "(error will be ignored). trigger= " +
+                                           jobExCtxt.getTrigger ().getKey () +
+                                           " job= " +
+                                           jobExCtxt.getJobDetail ().getKey (),
+                                           se);
 
       return false;
     }
     if (jobExCtxt.getTrigger ().getNextFireTime () == null)
     {
-      qs.notifySchedulerListenersFinalized (jobExCtxt.getTrigger ());
+      m_aQS.notifySchedulerListenersFinalized (jobExCtxt.getTrigger ());
     }
 
     return true;

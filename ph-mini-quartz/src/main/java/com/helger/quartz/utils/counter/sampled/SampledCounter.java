@@ -117,9 +117,6 @@ public class SampledCounter extends Counter implements ISampledCounter
     return m_nIntervalMillis;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   void recordSample ()
   {
     final long sample;

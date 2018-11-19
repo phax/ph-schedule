@@ -28,20 +28,20 @@ import java.util.Date;
  */
 public class SchedulerMetaData implements java.io.Serializable
 {
-  private final String schedName;
-  private final String schedInst;
-  private final Class <?> schedClass;
-  private final boolean started;
-  private final boolean isInStandbyMode;
-  private final boolean shutdown;
-  private final Date startTime;
-  private final int numJobsExec;
-  private final Class <?> jsClass;
-  private final boolean jsPersistent;
-  private final boolean jsClustered;
-  private final Class <?> tpClass;
-  private final int tpSize;
-  private final String version;
+  private final String m_sSchedName;
+  private final String m_sSchedInst;
+  private final Class <?> m_sSchedClass;
+  private final boolean m_bStarted;
+  private final boolean m_bIsInStandbyMode;
+  private final boolean m_bShutdown;
+  private final Date m_aStartTime;
+  private final int m_nNumJobsExec;
+  private final Class <?> m_aJsClass;
+  private final boolean m_bJsPersistent;
+  private final boolean m_bJsClustered;
+  private final Class <?> m_aTpClass;
+  private final int m_nTpSize;
+  private final String m_sVersion;
 
   public SchedulerMetaData (final String schedName,
                             final String schedInst,
@@ -58,20 +58,20 @@ public class SchedulerMetaData implements java.io.Serializable
                             final int tpSize,
                             final String version)
   {
-    this.schedName = schedName;
-    this.schedInst = schedInst;
-    this.schedClass = schedClass;
-    this.started = started;
-    this.isInStandbyMode = isInStandbyMode;
-    this.shutdown = shutdown;
-    this.startTime = startTime;
-    this.numJobsExec = numJobsExec;
-    this.jsClass = jsClass;
-    this.jsPersistent = jsPersistent;
-    this.jsClustered = jsClustered;
-    this.tpClass = tpClass;
-    this.tpSize = tpSize;
-    this.version = version;
+    this.m_sSchedName = schedName;
+    this.m_sSchedInst = schedInst;
+    this.m_sSchedClass = schedClass;
+    this.m_bStarted = started;
+    this.m_bIsInStandbyMode = isInStandbyMode;
+    this.m_bShutdown = shutdown;
+    this.m_aStartTime = startTime;
+    this.m_nNumJobsExec = numJobsExec;
+    this.m_aJsClass = jsClass;
+    this.m_bJsPersistent = jsPersistent;
+    this.m_bJsClustered = jsClustered;
+    this.m_aTpClass = tpClass;
+    this.m_nTpSize = tpSize;
+    this.m_sVersion = version;
   }
 
   /**
@@ -81,7 +81,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public String getSchedulerName ()
   {
-    return schedName;
+    return m_sSchedName;
   }
 
   /**
@@ -91,7 +91,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public String getSchedulerInstanceId ()
   {
-    return schedInst;
+    return m_sSchedInst;
   }
 
   /**
@@ -101,7 +101,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public Class <?> getSchedulerClass ()
   {
-    return schedClass;
+    return m_sSchedClass;
   }
 
   /**
@@ -113,7 +113,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public Date getRunningSince ()
   {
-    return startTime;
+    return m_aStartTime;
   }
 
   /**
@@ -124,7 +124,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public int getNumberOfJobsExecuted ()
   {
-    return numJobsExec;
+    return m_nNumJobsExec;
   }
 
   /**
@@ -138,7 +138,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public boolean isStarted ()
   {
-    return started;
+    return m_bStarted;
   }
 
   /**
@@ -146,7 +146,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public boolean isInStandbyMode ()
   {
-    return isInStandbyMode;
+    return m_bIsInStandbyMode;
   }
 
   /**
@@ -156,7 +156,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public boolean isShutdown ()
   {
-    return shutdown;
+    return m_bShutdown;
   }
 
   /**
@@ -167,7 +167,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public Class <?> getJobStoreClass ()
   {
-    return jsClass;
+    return m_aJsClass;
   }
 
   /**
@@ -178,7 +178,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public boolean isJobStoreSupportsPersistence ()
   {
-    return jsPersistent;
+    return m_bJsPersistent;
   }
 
   /**
@@ -189,18 +189,18 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public boolean isJobStoreClustered ()
   {
-    return jsClustered;
+    return m_bJsClustered;
   }
 
   /**
    * <p>
-   * Returns the class-name of the <code>ThreadPool</code> instance that is
-   * being used by the <code>Scheduler</code>.
+   * Returns the class-name of the <code>ThreadPool</code> instance that is being
+   * used by the <code>Scheduler</code>.
    * </p>
    */
   public Class <?> getThreadPoolClass ()
   {
-    return tpClass;
+    return m_aTpClass;
   }
 
   /**
@@ -211,7 +211,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public int getThreadPoolSize ()
   {
-    return tpSize;
+    return m_nTpSize;
   }
 
   /**
@@ -221,7 +221,7 @@ public class SchedulerMetaData implements java.io.Serializable
    */
   public String getVersion ()
   {
-    return version;
+    return m_sVersion;
   }
 
   /**
@@ -256,85 +256,86 @@ public class SchedulerMetaData implements java.io.Serializable
    * </pre>
    *
    * @throws SchedulerException
+   *         On error
    */
   public String getSummary () throws SchedulerException
   {
-    final StringBuilder str = new StringBuilder ("Mini Quartz Scheduler (v");
-    str.append (getVersion ());
-    str.append (") '");
+    final StringBuilder aSB = new StringBuilder ("Mini Quartz Scheduler (v");
+    aSB.append (getVersion ());
+    aSB.append (") '");
 
-    str.append (getSchedulerName ());
-    str.append ("' with instanceId '");
-    str.append (getSchedulerInstanceId ());
-    str.append ("'\n");
+    aSB.append (getSchedulerName ());
+    aSB.append ("' with instanceId '");
+    aSB.append (getSchedulerInstanceId ());
+    aSB.append ("'\n");
 
-    str.append ("  Scheduler class: '");
-    str.append (getSchedulerClass ().getName ());
-    str.append ("'");
-    str.append (" - running locally.");
-    str.append ("\n");
+    aSB.append ("  Scheduler class: '");
+    aSB.append (getSchedulerClass ().getName ());
+    aSB.append ("'");
+    aSB.append (" - running locally.");
+    aSB.append ("\n");
 
     if (!isShutdown ())
     {
       if (getRunningSince () != null)
       {
-        str.append ("  Running since: ");
-        str.append (getRunningSince ());
+        aSB.append ("  Running since: ");
+        aSB.append (getRunningSince ());
       }
       else
       {
-        str.append ("  NOT STARTED.");
+        aSB.append ("  NOT STARTED.");
       }
-      str.append ("\n");
+      aSB.append ("\n");
 
       if (isInStandbyMode ())
       {
-        str.append ("  Currently in standby mode.");
+        aSB.append ("  Currently in standby mode.");
       }
       else
       {
-        str.append ("  Not currently in standby mode.");
+        aSB.append ("  Not currently in standby mode.");
       }
     }
     else
     {
-      str.append ("  Scheduler has been SHUTDOWN.");
+      aSB.append ("  Scheduler has been SHUTDOWN.");
     }
-    str.append ("\n");
+    aSB.append ("\n");
 
-    str.append ("  Number of jobs executed: ");
-    str.append (getNumberOfJobsExecuted ());
-    str.append ("\n");
+    aSB.append ("  Number of jobs executed: ");
+    aSB.append (getNumberOfJobsExecuted ());
+    aSB.append ("\n");
 
-    str.append ("  Using thread pool '");
-    str.append (getThreadPoolClass ().getName ());
-    str.append ("' - with ");
-    str.append (getThreadPoolSize ());
-    str.append (" threads.");
-    str.append ("\n");
+    aSB.append ("  Using thread pool '");
+    aSB.append (getThreadPoolClass ().getName ());
+    aSB.append ("' - with ");
+    aSB.append (getThreadPoolSize ());
+    aSB.append (" threads.");
+    aSB.append ("\n");
 
-    str.append ("  Using job-store '");
-    str.append (getJobStoreClass ().getName ());
-    str.append ("' - which ");
+    aSB.append ("  Using job-store '");
+    aSB.append (getJobStoreClass ().getName ());
+    aSB.append ("' - which ");
     if (isJobStoreSupportsPersistence ())
     {
-      str.append ("supports persistence.");
+      aSB.append ("supports persistence.");
     }
     else
     {
-      str.append ("does not support persistence.");
+      aSB.append ("does not support persistence.");
     }
     if (isJobStoreClustered ())
     {
-      str.append (" and is clustered.");
+      aSB.append (" and is clustered.");
     }
     else
     {
-      str.append (" and is not clustered.");
+      aSB.append (" and is not clustered.");
     }
-    str.append ("\n");
+    aSB.append ("\n");
 
-    return str.toString ();
+    return aSB.toString ();
   }
 
 }

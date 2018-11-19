@@ -37,11 +37,9 @@ package com.helger.quartz;
  */
 public class JobExecutionException extends SchedulerException
 {
-  private boolean refire = false;
-
-  private boolean unscheduleTrigg = false;
-
-  private boolean unscheduleAllTriggs = false;
+  private boolean m_bRefire = false;
+  private boolean m_bUnscheduleTrigg = false;
+  private boolean m_bUnscheduleAllTriggs = false;
 
   /**
    * <p>
@@ -80,20 +78,20 @@ public class JobExecutionException extends SchedulerException
    */
   public JobExecutionException (final boolean refireImmediately)
   {
-    refire = refireImmediately;
+    m_bRefire = refireImmediately;
   }
 
   /**
    * <p>
-   * Create a JobExcecutionException with the given underlying exception, and
-   * the 're-fire immediately' flag set to the given value.
+   * Create a JobExcecutionException with the given underlying exception, and the
+   * 're-fire immediately' flag set to the given value.
    * </p>
    */
   public JobExecutionException (final Throwable cause, final boolean refireImmediately)
   {
     super (cause);
 
-    refire = refireImmediately;
+    m_bRefire = refireImmediately;
   }
 
   /**
@@ -117,7 +115,7 @@ public class JobExecutionException extends SchedulerException
   {
     super (msg, cause);
 
-    refire = refireImmediately;
+    m_bRefire = refireImmediately;
   }
 
   /**
@@ -128,43 +126,37 @@ public class JobExecutionException extends SchedulerException
   {
     super (msg);
 
-    refire = refireImmediately;
+    m_bRefire = refireImmediately;
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   public void setRefireImmediately (final boolean refire)
   {
-    this.refire = refire;
+    m_bRefire = refire;
   }
 
   public boolean refireImmediately ()
   {
-    return refire;
+    return m_bRefire;
   }
 
   public void setUnscheduleFiringTrigger (final boolean unscheduleTrigg)
   {
-    this.unscheduleTrigg = unscheduleTrigg;
+    m_bUnscheduleTrigg = unscheduleTrigg;
   }
 
   public boolean unscheduleFiringTrigger ()
   {
-    return unscheduleTrigg;
+    return m_bUnscheduleTrigg;
   }
 
   public void setUnscheduleAllTriggers (final boolean unscheduleAllTriggs)
   {
-    this.unscheduleAllTriggs = unscheduleAllTriggs;
+    m_bUnscheduleAllTriggs = unscheduleAllTriggs;
   }
 
   public boolean unscheduleAllTriggers ()
   {
-    return unscheduleAllTriggs;
+    return m_bUnscheduleAllTriggs;
   }
 
 }
