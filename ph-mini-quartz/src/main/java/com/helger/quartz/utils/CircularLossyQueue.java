@@ -21,6 +21,8 @@ package com.helger.quartz.utils;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.annotation.Nonnull;
+
 /**
  * An implementation of a CircularQueue data-structure. When the number of items
  * added exceeds the maximum capacity, items that were added first are lost.
@@ -40,6 +42,7 @@ public class CircularLossyQueue <T>
    * Constructs the circular queue with the specified capacity
    *
    * @param size
+   *        must be &gt; 0
    */
   @SuppressWarnings ("unchecked")
   public CircularLossyQueue (final int size)
@@ -54,6 +57,7 @@ public class CircularLossyQueue <T>
    * Adds a new item
    *
    * @param newVal
+   *        value to push
    */
   public void push (final T newVal)
   {
@@ -62,22 +66,19 @@ public class CircularLossyQueue <T>
   }
 
   /**
-   * Returns an array of the current elements in the queue. The order of
-   * elements is in reverse order of the order items were added.
+   * Returns an array of the current elements in the queue. The order of elements
+   * is in reverse order of the order items were added.
    *
    * @param type
+   *        destination
    * @return An array containing the current elements in the queue. The first
-   *         element of the array is the tail of the queue and the last element
-   *         is the head of the queue
+   *         element of the array is the tail of the queue and the last element is
+   *         the head of the queue
    */
-  public T [] toArray (final T [] type)
+  public T [] toArray (@Nonnull final T [] type)
   {
-    System.getProperties ();
-
     if (type.length > m_nMaxSize)
-    {
       throw new IllegalArgumentException ("Size of array passed in cannot be greater than " + m_nMaxSize);
-    }
 
     final int curIndex = _getCurrentIndex ();
     for (int k = 0; k < type.length; k++)

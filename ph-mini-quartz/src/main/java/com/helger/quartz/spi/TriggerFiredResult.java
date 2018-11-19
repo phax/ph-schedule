@@ -20,31 +20,37 @@ package com.helger.quartz.spi;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 /**
  * @author lorban
  */
 public class TriggerFiredResult implements Serializable
 {
-  private TriggerFiredBundle triggerFiredBundle;
-  private Exception exception;
+  private final TriggerFiredBundle m_aTriggerFiredBundle;
+  private final Exception m_aException;
 
-  public TriggerFiredResult (final TriggerFiredBundle triggerFiredBundle)
+  public TriggerFiredResult (@Nullable final TriggerFiredBundle triggerFiredBundle)
   {
-    this.triggerFiredBundle = triggerFiredBundle;
+    m_aTriggerFiredBundle = triggerFiredBundle;
+    m_aException = null;
   }
 
-  public TriggerFiredResult (final Exception exception)
+  public TriggerFiredResult (@Nullable final Exception exception)
   {
-    this.exception = exception;
+    m_aTriggerFiredBundle = null;
+    m_aException = exception;
   }
 
+  @Nullable
   public TriggerFiredBundle getTriggerFiredBundle ()
   {
-    return triggerFiredBundle;
+    return m_aTriggerFiredBundle;
   }
 
+  @Nullable
   public Exception getException ()
   {
-    return exception;
+    return m_aException;
   }
 }

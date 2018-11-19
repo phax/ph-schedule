@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
@@ -29,37 +32,33 @@ import com.helger.quartz.utils.Key;
  */
 public class AndMatcher <T extends Key <T>> implements IMatcher <T>
 {
-  private final IMatcher <T> leftOperand;
-  private final IMatcher <T> rightOperand;
+  private final IMatcher <T> m_aLeftOperand;
+  private final IMatcher <T> m_aRightOperand;
 
-  public AndMatcher (final IMatcher <T> leftOperand, final IMatcher <T> rightOperand)
+  public AndMatcher (@Nonnull final IMatcher <T> leftOperand, @Nonnull final IMatcher <T> rightOperand)
   {
-    if (leftOperand == null || rightOperand == null)
-      throw new IllegalArgumentException ("Two non-null operands required!");
+    ValueEnforcer.notNull (leftOperand, "LeftOperand");
+    ValueEnforcer.notNull (rightOperand, "RightOperand");
 
-    this.leftOperand = leftOperand;
-    this.rightOperand = rightOperand;
+    this.m_aLeftOperand = leftOperand;
+    this.m_aRightOperand = rightOperand;
   }
 
   public boolean isMatch (final T key)
   {
-    return leftOperand.isMatch (key) && rightOperand.isMatch (key);
+    return m_aLeftOperand.isMatch (key) && m_aRightOperand.isMatch (key);
   }
 
+  @Nonnull
   public IMatcher <T> getLeftOperand ()
   {
-    return leftOperand;
+    return m_aLeftOperand;
   }
 
+  @Nonnull
   public IMatcher <T> getRightOperand ()
   {
-    return rightOperand;
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return new HashCodeGenerator (this).append (leftOperand).append (rightOperand).getHashCode ();
+    return m_aRightOperand;
   }
 
   @Override
@@ -70,6 +69,12 @@ public class AndMatcher <T extends Key <T>> implements IMatcher <T>
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final AndMatcher <?> other = (AndMatcher <?>) o;
-    return leftOperand.equals (other.leftOperand) && rightOperand.equals (other.rightOperand);
+    return m_aLeftOperand.equals (other.m_aLeftOperand) && m_aRightOperand.equals (other.m_aRightOperand);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aLeftOperand).append (m_aRightOperand).getHashCode ();
   }
 }

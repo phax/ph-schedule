@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
@@ -48,9 +49,8 @@ import com.helger.quartz.TimeOfDay;
  * time intervals.
  * <p>
  * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) seconds,
- * minutes or hours (see
- * {@link #setRepeatIntervalUnit(com.helger.quartz.DateBuilder.EIntervalUnit)})
- * during a given time window on specified days of the week.
+ * minutes or hours (see {@link #setRepeatIntervalUnit(EIntervalUnit)}) during a
+ * given time window on specified days of the week.
  * </p>
  * <p>
  * For example#1, a trigger can be set to fire every 72 minutes between 8:00 and
@@ -99,8 +99,9 @@ import com.helger.quartz.TimeOfDay;
  * @author James House
  * @author Zemian Deng saltnlight5@gmail.com
  */
-public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeIntervalTrigger>
-                                      implements IDailyTimeIntervalTrigger, ICoreTrigger
+public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeIntervalTrigger> implements
+                                      IDailyTimeIntervalTrigger,
+                                      ICoreTrigger
 {
   private Date m_aStartTime;
   private Date m_aEndTime;
@@ -128,8 +129,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    * </p>
    *
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
-   *        occurring.
+   *        The <code>TimeOfDay</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
@@ -156,8 +156,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    * </p>
    *
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
-   *        occurring.
+   *        The <code>TimeOfDay</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
@@ -191,8 +190,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        A <code>Date</code> set to the time for the <code>Trigger</code> to
    *        quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
-   *        occurring.
+   *        The <code>TimeOfDay</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
@@ -229,8 +227,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        A <code>Date</code> set to the time for the <code>Trigger</code> to
    *        quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
-   *        occurring.
+   *        The <code>TimeOfDay</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
@@ -276,8 +273,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    *        A <code>Date</code> set to the time for the <code>Trigger</code> to
    *        quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
-   *        occurring.
+   *        The <code>TimeOfDay</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>TimeOfDay</code> that the repeating should stop occurring.
    * @param intervalUnit
@@ -319,8 +315,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   /**
    * <p>
-   * Get the time at which the <code>DailyTimeIntervalTrigger</code> should
-   * occur. It defaults to the getStartTimeOfDay of current day.
+   * Get the time at which the <code>DailyTimeIntervalTrigger</code> should occur.
+   * It defaults to the getStartTimeOfDay of current day.
    * </p>
    */
   @Override
@@ -335,8 +331,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   /**
    * <p>
-   * Set the time at which the <code>DailyTimeIntervalTrigger</code> should
-   * occur.
+   * Set the time at which the <code>DailyTimeIntervalTrigger</code> should occur.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -427,8 +422,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   /**
    * <p>
    * set the the time interval that will be added to the
-   * <code>DailyTimeIntervalTrigger</code>'s fire time (in the set repeat
-   * interval unit) in order to calculate the time of the next trigger repeat.
+   * <code>DailyTimeIntervalTrigger</code>'s fire time (in the set repeat interval
+   * unit) in order to calculate the time of the next trigger repeat.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -447,8 +442,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   /**
    * <p>
-   * Set the number of times the <code>DailyTimeIntervalTrigger</code> has
-   * already fired.
+   * Set the number of times the <code>DailyTimeIntervalTrigger</code> has already
+   * fired.
    * </p>
    */
   public void setTimesTriggered (final int timesTriggered)
@@ -589,17 +584,17 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   /**
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added
-   * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added to
+   * the scheduler, in order to have the <code>Trigger</code> compute its first
+   * fire time, based on any associated calendar.
    * </p>
    * <p>
    * After this method has been called, <code>getNextFireTime()</code> should
    * return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by
-   *         the scheduler, which is also the same value
+   * @return the first time at which the <code>Trigger</code> will be fired by the
+   *         scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
    */
@@ -637,12 +632,12 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   /**
    * <p>
-   * Returns the next time at which the <code>Trigger</code> is scheduled to
-   * fire. If the trigger will not fire again, <code>null</code> will be
-   * returned. Note that the time returned can possibly be in the past, if the
-   * time that was computed for the trigger to next fire has already arrived,
-   * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).
+   * Returns the next time at which the <code>Trigger</code> is scheduled to fire.
+   * If the trigger will not fire again, <code>null</code> will be returned. Note
+   * that the time returned can possibly be in the past, if the time that was
+   * computed for the trigger to next fire has already arrived, but the scheduler
+   * has not yet been able to fire the trigger (which would likely be due to lack
+   * of resources e.g. threads).
    * </p>
    * <p>
    * The value returned is not guaranteed to be valid until after the
@@ -657,9 +652,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   /**
    * <p>
-   * Returns the previous time at which the
-   * <code>DailyTimeIntervalTrigger</code> fired. If the trigger has not yet
-   * fired, <code>null</code> will be returned.
+   * Returns the previous time at which the <code>DailyTimeIntervalTrigger</code>
+   * fired. If the trigger has not yet fired, <code>null</code> will be returned.
    */
   @Override
   public Date getPreviousFireTime ()
@@ -697,15 +691,16 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   /**
    * <p>
-   * Returns the next time at which the <code>DailyTimeIntervalTrigger</code>
-   * will fire, after the given time. If the trigger will not fire after the
-   * given time, <code>null</code> will be returned.
+   * Returns the next time at which the <code>DailyTimeIntervalTrigger</code> will
+   * fire, after the given time. If the trigger will not fire after the given
+   * time, <code>null</code> will be returned.
    * </p>
    *
    * @param aAfterTime
+   *        after time
    */
   @Override
-  public Date getFireTimeAfter (final Date aAfterTime)
+  public Date getFireTimeAfter (@Nullable final Date aAfterTime)
   {
     // Check if trigger has completed or not.
     if (m_bComplete)
@@ -814,16 +809,16 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   }
 
   /**
-   * Given fireTime time determine if it is on a valid day of week. If so,
-   * simply return it unaltered, if not, advance to the next valid week day, and
-   * set the time of day to the start time of day
+   * Given fireTime time determine if it is on a valid day of week. If so, simply
+   * return it unaltered, if not, advance to the next valid week day, and set the
+   * time of day to the start time of day
    *
    * @param aFireTime
    *        - given next fireTime.
    * @param forceToAdvanceNextDay
-   *        - flag to whether to advance day without check existing week day.
-   *        This scenario can happen when a caller determine fireTime has passed
-   *        the endTimeOfDay that fireTime should move to next day anyway.
+   *        - flag to whether to advance day without check existing week day. This
+   *        scenario can happen when a caller determine fireTime has passed the
+   *        endTimeOfDay that fireTime should move to next day anyway.
    * @return a next day fireTime.
    */
   private Date _advanceToNextDayOfWeekIfNecessary (final Date aFireTime, final boolean forceToAdvanceNextDay)
@@ -913,8 +908,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
 
   /**
    * <p>
-   * Validates whether the properties of the <code>JobDetail</code> are valid
-   * for submission into a <code>Scheduler</code>.
+   * Validates whether the properties of the <code>JobDetail</code> are valid for
+   * submission into a <code>Scheduler</code>.
    *
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.

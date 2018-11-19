@@ -34,6 +34,7 @@ public class CounterConfig
    * Creates a config with the initial value
    *
    * @param initialValue
+   *        initial value
    */
   public CounterConfig (final long initialValue)
   {

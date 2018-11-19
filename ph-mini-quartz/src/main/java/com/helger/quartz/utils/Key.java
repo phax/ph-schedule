@@ -21,7 +21,11 @@ package com.helger.quartz.utils;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.commons.compare.IComparable;
+import com.helger.commons.hashcode.HashCodeGenerator;
 
 /**
  * <p>
@@ -37,8 +41,8 @@ public class Key <T> implements IComparable <Key <T>>
    */
   public static final String DEFAULT_GROUP = "DEFAULT";
 
-  private final String name;
-  private final String group;
+  private final String m_sName;
+  private final String m_sGroup;
 
   /**
    * Construct a new key with the given name and group.
@@ -48,39 +52,48 @@ public class Key <T> implements IComparable <Key <T>>
    * @param group
    *        the group
    */
-  public Key (final String name, final String group)
+  public Key (@Nonnull final String name, @Nullable final String group)
   {
     if (name == null)
       throw new IllegalArgumentException ("Name cannot be null.");
-    this.name = name;
+    m_sName = name;
     if (group != null)
-      this.group = group;
+      m_sGroup = group;
     else
-      this.group = DEFAULT_GROUP;
+      m_sGroup = DEFAULT_GROUP;
   }
 
   /**
-   * <p>
    * Get the name portion of the key.
-   * </p>
    *
    * @return the name
    */
+  @Nonnull
   public String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   /**
-   * <p>
    * Get the group portion of the key.
-   * </p>
    *
    * @return the group
    */
+  @Nonnull
   public String getGroup ()
   {
-    return group;
+    return m_sGroup;
+  }
+
+  /**
+   * Return the string representation of the key. The format will be:
+   * &lt;group&gt;.&lt;name&gt;.
+   *
+   * @return the string representation of the key
+   */
+  public String getAsString ()
+  {
+    return getGroup () + '.' + getName ();
   }
 
   /**
@@ -94,17 +107,13 @@ public class Key <T> implements IComparable <Key <T>>
   @Override
   public String toString ()
   {
-    return getGroup () + '.' + getName ();
+    return getAsString ();
   }
 
   @Override
   public int hashCode ()
   {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((group == null) ? 0 : group.hashCode ());
-    result = prime * result + ((name == null) ? 0 : name.hashCode ());
-    return result;
+    return new HashCodeGenerator (this).append (m_sName).append (m_sGroup).getHashCode ();
   }
 
   @Override
@@ -112,50 +121,31 @@ public class Key <T> implements IComparable <Key <T>>
   {
     if (this == obj)
       return true;
-    if (obj == null)
+    if (obj == null || !getClass ().equals (obj.getClass ()))
       return false;
-    if (getClass () != obj.getClass ())
-      return false;
-    @SuppressWarnings ("unchecked")
-    final Key <T> other = (Key <T>) obj;
-    if (group == null)
-    {
-      if (other.group != null)
-        return false;
-    }
-    else
-      if (!group.equals (other.group))
-        return false;
-    if (name == null)
-    {
-      if (other.name != null)
-        return false;
-    }
-    else
-      if (!name.equals (other.name))
-        return false;
-    return true;
+    final Key <?> rhs = (Key <?>) obj;
+    return m_sName.equals (rhs.m_sName) && m_sGroup.equals (rhs.m_sGroup);
   }
 
   public int compareTo (final Key <T> o)
   {
-    if (group.equals (DEFAULT_GROUP) && !o.group.equals (DEFAULT_GROUP))
+    if (m_sGroup.equals (DEFAULT_GROUP) && !o.m_sGroup.equals (DEFAULT_GROUP))
       return -1;
-    if (!group.equals (DEFAULT_GROUP) && o.group.equals (DEFAULT_GROUP))
+    if (!m_sGroup.equals (DEFAULT_GROUP) && o.m_sGroup.equals (DEFAULT_GROUP))
       return 1;
 
-    final int r = group.compareTo (o.getGroup ());
-    if (r != 0)
-      return r;
-
-    return name.compareTo (o.getName ());
+    int ret = m_sGroup.compareTo (o.getGroup ());
+    if (ret == 0)
+      ret = m_sName.compareTo (o.getName ());
+    return ret;
   }
 
+  @Nonnull
   public static String createUniqueName (final String sGroup)
   {
     final String n1 = UUID.randomUUID ().toString ();
-    final String n2 = UUID.nameUUIDFromBytes ((sGroup != null ? sGroup : DEFAULT_GROUP)
-                                                                                     .getBytes (StandardCharsets.ISO_8859_1))
+    final String n2 = UUID.nameUUIDFromBytes ((sGroup != null ? sGroup
+                                                              : DEFAULT_GROUP).getBytes (StandardCharsets.ISO_8859_1))
                           .toString ();
 
     return n2.substring (24) + "-" + n1;

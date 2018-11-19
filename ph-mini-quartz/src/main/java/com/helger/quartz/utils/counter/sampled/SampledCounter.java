@@ -20,6 +20,8 @@ package com.helger.quartz.utils.counter.sampled;
 
 import java.util.TimerTask;
 
+import javax.annotation.Nonnull;
+
 import com.helger.quartz.utils.CircularLossyQueue;
 import com.helger.quartz.utils.counter.Counter;
 
@@ -49,8 +51,9 @@ public class SampledCounter extends Counter implements ISampledCounter
    * Constructor accepting a {@link SampledCounterConfig}
    *
    * @param config
+   *        config
    */
-  public SampledCounter (final SampledCounterConfig config)
+  public SampledCounter (@Nonnull final SampledCounterConfig config)
   {
     super (config.getInitialValue ());
 

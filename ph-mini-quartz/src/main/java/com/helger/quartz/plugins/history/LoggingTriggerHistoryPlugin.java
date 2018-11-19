@@ -219,10 +219,10 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  */
 public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerListener
 {
-  private String name;
-  private String triggerFiredMessage = "Trigger {1}.{0} fired job {6}.{5} at: {4, date, HH:mm:ss MM/dd/yyyy}";
-  private String triggerMisfiredMessage = "Trigger {1}.{0} misfired job {6}.{5}  at: {4, date, HH:mm:ss MM/dd/yyyy}.  Should have fired at: {3, date, HH:mm:ss MM/dd/yyyy}";
-  private String triggerCompleteMessage = "Trigger {1}.{0} completed firing job {6}.{5} at {4, date, HH:mm:ss MM/dd/yyyy} with resulting trigger instruction code: {9}";
+  private String m_sName;
+  private String m_sTriggerFiredMessage = "Trigger {1}.{0} fired job {6}.{5} at: {4, date, HH:mm:ss MM/dd/yyyy}";
+  private String m_sTriggerMisfiredMessage = "Trigger {1}.{0} misfired job {6}.{5}  at: {4, date, HH:mm:ss MM/dd/yyyy}.  Should have fired at: {3, date, HH:mm:ss MM/dd/yyyy}";
+  private String m_sTriggerCompleteMessage = "Trigger {1}.{0} completed firing job {6}.{5} at {4, date, HH:mm:ss MM/dd/yyyy} with resulting trigger instruction code: {9}";
 
   private static final Logger log = LoggerFactory.getLogger (LoggingTriggerHistoryPlugin.class);
 
@@ -241,7 +241,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public String getTriggerCompleteMessage ()
   {
-    return triggerCompleteMessage;
+    return m_sTriggerCompleteMessage;
   }
 
   /**
@@ -251,7 +251,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public String getTriggerFiredMessage ()
   {
-    return triggerFiredMessage;
+    return m_sTriggerFiredMessage;
   }
 
   /**
@@ -261,7 +261,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public String getTriggerMisfiredMessage ()
   {
-    return triggerMisfiredMessage;
+    return m_sTriggerMisfiredMessage;
   }
 
   /**
@@ -272,7 +272,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public void setTriggerCompleteMessage (final String triggerCompleteMessage)
   {
-    this.triggerCompleteMessage = triggerCompleteMessage;
+    this.m_sTriggerCompleteMessage = triggerCompleteMessage;
   }
 
   /**
@@ -283,7 +283,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public void setTriggerFiredMessage (final String triggerFiredMessage)
   {
-    this.triggerFiredMessage = triggerFiredMessage;
+    this.m_sTriggerFiredMessage = triggerFiredMessage;
   }
 
   /**
@@ -294,7 +294,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public void setTriggerMisfiredMessage (final String triggerMisfiredMessage)
   {
-    this.triggerMisfiredMessage = triggerMisfiredMessage;
+    this.m_sTriggerMisfiredMessage = triggerMisfiredMessage;
   }
 
   /*
@@ -316,7 +316,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
                           final IScheduler scheduler,
                           final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
-    this.name = pname;
+    this.m_sName = pname;
 
     scheduler.getListenerManager ().addTriggerListener (this, EverythingMatcher.allTriggers ());
   }
@@ -346,7 +346,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
 
   public String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)

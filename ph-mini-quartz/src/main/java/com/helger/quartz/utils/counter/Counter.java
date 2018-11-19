@@ -43,55 +43,38 @@ public class Counter implements ICounter, Serializable
    * Constructor with initial value
    *
    * @param initialValue
+   *        initial value
    */
   public Counter (final long initialValue)
   {
     m_aValue = new AtomicLong (initialValue);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public long increment ()
   {
     return m_aValue.incrementAndGet ();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public long decrement ()
   {
     return m_aValue.decrementAndGet ();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public long getAndSet (final long newValue)
   {
     return m_aValue.getAndSet (newValue);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public long getValue ()
   {
     return m_aValue.get ();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public long increment (final long amount)
   {
     return m_aValue.addAndGet (amount);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public void setValue (final long newValue)
   {
     m_aValue.set (newValue);

@@ -277,12 +277,13 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  */
 public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
 {
-  private String name;
-  private String jobToBeFiredMessage = "Job {1}.{0} fired (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}";
-  private String jobSuccessMessage = "Job {1}.{0} execution complete at {2, date, HH:mm:ss MM/dd/yyyy} and reports: {8}";
-  private String jobFailedMessage = "Job {1}.{0} execution failed at {2, date, HH:mm:ss MM/dd/yyyy} and reports: {8}";
-  private String jobWasVetoedMessage = "Job {1}.{0} was vetoed.  It was to be fired (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}";
   private static final Logger log = LoggerFactory.getLogger (LoggingJobHistoryPlugin.class);
+
+  private String m_sName;
+  private String m_sJobToBeFiredMessage = "Job {1}.{0} fired (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}";
+  private String m_sJobSuccessMessage = "Job {1}.{0} execution complete at {2, date, HH:mm:ss MM/dd/yyyy} and reports: {8}";
+  private String m_sJobFailedMessage = "Job {1}.{0} execution failed at {2, date, HH:mm:ss MM/dd/yyyy} and reports: {8}";
+  private String m_sJobWasVetoedMessage = "Job {1}.{0} was vetoed.  It was to be fired (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}";
 
   public LoggingJobHistoryPlugin ()
   {}
@@ -298,7 +299,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
   public String getJobSuccessMessage ()
   {
-    return jobSuccessMessage;
+    return m_sJobSuccessMessage;
   }
 
   /**
@@ -306,7 +307,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
   public String getJobFailedMessage ()
   {
-    return jobFailedMessage;
+    return m_sJobFailedMessage;
   }
 
   /**
@@ -314,7 +315,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
   public String getJobToBeFiredMessage ()
   {
-    return jobToBeFiredMessage;
+    return m_sJobToBeFiredMessage;
   }
 
   /**
@@ -326,7 +327,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
   public void setJobSuccessMessage (final String jobSuccessMessage)
   {
-    this.jobSuccessMessage = jobSuccessMessage;
+    this.m_sJobSuccessMessage = jobSuccessMessage;
   }
 
   /**
@@ -337,7 +338,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
   public void setJobFailedMessage (final String jobFailedMessage)
   {
-    this.jobFailedMessage = jobFailedMessage;
+    this.m_sJobFailedMessage = jobFailedMessage;
   }
 
   /**
@@ -348,7 +349,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
   public void setJobToBeFiredMessage (final String jobToBeFiredMessage)
   {
-    this.jobToBeFiredMessage = jobToBeFiredMessage;
+    this.m_sJobToBeFiredMessage = jobToBeFiredMessage;
   }
 
   /**
@@ -357,7 +358,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
   public String getJobWasVetoedMessage ()
   {
-    return jobWasVetoedMessage;
+    return m_sJobWasVetoedMessage;
   }
 
   /**
@@ -369,7 +370,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
   public void setJobWasVetoedMessage (final String jobWasVetoedMessage)
   {
-    this.jobWasVetoedMessage = jobWasVetoedMessage;
+    this.m_sJobWasVetoedMessage = jobWasVetoedMessage;
   }
 
   /**
@@ -385,7 +386,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
                           final IScheduler scheduler,
                           final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
-    this.name = pname;
+    this.m_sName = pname;
     scheduler.getListenerManager ().addJobListener (this, EverythingMatcher.allJobs ());
   }
 
@@ -412,15 +413,15 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    */
 
   /*
-   * Object[] arguments = { new Integer(7), new
-   * Date(System.currentTimeMillis()), "a disturbance in the Force" }; String
-   * result = MessageFormat.format( "At {1,time} on {1,date}, there was {2} on
-   * planet {0,number,integer}.", arguments);
+   * Object[] arguments = { new Integer(7), new Date(System.currentTimeMillis()),
+   * "a disturbance in the Force" }; String result = MessageFormat.format( "At
+   * {1,time} on {1,date}, there was {2} on planet {0,number,integer}.",
+   * arguments);
    */
 
   public String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   /**

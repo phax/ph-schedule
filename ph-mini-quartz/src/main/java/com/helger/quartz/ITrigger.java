@@ -54,7 +54,7 @@ import com.helger.commons.compare.IComparator;
 @MustImplementEqualsAndHashcode
 public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
 {
-  enum ETriggerState
+  public enum ETriggerState
   {
     NONE,
     NORMAL,
@@ -72,15 +72,15 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * <p>
    * <code>RE_EXECUTE_JOB</code> Instructs the <code>{@link IScheduler}</code>
    * that the <code>{@link ITrigger}</code> wants the
-   * <code>{@link com.helger.quartz.IJobDetail}</code> to re-execute
-   * immediately. If not in a 'RECOVERING' or 'FAILED_OVER' situation, the
-   * execution context will be re-used (giving the <code>Job</code> the ability
-   * to 'see' anything placed in the context by its last execution).
+   * <code>{@link com.helger.quartz.IJobDetail}</code> to re-execute immediately.
+   * If not in a 'RECOVERING' or 'FAILED_OVER' situation, the execution context
+   * will be re-used (giving the <code>Job</code> the ability to 'see' anything
+   * placed in the context by its last execution).
    * </p>
    * <p>
    * <code>SET_TRIGGER_COMPLETE</code> Instructs the
-   * <code>{@link IScheduler}</code> that the <code>{@link ITrigger}</code>
-   * should be put in the <code>COMPLETE</code> state.
+   * <code>{@link IScheduler}</code> that the <code>{@link ITrigger}</code> should
+   * be put in the <code>COMPLETE</code> state.
    * </p>
    * <p>
    * <code>DELETE_TRIGGER</code> Instructs the <code>{@link IScheduler}</code>
@@ -89,14 +89,14 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * <p>
    * <code>SET_ALL_JOB_TRIGGERS_COMPLETE</code> Instructs the
    * <code>{@link IScheduler}</code> that all <code>Trigger</code>s referencing
-   * the same <code>{@link com.helger.quartz.IJobDetail}</code> as this one
-   * should be put in the <code>COMPLETE</code> state.
+   * the same <code>{@link com.helger.quartz.IJobDetail}</code> as this one should
+   * be put in the <code>COMPLETE</code> state.
    * </p>
    * <p>
-   * <code>SET_TRIGGER_ERROR</code> Instructs the
-   * <code>{@link IScheduler}</code> that all <code>Trigger</code>s referencing
-   * the same <code>{@link com.helger.quartz.IJobDetail}</code> as this one
-   * should be put in the <code>ERROR</code> state.
+   * <code>SET_TRIGGER_ERROR</code> Instructs the <code>{@link IScheduler}</code>
+   * that all <code>Trigger</code>s referencing the same
+   * <code>{@link com.helger.quartz.IJobDetail}</code> as this one should be put
+   * in the <code>ERROR</code> state.
    * </p>
    * <p>
    * <code>SET_ALL_JOB_TRIGGERS_ERROR</code> Instructs the
@@ -104,7 +104,7 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * in the <code>ERROR</code> state.
    * </p>
    */
-  enum ECompletedExecutionInstruction
+  public enum ECompletedExecutionInstruction
   {
     NOOP,
     RE_EXECUTE_JOB,
@@ -116,10 +116,10 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
   }
 
   /**
-   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
-   * situation, the <code>updateAfterMisfire()</code> method will be called on
-   * the <code>Trigger</code> to determine the mis-fire instruction, which logic
-   * will be trigger-implementation-dependent.
+   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire situation,
+   * the <code>updateAfterMisfire()</code> method will be called on the
+   * <code>Trigger</code> to determine the mis-fire instruction, which logic will
+   * be trigger-implementation-dependent.
    * <p>
    * In order to see if this instruction fits your needs, you should look at the
    * documentation for the <code>getSmartMisfirePolicy()</code> method on the
@@ -130,9 +130,9 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
 
   /**
    * Instructs the <code>{@link IScheduler}</code> that the <code>Trigger</code>
-   * will never be evaluated for a misfire situation, and that the scheduler
-   * will simply try to fire it as soon as it can, and then update the Trigger
-   * as if it had fired at the proper time.
+   * will never be evaluated for a misfire situation, and that the scheduler will
+   * simply try to fire it as soon as it can, and then update the Trigger as if it
+   * had fired at the proper time.
    * <p>
    * NOTE: if a trigger uses this instruction, and it has missed several of its
    * scheduled firings, then several rapid firings may occur as the trigger
@@ -179,9 +179,9 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
   JobDataMap getJobDataMap ();
 
   /**
-   * The priority of a <code>Trigger</code> acts as a tiebreaker such that if
-   * two <code>Trigger</code>s have the same scheduled fire time, then the one
-   * with the higher priority will get first access to a worker thread.
+   * The priority of a <code>Trigger</code> acts as a tiebreaker such that if two
+   * <code>Trigger</code>s have the same scheduled fire time, then the one with
+   * the higher priority will get first access to a worker thread.
    * <p>
    * If not explicitly set, the default value is <code>5</code>.
    * </p>
@@ -191,8 +191,8 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
   int getPriority ();
 
   /**
-   * Used by the <code>{@link IScheduler}</code> to determine whether or not it
-   * is possible for this <code>Trigger</code> to fire again.
+   * Used by the <code>{@link IScheduler}</code> to determine whether or not it is
+   * possible for this <code>Trigger</code> to fire again.
    * <p>
    * If the returned value is <code>false</code> then the <code>Scheduler</code>
    * may remove the <code>Trigger</code> from the
@@ -208,20 +208,20 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
 
   /**
    * Get the time at which the <code>Trigger</code> should quit repeating -
-   * regardless of any remaining repeats (based on the trigger's particular
-   * repeat settings).
+   * regardless of any remaining repeats (based on the trigger's particular repeat
+   * settings).
    *
    * @see #getFinalFireTime()
    */
   Date getEndTime ();
 
   /**
-   * Returns the next time at which the <code>Trigger</code> is scheduled to
-   * fire. If the trigger will not fire again, <code>null</code> will be
-   * returned. Note that the time returned can possibly be in the past, if the
-   * time that was computed for the trigger to next fire has already arrived,
-   * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).
+   * Returns the next time at which the <code>Trigger</code> is scheduled to fire.
+   * If the trigger will not fire again, <code>null</code> will be returned. Note
+   * that the time returned can possibly be in the past, if the time that was
+   * computed for the trigger to next fire has already arrived, but the scheduler
+   * has not yet been able to fire the trigger (which would likely be due to lack
+   * of resources e.g. threads).
    * <p>
    * The value returned is not guaranteed to be valid until after the
    * <code>Trigger</code> has been added to the scheduler.
@@ -239,8 +239,8 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
   Date getPreviousFireTime ();
 
   /**
-   * Returns the next time at which the <code>Trigger</code> will fire, after
-   * the given time. If the trigger will not fire after the given time,
+   * Returns the next time at which the <code>Trigger</code> will fire, after the
+   * given time. If the trigger will not fire after the given time,
    * <code>null</code> will be returned.
    */
   Date getFireTimeAfter (Date afterTime);
@@ -258,8 +258,8 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
    * Get the instruction the <code>Scheduler</code> should be given for handling
    * misfire situations for this <code>Trigger</code>- the concrete
    * <code>Trigger</code> type that you are using will have defined a set of
-   * additional <code>MISFIRE_INSTRUCTION_XXX</code> constants that may be set
-   * as this property's value.
+   * additional <code>MISFIRE_INSTRUCTION_XXX</code> constants that may be set as
+   * this property's value.
    * <p>
    * If not explicitly set, the default value is
    * <code>MISFIRE_INSTRUCTION_SMART_POLICY</code>.
@@ -296,9 +296,9 @@ public interface ITrigger extends Serializable, Cloneable, Comparable <ITrigger>
 
   /**
    * <p>
-   * Compare the next fire time of this <code>Trigger</code> to that of another
-   * by comparing their keys, or in other words, sorts them according to the
-   * natural (i.e. alphabetical) order of their keys.
+   * Compare the next fire time of this <code>Trigger</code> to that of another by
+   * comparing their keys, or in other words, sorts them according to the natural
+   * (i.e. alphabetical) order of their keys.
    * </p>
    */
   int compareTo (ITrigger other);

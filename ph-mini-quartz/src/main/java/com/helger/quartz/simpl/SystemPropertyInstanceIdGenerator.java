@@ -18,6 +18,10 @@
  */
 package com.helger.quartz.simpl;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.helger.commons.string.StringHelper;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IInstanceIdGenerator;
 
@@ -35,15 +39,14 @@ import com.helger.quartz.spi.IInstanceIdGenerator;
  */
 public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
 {
-
   /**
    * System property to read the instanceId from
    */
   public static final String SYSTEM_PROPERTY = "org.quartz.scheduler.instanceId";
 
-  private String prepend = null;
-  private String postpend = null;
-  private String systemPropertyName = SYSTEM_PROPERTY;
+  private String m_sPrepend;
+  private String m_sPostpend;
+  private String m_sSystemPropertyName = SYSTEM_PROPERTY;
 
   /**
    * Returns the cluster wide value for this scheduler instance's id, based on a
@@ -59,11 +62,10 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   {
     String property = System.getProperty (getSystemPropertyName ());
     if (property == null)
-    {
       throw new SchedulerException ("No value for '" +
                                     SYSTEM_PROPERTY +
                                     "' system property found, please configure your environment accordingly!");
-    }
+
     if (getPrepend () != null)
       property = getPrepend () + property;
     if (getPostpend () != null)
@@ -73,66 +75,68 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to prepend (add to the beginning) to the instanceId found
-   * in the system property.
+   * A String of text to prepend (add to the beginning) to the instanceId found in
+   * the system property.
    */
+  @Nullable
   public String getPrepend ()
   {
-    return prepend;
+    return m_sPrepend;
   }
 
   /**
-   * A String of text to prepend (add to the beginning) to the instanceId found
-   * in the system property.
+   * A String of text to prepend (add to the beginning) to the instanceId found in
+   * the system property.
    *
    * @param prepend
    *        the value to prepend, or null if none is desired.
    */
-  public void setPrepend (final String prepend)
+  public void setPrepend (@Nullable final String prepend)
   {
-    this.prepend = prepend == null ? null : prepend.trim ();
+    m_sPrepend = StringHelper.trim (prepend);
   }
 
   /**
-   * A String of text to postpend (add to the end) to the instanceId found in
-   * the system property.
+   * A String of text to postpend (add to the end) to the instanceId found in the
+   * system property.
    */
+  @Nullable
   public String getPostpend ()
   {
-    return postpend;
+    return m_sPostpend;
   }
 
   /**
-   * A String of text to postpend (add to the end) to the instanceId found in
-   * the system property.
+   * A String of text to postpend (add to the end) to the instanceId found in the
+   * system property.
    *
    * @param postpend
    *        the value to postpend, or null if none is desired.
    */
-  public void setPostpend (final String postpend)
+  public void setPostpend (@Nullable final String postpend)
   {
-    this.postpend = postpend == null ? null : postpend.trim ();
+    m_sPostpend = StringHelper.trim (postpend);
   }
 
   /**
-   * The name of the system property from which to obtain the instanceId.
-   * Defaults to {@link #SYSTEM_PROPERTY}.
+   * The name of the system property from which to obtain the instanceId. Defaults
+   * to {@link #SYSTEM_PROPERTY}.
    */
+  @Nonnull
   public String getSystemPropertyName ()
   {
-    return systemPropertyName;
+    return m_sSystemPropertyName;
   }
 
   /**
-   * The name of the system property from which to obtain the instanceId.
-   * Defaults to {@link #SYSTEM_PROPERTY}.
+   * The name of the system property from which to obtain the instanceId. Defaults
+   * to {@link #SYSTEM_PROPERTY}.
    *
    * @param systemPropertyName
    *        the system property name
    */
-  public void setSystemPropertyName (final String systemPropertyName)
+  public void setSystemPropertyName (@Nullable final String systemPropertyName)
   {
-    this.systemPropertyName = systemPropertyName == null ? SYSTEM_PROPERTY : systemPropertyName.trim ();
+    this.m_sSystemPropertyName = systemPropertyName == null ? SYSTEM_PROPERTY : systemPropertyName.trim ();
   }
-
 }

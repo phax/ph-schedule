@@ -46,9 +46,8 @@ import com.helger.quartz.TriggerUtils;
  * </p>
  * <p>
  * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) units of
- * calendar time (see
- * {@link #setRepeatIntervalUnit(com.helger.quartz.DateBuilder.EIntervalUnit)})
- * as specified in the trigger's definition. This trigger can achieve schedules
+ * calendar time (see {@link #setRepeatIntervalUnit(EIntervalUnit)}) as
+ * specified in the trigger's definition. This trigger can achieve schedules
  * that are not possible with {@link ISimpleTrigger} (e.g because months are not
  * a fixed number of seconds) or {@link ICronTrigger} (e.g. because "every 5
  * months" is not an even divisor of 12).
@@ -72,21 +71,22 @@ import com.helger.quartz.TriggerUtils;
  * @since 1.7
  * @author James House
  */
-public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalTrigger>
-                                     implements ICalendarIntervalTrigger, ICoreTrigger
+public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalTrigger> implements
+                                     ICalendarIntervalTrigger,
+                                     ICoreTrigger
 {
-  private Date startTime;
-  private Date endTime;
-  private Date nextFireTime;
-  private Date previousFireTime;
-  private int repeatInterval = 0;
-  private EIntervalUnit repeatIntervalUnit = EIntervalUnit.DAY;
-  private TimeZone timeZone;
+  private Date m_aStartTime;
+  private Date m_aEndTime;
+  private Date m_aNextFireTime;
+  private Date m_aPreviousFireTime;
+  private int m_nRepeatInterval = 0;
+  private EIntervalUnit m_eRepeatIntervalUnit = EIntervalUnit.DAY;
+  private TimeZone m_aTimeZone;
   // false is backward-compatible with behavior
-  private boolean preserveHourOfDayAcrossDaylightSavings = false;
-  private boolean skipDayIfHourDoesNotExist = false;
-  private int timesTriggered = 0;
-  private final boolean complete = false;
+  private boolean m_bPreserveHourOfDayAcrossDaylightSavings = false;
+  private boolean m_bSkipDayIfHourDoesNotExist = false;
+  private int m_nTimesTriggered = 0;
+  private final boolean m_bComplete = false;
 
   /**
    * <p>
@@ -125,8 +125,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given
-   * time, and repeat at the the given interval until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given time,
+   * and repeat at the the given interval until the given end time.
    * </p>
    *
    * @param startTime
@@ -151,8 +151,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given
-   * time, and repeat at the the given interval until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given time,
+   * and repeat at the the given interval until the given end time.
    * </p>
    *
    * @param startTime
@@ -183,9 +183,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given
-   * time, fire the identified <code>Job</code> and repeat at the the given
-   * interval until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given time,
+   * fire the identified <code>Job</code> and repeat at the the given interval
+   * until the given end time.
    * </p>
    *
    * @param startTime
@@ -230,9 +230,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   @Override
   public Date getStartTime ()
   {
-    if (startTime == null)
-      startTime = new Date ();
-    return startTime;
+    if (m_aStartTime == null)
+      m_aStartTime = new Date ();
+    return m_aStartTime;
   }
 
   /**
@@ -257,7 +257,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
       throw new IllegalArgumentException ("End time cannot be before start time");
     }
 
-    this.startTime = startTime;
+    this.m_aStartTime = startTime;
   }
 
   /**
@@ -271,7 +271,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   @Override
   public Date getEndTime ()
   {
-    return endTime;
+    return m_aEndTime;
   }
 
   /**
@@ -292,12 +292,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
       throw new IllegalArgumentException ("End time cannot be before start time");
     }
 
-    this.endTime = endTime;
+    this.m_aEndTime = endTime;
   }
 
   public EIntervalUnit getRepeatIntervalUnit ()
   {
-    return repeatIntervalUnit;
+    return m_eRepeatIntervalUnit;
   }
 
   /**
@@ -307,12 +307,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
   {
-    this.repeatIntervalUnit = intervalUnit;
+    this.m_eRepeatIntervalUnit = intervalUnit;
   }
 
   public int getRepeatInterval ()
   {
-    return repeatInterval;
+    return m_nRepeatInterval;
   }
 
   /**
@@ -330,17 +330,17 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     if (repeatInterval < 0)
       throw new IllegalArgumentException ("Repeat interval must be >= 0");
 
-    this.repeatInterval = repeatInterval;
+    this.m_nRepeatInterval = repeatInterval;
   }
 
   public TimeZone getTimeZone ()
   {
 
-    if (timeZone == null)
+    if (m_aTimeZone == null)
     {
-      timeZone = TimeZone.getDefault ();
+      m_aTimeZone = TimeZone.getDefault ();
     }
-    return timeZone;
+    return m_aTimeZone;
   }
 
   /**
@@ -354,27 +354,26 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setTimeZone (final TimeZone timeZone)
   {
-    this.timeZone = timeZone;
+    this.m_aTimeZone = timeZone;
   }
 
   /**
-   * If intervals are a day or greater, this property (set to true) will cause
-   * the firing of the trigger to always occur at the same time of day, (the
-   * time of day of the startTime) regardless of daylight saving time
-   * transitions. Default value is false.
+   * If intervals are a day or greater, this property (set to true) will cause the
+   * firing of the trigger to always occur at the same time of day, (the time of
+   * day of the startTime) regardless of daylight saving time transitions. Default
+   * value is false.
    * <p>
-   * For example, without the property set, your trigger may have a start time
-   * of 9:00 am on March 1st, and a repeat interval of 2 days. But after the
-   * daylight saving transition occurs, the trigger may start firing at 8:00 am
-   * every other day.
+   * For example, without the property set, your trigger may have a start time of
+   * 9:00 am on March 1st, and a repeat interval of 2 days. But after the daylight
+   * saving transition occurs, the trigger may start firing at 8:00 am every other
+   * day.
    * </p>
    * <p>
-   * If however, the time of day does not exist on a given day to fire (e.g.
-   * 2:00 am in the United States on the days of daylight saving transition),
-   * the trigger will go ahead and fire one hour off on that day, and then
-   * resume the normal hour on other days. If you wish for the trigger to never
-   * fire at the "wrong" hour, then you should set the property
-   * skipDayIfHourDoesNotExist.
+   * If however, the time of day does not exist on a given day to fire (e.g. 2:00
+   * am in the United States on the days of daylight saving transition), the
+   * trigger will go ahead and fire one hour off on that day, and then resume the
+   * normal hour on other days. If you wish for the trigger to never fire at the
+   * "wrong" hour, then you should set the property skipDayIfHourDoesNotExist.
    * </p>
    *
    * @see #isSkipDayIfHourDoesNotExist()
@@ -383,45 +382,45 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public boolean isPreserveHourOfDayAcrossDaylightSavings ()
   {
-    return preserveHourOfDayAcrossDaylightSavings;
+    return m_bPreserveHourOfDayAcrossDaylightSavings;
   }
 
   public void setPreserveHourOfDayAcrossDaylightSavings (final boolean preserveHourOfDayAcrossDaylightSavings)
   {
-    this.preserveHourOfDayAcrossDaylightSavings = preserveHourOfDayAcrossDaylightSavings;
+    this.m_bPreserveHourOfDayAcrossDaylightSavings = preserveHourOfDayAcrossDaylightSavings;
   }
 
   /**
-   * If intervals are a day or greater, and
-   * preserveHourOfDayAcrossDaylightSavings property is set to true, and the
-   * hour of the day does not exist on a given day for which the trigger would
-   * fire, the day will be skipped and the trigger advanced a second interval if
-   * this property is set to true. Defaults to false.
+   * If intervals are a day or greater, and preserveHourOfDayAcrossDaylightSavings
+   * property is set to true, and the hour of the day does not exist on a given
+   * day for which the trigger would fire, the day will be skipped and the trigger
+   * advanced a second interval if this property is set to true. Defaults to
+   * false.
    * <p>
-   * <b>CAUTION!</b> If you enable this property, and your hour of day happens
-   * to be that of daylight savings transition (e.g. 2:00 am in the United
-   * States) and the trigger's interval would have had the trigger fire on that
-   * day, then you may actually completely miss a firing on the day of
-   * transition if that hour of day does not exist on that day! In such a case
-   * the next fire time of the trigger will be computed as double (if the
-   * interval is 2 days, then a span of 4 days between firings will occur).
+   * <b>CAUTION!</b> If you enable this property, and your hour of day happens to
+   * be that of daylight savings transition (e.g. 2:00 am in the United States)
+   * and the trigger's interval would have had the trigger fire on that day, then
+   * you may actually completely miss a firing on the day of transition if that
+   * hour of day does not exist on that day! In such a case the next fire time of
+   * the trigger will be computed as double (if the interval is 2 days, then a
+   * span of 4 days between firings will occur).
    * </p>
    *
    * @see #isPreserveHourOfDayAcrossDaylightSavings()
    */
   public boolean isSkipDayIfHourDoesNotExist ()
   {
-    return skipDayIfHourDoesNotExist;
+    return m_bSkipDayIfHourDoesNotExist;
   }
 
   public void setSkipDayIfHourDoesNotExist (final boolean skipDayIfHourDoesNotExist)
   {
-    this.skipDayIfHourDoesNotExist = skipDayIfHourDoesNotExist;
+    this.m_bSkipDayIfHourDoesNotExist = skipDayIfHourDoesNotExist;
   }
 
   public int getTimesTriggered ()
   {
-    return timesTriggered;
+    return m_nTimesTriggered;
   }
 
   /**
@@ -432,7 +431,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setTimesTriggered (final int timesTriggered)
   {
-    this.timesTriggered = timesTriggered;
+    this.m_nTimesTriggered = timesTriggered;
   }
 
   @Override
@@ -509,24 +508,24 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   @Override
   public void triggered (final com.helger.quartz.ICalendar calendar)
   {
-    timesTriggered++;
-    previousFireTime = nextFireTime;
-    nextFireTime = getFireTimeAfter (nextFireTime);
+    m_nTimesTriggered++;
+    m_aPreviousFireTime = m_aNextFireTime;
+    m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-    while (nextFireTime != null && calendar != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
 
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-      if (nextFireTime == null)
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
       final Calendar c = PDTFactory.createCalendar ();
-      c.setTime (nextFireTime);
+      c.setTime (m_aNextFireTime);
       if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
-        nextFireTime = null;
+        m_aNextFireTime = null;
       }
     }
   }
@@ -538,36 +537,36 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   @Override
   public void updateWithNewCalendar (final com.helger.quartz.ICalendar calendar, final long misfireThreshold)
   {
-    nextFireTime = getFireTimeAfter (previousFireTime);
+    m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
 
-    if (nextFireTime == null || calendar == null)
+    if (m_aNextFireTime == null || calendar == null)
     {
       return;
     }
 
     final Date now = new Date ();
-    while (nextFireTime != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
 
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-      if (nextFireTime == null)
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
       final Calendar c = PDTFactory.createCalendar ();
-      c.setTime (nextFireTime);
+      c.setTime (m_aNextFireTime);
       if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
-        nextFireTime = null;
+        m_aNextFireTime = null;
       }
 
-      if (nextFireTime != null && nextFireTime.before (now))
+      if (m_aNextFireTime != null && m_aNextFireTime.before (now))
       {
-        final long diff = now.getTime () - nextFireTime.getTime ();
+        final long diff = now.getTime () - m_aNextFireTime.getTime ();
         if (diff >= misfireThreshold)
         {
-          nextFireTime = getFireTimeAfter (nextFireTime);
+          m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
         }
       }
     }
@@ -575,52 +574,52 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added
-   * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added to
+   * the scheduler, in order to have the <code>Trigger</code> compute its first
+   * fire time, based on any associated calendar.
    * </p>
    * <p>
    * After this method has been called, <code>getNextFireTime()</code> should
    * return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by
-   *         the scheduler, which is also the same value
+   * @return the first time at which the <code>Trigger</code> will be fired by the
+   *         scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
    */
   @Override
   public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)
   {
-    nextFireTime = getStartTime ();
+    m_aNextFireTime = getStartTime ();
 
-    while (nextFireTime != null && calendar != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-      if (nextFireTime == null)
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
       final Calendar c = PDTFactory.createCalendar ();
-      c.setTime (nextFireTime);
+      c.setTime (m_aNextFireTime);
       if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
       {
         return null;
       }
     }
 
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
   /**
    * <p>
-   * Returns the next time at which the <code>Trigger</code> is scheduled to
-   * fire. If the trigger will not fire again, <code>null</code> will be
-   * returned. Note that the time returned can possibly be in the past, if the
-   * time that was computed for the trigger to next fire has already arrived,
-   * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).
+   * Returns the next time at which the <code>Trigger</code> is scheduled to fire.
+   * If the trigger will not fire again, <code>null</code> will be returned. Note
+   * that the time returned can possibly be in the past, if the time that was
+   * computed for the trigger to next fire has already arrived, but the scheduler
+   * has not yet been able to fire the trigger (which would likely be due to lack
+   * of resources e.g. threads).
    * </p>
    * <p>
    * The value returned is not guaranteed to be valid until after the
@@ -630,25 +629,23 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   @Override
   public Date getNextFireTime ()
   {
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
   /**
    * <p>
    * Returns the previous time at which the <code>DateIntervalTrigger</code>
-   * fired. If the trigger has not yet fired, <code>null</code> will be
-   * returned.
+   * fired. If the trigger has not yet fired, <code>null</code> will be returned.
    */
   @Override
   public Date getPreviousFireTime ()
   {
-    return previousFireTime;
+    return m_aPreviousFireTime;
   }
 
   /**
    * <p>
-   * Set the next time at which the <code>DateIntervalTrigger</code> should
-   * fire.
+   * Set the next time at which the <code>DateIntervalTrigger</code> should fire.
    * </p>
    * <p>
    * <b>This method should not be invoked by client code.</b>
@@ -656,7 +653,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setNextFireTime (final Date nextFireTime)
   {
-    this.nextFireTime = nextFireTime;
+    this.m_aNextFireTime = nextFireTime;
   }
 
   /**
@@ -669,7 +666,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setPreviousFireTime (final Date previousFireTime)
   {
-    this.previousFireTime = previousFireTime;
+    this.m_aPreviousFireTime = previousFireTime;
   }
 
   /**
@@ -687,7 +684,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   protected Date getFireTimeAfter (final Date aAfterTime, final boolean ignoreEndTime)
   {
-    if (complete)
+    if (m_bComplete)
     {
       return null;
     }
@@ -717,8 +714,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     aTime.setTime (afterTime);
 
     final Calendar sTime = PDTFactory.createCalendar ();
-    if (timeZone != null)
-      sTime.setTimeZone (timeZone);
+    if (m_aTimeZone != null)
+      sTime.setTimeZone (m_aTimeZone);
     sTime.setTime (getStartTime ());
     sTime.setLenient (true);
 
@@ -845,8 +842,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
                 // because months are already large blocks of time, we will
                 // just advance via brute-force iteration.
 
-                while (!sTime.getTime ().after (afterTime) &&
-                       (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
+                while (!sTime.getTime ().after (afterTime) && (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
                 {
                   sTime.add (Calendar.MONTH, getRepeatInterval ());
                 }
@@ -861,8 +857,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
                 if (getRepeatIntervalUnit ().equals (EIntervalUnit.YEAR))
                 {
 
-                  while (!sTime.getTime ().after (afterTime) &&
-                         (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
+                  while (!sTime.getTime ().after (afterTime) && (sTime.get (Calendar.YEAR) < CQuartz.MAX_YEAR))
                   {
                     sTime.add (Calendar.YEAR, getRepeatInterval ());
                   }
@@ -911,7 +906,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   @Override
   public Date getFinalFireTime ()
   {
-    if (complete || getEndTime () == null)
+    if (m_bComplete || getEndTime () == null)
     {
       return null;
     }
@@ -929,8 +924,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     // end time
 
     final Calendar lTime = PDTFactory.createCalendar ();
-    if (timeZone != null)
-      lTime.setTimeZone (timeZone);
+    if (m_aTimeZone != null)
+      lTime.setTimeZone (m_aTimeZone);
     lTime.setTime (fTime);
     lTime.setLenient (true);
 
@@ -986,8 +981,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Validates whether the properties of the <code>JobDetail</code> are valid
-   * for submission into a <code>Scheduler</code>.
+   * Validates whether the properties of the <code>JobDetail</code> are valid for
+   * submission into a <code>Scheduler</code>.
    *
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.
@@ -997,7 +992,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   {
     super.validate ();
 
-    if (repeatInterval < 1)
+    if (m_nRepeatInterval < 1)
     {
       throw new SchedulerException ("Repeat Interval cannot be zero.");
     }

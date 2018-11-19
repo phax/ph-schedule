@@ -85,7 +85,7 @@ public abstract class AbstractSchedulerTest
         final List <Long> jobExecTimestamps = (List <Long>) context.getScheduler ().getContext ().get (DATE_STAMPS);
         final CyclicBarrier barrier = (CyclicBarrier) context.getScheduler ().getContext ().get (BARRIER);
 
-        jobExecTimestamps.add (System.currentTimeMillis ());
+        jobExecTimestamps.add (Long.valueOf (System.currentTimeMillis ()));
 
         barrier.await (TEST_TIMEOUT_SECONDS, TimeUnit.SECONDS);
       }
@@ -360,30 +360,30 @@ public abstract class AbstractSchedulerTest
       for (final Thread t : allThreadsEnd.keySet ())
       {
         LOGGER.info ("*** Found additional thread: " +
-                        t.getName () +
-                        " (of type " +
-                        t.getClass ().getName () +
-                        ")  in group: " +
-                        t.getThreadGroup ().getName () +
-                        " with parent group: " +
-                        (t.getThreadGroup ().getParent () == null ? "-none-"
-                                                                  : t.getThreadGroup ().getParent ().getName ()));
+                     t.getName () +
+                     " (of type " +
+                     t.getClass ().getName () +
+                     ")  in group: " +
+                     t.getThreadGroup ().getName () +
+                     " with parent group: " +
+                     (t.getThreadGroup ().getParent () == null ? "-none-"
+                                                               : t.getThreadGroup ().getParent ().getName ()));
       }
       // log all threads that were running before shutdown
       for (final Thread t : allThreadsRunning.keySet ())
       {
         LOGGER.info ("- Test runtime thread: " +
-                        t.getName () +
-                        " (of type " +
-                        t.getClass ().getName () +
-                        ")  in group: " +
-                        (t.getThreadGroup () == null ? "-none-"
-                                                     : (t.getThreadGroup ().getName () +
-                                                        " with parent group: " +
-                                                        (t.getThreadGroup ().getParent () == null ? "-none-"
-                                                                                                  : t.getThreadGroup ()
-                                                                                                     .getParent ()
-                                                                                                     .getName ()))));
+                     t.getName () +
+                     " (of type " +
+                     t.getClass ().getName () +
+                     ")  in group: " +
+                     (t.getThreadGroup () == null ? "-none-"
+                                                  : (t.getThreadGroup ().getName () +
+                                                     " with parent group: " +
+                                                     (t.getThreadGroup ().getParent () == null ? "-none-"
+                                                                                               : t.getThreadGroup ()
+                                                                                                  .getParent ()
+                                                                                                  .getName ()))));
       }
     }
     assertTrue ("Found unexpected new threads (see console output for listing)", allThreadsEnd.size () == 0);
@@ -414,7 +414,7 @@ public abstract class AbstractSchedulerTest
 
     sched.shutdown (true);
 
-    final long fTime = jobExecTimestamps.get (0);
+    final long fTime = jobExecTimestamps.get (0).longValue ();
 
     assertTrue ("Immediate trigger did not fire within a reasonable amount of time.", (fTime - sTime < 7000L)); // This
                                                                                                                 // is
@@ -453,7 +453,7 @@ public abstract class AbstractSchedulerTest
 
     sched.shutdown (true);
 
-    final long fTime = jobExecTimestamps.get (0);
+    final long fTime = jobExecTimestamps.get (0).longValue ();
 
     assertTrue ("Immediate trigger did not fire within a reasonable amount of time.", (fTime - sTime < 7000L)); // This
                                                                                                                 // is
@@ -489,17 +489,10 @@ public abstract class AbstractSchedulerTest
 
     sched.shutdown (true);
 
-    final long fTime = jobExecTimestamps.get (0);
+    final long fTime = jobExecTimestamps.get (0).longValue ();
 
-    assertTrue ("Immediate trigger did not fire within a reasonable amount of time.", (fTime - sTime < 7000L)); // This
-                                                                                                                // is
-                                                                                                                // dangerously
-                                                                                                                // subjective!
-                                                                                                                // but
-                                                                                                                // what
-                                                                                                                // else
-                                                                                                                // to
-                                                                                                                // do?
+    // This is dangerously subjective! but what else to do?
+    assertTrue ("Immediate trigger did not fire within a reasonable amount of time.", fTime - sTime < 7000L);
   }
 
   @Test

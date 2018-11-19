@@ -34,13 +34,15 @@ public class TimeStampedCounterValue implements Serializable
   /**
    * Constructor accepting the value of both timestamp and the counter value.
    *
-   * @param timestamp
-   * @param value
+   * @param nTmestamp
+   *        time stamp
+   * @param nValue
+   *        value
    */
-  public TimeStampedCounterValue (final long timestamp, final long value)
+  public TimeStampedCounterValue (final long nTmestamp, final long nValue)
   {
-    m_nTimestamp = timestamp;
-    m_nCounterValue = value;
+    m_nTimestamp = nTmestamp;
+    m_nCounterValue = nValue;
   }
 
   /**
@@ -63,9 +65,6 @@ public class TimeStampedCounterValue implements Serializable
     return m_nTimestamp;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString ()
   {

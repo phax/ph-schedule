@@ -24,6 +24,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.CQuartz;
 import com.helger.quartz.CronExpression;
@@ -52,18 +56,12 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
 {
   protected static final int YEAR_TO_GIVEUP_SCHEDULING_AT = CQuartz.MAX_YEAR;
 
-  private CronExpression cronEx;
-  private Date startTime;
-  private Date endTime;
-  private Date nextFireTime;
-  private Date previousFireTime;
-  private transient TimeZone timeZone;
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private CronExpression m_aCronEx;
+  private Date m_aStartTime;
+  private Date m_aEndTime;
+  private Date m_aNextFireTime;
+  private Date m_aPreviousFireTime;
+  private transient TimeZone m_aTimeZone;
 
   /**
    * <p>
@@ -85,9 +83,9 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   public CronTrigger clone ()
   {
     final CronTrigger copy = (CronTrigger) super.clone ();
-    if (cronEx != null)
+    if (m_aCronEx != null)
     {
-      copy.setCronExpression (new CronExpression (cronEx));
+      copy.setCronExpression (new CronExpression (m_aCronEx));
     }
     return copy;
   }
@@ -95,13 +93,13 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   public void setCronExpression (final String cronExpression) throws ParseException
   {
     final TimeZone origTz = getTimeZone ();
-    this.cronEx = new CronExpression (cronExpression);
-    this.cronEx.setTimeZone (origTz);
+    this.m_aCronEx = new CronExpression (cronExpression);
+    this.m_aCronEx.setTimeZone (origTz);
   }
 
   public String getCronExpression ()
   {
-    return cronEx == null ? null : cronEx.getCronExpression ();
+    return m_aCronEx == null ? null : m_aCronEx.getCronExpression ();
   }
 
   /**
@@ -110,8 +108,8 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    */
   public void setCronExpression (final CronExpression cronExpression)
   {
-    this.cronEx = cronExpression;
-    this.timeZone = cronExpression.getTimeZone ();
+    this.m_aCronEx = cronExpression;
+    this.m_aTimeZone = cronExpression.getTimeZone ();
   }
 
   /**
@@ -122,16 +120,13 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   @Override
   public Date getStartTime ()
   {
-    return this.startTime;
+    return this.m_aStartTime;
   }
 
   @Override
-  public void setStartTime (final Date startTime)
+  public final void setStartTime (@Nonnull final Date startTime)
   {
-    if (startTime == null)
-    {
-      throw new IllegalArgumentException ("Start time cannot be null");
-    }
+    ValueEnforcer.notNull (startTime, "StartTime");
 
     final Date eTime = getEndTime ();
     if (eTime != null && eTime.before (startTime))
@@ -147,7 +142,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
     cl.setTime (startTime);
     cl.set (Calendar.MILLISECOND, 0);
 
-    this.startTime = cl.getTime ();
+    this.m_aStartTime = cl.getTime ();
   }
 
   /**
@@ -161,7 +156,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   @Override
   public Date getEndTime ()
   {
-    return this.endTime;
+    return this.m_aEndTime;
   }
 
   @Override
@@ -173,41 +168,41 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
       throw new IllegalArgumentException ("End time cannot be before start time");
     }
 
-    this.endTime = endTime;
+    this.m_aEndTime = endTime;
   }
 
   /**
    * <p>
-   * Returns the next time at which the <code>Trigger</code> is scheduled to
-   * fire. If the trigger will not fire again, <code>null</code> will be
-   * returned. Note that the time returned can possibly be in the past, if the
-   * time that was computed for the trigger to next fire has already arrived,
-   * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).
+   * Returns the next time at which the <code>Trigger</code> is scheduled to fire.
+   * If the trigger will not fire again, <code>null</code> will be returned. Note
+   * that the time returned can possibly be in the past, if the time that was
+   * computed for the trigger to next fire has already arrived, but the scheduler
+   * has not yet been able to fire the trigger (which would likely be due to lack
+   * of resources e.g. threads).
    * </p>
    * <p>
    * The value returned is not guaranteed to be valid until after the
    * <code>Trigger</code> has been added to the scheduler.
    * </p>
    *
-   * @see TriggerUtils#computeFireTimesBetween(spi.IOperableTrigger, ICalendar,
-   *      Date, Date)
+   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
+   *      ICalendar, Date, Date)
    */
   @Override
   public Date getNextFireTime ()
   {
-    return this.nextFireTime;
+    return this.m_aNextFireTime;
   }
 
   /**
    * <p>
-   * Returns the previous time at which the <code>CronTrigger</code> fired. If
-   * the trigger has not yet fired, <code>null</code> will be returned.
+   * Returns the previous time at which the <code>CronTrigger</code> fired. If the
+   * trigger has not yet fired, <code>null</code> will be returned.
    */
   @Override
   public Date getPreviousFireTime ()
   {
-    return this.previousFireTime;
+    return this.m_aPreviousFireTime;
   }
 
   /**
@@ -218,7 +213,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    */
   public void setNextFireTime (final Date nextFireTime)
   {
-    this.nextFireTime = nextFireTime;
+    this.m_aNextFireTime = nextFireTime;
   }
 
   /**
@@ -231,19 +226,19 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    */
   public void setPreviousFireTime (final Date previousFireTime)
   {
-    this.previousFireTime = previousFireTime;
+    this.m_aPreviousFireTime = previousFireTime;
   }
 
   public TimeZone getTimeZone ()
   {
-    if (cronEx != null)
-      return cronEx.getTimeZone ();
+    if (m_aCronEx != null)
+      return m_aCronEx.getTimeZone ();
 
-    if (timeZone == null)
+    if (m_aTimeZone == null)
     {
-      timeZone = TimeZone.getDefault ();
+      m_aTimeZone = TimeZone.getDefault ();
     }
-    return timeZone;
+    return m_aTimeZone;
   }
 
   /**
@@ -254,23 +249,23 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * <p>
    * If {@link #setCronExpression(CronExpression)} is called after this method,
    * the TimeZon setting on the CronExpression will "win". However if
-   * {@link #setCronExpression(String)} is called after this method, the time
-   * zone applied by this method will remain in effect, since the String cron
+   * {@link #setCronExpression(String)} is called after this method, the time zone
+   * applied by this method will remain in effect, since the String cron
    * expression does not carry a time zone!
    */
   public void setTimeZone (final TimeZone timeZone)
   {
-    if (cronEx != null)
+    if (m_aCronEx != null)
     {
-      cronEx.setTimeZone (timeZone);
+      m_aCronEx.setTimeZone (timeZone);
     }
-    this.timeZone = timeZone;
+    this.m_aTimeZone = timeZone;
   }
 
   /**
    * <p>
-   * Returns the next time at which the <code>CronTrigger</code> will fire,
-   * after the given time. If the trigger will not fire after the given time,
+   * Returns the next time at which the <code>CronTrigger</code> will fire, after
+   * the given time. If the trigger will not fire after the given time,
    * <code>null</code> will be returned.
    * </p>
    * <p>
@@ -279,9 +274,10 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * </p>
    *
    * @param aAfterTime
+   *        after time
    */
   @Override
-  public Date getFireTimeAfter (final Date aAfterTime)
+  public Date getFireTimeAfter (@Nullable final Date aAfterTime)
   {
     Date afterTime = aAfterTime;
     if (afterTime == null)
@@ -312,8 +308,8 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * <code>CronTrigger</code> will fire.
    * </p>
    * <p>
-   * Note that the return time *may* be in the past. and the date returned is
-   * not validated against {@link ICalendar}
+   * Note that the return time *may* be in the past. and the date returned is not
+   * validated against {@link ICalendar}
    * </p>
    */
   @Override
@@ -326,7 +322,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
     }
     else
     {
-      resultTime = (cronEx == null) ? null : cronEx.getFinalFireTime ();
+      resultTime = (m_aCronEx == null) ? null : m_aCronEx.getFinalFireTime ();
     }
 
     if ((resultTime != null) && (getStartTime () != null) && (resultTime.before (getStartTime ())))
@@ -431,8 +427,8 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    *        the date to compare
    * @param dayOnly
    *        if set to true, the method will only determine if the trigger will
-   *        fire during the day represented by the given Calendar (hours,
-   *        minutes and seconds will be ignored).
+   *        fire during the day represented by the given Calendar (hours, minutes
+   *        and seconds will be ignored).
    * @see #willFireOn(Calendar)
    */
   public boolean willFireOn (final Calendar aTest, final boolean dayOnly)
@@ -489,12 +485,12 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   @Override
   public void triggered (final ICalendar calendar)
   {
-    previousFireTime = nextFireTime;
-    nextFireTime = getFireTimeAfter (nextFireTime);
+    m_aPreviousFireTime = m_aNextFireTime;
+    m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-    while (nextFireTime != null && calendar != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
     }
   }
 
@@ -504,37 +500,37 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   @Override
   public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
   {
-    nextFireTime = getFireTimeAfter (previousFireTime);
+    m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
 
-    if (nextFireTime == null || calendar == null)
+    if (m_aNextFireTime == null || calendar == null)
     {
       return;
     }
 
     final Date now = new Date ();
-    while (nextFireTime != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
 
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
 
-      if (nextFireTime == null)
+      if (m_aNextFireTime == null)
         break;
 
       // avoid infinite loop
       // Use gregorian only because the constant is based on Gregorian
       final Calendar c = PDTFactory.createCalendar ();
-      c.setTime (nextFireTime);
+      c.setTime (m_aNextFireTime);
       if (c.get (Calendar.YEAR) > YEAR_TO_GIVEUP_SCHEDULING_AT)
       {
-        nextFireTime = null;
+        m_aNextFireTime = null;
       }
 
-      if (nextFireTime != null && nextFireTime.before (now))
+      if (m_aNextFireTime != null && m_aNextFireTime.before (now))
       {
-        final long diff = now.getTime () - nextFireTime.getTime ();
+        final long diff = now.getTime () - m_aNextFireTime.getTime ();
         if (diff >= misfireThreshold)
         {
-          nextFireTime = getFireTimeAfter (nextFireTime);
+          m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
         }
       }
     }
@@ -542,36 +538,36 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
 
   /**
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added
-   * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added to
+   * the scheduler, in order to have the <code>Trigger</code> compute its first
+   * fire time, based on any associated calendar.
    * </p>
    * <p>
    * After this method has been called, <code>getNextFireTime()</code> should
    * return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by
-   *         the scheduler, which is also the same value
+   * @return the first time at which the <code>Trigger</code> will be fired by the
+   *         scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
    */
   @Override
   public Date computeFirstFireTime (final ICalendar calendar)
   {
-    nextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000l));
+    m_aNextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000l));
 
-    while (nextFireTime != null && calendar != null && !calendar.isTimeIncluded (nextFireTime.getTime ()))
+    while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
-      nextFireTime = getFireTimeAfter (nextFireTime);
+      m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
     }
 
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
   public String getExpressionSummary ()
   {
-    return cronEx == null ? null : cronEx.getExpressionSummary ();
+    return m_aCronEx == null ? null : m_aCronEx.getExpressionSummary ();
   }
 
   /**
@@ -616,7 +612,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
 
   protected Date getTimeAfter (final Date afterTime)
   {
-    return (cronEx == null) ? null : cronEx.getTimeAfter (afterTime);
+    return (m_aCronEx == null) ? null : m_aCronEx.getTimeAfter (afterTime);
   }
 
   /**
@@ -625,6 +621,6 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    */
   protected Date getTimeBefore (final Date eTime)
   {
-    return (cronEx == null) ? null : cronEx.getTimeBefore (eTime);
+    return (m_aCronEx == null) ? null : m_aCronEx.getTimeBefore (eTime);
   }
 }

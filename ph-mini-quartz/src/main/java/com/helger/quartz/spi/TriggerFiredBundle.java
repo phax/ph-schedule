@@ -35,14 +35,14 @@ import com.helger.quartz.IJobDetail;
  */
 public class TriggerFiredBundle implements Serializable
 {
-  private final IJobDetail job;
-  private final IOperableTrigger trigger;
-  private final ICalendar cal;
-  private final boolean jobIsRecovering;
-  private final Date fireTime;
-  private final Date scheduledFireTime;
-  private final Date prevFireTime;
-  private final Date nextFireTime;
+  private final IJobDetail m_aJob;
+  private final IOperableTrigger m_aTrigger;
+  private final ICalendar m_aCal;
+  private final boolean m_bJobIsRecovering;
+  private final Date m_aFireTime;
+  private final Date m_aScheduledFireTime;
+  private final Date m_aPrevFireTime;
+  private final Date m_aNextFireTime;
 
   public TriggerFiredBundle (final IJobDetail job,
                              final IOperableTrigger trigger,
@@ -53,34 +53,34 @@ public class TriggerFiredBundle implements Serializable
                              final Date prevFireTime,
                              final Date nextFireTime)
   {
-    this.job = job;
-    this.trigger = trigger;
-    this.cal = cal;
-    this.jobIsRecovering = jobIsRecovering;
-    this.fireTime = fireTime;
-    this.scheduledFireTime = scheduledFireTime;
-    this.prevFireTime = prevFireTime;
-    this.nextFireTime = nextFireTime;
+    this.m_aJob = job;
+    this.m_aTrigger = trigger;
+    this.m_aCal = cal;
+    this.m_bJobIsRecovering = jobIsRecovering;
+    this.m_aFireTime = fireTime;
+    this.m_aScheduledFireTime = scheduledFireTime;
+    this.m_aPrevFireTime = prevFireTime;
+    this.m_aNextFireTime = nextFireTime;
   }
 
   public IJobDetail getJobDetail ()
   {
-    return job;
+    return m_aJob;
   }
 
   public IOperableTrigger getTrigger ()
   {
-    return trigger;
+    return m_aTrigger;
   }
 
   public ICalendar getCalendar ()
   {
-    return cal;
+    return m_aCal;
   }
 
   public boolean isRecovering ()
   {
-    return jobIsRecovering;
+    return m_bJobIsRecovering;
   }
 
   /**
@@ -88,7 +88,7 @@ public class TriggerFiredBundle implements Serializable
    */
   public Date getFireTime ()
   {
-    return fireTime;
+    return m_aFireTime;
   }
 
   /**
@@ -96,7 +96,7 @@ public class TriggerFiredBundle implements Serializable
    */
   public Date getNextFireTime ()
   {
-    return nextFireTime;
+    return m_aNextFireTime;
   }
 
   /**
@@ -104,7 +104,7 @@ public class TriggerFiredBundle implements Serializable
    */
   public Date getPrevFireTime ()
   {
-    return prevFireTime;
+    return m_aPrevFireTime;
   }
 
   /**
@@ -112,6 +112,6 @@ public class TriggerFiredBundle implements Serializable
    */
   public Date getScheduledFireTime ()
   {
-    return scheduledFireTime;
+    return m_aScheduledFireTime;
   }
 }

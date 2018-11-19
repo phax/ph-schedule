@@ -22,6 +22,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
@@ -42,9 +45,8 @@ import com.helger.quartz.JobExecutionException;
  */
 public class BroadcastJobListener implements IJobListener
 {
-
-  private final String name;
-  private final List <IJobListener> listeners;
+  private final String m_sName;
+  private final List <IJobListener> m_aListeners = new LinkedList <> ();
 
   /**
    * Construct an instance with the given name. (Remember to add some delegate
@@ -53,14 +55,10 @@ public class BroadcastJobListener implements IJobListener
    * @param name
    *        the name of this instance
    */
-  public BroadcastJobListener (final String name)
+  public BroadcastJobListener (@Nonnull final String name)
   {
-    if (name == null)
-    {
-      throw new IllegalArgumentException ("Listener name cannot be null!");
-    }
-    this.name = name;
-    listeners = new LinkedList <> ();
+    ValueEnforcer.notNull (name, "Listener Name");
+    m_sName = name;
   }
 
   /**
@@ -71,30 +69,31 @@ public class BroadcastJobListener implements IJobListener
    * @param listeners
    *        the initial List of JobListeners to broadcast to.
    */
-  public BroadcastJobListener (final String name, final List <IJobListener> listeners)
+  public BroadcastJobListener (@Nonnull final String name, final List <IJobListener> listeners)
   {
     this (name);
-    this.listeners.addAll (listeners);
+    m_aListeners.addAll (listeners);
   }
 
+  @Nonnull
   public String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   public void addListener (final IJobListener listener)
   {
-    listeners.add (listener);
+    m_aListeners.add (listener);
   }
 
   public boolean removeListener (final IJobListener listener)
   {
-    return listeners.remove (listener);
+    return m_aListeners.remove (listener);
   }
 
   public boolean removeListener (final String listenerName)
   {
-    final Iterator <IJobListener> itr = listeners.iterator ();
+    final Iterator <IJobListener> itr = m_aListeners.iterator ();
     while (itr.hasNext ())
     {
       final IJobListener jl = itr.next ();
@@ -109,13 +108,13 @@ public class BroadcastJobListener implements IJobListener
 
   public List <IJobListener> getListeners ()
   {
-    return java.util.Collections.unmodifiableList (listeners);
+    return java.util.Collections.unmodifiableList (m_aListeners);
   }
 
   public void jobToBeExecuted (final IJobExecutionContext context)
   {
 
-    final Iterator <IJobListener> itr = listeners.iterator ();
+    final Iterator <IJobListener> itr = m_aListeners.iterator ();
     while (itr.hasNext ())
     {
       final IJobListener jl = itr.next ();
@@ -126,7 +125,7 @@ public class BroadcastJobListener implements IJobListener
   public void jobExecutionVetoed (final IJobExecutionContext context)
   {
 
-    final Iterator <IJobListener> itr = listeners.iterator ();
+    final Iterator <IJobListener> itr = m_aListeners.iterator ();
     while (itr.hasNext ())
     {
       final IJobListener jl = itr.next ();
@@ -137,7 +136,7 @@ public class BroadcastJobListener implements IJobListener
   public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
 
-    final Iterator <IJobListener> itr = listeners.iterator ();
+    final Iterator <IJobListener> itr = m_aListeners.iterator ();
     while (itr.hasNext ())
     {
       final IJobListener jl = itr.next ();

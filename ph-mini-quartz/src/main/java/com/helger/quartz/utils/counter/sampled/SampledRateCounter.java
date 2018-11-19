@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
+import javax.annotation.Nonnull;
+
 /**
  * An implementation of {@link ISampledRateCounter}
  *
@@ -35,8 +37,9 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
    * Constructor accepting the config
    *
    * @param config
+   *        config
    */
-  public SampledRateCounter (final SampledRateCounterConfig config)
+  public SampledRateCounter (@Nonnull final SampledRateCounterConfig config)
   {
     super (config);
   }

@@ -23,6 +23,7 @@ import java.util.Date;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduler;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.SchedulerException;
 
@@ -48,17 +49,17 @@ public interface IOperableTrigger extends IMutableTrigger
    * This method should not be used by the Quartz client.
    * </p>
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added
-   * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added to
+   * the scheduler, in order to have the <code>Trigger</code> compute its first
+   * fire time, based on any associated calendar.
    * </p>
    * <p>
    * After this method has been called, <code>getNextFireTime()</code> should
    * return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by
-   *         the scheduler, which is also the same value
+   * @return the first time at which the <code>Trigger</code> will be fired by the
+   *         scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
    */
@@ -82,10 +83,10 @@ public interface IOperableTrigger extends IMutableTrigger
    *        is the <code>JobExecutionException</code> thrown by the
    *        <code>Job</code>, if any (may be null).
    * @return one of the <code>CompletedExecutionInstruction</code> constants.
-   * @see ECompletedExecutionInstruction
    * @see #triggered(ICalendar)
    */
-  ECompletedExecutionInstruction executionComplete (IJobExecutionContext context, JobExecutionException result);
+  ITrigger.ECompletedExecutionInstruction executionComplete (IJobExecutionContext context,
+                                                             JobExecutionException result);
 
   /**
    * <p>
@@ -122,8 +123,8 @@ public interface IOperableTrigger extends IMutableTrigger
 
   /**
    * <p>
-   * Validates whether the properties of the <code>JobDetail</code> are valid
-   * for submission into a <code>Scheduler</code>.
+   * Validates whether the properties of the <code>JobDetail</code> are valid for
+   * submission into a <code>Scheduler</code>.
    *
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.
