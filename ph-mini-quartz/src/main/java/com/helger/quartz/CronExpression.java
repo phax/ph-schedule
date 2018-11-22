@@ -191,22 +191,22 @@ import com.helger.commons.lang.IExplicitlyCloneable;
  * be one expression in the day-of-week field (&quot;3#1,6#3&quot; is not valid,
  * since there are two expressions).
  * </p>
+ * <!--
  * <p>
- * <!--The 'C' character is allowed for the day-of-month and day-of-week fields.
+ * The 'C' character is allowed for the day-of-month and day-of-week fields.
  * This character is short-hand for "calendar". This means values are calculated
  * against the associated calendar, if any. If no calendar is associated, then
  * it is equivalent to having an all-inclusive calendar. A value of "5C" in the
  * day-of-month field means "the first day included by the calendar on or after
  * the 5th". A value of "1C" in the day-of-week field means "the first day
- * included by the calendar on or after Sunday".-->
+ * included by the calendar on or after Sunday".
  * </p>
+ * -->
  * <p>
  * The legal characters and the names of months and days of the week are not
  * case sensitive.
  * </p>
- * <p>
  * <b>NOTES:</b>
- * </p>
  * <ul>
  * <li>Support for specifying both a day-of-week and a day-of-month value is not
  * complete (you'll need to use the '?' character in one of these fields).</li>
@@ -405,8 +405,8 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
   }
 
   /**
-   * Returns the time zone for which this <code>CronExpression</code> will be
-   * resolved.
+   * @return the time zone for which this <code>CronExpression</code> will be
+   *         resolved.
    */
   @Nonnull
   public TimeZone getTimeZone ()
@@ -420,6 +420,9 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
   /**
    * Sets the time zone for which this <code>CronExpression</code> will be
    * resolved.
+   *
+   * @param timeZone
+   *        Time zone to use
    */
   public void setTimeZone (@Nullable final TimeZone timeZone)
   {
@@ -1891,7 +1894,10 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
    *
    * @param endTime
    *        end time
+   * @return the time before the given time that the <code>CronExpression</code>
+   *         matches. May be <code>null</code>.
    */
+  @Nullable
   public Date getTimeBefore (final Date endTime)
   {
     // FUTURE_TODO: implement QUARTZ-423
@@ -1901,7 +1907,10 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
   /**
    * NOT YET IMPLEMENTED: Returns the final time that the
    * <code>CronExpression</code> will match.
+   * 
+   * @return the final time that the <code>CronExpression</code> will match.
    */
+  @Nullable
   public Date getFinalFireTime ()
   {
     // FUTURE_TODO: implement QUARTZ-423
@@ -1910,7 +1919,7 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
 
   protected static boolean isLeapYear (final int year)
   {
-    return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0));
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
   }
 
   protected static int getLastDayOfMonth (final int monthNum, final int year)

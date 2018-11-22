@@ -333,6 +333,9 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * skipDayIfHourDoesNotExist.
    * </p>
    *
+   * @param bPreserveHourOfDay
+   *        <code>true</code> to enable
+   * @return this for chaining
    * @see #skipDayIfHourDoesNotExist(boolean)
    * @see #inTimeZone(TimeZone)
    * @see TriggerBuilder#startAt(java.util.Date)
@@ -360,12 +363,15 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalen
    * interval is 2 days, then a span of 4 days between firings will occur).
    * </p>
    *
+   * @param bSkipDay
+   *        <code>true</code> to enable
+   * @return this for chaining
    * @see #preserveHourOfDayAcrossDaylightSavings(boolean)
    */
   @Nonnull
-  public CalendarIntervalScheduleBuilder skipDayIfHourDoesNotExist (final boolean skipDay)
+  public CalendarIntervalScheduleBuilder skipDayIfHourDoesNotExist (final boolean bSkipDay)
   {
-    m_bSkipDayIfHourDoesNotExist = skipDay;
+    m_bSkipDayIfHourDoesNotExist = bSkipDay;
     return this;
   }
 
