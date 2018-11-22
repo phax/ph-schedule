@@ -68,7 +68,6 @@
     <dependency>
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm</artifactId>
-      <version>7.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -90,6 +89,7 @@
         </excludes>
       </resource>
     </resources>
+
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>

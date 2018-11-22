@@ -4,7 +4,7 @@ Java scheduling library based on Quartz with scope support (see [ph-commons](htt
 
 # News and noteworthy
 
-* v4.0.1 - work in progress
+* v4.0.1 - 2018-11-12
     * Fixed OSGI ServiceProvider configuration
     * Removed `com.helger.quartz.xml` package
 * v4.0.0 - 2017-12-06
@@ -17,12 +17,14 @@ Java scheduling library based on Quartz with scope support (see [ph-commons](htt
     * Using a forked version of Quartz with less dependencies - "Mini quartz"  
 
 # Maven usage
+
 Add the following to your pom.xml to use this artifact:
-```
+
+```xml
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>ph-schedule</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1</version>
 </dependency>
 ```
 
