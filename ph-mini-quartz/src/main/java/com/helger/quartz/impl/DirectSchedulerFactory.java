@@ -352,7 +352,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
 
     qrs.setName (schedulerName);
     qrs.setInstanceId (schedulerInstanceId);
-    SchedulerDetailsSetter.setDetails (threadPool, schedulerName, schedulerInstanceId);
+    threadPool.setInstanceName (schedulerName);
+    threadPool.setInstanceId (schedulerInstanceId);
     qrs.setJobRunShellFactory (jrsf);
     qrs.setThreadPool (threadPool);
     qrs.setThreadExecutor (threadExecutor);
@@ -374,7 +375,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
     final IClassLoadHelper cch = new CascadingClassLoadHelper ();
     cch.initialize ();
 
-    SchedulerDetailsSetter.setDetails (jobStore, schedulerName, schedulerInstanceId);
+    jobStore.setInstanceName (schedulerName);
+    jobStore.setInstanceId (schedulerInstanceId);
 
     jobStore.initialize (cch, qs.getSchedulerSignaler ());
 

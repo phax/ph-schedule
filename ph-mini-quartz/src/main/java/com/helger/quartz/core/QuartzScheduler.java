@@ -27,10 +27,14 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.CommonsLinkedList;
@@ -1423,6 +1427,7 @@ public class QuartzScheduler implements IQuartzScheduler
     return m_aResources.getJobStore ().getCalendarNames ();
   }
 
+  @Nonnull
   public IListenerManager getListenerManager ()
   {
     return m_aListenerManager;
@@ -1436,10 +1441,8 @@ public class QuartzScheduler implements IQuartzScheduler
    */
   public void addInternalJobListener (final IJobListener jobListener)
   {
-    if (jobListener.getName () == null || jobListener.getName ().length () == 0)
-    {
-      throw new IllegalArgumentException ("JobListener name cannot be empty.");
-    }
+    ValueEnforcer.notNull (jobListener, "JobListener");
+    ValueEnforcer.notEmpty (jobListener.getName (), "JobListener.getName()");
 
     synchronized (m_aInternalJobListeners)
     {
@@ -1470,6 +1473,8 @@ public class QuartzScheduler implements IQuartzScheduler
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
+  @Nonnull
+  @ReturnsMutableCopy
   public ICommonsList <IJobListener> getInternalJobListeners ()
   {
     synchronized (m_aInternalJobListeners)
@@ -1484,6 +1489,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * that has the given name.
    * </p>
    */
+  @Nullable
   public IJobListener getInternalJobListener (final String name)
   {
     synchronized (m_aInternalJobListeners)
@@ -1500,10 +1506,8 @@ public class QuartzScheduler implements IQuartzScheduler
    */
   public void addInternalTriggerListener (final ITriggerListener triggerListener)
   {
-    if (triggerListener.getName () == null || triggerListener.getName ().length () == 0)
-    {
-      throw new IllegalArgumentException ("TriggerListener name cannot be empty.");
-    }
+    ValueEnforcer.notNull (triggerListener, "TriggerListener");
+    ValueEnforcer.notEmpty (triggerListener.getName (), "TriggerListener.getName()");
 
     synchronized (m_aInternalTriggerListeners)
     {
@@ -1523,7 +1527,7 @@ public class QuartzScheduler implements IQuartzScheduler
   {
     synchronized (m_aInternalTriggerListeners)
     {
-      return (m_aInternalTriggerListeners.remove (name) != null);
+      return m_aInternalTriggerListeners.remove (name) != null;
     }
   }
 
@@ -1534,6 +1538,8 @@ public class QuartzScheduler implements IQuartzScheduler
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
+  @Nonnull
+  @ReturnsMutableCopy
   public ICommonsList <ITriggerListener> getInternalTriggerListeners ()
   {
     synchronized (m_aInternalTriggerListeners)
@@ -1548,6 +1554,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * given name.
    * </p>
    */
+  @Nullable
   public ITriggerListener getInternalTriggerListener (final String name)
   {
     synchronized (m_aInternalTriggerListeners)

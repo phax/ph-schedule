@@ -633,7 +633,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
       throw m_aInitException;
     }
 
-    SchedulerDetailsSetter.setDetails (js, schedName, schedInstId);
+    js.setInstanceName (schedName);
+    js.setInstanceId (schedInstId);
 
     tProps = m_aCfg.getPropertyGroup (PROP_JOB_STORE_PREFIX,
                                       true,
@@ -879,9 +880,14 @@ public class StdSchedulerFactory implements ISchedulerFactory
       rsrcs.setInterruptJobsOnShutdown (interruptJobsOnShutdown);
       rsrcs.setInterruptJobsOnShutdownWithWait (interruptJobsOnShutdownWithWait);
 
-      SchedulerDetailsSetter.setDetails (tp, schedName, schedInstId);
+      tp.setInstanceName (schedName);
+      tp.setInstanceId (schedInstId);
 
       rsrcs.setThreadExecutor (threadExecutor);
+
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Initializing ThreadExecutor");
+
       threadExecutor.initialize ();
 
       rsrcs.setThreadPool (tp);
@@ -890,12 +896,19 @@ public class StdSchedulerFactory implements ISchedulerFactory
         if (threadsInheritInitalizersClassLoader)
           ((SimpleThreadPool) tp).setThreadsInheritContextClassLoaderOfInitializingThread (threadsInheritInitalizersClassLoader);
       }
+
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Initializing ThreadPool");
+
       tp.initialize ();
       tpInited = true;
 
       rsrcs.setJobStore (js);
 
       // add plugins
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Adding " + plugins.size () + " scheduler plugins");
+
       for (final ISchedulerPlugin plugin : plugins)
       {
         rsrcs.addSchedulerPlugin (plugin);
@@ -930,10 +943,11 @@ public class StdSchedulerFactory implements ISchedulerFactory
       }
 
       // set scheduler context data...
-      for (final Object key : schedCtxtProps.keySet ())
+      // (don't use entrySet - different semantics!)
+      for (final String key : schedCtxtProps.keySet ())
       {
-        final String val = schedCtxtProps.getProperty ((String) key);
-        scheduler.getContext ().put ((String) key, val);
+        final String val = schedCtxtProps.getProperty (key);
+        scheduler.getContext ().put (key, val);
       }
 
       // fire up job store, and runshell factory
