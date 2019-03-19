@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.CommonsHashSet;
@@ -83,6 +84,7 @@ import com.helger.quartz.spi.TriggerFiredResult;
 public class RAMJobStore implements IJobStore
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (RAMJobStore.class);
+  private static final AtomicLong FIRED_TRIGGER_RECORD_COUNTER = new AtomicLong (System.currentTimeMillis ());
 
   protected final ICommonsMap <JobKey, JobWrapper> m_aJobsByKey = new CommonsHashMap <> (1000);
   protected final ICommonsMap <TriggerKey, TriggerWrapper> m_aTriggersByKey = new CommonsHashMap <> (1000);
@@ -292,8 +294,7 @@ public class RAMJobStore implements IJobStore
    */
   public boolean removeJob (final JobKey jobKey)
   {
-
-    boolean found = false;
+    boolean bFound = false;
 
     synchronized (m_aLock)
     {
@@ -301,11 +302,11 @@ public class RAMJobStore implements IJobStore
       for (final IOperableTrigger trig : triggersOfJob)
       {
         removeTrigger (trig.getKey ());
-        found = true;
+        bFound = true;
       }
 
-      found = (m_aJobsByKey.remove (jobKey) != null) | found;
-      if (found)
+      bFound = (m_aJobsByKey.remove (jobKey) != null) || bFound;
+      if (bFound)
       {
 
         final ICommonsMap <JobKey, JobWrapper> grpMap = m_aJobsByGroup.get (jobKey.getGroup ());
@@ -320,7 +321,7 @@ public class RAMJobStore implements IJobStore
       }
     }
 
-    return found;
+    return bFound;
   }
 
   public boolean removeJobs (final List <JobKey> jobKeys) throws JobPersistenceException
@@ -412,7 +413,7 @@ public class RAMJobStore implements IJobStore
           throw new ObjectAlreadyExistsException (newTrigger);
         }
 
-        removeTrigger (newTrigger.getKey (), false);
+        _removeTrigger (newTrigger.getKey (), false);
       }
 
       if (retrieveJob (newTrigger.getJobKey ()) == null)
@@ -438,16 +439,16 @@ public class RAMJobStore implements IJobStore
       if (m_aPausedTriggerGroups.contains (newTrigger.getKey ().getGroup ()) ||
           m_aPausedJobGroups.contains (newTrigger.getJobKey ().getGroup ()))
       {
-        tw.state = TriggerWrapper.STATE_PAUSED;
+        tw.m_nState = TriggerWrapper.STATE_PAUSED;
         if (m_aBlockedJobs.contains (tw.m_aJobKey))
         {
-          tw.state = TriggerWrapper.STATE_PAUSED_BLOCKED;
+          tw.m_nState = TriggerWrapper.STATE_PAUSED_BLOCKED;
         }
       }
       else
         if (m_aBlockedJobs.contains (tw.m_aJobKey))
         {
-          tw.state = TriggerWrapper.STATE_BLOCKED;
+          tw.m_nState = TriggerWrapper.STATE_BLOCKED;
         }
         else
         {
@@ -467,21 +468,19 @@ public class RAMJobStore implements IJobStore
    */
   public boolean removeTrigger (final TriggerKey triggerKey)
   {
-    return removeTrigger (triggerKey, true);
+    return _removeTrigger (triggerKey, true);
   }
 
-  private boolean removeTrigger (final TriggerKey key, final boolean removeOrphanedJob)
+  private boolean _removeTrigger (final TriggerKey key, final boolean removeOrphanedJob)
   {
-
-    boolean found;
+    boolean bFound;
 
     synchronized (m_aLock)
     {
       // remove from triggers by FQN map
-      found = (m_aTriggersByKey.remove (key) != null);
-      if (found)
+      bFound = m_aTriggersByKey.remove (key) != null;
+      if (bFound)
       {
-        TriggerWrapper tw = null;
         // remove from triggers by group
         final ICommonsMap <TriggerKey, TriggerWrapper> grpMap = m_aTriggersByGroup.get (key.getGroup ());
         if (grpMap != null)
@@ -493,6 +492,7 @@ public class RAMJobStore implements IJobStore
           }
         }
         // remove from triggers array
+        TriggerWrapper tw = null;
         final Iterator <TriggerWrapper> tgs = m_aTriggers.iterator ();
         while (tgs.hasNext ())
         {
@@ -520,7 +520,7 @@ public class RAMJobStore implements IJobStore
       }
     }
 
-    return found;
+    return bFound;
   }
 
   /**
@@ -682,27 +682,27 @@ public class RAMJobStore implements IJobStore
         return ETriggerState.NONE;
       }
 
-      if (tw.state == TriggerWrapper.STATE_COMPLETE)
+      if (tw.m_nState == TriggerWrapper.STATE_COMPLETE)
       {
         return ETriggerState.COMPLETE;
       }
 
-      if (tw.state == TriggerWrapper.STATE_PAUSED)
+      if (tw.m_nState == TriggerWrapper.STATE_PAUSED)
       {
         return ETriggerState.PAUSED;
       }
 
-      if (tw.state == TriggerWrapper.STATE_PAUSED_BLOCKED)
+      if (tw.m_nState == TriggerWrapper.STATE_PAUSED_BLOCKED)
       {
         return ETriggerState.PAUSED;
       }
 
-      if (tw.state == TriggerWrapper.STATE_BLOCKED)
+      if (tw.m_nState == TriggerWrapper.STATE_BLOCKED)
       {
         return ETriggerState.BLOCKED;
       }
 
-      if (tw.state == TriggerWrapper.STATE_ERROR)
+      if (tw.m_nState == TriggerWrapper.STATE_ERROR)
       {
         return ETriggerState.ERROR;
       }
@@ -1085,18 +1085,18 @@ public class RAMJobStore implements IJobStore
       }
 
       // if the trigger is "complete" pausing it does not make sense...
-      if (tw.state == TriggerWrapper.STATE_COMPLETE)
+      if (tw.m_nState == TriggerWrapper.STATE_COMPLETE)
       {
         return;
       }
 
-      if (tw.state == TriggerWrapper.STATE_BLOCKED)
+      if (tw.m_nState == TriggerWrapper.STATE_BLOCKED)
       {
-        tw.state = TriggerWrapper.STATE_PAUSED_BLOCKED;
+        tw.m_nState = TriggerWrapper.STATE_PAUSED_BLOCKED;
       }
       else
       {
-        tw.state = TriggerWrapper.STATE_PAUSED;
+        tw.m_nState = TriggerWrapper.STATE_PAUSED;
       }
 
       m_aTimeTriggers.remove (tw);
@@ -1252,19 +1252,19 @@ public class RAMJobStore implements IJobStore
       final IOperableTrigger trig = tw.getTrigger ();
 
       // if the trigger is not paused resuming it does not make sense...
-      if (tw.state != TriggerWrapper.STATE_PAUSED && tw.state != TriggerWrapper.STATE_PAUSED_BLOCKED)
+      if (tw.m_nState != TriggerWrapper.STATE_PAUSED && tw.m_nState != TriggerWrapper.STATE_PAUSED_BLOCKED)
       {
         return;
       }
 
       if (m_aBlockedJobs.contains (trig.getJobKey ()))
-        tw.state = TriggerWrapper.STATE_BLOCKED;
+        tw.m_nState = TriggerWrapper.STATE_BLOCKED;
       else
-        tw.state = TriggerWrapper.STATE_WAITING;
+        tw.m_nState = TriggerWrapper.STATE_WAITING;
 
       applyMisfire (tw);
 
-      if (tw.state == TriggerWrapper.STATE_WAITING)
+      if (tw.m_nState == TriggerWrapper.STATE_WAITING)
         m_aTimeTriggers.add (tw);
     }
   }
@@ -1437,7 +1437,7 @@ public class RAMJobStore implements IJobStore
 
     if (tw.m_aTrigger.getNextFireTime () == null)
     {
-      tw.state = TriggerWrapper.STATE_COMPLETE;
+      tw.m_nState = TriggerWrapper.STATE_COMPLETE;
       m_aSignaler.notifySchedulerListenersFinalized (tw.m_aTrigger);
       synchronized (m_aLock)
       {
@@ -1453,11 +1453,11 @@ public class RAMJobStore implements IJobStore
     return true;
   }
 
-  private static final AtomicLong ftrCtr = new AtomicLong (System.currentTimeMillis ());
-
+  @Nonnull
+  @Nonempty
   protected String getFiredTriggerRecordId ()
   {
-    return String.valueOf (ftrCtr.incrementAndGet ());
+    return Long.toString (FIRED_TRIGGER_RECORD_COUNTER.incrementAndGet ());
   }
 
   /**
@@ -1534,7 +1534,7 @@ public class RAMJobStore implements IJobStore
           }
         }
 
-        tw.state = TriggerWrapper.STATE_ACQUIRED;
+        tw.m_nState = TriggerWrapper.STATE_ACQUIRED;
         tw.m_aTrigger.setFireInstanceId (getFiredTriggerRecordId ());
         final IOperableTrigger trig = tw.m_aTrigger.clone ();
         if (result.isEmpty ())
@@ -1565,9 +1565,9 @@ public class RAMJobStore implements IJobStore
     synchronized (m_aLock)
     {
       final TriggerWrapper tw = m_aTriggersByKey.get (trigger.getKey ());
-      if (tw != null && tw.state == TriggerWrapper.STATE_ACQUIRED)
+      if (tw != null && tw.m_nState == TriggerWrapper.STATE_ACQUIRED)
       {
-        tw.state = TriggerWrapper.STATE_WAITING;
+        tw.m_nState = TriggerWrapper.STATE_WAITING;
         m_aTimeTriggers.add (tw);
       }
     }
@@ -1596,7 +1596,7 @@ public class RAMJobStore implements IJobStore
         }
         // was the trigger completed, paused, blocked, etc. since being
         // acquired?
-        if (tw.state != TriggerWrapper.STATE_ACQUIRED)
+        if (tw.m_nState != TriggerWrapper.STATE_ACQUIRED)
         {
           continue;
         }
@@ -1615,7 +1615,7 @@ public class RAMJobStore implements IJobStore
         tw.m_aTrigger.triggered (cal);
         trigger.triggered (cal);
         // tw.state = TriggerWrapper.STATE_EXECUTING;
-        tw.state = TriggerWrapper.STATE_WAITING;
+        tw.m_nState = TriggerWrapper.STATE_WAITING;
 
         final TriggerFiredBundle bndle = new TriggerFiredBundle (retrieveJob (tw.m_aJobKey),
                                                                  trigger,
@@ -1633,13 +1633,13 @@ public class RAMJobStore implements IJobStore
           final ICommonsList <TriggerWrapper> trigs = getTriggerWrappersForJob (job.getKey ());
           for (final TriggerWrapper ttw : trigs)
           {
-            if (ttw.state == TriggerWrapper.STATE_WAITING)
+            if (ttw.m_nState == TriggerWrapper.STATE_WAITING)
             {
-              ttw.state = TriggerWrapper.STATE_BLOCKED;
+              ttw.m_nState = TriggerWrapper.STATE_BLOCKED;
             }
-            if (ttw.state == TriggerWrapper.STATE_PAUSED)
+            if (ttw.m_nState == TriggerWrapper.STATE_PAUSED)
             {
-              ttw.state = TriggerWrapper.STATE_PAUSED_BLOCKED;
+              ttw.m_nState = TriggerWrapper.STATE_PAUSED_BLOCKED;
             }
             m_aTimeTriggers.remove (ttw);
           }
@@ -1704,14 +1704,14 @@ public class RAMJobStore implements IJobStore
           final ICommonsList <TriggerWrapper> trigs = getTriggerWrappersForJob (jd.getKey ());
           for (final TriggerWrapper ttw : trigs)
           {
-            if (ttw.state == TriggerWrapper.STATE_BLOCKED)
+            if (ttw.m_nState == TriggerWrapper.STATE_BLOCKED)
             {
-              ttw.state = TriggerWrapper.STATE_WAITING;
+              ttw.m_nState = TriggerWrapper.STATE_WAITING;
               m_aTimeTriggers.add (ttw);
             }
-            if (ttw.state == TriggerWrapper.STATE_PAUSED_BLOCKED)
+            if (ttw.m_nState == TriggerWrapper.STATE_PAUSED_BLOCKED)
             {
-              ttw.state = TriggerWrapper.STATE_PAUSED;
+              ttw.m_nState = TriggerWrapper.STATE_PAUSED;
             }
           }
           m_aSignaler.signalSchedulingChange (0L);
@@ -1746,7 +1746,7 @@ public class RAMJobStore implements IJobStore
         else
           if (triggerInstCode == ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
           {
-            tw.state = TriggerWrapper.STATE_COMPLETE;
+            tw.m_nState = TriggerWrapper.STATE_COMPLETE;
             m_aTimeTriggers.remove (tw);
             m_aSignaler.signalSchedulingChange (0L);
           }
@@ -1754,7 +1754,7 @@ public class RAMJobStore implements IJobStore
             if (triggerInstCode == ECompletedExecutionInstruction.SET_TRIGGER_ERROR)
             {
               LOGGER.info ("Trigger " + trigger.getKey () + " set to ERROR state.");
-              tw.state = TriggerWrapper.STATE_ERROR;
+              tw.m_nState = TriggerWrapper.STATE_ERROR;
               m_aSignaler.signalSchedulingChange (0L);
             }
             else
@@ -1779,7 +1779,7 @@ public class RAMJobStore implements IJobStore
     final ICommonsList <TriggerWrapper> tws = getTriggerWrappersForJob (jobKey);
     for (final TriggerWrapper tw : tws)
     {
-      tw.state = state;
+      tw.m_nState = state;
       if (state != TriggerWrapper.STATE_WAITING)
       {
         m_aTimeTriggers.remove (tw);
@@ -1906,11 +1906,6 @@ final class JobWrapper
 
 final class TriggerWrapper
 {
-  public final TriggerKey m_aKey;
-  public final JobKey m_aJobKey;
-  public final IOperableTrigger m_aTrigger;
-
-  public int state = STATE_WAITING;
   public static final int STATE_WAITING = 0;
   public static final int STATE_ACQUIRED = 1;
   public static final int STATE_EXECUTING = 2;
@@ -1919,6 +1914,12 @@ final class TriggerWrapper
   public static final int STATE_BLOCKED = 5;
   public static final int STATE_PAUSED_BLOCKED = 6;
   public static final int STATE_ERROR = 7;
+
+  public final TriggerKey m_aKey;
+  public final JobKey m_aJobKey;
+  public final IOperableTrigger m_aTrigger;
+
+  public int m_nState = STATE_WAITING;
 
   TriggerWrapper (@Nonnull final IOperableTrigger trigger)
   {

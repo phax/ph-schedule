@@ -796,7 +796,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
           nameSetter = listener.getClass ().getMethod ("setName", strArg);
         }
         catch (final NoSuchMethodException ignore)
-        { /* do nothing */ }
+        {
+          /* do nothing */
+        }
         if (nameSetter != null)
         {
           nameSetter.invoke (listener, new Object [] { triggerListenerName });
@@ -927,6 +929,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
       }
 
       // Initialize plugins now that we have a Scheduler instance.
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Initializing scheduler plugins");
       for (int i = 0; i < plugins.size (); i++)
       {
         plugins.getAtIndex (i).initialize (pluginNames.getAtIndex (i), scheduler, loadHelper);
@@ -957,7 +961,13 @@ public class StdSchedulerFactory implements ISchedulerFactory
       js.setThreadPoolSize (tp.getPoolSize ());
       js.initialize (loadHelper, qs.getSchedulerSignaler ());
 
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Initializing JobRunShellFactory");
+
       jrsf.initialize (scheduler);
+
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Initializing QuartzScheduler");
 
       qs.initialize ();
 

@@ -23,6 +23,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 
@@ -108,7 +109,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
       final String c = name.substring (0, 1).toUpperCase (Locale.US);
       final String methName = "set" + c + name.substring (1);
 
-      final java.lang.reflect.Method setMeth = _getSetMethod (methName, propDescs);
+      final Method setMeth = _getSetMethod (methName, propDescs);
 
       Class <?> paramType = null;
       Object o = null;
@@ -332,11 +333,11 @@ public class PropertySettingJobFactory extends SimpleJobFactory
     }
   }
 
-  private java.lang.reflect.Method _getSetMethod (final String name, final PropertyDescriptor [] props)
+  private Method _getSetMethod (final String name, final PropertyDescriptor [] props)
   {
     for (final PropertyDescriptor prop : props)
     {
-      final java.lang.reflect.Method wMeth = prop.getWriteMethod ();
+      final Method wMeth = prop.getWriteMethod ();
       if (wMeth == null)
         continue;
 
