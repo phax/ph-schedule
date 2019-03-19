@@ -54,7 +54,7 @@ public class ClassUtilsTest
   {
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
-      LOGGER.info (this.getClass ().getSimpleName ());
+      LOGGER.info (getClass ().getSimpleName ());
     }
   }
 

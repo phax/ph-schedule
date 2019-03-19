@@ -75,8 +75,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to prepend (add to the beginning) to the instanceId found in
-   * the system property.
+   * A String of text to prepend (add to the beginning) to the instanceId found
+   * in the system property.
    */
   @Nullable
   public String getPrepend ()
@@ -85,8 +85,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to prepend (add to the beginning) to the instanceId found in
-   * the system property.
+   * A String of text to prepend (add to the beginning) to the instanceId found
+   * in the system property.
    *
    * @param prepend
    *        the value to prepend, or null if none is desired.
@@ -97,8 +97,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to postpend (add to the end) to the instanceId found in the
-   * system property.
+   * A String of text to postpend (add to the end) to the instanceId found in
+   * the system property.
    */
   @Nullable
   public String getPostpend ()
@@ -107,8 +107,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to postpend (add to the end) to the instanceId found in the
-   * system property.
+   * A String of text to postpend (add to the end) to the instanceId found in
+   * the system property.
    *
    * @param postpend
    *        the value to postpend, or null if none is desired.
@@ -119,8 +119,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * The name of the system property from which to obtain the instanceId. Defaults
-   * to {@link #SYSTEM_PROPERTY}.
+   * The name of the system property from which to obtain the instanceId.
+   * Defaults to {@link #SYSTEM_PROPERTY}.
    */
   @Nonnull
   public String getSystemPropertyName ()
@@ -129,14 +129,14 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * The name of the system property from which to obtain the instanceId. Defaults
-   * to {@link #SYSTEM_PROPERTY}.
+   * The name of the system property from which to obtain the instanceId.
+   * Defaults to {@link #SYSTEM_PROPERTY}.
    *
    * @param systemPropertyName
    *        the system property name
    */
   public void setSystemPropertyName (@Nullable final String systemPropertyName)
   {
-    this.m_sSystemPropertyName = systemPropertyName == null ? SYSTEM_PROPERTY : systemPropertyName.trim ();
+    m_sSystemPropertyName = systemPropertyName == null ? SYSTEM_PROPERTY : systemPropertyName.trim ();
   }
 }

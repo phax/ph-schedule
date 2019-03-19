@@ -125,8 +125,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given time,
-   * and repeat at the the given interval until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given
+   * time, and repeat at the the given interval until the given end time.
    * </p>
    *
    * @param startTime
@@ -151,8 +151,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given time,
-   * and repeat at the the given interval until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given
+   * time, and repeat at the the given interval until the given end time.
    * </p>
    *
    * @param startTime
@@ -183,9 +183,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given time,
-   * fire the identified <code>Job</code> and repeat at the the given interval
-   * until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given
+   * time, fire the identified <code>Job</code> and repeat at the the given
+   * interval until the given end time.
    * </p>
    *
    * @param startTime
@@ -257,7 +257,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
       throw new IllegalArgumentException ("End time cannot be before start time");
     }
 
-    this.m_aStartTime = startTime;
+    m_aStartTime = startTime;
   }
 
   /**
@@ -292,7 +292,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
       throw new IllegalArgumentException ("End time cannot be before start time");
     }
 
-    this.m_aEndTime = endTime;
+    m_aEndTime = endTime;
   }
 
   public EIntervalUnit getRepeatIntervalUnit ()
@@ -307,7 +307,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
   {
-    this.m_eRepeatIntervalUnit = intervalUnit;
+    m_eRepeatIntervalUnit = intervalUnit;
   }
 
   public int getRepeatInterval ()
@@ -330,7 +330,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     if (repeatInterval < 0)
       throw new IllegalArgumentException ("Repeat interval must be >= 0");
 
-    this.m_nRepeatInterval = repeatInterval;
+    m_nRepeatInterval = repeatInterval;
   }
 
   public TimeZone getTimeZone ()
@@ -354,26 +354,27 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setTimeZone (final TimeZone timeZone)
   {
-    this.m_aTimeZone = timeZone;
+    m_aTimeZone = timeZone;
   }
 
   /**
-   * If intervals are a day or greater, this property (set to true) will cause the
-   * firing of the trigger to always occur at the same time of day, (the time of
-   * day of the startTime) regardless of daylight saving time transitions. Default
-   * value is false.
+   * If intervals are a day or greater, this property (set to true) will cause
+   * the firing of the trigger to always occur at the same time of day, (the
+   * time of day of the startTime) regardless of daylight saving time
+   * transitions. Default value is false.
    * <p>
-   * For example, without the property set, your trigger may have a start time of
-   * 9:00 am on March 1st, and a repeat interval of 2 days. But after the daylight
-   * saving transition occurs, the trigger may start firing at 8:00 am every other
-   * day.
+   * For example, without the property set, your trigger may have a start time
+   * of 9:00 am on March 1st, and a repeat interval of 2 days. But after the
+   * daylight saving transition occurs, the trigger may start firing at 8:00 am
+   * every other day.
    * </p>
    * <p>
-   * If however, the time of day does not exist on a given day to fire (e.g. 2:00
-   * am in the United States on the days of daylight saving transition), the
-   * trigger will go ahead and fire one hour off on that day, and then resume the
-   * normal hour on other days. If you wish for the trigger to never fire at the
-   * "wrong" hour, then you should set the property skipDayIfHourDoesNotExist.
+   * If however, the time of day does not exist on a given day to fire (e.g.
+   * 2:00 am in the United States on the days of daylight saving transition),
+   * the trigger will go ahead and fire one hour off on that day, and then
+   * resume the normal hour on other days. If you wish for the trigger to never
+   * fire at the "wrong" hour, then you should set the property
+   * skipDayIfHourDoesNotExist.
    * </p>
    *
    * @see #isSkipDayIfHourDoesNotExist()
@@ -387,23 +388,23 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   public void setPreserveHourOfDayAcrossDaylightSavings (final boolean preserveHourOfDayAcrossDaylightSavings)
   {
-    this.m_bPreserveHourOfDayAcrossDaylightSavings = preserveHourOfDayAcrossDaylightSavings;
+    m_bPreserveHourOfDayAcrossDaylightSavings = preserveHourOfDayAcrossDaylightSavings;
   }
 
   /**
-   * If intervals are a day or greater, and preserveHourOfDayAcrossDaylightSavings
-   * property is set to true, and the hour of the day does not exist on a given
-   * day for which the trigger would fire, the day will be skipped and the trigger
-   * advanced a second interval if this property is set to true. Defaults to
-   * false.
+   * If intervals are a day or greater, and
+   * preserveHourOfDayAcrossDaylightSavings property is set to true, and the
+   * hour of the day does not exist on a given day for which the trigger would
+   * fire, the day will be skipped and the trigger advanced a second interval if
+   * this property is set to true. Defaults to false.
    * <p>
-   * <b>CAUTION!</b> If you enable this property, and your hour of day happens to
-   * be that of daylight savings transition (e.g. 2:00 am in the United States)
-   * and the trigger's interval would have had the trigger fire on that day, then
-   * you may actually completely miss a firing on the day of transition if that
-   * hour of day does not exist on that day! In such a case the next fire time of
-   * the trigger will be computed as double (if the interval is 2 days, then a
-   * span of 4 days between firings will occur).
+   * <b>CAUTION!</b> If you enable this property, and your hour of day happens
+   * to be that of daylight savings transition (e.g. 2:00 am in the United
+   * States) and the trigger's interval would have had the trigger fire on that
+   * day, then you may actually completely miss a firing on the day of
+   * transition if that hour of day does not exist on that day! In such a case
+   * the next fire time of the trigger will be computed as double (if the
+   * interval is 2 days, then a span of 4 days between firings will occur).
    * </p>
    *
    * @see #isPreserveHourOfDayAcrossDaylightSavings()
@@ -415,7 +416,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   public void setSkipDayIfHourDoesNotExist (final boolean skipDayIfHourDoesNotExist)
   {
-    this.m_bSkipDayIfHourDoesNotExist = skipDayIfHourDoesNotExist;
+    m_bSkipDayIfHourDoesNotExist = skipDayIfHourDoesNotExist;
   }
 
   public int getTimesTriggered ()
@@ -431,7 +432,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setTimesTriggered (final int timesTriggered)
   {
-    this.m_nTimesTriggered = timesTriggered;
+    m_nTimesTriggered = timesTriggered;
   }
 
   @Override
@@ -574,17 +575,17 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added to
-   * the scheduler, in order to have the <code>Trigger</code> compute its first
-   * fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added
+   * to the scheduler, in order to have the <code>Trigger</code> compute its
+   * first fire time, based on any associated calendar.
    * </p>
    * <p>
    * After this method has been called, <code>getNextFireTime()</code> should
    * return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by the
-   *         scheduler, which is also the same value
+   * @return the first time at which the <code>Trigger</code> will be fired by
+   *         the scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
    */
@@ -614,12 +615,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Returns the next time at which the <code>Trigger</code> is scheduled to fire.
-   * If the trigger will not fire again, <code>null</code> will be returned. Note
-   * that the time returned can possibly be in the past, if the time that was
-   * computed for the trigger to next fire has already arrived, but the scheduler
-   * has not yet been able to fire the trigger (which would likely be due to lack
-   * of resources e.g. threads).
+   * Returns the next time at which the <code>Trigger</code> is scheduled to
+   * fire. If the trigger will not fire again, <code>null</code> will be
+   * returned. Note that the time returned can possibly be in the past, if the
+   * time that was computed for the trigger to next fire has already arrived,
+   * but the scheduler has not yet been able to fire the trigger (which would
+   * likely be due to lack of resources e.g. threads).
    * </p>
    * <p>
    * The value returned is not guaranteed to be valid until after the
@@ -635,7 +636,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   /**
    * <p>
    * Returns the previous time at which the <code>DateIntervalTrigger</code>
-   * fired. If the trigger has not yet fired, <code>null</code> will be returned.
+   * fired. If the trigger has not yet fired, <code>null</code> will be
+   * returned.
    */
   @Override
   public Date getPreviousFireTime ()
@@ -645,7 +647,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Set the next time at which the <code>DateIntervalTrigger</code> should fire.
+   * Set the next time at which the <code>DateIntervalTrigger</code> should
+   * fire.
    * </p>
    * <p>
    * <b>This method should not be invoked by client code.</b>
@@ -653,7 +656,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setNextFireTime (final Date nextFireTime)
   {
-    this.m_aNextFireTime = nextFireTime;
+    m_aNextFireTime = nextFireTime;
   }
 
   /**
@@ -666,7 +669,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
    */
   public void setPreviousFireTime (final Date previousFireTime)
   {
-    this.m_aPreviousFireTime = previousFireTime;
+    m_aPreviousFireTime = previousFireTime;
   }
 
   /**
@@ -981,8 +984,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
 
   /**
    * <p>
-   * Validates whether the properties of the <code>JobDetail</code> are valid for
-   * submission into a <code>Scheduler</code>.
+   * Validates whether the properties of the <code>JobDetail</code> are valid
+   * for submission into a <code>Scheduler</code>.
    *
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.

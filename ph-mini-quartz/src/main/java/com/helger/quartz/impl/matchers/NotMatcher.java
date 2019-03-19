@@ -37,7 +37,7 @@ public class NotMatcher <T extends Key <T>> implements IMatcher <T>
   public NotMatcher (@Nonnull final IMatcher <T> operand)
   {
     ValueEnforcer.notNull (operand, "Operand");
-    this.m_aOperand = operand;
+    m_aOperand = operand;
   }
 
   public boolean isMatch (final T key)

@@ -55,13 +55,13 @@ import com.helger.quartz.utils.Key;
  */
 public class JobBuilder
 {
-  private JobKey key;
-  private String description;
-  private Class <? extends IJob> jobClass;
-  private boolean durability;
-  private boolean shouldRecover;
+  private JobKey m_aKey;
+  private String m_sDescription;
+  private Class <? extends IJob> m_aJobClass;
+  private boolean m_bDurability;
+  private boolean m_bShouldRecover;
 
-  private JobDataMap jobDataMap = new JobDataMap ();
+  private JobDataMap m_aJobDataMap = new JobDataMap ();
 
   protected JobBuilder ()
   {}
@@ -100,16 +100,16 @@ public class JobBuilder
 
     final JobDetail job = new JobDetail ();
 
-    job.setJobClass (jobClass);
-    job.setDescription (description);
-    if (key == null)
-      key = new JobKey (Key.createUniqueName (null), null);
-    job.setKey (key);
-    job.setDurability (durability);
-    job.setRequestsRecovery (shouldRecover);
+    job.setJobClass (m_aJobClass);
+    job.setDescription (m_sDescription);
+    if (m_aKey == null)
+      m_aKey = new JobKey (Key.createUniqueName (null), null);
+    job.setKey (m_aKey);
+    job.setDurability (m_bDurability);
+    job.setRequestsRecovery (m_bShouldRecover);
 
-    if (!jobDataMap.isEmpty ())
-      job.setJobDataMap (jobDataMap);
+    if (!m_aJobDataMap.isEmpty ())
+      job.setJobDataMap (m_aJobDataMap);
 
     return job;
   }
@@ -130,7 +130,7 @@ public class JobBuilder
    */
   public JobBuilder withIdentity (final String name)
   {
-    key = new JobKey (name, null);
+    m_aKey = new JobKey (name, null);
     return this;
   }
 
@@ -152,7 +152,7 @@ public class JobBuilder
    */
   public JobBuilder withIdentity (final String name, final String group)
   {
-    key = new JobKey (name, group);
+    m_aKey = new JobKey (name, group);
     return this;
   }
 
@@ -171,7 +171,7 @@ public class JobBuilder
    */
   public JobBuilder withIdentity (final JobKey jobKey)
   {
-    this.key = jobKey;
+    m_aKey = jobKey;
     return this;
   }
 
@@ -185,7 +185,7 @@ public class JobBuilder
    */
   public JobBuilder withDescription (final String jobDescription)
   {
-    this.description = jobDescription;
+    m_sDescription = jobDescription;
     return this;
   }
 
@@ -200,7 +200,7 @@ public class JobBuilder
    */
   public JobBuilder ofType (final Class <? extends IJob> jobClazz)
   {
-    this.jobClass = jobClazz;
+    m_aJobClass = jobClazz;
     return this;
   }
 
@@ -217,7 +217,7 @@ public class JobBuilder
    */
   public JobBuilder requestRecovery ()
   {
-    this.shouldRecover = true;
+    m_bShouldRecover = true;
     return this;
   }
 
@@ -235,7 +235,7 @@ public class JobBuilder
    */
   public JobBuilder requestRecovery (final boolean jobShouldRecover)
   {
-    this.shouldRecover = jobShouldRecover;
+    m_bShouldRecover = jobShouldRecover;
     return this;
   }
 
@@ -252,7 +252,7 @@ public class JobBuilder
    */
   public JobBuilder storeDurably ()
   {
-    this.durability = true;
+    m_bDurability = true;
     return this;
   }
 
@@ -270,7 +270,7 @@ public class JobBuilder
    */
   public JobBuilder storeDurably (final boolean jobDurability)
   {
-    this.durability = jobDurability;
+    m_bDurability = jobDurability;
     return this;
   }
 
@@ -282,7 +282,7 @@ public class JobBuilder
    */
   public JobBuilder usingJobData (final String dataKey, final String value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -294,7 +294,7 @@ public class JobBuilder
    */
   public JobBuilder usingJobData (final String dataKey, final Integer value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -306,7 +306,7 @@ public class JobBuilder
    */
   public JobBuilder usingJobData (final String dataKey, final Long value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -318,7 +318,7 @@ public class JobBuilder
    */
   public JobBuilder usingJobData (final String dataKey, final Float value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -330,7 +330,7 @@ public class JobBuilder
    */
   public JobBuilder usingJobData (final String dataKey, final Double value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -342,7 +342,7 @@ public class JobBuilder
    */
   public JobBuilder usingJobData (final String dataKey, final Boolean value)
   {
-    jobDataMap.put (dataKey, value);
+    m_aJobDataMap.put (dataKey, value);
     return this;
   }
 
@@ -355,7 +355,7 @@ public class JobBuilder
    */
   public JobBuilder usingJobData (final JobDataMap newJobDataMap)
   {
-    jobDataMap.putAll (newJobDataMap);
+    m_aJobDataMap.putAll (newJobDataMap);
     return this;
   }
 
@@ -368,7 +368,7 @@ public class JobBuilder
    */
   public JobBuilder setJobData (final JobDataMap newJobDataMap)
   {
-    jobDataMap = newJobDataMap;
+    m_aJobDataMap = newJobDataMap;
     return this;
   }
 }

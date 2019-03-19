@@ -36,31 +36,12 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  */
 public class ShutdownHookPlugin implements ISchedulerPlugin
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (ShutdownHookPlugin.class);
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Data members.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  private boolean cleanShutdown = true;
-
-  private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Constructors.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
+  private boolean m_bCleanShutdown = true;
 
   public ShutdownHookPlugin ()
   {}
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * Determine whether or not the plug-in is configured to cause a clean
@@ -73,7 +54,7 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
    */
   public boolean isCleanShutdown ()
   {
-    return cleanShutdown;
+    return m_bCleanShutdown;
   }
 
   /**
@@ -87,19 +68,8 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
    */
   public void setCleanShutdown (final boolean b)
   {
-    cleanShutdown = b;
+    m_bCleanShutdown = b;
   }
-
-  protected Logger getLog ()
-  {
-    return log;
-  }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * SchedulerPlugin Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   /**
    * <p>
@@ -115,21 +85,21 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
                           final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
 
-    getLog ().info ("Registering Quartz shutdown hook.");
+    LOGGER.info ("Registering Quartz shutdown hook.");
 
     final Thread t = new Thread ("Quartz Shutdown-Hook " + scheduler.getSchedulerName ())
     {
       @Override
       public void run ()
       {
-        getLog ().info ("Shutting down Quartz...");
+        LOGGER.info ("Shutting down Quartz...");
         try
         {
           scheduler.shutdown (isCleanShutdown ());
         }
         catch (final SchedulerException e)
         {
-          getLog ().info ("Error shutting down Quartz: " + e.getMessage (), e);
+          LOGGER.info ("Error shutting down Quartz: " + e.getMessage (), e);
         }
       }
     };

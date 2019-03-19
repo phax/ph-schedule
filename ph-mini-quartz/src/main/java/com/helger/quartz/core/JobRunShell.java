@@ -56,7 +56,7 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  */
 public class JobRunShell extends AbstractSchedulerListenerSupport implements Runnable
 {
-  private static final Logger log = LoggerFactory.getLogger (JobRunShell.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (JobRunShell.class);
 
   protected JobExecutionContext m_aJEC;
   protected QuartzScheduler m_aQS;
@@ -79,22 +79,10 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
     m_aFiredTriggerBundle = bndle;
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   @Override
   public void schedulerShuttingdown ()
   {
     requestShutdown ();
-  }
-
-  @Override
-  protected Logger getLog ()
-  {
-    return log;
   }
 
   public void initialize (final QuartzScheduler sched) throws SchedulerException
@@ -206,8 +194,8 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         // execute the job
         try
         {
-          if (log.isDebugEnabled ())
-            log.debug ("Calling execute on job " + jobDetail.getKey ());
+          if (LOGGER.isDebugEnabled ())
+            LOGGER.debug ("Calling execute on job " + jobDetail.getKey ());
           job.execute (m_aJEC);
           endTime = System.currentTimeMillis ();
         }
@@ -215,12 +203,12 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
         {
           endTime = System.currentTimeMillis ();
           jobExEx = jee;
-          getLog ().info ("Job " + jobDetail.getKey () + " threw a JobExecutionException: ", jobExEx);
+          LOGGER.info ("Job " + jobDetail.getKey () + " threw a JobExecutionException: ", jobExEx);
         }
         catch (final Throwable e)
         {
           endTime = System.currentTimeMillis ();
-          getLog ().error ("Job " + jobDetail.getKey () + " threw an unhandled Exception: ", e);
+          LOGGER.error ("Job " + jobDetail.getKey () + " threw an unhandled Exception: ", e);
           final SchedulerException se = new SchedulerException ("Job threw an unhandled exception.", e);
           m_aQS.notifySchedulerListenersError ("Job (" + m_aJEC.getJobDetail ().getKey () + " threw an exception.", se);
           jobExEx = new JobExecutionException (se, false);

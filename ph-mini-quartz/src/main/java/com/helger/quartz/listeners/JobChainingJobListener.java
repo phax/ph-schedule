@@ -20,6 +20,9 @@ package com.helger.quartz.listeners;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
@@ -50,8 +53,10 @@ import com.helger.quartz.SchedulerException;
  */
 public class JobChainingJobListener extends AbstractJobListenerSupport
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (JobChainingJobListener.class);
+
   private final String m_sName;
-  private final ICommonsMap <JobKey, JobKey> chainLinks = new CommonsHashMap <> ();
+  private final ICommonsMap <JobKey, JobKey> m_aChainLinks = new CommonsHashMap <> ();
 
   /**
    * Construct an instance with the given name.
@@ -86,24 +91,24 @@ public class JobChainingJobListener extends AbstractJobListenerSupport
     ValueEnforcer.notNull (secondJob, "SecondJob");
     ValueEnforcer.notNull (secondJob.getName (), "SecondJob.Name");
 
-    chainLinks.put (firstJob, secondJob);
+    m_aChainLinks.put (firstJob, secondJob);
   }
 
   @Override
   public void jobWasExecuted (@Nonnull final IJobExecutionContext context, final JobExecutionException jobException)
   {
-    final JobKey sj = chainLinks.get (context.getJobDetail ().getKey ());
+    final JobKey sj = m_aChainLinks.get (context.getJobDetail ().getKey ());
     if (sj == null)
       return;
 
-    getLog ().info ("Job '" + context.getJobDetail ().getKey () + "' will now chain to Job '" + sj + "'");
+    LOGGER.info ("Job '" + context.getJobDetail ().getKey () + "' will now chain to Job '" + sj + "'");
     try
     {
       context.getScheduler ().triggerJob (sj);
     }
     catch (final SchedulerException se)
     {
-      getLog ().error ("Error encountered during chaining to Job '" + sj + "'", se);
+      LOGGER.error ("Error encountered during chaining to Job '" + sj + "'", se);
     }
   }
 }

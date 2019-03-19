@@ -156,10 +156,11 @@ public class StdSchedulerFactory implements ISchedulerFactory
   public static final String PROP_THREAD_EXECUTOR_CLASS = "org.quartz.threadExecutor.class";
   public static final String SYSTEM_PROPERTY_AS_INSTANCE_ID = "SYS_PROP";
 
+  private static final Logger LOGGER = LoggerFactory.getLogger (StdSchedulerFactory.class);
+
   private SchedulerException m_aInitException;
   private String m_sPropSrc;
   private PropertiesParser m_aCfg;
-  private static final Logger LOGGER = LoggerFactory.getLogger (StdSchedulerFactory.class);
 
   /**
    * Create an uninitialized StdSchedulerFactory.
@@ -167,29 +168,24 @@ public class StdSchedulerFactory implements ISchedulerFactory
   public StdSchedulerFactory ()
   {}
 
-  protected Logger getLog ()
-  {
-    return LOGGER;
-  }
-
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
-   * the contents of a <code>NonBlockingProperties</code> file and overriding
-   * System properties.
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
+   * with the contents of a <code>NonBlockingProperties</code> file and
+   * overriding System properties.
    * </p>
    * <p>
    * By default a properties file named "quartz.properties" is loaded from the
-   * 'current working directory'. If that fails, then the "quartz.properties" file
-   * located (as a resource) in the "quartz" package is loaded. If you wish to use
-   * a file other than these defaults, you must define the system property
-   * 'org.quartz.properties' to point to the file you want.
+   * 'current working directory'. If that fails, then the "quartz.properties"
+   * file located (as a resource) in the "quartz" package is loaded. If you wish
+   * to use a file other than these defaults, you must define the system
+   * property 'org.quartz.properties' to point to the file you want.
    * </p>
    * <p>
    * System properties (environment variables, and -D definitions on the
    * command-line when running the JVM) override any properties in the loaded
-   * file. For this reason, you may want to use a different initialize() method if
-   * your application security policy prohibits access to
+   * file. For this reason, you may want to use a different initialize() method
+   * if your application security policy prohibits access to
    * <code>{@link java.lang.System#getProperties()}</code>.
    * </p>
    *
@@ -299,8 +295,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Add all System properties to the given <code>props</code>. Will override any
-   * properties that already exist in the given <code>props</code>.
+   * Add all System properties to the given <code>props</code>. Will override
+   * any properties that already exist in the given <code>props</code>.
    */
   @Nonnull
   private NonBlockingProperties _overrideWithSysProps (@Nonnull final NonBlockingProperties props)
@@ -312,13 +308,13 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
     catch (final AccessControlException e)
     {
-      getLog ().warn ("Skipping overriding MiniQuartz properties with System properties " +
-                      "during initialization because of an AccessControlException.  " +
-                      "This is likely due to not having read/write access for " +
-                      "java.util.PropertyPermission as required by java.lang.System.getProperties().  " +
-                      "To resolve this warning, either add this permission to your policy file or " +
-                      "use a non-default version of initialize().",
-                      e);
+      LOGGER.warn ("Skipping overriding MiniQuartz properties with System properties " +
+                   "during initialization because of an AccessControlException.  " +
+                   "This is likely due to not having read/write access for " +
+                   "java.util.PropertyPermission as required by java.lang.System.getProperties().  " +
+                   "To resolve this warning, either add this permission to your policy file or " +
+                   "use a non-default version of initialize().",
+                   e);
     }
 
     if (sysProps != null)
@@ -332,8 +328,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
-   * the contents of the <code>Properties</code> file with the given name.
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
+   * with the contents of the <code>Properties</code> file with the given name.
    * </p>
    *
    * @return this
@@ -380,8 +376,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
-   * the contents of the <code>Properties</code> file opened with the given
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
+   * with the contents of the <code>Properties</code> file opened with the given
    * <code>InputStream</code>.
    * </p>
    *
@@ -421,8 +417,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code> with
-   * the contents of the given <code>Properties</code> object.
+   * Initialize the <code>{@link com.helger.quartz.ISchedulerFactory}</code>
+   * with the contents of the given <code>Properties</code> object.
    *
    * @throws SchedulerException
    *         on error
@@ -456,7 +452,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     QuartzScheduler qs = null;
     String instanceIdGeneratorClass = null;
     NonBlockingProperties tProps;
-    boolean autoId = false;
+    boolean bAutoId = false;
     long idleWaitTime = -1;
     String classLoadHelperClass;
     String jobFactoryClass;
@@ -476,14 +472,14 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
     if (schedInstId.equals (AUTO_GENERATE_INSTANCE_ID))
     {
-      autoId = true;
+      bAutoId = true;
       instanceIdGeneratorClass = m_aCfg.getStringProperty (PROP_SCHED_INSTANCE_ID_GENERATOR_CLASS,
                                                            SimpleInstanceIdGenerator.class.getName ());
     }
     else
       if (schedInstId.equals (SYSTEM_PROPERTY_AS_INSTANCE_ID))
       {
-        autoId = true;
+        bAutoId = true;
         instanceIdGeneratorClass = SystemPropertyInstanceIdGenerator.class.getName ();
       }
 
@@ -851,45 +847,23 @@ public class StdSchedulerFactory implements ISchedulerFactory
       threadExecutor = new DefaultThreadExecutor ();
     }
 
-    // Fire everything up
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     try
     {
-
-      // Create correct run-shell
-      // factory...
+      // Create correct run-shell factory...
       final IJobRunShellFactory jrsf = new StdJobRunShellFactory ();
 
-      if (autoId)
+      if (bAutoId)
       {
         try
         {
           schedInstId = DEFAULT_INSTANCE_ID;
           if (js.isClustered ())
-          {
             schedInstId = instanceIdGenerator.generateInstanceId ();
-          }
         }
         catch (final Exception e)
         {
-          getLog ().error ("Couldn't generate instance Id!", e);
+          LOGGER.error ("Couldn't generate instance Id!", e);
           throw new IllegalStateException ("Cannot run without an instance id.");
-        }
-      }
-
-      if (js.getClass ().getName ().startsWith ("org.terracotta.quartz"))
-      {
-        try
-        {
-          final String uuid = (String) js.getClass ().getMethod ("getUUID").invoke (js);
-          if (schedInstId.equals (DEFAULT_INSTANCE_ID))
-          {
-            schedInstId = "TERRACOTTA_CLUSTERED,node=" + uuid;
-          }
-        }
-        catch (final Exception e)
-        {
-          throw new RuntimeException ("Problem obtaining node id from TerracottaJobStore.", e);
         }
       }
 
@@ -973,9 +947,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
       qs.initialize ();
 
-      getLog ().info ("Quartz scheduler '" + scheduler.getSchedulerName () + "' initialized from " + m_sPropSrc);
+      LOGGER.info ("Quartz scheduler '" + scheduler.getSchedulerName () + "' initialized from " + m_sPropSrc);
 
-      getLog ().info ("Quartz scheduler version: " + qs.getVersion ());
+      LOGGER.info ("Quartz scheduler version: " + qs.getVersion ());
 
       // prevents the repository from being garbage collected
       qs.addNoGCObject (schedRep);
@@ -1015,7 +989,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
     catch (final Exception e)
     {
-      getLog ().error ("Got another exception while shutting down after instantiation exception", e);
+      LOGGER.error ("Got another exception while shutting down after instantiation exception", e);
     }
   }
 
@@ -1177,8 +1151,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * </p>
    * <p>
    * If one of the <code>initialize</code> methods has not be previously called,
-   * then the default (no-arg) <code>initialize()</code> method will be called by
-   * this method.
+   * then the default (no-arg) <code>initialize()</code> method will be called
+   * by this method.
    * </p>
    */
   public IScheduler getScheduler () throws SchedulerException

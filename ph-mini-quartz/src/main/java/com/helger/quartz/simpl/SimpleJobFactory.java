@@ -38,13 +38,7 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  */
 public class SimpleJobFactory implements IJobFactory
 {
-
-  private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  protected Logger getLog ()
-  {
-    return log;
-  }
+  private static final Logger LOGGER = LoggerFactory.getLogger (SimpleJobFactory.class);
 
   public IJob newJob (final TriggerFiredBundle bundle, final IScheduler Scheduler) throws SchedulerException
   {
@@ -53,8 +47,8 @@ public class SimpleJobFactory implements IJobFactory
     final Class <? extends IJob> jobClass = jobDetail.getJobClass ();
     try
     {
-      if (log.isDebugEnabled ())
-        log.debug ("Producing instance of Job '" + jobDetail.getKey () + "', class=" + jobClass.getName ());
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Producing instance of Job '" + jobDetail.getKey () + "', class=" + jobClass.getName ());
 
       return jobClass.getDeclaredConstructor ().newInstance ();
     }

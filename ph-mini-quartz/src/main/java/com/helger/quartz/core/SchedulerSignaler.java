@@ -34,17 +34,17 @@ import com.helger.quartz.spi.ISchedulerSignaler;
  */
 public class SchedulerSignaler implements ISchedulerSignaler
 {
-  private static final Logger log = LoggerFactory.getLogger (SchedulerSignaler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (SchedulerSignaler.class);
 
   protected QuartzScheduler m_aScheduler;
   protected QuartzSchedulerThread m_aSchedulerThread;
 
   public SchedulerSignaler (final QuartzScheduler sched, final QuartzSchedulerThread schedThread)
   {
-    this.m_aScheduler = sched;
-    this.m_aSchedulerThread = schedThread;
+    m_aScheduler = sched;
+    m_aSchedulerThread = schedThread;
 
-    log.info ("Initialized Scheduler Signaller of type: " + getClass ());
+    LOGGER.info ("Initialized Scheduler Signaller of type: " + getClass ());
   }
 
   public void notifyTriggerListenersMisfired (final ITrigger trigger)
@@ -55,7 +55,7 @@ public class SchedulerSignaler implements ISchedulerSignaler
     }
     catch (final SchedulerException se)
     {
-      m_aScheduler.getLog ().error ("Error notifying listeners of trigger misfire.", se);
+      LOGGER.error ("Error notifying listeners of trigger misfire.", se);
       m_aScheduler.notifySchedulerListenersError ("Error notifying listeners of trigger misfire.", se);
     }
   }

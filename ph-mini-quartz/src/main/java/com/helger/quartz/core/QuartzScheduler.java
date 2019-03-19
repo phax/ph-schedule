@@ -42,29 +42,9 @@ import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.lang.PropertiesHelper;
 import com.helger.commons.random.RandomHelper;
 import com.helger.commons.string.StringHelper;
-import com.helger.quartz.ICalendar;
-import com.helger.quartz.IInterruptableJob;
-import com.helger.quartz.IJob;
-import com.helger.quartz.IJobDetail;
-import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.IJobListener;
-import com.helger.quartz.IListenerManager;
-import com.helger.quartz.IMatcher;
-import com.helger.quartz.IScheduler;
-import com.helger.quartz.ISchedulerListener;
-import com.helger.quartz.ITrigger;
+import com.helger.quartz.*;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
-import com.helger.quartz.ITriggerListener;
-import com.helger.quartz.JobDataMap;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.JobKey;
-import com.helger.quartz.ObjectAlreadyExistsException;
-import com.helger.quartz.SchedulerContext;
-import com.helger.quartz.SchedulerException;
-import com.helger.quartz.SchedulerMetaData;
-import com.helger.quartz.TriggerKey;
-import com.helger.quartz.UnableToInterruptJobException;
 import com.helger.quartz.impl.SchedulerRepository;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
@@ -91,7 +71,8 @@ import com.helger.quartz.utils.Key;
  */
 public class QuartzScheduler implements IQuartzScheduler
 {
-  private static final Logger log = LoggerFactory.getLogger (QuartzScheduler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (QuartzScheduler.class);
+
   private static String VERSION_MAJOR = "UNKNOWN";
   private static String VERSION_MINOR = "UNKNOWN";
   private static String VERSION_ITERATION = "UNKNOWN";
@@ -173,7 +154,7 @@ public class QuartzScheduler implements IQuartzScheduler
 
     m_aSignaler = new SchedulerSignaler (this, m_aSchedThread);
 
-    getLog ().info ("Mini Quartz Scheduler v." + getVersion () + " created.");
+    LOGGER.info ("Mini Quartz Scheduler v." + getVersion () + " created.");
   }
 
   /**
@@ -182,21 +163,21 @@ public class QuartzScheduler implements IQuartzScheduler
    */
   public void initialize () throws SchedulerException
   {
-    getLog ().info ("Scheduler meta-data: " +
-                    (new SchedulerMetaData (getSchedulerName (),
-                                            getSchedulerInstanceId (),
-                                            getClass (),
-                                            runningSince () != null,
-                                            isInStandbyMode (),
-                                            isShutdown (),
-                                            runningSince (),
-                                            numJobsExecuted (),
-                                            getJobStoreClass (),
-                                            supportsPersistence (),
-                                            isClustered (),
-                                            getThreadPoolClass (),
-                                            getThreadPoolSize (),
-                                            getVersion ())).toString ());
+    LOGGER.info ("Scheduler meta-data: " +
+                 (new SchedulerMetaData (getSchedulerName (),
+                                         getSchedulerInstanceId (),
+                                         getClass (),
+                                         runningSince () != null,
+                                         isInStandbyMode (),
+                                         isShutdown (),
+                                         runningSince (),
+                                         numJobsExecuted (),
+                                         getJobStoreClass (),
+                                         supportsPersistence (),
+                                         isClustered (),
+                                         getThreadPoolClass (),
+                                         getThreadPoolSize (),
+                                         getVersion ())).toString ());
   }
 
   /*
@@ -228,11 +209,6 @@ public class QuartzScheduler implements IQuartzScheduler
   public ISchedulerSignaler getSchedulerSignaler ()
   {
     return m_aSignaler;
-  }
-
-  public Logger getLog ()
-  {
-    return log;
   }
 
   /**
@@ -316,8 +292,8 @@ public class QuartzScheduler implements IQuartzScheduler
    * <code>{@link com.helger.quartz.ITrigger}s</code>.
    * </p>
    * <p>
-   * All <code>{@link com.helger.quartz.ITrigger}s</code> that have misfired will
-   * be passed to the appropriate TriggerListener(s).
+   * All <code>{@link com.helger.quartz.ITrigger}s</code> that have misfired
+   * will be passed to the appropriate TriggerListener(s).
    * </p>
    */
   public void start () throws SchedulerException
@@ -345,7 +321,7 @@ public class QuartzScheduler implements IQuartzScheduler
 
     m_aSchedThread.togglePause (false);
 
-    getLog ().info ("Scheduler " + m_aResources.getUniqueIdentifier () + " started.");
+    LOGGER.info ("Scheduler " + m_aResources.getUniqueIdentifier () + " started.");
 
     notifySchedulerListenersStarted ();
   }
@@ -370,7 +346,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final SchedulerException se)
       {
-        getLog ().error ("Unable to start secheduler after startup delay.", se);
+        LOGGER.error ("Unable to start secheduler after startup delay.", se);
       }
     });
     t.start ();
@@ -389,7 +365,7 @@ public class QuartzScheduler implements IQuartzScheduler
   {
     m_aResources.getJobStore ().schedulerPaused ();
     m_aSchedThread.togglePause (true);
-    getLog ().info ("Scheduler " + m_aResources.getUniqueIdentifier () + " paused.");
+    LOGGER.info ("Scheduler " + m_aResources.getUniqueIdentifier () + " paused.");
     notifySchedulerListenersInStandbyMode ();
   }
 
@@ -443,8 +419,8 @@ public class QuartzScheduler implements IQuartzScheduler
   /**
    * <p>
    * Halts the <code>QuartzScheduler</code>'s firing of
-   * <code>{@link com.helger.quartz.ITrigger}s</code>, and cleans up all resources
-   * associated with the QuartzScheduler. Equivalent to
+   * <code>{@link com.helger.quartz.ITrigger}s</code>, and cleans up all
+   * resources associated with the QuartzScheduler. Equivalent to
    * <code>shutdown(false)</code>.
    * </p>
    * <p>
@@ -459,8 +435,8 @@ public class QuartzScheduler implements IQuartzScheduler
   /**
    * <p>
    * Halts the <code>QuartzScheduler</code>'s firing of
-   * <code>{@link com.helger.quartz.ITrigger}s</code>, and cleans up all resources
-   * associated with the QuartzScheduler.
+   * <code>{@link com.helger.quartz.ITrigger}s</code>, and cleans up all
+   * resources associated with the QuartzScheduler.
    * </p>
    * <p>
    * The scheduler cannot be re-started.
@@ -480,7 +456,7 @@ public class QuartzScheduler implements IQuartzScheduler
 
     m_bShuttingDown = true;
 
-    getLog ().info ("Scheduler " + m_aResources.getUniqueIdentifier () + " shutting down.");
+    LOGGER.info ("Scheduler " + m_aResources.getUniqueIdentifier () + " shutting down.");
 
     standby ();
 
@@ -502,9 +478,9 @@ public class QuartzScheduler implements IQuartzScheduler
           catch (final Throwable e)
           {
             // do nothing, this was just a courtesy effort
-            getLog ().warn ("Encountered error when interrupting job {} during shutdown: {}",
-                            job.getJobDetail ().getKey (),
-                            e);
+            LOGGER.warn ("Encountered error when interrupting job {} during shutdown: {}",
+                         job.getJobDetail ().getKey (),
+                         e);
           }
       }
     }
@@ -523,7 +499,7 @@ public class QuartzScheduler implements IQuartzScheduler
 
     holdToPreventGC.clear ();
 
-    getLog ().info ("Scheduler " + m_aResources.getUniqueIdentifier () + " shutdown complete.");
+    LOGGER.info ("Scheduler " + m_aResources.getUniqueIdentifier () + " shutdown complete.");
   }
 
   /**
@@ -558,16 +534,17 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
-   * Return a list of <code>JobExecutionContext</code> objects that represent all
-   * currently executing Jobs in this Scheduler instance.
+   * Return a list of <code>JobExecutionContext</code> objects that represent
+   * all currently executing Jobs in this Scheduler instance.
    * </p>
    * <p>
-   * This method is not cluster aware. That is, it will only return Jobs currently
-   * executing in this Scheduler instance, not across the entire cluster.
+   * This method is not cluster aware. That is, it will only return Jobs
+   * currently executing in this Scheduler instance, not across the entire
+   * cluster.
    * </p>
    * <p>
-   * Note that the list returned is an 'instantaneous' snap-shot, and that as soon
-   * as it's returned, the true list of executing jobs may be different.
+   * Note that the list returned is an 'instantaneous' snap-shot, and that as
+   * soon as it's returned, the true list of executing jobs may be different.
    * </p>
    */
   public ICommonsList <IJobExecutionContext> getCurrentlyExecutingJobs ()
@@ -585,11 +562,12 @@ public class QuartzScheduler implements IQuartzScheduler
    * <p>
    * Add the <code>{@link com.helger.quartz.IJob}</code> identified by the given
    * <code>{@link com.helger.quartz.IJobDetail}</code> to the Scheduler, and
-   * associate the given <code>{@link com.helger.quartz.ITrigger}</code> with it.
+   * associate the given <code>{@link com.helger.quartz.ITrigger}</code> with
+   * it.
    * </p>
    * <p>
-   * If the given Trigger does not reference any <code>Job</code>, then it will be
-   * set to reference the Job passed with it into this method.
+   * If the given Trigger does not reference any <code>Job</code>, then it will
+   * be set to reference the Job passed with it into this method.
    * </p>
    *
    * @throws SchedulerException
@@ -598,8 +576,8 @@ public class QuartzScheduler implements IQuartzScheduler
    */
   public Date scheduleJob (final IJobDetail jobDetail, final ITrigger trigger) throws SchedulerException
   {
-    if (log.isDebugEnabled ())
-      log.debug ("scheduleJob (" + jobDetail + ", " + trigger + ")");
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("scheduleJob (" + jobDetail + ", " + trigger + ")");
 
     validateState ();
 
@@ -703,8 +681,8 @@ public class QuartzScheduler implements IQuartzScheduler
    * <p>
    * Add the given <code>Job</code> to the Scheduler - with no associated
    * <code>Trigger</code>. The <code>Job</code> will be 'dormant' until it is
-   * scheduled with a <code>Trigger</code>, or <code>Scheduler.triggerJob()</code>
-   * is called for it.
+   * scheduled with a <code>Trigger</code>, or
+   * <code>Scheduler.triggerJob()</code> is called for it.
    * </p>
    * <p>
    * The <code>Job</code> must by definition be 'durable', if it is not,
@@ -870,8 +848,8 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
-   * Remove the indicated <code>{@link com.helger.quartz.ITrigger}</code> from the
-   * scheduler.
+   * Remove the indicated <code>{@link com.helger.quartz.ITrigger}</code> from
+   * the scheduler.
    * </p>
    */
   public boolean unscheduleJob (final TriggerKey triggerKey) throws SchedulerException
@@ -893,16 +871,16 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
-   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the
-   * given name, and store the new given one - which must be associated with the
-   * same job.
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
+   * the given name, and store the new given one - which must be associated with
+   * the same job.
    * </p>
    *
    * @param newTrigger
    *        The new <code>Trigger</code> to be stored.
-   * @return <code>null</code> if a <code>Trigger</code> with the given name &amp;
-   *         group was not found and removed from the store, otherwise the first
-   *         fire time of the newly scheduled trigger.
+   * @return <code>null</code> if a <code>Trigger</code> with the given name
+   *         &amp; group was not found and removed from the store, otherwise the
+   *         first fire time of the newly scheduled trigger.
    */
   public Date rescheduleJob (final TriggerKey triggerKey, final ITrigger newTrigger) throws SchedulerException
   {
@@ -1143,8 +1121,8 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
-   * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code> with
-   * the given name.
+   * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code>
+   * with the given name.
    * </p>
    * <p>
    * If any of the <code>Job</code>'s<code>Trigger</code> s missed one or more
@@ -1168,8 +1146,8 @@ public class QuartzScheduler implements IQuartzScheduler
    * </p>
    * <p>
    * If any of the <code>Job</code> s had <code>Trigger</code> s that missed one
-   * or more fire-times, then the <code>Trigger</code>'s misfire instruction will
-   * be applied.
+   * or more fire-times, then the <code>Trigger</code>'s misfire instruction
+   * will be applied.
    * </p>
    */
   public void resumeJobs (final GroupMatcher <JobKey> matcher) throws SchedulerException
@@ -1244,8 +1222,8 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all the <code>{@link com.helger.quartz.IJob}s</code> in the
-   * matching groups.
+   * Get the names of all the <code>{@link com.helger.quartz.IJob}s</code> in
+   * the matching groups.
    * </p>
    */
   public ICommonsSet <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
@@ -1283,8 +1261,8 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
-   * Get the names of all the <code>{@link com.helger.quartz.ITrigger}s</code> in
-   * the matching groups.
+   * Get the names of all the <code>{@link com.helger.quartz.ITrigger}s</code>
+   * in the matching groups.
    * </p>
    */
   public ICommonsSet <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
@@ -1309,7 +1287,8 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
-   * Get the <code>{@link ITrigger}</code> instance with the given name and group.
+   * Get the <code>{@link ITrigger}</code> instance with the given name and
+   * group.
    * </p>
    */
   public ITrigger getTrigger (final TriggerKey triggerKey) throws SchedulerException
@@ -1337,8 +1316,8 @@ public class QuartzScheduler implements IQuartzScheduler
   }
 
   /**
-   * Determine whether a {@link ITrigger} with the given identifier already exists
-   * within the scheduler.
+   * Determine whether a {@link ITrigger} with the given identifier already
+   * exists within the scheduler.
    *
    * @param triggerKey
    *        the identifier to check for
@@ -1355,8 +1334,8 @@ public class QuartzScheduler implements IQuartzScheduler
   }
 
   /**
-   * Clears (deletes!) all scheduling data - all {@link IJob}s, {@link ITrigger}s
-   * {@link ICalendar}s.
+   * Clears (deletes!) all scheduling data - all {@link IJob}s,
+   * {@link ITrigger}s {@link ICalendar}s.
    *
    * @throws SchedulerException
    *         on error
@@ -1390,8 +1369,9 @@ public class QuartzScheduler implements IQuartzScheduler
    * </p>
    *
    * @throws SchedulerException
-   *         if there is an internal Scheduler error, or a Calendar with the same
-   *         name already exists, and <code>replace</code> is <code>false</code>.
+   *         if there is an internal Scheduler error, or a Calendar with the
+   *         same name already exists, and <code>replace</code> is
+   *         <code>false</code>.
    */
   public void addCalendar (final String calName,
                            final ICalendar calendar,
@@ -1514,8 +1494,8 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
-   * Add the given <code>{@link com.helger.quartz.ITriggerListener}</code> to the
-   * <code>Scheduler</code>'s <i>internal</i> list.
+   * Add the given <code>{@link com.helger.quartz.ITriggerListener}</code> to
+   * the <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
   public void addInternalTriggerListener (final ITriggerListener triggerListener)
@@ -1877,8 +1857,8 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of error: ", e);
-        getLog ().error ("  Original error (for notification) was: " + msg, se);
+        LOGGER.error ("Error while notifying SchedulerListener of error: ", e);
+        LOGGER.error ("  Original error (for notification) was: " + msg, se);
       }
     }
   }
@@ -1897,8 +1877,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of scheduled job." + "  Triger=" + trigger.getKey (),
-                         e);
+        LOGGER.error ("Error while notifying SchedulerListener of scheduled job." + "  Triger=" + trigger.getKey (), e);
       }
     }
   }
@@ -1920,10 +1899,10 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of unscheduled job." +
-                         "  Triger=" +
-                         (triggerKey == null ? "ALL DATA" : triggerKey),
-                         e);
+        LOGGER.error ("Error while notifying SchedulerListener of unscheduled job." +
+                      "  Triger=" +
+                      (triggerKey == null ? "ALL DATA" : triggerKey),
+                      e);
       }
     }
   }
@@ -1942,10 +1921,8 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of finalized trigger." +
-                         "  Triger=" +
-                         trigger.getKey (),
-                         e);
+        LOGGER.error ("Error while notifying SchedulerListener of finalized trigger." + "  Triger=" + trigger.getKey (),
+                      e);
       }
     }
   }
@@ -1964,7 +1941,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of paused trigger: " + triggerKey, e);
+        LOGGER.error ("Error while notifying SchedulerListener of paused trigger: " + triggerKey, e);
       }
     }
   }
@@ -1983,7 +1960,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of paused trigger group." + group, e);
+        LOGGER.error ("Error while notifying SchedulerListener of paused trigger group." + group, e);
       }
     }
   }
@@ -2002,7 +1979,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of resumed trigger: " + key, e);
+        LOGGER.error ("Error while notifying SchedulerListener of resumed trigger: " + key, e);
       }
     }
   }
@@ -2021,7 +1998,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of resumed group: " + group, e);
+        LOGGER.error ("Error while notifying SchedulerListener of resumed group: " + group, e);
       }
     }
   }
@@ -2040,7 +2017,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of paused job: " + key, e);
+        LOGGER.error ("Error while notifying SchedulerListener of paused job: " + key, e);
       }
     }
   }
@@ -2059,7 +2036,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of paused job group: " + group, e);
+        LOGGER.error ("Error while notifying SchedulerListener of paused job group: " + group, e);
       }
     }
   }
@@ -2078,7 +2055,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of resumed job: " + key, e);
+        LOGGER.error ("Error while notifying SchedulerListener of resumed job: " + key, e);
       }
     }
   }
@@ -2097,7 +2074,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of resumed job group: " + group, e);
+        LOGGER.error ("Error while notifying SchedulerListener of resumed job group: " + group, e);
       }
     }
   }
@@ -2116,7 +2093,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of inStandByMode.", e);
+        LOGGER.error ("Error while notifying SchedulerListener of inStandByMode.", e);
       }
     }
   }
@@ -2135,7 +2112,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of startup.", e);
+        LOGGER.error ("Error while notifying SchedulerListener of startup.", e);
       }
     }
   }
@@ -2154,7 +2131,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of startup.", e);
+        LOGGER.error ("Error while notifying SchedulerListener of startup.", e);
       }
     }
   }
@@ -2173,7 +2150,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of shutdown.", e);
+        LOGGER.error ("Error while notifying SchedulerListener of shutdown.", e);
       }
     }
   }
@@ -2192,7 +2169,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of shutdown.", e);
+        LOGGER.error ("Error while notifying SchedulerListener of shutdown.", e);
       }
     }
   }
@@ -2211,7 +2188,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of JobAdded.", e);
+        LOGGER.error ("Error while notifying SchedulerListener of JobAdded.", e);
       }
     }
   }
@@ -2230,7 +2207,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        getLog ().error ("Error while notifying SchedulerListener of JobAdded.", e);
+        LOGGER.error ("Error while notifying SchedulerListener of JobAdded.", e);
       }
     }
   }
@@ -2244,7 +2221,7 @@ public class QuartzScheduler implements IQuartzScheduler
   public void setJobFactory (final IJobFactory aFactory) throws SchedulerException
   {
     ValueEnforcer.notNull (aFactory, "JobFactory");
-    getLog ().info ("JobFactory set to: " + aFactory.toString ());
+    LOGGER.info ("JobFactory set to: " + aFactory.toString ());
     m_aJobFactory = aFactory;
   }
 
@@ -2254,8 +2231,8 @@ public class QuartzScheduler implements IQuartzScheduler
   }
 
   /**
-   * Interrupt all instances of the identified InterruptableJob executing in this
-   * Scheduler instance.
+   * Interrupt all instances of the identified InterruptableJob executing in
+   * this Scheduler instance.
    * <p>
    * This method is not cluster aware. That is, it will only interrupt instances
    * of the identified InterruptableJob currently executing in this Scheduler
@@ -2348,20 +2325,22 @@ public class QuartzScheduler implements IQuartzScheduler
 
 class ErrorLogger extends AbstractSchedulerListenerSupport
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (ErrorLogger.class);
+
   ErrorLogger ()
   {}
 
   @Override
   public void schedulerError (final String msg, final SchedulerException cause)
   {
-    getLog ().error (msg, cause);
+    LOGGER.error (msg, cause);
   }
 }
 
 class ExecutingJobsManager implements IJobListener
 {
-  private final ICommonsMap <String, IJobExecutionContext> executingJobs = new CommonsHashMap <> ();
-  private final AtomicInteger numJobsFired = new AtomicInteger (0);
+  private final ICommonsMap <String, IJobExecutionContext> m_aExecutingJobs = new CommonsHashMap <> ();
+  private final AtomicInteger m_aNumJobsFired = new AtomicInteger (0);
 
   ExecutingJobsManager ()
   {}
@@ -2373,40 +2352,40 @@ class ExecutingJobsManager implements IJobListener
 
   public int getNumJobsCurrentlyExecuting ()
   {
-    synchronized (executingJobs)
+    synchronized (m_aExecutingJobs)
     {
-      return executingJobs.size ();
+      return m_aExecutingJobs.size ();
     }
   }
 
   public void jobToBeExecuted (final IJobExecutionContext context)
   {
-    numJobsFired.incrementAndGet ();
+    m_aNumJobsFired.incrementAndGet ();
 
-    synchronized (executingJobs)
+    synchronized (m_aExecutingJobs)
     {
-      executingJobs.put (((IOperableTrigger) context.getTrigger ()).getFireInstanceId (), context);
+      m_aExecutingJobs.put (((IOperableTrigger) context.getTrigger ()).getFireInstanceId (), context);
     }
   }
 
   public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
-    synchronized (executingJobs)
+    synchronized (m_aExecutingJobs)
     {
-      executingJobs.remove (((IOperableTrigger) context.getTrigger ()).getFireInstanceId ());
+      m_aExecutingJobs.remove (((IOperableTrigger) context.getTrigger ()).getFireInstanceId ());
     }
   }
 
   public int getNumJobsFired ()
   {
-    return numJobsFired.get ();
+    return m_aNumJobsFired.get ();
   }
 
   public ICommonsList <IJobExecutionContext> getExecutingJobs ()
   {
-    synchronized (executingJobs)
+    synchronized (m_aExecutingJobs)
     {
-      return new CommonsArrayList <> (executingJobs.values ());
+      return new CommonsArrayList <> (m_aExecutingJobs.values ());
     }
   }
 

@@ -104,11 +104,6 @@ public class RAMJobStore implements IJobStore
   public RAMJobStore ()
   {}
 
-  protected Logger getLog ()
-  {
-    return LOGGER;
-  }
-
   /**
    * <p>
    * Called by the QuartzScheduler before the <code>JobStore</code> is used, in
@@ -117,8 +112,8 @@ public class RAMJobStore implements IJobStore
    */
   public void initialize (final IClassLoadHelper loadHelper, final ISchedulerSignaler schedSignaler)
   {
-    this.m_aSignaler = schedSignaler;
-    getLog ().info ("RAMJobStore initialized.");
+    m_aSignaler = schedSignaler;
+    LOGGER.info ("RAMJobStore initialized.");
   }
 
   public void schedulerStarted ()
@@ -155,7 +150,7 @@ public class RAMJobStore implements IJobStore
     {
       throw new IllegalArgumentException ("Misfire threshold must be larger than 0");
     }
-    this.m_nMisfireThreshold = misfireThreshold;
+    m_nMisfireThreshold = misfireThreshold;
   }
 
   /**
@@ -305,7 +300,7 @@ public class RAMJobStore implements IJobStore
       final ICommonsList <IOperableTrigger> triggersOfJob = getTriggersForJob (jobKey);
       for (final IOperableTrigger trig : triggersOfJob)
       {
-        this.removeTrigger (trig.getKey ());
+        removeTrigger (trig.getKey ());
         found = true;
       }
 
@@ -1758,14 +1753,14 @@ public class RAMJobStore implements IJobStore
           else
             if (triggerInstCode == ECompletedExecutionInstruction.SET_TRIGGER_ERROR)
             {
-              getLog ().info ("Trigger " + trigger.getKey () + " set to ERROR state.");
+              LOGGER.info ("Trigger " + trigger.getKey () + " set to ERROR state.");
               tw.state = TriggerWrapper.STATE_ERROR;
               m_aSignaler.signalSchedulingChange (0L);
             }
             else
               if (triggerInstCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR)
               {
-                getLog ().info ("All triggers of Job " + trigger.getJobKey () + " set to ERROR state.");
+                LOGGER.info ("All triggers of Job " + trigger.getJobKey () + " set to ERROR state.");
                 setAllTriggersOfJobToState (trigger.getJobKey (), TriggerWrapper.STATE_ERROR);
                 m_aSignaler.signalSchedulingChange (0L);
               }

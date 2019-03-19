@@ -107,8 +107,8 @@ public class JobDetail implements IJobDetail
       throw new IllegalArgumentException ("Job name cannot be empty.");
     }
 
-    this.m_sName = name;
-    this.m_aKey = null;
+    m_sName = name;
+    m_aKey = null;
   }
 
   /**
@@ -139,10 +139,10 @@ public class JobDetail implements IJobDetail
     }
 
     if (group == null)
-      this.m_sGroup = IScheduler.DEFAULT_GROUP;
+      m_sGroup = IScheduler.DEFAULT_GROUP;
     else
-      this.m_sGroup = group;
-    this.m_aKey = null;
+      m_sGroup = group;
+    m_aKey = null;
   }
 
   /**
@@ -175,7 +175,7 @@ public class JobDetail implements IJobDetail
 
     setName (key.getName ());
     setGroup (key.getGroup ());
-    this.m_aKey = key;
+    m_aKey = key;
   }
 
   public String getDescription ()
@@ -186,13 +186,13 @@ public class JobDetail implements IJobDetail
   /**
    * <p>
    * Set a description for the <code>Job</code> instance - may be useful for
-   * remembering/displaying the purpose of the job, though the description has no
-   * meaning to Quartz.
+   * remembering/displaying the purpose of the job, though the description has
+   * no meaning to Quartz.
    * </p>
    */
   public void setDescription (final String description)
   {
-    this.m_sDescription = description;
+    m_sDescription = description;
   }
 
   public Class <? extends IJob> getJobClass ()
@@ -220,7 +220,7 @@ public class JobDetail implements IJobDetail
       throw new IllegalArgumentException ("Job class must implement the Job interface.");
     }
 
-    this.m_aJobClass = jobClass;
+    m_aJobClass = jobClass;
   }
 
   public JobDataMap getJobDataMap ()
@@ -239,7 +239,7 @@ public class JobDetail implements IJobDetail
    */
   public void setJobDataMap (final JobDataMap jobDataMap)
   {
-    this.m_aJobDataMap = jobDataMap;
+    m_aJobDataMap = jobDataMap;
   }
 
   /**
@@ -253,7 +253,7 @@ public class JobDetail implements IJobDetail
    */
   public void setDurability (final boolean durability)
   {
-    this.m_bDurability = durability;
+    m_bDurability = durability;
   }
 
   /**
@@ -269,7 +269,7 @@ public class JobDetail implements IJobDetail
    */
   public void setRequestsRecovery (final boolean shouldRecover)
   {
-    this.m_bShouldRecover = shouldRecover;
+    m_bShouldRecover = shouldRecover;
   }
 
   public boolean isDurable ()

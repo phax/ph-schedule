@@ -29,7 +29,6 @@ import com.helger.quartz.spi.IThreadExecutor;
  */
 public class DefaultThreadExecutor implements IThreadExecutor
 {
-
   public void initialize ()
   {}
 
@@ -37,5 +36,4 @@ public class DefaultThreadExecutor implements IThreadExecutor
   {
     thread.start ();
   }
-
 }

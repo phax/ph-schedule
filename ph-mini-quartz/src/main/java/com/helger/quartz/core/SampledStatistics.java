@@ -20,6 +20,8 @@ package com.helger.quartz.core;
 
 import java.util.Timer;
 
+import javax.annotation.Nonnull;
+
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
@@ -35,9 +37,6 @@ import com.helger.quartz.utils.counter.sampled.SampledRateCounterConfig;
 
 public class SampledStatistics extends AbstractSchedulerListenerSupport implements ISampledStatistics, IJobListener
 {
-  @SuppressWarnings ("unused")
-  private final QuartzScheduler m_aScheduler;
-
   private static final String NAME = "QuartzSampledStatistics";
 
   private static final int DEFAULT_HISTORY_SIZE = 30;
@@ -56,17 +55,15 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
   private final ISampledCounter m_aJobsExecutingCount;
   private final ISampledCounter m_aJobsCompletedCount;
 
-  SampledStatistics (final QuartzScheduler scheduler)
+  SampledStatistics (@Nonnull final QuartzScheduler aScheduler)
   {
-    this.m_aScheduler = scheduler;
-
     m_aCounterManager = new CounterManager (new Timer (NAME + "Timer"));
     m_aJobsScheduledCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
     m_aJobsExecutingCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
     m_aJobsCompletedCount = createSampledCounter (DEFAULT_SAMPLED_COUNTER_CONFIG);
 
-    scheduler.addInternalSchedulerListener (this);
-    scheduler.addInternalJobListener (this);
+    aScheduler.addInternalSchedulerListener (this);
+    aScheduler.addInternalJobListener (this);
   }
 
   public void shutdown ()

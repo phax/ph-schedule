@@ -56,20 +56,20 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public JobExecutionContext (final IScheduler scheduler, final TriggerFiredBundle firedBundle, final IJob job)
   {
-    this.m_aScheduler = scheduler;
-    this.m_aTrigger = firedBundle.getTrigger ();
-    this.m_aCalendar = firedBundle.getCalendar ();
-    this.m_aJobDetail = firedBundle.getJobDetail ();
-    this.m_aJob = job;
-    this.m_bRecovering = firedBundle.isRecovering ();
-    this.m_aFireTime = firedBundle.getFireTime ();
-    this.m_aScheduledFireTime = firedBundle.getScheduledFireTime ();
-    this.m_aPrevFireTime = firedBundle.getPrevFireTime ();
-    this.m_aNextFireTime = firedBundle.getNextFireTime ();
+    m_aScheduler = scheduler;
+    m_aTrigger = firedBundle.getTrigger ();
+    m_aCalendar = firedBundle.getCalendar ();
+    m_aJobDetail = firedBundle.getJobDetail ();
+    m_aJob = job;
+    m_bRecovering = firedBundle.isRecovering ();
+    m_aFireTime = firedBundle.getFireTime ();
+    m_aScheduledFireTime = firedBundle.getScheduledFireTime ();
+    m_aPrevFireTime = firedBundle.getPrevFireTime ();
+    m_aNextFireTime = firedBundle.getNextFireTime ();
 
-    this.m_aJobDataMap = new JobDataMap ();
-    this.m_aJobDataMap.putAll (m_aJobDetail.getJobDataMap ());
-    this.m_aJobDataMap.putAll (m_aTrigger.getJobDataMap ());
+    m_aJobDataMap = new JobDataMap ();
+    m_aJobDataMap.putAll (m_aJobDetail.getJobDataMap ());
+    m_aJobDataMap.putAll (m_aTrigger.getJobDataMap ());
   }
 
   /*
@@ -224,7 +224,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public void setResult (final Object result)
   {
-    this.m_aResult = result;
+    m_aResult = result;
   }
 
   /**
@@ -241,7 +241,7 @@ public class JobExecutionContext implements IJobExecutionContext
    */
   public void setJobRunTime (final long jobRunTime)
   {
-    this.m_nJobRunTime = jobRunTime;
+    m_nJobRunTime = jobRunTime;
   }
 
   /**

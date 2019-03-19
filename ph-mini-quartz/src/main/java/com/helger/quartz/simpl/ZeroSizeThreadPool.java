@@ -44,15 +44,10 @@ import com.helger.quartz.spi.IThreadPool;
  */
 public class ZeroSizeThreadPool implements IThreadPool
 {
-  private static final Logger log = LoggerFactory.getLogger (ZeroSizeThreadPool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (ZeroSizeThreadPool.class);
 
   public ZeroSizeThreadPool ()
   {}
-
-  public Logger getLog ()
-  {
-    return log;
-  }
 
   public int getPoolSize ()
   {
@@ -69,7 +64,8 @@ public class ZeroSizeThreadPool implements IThreadPool
 
   public void shutdown (final boolean waitForJobsToComplete)
   {
-    getLog ().debug ("shutdown complete");
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("shutdown complete");
   }
 
   public boolean runInThread (final Runnable runnable)

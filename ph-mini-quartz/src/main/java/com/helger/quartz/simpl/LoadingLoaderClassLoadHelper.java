@@ -22,7 +22,7 @@ import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
  * A <code>ClassLoadHelper</code> that uses either the loader of it's own class
- * (<code>this.getClass().getClassLoader().loadClass( .. )</code>).
+ * (<code>getClass().getClassLoader().loadClass( .. )</code>).
  *
  * @see com.helger.quartz.spi.IClassLoadHelper
  * @see com.helger.quartz.simpl.InitThreadContextClassLoadHelper
@@ -40,6 +40,6 @@ public class LoadingLoaderClassLoadHelper implements IClassLoadHelper
    */
   public ClassLoader getClassLoader ()
   {
-    return this.getClass ().getClassLoader ();
+    return getClass ().getClassLoader ();
   }
 }

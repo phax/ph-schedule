@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.random.RandomHelper;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.JobPersistenceException;
@@ -49,7 +50,7 @@ import com.helger.quartz.spi.TriggerFiredResult;
  */
 public class QuartzSchedulerThread extends Thread
 {
-  private static final Logger log = LoggerFactory.getLogger (QuartzSchedulerThread.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (QuartzSchedulerThread.class);
 
   private QuartzScheduler m_aQS;
   private QuartzSchedulerResources m_aQSRsrcs;
@@ -58,7 +59,7 @@ public class QuartzSchedulerThread extends Thread
   private long m_nSignaledNextFireTime;
   private boolean m_bPaused;
   private final AtomicBoolean m_aHalted;
-  private final Random m_aRandom = new Random (System.currentTimeMillis ());
+  private final Random m_aRandom = RandomHelper.getRandom ();
   // When the scheduler finds there is no current trigger to fire, how long
   // it should wait until checking again...
   private static long DEFAULT_IDLE_WAIT_TIME = 30L * 1000L;
@@ -68,8 +69,8 @@ public class QuartzSchedulerThread extends Thread
   /**
    * <p>
    * Construct a new <code>QuartzSchedulerThread</code> for the given
-   * <code>QuartzScheduler</code> as a non-daemon <code>Thread</code> with normal
-   * priority.
+   * <code>QuartzScheduler</code> as a non-daemon <code>Thread</code> with
+   * normal priority.
    * </p>
    */
   QuartzSchedulerThread (final QuartzScheduler qs, final QuartzSchedulerResources qsRsrcs)
@@ -90,16 +91,17 @@ public class QuartzSchedulerThread extends Thread
                          final int threadPrio)
   {
     super (qs.getSchedulerThreadGroup (), qsRsrcs.getThreadName ());
-    this.m_aQS = qs;
-    this.m_aQSRsrcs = qsRsrcs;
-    this.setDaemon (setDaemon);
+    m_aQS = qs;
+    m_aQSRsrcs = qsRsrcs;
+    setDaemon (setDaemon);
     if (qsRsrcs.isThreadsInheritInitializersClassLoadContext ())
     {
-      log.info ("QuartzSchedulerThread Inheriting ContextClassLoader of thread: " + Thread.currentThread ().getName ());
-      this.setContextClassLoader (Thread.currentThread ().getContextClassLoader ());
+      LOGGER.info ("QuartzSchedulerThread Inheriting ContextClassLoader of thread: " +
+                   Thread.currentThread ().getName ());
+      setContextClassLoader (Thread.currentThread ().getContextClassLoader ());
     }
 
-    this.setPriority (threadPrio);
+    setPriority (threadPrio);
 
     // start the underlying thread, but put this object into the 'paused'
     // state
@@ -107,12 +109,6 @@ public class QuartzSchedulerThread extends Thread
     m_bPaused = true;
     m_aHalted = new AtomicBoolean (false);
   }
-
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
 
   void setIdleWaitTime (final long waitTime)
   {
@@ -203,9 +199,9 @@ public class QuartzSchedulerThread extends Thread
 
   /**
    * <p>
-   * Signals the main processing loop that a change in scheduling has been made -
-   * in order to interrupt any sleeping that may be occuring while waiting for the
-   * fire time to arrive.
+   * Signals the main processing loop that a change in scheduling has been made
+   * - in order to interrupt any sleeping that may be occuring while waiting for
+   * the fire time to arrive.
    * </p>
    *
    * @param candidateNewNextFireTime
@@ -299,8 +295,8 @@ public class QuartzSchedulerThread extends Thread
                                                        Math.min (availThreadCount, m_aQSRsrcs.getMaxBatchSize ()),
                                                        m_aQSRsrcs.getBatchTimeWindow ());
             lastAcquireFailed = false;
-            if (log.isDebugEnabled ())
-              log.debug ("batch acquisition of " + (triggers == null ? 0 : triggers.size ()) + " triggers");
+            if (LOGGER.isDebugEnabled ())
+              LOGGER.debug ("batch acquisition of " + (triggers == null ? 0 : triggers.size ()) + " triggers");
           }
           catch (final JobPersistenceException jpe)
           {
@@ -316,7 +312,7 @@ public class QuartzSchedulerThread extends Thread
           {
             if (!lastAcquireFailed)
             {
-              getLog ().error ("quartzSchedulerThreadLoop: RuntimeException " + e.getMessage (), e);
+              LOGGER.error ("quartzSchedulerThreadLoop: RuntimeException " + e.getMessage (), e);
             }
             lastAcquireFailed = true;
             continue;
@@ -403,7 +399,7 @@ public class QuartzSchedulerThread extends Thread
 
               if (exception instanceof RuntimeException)
               {
-                getLog ().error ("RuntimeException while firing trigger " + triggers.get (i), exception);
+                LOGGER.error ("RuntimeException while firing trigger " + triggers.get (i), exception);
                 m_aQSRsrcs.getJobStore ().releaseAcquiredTrigger (triggers.get (i));
                 continue;
               }
@@ -438,7 +434,7 @@ public class QuartzSchedulerThread extends Thread
                 // scheduler being shutdown or a bug in the thread pool or
                 // a thread pool being used concurrently - which the docs
                 // say not to do...
-                getLog ().error ("ThreadPool.runInThread() return false!");
+                LOGGER.error ("ThreadPool.runInThread() return false!");
                 m_aQSRsrcs.getJobStore ()
                           .triggeredJobComplete (triggers.get (i),
                                                  bndle.getJobDetail (),
@@ -486,7 +482,7 @@ public class QuartzSchedulerThread extends Thread
       }
       catch (final RuntimeException re)
       {
-        getLog ().error ("Runtime error occurred in main trigger firing loop.", re);
+        LOGGER.error ("Runtime error occurred in main trigger firing loop.", re);
       }
     } // while (!halted)
 
@@ -561,10 +557,4 @@ public class QuartzSchedulerThread extends Thread
       return earlier;
     }
   }
-
-  public Logger getLog ()
-  {
-    return log;
-  }
-
-} // end of QuartzSchedulerThread
+}

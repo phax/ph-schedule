@@ -35,13 +35,13 @@ public class OrMatcher <T extends Key <T>> implements IMatcher <T>
   private final IMatcher <T> m_aLeftOperand;
   private final IMatcher <T> m_aRightOperand;
 
-  public OrMatcher (@Nonnull final IMatcher <T> leftOperand, @Nonnull final IMatcher <T> rightOperand)
+  public OrMatcher (@Nonnull final IMatcher <T> aLeftOperand, @Nonnull final IMatcher <T> aRightOperand)
   {
-    ValueEnforcer.notNull (leftOperand, "LeftOperand");
-    ValueEnforcer.notNull (rightOperand, "RightOperand");
+    ValueEnforcer.notNull (aLeftOperand, "LeftOperand");
+    ValueEnforcer.notNull (aRightOperand, "RightOperand");
 
-    this.m_aLeftOperand = leftOperand;
-    this.m_aRightOperand = rightOperand;
+    m_aLeftOperand = aLeftOperand;
+    m_aRightOperand = aRightOperand;
   }
 
   public boolean isMatch (final T key)

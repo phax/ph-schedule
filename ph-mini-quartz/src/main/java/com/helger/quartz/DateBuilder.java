@@ -65,12 +65,12 @@ public final class DateBuilder
 
   private TimeZone m_aTZ;
   private Locale m_aLocale;
-  private int month;
-  private int day;
-  private int year;
-  private int hour;
-  private int minute;
-  private int second;
+  private int m_nMonth;
+  private int m_nDay;
+  private int m_nYear;
+  private int m_nHour;
+  private int m_nMinute;
+  private int m_nSecond;
 
   /**
    * Create a DateBuilder, with initial settings for the current date and time
@@ -107,14 +107,14 @@ public final class DateBuilder
   {
     final Calendar cal = Calendar.getInstance (tz, lc);
 
-    this.m_aTZ = tz;
-    this.m_aLocale = lc;
-    month = cal.get (Calendar.MONTH) + 1;
-    day = cal.get (Calendar.DAY_OF_MONTH);
-    year = cal.get (Calendar.YEAR);
-    hour = cal.get (Calendar.HOUR_OF_DAY);
-    minute = cal.get (Calendar.MINUTE);
-    second = cal.get (Calendar.SECOND);
+    m_aTZ = tz;
+    m_aLocale = lc;
+    m_nMonth = cal.get (Calendar.MONTH) + 1;
+    m_nDay = cal.get (Calendar.DAY_OF_MONTH);
+    m_nYear = cal.get (Calendar.YEAR);
+    m_nHour = cal.get (Calendar.HOUR_OF_DAY);
+    m_nMinute = cal.get (Calendar.MINUTE);
+    m_nSecond = cal.get (Calendar.SECOND);
   }
 
   /**
@@ -171,12 +171,12 @@ public final class DateBuilder
         else
           cal = PDTFactory.createCalendar ();
 
-    cal.set (Calendar.YEAR, year);
-    cal.set (Calendar.MONTH, month - 1);
-    cal.set (Calendar.DAY_OF_MONTH, day);
-    cal.set (Calendar.HOUR_OF_DAY, hour);
-    cal.set (Calendar.MINUTE, minute);
-    cal.set (Calendar.SECOND, second);
+    cal.set (Calendar.YEAR, m_nYear);
+    cal.set (Calendar.MONTH, m_nMonth - 1);
+    cal.set (Calendar.DAY_OF_MONTH, m_nDay);
+    cal.set (Calendar.HOUR_OF_DAY, m_nHour);
+    cal.set (Calendar.MINUTE, m_nMinute);
+    cal.set (Calendar.SECOND, m_nSecond);
     cal.set (Calendar.MILLISECOND, 0);
     return cal.getTime ();
   }
@@ -188,7 +188,7 @@ public final class DateBuilder
   {
     validateHour (atHour);
 
-    this.hour = atHour;
+    m_nHour = atHour;
     return this;
   }
 
@@ -199,7 +199,7 @@ public final class DateBuilder
   {
     validateMinute (atMinute);
 
-    this.minute = atMinute;
+    m_nMinute = atMinute;
     return this;
   }
 
@@ -211,7 +211,7 @@ public final class DateBuilder
   {
     validateSecond (atSecond);
 
-    this.second = atSecond;
+    m_nSecond = atSecond;
     return this;
   }
 
@@ -221,9 +221,9 @@ public final class DateBuilder
     validateMinute (atMinute);
     validateSecond (atSecond);
 
-    this.hour = atHour;
-    this.second = atSecond;
-    this.minute = atMinute;
+    m_nHour = atHour;
+    m_nSecond = atSecond;
+    m_nMinute = atMinute;
     return this;
   }
 
@@ -235,7 +235,7 @@ public final class DateBuilder
   {
     validateDayOfMonth (onDay);
 
-    this.day = onDay;
+    m_nDay = onDay;
     return this;
   }
 
@@ -246,7 +246,7 @@ public final class DateBuilder
   {
     validateMonth (inMonth);
 
-    this.month = inMonth.getValue ();
+    m_nMonth = inMonth.getValue ();
     return this;
   }
 
@@ -255,8 +255,8 @@ public final class DateBuilder
     validateMonth (inMonth);
     validateDayOfMonth (onDay);
 
-    this.month = inMonth.getValue ();
-    this.day = onDay;
+    m_nMonth = inMonth.getValue ();
+    m_nDay = onDay;
     return this;
   }
 
@@ -267,7 +267,7 @@ public final class DateBuilder
   {
     validateYear (inYear);
 
-    this.year = inYear;
+    m_nYear = inYear;
     return this;
   }
 
@@ -277,7 +277,7 @@ public final class DateBuilder
    */
   public DateBuilder inTimeZone (final TimeZone timezone)
   {
-    this.m_aTZ = timezone;
+    m_aTZ = timezone;
     return this;
   }
 
@@ -287,7 +287,7 @@ public final class DateBuilder
    */
   public DateBuilder inLocale (final Locale locale)
   {
-    this.m_aLocale = locale;
+    m_aLocale = locale;
     return this;
   }
 

@@ -18,9 +18,6 @@
  */
 package com.helger.quartz.listeners;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.helger.quartz.ISchedulerListener;
 
 /**
@@ -36,14 +33,5 @@ import com.helger.quartz.ISchedulerListener;
  */
 public abstract class AbstractSchedulerListenerSupport implements ISchedulerListener
 {
-  private final Logger log = LoggerFactory.getLogger (getClass ());
-
-  /**
-   * Get the <code>{@link org.slf4j.Logger}</code> for this class's category.
-   * This should be used by subclasses for logging.
-   */
-  protected Logger getLog ()
-  {
-    return log;
-  }
+  /* empty */
 }

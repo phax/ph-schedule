@@ -224,15 +224,10 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
   private String m_sTriggerMisfiredMessage = "Trigger {1}.{0} misfired job {6}.{5}  at: {4, date, HH:mm:ss MM/dd/yyyy}.  Should have fired at: {3, date, HH:mm:ss MM/dd/yyyy}";
   private String m_sTriggerCompleteMessage = "Trigger {1}.{0} completed firing job {6}.{5} at {4, date, HH:mm:ss MM/dd/yyyy} with resulting trigger instruction code: {9}";
 
-  private static final Logger log = LoggerFactory.getLogger (LoggingTriggerHistoryPlugin.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (LoggingTriggerHistoryPlugin.class);
 
   public LoggingTriggerHistoryPlugin ()
   {}
-
-  protected Logger getLog ()
-  {
-    return log;
-  }
 
   /**
    * Get the message that is printed upon the completion of a trigger's firing.
@@ -272,7 +267,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public void setTriggerCompleteMessage (final String triggerCompleteMessage)
   {
-    this.m_sTriggerCompleteMessage = triggerCompleteMessage;
+    m_sTriggerCompleteMessage = triggerCompleteMessage;
   }
 
   /**
@@ -283,7 +278,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public void setTriggerFiredMessage (final String triggerFiredMessage)
   {
-    this.m_sTriggerFiredMessage = triggerFiredMessage;
+    m_sTriggerFiredMessage = triggerFiredMessage;
   }
 
   /**
@@ -294,7 +289,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    */
   public void setTriggerMisfiredMessage (final String triggerMisfiredMessage)
   {
-    this.m_sTriggerMisfiredMessage = triggerMisfiredMessage;
+    m_sTriggerMisfiredMessage = triggerMisfiredMessage;
   }
 
   /*
@@ -316,7 +311,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
                           final IScheduler scheduler,
                           final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
-    this.m_sName = pname;
+    m_sName = pname;
 
     scheduler.getListenerManager ().addTriggerListener (this, EverythingMatcher.allTriggers ());
   }
@@ -337,13 +332,6 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
     // nothing to do...
   }
 
-  /*
-   * Object[] arguments = { new Integer(7), new
-   * Date(System.currentTimeMillis()), "a disturbance in the Force" }; String
-   * result = MessageFormat.format( "At {1,time} on {1,date}, there was {2} on
-   * planet {0,number,integer}.", arguments);
-   */
-
   public String getName ()
   {
     return m_sName;
@@ -351,91 +339,86 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
 
   public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
   {
-    if (!getLog ().isInfoEnabled ())
+    if (LOGGER.isInfoEnabled ())
     {
-      return;
+      final Object [] args = { trigger.getKey ().getName (),
+                               trigger.getKey ().getGroup (),
+                               trigger.getPreviousFireTime (),
+                               trigger.getNextFireTime (),
+                               new Date (),
+                               context.getJobDetail ().getKey ().getName (),
+                               context.getJobDetail ().getKey ().getGroup (),
+                               Integer.valueOf (context.getRefireCount ()) };
+
+      LOGGER.info (new MessageFormat (getTriggerFiredMessage (), Locale.US).format (args));
     }
-
-    final Object [] args = { trigger.getKey ().getName (),
-                             trigger.getKey ().getGroup (),
-                             trigger.getPreviousFireTime (),
-                             trigger.getNextFireTime (),
-                             new Date (),
-                             context.getJobDetail ().getKey ().getName (),
-                             context.getJobDetail ().getKey ().getGroup (),
-                             Integer.valueOf (context.getRefireCount ()) };
-
-    getLog ().info (new MessageFormat (getTriggerFiredMessage (), Locale.US).format (args));
   }
 
   public void triggerMisfired (final ITrigger trigger)
   {
-    if (!getLog ().isInfoEnabled ())
-      return;
+    if (LOGGER.isInfoEnabled ())
+    {
+      final Object [] args = { trigger.getKey ().getName (),
+                               trigger.getKey ().getGroup (),
+                               trigger.getPreviousFireTime (),
+                               trigger.getNextFireTime (),
+                               new Date (),
+                               trigger.getJobKey ().getName (),
+                               trigger.getJobKey ().getGroup () };
 
-    final Object [] args = { trigger.getKey ().getName (),
-                             trigger.getKey ().getGroup (),
-                             trigger.getPreviousFireTime (),
-                             trigger.getNextFireTime (),
-                             new Date (),
-                             trigger.getJobKey ().getName (),
-                             trigger.getJobKey ().getGroup () };
-
-    getLog ().info (new MessageFormat (getTriggerMisfiredMessage (), Locale.US).format (args));
+      LOGGER.info (new MessageFormat (getTriggerMisfiredMessage (), Locale.US).format (args));
+    }
   }
 
   public void triggerComplete (final ITrigger trigger,
                                final IJobExecutionContext context,
                                final ECompletedExecutionInstruction triggerInstructionCode)
   {
-    if (!getLog ().isInfoEnabled ())
+    if (LOGGER.isInfoEnabled ())
     {
-      return;
-    }
-
-    String instrCode = "UNKNOWN";
-    if (triggerInstructionCode == ECompletedExecutionInstruction.DELETE_TRIGGER)
-    {
-      instrCode = "DELETE TRIGGER";
-    }
-    else
-      if (triggerInstructionCode == ECompletedExecutionInstruction.NOOP)
+      String instrCode = "UNKNOWN";
+      if (triggerInstructionCode == ECompletedExecutionInstruction.DELETE_TRIGGER)
       {
-        instrCode = "DO NOTHING";
+        instrCode = "DELETE TRIGGER";
       }
       else
-        if (triggerInstructionCode == ECompletedExecutionInstruction.RE_EXECUTE_JOB)
+        if (triggerInstructionCode == ECompletedExecutionInstruction.NOOP)
         {
-          instrCode = "RE-EXECUTE JOB";
+          instrCode = "DO NOTHING";
         }
         else
-          if (triggerInstructionCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE)
+          if (triggerInstructionCode == ECompletedExecutionInstruction.RE_EXECUTE_JOB)
           {
-            instrCode = "SET ALL OF JOB'S TRIGGERS COMPLETE";
+            instrCode = "RE-EXECUTE JOB";
           }
           else
-            if (triggerInstructionCode == ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
+            if (triggerInstructionCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE)
             {
-              instrCode = "SET THIS TRIGGER COMPLETE";
+              instrCode = "SET ALL OF JOB'S TRIGGERS COMPLETE";
             }
+            else
+              if (triggerInstructionCode == ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
+              {
+                instrCode = "SET THIS TRIGGER COMPLETE";
+              }
 
-    final Object [] args = { trigger.getKey ().getName (),
-                             trigger.getKey ().getGroup (),
-                             trigger.getPreviousFireTime (),
-                             trigger.getNextFireTime (),
-                             new Date (),
-                             context.getJobDetail ().getKey ().getName (),
-                             context.getJobDetail ().getKey ().getGroup (),
-                             Integer.valueOf (context.getRefireCount ()),
-                             triggerInstructionCode.toString (),
-                             instrCode };
+      final Object [] args = { trigger.getKey ().getName (),
+                               trigger.getKey ().getGroup (),
+                               trigger.getPreviousFireTime (),
+                               trigger.getNextFireTime (),
+                               new Date (),
+                               context.getJobDetail ().getKey ().getName (),
+                               context.getJobDetail ().getKey ().getGroup (),
+                               Integer.valueOf (context.getRefireCount ()),
+                               triggerInstructionCode.toString (),
+                               instrCode };
 
-    getLog ().info (new MessageFormat (getTriggerCompleteMessage (), Locale.US).format (args));
+      LOGGER.info (new MessageFormat (getTriggerCompleteMessage (), Locale.US).format (args));
+    }
   }
 
   public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
   {
     return false;
   }
-
 }

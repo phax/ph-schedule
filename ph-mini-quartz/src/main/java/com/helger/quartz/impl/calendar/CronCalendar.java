@@ -89,9 +89,9 @@ public class CronCalendar extends BaseCalendar
    *        a String representation of the desired cron expression
    * @param timeZone
    *        Specifies for which time zone the <code>expression</code> should be
-   *        interpreted, i.e. the expression 0 0 10 * * ?, is resolved to 10:00 am
-   *        in this time zone. If <code>timeZone</code> is <code>null</code> then
-   *        <code>TimeZone.getDefault()</code> will be used.
+   *        interpreted, i.e. the expression 0 0 10 * * ?, is resolved to 10:00
+   *        am in this time zone. If <code>timeZone</code> is <code>null</code>
+   *        then <code>TimeZone.getDefault()</code> will be used.
    */
   public CronCalendar (final ICalendar baseCalendar,
                        final String expression,
@@ -129,8 +129,8 @@ public class CronCalendar extends BaseCalendar
    * <code>CronCalendar</code> will be resolved. If <code>timeZone</code> is
    * <code>null</code> then <code>TimeZone.getDefault()</code> will be used.
    * <p>
-   * Overrides <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code> to defer to
-   * its <code>CronExpression</code>.
+   * Overrides <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code> to defer
+   * to its <code>CronExpression</code>.
    * </p>
    */
   @Override
@@ -145,8 +145,8 @@ public class CronCalendar extends BaseCalendar
    *
    * @param timeInMillis
    *        the date/time to test
-   * @return a boolean indicating whether the specified time is 'included' by the
-   *         <CODE>CronCalendar</CODE>
+   * @return a boolean indicating whether the specified time is 'included' by
+   *         the <CODE>CronCalendar</CODE>
    */
   @Override
   public boolean isTimeIncluded (final long timeInMillis)
@@ -160,8 +160,8 @@ public class CronCalendar extends BaseCalendar
   }
 
   /**
-   * Determines the next time included by the <CODE>CronCalendar</CODE> after the
-   * specified time.
+   * Determines the next time included by the <CODE>CronCalendar</CODE> after
+   * the specified time.
    *
    * @param timeInMillis
    *        the initial date/time after which to find an included time
@@ -201,7 +201,8 @@ public class CronCalendar extends BaseCalendar
   }
 
   /**
-   * Returns a string representing the properties of the <CODE>CronCalendar</CODE>
+   * Returns a string representing the properties of the
+   * <CODE>CronCalendar</CODE>
    *
    * @return the properteis of the CronCalendar in a String format
    */
@@ -262,6 +263,6 @@ public class CronCalendar extends BaseCalendar
   {
     ValueEnforcer.notNull (expression, "Expression");
 
-    this.m_aCronExpression = expression;
+    m_aCronExpression = expression;
   }
 }

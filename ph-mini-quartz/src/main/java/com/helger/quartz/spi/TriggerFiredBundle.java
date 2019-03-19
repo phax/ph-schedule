@@ -53,14 +53,14 @@ public class TriggerFiredBundle implements Serializable
                              final Date prevFireTime,
                              final Date nextFireTime)
   {
-    this.m_aJob = job;
-    this.m_aTrigger = trigger;
-    this.m_aCal = cal;
-    this.m_bJobIsRecovering = jobIsRecovering;
-    this.m_aFireTime = fireTime;
-    this.m_aScheduledFireTime = scheduledFireTime;
-    this.m_aPrevFireTime = prevFireTime;
-    this.m_aNextFireTime = nextFireTime;
+    m_aJob = job;
+    m_aTrigger = trigger;
+    m_aCal = cal;
+    m_bJobIsRecovering = jobIsRecovering;
+    m_aFireTime = fireTime;
+    m_aScheduledFireTime = scheduledFireTime;
+    m_aPrevFireTime = prevFireTime;
+    m_aNextFireTime = nextFireTime;
   }
 
   public IJobDetail getJobDetail ()

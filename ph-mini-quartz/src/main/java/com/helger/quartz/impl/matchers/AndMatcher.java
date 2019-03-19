@@ -40,8 +40,8 @@ public class AndMatcher <T extends Key <T>> implements IMatcher <T>
     ValueEnforcer.notNull (leftOperand, "LeftOperand");
     ValueEnforcer.notNull (rightOperand, "RightOperand");
 
-    this.m_aLeftOperand = leftOperand;
-    this.m_aRightOperand = rightOperand;
+    m_aLeftOperand = leftOperand;
+    m_aRightOperand = rightOperand;
   }
 
   public boolean isMatch (final T key)

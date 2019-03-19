@@ -58,20 +58,20 @@ public class SchedulerMetaData implements java.io.Serializable
                             final int tpSize,
                             final String version)
   {
-    this.m_sSchedName = schedName;
-    this.m_sSchedInst = schedInst;
-    this.m_sSchedClass = schedClass;
-    this.m_bStarted = started;
-    this.m_bIsInStandbyMode = isInStandbyMode;
-    this.m_bShutdown = shutdown;
-    this.m_aStartTime = startTime;
-    this.m_nNumJobsExec = numJobsExec;
-    this.m_aJsClass = jsClass;
-    this.m_bJsPersistent = jsPersistent;
-    this.m_bJsClustered = jsClustered;
-    this.m_aTpClass = tpClass;
-    this.m_nTpSize = tpSize;
-    this.m_sVersion = version;
+    m_sSchedName = schedName;
+    m_sSchedInst = schedInst;
+    m_sSchedClass = schedClass;
+    m_bStarted = started;
+    m_bIsInStandbyMode = isInStandbyMode;
+    m_bShutdown = shutdown;
+    m_aStartTime = startTime;
+    m_nNumJobsExec = numJobsExec;
+    m_aJsClass = jsClass;
+    m_bJsPersistent = jsPersistent;
+    m_bJsClustered = jsClustered;
+    m_aTpClass = tpClass;
+    m_nTpSize = tpSize;
+    m_sVersion = version;
   }
 
   /**
@@ -194,8 +194,8 @@ public class SchedulerMetaData implements java.io.Serializable
 
   /**
    * <p>
-   * Returns the class-name of the <code>ThreadPool</code> instance that is being
-   * used by the <code>Scheduler</code>.
+   * Returns the class-name of the <code>ThreadPool</code> instance that is
+   * being used by the <code>Scheduler</code>.
    * </p>
    */
   public Class <?> getThreadPoolClass ()

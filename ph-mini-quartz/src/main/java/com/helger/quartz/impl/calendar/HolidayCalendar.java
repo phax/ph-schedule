@@ -96,8 +96,8 @@ public class HolidayCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the Calendar
-   * after the given time.
+   * Determine the next time (in milliseconds) that is 'included' by the
+   * Calendar after the given time.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -127,8 +127,8 @@ public class HolidayCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Add the given Date to the list of excluded days. Only the month, day and year
-   * of the returned dates are significant.
+   * Add the given Date to the list of excluded days. Only the month, day and
+   * year of the returned dates are significant.
    * </p>
    */
   public void addExcludedDate (final Date excludedDate)
@@ -138,7 +138,7 @@ public class HolidayCalendar extends BaseCalendar
      * System.err.println( "HolidayCalendar.add(): date=" +
      * excludedDate.toLocaleString());
      */
-    this.m_aDates.add (date);
+    m_aDates.add (date);
   }
 
   public void removeExcludedDate (final Date dateToRemove)

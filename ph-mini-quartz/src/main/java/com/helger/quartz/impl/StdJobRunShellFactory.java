@@ -36,7 +36,7 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  */
 public class StdJobRunShellFactory implements IJobRunShellFactory
 {
-  private IScheduler scheduler;
+  private IScheduler m_aScheduler;
 
   /**
    * <p>
@@ -47,7 +47,7 @@ public class StdJobRunShellFactory implements IJobRunShellFactory
    */
   public void initialize (final IScheduler sched)
   {
-    this.scheduler = sched;
+    m_aScheduler = sched;
   }
 
   /**
@@ -58,6 +58,6 @@ public class StdJobRunShellFactory implements IJobRunShellFactory
    */
   public JobRunShell createJobRunShell (final TriggerFiredBundle bndle) throws SchedulerException
   {
-    return new JobRunShell (scheduler, bndle);
+    return new JobRunShell (m_aScheduler, bndle);
   }
 }

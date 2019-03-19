@@ -23,6 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +51,7 @@ import com.helger.quartz.spi.IThreadPool;
  */
 public class SimpleThreadPool implements IThreadPool
 {
-  private static final Logger log = LoggerFactory.getLogger (SimpleThreadPool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (SimpleThreadPool.class);
 
   private int m_nCount = -1;
 
@@ -66,10 +68,10 @@ public class SimpleThreadPool implements IThreadPool
 
   private ThreadGroup m_aThreadGroup;
 
-  private final Object nextRunnableLock = new Object ();
+  private final Object m_aNextRunnableLock = new Object ();
 
   private List <WorkerThread> m_aWorkers;
-  private final List <WorkerThread> m_aWvailWorkers = new LinkedList <> ();
+  private final List <WorkerThread> m_aAvailWorkers = new LinkedList <> ();
   private final List <WorkerThread> m_aBusyWorkers = new LinkedList <> ();
 
   private String m_sThreadNamePrefix;
@@ -92,7 +94,8 @@ public class SimpleThreadPool implements IThreadPool
    * </p>
    *
    * @param threadCount
-   *        the number of worker <code>Threads</code> in the pool, must be &gt; 0.
+   *        the number of worker <code>Threads</code> in the pool, must be &gt;
+   *        0.
    * @param threadPriority
    *        the thread priority for the worker threads.
    * @see java.lang.Thread
@@ -101,11 +104,6 @@ public class SimpleThreadPool implements IThreadPool
   {
     setThreadCount (threadCount);
     setThreadPriority (threadPriority);
-  }
-
-  public Logger getLog ()
-  {
-    return log;
   }
 
   public int getPoolSize ()
@@ -121,7 +119,7 @@ public class SimpleThreadPool implements IThreadPool
    */
   public final void setThreadCount (final int count)
   {
-    this.m_nCount = count;
+    m_nCount = count;
   }
 
   /**
@@ -142,7 +140,7 @@ public class SimpleThreadPool implements IThreadPool
    */
   public final void setThreadPriority (final int prio)
   {
-    this.m_nPrio = prio;
+    m_nPrio = prio;
   }
 
   /**
@@ -155,11 +153,12 @@ public class SimpleThreadPool implements IThreadPool
     return m_nPrio;
   }
 
-  public final void setThreadNamePrefix (final String prfx)
+  public final void setThreadNamePrefix (@Nullable final String prfx)
   {
-    this.m_sThreadNamePrefix = prfx;
+    m_sThreadNamePrefix = prfx;
   }
 
+  @Nullable
   public final String getThreadNamePrefix ()
   {
     return m_sThreadNamePrefix;
@@ -179,7 +178,7 @@ public class SimpleThreadPool implements IThreadPool
    */
   public final void setThreadsInheritContextClassLoaderOfInitializingThread (final boolean inheritLoader)
   {
-    this.m_bInheritLoader = inheritLoader;
+    m_bInheritLoader = inheritLoader;
   }
 
   public final boolean isThreadsInheritGroupOfInitializingThread ()
@@ -189,7 +188,7 @@ public class SimpleThreadPool implements IThreadPool
 
   public final void setThreadsInheritGroupOfInitializingThread (final boolean inheritGroup)
   {
-    this.m_bInheritGroup = inheritGroup;
+    m_bInheritGroup = inheritGroup;
   }
 
   /**
@@ -206,7 +205,7 @@ public class SimpleThreadPool implements IThreadPool
    */
   public final void setMakeThreadsDaemons (final boolean makeThreadsDaemons)
   {
-    this.m_bMakeThreadsDaemons = makeThreadsDaemons;
+    m_bMakeThreadsDaemons = makeThreadsDaemons;
   }
 
   public void setInstanceId (final String schedInstId)
@@ -219,17 +218,18 @@ public class SimpleThreadPool implements IThreadPool
 
   public void initialize () throws SchedulerConfigException
   {
-    if (m_aWorkers != null && m_aWorkers.size () > 0) // already initialized...
+    // already initialized...
+    if (m_aWorkers != null && m_aWorkers.size () > 0)
       return;
 
     if (m_nCount <= 0)
-    {
       throw new SchedulerConfigException ("Thread count must be > 0");
-    }
-    if (m_nPrio <= 0 || m_nPrio > 9)
-    {
-      throw new SchedulerConfigException ("Thread priority must be > 0 and <= 9");
-    }
+
+    if (m_nPrio < Thread.MIN_PRIORITY || m_nPrio > Thread.MAX_PRIORITY)
+      throw new SchedulerConfigException ("Thread priority must be <= " +
+                                          Thread.MIN_PRIORITY +
+                                          " and <= " +
+                                          Thread.MAX_PRIORITY);
 
     if (isThreadsInheritGroupOfInitializingThread ())
     {
@@ -239,22 +239,22 @@ public class SimpleThreadPool implements IThreadPool
     {
       // follow the threadGroup tree to the root thread group.
       m_aThreadGroup = Thread.currentThread ().getThreadGroup ();
-      ThreadGroup parent = m_aThreadGroup;
-      while (!parent.getName ().equals ("main"))
+      ThreadGroup aParent = m_aThreadGroup;
+      while (!aParent.getName ().equals ("main"))
       {
-        m_aThreadGroup = parent;
-        parent = m_aThreadGroup.getParent ();
+        m_aThreadGroup = aParent;
+        aParent = m_aThreadGroup.getParent ();
+        if (aParent == null)
+          throw new IllegalStateException ("Failed to resolve thread group with name 'main'");
       }
-      m_aThreadGroup = new ThreadGroup (parent, m_sSchedulerInstanceName + "-SimpleThreadPool");
+      m_aThreadGroup = new ThreadGroup (aParent, m_sSchedulerInstanceName + "-SimpleThreadPool");
       if (isMakeThreadsDaemons ())
-      {
         m_aThreadGroup.setDaemon (true);
-      }
     }
 
     if (isThreadsInheritContextClassLoaderOfInitializingThread ())
     {
-      getLog ().info ("Job execution threads will use class loader of thread: " + Thread.currentThread ().getName ());
+      LOGGER.info ("Job execution threads will use class loader of thread: " + Thread.currentThread ().getName ());
     }
 
     // create the worker threads and start them
@@ -263,8 +263,10 @@ public class SimpleThreadPool implements IThreadPool
     {
       final WorkerThread wt = workerThreads.next ();
       wt.start ();
-      m_aWvailWorkers.add (wt);
+      m_aAvailWorkers.add (wt);
     }
+
+    LOGGER.info ("Initialized " + m_nCount + " worker threads");
   }
 
   protected List <WorkerThread> createWorkerThreads (final int createCount)
@@ -272,14 +274,14 @@ public class SimpleThreadPool implements IThreadPool
     m_aWorkers = new LinkedList <> ();
     for (int i = 1; i <= createCount; ++i)
     {
-      String threadPrefix = getThreadNamePrefix ();
-      if (threadPrefix == null)
+      String sThreadPrefix = getThreadNamePrefix ();
+      if (sThreadPrefix == null)
       {
-        threadPrefix = m_sSchedulerInstanceName + "_Worker";
+        sThreadPrefix = m_sSchedulerInstanceName + "_Worker";
       }
       final WorkerThread wt = new WorkerThread (this,
                                                 m_aThreadGroup,
-                                                threadPrefix + "-" + i,
+                                                sThreadPrefix + "-" + i,
                                                 getThreadPriority (),
                                                 isMakeThreadsDaemons ());
       if (isThreadsInheritContextClassLoaderOfInitializingThread ())
@@ -315,10 +317,10 @@ public class SimpleThreadPool implements IThreadPool
    */
   public void shutdown (final boolean waitForJobsToComplete)
   {
-
-    synchronized (nextRunnableLock)
+    synchronized (m_aNextRunnableLock)
     {
-      getLog ().debug ("Shutting down threadpool...");
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Shutting down threadpool...");
 
       m_bIsShutdown = true;
 
@@ -331,13 +333,13 @@ public class SimpleThreadPool implements IThreadPool
       {
         final WorkerThread wt = workerThreads.next ();
         wt.shutdown ();
-        m_aWvailWorkers.remove (wt);
+        m_aAvailWorkers.remove (wt);
       }
 
       // Give waiting (wait(1000)) worker threads a chance to shut down.
       // Active worker threads will shut down after finishing their
       // current job.
-      nextRunnableLock.notifyAll ();
+      m_aNextRunnableLock.notifyAll ();
 
       if (waitForJobsToComplete == true)
       {
@@ -350,7 +352,7 @@ public class SimpleThreadPool implements IThreadPool
           {
             try
             {
-              nextRunnableLock.wait (100);
+              m_aNextRunnableLock.wait (100);
             }
             catch (final InterruptedException ex)
             {
@@ -364,11 +366,12 @@ public class SimpleThreadPool implements IThreadPool
             final WorkerThread wt = m_aBusyWorkers.get (0);
             try
             {
-              getLog ().debug ("Waiting for thread " + wt.getName () + " to shut down");
+              if (LOGGER.isDebugEnabled ())
+                LOGGER.debug ("Waiting for thread " + wt.getName () + " to shut down");
 
               // note: with waiting infinite time the
               // application may appear to 'hang'.
-              nextRunnableLock.wait (2000);
+              m_aNextRunnableLock.wait (2000);
             }
             catch (final InterruptedException ex)
             {
@@ -399,50 +402,51 @@ public class SimpleThreadPool implements IThreadPool
           }
         }
 
-        getLog ().debug ("No executing jobs remaining, all threads stopped.");
+        if (LOGGER.isDebugEnabled ())
+          LOGGER.debug ("No executing jobs remaining, all threads stopped.");
       }
-      getLog ().debug ("Shutdown of threadpool complete.");
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Shutdown of threadpool complete.");
     }
   }
 
   /**
    * <p>
    * Run the given <code>Runnable</code> object in the next available
-   * <code>Thread</code>. If while waiting the thread pool is asked to shut down,
-   * the Runnable is executed immediately within a new additional thread.
+   * <code>Thread</code>. If while waiting the thread pool is asked to shut
+   * down, the Runnable is executed immediately within a new additional thread.
    * </p>
    *
-   * @param runnable
+   * @param aRunnable
    *        the <code>Runnable</code> to be added.
    */
-  public boolean runInThread (final Runnable runnable)
+  public boolean runInThread (final Runnable aRunnable)
   {
-    if (runnable == null)
-    {
+    if (aRunnable == null)
       return false;
-    }
 
-    synchronized (nextRunnableLock)
+    synchronized (m_aNextRunnableLock)
     {
-
       m_bHandoffPending = true;
 
       // Wait until a worker thread is available
-      while ((m_aWvailWorkers.size () < 1) && !m_bIsShutdown)
+      while ((m_aAvailWorkers.size () < 1) && !m_bIsShutdown)
       {
         try
         {
-          nextRunnableLock.wait (500);
+          m_aNextRunnableLock.wait (500);
         }
         catch (final InterruptedException ignore)
-        {}
+        {
+          // ignore
+        }
       }
 
       if (!m_bIsShutdown)
       {
-        final WorkerThread wt = m_aWvailWorkers.remove (0);
+        final WorkerThread wt = m_aAvailWorkers.remove (0);
         m_aBusyWorkers.add (wt);
-        wt.run (runnable);
+        wt.run (aRunnable);
       }
       else
       {
@@ -453,12 +457,12 @@ public class SimpleThreadPool implements IThreadPool
                                                   "WorkerThread-LastJob",
                                                   m_nPrio,
                                                   isMakeThreadsDaemons (),
-                                                  runnable);
+                                                  aRunnable);
         m_aBusyWorkers.add (wt);
         m_aWorkers.add (wt);
         wt.start ();
       }
-      nextRunnableLock.notifyAll ();
+      m_aNextRunnableLock.notifyAll ();
       m_bHandoffPending = false;
     }
 
@@ -467,98 +471,91 @@ public class SimpleThreadPool implements IThreadPool
 
   public int blockForAvailableThreads ()
   {
-    synchronized (nextRunnableLock)
+    synchronized (m_aNextRunnableLock)
     {
 
-      while ((m_aWvailWorkers.size () < 1 || m_bHandoffPending) && !m_bIsShutdown)
+      while ((m_aAvailWorkers.size () < 1 || m_bHandoffPending) && !m_bIsShutdown)
       {
         try
         {
-          nextRunnableLock.wait (500);
+          m_aNextRunnableLock.wait (500);
         }
         catch (final InterruptedException ignore)
         {}
       }
 
-      return m_aWvailWorkers.size ();
+      return m_aAvailWorkers.size ();
     }
   }
 
   protected void makeAvailable (final WorkerThread wt)
   {
-    synchronized (nextRunnableLock)
+    synchronized (m_aNextRunnableLock)
     {
       if (!m_bIsShutdown)
       {
-        m_aWvailWorkers.add (wt);
+        m_aAvailWorkers.add (wt);
       }
       m_aBusyWorkers.remove (wt);
-      nextRunnableLock.notifyAll ();
+      m_aNextRunnableLock.notifyAll ();
     }
   }
 
   protected void clearFromBusyWorkersList (final WorkerThread wt)
   {
-    synchronized (nextRunnableLock)
+    synchronized (m_aNextRunnableLock)
     {
       m_aBusyWorkers.remove (wt);
-      nextRunnableLock.notifyAll ();
+      m_aNextRunnableLock.notifyAll ();
     }
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * WorkerThread Class.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
-   * <p>
    * A Worker loops, waiting to execute tasks.
-   * </p>
    */
   final class WorkerThread extends Thread
   {
     private final Object m_aLock = new Object ();
     // A flag that signals the WorkerThread to terminate.
-    private final AtomicBoolean m_aRun = new AtomicBoolean (true);
+    private final AtomicBoolean m_aCanRun = new AtomicBoolean (true);
     private final SimpleThreadPool m_aSTP;
     private Runnable m_aRunnable;
     private boolean m_bRunOnce = false;
 
     /*
-     * Create a worker thread and start it. Waiting for the next Runnable, executing
-     * it, and waiting for the next Runnable, until the shutdown flag is set.
+     * Create a worker thread and start it. Waiting for the next Runnable,
+     * executing it, and waiting for the next Runnable, until the shutdown flag
+     * is set.
      */
-    WorkerThread (final SimpleThreadPool tp,
-                  final ThreadGroup threadGroup,
-                  final String name,
-                  final int prio,
-                  final boolean isDaemon)
+    WorkerThread (final SimpleThreadPool aSTP,
+                  final ThreadGroup aThreadGroup,
+                  final String sName,
+                  final int nPrio,
+                  final boolean bIsDaemon)
     {
 
-      this (tp, threadGroup, name, prio, isDaemon, null);
+      this (aSTP, aThreadGroup, sName, nPrio, bIsDaemon, null);
     }
 
     /*
      * Create a worker thread, start it, execute the runnable and terminate the
      * thread (one time execution).
      */
-    WorkerThread (final SimpleThreadPool tp,
-                  final ThreadGroup threadGroup,
-                  final String name,
-                  final int prio,
-                  final boolean isDaemon,
-                  final Runnable runnable)
+    WorkerThread (final SimpleThreadPool aSTP,
+                  final ThreadGroup aThreadGroup,
+                  final String sName,
+                  final int nPrio,
+                  final boolean bIsDaemon,
+                  final Runnable aRunnable)
     {
 
-      super (threadGroup, name);
-      this.m_aSTP = tp;
-      this.m_aRunnable = runnable;
-      if (runnable != null)
+      super (aThreadGroup, sName);
+      m_aSTP = aSTP;
+      m_aRunnable = aRunnable;
+      if (aRunnable != null)
         m_bRunOnce = true;
-      setPriority (prio);
-      setDaemon (isDaemon);
+      setPriority (nPrio);
+      setDaemon (bIsDaemon);
     }
 
     /**
@@ -568,17 +565,17 @@ public class SimpleThreadPool implements IThreadPool
      */
     void shutdown ()
     {
-      m_aRun.set (false);
+      m_aCanRun.set (false);
     }
 
-    public void run (final Runnable newRunnable)
+    public void run (final Runnable aNewRunnable)
     {
       synchronized (m_aLock)
       {
         if (m_aRunnable != null)
           throw new IllegalStateException ("Already running a Runnable!");
 
-        m_aRunnable = newRunnable;
+        m_aRunnable = aNewRunnable;
         m_aLock.notifyAll ();
       }
     }
@@ -591,22 +588,22 @@ public class SimpleThreadPool implements IThreadPool
     @Override
     public void run ()
     {
-      boolean ran = false;
+      boolean bRan = false;
 
-      while (m_aRun.get ())
+      while (m_aCanRun.get ())
       {
         try
         {
           synchronized (m_aLock)
           {
-            while (m_aRunnable == null && m_aRun.get ())
+            while (m_aRunnable == null && m_aCanRun.get ())
             {
               m_aLock.wait (500);
             }
 
             if (m_aRunnable != null)
             {
-              ran = true;
+              bRan = true;
               m_aRunnable.run ();
             }
           }
@@ -616,7 +613,7 @@ public class SimpleThreadPool implements IThreadPool
           // do nothing (loop will terminate if shutdown() was called
           try
           {
-            getLog ().error ("Worker thread was interrupt()'ed.", unblock);
+            LOGGER.error ("Worker thread was interrupt()'ed.", unblock);
           }
           catch (final Exception e)
           {
@@ -627,7 +624,7 @@ public class SimpleThreadPool implements IThreadPool
         {
           try
           {
-            getLog ().error ("Error while executing the Runnable: ", exceptionInRunnable);
+            LOGGER.error ("Error while executing the Runnable: ", exceptionInRunnable);
           }
           catch (final Exception e)
           {
@@ -648,22 +645,22 @@ public class SimpleThreadPool implements IThreadPool
 
           if (m_bRunOnce)
           {
-            m_aRun.set (false);
+            m_aCanRun.set (false);
             clearFromBusyWorkersList (this);
           }
           else
-            if (ran)
+            if (bRan)
             {
-              ran = false;
+              bRan = false;
               makeAvailable (this);
             }
         }
       }
 
-      // if (log.isDebugEnabled())
       try
       {
-        getLog ().debug ("WorkerThread is shut down.");
+        if (LOGGER.isDebugEnabled ())
+          LOGGER.debug ("WorkerThread is shut down.");
       }
       catch (final Exception e)
       {

@@ -41,16 +41,15 @@ import com.helger.quartz.listeners.AbstractTriggerListenerSupport;
 /**
  * Test ListenerManagerImpl functionality
  */
-public class ListenerManagerTest
+public final class ListenerManagerTest
 {
-
   public static class TestJobListener extends AbstractJobListenerSupport
   {
     private final String m_sName;
 
     public TestJobListener (final String name)
     {
-      this.m_sName = name;
+      m_sName = name;
     }
 
     public String getName ()
@@ -65,7 +64,7 @@ public class ListenerManagerTest
 
     public TestTriggerListener (final String name)
     {
-      this.m_sName = name;
+      m_sName = name;
     }
 
     public String getName ()

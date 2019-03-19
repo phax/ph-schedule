@@ -106,7 +106,7 @@ public class BaseCalendar implements ICalendar
    */
   public final void setBaseCalendar (@Nullable final ICalendar baseCalendar)
   {
-    this.m_aBaseCalendar = baseCalendar;
+    m_aBaseCalendar = baseCalendar;
   }
 
   /**
@@ -116,7 +116,7 @@ public class BaseCalendar implements ICalendar
    */
   public ICalendar getBaseCalendar ()
   {
-    return this.m_aBaseCalendar;
+    return m_aBaseCalendar;
   }
 
   /**
@@ -134,18 +134,19 @@ public class BaseCalendar implements ICalendar
 
   /**
    * <p>
-   * Set a description for the <code>Calendar</code> instance - may be useful for
-   * remembering/displaying the purpose of the calendar, though the description
-   * has no meaning to Quartz.
+   * Set a description for the <code>Calendar</code> instance - may be useful
+   * for remembering/displaying the purpose of the calendar, though the
+   * description has no meaning to Quartz.
    * </p>
    */
   public void setDescription (@Nullable final String description)
   {
-    this.m_sDescription = description;
+    m_sDescription = description;
   }
 
   /**
-   * Returns the time zone for which this <code>Calendar</code> will be resolved.
+   * Returns the time zone for which this <code>Calendar</code> will be
+   * resolved.
    *
    * @return This Calendar's timezone, <code>null</code> if Calendar should use
    *         the <code>{@link TimeZone#getDefault()}</code>
@@ -164,7 +165,7 @@ public class BaseCalendar implements ICalendar
    */
   public void setTimeZone (@Nullable final TimeZone timeZone)
   {
-    this.m_aTimeZone = timeZone;
+    m_aTimeZone = timeZone;
   }
 
   /**
@@ -197,9 +198,9 @@ public class BaseCalendar implements ICalendar
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the Calendar
-   * after the given time. Return the original value if timeStamp is included.
-   * Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the
+   * Calendar after the given time. Return the original value if timeStamp is
+   * included. Return 0 if all days are excluded.
    * </p>
    *
    * @see com.helger.quartz.ICalendar#getNextIncludedTime(long)
@@ -230,8 +231,8 @@ public class BaseCalendar implements ICalendar
   }
 
   /**
-   * Build a <code>{@link Calendar}</code> with the current time. The new Calendar
-   * will use the <code>BaseCalendar</code> time zone if it is not
+   * Build a <code>{@link Calendar}</code> with the current time. The new
+   * Calendar will use the <code>BaseCalendar</code> time zone if it is not
    * <code>null</code>.
    */
   protected Calendar createJavaCalendar ()
@@ -242,8 +243,8 @@ public class BaseCalendar implements ICalendar
 
   /**
    * Returns the start of the given day as a <code>{@link Calendar}</code>. This
-   * calculation will take the <code>BaseCalendar</code> time zone into account if
-   * it is not <code>null</code>.
+   * calculation will take the <code>BaseCalendar</code> time zone into account
+   * if it is not <code>null</code>.
    *
    * @param timeInMillis
    *        A time containing the desired date for the start-of-day time
@@ -261,8 +262,8 @@ public class BaseCalendar implements ICalendar
 
   /**
    * Returns the end of the given day <code>{@link Calendar}</code>. This
-   * calculation will take the <code>BaseCalendar</code> time zone into account if
-   * it is not <code>null</code>.
+   * calculation will take the <code>BaseCalendar</code> time zone into account
+   * if it is not <code>null</code>.
    *
    * @param timeInMillis
    *        a time containing the desired date for the end-of-day time.

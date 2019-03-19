@@ -26,6 +26,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.quartz.IJob;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.JobDataMap;
@@ -61,13 +64,14 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  */
 public class PropertySettingJobFactory extends SimpleJobFactory
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (PropertySettingJobFactory.class);
+
   private boolean m_bWarnIfNotFound = false;
   private boolean m_bThrowIfNotFound = false;
 
   @Override
   public IJob newJob (final TriggerFiredBundle bundle, final IScheduler scheduler) throws SchedulerException
   {
-
     final IJob job = super.newJob (bundle, scheduler);
 
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -126,10 +130,10 @@ public class PropertySettingJobFactory extends SimpleJobFactory
           if (o == null)
           {
             _handleError ("Cannot set primitive property '" +
-                         name +
-                         "' on Job class " +
-                         obj.getClass ().getName () +
-                         " to null.");
+                          name +
+                          "' on Job class " +
+                          obj.getClass ().getName () +
+                          " to null.");
             continue;
           }
 
@@ -252,13 +256,13 @@ public class PropertySettingJobFactory extends SimpleJobFactory
         if ((o != null) && (parm == null))
         {
           _handleError ("The setter on Job class " +
-                       obj.getClass ().getName () +
-                       " for property '" +
-                       name +
-                       "' expects a " +
-                       paramType +
-                       " but was given " +
-                       o.getClass ().getName ());
+                        obj.getClass ().getName () +
+                        " for property '" +
+                        name +
+                        "' expects a " +
+                        paramType +
+                        " but was given " +
+                        o.getClass ().getName ());
           continue;
         }
 
@@ -322,9 +326,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
     if (isWarnIfPropertyNotFound ())
     {
       if (e == null)
-        getLog ().warn (message);
+        LOGGER.warn (message);
       else
-        getLog ().warn (message, e);
+        LOGGER.warn (message, e);
     }
   }
 
@@ -368,12 +372,13 @@ public class PropertySettingJobFactory extends SimpleJobFactory
    */
   public void setThrowIfPropertyNotFound (final boolean throwIfNotFound)
   {
-    this.m_bThrowIfNotFound = throwIfNotFound;
+    m_bThrowIfNotFound = throwIfNotFound;
   }
 
   /**
-   * Whether a warning should be logged if a key (name) and value (type) found in
-   * the JobDataMap does not correspond to a proptery setter on the Job class.
+   * Whether a warning should be logged if a key (name) and value (type) found
+   * in the JobDataMap does not correspond to a proptery setter on the Job
+   * class.
    *
    * @return Returns the warnIfNotFound.
    */
@@ -383,14 +388,15 @@ public class PropertySettingJobFactory extends SimpleJobFactory
   }
 
   /**
-   * Whether a warning should be logged if a key (name) and value (type) found in
-   * the JobDataMap does not correspond to a proptery setter on the Job class.
+   * Whether a warning should be logged if a key (name) and value (type) found
+   * in the JobDataMap does not correspond to a proptery setter on the Job
+   * class.
    *
    * @param warnIfNotFound
    *        defaults to <code>true</code>.
    */
   public void setWarnIfPropertyNotFound (final boolean warnIfNotFound)
   {
-    this.m_bWarnIfNotFound = warnIfNotFound;
+    m_bWarnIfNotFound = warnIfNotFound;
   }
 }

@@ -89,8 +89,8 @@ import com.helger.quartz.spi.IThreadPool;
  * </p>
  *
  * <pre>
- * DBConnectionManager.getInstance ().addConnectionProvider ("someDatasource",
- *                                                           new JNDIConnectionProvider ("someDatasourceJNDIName"));
+ * DBConnectionManager.getInstance ()
+ *                    .addConnectionProvider ("someDatasource", new JNDIConnectionProvider ("someDatasourceJNDIName"));
  *
  * JobStoreTX jdbcJobStore = new JobStoreTX ();
  * jdbcJobStore.setDataSource ("someDatasource");
@@ -115,11 +115,6 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   private boolean m_bInitialized = false;
   private static DirectSchedulerFactory s_aInstance = new DirectSchedulerFactory ();
   private static final Logger LOGGER = LoggerFactory.getLogger (DirectSchedulerFactory.class);
-
-  protected Logger getLog ()
-  {
-    return LOGGER;
-  }
 
   /**
    * Constructor
@@ -398,9 +393,9 @@ public class DirectSchedulerFactory implements ISchedulerFactory
       }
     }
 
-    getLog ().info ("Quartz scheduler '" + scheduler.getSchedulerName ());
+    LOGGER.info ("Quartz scheduler '" + scheduler.getSchedulerName ());
 
-    getLog ().info ("Quartz scheduler version: " + qs.getVersion ());
+    LOGGER.info ("Quartz scheduler version: " + qs.getVersion ());
 
     final SchedulerRepository schedRep = SchedulerRepository.getInstance ();
 
@@ -411,14 +406,6 @@ public class DirectSchedulerFactory implements ISchedulerFactory
 
     m_bInitialized = true;
   }
-
-  /*
-   * public void registerSchedulerForRmi(String schedulerName, String
-   * schedulerId, String registryHost, int registryPort) throws
-   * SchedulerException, RemoteException { QuartzScheduler scheduler =
-   * (QuartzScheduler) this.getScheduler(); scheduler.bind(registryHost,
-   * registryPort); }
-   */
 
   /**
    * <p>
@@ -432,9 +419,7 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   public IScheduler getScheduler () throws SchedulerException
   {
     if (!m_bInitialized)
-    {
       throw new SchedulerException ("you must call createRemoteScheduler or createScheduler methods before calling getScheduler()");
-    }
 
     return getScheduler (DEFAULT_SCHEDULER_NAME);
   }

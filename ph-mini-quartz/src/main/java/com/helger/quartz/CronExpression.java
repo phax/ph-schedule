@@ -288,9 +288,9 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
   {
     ValueEnforcer.notNull (cronExpression, "CronExpression");
 
-    this.m_sCronExpression = cronExpression.toUpperCase (Locale.US);
+    m_sCronExpression = cronExpression.toUpperCase (Locale.US);
 
-    buildExpression (this.m_sCronExpression);
+    buildExpression (m_sCronExpression);
   }
 
   /**
@@ -1907,7 +1907,7 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
   /**
    * NOT YET IMPLEMENTED: Returns the final time that the
    * <code>CronExpression</code> will match.
-   * 
+   *
    * @return the final time that the <code>CronExpression</code> will match.
    */
   @Nullable

@@ -203,7 +203,7 @@ public class AnnualCalendar extends BaseCalendar
       return;
 
     // Fast way, see if exact day object was already in list
-    if (this.m_aExcludeDays.remove (day))
+    if (m_aExcludeDays.remove (day))
       return;
 
     final int dmonth = day.get (Calendar.MONTH);
@@ -228,7 +228,7 @@ public class AnnualCalendar extends BaseCalendar
       break;
     }
 
-    this.m_aExcludeDays.remove (day);
+    m_aExcludeDays.remove (day);
   }
 
   /**
@@ -257,9 +257,9 @@ public class AnnualCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the Calendar
-   * after the given time. Return the original value if timeStamp is included.
-   * Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the
+   * Calendar after the given time. Return the original value if timeStamp is
+   * included. Return 0 if all days are excluded.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.

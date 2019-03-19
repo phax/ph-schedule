@@ -179,8 +179,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
         !(unit.equals (EIntervalUnit.SECOND) || unit.equals (EIntervalUnit.MINUTE) || unit.equals (EIntervalUnit.HOUR)))
       throw new IllegalArgumentException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
     _validateInterval (timeInterval);
-    this.m_nInterval = timeInterval;
-    this.m_eIntervalUnit = unit;
+    m_nInterval = timeInterval;
+    m_eIntervalUnit = unit;
     return this;
   }
 
@@ -245,7 +245,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
   {
     ValueEnforcer.notEmpty (onDaysOfWeek, "OnDaysOfWeek");
 
-    this.m_aDaysOfWeek = onDaysOfWeek;
+    m_aDaysOfWeek = onDaysOfWeek;
     return this;
   }
 
@@ -270,7 +270,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
    */
   public DailyTimeIntervalScheduleBuilder onMondayThroughFriday ()
   {
-    this.m_aDaysOfWeek = MONDAY_THROUGH_FRIDAY;
+    m_aDaysOfWeek = MONDAY_THROUGH_FRIDAY;
     return this;
   }
 
@@ -281,7 +281,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
    */
   public DailyTimeIntervalScheduleBuilder onSaturdayAndSunday ()
   {
-    this.m_aDaysOfWeek = SATURDAY_AND_SUNDAY;
+    m_aDaysOfWeek = SATURDAY_AND_SUNDAY;
     return this;
   }
 
@@ -292,7 +292,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
    */
   public DailyTimeIntervalScheduleBuilder onEveryDay ()
   {
-    this.m_aDaysOfWeek = ALL_DAYS_OF_THE_WEEK;
+    m_aDaysOfWeek = ALL_DAYS_OF_THE_WEEK;
     return this;
   }
 
@@ -306,7 +306,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
     if (timeOfDay == null)
       throw new IllegalArgumentException ("Start time of day cannot be null!");
 
-    this.m_aStartTimeOfDay = timeOfDay;
+    m_aStartTimeOfDay = timeOfDay;
     return this;
   }
 
@@ -318,7 +318,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
    */
   public DailyTimeIntervalScheduleBuilder endingDailyAt (final TimeOfDay timeOfDay)
   {
-    this.m_aEndTimeOfDay = timeOfDay;
+    m_aEndTimeOfDay = timeOfDay;
     return this;
   }
 
@@ -431,7 +431,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDail
    */
   public DailyTimeIntervalScheduleBuilder withRepeatCount (final int repeatCount)
   {
-    this.m_nRepeatCount = repeatCount;
+    m_nRepeatCount = repeatCount;
     return this;
   }
 

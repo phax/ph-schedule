@@ -229,7 +229,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setBooleanValue (final boolean booleanValue)
     {
-      this.m_bBooleanValue = booleanValue;
+      m_bBooleanValue = booleanValue;
     }
 
     public double getDoubleValue ()
@@ -240,7 +240,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setDoubleValue (final double doubleValue)
     {
-      this.m_dDoubleValue = doubleValue;
+      m_dDoubleValue = doubleValue;
     }
 
     public float getFloatValue ()
@@ -251,7 +251,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setFloatValue (final float floatValue)
     {
-      this.m_fFloatValue = floatValue;
+      m_fFloatValue = floatValue;
     }
 
     public int getIntValue ()
@@ -262,7 +262,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setIntValue (final int intValue)
     {
-      this.m_nIntValue = intValue;
+      m_nIntValue = intValue;
     }
 
     public long getLongValue ()
@@ -273,7 +273,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setLongValue (final long longValue)
     {
-      this.m_nLongValue = longValue;
+      m_nLongValue = longValue;
     }
 
     public Map <?, ?> getMapValue ()
@@ -283,7 +283,7 @@ public class PropertySettingJobFactoryTest
 
     public void setMapValue (final Map <?, ?> mapValue)
     {
-      this.m_aMapValue = mapValue;
+      m_aMapValue = mapValue;
     }
 
     public String getStringValue ()
@@ -294,7 +294,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setStringValue (final String stringValue)
     {
-      this.m_sStringValue = stringValue;
+      m_sStringValue = stringValue;
     }
 
     public byte getByteValue ()
@@ -305,7 +305,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setByteValue (final byte byteValue)
     {
-      this.m_nByteValue = byteValue;
+      m_nByteValue = byteValue;
     }
 
     public char getCharValue ()
@@ -316,7 +316,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setCharValue (final char charValue)
     {
-      this.m_cCharValue = charValue;
+      m_cCharValue = charValue;
     }
 
     public short getShortValue ()
@@ -327,7 +327,7 @@ public class PropertySettingJobFactoryTest
     @SuppressWarnings ("unused")
     public void setShortValue (final short shortValue)
     {
-      this.m_nShortValue = shortValue;
+      m_nShortValue = shortValue;
     }
   }
 }
