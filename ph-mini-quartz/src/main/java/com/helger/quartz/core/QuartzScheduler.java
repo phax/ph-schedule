@@ -44,7 +44,6 @@ import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.lang.PropertiesHelper;
-import com.helger.commons.random.RandomHelper;
 import com.helger.commons.string.StringHelper;
 import com.helger.quartz.*;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
@@ -120,7 +119,7 @@ public class QuartzScheduler implements IQuartzScheduler
   private final ExecutingJobsManager m_aJobMgr;
   private final ErrorLogger m_aErrLogger;
   private final ISchedulerSignaler m_aSignaler;
-  private final Random m_aRandom = RandomHelper.getRandom ();
+  private final Random m_aRandom = new Random ();
   private final ICommonsList <Object> holdToPreventGC = new CommonsArrayList <> (5);
   private boolean m_bSignalOnSchedulingChange = true;
   private volatile boolean m_bClosed = false;

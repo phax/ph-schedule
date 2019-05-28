@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.random.RandomHelper;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.JobPersistenceException;
@@ -59,7 +58,7 @@ public class QuartzSchedulerThread extends Thread
   private long m_nSignaledNextFireTime;
   private boolean m_bPaused;
   private final AtomicBoolean m_aHalted;
-  private final Random m_aRandom = RandomHelper.getRandom ();
+  private final Random m_aRandom = new Random ();
   // When the scheduler finds there is no current trigger to fire, how long
   // it should wait until checking again...
   private static long DEFAULT_IDLE_WAIT_TIME = 30L * 1000L;
