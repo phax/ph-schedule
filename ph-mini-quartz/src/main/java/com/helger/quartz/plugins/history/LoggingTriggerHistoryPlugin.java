@@ -30,7 +30,6 @@ import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITriggerListener;
-import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 import com.helger.quartz.spi.IClassLoadHelper;

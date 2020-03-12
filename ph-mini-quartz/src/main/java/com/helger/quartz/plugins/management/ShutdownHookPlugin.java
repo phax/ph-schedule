@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IClassLoadHelper;
 import com.helger.quartz.spi.ISchedulerPlugin;

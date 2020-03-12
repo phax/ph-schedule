@@ -18,7 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.util.Calendar;
 import java.util.TimeZone;
 
 /**

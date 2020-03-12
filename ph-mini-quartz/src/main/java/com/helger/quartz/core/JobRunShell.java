@@ -286,6 +286,7 @@ public class JobRunShell extends AbstractSchedulerListenerSupport implements Run
 
   /**
    * @throws SchedulerException
+   *         on error
    */
   protected void begin () throws SchedulerException
   {}

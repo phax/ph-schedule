@@ -26,16 +26,11 @@ import javax.annotation.Nullable;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.CQuartz;
 import com.helger.quartz.ICalendar;
-import com.helger.quartz.ICronTrigger;
-import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduleBuilder;
-import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
-import com.helger.quartz.TriggerUtils;
 
 /**
  * <p>

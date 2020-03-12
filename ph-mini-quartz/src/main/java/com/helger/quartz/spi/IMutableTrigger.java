@@ -20,15 +20,10 @@ package com.helger.quartz.spi;
 
 import java.util.Date;
 
-import com.helger.quartz.ICalendar;
-import com.helger.quartz.ICronTrigger;
-import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.TriggerUtils;
-import com.helger.quartz.impl.triggers.AbstractTrigger;
 
 public interface IMutableTrigger extends ITrigger
 {

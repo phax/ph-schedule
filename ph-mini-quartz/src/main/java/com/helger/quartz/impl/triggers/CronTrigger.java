@@ -34,13 +34,8 @@ import com.helger.quartz.CronExpression;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
-import com.helger.quartz.IJobDetail;
-import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduleBuilder;
-import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
-import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.TriggerUtils;
 
 /**
  * <p>

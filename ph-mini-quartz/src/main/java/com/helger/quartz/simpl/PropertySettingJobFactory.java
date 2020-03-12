@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.JobDataMap;
-import com.helger.quartz.SchedulerContext;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.TriggerFiredBundle;
 

@@ -23,11 +23,9 @@ import java.util.Date;
 import javax.annotation.Nonnull;
 
 import com.helger.quartz.ICalendar;
-import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
-import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobExecutionException;
@@ -35,7 +33,6 @@ import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.TriggerUtils;
 import com.helger.quartz.spi.IOperableTrigger;
 
 /**

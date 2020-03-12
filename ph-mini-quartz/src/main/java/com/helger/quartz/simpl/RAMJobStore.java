@@ -45,7 +45,6 @@ import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.commons.collection.impl.ICommonsSortedSet;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.ICalendar;
-import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;

@@ -18,8 +18,8 @@
  */
 package com.helger.quartz;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -41,10 +41,11 @@ public class DefaultSchedulerTest
     try
     {
       scheduler.addJob (jobDetail, false);
+      fail ();
     }
     catch (final SchedulerException e)
     {
-      assertThat (e.getMessage (), containsString ("durable"));
+      assertTrue (e.getMessage ().contains ("durable"));
     }
 
     jobDetail.setDurability (true);

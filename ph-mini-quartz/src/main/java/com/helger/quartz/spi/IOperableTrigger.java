@@ -22,7 +22,6 @@ import java.util.Date;
 
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobExecutionContext;
-import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.SchedulerException;

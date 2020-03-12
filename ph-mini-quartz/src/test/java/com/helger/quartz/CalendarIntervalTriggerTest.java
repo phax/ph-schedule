@@ -18,10 +18,8 @@
  */
 package com.helger.quartz;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -54,10 +52,10 @@ public class CalendarIntervalTriggerTest
     final Date triggerTime = start.getTime ();
 
     final CalendarIntervalTrigger trigger = new CalendarIntervalTrigger ("test", startTime, null, EIntervalUnit.DAY, 1);
-    assertThat (trigger.getFireTimeAfter (startTime), equalTo (triggerTime));
+    assertEquals (trigger.getFireTimeAfter (startTime), triggerTime);
 
     final Date after = new Date (start.getTimeInMillis () - 500);
-    assertThat (trigger.getFireTimeAfter (after), equalTo (triggerTime));
+    assertEquals (trigger.getFireTimeAfter (after), triggerTime);
   }
 
   @Test

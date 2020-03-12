@@ -30,7 +30,6 @@ import com.helger.quartz.IJobListener;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
 import com.helger.quartz.spi.IClassLoadHelper;

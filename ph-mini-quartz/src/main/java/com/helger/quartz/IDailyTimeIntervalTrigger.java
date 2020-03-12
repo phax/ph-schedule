@@ -19,7 +19,6 @@
 package com.helger.quartz;
 
 import java.time.DayOfWeek;
-import java.util.Calendar;
 import java.util.Set;
 
 /**

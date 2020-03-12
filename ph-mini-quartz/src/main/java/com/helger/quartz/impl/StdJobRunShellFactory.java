@@ -18,7 +18,6 @@
  */
 package com.helger.quartz.impl;
 
-import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.core.IJobRunShellFactory;
