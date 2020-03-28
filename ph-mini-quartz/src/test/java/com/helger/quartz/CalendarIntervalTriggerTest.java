@@ -73,7 +73,7 @@ public class CalendarIntervalTriggerTest
     after.setTimeZone (edt);
     after.set (2013, Calendar.APRIL, 19, 2, 30, 0);
 
-    final BaseCalendar baseCalendar = new BaseCalendar (edt);
+    final BaseCalendar baseCalendar = new BaseCalendar (null, edt);
 
     final CalendarIntervalTrigger intervalTrigger = new CalendarIntervalTrigger ("QTZ-330",
                                                                                  start.getTime (),

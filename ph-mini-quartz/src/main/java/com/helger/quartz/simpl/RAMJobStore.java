@@ -724,7 +724,7 @@ public class RAMJobStore implements IJobStore
                              final boolean replaceExisting,
                              final boolean updateTriggers) throws ObjectAlreadyExistsException
   {
-    final ICalendar calendar = aCalendar.clone ();
+    final ICalendar calendar = aCalendar.getClone ();
 
     synchronized (m_aLock)
     {
@@ -811,7 +811,7 @@ public class RAMJobStore implements IJobStore
     {
       final ICalendar cal = m_aCalendarsByName.get (calName);
       if (cal != null)
-        return cal.clone ();
+        return cal.getClone ();
       return null;
     }
   }

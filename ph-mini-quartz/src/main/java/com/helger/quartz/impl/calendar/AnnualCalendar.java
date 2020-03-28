@@ -18,7 +18,6 @@
  */
 package com.helger.quartz.impl.calendar;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
@@ -29,8 +28,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.compare.IComparator;
+import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -43,24 +46,32 @@ import com.helger.quartz.ICalendar;
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class AnnualCalendar extends BaseCalendar
+public class AnnualCalendar extends BaseCalendar implements ICloneable <AnnualCalendar>
 {
-  private List <Calendar> m_aExcludeDays = new ArrayList <> ();
+  private final ICommonsList <Calendar> m_aExcludeDays = new CommonsArrayList <> ();
 
   // true, if excludeDays is sorted
   private boolean m_bDataSorted = false;
 
+  public AnnualCalendar (@Nonnull final AnnualCalendar aRhs)
+  {
+    super (aRhs);
+    m_aExcludeDays.addAll (aRhs.m_aExcludeDays);
+  }
+
   public AnnualCalendar ()
-  {}
+  {
+    this (null, null);
+  }
 
   public AnnualCalendar (final ICalendar baseCalendar)
   {
-    super (baseCalendar);
+    this (baseCalendar, null);
   }
 
   public AnnualCalendar (final TimeZone timeZone)
   {
-    super (timeZone);
+    this (null, timeZone);
   }
 
   public AnnualCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
@@ -68,19 +79,11 @@ public class AnnualCalendar extends BaseCalendar
     super (baseCalendar, timeZone);
   }
 
-  @Override
-  public AnnualCalendar clone ()
-  {
-    final AnnualCalendar clone = (AnnualCalendar) super.clone ();
-    clone.m_aExcludeDays = new ArrayList <> (m_aExcludeDays);
-    return clone;
-  }
-
   /**
    * @return Get the list which defines the exclude-value of each day of month
    */
   @ReturnsMutableObject
-  public List <Calendar> getDaysExcluded ()
+  public ICommonsList <Calendar> getDaysExcluded ()
   {
     return m_aExcludeDays;
   }
@@ -138,9 +141,9 @@ public class AnnualCalendar extends BaseCalendar
   public void setDaysExcluded (@Nullable final List <Calendar> days)
   {
     if (days == null)
-      m_aExcludeDays = new ArrayList <> ();
+      m_aExcludeDays.clear ();
     else
-      m_aExcludeDays = days;
+      m_aExcludeDays.setAll (days);
 
     m_bDataSorted = false;
   }
@@ -225,14 +228,11 @@ public class AnnualCalendar extends BaseCalendar
   {
     // Test the base calendar first. Only if the base calendar not already
     // excludes the time/date, continue evaluating this calendar instance.
-    if (super.isTimeIncluded (timeStamp) == false)
-    {
+    if (!super.isTimeIncluded (timeStamp))
       return false;
-    }
 
     final Calendar day = createJavaCalendar (timeStamp);
-
-    return !(isDayExcluded (day));
+    return !isDayExcluded (day);
   }
 
   /**
@@ -269,6 +269,14 @@ public class AnnualCalendar extends BaseCalendar
     }
 
     return day.getTime ().getTime ();
+  }
+
+  @Override
+  @Nonnull
+  @ReturnsMutableCopy
+  public AnnualCalendar getClone ()
+  {
+    return new AnnualCalendar (this);
   }
 }
 

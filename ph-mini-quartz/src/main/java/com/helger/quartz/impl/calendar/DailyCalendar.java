@@ -24,6 +24,9 @@ import java.util.Locale;
 import java.util.Locale.Category;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.lang.ICloneable;
 import com.helger.commons.string.StringHelper;
 
 /**
@@ -46,7 +49,7 @@ import com.helger.commons.string.StringHelper;
  *
  * @author Mike Funk, Aaron Craven
  */
-public class DailyCalendar extends BaseCalendar
+public class DailyCalendar extends BaseCalendar implements ICloneable <DailyCalendar>
 {
   private static final String INVALID_HOUR_OF_DAY = "Invalid hour of day: ";
   private static final String INVALID_MINUTE = "Invalid minute: ";
@@ -67,6 +70,20 @@ public class DailyCalendar extends BaseCalendar
   private int m_nRangeEndingMillis;
 
   private boolean m_bInvertTimeRange = false;
+
+  public DailyCalendar (@Nonnull final DailyCalendar aOther)
+  {
+    super (aOther);
+    m_nRangeStartingHourOfDay = aOther.m_nRangeStartingHourOfDay;
+    m_nRangeStartingMinute = aOther.m_nRangeStartingMinute;
+    m_nRangeStartingSecond = aOther.m_nRangeStartingSecond;
+    m_nRangeStartingMillis = aOther.m_nRangeStartingMillis;
+    m_nRangeEndingHourOfDay = aOther.m_nRangeEndingHourOfDay;
+    m_nRangeEndingMinute = aOther.m_nRangeEndingMinute;
+    m_nRangeEndingSecond = aOther.m_nRangeEndingSecond;
+    m_nRangeEndingMillis = aOther.m_nRangeEndingMillis;
+    m_bInvertTimeRange = aOther.m_bInvertTimeRange;
+  }
 
   /**
    * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
@@ -101,7 +118,7 @@ public class DailyCalendar extends BaseCalendar
    */
   public DailyCalendar (final String rangeStartingTime, final String rangeEndingTime)
   {
-    super ();
+    super (null, null);
     setTimeRange (rangeStartingTime, rangeEndingTime);
   }
 
@@ -144,7 +161,7 @@ public class DailyCalendar extends BaseCalendar
                         final String rangeStartingTime,
                         final String rangeEndingTime)
   {
-    super (baseCalendar);
+    super (baseCalendar, null);
     setTimeRange (rangeStartingTime, rangeEndingTime);
   }
 
@@ -195,7 +212,7 @@ public class DailyCalendar extends BaseCalendar
                         final int rangeEndingSecond,
                         final int rangeEndingMillis)
   {
-    super ();
+    super (null, null);
     setTimeRange (rangeStartingHourOfDay,
                   rangeStartingMinute,
                   rangeStartingSecond,
@@ -258,7 +275,7 @@ public class DailyCalendar extends BaseCalendar
                         final int rangeEndingSecond,
                         final int rangeEndingMillis)
   {
-    super (baseCalendar);
+    super (baseCalendar, null);
     setTimeRange (rangeStartingHourOfDay,
                   rangeStartingMinute,
                   rangeStartingSecond,
@@ -297,7 +314,7 @@ public class DailyCalendar extends BaseCalendar
    */
   public DailyCalendar (final Calendar rangeStartingCalendar, final Calendar rangeEndingCalendar)
   {
-    super ();
+    super (null, null);
     setTimeRange (rangeStartingCalendar, rangeEndingCalendar);
   }
 
@@ -336,7 +353,7 @@ public class DailyCalendar extends BaseCalendar
                         final Calendar rangeStartingCalendar,
                         final Calendar rangeEndingCalendar)
   {
-    super (baseCalendar);
+    super (baseCalendar, null);
     setTimeRange (rangeStartingCalendar, rangeEndingCalendar);
   }
 
@@ -371,7 +388,7 @@ public class DailyCalendar extends BaseCalendar
    */
   public DailyCalendar (final long rangeStartingTimeInMillis, final long rangeEndingTimeInMillis)
   {
-    super ();
+    super (null, null);
     setTimeRange (rangeStartingTimeInMillis, rangeEndingTimeInMillis);
   }
 
@@ -412,7 +429,7 @@ public class DailyCalendar extends BaseCalendar
                         final long rangeStartingTimeInMillis,
                         final long rangeEndingTimeInMillis)
   {
-    super (baseCalendar);
+    super (baseCalendar, null);
     setTimeRange (rangeStartingTimeInMillis, rangeEndingTimeInMillis);
   }
 
@@ -442,7 +459,7 @@ public class DailyCalendar extends BaseCalendar
                         final long rangeStartingTimeInMillis,
                         final long rangeEndingTimeInMillis)
   {
-    super (timeZone);
+    super (null, timeZone);
     setTimeRange (rangeStartingTimeInMillis, rangeEndingTimeInMillis);
   }
 
@@ -479,13 +496,6 @@ public class DailyCalendar extends BaseCalendar
   {
     super (baseCalendar, timeZone);
     setTimeRange (rangeStartingTimeInMillis, rangeEndingTimeInMillis);
-  }
-
-  @Override
-  public DailyCalendar clone ()
-  {
-    final DailyCalendar clone = (DailyCalendar) super.clone ();
-    return clone;
   }
 
   /**
@@ -893,5 +903,12 @@ public class DailyCalendar extends BaseCalendar
       throw new IllegalArgumentException (INVALID_SECOND + second);
     if (millis < 0 || millis > 999)
       throw new IllegalArgumentException (INVALID_MILLIS + millis);
+  }
+
+  @Override
+  @Nonnull
+  public DailyCalendar getClone ()
+  {
+    return new DailyCalendar (this);
   }
 }

@@ -20,7 +20,7 @@ package com.helger.quartz;
 
 import java.io.Serializable;
 
-import com.helger.commons.lang.IExplicitlyCloneable;
+import javax.annotation.Nullable;
 
 /**
  * An interface to be implemented by objects that define spaces of time during
@@ -44,58 +44,54 @@ import com.helger.commons.lang.IExplicitlyCloneable;
  * @author James House
  * @author Juergen Donnerstag
  */
-public interface ICalendar extends Serializable, IExplicitlyCloneable
+public interface ICalendar extends Serializable
 {
   int MONTH = 0;
 
   /**
-   * <p>
-   * Set a new base calendar or remove the existing one.
-   * </p>
+   * Get the base calendar. Will be <code>null</code>, if not set.
    */
-  void setBaseCalendar (ICalendar baseCalendar);
-
-  /**
-   * <p>
-   * Get the base calendar. Will be null, if not set.
-   * </p>
-   */
+  @Nullable
   ICalendar getBaseCalendar ();
 
   /**
-   * <p>
+   * Set a new base calendar or remove the existing one.
+   *
+   * @param baseCalendar
+   *        The new base calendar. May be <code>null</code>.
+   */
+  void setBaseCalendar (@Nullable ICalendar baseCalendar);
+
+  /**
+   * Return the description given to the <code>Calendar</code> instance by its
+   * creator (if any).
+   *
+   * @return <code>null</code> if no description was set.
+   */
+  @Nullable
+  String getDescription ();
+
+  /**
+   * Set a description for the <code>Calendar</code> instance - may be useful
+   * for remembering/displaying the purpose of the calendar, though the
+   * description has no meaning to Quartz.
+   *
+   * @param description
+   *        The new description. May be <code>null</code>.
+   */
+  void setDescription (@Nullable String description);
+
+  /**
    * Determine whether the given time (in milliseconds) is 'included' by the
    * Calendar.
-   * </p>
    */
   boolean isTimeIncluded (long timeStamp);
 
   /**
-   * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the Calendar
-   * after the given time.
-   * </p>
+   * Determine the next time (in milliseconds) that is 'included' by the
+   * Calendar after the given time.
    */
   long getNextIncludedTime (long timeStamp);
 
-  /**
-   * <p>
-   * Return the description given to the <code>Calendar</code> instance by its
-   * creator (if any).
-   * </p>
-   *
-   * @return null if no description was set.
-   */
-  String getDescription ();
-
-  /**
-   * <p>
-   * Set a description for the <code>Calendar</code> instance - may be useful for
-   * remembering/displaying the purpose of the calendar, though the description
-   * has no meaning to Quartz.
-   * </p>
-   */
-  void setDescription (String description);
-
-  ICalendar clone ();
+  ICalendar getClone ();
 }

@@ -21,6 +21,10 @@ package com.helger.quartz.impl.calendar;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.collection.ArrayHelper;
+import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -34,7 +38,7 @@ import com.helger.quartz.ICalendar;
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class WeeklyCalendar extends BaseCalendar
+public class WeeklyCalendar extends BaseCalendar implements ICloneable <WeeklyCalendar>
 {
   // An array to store the week days which are to be excluded.
   // Calendar.MONDAY etc. are used as index.
@@ -42,6 +46,13 @@ public class WeeklyCalendar extends BaseCalendar
 
   // Will be set to true, if all week days are excluded
   private boolean m_bExcludeAll = false;
+
+  public WeeklyCalendar (@Nonnull final WeeklyCalendar aOther)
+  {
+    super (aOther);
+    m_aExcludeDays = ArrayHelper.getCopy (aOther.m_aExcludeDays);
+    m_bExcludeAll = aOther.m_bExcludeAll;
+  }
 
   public WeeklyCalendar ()
   {
@@ -55,7 +66,7 @@ public class WeeklyCalendar extends BaseCalendar
 
   public WeeklyCalendar (final TimeZone timeZone)
   {
-    super (null, timeZone);
+    this (null, timeZone);
   }
 
   public WeeklyCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
@@ -65,14 +76,6 @@ public class WeeklyCalendar extends BaseCalendar
     m_aExcludeDays[Calendar.SUNDAY] = true;
     m_aExcludeDays[Calendar.SATURDAY] = true;
     m_bExcludeAll = areAllDaysExcluded ();
-  }
-
-  @Override
-  public WeeklyCalendar clone ()
-  {
-    final WeeklyCalendar clone = (WeeklyCalendar) super.clone ();
-    clone.m_aExcludeDays = m_aExcludeDays.clone ();
-    return clone;
   }
 
   /**
@@ -98,9 +101,9 @@ public class WeeklyCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Redefine the array of days excluded. The array must of size greater or equal
-   * 8. Calendar's constants like MONDAY should be used as index. A value of true
-   * is regarded as: exclude it.
+   * Redefine the array of days excluded. The array must of size greater or
+   * equal 8. Calendar's constants like MONDAY should be used as index. A value
+   * of true is regarded as: exclude it.
    * </p>
    */
   public void setDaysExcluded (final boolean [] weekDays)
@@ -116,8 +119,8 @@ public class WeeklyCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Redefine a certain day of the week to be excluded (true) or included (false).
-   * Use Calendar's constants like MONDAY to determine the wday.
+   * Redefine a certain day of the week to be excluded (true) or included
+   * (false). Use Calendar's constants like MONDAY to determine the wday.
    * </p>
    */
   public void setDayExcluded (final int wday, final boolean exclude)
@@ -156,10 +159,8 @@ public class WeeklyCalendar extends BaseCalendar
   @Override
   public boolean isTimeIncluded (final long timeStamp)
   {
-    if (m_bExcludeAll == true)
-    {
+    if (m_bExcludeAll)
       return false;
-    }
 
     // Test the base calendar first. Only if the base calendar not already
     // excludes the time/date, continue evaluating this calendar instance.
@@ -176,9 +177,9 @@ public class WeeklyCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the Calendar
-   * after the given time. Return the original value if timeStamp is included.
-   * Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the
+   * Calendar after the given time. Return the original value if timeStamp is
+   * included. Return 0 if all days are excluded.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -187,10 +188,8 @@ public class WeeklyCalendar extends BaseCalendar
   @Override
   public long getNextIncludedTime (final long nTimeStamp)
   {
-    if (m_bExcludeAll == true)
-    {
+    if (m_bExcludeAll)
       return 0;
-    }
 
     // Call base calendar implementation first
     long timeStamp = nTimeStamp;
@@ -206,15 +205,23 @@ public class WeeklyCalendar extends BaseCalendar
 
     if (!isDayExcluded (wday))
     {
-      return timeStamp; // return the original value
+      // return the original value
+      return timeStamp;
     }
 
-    while (isDayExcluded (wday) == true)
+    while (isDayExcluded (wday))
     {
       cl.add (Calendar.DATE, 1);
       wday = cl.get (Calendar.DAY_OF_WEEK);
     }
 
     return cl.getTime ().getTime ();
+  }
+
+  @Override
+  @Nonnull
+  public WeeklyCalendar getClone ()
+  {
+    return new WeeklyCalendar (this);
   }
 }

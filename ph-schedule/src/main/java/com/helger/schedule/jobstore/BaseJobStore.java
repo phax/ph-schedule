@@ -543,7 +543,7 @@ public class BaseJobStore implements IJobStore
         m_aCalendarsByName.remove (name);
       }
 
-      final ICalendar aCalendarClone = aCalendar.clone ();
+      final ICalendar aCalendarClone = aCalendar.getClone ();
       m_aCalendarsByName.put (name, aCalendarClone);
 
       if (aOld != null && bUpdateTriggers)
@@ -583,7 +583,7 @@ public class BaseJobStore implements IJobStore
   {
     return m_aRWLock.readLockedGet ( () -> {
       final ICalendar cal = m_aCalendarsByName.get (calName);
-      return cal != null ? cal.clone () : null;
+      return cal != null ? cal.getClone () : null;
     });
   }
 

@@ -23,8 +23,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TimeZone;
-import java.util.TreeSet;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.collection.impl.CommonsTreeSet;
+import com.helger.commons.collection.impl.ICommonsSortedSet;
+import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -41,35 +45,35 @@ import com.helger.quartz.ICalendar;
  * @author Sharada Jambula
  * @author Juergen Donnerstag
  */
-public class HolidayCalendar extends BaseCalendar
+public class HolidayCalendar extends BaseCalendar implements ICloneable <HolidayCalendar>
 {
   // A sorted set to store the holidays
-  private TreeSet <Date> m_aDates = new TreeSet <> ();
+  private final ICommonsSortedSet <Date> m_aDates = new CommonsTreeSet <> ();
+
+  public HolidayCalendar (@Nonnull final HolidayCalendar aOther)
+  {
+    super (aOther);
+    m_aDates.addAll (aOther.m_aDates);
+  }
 
   public HolidayCalendar ()
-  {}
+  {
+    this (null, null);
+  }
 
   public HolidayCalendar (final ICalendar baseCalendar)
   {
-    super (baseCalendar);
+    this (baseCalendar, null);
   }
 
   public HolidayCalendar (final TimeZone timeZone)
   {
-    super (timeZone);
+    this (null, timeZone);
   }
 
   public HolidayCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
-  }
-
-  @Override
-  public HolidayCalendar clone ()
-  {
-    final HolidayCalendar clone = (HolidayCalendar) super.clone ();
-    clone.m_aDates = new TreeSet <> (m_aDates);
-    return clone;
   }
 
   /**
@@ -95,13 +99,9 @@ public class HolidayCalendar extends BaseCalendar
   }
 
   /**
-   * <p>
    * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time.
-   * </p>
-   * <p>
+   * Calendar after the given time.<br>
    * Note that this Calendar is only has full-day precision.
-   * </p>
    */
   @Override
   public long getNextIncludedTime (final long nTimeStamp)
@@ -126,10 +126,8 @@ public class HolidayCalendar extends BaseCalendar
   }
 
   /**
-   * <p>
    * Add the given Date to the list of excluded days. Only the month, day and
    * year of the returned dates are significant.
-   * </p>
    */
   public void addExcludedDate (final Date excludedDate)
   {
@@ -156,5 +154,12 @@ public class HolidayCalendar extends BaseCalendar
   public SortedSet <Date> getExcludedDates ()
   {
     return Collections.unmodifiableSortedSet (m_aDates);
+  }
+
+  @Override
+  @Nonnull
+  public HolidayCalendar getClone ()
+  {
+    return new HolidayCalendar (this);
   }
 }

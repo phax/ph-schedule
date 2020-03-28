@@ -23,8 +23,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -52,22 +54,11 @@ public class BaseCalendar implements ICalendar
   private String m_sDescription;
   private TimeZone m_aTimeZone;
 
-  public BaseCalendar ()
-  {}
-
-  public BaseCalendar (@Nullable final ICalendar baseCalendar)
+  public BaseCalendar (@Nonnull final BaseCalendar aOther)
   {
-    setBaseCalendar (baseCalendar);
-  }
-
-  /**
-   * @param timeZone
-   *        The time zone to use for this Calendar, <code>null</code> if
-   *        <code>{@link TimeZone#getDefault()}</code> should be used
-   */
-  public BaseCalendar (@Nullable final TimeZone timeZone)
-  {
-    setTimeZone (timeZone);
+    m_aBaseCalendar = aOther.m_aBaseCalendar;
+    m_sDescription = aOther.m_sDescription;
+    m_aTimeZone = aOther.m_aTimeZone;
   }
 
   /**
@@ -78,91 +69,35 @@ public class BaseCalendar implements ICalendar
   public BaseCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
   {
     setBaseCalendar (baseCalendar);
-    setTimeZone (timeZone);
+    m_aTimeZone = timeZone;
   }
 
-  @Override
-  public BaseCalendar clone ()
+  public final ICalendar getBaseCalendar ()
   {
-    try
-    {
-      final BaseCalendar clone = (BaseCalendar) super.clone ();
-      if (getBaseCalendar () != null)
-        clone.m_aBaseCalendar = getBaseCalendar ().clone ();
-      if (getTimeZone () != null)
-        clone.m_aTimeZone = (TimeZone) getTimeZone ().clone ();
-      return clone;
-    }
-    catch (final CloneNotSupportedException ex)
-    {
-      throw new IncompatibleClassChangeError ("Not Cloneable.");
-    }
+    return m_aBaseCalendar;
   }
 
-  /**
-   * <p>
-   * Set a new base calendar or remove the existing one
-   * </p>
-   */
   public final void setBaseCalendar (@Nullable final ICalendar baseCalendar)
   {
     m_aBaseCalendar = baseCalendar;
   }
 
-  /**
-   * <p>
-   * Get the base calendar. Will be null, if not set.
-   * </p>
-   */
-  public ICalendar getBaseCalendar ()
-  {
-    return m_aBaseCalendar;
-  }
-
-  /**
-   * <p>
-   * Return the description given to the <code>Calendar</code> instance by its
-   * creator (if any).
-   * </p>
-   *
-   * @return null if no description was set.
-   */
-  public String getDescription ()
+  public final String getDescription ()
   {
     return m_sDescription;
   }
 
-  /**
-   * <p>
-   * Set a description for the <code>Calendar</code> instance - may be useful
-   * for remembering/displaying the purpose of the calendar, though the
-   * description has no meaning to Quartz.
-   * </p>
-   */
-  public void setDescription (@Nullable final String description)
+  public final void setDescription (@Nullable final String description)
   {
     m_sDescription = description;
   }
 
-  /**
-   * Returns the time zone for which this <code>Calendar</code> will be
-   * resolved.
-   *
-   * @return This Calendar's timezone, <code>null</code> if Calendar should use
-   *         the <code>{@link TimeZone#getDefault()}</code>
-   */
+  @Nullable
   public TimeZone getTimeZone ()
   {
     return m_aTimeZone;
   }
 
-  /**
-   * Sets the time zone for which this <code>Calendar</code> will be resolved.
-   *
-   * @param timeZone
-   *        The time zone to use for this Calendar, <code>null</code> if
-   *        <code>{@link TimeZone#getDefault()}</code> should be used
-   */
   public void setTimeZone (@Nullable final TimeZone timeZone)
   {
     m_aTimeZone = timeZone;
@@ -179,21 +114,10 @@ public class BaseCalendar implements ICalendar
    */
   public boolean isTimeIncluded (final long timeStamp)
   {
-
     if (timeStamp <= 0)
-    {
       throw new IllegalArgumentException ("timeStamp must be greater 0");
-    }
 
-    if (m_aBaseCalendar != null)
-    {
-      if (m_aBaseCalendar.isTimeIncluded (timeStamp) == false)
-      {
-        return false;
-      }
-    }
-
-    return true;
+    return m_aBaseCalendar == null || m_aBaseCalendar.isTimeIncluded (timeStamp);
   }
 
   /**
@@ -211,9 +135,7 @@ public class BaseCalendar implements ICalendar
       throw new IllegalArgumentException ("timeStamp must be greater 0");
 
     if (m_aBaseCalendar != null)
-    {
       return m_aBaseCalendar.getNextIncludedTime (timeStamp);
-    }
 
     return timeStamp;
   }
@@ -277,5 +199,12 @@ public class BaseCalendar implements ICalendar
     endOfDay.set (Calendar.SECOND, 59);
     endOfDay.set (Calendar.MILLISECOND, 999);
     return endOfDay;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public BaseCalendar getClone ()
+  {
+    return new BaseCalendar (this);
   }
 }

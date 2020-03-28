@@ -41,9 +41,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
-import com.helger.commons.lang.IExplicitlyCloneable;
+import com.helger.commons.lang.ICloneable;
 import com.helger.commons.regex.RegExHelper;
 
 /**
@@ -223,7 +224,7 @@ import com.helger.commons.regex.RegExHelper;
  * @author Contributions from Mads Henderson
  * @author Refactoring from CronTrigger to CronExpression by Aaron Craven
  */
-public final class CronExpression implements Serializable, IExplicitlyCloneable
+public final class CronExpression implements Serializable, ICloneable <CronExpression>
 {
   private static final class ValueSet implements Serializable
   {
@@ -258,6 +259,7 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
 
   private final String m_sCronExpression;
   private TimeZone m_aTimeZone;
+
   private transient TreeSet <Integer> m_aSeconds;
   private transient TreeSet <Integer> m_aMinutes;
   private transient TreeSet <Integer> m_aHours;
@@ -1877,17 +1879,10 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
     }
   }
 
-  @Override
-  public CronExpression clone ()
+  @Nonnull
+  @ReturnsMutableCopy
+  public CronExpression getClone ()
   {
-    try
-    {
-      final CronExpression copy = (CronExpression) super.clone ();
-      return copy;
-    }
-    catch (final CloneNotSupportedException ex)
-    {
-      throw new IncompatibleClassChangeError ("Not Cloneable.");
-    }
+    return new CronExpression (this);
   }
 }

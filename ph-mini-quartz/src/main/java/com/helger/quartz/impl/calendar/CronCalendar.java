@@ -25,6 +25,7 @@ import java.util.TimeZone;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.ICalendar;
 
@@ -45,9 +46,15 @@ import com.helger.quartz.ICalendar;
  *
  * @author Aaron Craven
  */
-public class CronCalendar extends BaseCalendar
+public class CronCalendar extends BaseCalendar implements ICloneable <CronCalendar>
 {
-  protected CronExpression m_aCronExpression;
+  private CronExpression m_aCronExpression;
+
+  public CronCalendar (@Nonnull final CronCalendar aOther)
+  {
+    super (aOther);
+    m_aCronExpression = aOther.m_aCronExpression.getClone ();
+  }
 
   /**
    * Create a <CODE>CronCalendar</CODE> with the given cron expression and no
@@ -97,17 +104,9 @@ public class CronCalendar extends BaseCalendar
                        final String expression,
                        final TimeZone timeZone) throws ParseException
   {
-    super (baseCalendar);
+    super (baseCalendar, null);
     m_aCronExpression = new CronExpression (expression);
     m_aCronExpression.setTimeZone (timeZone);
-  }
-
-  @Override
-  public CronCalendar clone ()
-  {
-    final CronCalendar clone = (CronCalendar) super.clone ();
-    clone.m_aCronExpression = new CronExpression (m_aCronExpression);
-    return clone;
   }
 
   /**
@@ -204,25 +203,25 @@ public class CronCalendar extends BaseCalendar
    * Returns a string representing the properties of the
    * <CODE>CronCalendar</CODE>
    *
-   * @return the properteis of the CronCalendar in a String format
+   * @return the properties of the CronCalendar in a String format
    */
   @Override
   public String toString ()
   {
-    final StringBuilder buffer = new StringBuilder ();
-    buffer.append ("base calendar: [");
+    final StringBuilder aSB = new StringBuilder ();
+    aSB.append ("base calendar: [");
     if (getBaseCalendar () != null)
     {
-      buffer.append (getBaseCalendar ().toString ());
+      aSB.append (getBaseCalendar ().toString ());
     }
     else
     {
-      buffer.append ("null");
+      aSB.append ("null");
     }
-    buffer.append ("], excluded cron expression: '");
-    buffer.append (m_aCronExpression);
-    buffer.append ("'");
-    return buffer.toString ();
+    aSB.append ("], excluded cron expression: '");
+    aSB.append (m_aCronExpression);
+    aSB.append ("'");
+    return aSB.toString ();
   }
 
   /**
@@ -249,7 +248,6 @@ public class CronCalendar extends BaseCalendar
   public void setCronExpression (@Nonnull final String expression) throws ParseException
   {
     final CronExpression newExp = new CronExpression (expression);
-
     setCronExpression (newExp);
   }
 
@@ -264,5 +262,12 @@ public class CronCalendar extends BaseCalendar
     ValueEnforcer.notNull (expression, "Expression");
 
     m_aCronExpression = expression;
+  }
+
+  @Override
+  @Nonnull
+  public CronCalendar getClone ()
+  {
+    return new CronCalendar (this);
   }
 }

@@ -21,6 +21,10 @@ package com.helger.quartz.impl.calendar;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+
+import com.helger.commons.collection.ArrayHelper;
+import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -34,7 +38,7 @@ import com.helger.quartz.ICalendar;
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class MonthlyCalendar extends BaseCalendar
+public class MonthlyCalendar extends BaseCalendar implements ICloneable <MonthlyCalendar>
 {
   private static final int MAX_DAYS_IN_MONTH = 31;
 
@@ -43,7 +47,14 @@ public class MonthlyCalendar extends BaseCalendar
   private boolean [] m_aExcludeDays = new boolean [MAX_DAYS_IN_MONTH];
 
   // Will be set to true, if all week days are excluded
-  private boolean m_aExcludeAll = false;
+  private boolean m_bExcludeAll = false;
+
+  public MonthlyCalendar (@Nonnull final MonthlyCalendar aOther)
+  {
+    super (aOther);
+    m_aExcludeDays = ArrayHelper.getCopy (aOther.m_aExcludeDays);
+    m_bExcludeAll = aOther.m_bExcludeAll;
+  }
 
   public MonthlyCalendar ()
   {
@@ -65,21 +76,13 @@ public class MonthlyCalendar extends BaseCalendar
     super (baseCalendar, timeZone);
 
     // all days are included by default
-    m_aExcludeAll = areAllDaysExcluded ();
-  }
-
-  @Override
-  public MonthlyCalendar clone ()
-  {
-    final MonthlyCalendar clone = (MonthlyCalendar) super.clone ();
-    clone.m_aExcludeDays = m_aExcludeDays.clone ();
-    return clone;
+    m_bExcludeAll = areAllDaysExcluded ();
   }
 
   /**
    * <p>
-   * Get the array which defines the exclude-value of each day of month. Only the
-   * first 31 elements of the array are relevant, with the 0 index element
+   * Get the array which defines the exclude-value of each day of month. Only
+   * the first 31 elements of the array are relevant, with the 0 index element
    * representing the first day of the month.
    * </p>
    */
@@ -128,7 +131,7 @@ public class MonthlyCalendar extends BaseCalendar
     }
 
     m_aExcludeDays = days;
-    m_aExcludeAll = areAllDaysExcluded ();
+    m_bExcludeAll = areAllDaysExcluded ();
   }
 
   /**
@@ -148,7 +151,7 @@ public class MonthlyCalendar extends BaseCalendar
     }
 
     m_aExcludeDays[day - 1] = exclude;
-    m_aExcludeAll = areAllDaysExcluded ();
+    m_bExcludeAll = areAllDaysExcluded ();
   }
 
   /**
@@ -181,7 +184,7 @@ public class MonthlyCalendar extends BaseCalendar
   @Override
   public boolean isTimeIncluded (final long timeStamp)
   {
-    if (m_aExcludeAll == true)
+    if (m_bExcludeAll)
     {
       return false;
     }
@@ -201,9 +204,9 @@ public class MonthlyCalendar extends BaseCalendar
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the Calendar
-   * after the given time. Return the original value if timeStamp is included.
-   * Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the
+   * Calendar after the given time. Return the original value if timeStamp is
+   * included. Return 0 if all days are excluded.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -212,10 +215,8 @@ public class MonthlyCalendar extends BaseCalendar
   @Override
   public long getNextIncludedTime (final long nTimeStamp)
   {
-    if (m_aExcludeAll == true)
-    {
+    if (m_bExcludeAll)
       return 0;
-    }
 
     // Call base calendar implementation first
     long timeStamp = nTimeStamp;
@@ -231,15 +232,23 @@ public class MonthlyCalendar extends BaseCalendar
 
     if (!isDayExcluded (day))
     {
-      return timeStamp; // return the original value
+      // return the original value
+      return timeStamp;
     }
 
-    while (isDayExcluded (day) == true)
+    while (isDayExcluded (day))
     {
       cl.add (Calendar.DATE, 1);
       day = cl.get (Calendar.DAY_OF_MONTH);
     }
 
     return cl.getTime ().getTime ();
+  }
+
+  @Override
+  @Nonnull
+  public MonthlyCalendar getClone ()
+  {
+    return new MonthlyCalendar (this);
   }
 }
