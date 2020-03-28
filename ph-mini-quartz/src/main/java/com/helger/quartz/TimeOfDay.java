@@ -111,7 +111,7 @@ public class TimeOfDay implements Serializable
   /**
    * Determine with this time of day is before the given time of day.
    *
-   * @return true this time of day is before the given time of day.
+   * @return <code>true</code> this time of day is before the given time of day.
    */
   public boolean before (final TimeOfDay timeOfDay)
   {
@@ -134,14 +134,14 @@ public class TimeOfDay implements Serializable
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object o)
   {
-    if (obj == this)
+    if (o == this)
       return true;
-    if (obj == null || !getClass ().equals (TimeOfDay.class))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
 
-    final TimeOfDay rhs = (TimeOfDay) obj;
+    final TimeOfDay rhs = (TimeOfDay) o;
     return rhs.m_nHour == m_nHour && rhs.m_nMinute == m_nMinute && rhs.m_nSecond == m_nSecond;
   }
 

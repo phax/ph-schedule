@@ -438,7 +438,7 @@ public class SimpleThreadPool implements IThreadPool
         }
         catch (final InterruptedException ignore)
         {
-          // ignore
+          Thread.currentThread ().interrupt ();
         }
       }
 
@@ -481,7 +481,9 @@ public class SimpleThreadPool implements IThreadPool
           m_aNextRunnableLock.wait (500);
         }
         catch (final InterruptedException ignore)
-        {}
+        {
+          Thread.currentThread ().interrupt ();
+        }
       }
 
       return m_aAvailWorkers.size ();
@@ -613,12 +615,13 @@ public class SimpleThreadPool implements IThreadPool
           // do nothing (loop will terminate if shutdown() was called
           try
           {
-            LOGGER.error ("Worker thread was interrupt()'ed.", unblock);
+            LOGGER.error ("Worker thread was interrupt'ed.", unblock);
           }
           catch (final Exception e)
           {
             // ignore to help with a tomcat glitch
           }
+          Thread.currentThread ().interrupt ();
         }
         catch (final Throwable exceptionInRunnable)
         {

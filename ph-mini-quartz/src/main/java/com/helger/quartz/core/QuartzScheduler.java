@@ -342,7 +342,9 @@ public class QuartzScheduler implements IQuartzScheduler
         Thread.sleep (seconds * 1000L);
       }
       catch (final InterruptedException ignore)
-      {}
+      {
+        Thread.currentThread ().interrupt ();
+      }
       try
       {
         start ();
@@ -478,12 +480,13 @@ public class QuartzScheduler implements IQuartzScheduler
           {
             ((IInterruptableJob) job.getJobInstance ()).interrupt ();
           }
-          catch (final Throwable e)
+          catch (final Throwable t)
           {
             // do nothing, this was just a courtesy effort
-            LOGGER.warn ("Encountered error when interrupting job {} during shutdown: {}",
-                         job.getJobDetail ().getKey (),
-                         e);
+            LOGGER.warn ("Encountered error when interrupting job " +
+                         job.getJobDetail ().getKey () +
+                         " during shutdown",
+                         t);
           }
       }
     }

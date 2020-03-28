@@ -260,7 +260,9 @@ public class QuartzSchedulerThread extends Thread
               m_aSigLock.wait (1000L);
             }
             catch (final InterruptedException ignore)
-            {}
+            {
+              Thread.currentThread ().interrupt ();
+            }
           }
 
           if (m_aHalted.get ())
@@ -335,7 +337,9 @@ public class QuartzSchedulerThread extends Thread
                       m_aSigLock.wait (timeUntilTrigger);
                   }
                   catch (final InterruptedException ignore)
-                  {}
+                  {
+                    Thread.currentThread ().interrupt ();
+                  }
                 }
               }
               if (releaseIfScheduleChangedSignificantly (triggers, triggerTime))
@@ -467,7 +471,9 @@ public class QuartzSchedulerThread extends Thread
             }
           }
           catch (final InterruptedException ignore)
-          {}
+          {
+            Thread.currentThread ().interrupt ();
+          }
         }
 
       }

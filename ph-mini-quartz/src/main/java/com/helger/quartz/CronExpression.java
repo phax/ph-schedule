@@ -1040,34 +1040,27 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
   protected String getExpressionSetSummary (final List <Integer> list)
   {
     if (list.contains (NO_SPEC))
-    {
       return "?";
-    }
     if (list.contains (ALL_SPEC))
-    {
       return "*";
-    }
 
     final StringBuilder buf = new StringBuilder ();
-
     final Iterator <Integer> itr = list.iterator ();
     boolean first = true;
     while (itr.hasNext ())
     {
       final Integer iVal = itr.next ();
       final String val = iVal.toString ();
-      if (!first)
-      {
+      if (first)
+        first = false;
+      else
         buf.append (",");
-      }
       buf.append (val);
-      first = false;
     }
-
     return buf.toString ();
   }
 
-  protected int skipWhiteSpace (final int i, final String s)
+  protected static final int skipWhiteSpace (final int i, final String s)
   {
     int nIndex = i;
     final int nMax = s.length ();
@@ -1078,10 +1071,10 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
       nIndex++;
     }
 
-    return nIndex++;
+    return nIndex;
   }
 
-  protected int findNextWhiteSpace (final int i, final String s)
+  protected static final int findNextWhiteSpace (final int i, final String s)
   {
     int nIndex = i;
     final int nMax = s.length ();
@@ -1092,7 +1085,7 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
       nIndex++;
     }
 
-    return nIndex++;
+    return nIndex;
   }
 
   protected void addToSet (final int val, final int end, final int nIncr, final int type) throws ParseException
@@ -1103,54 +1096,39 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
     if (type == SECOND || type == MINUTE)
     {
       if ((val < 0 || val > 59 || end > 59) && (val != ALL_SPEC_INT))
-      {
         throw new ParseException ("Minute and Second values must be between 0 and 59", -1);
-      }
     }
     else
       if (type == HOUR)
       {
         if ((val < 0 || val > 23 || end > 23) && (val != ALL_SPEC_INT))
-        {
           throw new ParseException ("Hour values must be between 0 and 23", -1);
-        }
       }
       else
         if (type == DAY_OF_MONTH)
         {
           if ((val < 1 || val > 31 || end > 31) && (val != ALL_SPEC_INT) && (val != NO_SPEC_INT))
-          {
             throw new ParseException ("Day of month values must be between 1 and 31", -1);
-          }
         }
         else
           if (type == MONTH)
           {
             if ((val < 1 || val > 12 || end > 12) && (val != ALL_SPEC_INT))
-            {
               throw new ParseException ("Month values must be between 1 and 12", -1);
-            }
           }
           else
             if (type == DAY_OF_WEEK)
             {
               if ((val < 1 || val > 7 || end > 7) && (val != ALL_SPEC_INT) && (val != NO_SPEC_INT))
-              {
                 throw new ParseException ("Day-of-Week values must be between 1 and 7", -1);
-              }
             }
 
     if ((incr == 0 || incr == -1) && val != ALL_SPEC_INT)
     {
       if (val != -1)
-      {
         set.add (Integer.valueOf (val));
-      }
       else
-      {
         set.add (NO_SPEC);
-      }
-
       return;
     }
 
@@ -1166,73 +1144,49 @@ public final class CronExpression implements Serializable, IExplicitlyCloneable
     if (type == SECOND || type == MINUTE)
     {
       if (stopAt == -1)
-      {
         stopAt = 59;
-      }
       if (startAt == -1 || startAt == ALL_SPEC_INT)
-      {
         startAt = 0;
-      }
     }
     else
       if (type == HOUR)
       {
         if (stopAt == -1)
-        {
           stopAt = 23;
-        }
         if (startAt == -1 || startAt == ALL_SPEC_INT)
-        {
           startAt = 0;
-        }
       }
       else
         if (type == DAY_OF_MONTH)
         {
           if (stopAt == -1)
-          {
             stopAt = 31;
-          }
           if (startAt == -1 || startAt == ALL_SPEC_INT)
-          {
             startAt = 1;
-          }
         }
         else
           if (type == MONTH)
           {
             if (stopAt == -1)
-            {
               stopAt = 12;
-            }
             if (startAt == -1 || startAt == ALL_SPEC_INT)
-            {
               startAt = 1;
-            }
           }
           else
             if (type == DAY_OF_WEEK)
             {
               if (stopAt == -1)
-              {
                 stopAt = 7;
-              }
               if (startAt == -1 || startAt == ALL_SPEC_INT)
-              {
                 startAt = 1;
-              }
             }
             else
               if (type == YEAR)
               {
                 if (stopAt == -1)
-                {
                   stopAt = CQuartz.MAX_YEAR;
-                }
                 if (startAt == -1 || startAt == ALL_SPEC_INT)
-                {
                   startAt = 1970;
-                }
               }
 
     // if the end of the range is before the start, then we need to overflow
