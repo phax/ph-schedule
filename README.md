@@ -4,7 +4,7 @@ Java scheduling library based on Quartz with scope support (see [ph-commons](htt
 
 # News and noteworthy
 
-* v4.0.2 - work in progress
+* v4.0.2 - 2020-03-28
     * Improved debug logging
     * Improved code quality slightly
     * Updated to ph-commons 9.4.0
@@ -28,7 +28,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>ph-schedule</artifactId>
-  <version>4.0.1</version>
+  <version>4.0.2</version>
 </dependency>
 ```
 
