@@ -150,5 +150,5 @@ public interface ICalendarIntervalTrigger extends ITrigger
    */
   boolean isSkipDayIfHourDoesNotExist ();
 
-  TriggerBuilder <ICalendarIntervalTrigger> getTriggerBuilder ();
+  TriggerBuilder <? extends ICalendarIntervalTrigger> getTriggerBuilder ();
 }

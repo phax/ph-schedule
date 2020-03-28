@@ -71,7 +71,7 @@ import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
  * @author James House
  * @author Zemian Deng saltnlight5@gmail.com
  */
-public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <IDailyTimeIntervalTrigger>
+public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <DailyTimeIntervalTrigger>
 {
   private int m_nInterval = 1;
   private EIntervalUnit m_eIntervalUnit = EIntervalUnit.MINUTE;

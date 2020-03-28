@@ -59,7 +59,7 @@ import com.helger.quartz.impl.triggers.CronTrigger;
  * @see CalendarIntervalScheduleBuilder
  * @see TriggerBuilder
  */
-public class CronScheduleBuilder implements IScheduleBuilder <ICronTrigger>
+public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
 {
   private final CronExpression m_aCronExpression;
   private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;

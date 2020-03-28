@@ -97,7 +97,7 @@ import com.helger.quartz.TimeOfDay;
  * @author James House
  * @author Zemian Deng saltnlight5@gmail.com
  */
-public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeIntervalTrigger> implements
+public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeIntervalTrigger> implements
                                       IDailyTimeIntervalTrigger,
                                       ICoreTrigger
 {
@@ -1025,9 +1025,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
    * @see #getTriggerBuilder()
    */
   @Override
-  public IScheduleBuilder <IDailyTimeIntervalTrigger> getScheduleBuilder ()
+  public IScheduleBuilder <DailyTimeIntervalTrigger> getScheduleBuilder ()
   {
-
     final DailyTimeIntervalScheduleBuilder cb = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule ()
                                                                                 .withInterval (getRepeatInterval (),
                                                                                                getRepeatIntervalUnit ())

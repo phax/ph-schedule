@@ -27,10 +27,10 @@ import com.helger.quartz.spi.IMutableTrigger;
 /**
  * @author Terracotta
  * @param <T>
- *        Trigger class - whysoever
+ *        Trigger class
  */
-public interface IScheduleBuilder <T extends ITrigger> extends Serializable
+public interface IScheduleBuilder <T extends IMutableTrigger> extends Serializable
 {
   @Nonnull
-  IMutableTrigger build ();
+  T build ();
 }

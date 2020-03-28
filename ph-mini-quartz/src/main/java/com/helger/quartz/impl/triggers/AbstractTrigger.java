@@ -34,6 +34,7 @@ import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
+import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.spi.IOperableTrigger;
 
 /**
@@ -59,7 +60,7 @@ import com.helger.quartz.spi.IOperableTrigger;
  * @author James House
  * @author Sharada Jambula
  */
-public abstract class AbstractTrigger <T extends ITrigger> implements IOperableTrigger
+public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOperableTrigger
 {
   private String m_sName;
   private String m_sGroup = IScheduler.DEFAULT_GROUP;
@@ -86,9 +87,7 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    * </p>
    */
   public AbstractTrigger ()
-  {
-    // do nothing...
-  }
+  {}
 
   /**
    * <p>

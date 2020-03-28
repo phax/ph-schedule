@@ -45,7 +45,7 @@ import com.helger.quartz.ITrigger;
  * @author Sharada Jambula, James House
  * @author Contributions from Mads Henderson
  */
-public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICronTrigger, ICoreTrigger
+public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronTrigger, ICoreTrigger
 {
   protected static final int YEAR_TO_GIVEUP_SCHEDULING_AT = CQuartz.MAX_YEAR;
 
@@ -569,7 +569,7 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
    * @see #getTriggerBuilder()
    */
   @Override
-  public IScheduleBuilder <ICronTrigger> getScheduleBuilder ()
+  public IScheduleBuilder <CronTrigger> getScheduleBuilder ()
   {
     final CronScheduleBuilder cb = CronScheduleBuilder.cronSchedule (getCronExpression ()).inTimeZone (getTimeZone ());
 

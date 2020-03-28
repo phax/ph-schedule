@@ -24,6 +24,7 @@ import java.util.Date;
 import com.helger.commons.annotation.MustImplementEqualsAndHashcode;
 import com.helger.commons.compare.IComparator;
 import com.helger.commons.lang.IExplicitlyCloneable;
+import com.helger.quartz.spi.IMutableTrigger;
 
 /**
  * The base interface with properties common to all <code>Trigger</code>s - use
@@ -286,7 +287,7 @@ public interface ITrigger extends Serializable, IExplicitlyCloneable, Comparable
    *
    * @see #getTriggerBuilder()
    */
-  IScheduleBuilder <? extends ITrigger> getScheduleBuilder ();
+  IScheduleBuilder <? extends IMutableTrigger> getScheduleBuilder ();
 
   /**
    * Trigger equality is based upon the equality of the TriggerKey.

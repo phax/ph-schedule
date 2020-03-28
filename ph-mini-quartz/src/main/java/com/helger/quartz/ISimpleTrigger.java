@@ -152,5 +152,5 @@ public interface ISimpleTrigger extends ITrigger
    */
   int getTimesTriggered ();
 
-  TriggerBuilder <ISimpleTrigger> getTriggerBuilder ();
+  TriggerBuilder <? extends ISimpleTrigger> getTriggerBuilder ();
 }

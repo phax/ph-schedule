@@ -559,12 +559,12 @@ public abstract class AbstractJobStoreTest
       final Date startTime = new Date (startTime0.getTime () + i * MIN);
       final IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i).build ();
       final SimpleScheduleBuilder schedule = SimpleScheduleBuilder.repeatMinutelyForever (2);
-      final IOperableTrigger trigger = (IOperableTrigger) TriggerBuilder.newTrigger ()
-                                                                        .withIdentity ("job" + i)
-                                                                        .withSchedule (schedule)
-                                                                        .forJob (job)
-                                                                        .startAt (startTime)
-                                                                        .build ();
+      final IOperableTrigger trigger = TriggerBuilder.newTrigger ()
+                                                     .withIdentity ("job" + i)
+                                                     .withSchedule (schedule)
+                                                     .forJob (job)
+                                                     .startAt (startTime)
+                                                     .build ();
 
       // Manually trigger the first fire time computation that scheduler would
       // do. Otherwise
@@ -610,12 +610,12 @@ public abstract class AbstractJobStoreTest
       final Date startTime = new Date (startTime0.getTime () + i * MIN);
       final IJobDetail job = JobBuilder.newJob (MyJob.class).withIdentity ("job" + i).build ();
       final SimpleScheduleBuilder schedule = SimpleScheduleBuilder.repeatMinutelyForever (2);
-      final IOperableTrigger trigger = (IOperableTrigger) TriggerBuilder.newTrigger ()
-                                                                        .withIdentity ("job" + i)
-                                                                        .withSchedule (schedule)
-                                                                        .forJob (job)
-                                                                        .startAt (startTime)
-                                                                        .build ();
+      final IOperableTrigger trigger = TriggerBuilder.newTrigger ()
+                                                     .withIdentity ("job" + i)
+                                                     .withSchedule (schedule)
+                                                     .forJob (job)
+                                                     .startAt (startTime)
+                                                     .build ();
 
       // Manually trigger the first fire time computation that scheduler would
       // do. Otherwise

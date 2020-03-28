@@ -71,7 +71,7 @@ public class TriggerBuilder <T extends ITrigger>
   private String m_sCalendarName;
   private JobKey m_aJobKey;
   private JobDataMap m_aJobDataMap = new JobDataMap ();
-  private IScheduleBuilder <? extends ITrigger> m_aScheduleBuilder;
+  private IScheduleBuilder <? extends IMutableTrigger> m_aScheduleBuilder;
 
   private TriggerBuilder ()
   {}
@@ -83,7 +83,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @return the new TriggerBuilder
    */
   @Nonnull
-  public static TriggerBuilder <ITrigger> newTrigger ()
+  public static TriggerBuilder <IMutableTrigger> newTrigger ()
   {
     return new TriggerBuilder <> ();
   }
@@ -295,7 +295,7 @@ public class TriggerBuilder <T extends ITrigger>
    */
   @SuppressWarnings ("unchecked")
   @Nonnull
-  public <SBT extends T> TriggerBuilder <SBT> withSchedule (final IScheduleBuilder <SBT> schedBuilder)
+  public <SBT extends IMutableTrigger> TriggerBuilder <SBT> withSchedule (final IScheduleBuilder <SBT> schedBuilder)
   {
     m_aScheduleBuilder = schedBuilder;
     return (TriggerBuilder <SBT>) this;

@@ -56,7 +56,7 @@ import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
  * @see SimpleScheduleBuilder
  * @see TriggerBuilder
  */
-public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <ICalendarIntervalTrigger>
+public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <CalendarIntervalTrigger>
 {
   private int m_nInterval = 1;
   private EIntervalUnit m_eIntervalUnit = EIntervalUnit.DAY;

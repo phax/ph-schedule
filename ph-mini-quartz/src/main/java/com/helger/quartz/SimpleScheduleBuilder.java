@@ -54,7 +54,7 @@ import com.helger.quartz.impl.triggers.SimpleTrigger;
  * @see IScheduleBuilder
  * @see TriggerBuilder
  */
-public class SimpleScheduleBuilder implements IScheduleBuilder <ISimpleTrigger>
+public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
 {
   private long m_nInterval = 0;
   private int m_nRepeatCount = 0;

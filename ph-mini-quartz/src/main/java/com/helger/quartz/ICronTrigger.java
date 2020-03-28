@@ -201,5 +201,5 @@ public interface ICronTrigger extends ITrigger
 
   String getExpressionSummary ();
 
-  TriggerBuilder <ICronTrigger> getTriggerBuilder ();
+  TriggerBuilder <? extends ICronTrigger> getTriggerBuilder ();
 }

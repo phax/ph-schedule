@@ -65,7 +65,7 @@ import com.helger.quartz.SchedulerException;
  * @since 1.7
  * @author James House
  */
-public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalTrigger> implements
+public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTrigger> implements
                                      ICalendarIntervalTrigger,
                                      ICoreTrigger
 {
@@ -925,39 +925,25 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     lTime.setLenient (true);
 
     if (getRepeatIntervalUnit ().equals (EIntervalUnit.SECOND))
-    {
       lTime.add (Calendar.SECOND, -1 * getRepeatInterval ());
-    }
     else
       if (getRepeatIntervalUnit ().equals (EIntervalUnit.MINUTE))
-      {
         lTime.add (Calendar.MINUTE, -1 * getRepeatInterval ());
-      }
       else
         if (getRepeatIntervalUnit ().equals (EIntervalUnit.HOUR))
-        {
           lTime.add (Calendar.HOUR_OF_DAY, -1 * getRepeatInterval ());
-        }
         else
           if (getRepeatIntervalUnit ().equals (EIntervalUnit.DAY))
-          {
             lTime.add (Calendar.DAY_OF_YEAR, -1 * getRepeatInterval ());
-          }
           else
             if (getRepeatIntervalUnit ().equals (EIntervalUnit.WEEK))
-            {
               lTime.add (Calendar.WEEK_OF_YEAR, -1 * getRepeatInterval ());
-            }
             else
               if (getRepeatIntervalUnit ().equals (EIntervalUnit.MONTH))
-              {
                 lTime.add (Calendar.MONTH, -1 * getRepeatInterval ());
-              }
               else
                 if (getRepeatIntervalUnit ().equals (EIntervalUnit.YEAR))
-                {
                   lTime.add (Calendar.YEAR, -1 * getRepeatInterval ());
-                }
 
     return lTime.getTime ();
   }
@@ -971,7 +957,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   @Override
   public boolean mayFireAgain ()
   {
-    return (getNextFireTime () != null);
+    return getNextFireTime () != null;
   }
 
   /**
@@ -988,9 +974,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     super.validate ();
 
     if (m_nRepeatInterval < 1)
-    {
       throw new SchedulerException ("Repeat Interval cannot be zero.");
-    }
   }
 
   /**
@@ -1005,7 +989,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
     final CalendarIntervalScheduleBuilder cb = CalendarIntervalScheduleBuilder.calendarIntervalSchedule ()
                                                                               .withInterval (getRepeatInterval (),
                                                                                              getRepeatIntervalUnit ());
-
     switch (getMisfireInstruction ())
     {
       case MISFIRE_INSTRUCTION_DO_NOTHING:
@@ -1015,7 +998,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
         cb.withMisfireHandlingInstructionFireAndProceed ();
         break;
     }
-
     return cb;
   }
 

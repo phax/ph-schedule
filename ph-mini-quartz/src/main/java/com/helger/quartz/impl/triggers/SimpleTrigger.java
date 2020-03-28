@@ -45,7 +45,7 @@ import com.helger.quartz.SimpleScheduleBuilder;
  * @author James House
  * @author contributions by Lieven Govaerts of Ebitec Nv, Belgium.
  */
-public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements ISimpleTrigger, ICoreTrigger
+public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements ISimpleTrigger, ICoreTrigger
 {
   private Date m_aStartTime;
   private Date m_aEndTime;
@@ -731,7 +731,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
    * @see #getTriggerBuilder()
    */
   @Override
-  public IScheduleBuilder <ISimpleTrigger> getScheduleBuilder ()
+  public IScheduleBuilder <SimpleTrigger> getScheduleBuilder ()
   {
     final SimpleScheduleBuilder sb = SimpleScheduleBuilder.simpleSchedule ()
                                                           .withIntervalInMilliseconds (getRepeatInterval ())

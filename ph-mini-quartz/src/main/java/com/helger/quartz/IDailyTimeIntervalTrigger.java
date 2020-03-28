@@ -134,5 +134,5 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    */
   int getTimesTriggered ();
 
-  TriggerBuilder <IDailyTimeIntervalTrigger> getTriggerBuilder ();
+  TriggerBuilder <? extends IDailyTimeIntervalTrigger> getTriggerBuilder ();
 }
