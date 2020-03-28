@@ -26,6 +26,7 @@ import java.time.DayOfWeek;
 import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +36,6 @@ import com.helger.commons.collection.impl.CommonsHashSet;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.commons.datetime.PDTFactory;
-import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.JobKey;
@@ -394,8 +394,9 @@ public class DailyTimeIntervalTriggerTest
   @Test
   public void testAllDaysOfTheWeek () throws Exception
   {
-    final Set <DayOfWeek> daysOfWeek = DailyTimeIntervalScheduleBuilder.ALL_DAYS_OF_THE_WEEK;
-    final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011); // SAT
+    final Set <DayOfWeek> daysOfWeek = EnumSet.allOf (DayOfWeek.class);
+    // SAT
+    final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
@@ -409,22 +410,21 @@ public class DailyTimeIntervalTriggerTest
     final ICommonsList <Date> fireTimes = TriggerUtils.computeFireTimes (trigger, null, 48);
     assertEquals (48, fireTimes.size ());
     assertEquals (dateOf (8, 0, 0, 1, Month.JANUARY, 2011), fireTimes.get (0));
-    assertEquals (dateOf (17, 0, 0, 1, Month.JANUARY, 2011), fireTimes.get (9)); // The
-    // 10th
-    // hours
-    // is
-    // the
-    // end
-    // of
-    // day.
+    assertEquals (dateOf (17, 0, 0, 1, Month.JANUARY, 2011), fireTimes.get (9));
+    // The 10th hours is the end of day.
     assertEquals (dateOf (15, 0, 0, 5, Month.JANUARY, 2011), fireTimes.get (47));
   }
 
   @Test
   public void testMonThroughFri () throws Exception
   {
-    final Set <DayOfWeek> daysOfWeek = DailyTimeIntervalScheduleBuilder.MONDAY_THROUGH_FRIDAY;
-    final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011); // SAT(7)
+    final Set <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.MONDAY,
+                                                   DayOfWeek.TUESDAY,
+                                                   DayOfWeek.WEDNESDAY,
+                                                   DayOfWeek.THURSDAY,
+                                                   DayOfWeek.FRIDAY);
+    // SAT(7)
+    final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
@@ -448,8 +448,9 @@ public class DailyTimeIntervalTriggerTest
   @Test
   public void testSatAndSun () throws Exception
   {
-    final Set <DayOfWeek> daysOfWeek = DailyTimeIntervalScheduleBuilder.SATURDAY_AND_SUNDAY;
-    final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011); // SAT
+    final Set <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    // SAT
+    final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();

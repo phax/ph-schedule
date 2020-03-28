@@ -20,6 +20,8 @@ package com.helger.quartz;
 
 import java.io.Serializable;
 
+import javax.annotation.Nonnull;
+
 import com.helger.commons.annotation.MustImplementEqualsAndHashcode;
 import com.helger.quartz.impl.matchers.AndMatcher;
 import com.helger.quartz.impl.matchers.NotMatcher;
@@ -46,12 +48,15 @@ public interface IMatcher <T extends Key <T>> extends Serializable
    * Create an AndMatcher that depends upon the result of both of the given
    * matchers.
    */
-  static <U extends Key <U>> AndMatcher <U> and (final IMatcher <U> leftOperand, final IMatcher <U> rightOperand)
+  @Nonnull
+  static <U extends Key <U>> AndMatcher <U> and (@Nonnull final IMatcher <U> leftOperand,
+                                                 @Nonnull final IMatcher <U> rightOperand)
   {
     return new AndMatcher <> (leftOperand, rightOperand);
   }
 
-  default AndMatcher <T> and (final IMatcher <T> rightOperand)
+  @Nonnull
+  default AndMatcher <T> and (@Nonnull final IMatcher <T> rightOperand)
   {
     return and (this, rightOperand);
   }
@@ -60,12 +65,15 @@ public interface IMatcher <T extends Key <T>> extends Serializable
    * Create an OrMatcher that depends upon the result of at least one of the
    * given matchers.
    */
-  public static <U extends Key <U>> OrMatcher <U> or (final IMatcher <U> leftOperand, final IMatcher <U> rightOperand)
+  @Nonnull
+  static <U extends Key <U>> OrMatcher <U> or (@Nonnull final IMatcher <U> leftOperand,
+                                               @Nonnull final IMatcher <U> rightOperand)
   {
     return new OrMatcher <> (leftOperand, rightOperand);
   }
 
-  default OrMatcher <T> or (final IMatcher <T> rightOperand)
+  @Nonnull
+  default OrMatcher <T> or (@Nonnull final IMatcher <T> rightOperand)
   {
     return or (this, rightOperand);
   }
@@ -73,11 +81,13 @@ public interface IMatcher <T extends Key <T>> extends Serializable
   /**
    * Create a NotMatcher that reverses the result of the given matcher.
    */
-  public static <U extends Key <U>> NotMatcher <U> not (final IMatcher <U> operand)
+  @Nonnull
+  static <U extends Key <U>> NotMatcher <U> not (@Nonnull final IMatcher <U> operand)
   {
     return new NotMatcher <> (operand);
   }
 
+  @Nonnull
   default NotMatcher <T> not ()
   {
     return not (this);

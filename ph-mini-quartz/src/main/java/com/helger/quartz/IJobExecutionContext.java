@@ -107,7 +107,7 @@ public interface IJobExecutionContext extends Serializable
    * @throws IllegalStateException
    *         if this is not a recovering job.
    */
-  TriggerKey getRecoveringTriggerKey () throws IllegalStateException;
+  TriggerKey getRecoveringTriggerKey ();
 
   int getRefireCount ();
 

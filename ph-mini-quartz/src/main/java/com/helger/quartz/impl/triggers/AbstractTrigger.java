@@ -22,6 +22,7 @@ import java.util.Date;
 
 import javax.annotation.Nonnull;
 
+import com.helger.commons.equals.EqualsHelper;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduleBuilder;
@@ -806,12 +807,13 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
   @Override
   public boolean equals (final Object o)
   {
-    if (!(o instanceof ITrigger))
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
 
-    final ITrigger other = (ITrigger) o;
-
-    return !(other.getKey () == null || getKey () == null) && getKey ().equals (other.getKey ());
+    final AbstractTrigger <?> rhs = (AbstractTrigger <?>) o;
+    return EqualsHelper.equals (getKey (), rhs.getKey ());
 
   }
 

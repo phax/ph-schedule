@@ -20,6 +20,7 @@ package com.helger.quartz.impl;
 
 import javax.annotation.Nonnull;
 
+import com.helger.commons.equals.EqualsHelper;
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -316,24 +317,15 @@ public class JobDetail implements IJobDetail
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object o)
   {
-    if (!(obj instanceof IJobDetail))
-    {
-      return false;
-    }
-
-    final IJobDetail other = (IJobDetail) obj;
-
-    if (other.getKey () == null || getKey () == null)
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
 
-    if (!other.getKey ().equals (getKey ()))
-    {
-      return false;
-    }
-
-    return true;
+    final JobDetail rhs = (JobDetail) o;
+    return EqualsHelper.equals (getKey (), rhs.getKey ());
   }
 
   @Override

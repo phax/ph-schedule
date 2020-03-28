@@ -57,7 +57,7 @@ public class SampledCounter extends Counter implements ISampledCounter
   {
     super (config.getInitialValue ());
 
-    m_nIntervalMillis = config.getIntervalSecs () * MILLIS_PER_SEC;
+    m_nIntervalMillis = config.getIntervalSecs () * (long) MILLIS_PER_SEC;
     m_aHistory = new CircularLossyQueue <> (config.getHistorySize ());
     m_bResetOnSample = config.isResetOnSample ();
 
@@ -73,25 +73,16 @@ public class SampledCounter extends Counter implements ISampledCounter
     recordSample ();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public TimeStampedCounterValue getMostRecentSample ()
   {
     return m_aHistory.peek ();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public TimeStampedCounterValue [] getAllSampleValues ()
   {
     return m_aHistory.toArray (new TimeStampedCounterValue [m_aHistory.depth ()]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public void shutdown ()
   {
     if (m_aSamplerTask != null)
@@ -101,8 +92,6 @@ public class SampledCounter extends Counter implements ISampledCounter
   }
 
   /**
-   * Returns the timer task for this sampled counter
-   *
    * @return the timer task for this sampled counter
    */
   public TimerTask getTimerTask ()
@@ -111,8 +100,6 @@ public class SampledCounter extends Counter implements ISampledCounter
   }
 
   /**
-   * Returns the sampling thread interval in millis
-   *
    * @return the sampling thread interval in millis
    */
   public long getIntervalMillis ()
@@ -134,9 +121,6 @@ public class SampledCounter extends Counter implements ISampledCounter
     m_aHistory.push (timedSample);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public long getAndReset ()
   {
     return getAndSet (0L);

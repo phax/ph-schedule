@@ -21,6 +21,7 @@ package com.helger.quartz.impl.triggers;
 import java.time.DayOfWeek;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -969,9 +970,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   public Set <DayOfWeek> getDaysOfWeek ()
   {
     if (m_aDaysOfWeek == null)
-    {
-      m_aDaysOfWeek = DailyTimeIntervalScheduleBuilder.ALL_DAYS_OF_THE_WEEK;
-    }
+      m_aDaysOfWeek = EnumSet.allOf (DayOfWeek.class);
     return m_aDaysOfWeek;
   }
 

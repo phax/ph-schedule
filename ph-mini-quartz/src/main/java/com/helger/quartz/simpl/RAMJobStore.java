@@ -18,7 +18,6 @@
  */
 package com.helger.quartz.simpl;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -43,6 +42,7 @@ import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.commons.collection.impl.ICommonsSortedSet;
+import com.helger.commons.compare.IComparator;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobDetail;
@@ -258,7 +258,14 @@ public class RAMJobStore implements IJobStore
         bReplace = true;
       }
 
-      if (!bReplace)
+      if (bReplace)
+      {
+        // update job detail
+        final JobWrapper orig = m_aJobsByKey.get (jw.m_aKey);
+        // already cloned
+        orig.setJobDetail (jw.getJobDetail ());
+      }
+      else
       {
         // get job group
         ICommonsMap <JobKey, JobWrapper> aGrpMap = m_aJobsByGroup.get (newJob.getKey ().getGroup ());
@@ -271,12 +278,6 @@ public class RAMJobStore implements IJobStore
         aGrpMap.put (newJob.getKey (), jw);
         // add to jobs by FQN map
         m_aJobsByKey.put (jw.m_aKey, jw);
-      }
-      else
-      {
-        // update job detail
-        final JobWrapper orig = m_aJobsByKey.get (jw.m_aKey);
-        orig.m_aJobDetail = jw.m_aJobDetail; // already cloned
       }
     }
   }
@@ -508,7 +509,7 @@ public class RAMJobStore implements IJobStore
         {
           final JobWrapper jw = m_aJobsByKey.get (tw.m_aJobKey);
           final ICommonsList <IOperableTrigger> trigs = getTriggersForJob (tw.m_aJobKey);
-          if ((trigs == null || trigs.isEmpty ()) && !jw.m_aJobDetail.isDurable ())
+          if ((trigs == null || trigs.isEmpty ()) && !jw.getJobDetail ().isDurable ())
           {
             if (removeJob (jw.m_aKey))
             {
@@ -599,7 +600,7 @@ public class RAMJobStore implements IJobStore
     synchronized (m_aLock)
     {
       final JobWrapper jw = m_aJobsByKey.get (jobKey);
-      return (jw != null) ? (IJobDetail) jw.m_aJobDetail.clone () : null;
+      return jw != null ? (IJobDetail) jw.getJobDetail ().clone () : null;
     }
   }
 
@@ -881,7 +882,7 @@ public class RAMJobStore implements IJobStore
             outList = new CommonsHashSet <> ();
             for (final JobWrapper jw : grpMap.values ())
               if (jw != null)
-                outList.add (jw.m_aJobDetail.getKey ());
+                outList.add (jw.getJobDetail ().getKey ());
           }
           break;
 
@@ -895,7 +896,7 @@ public class RAMJobStore implements IJobStore
 
               for (final JobWrapper jobWrapper : entry.getValue ().values ())
                 if (jobWrapper != null)
-                  outList.add (jobWrapper.m_aJobDetail.getKey ());
+                  outList.add (jobWrapper.getJobDetail ().getKey ());
             }
           }
       }
@@ -1509,7 +1510,7 @@ public class RAMJobStore implements IJobStore
         // put it back into the timeTriggers set and continue to search for next
         // trigger.
         final JobKey jobKey = tw.m_aTrigger.getJobKey ();
-        final IJobDetail job = m_aJobsByKey.get (tw.m_aTrigger.getJobKey ()).m_aJobDetail;
+        final IJobDetail job = m_aJobsByKey.get (tw.m_aTrigger.getJobKey ()).getJobDetail ();
         if (job.isConcurrentExectionDisallowed ())
         {
           if (!acquiredJobKeysForNoConcurrentExec.add (jobKey))
@@ -1670,7 +1671,7 @@ public class RAMJobStore implements IJobStore
       // from the JDBC job store
       if (jw != null)
       {
-        IJobDetail jd = jw.m_aJobDetail;
+        IJobDetail jd = jw.getJobDetail ();
 
         if (jd.isPersistJobDataAfterExecution ())
         {
@@ -1681,7 +1682,7 @@ public class RAMJobStore implements IJobStore
             // newData.clearDirtyFlag ();
           }
           jd = jd.getJobBuilder ().setJobData (newData).build ();
-          jw.m_aJobDetail = jd;
+          jw.setJobDetail (jd);
         }
         if (jd.isConcurrentExectionDisallowed ())
         {
@@ -1833,14 +1834,9 @@ public class RAMJobStore implements IJobStore
 
 }
 
-/*******************************************************************************
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * Helper
- * Classes. * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- */
-
-class TriggerWrapperComparator implements Comparator <TriggerWrapper>, java.io.Serializable
+final class TriggerWrapperComparator implements IComparator <TriggerWrapper>
 {
-  TriggerTimeComparator ttc = new TriggerTimeComparator ();
+  private final TriggerTimeComparator ttc = new TriggerTimeComparator ();
 
   public int compare (final TriggerWrapper trig1, final TriggerWrapper trig2)
   {
@@ -1848,9 +1844,13 @@ class TriggerWrapperComparator implements Comparator <TriggerWrapper>, java.io.S
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object o)
   {
-    return (obj instanceof TriggerWrapperComparator);
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    return true;
   }
 
   @Override
@@ -1862,13 +1862,24 @@ class TriggerWrapperComparator implements Comparator <TriggerWrapper>, java.io.S
 
 final class JobWrapper
 {
-  public final JobKey m_aKey;
-  public IJobDetail m_aJobDetail;
+  final JobKey m_aKey;
+  private IJobDetail m_aJobDetail;
 
   JobWrapper (@Nonnull final IJobDetail jobDetail)
   {
     m_aKey = jobDetail.getKey ();
     m_aJobDetail = jobDetail;
+  }
+
+  @Nonnull
+  public IJobDetail getJobDetail ()
+  {
+    return m_aJobDetail;
+  }
+
+  public void setJobDetail (@Nonnull final IJobDetail aJobDetail)
+  {
+    m_aJobDetail = aJobDetail;
   }
 
   @Override
@@ -1900,11 +1911,11 @@ final class TriggerWrapper
   public static final int STATE_PAUSED_BLOCKED = 6;
   public static final int STATE_ERROR = 7;
 
-  public final TriggerKey m_aKey;
-  public final JobKey m_aJobKey;
-  public final IOperableTrigger m_aTrigger;
+  final TriggerKey m_aKey;
+  final JobKey m_aJobKey;
+  final IOperableTrigger m_aTrigger;
 
-  public int m_nState = STATE_WAITING;
+  int m_nState = STATE_WAITING;
 
   TriggerWrapper (@Nonnull final IOperableTrigger trigger)
   {
