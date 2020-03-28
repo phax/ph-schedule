@@ -50,7 +50,7 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
                                                                                                                     DEFAULT_HISTORY_SIZE,
                                                                                                                     true);
 
-  private volatile ICounterManager m_aCounterManager;
+  private final ICounterManager m_aCounterManager;
   private final ISampledCounter m_aJobsScheduledCount;
   private final ISampledCounter m_aJobsExecutingCount;
   private final ISampledCounter m_aJobsCompletedCount;
