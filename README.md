@@ -7,6 +7,7 @@ Java scheduling library based on Quartz with scope support (see [ph-commons](htt
 * v4.0.2 - work in progress
     * Improved debug logging
     * Improved code quality slightly
+    * Updated to ph-commons 9.4.0
 * v4.0.1 - 2018-11-12
     * Fixed OSGI ServiceProvider configuration
     * Removed `com.helger.quartz.xml` package
