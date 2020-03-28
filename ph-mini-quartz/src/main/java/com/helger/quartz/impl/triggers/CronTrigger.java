@@ -38,11 +38,9 @@ import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.ITrigger;
 
 /**
- * <p>
  * A concrete <code>{@link ITrigger}</code> that is used to fire a
- * <code>{@link IJobDetail}</code> at given moments in time, defined with Unix
- * 'cron-like' definitions.
- * </p>
+ * <code>{@link com.helger.quartz.IJobDetail}</code> at given moments in time,
+ * defined with Unix 'cron-like' definitions.
  *
  * @author Sharada Jambula, James House
  * @author Contributions from Mads Henderson
@@ -167,21 +165,16 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   }
 
   /**
-   * <p>
    * Returns the next time at which the <code>Trigger</code> is scheduled to
    * fire. If the trigger will not fire again, <code>null</code> will be
    * returned. Note that the time returned can possibly be in the past, if the
    * time that was computed for the trigger to next fire has already arrived,
    * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).
-   * </p>
-   * <p>
+   * likely be due to lack of resources e.g. threads).<br>
    * The value returned is not guaranteed to be valid until after the
-   * <code>Trigger</code> has been added to the scheduler.
-   * </p>
-   *
-   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
-   *      ICalendar, Date, Date)
+   * <code>Trigger</code> has been added to the scheduler. Ssee
+   * com.helger.quartz.TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
+   * ICalendar, Date, Date)
    */
   @Override
   public Date getNextFireTime ()
@@ -190,7 +183,6 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   }
 
   /**
-   * <p>
    * Returns the previous time at which the <code>CronTrigger</code> fired. If
    * the trigger has not yet fired, <code>null</code> will be returned.
    */
@@ -201,10 +193,8 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   }
 
   /**
-   * <p>
    * Sets the next time at which the <code>CronTrigger</code> will fire. <b>This
    * method should not be invoked by client code.</b>
-   * </p>
    */
   public void setNextFireTime (final Date nextFireTime)
   {
@@ -212,12 +202,8 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
   }
 
   /**
-   * <p>
-   * Set the previous time at which the <code>CronTrigger</code> fired.
-   * </p>
-   * <p>
+   * Set the previous time at which the <code>CronTrigger</code> fired.<br>
    * <b>This method should not be invoked by client code.</b>
-   * </p>
    */
   public void setPreviousFireTime (final Date previousFireTime)
   {
@@ -469,13 +455,14 @@ public class CronTrigger extends AbstractTrigger <ICronTrigger> implements ICron
 
   /**
    * <p>
-   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
-   * trigger (execute the associated <code>Job</code>), in order to give the
-   * <code>Trigger</code> a chance to update itself for its next triggering (if
-   * any).
+   * Called when the <code>{@link com.helger.quartz.IScheduler}</code> has
+   * decided to 'fire' the trigger (execute the associated <code>Job</code>), in
+   * order to give the <code>Trigger</code> a chance to update itself for its
+   * next triggering (if any).
    * </p>
    *
-   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
+   * @see #executionComplete(com.helger.quartz.IJobExecutionContext,
+   *      com.helger.quartz.JobExecutionException)
    */
   @Override
   public void triggered (final ICalendar calendar)

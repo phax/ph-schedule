@@ -24,6 +24,7 @@ import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.collection.impl.ICommonsMap;
+import com.helger.commons.concurrent.SimpleReadWriteLock;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 
@@ -43,6 +44,7 @@ public class SchedulerRepository
     static final SchedulerRepository INSTANCE = new SchedulerRepository ();
   }
 
+  private final SimpleReadWriteLock m_aRWLock = new SimpleReadWriteLock ();
   private final ICommonsMap <String, IScheduler> m_aSchedulers = new CommonsHashMap <> ();
 
   private SchedulerRepository ()
@@ -54,28 +56,30 @@ public class SchedulerRepository
     return SingletonHolder.INSTANCE;
   }
 
-  public synchronized void bind (final IScheduler sched) throws SchedulerException
+  public void bind (final IScheduler sched) throws SchedulerException
   {
     final String sKey = sched.getSchedulerName ();
-    if (m_aSchedulers.containsKey (sKey))
-      throw new SchedulerException ("Scheduler with name '" + sKey + "' already exists.");
-    m_aSchedulers.put (sKey, sched);
+    m_aRWLock.writeLockedThrowing ( () -> {
+      if (m_aSchedulers.containsKey (sKey))
+        throw new SchedulerException ("Scheduler with name '" + sKey + "' already exists.");
+      m_aSchedulers.put (sKey, sched);
+    });
   }
 
-  public synchronized boolean remove (final String schedName)
+  public boolean remove (final String schedName)
   {
-    return m_aSchedulers.remove (schedName) != null;
+    return m_aRWLock.writeLockedBoolean ( () -> m_aSchedulers.remove (schedName) != null);
   }
 
-  public synchronized IScheduler lookup (final String schedName)
+  public IScheduler lookup (final String schedName)
   {
-    return m_aSchedulers.get (schedName);
+    return m_aRWLock.readLockedGet ( () -> m_aSchedulers.get (schedName));
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public synchronized ICommonsList <IScheduler> lookupAll ()
+  public ICommonsList <IScheduler> lookupAll ()
   {
-    return m_aSchedulers.copyOfValues ();
+    return m_aRWLock.readLockedGet (m_aSchedulers::copyOfValues);
   }
 }

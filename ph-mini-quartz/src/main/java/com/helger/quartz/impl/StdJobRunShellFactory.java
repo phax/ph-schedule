@@ -38,15 +38,13 @@ public class StdJobRunShellFactory implements IJobRunShellFactory
   private IScheduler m_aScheduler;
 
   /**
-   * <p>
    * Initialize the factory, providing a handle to the {@link IScheduler} that
    * should be made available within the {@link JobRunShell} and the
-   * {@link IJobExecutionContext}s within it.
-   * </p>
+   * JobExecutionContexts within it.
    */
-  public void initialize (final IScheduler sched)
+  public void initialize (final IScheduler aScheduler)
   {
-    m_aScheduler = sched;
+    m_aScheduler = aScheduler;
   }
 
   /**

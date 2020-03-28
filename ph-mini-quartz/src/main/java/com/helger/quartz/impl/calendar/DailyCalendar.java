@@ -49,14 +49,14 @@ import java.util.TimeZone;
  */
 public class DailyCalendar extends BaseCalendar
 {
-  private static final String invalidHourOfDay = "Invalid hour of day: ";
-  private static final String invalidMinute = "Invalid minute: ";
-  private static final String invalidSecond = "Invalid second: ";
-  private static final String invalidMillis = "Invalid millis: ";
-  private static final String invalidTimeRange = "Invalid time range: ";
-  private static final String separator = " - ";
-  private static final long oneMillis = 1;
-  private static final String colon = ":";
+  private static final String INVALID_HOUR_OF_DAY = "Invalid hour of day: ";
+  private static final String INVALID_MINUTE = "Invalid minute: ";
+  private static final String INVALID_SECOND = "Invalid second: ";
+  private static final String INVALID_MILLIS = "Invalid millis: ";
+  private static final String INVALID_TIME_RANGE = "Invalid time range: ";
+  private static final String SEPARATOR = " - ";
+  private static final long ONE_MILLIS = 1;
+  private static final String COLON = ":";
 
   private int m_nRangeStartingHourOfDay;
   private int m_nRangeStartingMinute;
@@ -530,7 +530,7 @@ public class DailyCalendar extends BaseCalendar
   @Override
   public long getNextIncludedTime (final long timeInMillis)
   {
-    long nextIncludedTime = timeInMillis + oneMillis;
+    long nextIncludedTime = timeInMillis + ONE_MILLIS;
 
     while (!isTimeIncluded (nextIncludedTime))
     {
@@ -546,7 +546,7 @@ public class DailyCalendar extends BaseCalendar
             (nextIncludedTime <= getTimeRangeEndingTimeInMillis (nextIncludedTime)))
         {
 
-          nextIncludedTime = getTimeRangeEndingTimeInMillis (nextIncludedTime) + oneMillis;
+          nextIncludedTime = getTimeRangeEndingTimeInMillis (nextIncludedTime) + ONE_MILLIS;
         }
         else
           if ((getBaseCalendar () != null) && (!getBaseCalendar ().isTimeIncluded (nextIncludedTime)))
@@ -699,7 +699,7 @@ public class DailyCalendar extends BaseCalendar
   /**
    * Helper method to split the given string by the given delimiter.
    */
-  private String [] split (final String string, final String delim)
+  private static String [] _split (final String string, final String delim)
   {
     final List <String> result = new ArrayList <> ();
 
@@ -735,7 +735,7 @@ public class DailyCalendar extends BaseCalendar
     int rEndingSecond;
     int rEndingMillis;
 
-    rangeStartingTime = split (rangeStartingTimeString, colon);
+    rangeStartingTime = _split (rangeStartingTimeString, COLON);
 
     if ((rangeStartingTime.length < 2) || (rangeStartingTime.length > 4))
     {
@@ -761,7 +761,7 @@ public class DailyCalendar extends BaseCalendar
       rStartingMillis = 0;
     }
 
-    rEndingTime = split (rangeEndingTimeString, colon);
+    rEndingTime = _split (rangeEndingTimeString, COLON);
 
     if ((rEndingTime.length < 2) || (rEndingTime.length > 4))
     {
@@ -845,7 +845,7 @@ public class DailyCalendar extends BaseCalendar
 
     if (!startCal.before (endCal))
     {
-      throw new IllegalArgumentException (invalidTimeRange +
+      throw new IllegalArgumentException (INVALID_TIME_RANGE +
                                           rangeStartingHourOfDay +
                                           ":" +
                                           rangeStartingMinute +
@@ -853,7 +853,7 @@ public class DailyCalendar extends BaseCalendar
                                           rangeStartingSecond +
                                           ":" +
                                           rangeStartingMillis +
-                                          separator +
+                                          SEPARATOR +
                                           rangeEndingHourOfDay +
                                           ":" +
                                           rangeEndingMinute +
@@ -926,19 +926,19 @@ public class DailyCalendar extends BaseCalendar
   {
     if (hourOfDay < 0 || hourOfDay > 23)
     {
-      throw new IllegalArgumentException (invalidHourOfDay + hourOfDay);
+      throw new IllegalArgumentException (INVALID_HOUR_OF_DAY + hourOfDay);
     }
     if (minute < 0 || minute > 59)
     {
-      throw new IllegalArgumentException (invalidMinute + minute);
+      throw new IllegalArgumentException (INVALID_MINUTE + minute);
     }
     if (second < 0 || second > 59)
     {
-      throw new IllegalArgumentException (invalidSecond + second);
+      throw new IllegalArgumentException (INVALID_SECOND + second);
     }
     if (millis < 0 || millis > 999)
     {
-      throw new IllegalArgumentException (invalidMillis + millis);
+      throw new IllegalArgumentException (INVALID_MILLIS + millis);
     }
   }
 }

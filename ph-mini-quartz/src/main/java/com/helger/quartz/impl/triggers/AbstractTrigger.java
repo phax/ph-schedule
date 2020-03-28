@@ -355,12 +355,12 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    * Trigger.
    * </p>
    *
-   * @param calendarName
+   * @param sCalendarName
    *        use <code>null</code> to dis-associate a Calendar.
    */
-  public void setCalendarName (final String calendarName)
+  public void setCalendarName (final String sCalendarName)
   {
-    m_sCalendarName = calendarName;
+    m_sCalendarName = sCalendarName;
   }
 
   /**
@@ -556,14 +556,10 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
   public abstract void setStartTime (Date startTime);
 
   /**
-   * <p>
    * Set the time at which the <code>Trigger</code> should quit repeating -
    * regardless of any remaining repeats (based on the trigger's particular
-   * repeat settings).
-   * </p>
-   *
-   * @see TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings(com.helger.quartz.spi.IOperableTrigger,
-   *      com.helger.quartz.ICalendar, int)
+   * repeat settings). <br>
+   * See TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings
    */
   public abstract void setEndTime (Date endTime);
 
@@ -579,21 +575,17 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
   public abstract Date getEndTime ();
 
   /**
-   * <p>
    * Returns the next time at which the <code>Trigger</code> is scheduled to
    * fire. If the trigger will not fire again, <code>null</code> will be
    * returned. Note that the time returned can possibly be in the past, if the
    * time that was computed for the trigger to next fire has already arrived,
    * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).
-   * </p>
-   * <p>
+   * likely be due to lack of resources e.g. threads).<br>
    * The value returned is not guaranteed to be valid until after the
-   * <code>Trigger</code> has been added to the scheduler.
-   * </p>
-   *
-   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
-   *      com.helger.quartz.ICalendar, java.util.Date, java.util.Date)
+   * <code>Trigger</code> has been added to the scheduler.<br>
+   * See
+   * com.helger.quartz.TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
+   * com.helger.quartz.ICalendar, java.util.Date, java.util.Date)
    */
   public abstract Date getNextFireTime ();
 
@@ -639,8 +631,8 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    *
    * @see #MISFIRE_INSTRUCTION_SMART_POLICY
    * @see #updateAfterMisfire(ICalendar)
-   * @see ISimpleTrigger
-   * @see ICronTrigger
+   * @see com.helger.quartz.ISimpleTrigger
+   * @see com.helger.quartz.ICronTrigger
    */
   public void setMisfireInstruction (final int misfireInstruction)
   {
@@ -668,8 +660,8 @@ public abstract class AbstractTrigger <T extends ITrigger> implements IOperableT
    *
    * @see #MISFIRE_INSTRUCTION_SMART_POLICY
    * @see #updateAfterMisfire(ICalendar)
-   * @see ISimpleTrigger
-   * @see ICronTrigger
+   * @see com.helger.quartz.ISimpleTrigger
+   * @see com.helger.quartz.ICronTrigger
    */
   public int getMisfireInstruction ()
   {

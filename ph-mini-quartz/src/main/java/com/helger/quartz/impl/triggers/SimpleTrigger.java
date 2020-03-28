@@ -40,8 +40,8 @@ import com.helger.quartz.SimpleScheduleBuilder;
  * </p>
  *
  * @see ITrigger
- * @see ICronTrigger
- * @see TriggerUtils
+ * @see com.helger.quartz.ICronTrigger
+ * @see com.helger.quartz.TriggerUtils
  * @author James House
  * @author contributions by Lieven Govaerts of Ebitec Nv, Belgium.
  */
@@ -408,14 +408,13 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   }
 
   /**
-   * <p>
-   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
-   * trigger (execute the associated <code>Job</code>), in order to give the
-   * <code>Trigger</code> a chance to update itself for its next triggering (if
-   * any).
-   * </p>
+   * Called when the <code>{@link com.helger.quartz.IScheduler}</code> has
+   * decided to 'fire' the trigger (execute the associated <code>Job</code>), in
+   * order to give the <code>Trigger</code> a chance to update itself for its
+   * next triggering (if any).
    *
-   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
+   * @see #executionComplete(com.helger.quartz.IJobExecutionContext,
+   *      com.helger.quartz.JobExecutionException)
    */
   @Override
   public void triggered (final ICalendar calendar)
@@ -538,7 +537,7 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
    * <code>Trigger</code> has been added to the scheduler.
    * </p>
    *
-   * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
+   * @see com.helger.quartz.TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
    *      ICalendar, Date, Date)
    */
   @Override
@@ -548,7 +547,6 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   }
 
   /**
-   * <p>
    * Returns the previous time at which the <code>SimpleTrigger</code> fired. If
    * the trigger has not yet fired, <code>null</code> will be returned.
    */
@@ -559,12 +557,8 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   }
 
   /**
-   * <p>
-   * Set the next time at which the <code>SimpleTrigger</code> should fire.
-   * </p>
-   * <p>
+   * Set the next time at which the <code>SimpleTrigger</code> should fire.<br>
    * <b>This method should not be invoked by client code.</b>
-   * </p>
    */
   public void setNextFireTime (final Date nextFireTime)
   {
@@ -572,12 +566,8 @@ public class SimpleTrigger extends AbstractTrigger <ISimpleTrigger> implements I
   }
 
   /**
-   * <p>
-   * Set the previous time at which the <code>SimpleTrigger</code> fired.
-   * </p>
-   * <p>
+   * Set the previous time at which the <code>SimpleTrigger</code> fired.<br>
    * <b>This method should not be invoked by client code.</b>
-   * </p>
    */
   public void setPreviousFireTime (final Date previousFireTime)
   {

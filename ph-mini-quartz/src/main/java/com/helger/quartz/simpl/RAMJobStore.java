@@ -170,8 +170,8 @@ public class RAMJobStore implements IJobStore
   }
 
   /**
-   * Clear (delete!) all scheduling data - all {@link IJob}s, {@link ITrigger}s
-   * {@link ICalendar}s.
+   * Clear (delete!) all scheduling data - all {@link com.helger.quartz.IJob}s,
+   * {@link ITrigger}s {@link ICalendar}s.
    *
    * @throws JobPersistenceException
    *         on error
@@ -621,8 +621,8 @@ public class RAMJobStore implements IJobStore
   }
 
   /**
-   * Determine whether a {@link IJob} with the given identifier already exists
-   * within the scheduler.
+   * Determine whether a {@link com.helger.quartz.IJob} with the given
+   * identifier already exists within the scheduler.
    *
    * @param jobKey
    *        the identifier to check for
@@ -634,8 +634,7 @@ public class RAMJobStore implements IJobStore
   {
     synchronized (m_aLock)
     {
-      final JobWrapper jw = m_aJobsByKey.get (jobKey);
-      return jw != null;
+      return m_aJobsByKey.get (jobKey) != null;
     }
   }
 
@@ -653,8 +652,7 @@ public class RAMJobStore implements IJobStore
   {
     synchronized (m_aLock)
     {
-      final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
-      return tw != null;
+      return m_aTriggersByKey.get (triggerKey) != null;
     }
   }
 
@@ -677,34 +675,22 @@ public class RAMJobStore implements IJobStore
       final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
 
       if (tw == null)
-      {
         return ETriggerState.NONE;
-      }
 
       if (tw.m_nState == TriggerWrapper.STATE_COMPLETE)
-      {
         return ETriggerState.COMPLETE;
-      }
 
       if (tw.m_nState == TriggerWrapper.STATE_PAUSED)
-      {
         return ETriggerState.PAUSED;
-      }
 
       if (tw.m_nState == TriggerWrapper.STATE_PAUSED_BLOCKED)
-      {
         return ETriggerState.PAUSED;
-      }
 
       if (tw.m_nState == TriggerWrapper.STATE_BLOCKED)
-      {
         return ETriggerState.BLOCKED;
-      }
 
       if (tw.m_nState == TriggerWrapper.STATE_ERROR)
-      {
         return ETriggerState.ERROR;
-      }
 
       return ETriggerState.NORMAL;
     }

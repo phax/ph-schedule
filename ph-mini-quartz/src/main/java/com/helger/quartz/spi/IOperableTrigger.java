@@ -29,15 +29,11 @@ import com.helger.quartz.SchedulerException;
 public interface IOperableTrigger extends IMutableTrigger
 {
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
-   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
-   * trigger (execute the associated <code>Job</code>), in order to give the
+   * This method should not be used by the Quartz client.<br>
+   * Called when the <code>IScheduler</code> has decided to 'fire' the trigger
+   * (execute the associated <code>Job</code>), in order to give the
    * <code>Trigger</code> a chance to update itself for its next triggering (if
    * any).
-   * </p>
    *
    * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
@@ -48,34 +44,30 @@ public interface IOperableTrigger extends IMutableTrigger
    * This method should not be used by the Quartz client.
    * </p>
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added to
-   * the scheduler, in order to have the <code>Trigger</code> compute its first
-   * fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added
+   * to the scheduler, in order to have the <code>Trigger</code> compute its
+   * first fire time, based on any associated calendar.
    * </p>
    * <p>
    * After this method has been called, <code>getNextFireTime()</code> should
    * return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by the
-   *         scheduler, which is also the same value
+   * @return the first time at which the <code>Trigger</code> will be fired by
+   *         the scheduler, which is also the same value
    *         <code>getNextFireTime()</code> will return (until after the first
    *         firing of the <code>Trigger</code>).
    */
-  Date computeFirstFireTime (ICalendar calendar);
+  Date computeFirstFireTime (ICalendar aCalendar);
 
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
-   * Called after the <code>{@link IScheduler}</code> has executed the
+   * This method should not be used by the Quartz client.<br>
+   * Called after the <code>Scheduler</code> has executed the
    * <code>{@link com.helger.quartz.IJobDetail}</code> associated with the
    * <code>Trigger</code> in order to get the final instruction code from the
    * trigger.
-   * </p>
    *
-   * @param context
+   * @param aContext
    *        is the <code>JobExecutionContext</code> that was used by the
    *        <code>Job</code>'s<code>execute(xx)</code> method.
    * @param result
@@ -84,7 +76,7 @@ public interface IOperableTrigger extends IMutableTrigger
    * @return one of the <code>CompletedExecutionInstruction</code> constants.
    * @see #triggered(ICalendar)
    */
-  ITrigger.ECompletedExecutionInstruction executionComplete (IJobExecutionContext context,
+  ITrigger.ECompletedExecutionInstruction executionComplete (IJobExecutionContext aContext,
                                                              JobExecutionException result);
 
   /**
@@ -122,8 +114,8 @@ public interface IOperableTrigger extends IMutableTrigger
 
   /**
    * <p>
-   * Validates whether the properties of the <code>JobDetail</code> are valid for
-   * submission into a <code>Scheduler</code>.
+   * Validates whether the properties of the <code>JobDetail</code> are valid
+   * for submission into a <code>Scheduler</code>.
    *
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
+import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IOperableTrigger;
@@ -35,14 +35,11 @@ import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
 
 /**
- * <p>
  * The thread responsible for performing the work of firing
  * <code>{@link ITrigger}</code> s that are registered with the
  * <code>{@link QuartzScheduler}</code>.
- * </p>
  *
  * @see QuartzScheduler
- * @see com.helger.quartz.IJob
  * @see ITrigger
  * @author James House
  */
@@ -65,11 +62,9 @@ public class QuartzSchedulerThread extends Thread
   private int m_nIdleWaitVariablness = 7 * 1000;
 
   /**
-   * <p>
    * Construct a new <code>QuartzSchedulerThread</code> for the given
    * <code>QuartzScheduler</code> as a non-daemon <code>Thread</code> with
    * normal priority.
-   * </p>
    */
   QuartzSchedulerThread (final QuartzScheduler qs, final QuartzSchedulerResources qsRsrcs)
   {
@@ -77,11 +72,9 @@ public class QuartzSchedulerThread extends Thread
   }
 
   /**
-   * <p>
    * Construct a new <code>QuartzSchedulerThread</code> for the given
    * <code>QuartzScheduler</code> as a <code>Thread</code> with the given
    * attributes.
-   * </p>
    */
   QuartzSchedulerThread (final QuartzScheduler qs,
                          final QuartzSchedulerResources qsRsrcs,
@@ -380,9 +373,9 @@ public class QuartzSchedulerThread extends Thread
                 // QTZ-179 : a problem occurred interacting with the triggers
                 // from the db
                 // we release them and loop again
-                for (int i = 0; i < triggers.size (); i++)
+                for (final IOperableTrigger trigger : triggers)
                 {
-                  m_aQSRsrcs.getJobStore ().releaseAcquiredTrigger (triggers.get (i));
+                  m_aQSRsrcs.getJobStore ().releaseAcquiredTrigger (trigger);
                 }
                 continue;
               }
@@ -422,7 +415,7 @@ public class QuartzSchedulerThread extends Thread
                 m_aQSRsrcs.getJobStore ()
                           .triggeredJobComplete (triggers.get (i),
                                                  bndle.getJobDetail (),
-                                                 ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
+                                                 ITrigger.ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
                 continue;
               }
 
@@ -436,7 +429,7 @@ public class QuartzSchedulerThread extends Thread
                 m_aQSRsrcs.getJobStore ()
                           .triggeredJobComplete (triggers.get (i),
                                                  bndle.getJobDetail (),
-                                                 ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
+                                                 ITrigger.ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
               }
 
             }

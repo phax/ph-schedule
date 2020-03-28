@@ -66,62 +66,48 @@ import java.util.Set;
 public interface IDailyTimeIntervalTrigger extends ITrigger
 {
   /**
-   * <p>
    * Used to indicate the 'repeat count' of the trigger is indefinite. Or in
    * other words, the trigger should repeat continually until the trigger's
    * ending timestamp.
-   * </p>
    */
   int REPEAT_INDEFINITELY = -1;
 
   /**
-   * <p>
    * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
    * situation, the <code>{@link IDailyTimeIntervalTrigger}</code> wants to be
    * fired now by <code>Scheduler</code>.
-   * </p>
    */
   int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
 
   /**
-   * <p>
    * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
    * situation, the <code>{@link IDailyTimeIntervalTrigger}</code> wants to have
    * it's next-fire-time updated to the next time in the schedule after the
-   * current time (taking into account any associated
-   * <code>{@link Calendar}</code>, but it does not want to be fired now.
-   * </p>
+   * current time (taking into account any associated <code>Calendar</code>, but
+   * it does not want to be fired now.
    */
   int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
 
   /**
-   * <p>
-   * Get the interval unit - the time unit on with the interval applies.
-   * </p>
-   * <p>
+   * Get the interval unit - the time unit on with the interval applies. <br>
    * The only intervals that are valid for this type of trigger are
    * {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
    * {@link EIntervalUnit#HOUR}.
-   * </p>
    */
   EIntervalUnit getRepeatIntervalUnit ();
 
   /**
-   * <p>
    * Get the the number of times for interval this trigger should repeat, after
    * which it will be automatically deleted.
-   * </p>
    *
    * @see #REPEAT_INDEFINITELY
    */
   int getRepeatCount ();
 
   /**
-   * <p>
    * Get the the time interval that will be added to the
    * <code>DateIntervalTrigger</code>'s fire time (in the set repeat interval
    * unit) in order to calculate the time of the next trigger repeat.
-   * </p>
    */
   int getRepeatInterval ();
 
@@ -138,17 +124,13 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
   /**
    * The days of the week upon which to fire.
    *
-   * @return a Set containing the integers representing the days of the week,
-   *         per the values 1-7 as defined by {@link Calendar#SUNDAY} -
-   *         {@link Calendar#SATURDAY}.
+   * @return a Set containing the enums representing the days of the week.
    */
   Set <DayOfWeek> getDaysOfWeek ();
 
   /**
-   * <p>
    * Get the number of times the <code>DateIntervalTrigger</code> has already
    * fired.
-   * </p>
    */
   int getTimesTriggered ();
 

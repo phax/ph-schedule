@@ -32,24 +32,19 @@ public interface IMutableTrigger extends ITrigger
   void setJobKey (JobKey key);
 
   /**
-   * <p>
    * Set a description for the <code>Trigger</code> instance - may be useful for
    * remembering/displaying the purpose of the trigger, though the description
    * has no meaning to Quartz.
-   * </p>
    */
-  void setDescription (String description);
+  void setDescription (String sDescription);
 
   /**
-   * <p>
-   * Associate the <code>{@link ICalendar}</code> with the given name with this
-   * Trigger.
-   * </p>
+   * Associate the <code>Calendar</code> with the given name with this Trigger.
    *
-   * @param calendarName
+   * @param sCalendarName
    *        use <code>null</code> to dis-associate a Calendar.
    */
-  void setCalendarName (String calendarName);
+  void setCalendarName (String sCalendarName);
 
   /**
    * <p>
@@ -94,28 +89,24 @@ public interface IMutableTrigger extends ITrigger
    * repeat settings).
    * </p>
    *
-   * @see TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings(IOperableTrigger,
-   *      ICalendar, int)
+   * @see com.helger.quartz.TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings(IOperableTrigger,
+   *      com.helger.quartz.ICalendar, int)
    */
   void setEndTime (Date endTime);
 
   /**
-   * <p>
    * Set the instruction the <code>Scheduler</code> should be given for handling
    * misfire situations for this <code>Trigger</code>- the concrete
    * <code>Trigger</code> type that you are using will have defined a set of
    * additional <code>MISFIRE_INSTRUCTION_XXX</code> constants that may be
-   * passed to this method.
-   * </p>
-   * <p>
+   * passed to this method.<br>
    * If not explicitly set, the default value is
    * <code>MISFIRE_INSTRUCTION_SMART_POLICY</code>.
-   * </p>
    *
    * @see #MISFIRE_INSTRUCTION_SMART_POLICY
-   * @see AbstractTrigger#updateAfterMisfire(ICalendar)
-   * @see ISimpleTrigger
-   * @see ICronTrigger
+   * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateAfterMisfire(com.helger.quartz.ICalendar)
+   * @see com.helger.quartz.ISimpleTrigger
+   * @see com.helger.quartz.ICronTrigger
    */
   void setMisfireInstruction (int misfireInstruction);
 

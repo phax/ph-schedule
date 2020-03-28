@@ -41,9 +41,10 @@ import com.helger.quartz.SchedulerException;
  * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) units of
  * calendar time (see {@link #setRepeatIntervalUnit(EIntervalUnit)}) as
  * specified in the trigger's definition. This trigger can achieve schedules
- * that are not possible with {@link ISimpleTrigger} (e.g because months are not
- * a fixed number of seconds) or {@link ICronTrigger} (e.g. because "every 5
- * months" is not an even divisor of 12).
+ * that are not possible with {@link com.helger.quartz.ISimpleTrigger} (e.g
+ * because months are not a fixed number of seconds) or
+ * {@link com.helger.quartz.ICronTrigger} (e.g. because "every 5 months" is not
+ * an even divisor of 12).
  * </p>
  * <p>
  * If you use an interval unit of <code>MONTH</code> then care should be taken
@@ -58,9 +59,9 @@ import com.helger.quartz.SchedulerException;
  * </p>
  *
  * @see ITrigger
- * @see ICronTrigger
- * @see ISimpleTrigger
- * @see TriggerUtils
+ * @see com.helger.quartz.ICronTrigger
+ * @see com.helger.quartz.ISimpleTrigger
+ * @see com.helger.quartz.TriggerUtils
  * @since 1.7
  * @author James House
  */
@@ -490,12 +491,10 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   }
 
   /**
-   * <p>
-   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
-   * trigger (execute the associated <code>Job</code>), in order to give the
+   * Called when the <code>Scheduler</code> has decided to 'fire' the trigger
+   * (execute the associated <code>Job</code>), in order to give the
    * <code>Trigger</code> a chance to update itself for its next triggering (if
    * any).
-   * </p>
    *
    * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
@@ -995,8 +994,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <ICalendarIntervalT
   }
 
   /**
-   * Get a {@link IScheduleBuilder} that is configured to produce a schedule
-   * identical to this trigger's schedule.
+   * Get a {@link com.helger.quartz.IScheduleBuilder} that is configured to
+   * produce a schedule identical to this trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */

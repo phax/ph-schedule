@@ -65,8 +65,8 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
    * situation, the <code>{@link ICalendarIntervalTrigger}</code> wants to have
    * it's next-fire-time updated to the next time in the schedule after the
-   * current time (taking into account any associated
-   * <code>{@link Calendar}</code>, but it does not want to be fired now.
+   * current time (taking into account any associated <code>Calendar</code>, but
+   * it does not want to be fired now.
    * </p>
    */
   int MISFIRE_INSTRUCTION_DO_NOTHING = 2;

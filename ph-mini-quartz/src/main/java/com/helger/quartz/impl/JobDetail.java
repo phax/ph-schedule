@@ -51,7 +51,7 @@ import com.helger.quartz.utils.ClassUtils;
  *
  * @see IJob
  * @see JobDataMap
- * @see ITrigger
+ * @see com.helger.quartz.ITrigger
  * @author James House
  * @author Sharada Jambula
  */
@@ -241,13 +241,9 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * <p>
    * Set whether or not the <code>Job</code> should remain stored after it is
-   * orphaned (no <code>{@link ITrigger}s</code> point to it).
-   * </p>
-   * <p>
+   * orphaned (no <code>Triggers</code> point to it).<br>
    * If not explicitly set, the default value is <code>false</code>.
-   * </p>
    */
   public void setDurability (final boolean durability)
   {
@@ -255,15 +251,12 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * <p>
    * Set whether or not the the <code>Scheduler</code> should re-execute the
-   * <code>Job</code> if a 'recovery' or 'fail-over' situation is encountered.
-   * </p>
-   * <p>
+   * <code>Job</code> if a 'recovery' or 'fail-over' situation is
+   * encountered.<br>
    * If not explicitly set, the default value is <code>false</code>.
-   * </p>
    *
-   * @see IJobExecutionContext#isRecovering()
+   * @see com.helger.quartz.IJobExecutionContext#isRecovering()
    */
   public void setRequestsRecovery (final boolean shouldRecover)
   {

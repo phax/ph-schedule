@@ -76,7 +76,7 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
    * <code>SchedulerPlugin</code> a chance to initialize.
    * </p>
    *
-   * @throws SchedulerConfigException
+   * @throws SchedulerException
    *         if there is an error initializing.
    */
   public void initialize (final String name,

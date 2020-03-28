@@ -291,19 +291,13 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
     m_sTriggerMisfiredMessage = triggerMisfiredMessage;
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * SchedulerPlugin Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
   /**
    * <p>
    * Called during creation of the <code>Scheduler</code> in order to give the
    * <code>SchedulerPlugin</code> a chance to initialize.
    * </p>
    *
-   * @throws SchedulerConfigException
+   * @throws SchedulerException
    *         if there is an error initializing.
    */
   public void initialize (final String pname,
@@ -348,7 +342,6 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
                                context.getJobDetail ().getKey ().getName (),
                                context.getJobDetail ().getKey ().getGroup (),
                                Integer.valueOf (context.getRefireCount ()) };
-
       LOGGER.info (new MessageFormat (getTriggerFiredMessage (), Locale.US).format (args));
     }
   }
@@ -364,7 +357,6 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
                                new Date (),
                                trigger.getJobKey ().getName (),
                                trigger.getJobKey ().getGroup () };
-
       LOGGER.info (new MessageFormat (getTriggerMisfiredMessage (), Locale.US).format (args));
     }
   }
@@ -411,7 +403,6 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
                                Integer.valueOf (context.getRefireCount ()),
                                triggerInstructionCode.toString (),
                                instrCode };
-
       LOGGER.info (new MessageFormat (getTriggerCompleteMessage (), Locale.US).format (args));
     }
   }

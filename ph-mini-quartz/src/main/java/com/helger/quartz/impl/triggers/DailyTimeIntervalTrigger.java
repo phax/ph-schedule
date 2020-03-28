@@ -513,14 +513,13 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <IDailyTimeInterva
   }
 
   /**
-   * <p>
-   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
-   * trigger (execute the associated <code>Job</code>), in order to give the
-   * <code>Trigger</code> a chance to update itself for its next triggering (if
-   * any).
-   * </p>
+   * Called when the <code>{@link com.helger.quartz.IScheduler}</code> has
+   * decided to 'fire' the trigger (execute the associated <code>Job</code>), in
+   * order to give the <code>Trigger</code> a chance to update itself for its
+   * next triggering (if any).
    *
-   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
+   * @see #executionComplete(com.helger.quartz.IJobExecutionContext,
+   *      com.helger.quartz.JobExecutionException)
    */
   @Override
   public void triggered (final ICalendar calendar)

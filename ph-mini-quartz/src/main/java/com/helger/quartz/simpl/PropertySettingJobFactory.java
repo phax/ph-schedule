@@ -56,7 +56,7 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  *
  * @see com.helger.quartz.spi.IJobFactory
  * @see SimpleJobFactory
- * @see SchedulerContext
+ * @see com.helger.quartz.SchedulerContext
  * @see com.helger.quartz.IJobExecutionContext#getMergedJobDataMap()
  * @see #setWarnIfPropertyNotFound(boolean)
  * @see #setThrowIfPropertyNotFound(boolean)

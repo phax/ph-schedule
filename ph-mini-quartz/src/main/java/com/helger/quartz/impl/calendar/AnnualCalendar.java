@@ -18,15 +18,19 @@
  */
 package com.helger.quartz.impl.calendar;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableObject;
+import com.helger.commons.compare.IComparator;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -73,27 +77,20 @@ public class AnnualCalendar extends BaseCalendar
   }
 
   /**
-   * <p>
-   * Get the array which defines the exclude-value of each day of month
-   * </p>
+   * @return Get the list which defines the exclude-value of each day of month
    */
+  @ReturnsMutableObject
   public List <Calendar> getDaysExcluded ()
   {
     return m_aExcludeDays;
   }
 
   /**
-   * <p>
-   * Return true, if day is defined to be exluded.
-   * </p>
+   * @return <code>true</code> if day is defined to be excluded.
    */
-  public boolean isDayExcluded (final Calendar day)
+  public boolean isDayExcluded (@Nonnull final Calendar day)
   {
-
-    if (day == null)
-    {
-      throw new IllegalArgumentException ("Parameter day must not be null");
-    }
+    ValueEnforcer.notNull (day, "Day");
 
     // Check baseCalendar first
     if (!super.isTimeIncluded (day.getTime ().getTime ()))
@@ -117,19 +114,13 @@ public class AnnualCalendar extends BaseCalendar
 
       // remember, the list is sorted
       if (dmonth < cl.get (Calendar.MONTH))
-      {
         return false;
-      }
 
       if (dday != cl.get (Calendar.DAY_OF_MONTH))
-      {
         continue;
-      }
 
       if (dmonth != cl.get (Calendar.MONTH))
-      {
         continue;
-      }
 
       return true;
     }
@@ -138,50 +129,39 @@ public class AnnualCalendar extends BaseCalendar
   }
 
   /**
-   * <p>
    * Redefine the list of days excluded. The ArrayList should contain
    * <code>Calendar</code> objects.
-   * </p>
+   *
+   * @param days
+   *        The days to be excluded
    */
-  public void setDaysExcluded (final ArrayList <Calendar> days)
+  public void setDaysExcluded (@Nullable final List <Calendar> days)
   {
     if (days == null)
-    {
       m_aExcludeDays = new ArrayList <> ();
-    }
     else
-    {
       m_aExcludeDays = days;
-    }
 
     m_bDataSorted = false;
   }
 
   /**
-   * <p>
    * Redefine a certain day to be excluded (true) or included (false).
-   * </p>
    */
   public void setDayExcluded (final Calendar day, final boolean exclude)
   {
     if (exclude)
     {
-      if (isDayExcluded (day))
+      if (!isDayExcluded (day))
       {
-        return;
+        m_aExcludeDays.add (day);
+        m_bDataSorted = false;
       }
-
-      m_aExcludeDays.add (day);
-      m_bDataSorted = false;
     }
     else
     {
-      if (!isDayExcluded (day))
-      {
-        return;
-      }
-
-      removeExcludedDay (day, true);
+      if (isDayExcluded (day))
+        _removeExcludedDay (day, true);
     }
   }
 
@@ -193,10 +173,10 @@ public class AnnualCalendar extends BaseCalendar
    */
   public void removeExcludedDay (final Calendar day)
   {
-    removeExcludedDay (day, false);
+    _removeExcludedDay (day, false);
   }
 
-  private void removeExcludedDay (final Calendar aDay, final boolean isChecked)
+  private void _removeExcludedDay (final Calendar aDay, final boolean isChecked)
   {
     Calendar day = aDay;
     if (!isChecked && !isDayExcluded (day))
@@ -292,36 +272,24 @@ public class AnnualCalendar extends BaseCalendar
   }
 }
 
-class CalendarComparator implements Comparator <Calendar>, Serializable
+class CalendarComparator implements IComparator <Calendar>
 {
-  public CalendarComparator ()
-  {}
-
   public int compare (final Calendar c1, final Calendar c2)
   {
-
     final int month1 = c1.get (Calendar.MONTH);
     final int month2 = c2.get (Calendar.MONTH);
+    if (month1 < month2)
+      return -1;
+    if (month1 > month2)
+      return 1;
 
     final int day1 = c1.get (Calendar.DAY_OF_MONTH);
     final int day2 = c2.get (Calendar.DAY_OF_MONTH);
-
-    if (month1 < month2)
-    {
-      return -1;
-    }
-    if (month1 > month2)
-    {
-      return 1;
-    }
     if (day1 < day2)
-    {
       return -1;
-    }
     if (day1 > day2)
-    {
       return 1;
-    }
+
     return 0;
   }
 }
