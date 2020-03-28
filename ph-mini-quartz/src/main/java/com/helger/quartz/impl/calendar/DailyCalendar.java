@@ -19,13 +19,12 @@
 package com.helger.quartz.impl.calendar;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Locale.Category;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
+
+import com.helger.commons.string.StringHelper;
 
 /**
  * This implementation of the Calendar excludes (or includes - see below) a
@@ -56,7 +55,7 @@ public class DailyCalendar extends BaseCalendar
   private static final String INVALID_TIME_RANGE = "Invalid time range: ";
   private static final String SEPARATOR = " - ";
   private static final long ONE_MILLIS = 1;
-  private static final String COLON = ":";
+  private static final char COLON = ':';
 
   private int m_nRangeStartingHourOfDay;
   private int m_nRangeStartingMinute;
@@ -697,22 +696,6 @@ public class DailyCalendar extends BaseCalendar
   }
 
   /**
-   * Helper method to split the given string by the given delimiter.
-   */
-  private static String [] _split (final String string, final String delim)
-  {
-    final List <String> result = new ArrayList <> ();
-
-    final StringTokenizer stringTokenizer = new StringTokenizer (string, delim);
-    while (stringTokenizer.hasMoreTokens ())
-    {
-      result.add (stringTokenizer.nextToken ());
-    }
-
-    return result.toArray (new String [result.size ()]);
-  }
-
-  /**
    * Sets the time range for the <CODE>DailyCalendar</CODE> to the times
    * represented in the specified Strings.
    *
@@ -735,57 +718,35 @@ public class DailyCalendar extends BaseCalendar
     int rEndingSecond;
     int rEndingMillis;
 
-    rangeStartingTime = _split (rangeStartingTimeString, COLON);
-
-    if ((rangeStartingTime.length < 2) || (rangeStartingTime.length > 4))
-    {
+    rangeStartingTime = StringHelper.getExplodedArray (COLON, rangeStartingTimeString);
+    if (rangeStartingTime.length < 2 || rangeStartingTime.length > 4)
       throw new IllegalArgumentException ("Invalid time string '" + rangeStartingTimeString + "'");
-    }
 
     rStartingHourOfDay = Integer.parseInt (rangeStartingTime[0]);
     rStartingMinute = Integer.parseInt (rangeStartingTime[1]);
     if (rangeStartingTime.length > 2)
-    {
       rStartingSecond = Integer.parseInt (rangeStartingTime[2]);
-    }
     else
-    {
       rStartingSecond = 0;
-    }
     if (rangeStartingTime.length == 4)
-    {
       rStartingMillis = Integer.parseInt (rangeStartingTime[3]);
-    }
     else
-    {
       rStartingMillis = 0;
-    }
 
-    rEndingTime = _split (rangeEndingTimeString, COLON);
-
-    if ((rEndingTime.length < 2) || (rEndingTime.length > 4))
-    {
+    rEndingTime = StringHelper.getExplodedArray (COLON, rangeEndingTimeString);
+    if (rEndingTime.length < 2 || rEndingTime.length > 4)
       throw new IllegalArgumentException ("Invalid time string '" + rangeEndingTimeString + "'");
-    }
 
     rEndingHourOfDay = Integer.parseInt (rEndingTime[0]);
     rEndingMinute = Integer.parseInt (rEndingTime[1]);
     if (rEndingTime.length > 2)
-    {
       rEndingSecond = Integer.parseInt (rEndingTime[2]);
-    }
     else
-    {
       rEndingSecond = 0;
-    }
     if (rEndingTime.length == 4)
-    {
       rEndingMillis = Integer.parseInt (rEndingTime[3]);
-    }
     else
-    {
       rEndingMillis = 0;
-    }
 
     setTimeRange (rStartingHourOfDay,
                   rStartingMinute,
@@ -922,23 +883,15 @@ public class DailyCalendar extends BaseCalendar
    * @param millis
    *        the millisecond of the time to check
    */
-  private void _validate (final int hourOfDay, final int minute, final int second, final int millis)
+  private static void _validate (final int hourOfDay, final int minute, final int second, final int millis)
   {
     if (hourOfDay < 0 || hourOfDay > 23)
-    {
       throw new IllegalArgumentException (INVALID_HOUR_OF_DAY + hourOfDay);
-    }
     if (minute < 0 || minute > 59)
-    {
       throw new IllegalArgumentException (INVALID_MINUTE + minute);
-    }
     if (second < 0 || second > 59)
-    {
       throw new IllegalArgumentException (INVALID_SECOND + second);
-    }
     if (millis < 0 || millis > 999)
-    {
       throw new IllegalArgumentException (INVALID_MILLIS + millis);
-    }
   }
 }
