@@ -244,32 +244,24 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    */
   public Date getFinalFireTime ()
   {
-    Date resultTime;
+    final Date resultTime;
     if (getEndTime () != null)
-    {
       resultTime = getTimeBefore (new Date (getEndTime ().getTime () + 1000l));
-    }
     else
-    {
-      resultTime = (m_aCronEx == null) ? null : m_aCronEx.getFinalFireTime ();
-    }
+      resultTime = m_aCronEx == null ? null : m_aCronEx.getFinalFireTime ();
 
-    if ((resultTime != null) && (getStartTime () != null) && (resultTime.before (getStartTime ())))
-    {
+    if (resultTime != null && getStartTime () != null && resultTime.before (getStartTime ()))
       return null;
-    }
 
     return resultTime;
   }
 
   /**
-   * <p>
    * Determines whether or not the <code>CronTrigger</code> will occur again.
-   * </p>
    */
   public boolean mayFireAgain ()
   {
-    return (getNextFireTime () != null);
+    return getNextFireTime () != null;
   }
 
   @Override

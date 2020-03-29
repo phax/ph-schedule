@@ -247,7 +247,7 @@ public class RAMJobStore implements IJobStore
    */
   public void storeJob (final IJobDetail newJob, final boolean bReplaceExisting) throws ObjectAlreadyExistsException
   {
-    final JobWrapper jw = new JobWrapper (newJob.clone ());
+    final JobWrapper jw = new JobWrapper (newJob.getClone ());
     boolean bReplace = false;
 
     synchronized (m_aLock)
@@ -601,7 +601,7 @@ public class RAMJobStore implements IJobStore
     synchronized (m_aLock)
     {
       final JobWrapper jw = m_aJobsByKey.get (jobKey);
-      return jw != null ? (IJobDetail) jw.getJobDetail ().clone () : null;
+      return jw != null ? jw.getJobDetail ().getClone () : null;
     }
   }
 
@@ -617,8 +617,7 @@ public class RAMJobStore implements IJobStore
     synchronized (m_aLock)
     {
       final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
-
-      return (tw != null) ? (IOperableTrigger) tw.getTrigger ().getClone () : null;
+      return tw != null ? tw.getTrigger ().getClone () : null;
     }
   }
 

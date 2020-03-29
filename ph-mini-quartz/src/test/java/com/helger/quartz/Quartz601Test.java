@@ -18,6 +18,7 @@
  */
 package com.helger.quartz;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.text.ParseException;
@@ -25,84 +26,78 @@ import java.util.Set;
 
 import org.junit.Test;
 
-public class Quartz601Test
+public final class Quartz601Test
 {
-  @Test
-  public void testNormal ()
-  {
-    for (int i = 0; i < 6; i++)
-      _assertParsesForField ("0 15 10 * * ? 2005", i);
-  }
-
-  @Test
-  public void testSecond ()
-  {
-    _assertParsesForField ("58-4 5 21 ? * MON-FRI", 0);
-  }
-
-  @Test
-  public void testMinute ()
-  {
-    _assertParsesForField ("0 58-4 21 ? * MON-FRI", 1);
-  }
-
-  @Test
-  public void testHour ()
-  {
-    _assertParsesForField ("0 0/5 21-3 ? * MON-FRI", 2);
-  }
-
-  @Test
-  public void testDayOfWeekNumber ()
-  {
-    _assertParsesForField ("58 5 21 ? * 6-2", 5);
-  }
-
-  @Test
-  public void testDayOfWeek ()
-  {
-    _assertParsesForField ("58 5 21 ? * FRI-TUE", 5);
-  }
-
-  @Test
-  public void testDayOfMonth ()
-  {
-    _assertParsesForField ("58 5 21 28-5 1 ?", 3);
-  }
-
-  @Test
-  public void testMonth ()
-  {
-    _assertParsesForField ("58 5 21 ? 11-2 FRI", 4);
-  }
-
-  @Test
-  public void testAmbiguous ()
-  {
-    _assertParsesForField ("0 0 14-6 ? * FRI-MON", 2);
-    _assertParsesForField ("0 0 14-6 ? * FRI-MON", 5);
-
-    _assertParsesForField ("55-3 56-2 6 ? * FRI", 0);
-    _assertParsesForField ("55-3 56-2 6 ? * FRI", 1);
-  }
-
-  private Set <Integer> _assertParsesForField (final String expression, final int constant)
+  private static void _assertParsesForField (final String expression, final CronExpression.EType constant)
   {
     try
     {
       final CronExpression cronExpression = new CronExpression (expression);
       final Set <Integer> set = cronExpression.getSet (constant);
-      if (set.isEmpty ())
-      {
-        fail ("Empty field [" + constant + "] returned for " + expression);
-      }
-      return set;
+      assertFalse ("Empty field [" + constant + "] returned for " + expression, set.isEmpty ());
     }
     catch (final ParseException pe)
     {
       fail ("Exception thrown during parsing: " + pe);
     }
-    return null; // not reachable
   }
 
+  @Test
+  public void testNormal ()
+  {
+    for (final CronExpression.EType e : CronExpression.EType.values ())
+      _assertParsesForField ("0 15 10 * * ? 2005", e);
+  }
+
+  @Test
+  public void testSecond ()
+  {
+    _assertParsesForField ("58-4 5 21 ? * MON-FRI", CronExpression.EType.SECOND);
+  }
+
+  @Test
+  public void testMinute ()
+  {
+    _assertParsesForField ("0 58-4 21 ? * MON-FRI", CronExpression.EType.MINUTE);
+  }
+
+  @Test
+  public void testHour ()
+  {
+    _assertParsesForField ("0 0/5 21-3 ? * MON-FRI", CronExpression.EType.HOUR);
+  }
+
+  @Test
+  public void testDayOfMonth ()
+  {
+    _assertParsesForField ("58 5 21 28-5 1 ?", CronExpression.EType.DAY_OF_MONTH);
+  }
+
+  @Test
+  public void testMonth ()
+  {
+    _assertParsesForField ("58 5 21 ? 11-2 FRI", CronExpression.EType.MONTH);
+  }
+
+  @Test
+  public void testDayOfWeekNumber ()
+  {
+    _assertParsesForField ("58 5 21 ? * 6-2", CronExpression.EType.DAY_OF_WEEK);
+  }
+
+  @Test
+  public void testDayOfWeek ()
+  {
+    _assertParsesForField ("58 5 21 ? * FRI-TUE", CronExpression.EType.DAY_OF_WEEK);
+  }
+
+  @Test
+  public void testAmbiguous ()
+  {
+    _assertParsesForField ("55-3 56-2 6 ? * FRI", CronExpression.EType.SECOND);
+    _assertParsesForField ("55-3 56-2 6 ? * FRI", CronExpression.EType.MINUTE);
+
+    _assertParsesForField ("0 0 14-6 ? * FRI-MON", CronExpression.EType.HOUR);
+    _assertParsesForField ("0 0 14-6 ? * FRI-MON", CronExpression.EType.DAY_OF_WEEK);
+  }
 }

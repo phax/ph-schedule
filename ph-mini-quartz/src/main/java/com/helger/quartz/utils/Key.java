@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.compare.IComparable;
@@ -35,6 +36,7 @@ import com.helger.commons.hashcode.HashCodeGenerator;
  *
  * @author <a href="mailto:jeff@binaryfeed.org">Jeffrey Wescott</a>
  */
+@Immutable
 public class Key <T> implements IComparable <Key <T>>
 {
   /**

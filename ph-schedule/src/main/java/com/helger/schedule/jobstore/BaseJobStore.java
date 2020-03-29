@@ -208,7 +208,7 @@ public class BaseJobStore implements IJobStore
         final ICommonsMap <JobKey, JobWrapper> aMap = m_aJobsByGroup.computeIfAbsent (sGroupName,
                                                                                       k -> new CommonsHashMap <> (100));
 
-        final JobWrapper jw = new JobWrapper (aNewJob.clone ());
+        final JobWrapper jw = new JobWrapper (aNewJob.getClone ());
         // add to jobs by group
         aMap.put (aKey, jw);
         // add to jobs by FQN map
@@ -217,9 +217,8 @@ public class BaseJobStore implements IJobStore
     }
     else
     {
-      m_aRWLock.writeLocked ( () ->
       // update job detail
-      aOld.setJobDetail (aNewJob.clone ()));
+      m_aRWLock.writeLocked ( () -> aOld.setJobDetail (aNewJob.getClone ()));
     }
   }
 
@@ -472,7 +471,7 @@ public class BaseJobStore implements IJobStore
   {
     return m_aRWLock.readLockedGet ( () -> {
       final JobWrapper jw = m_aJobsByKey.get (jobKey);
-      return jw != null ? jw.getJobDetail ().clone () : null;
+      return jw != null ? jw.getJobDetail ().getClone () : null;
     });
   }
 

@@ -208,7 +208,7 @@ public interface ITrigger extends Serializable, Comparable <ITrigger>
 
   /**
    * Get the time at which the <code>Trigger</code> should occur.
-   * 
+   *
    * @return The start. May be <code>null</code> depending on the implementation
    */
   Date getStartTime ();

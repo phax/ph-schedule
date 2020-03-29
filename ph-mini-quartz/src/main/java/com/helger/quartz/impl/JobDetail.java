@@ -19,8 +19,11 @@
 package com.helger.quartz.impl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -29,6 +32,7 @@ import com.helger.quartz.JobBuilder;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.PersistJobDataAfterExecution;
+import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.utils.ClassUtils;
 
 /**
@@ -67,26 +71,33 @@ public class JobDetail implements IJobDetail
   private boolean m_bShouldRecover = false;
   private transient JobKey m_aKey;
 
+  public JobDetail (@Nonnull final JobDetail aOther)
+  {
+    ValueEnforcer.notNull (aOther, "Other");
+    m_sName = aOther.m_sName;
+    m_sGroup = aOther.m_sGroup;
+    m_sDescription = aOther.m_sDescription;
+    m_aJobClass = aOther.m_aJobClass;
+    m_aJobDataMap = QCloneUtils.getClone (aOther.m_aJobDataMap);
+    m_bDurability = aOther.m_bDurability;
+    m_bShouldRecover = aOther.m_bShouldRecover;
+    m_aKey = aOther.m_aKey;
+  }
+
   /**
-   * <p>
    * Create a <code>JobDetail</code> with no specified name or group, and the
-   * default settings of all the other properties.
-   * </p>
-   * <p>
+   * default settings of all the other properties.<br>
    * Note that the {@link #setName(String)},{@link #setGroup(String)}and
    * {@link #setJobClass(Class)}methods must be called before the job can be
    * placed into a {@link IScheduler}
-   * </p>
    */
   public JobDetail ()
   {}
 
   /**
-   * <p>
    * Get the name of this <code>Job</code>.
-   * </p>
    */
-  public String getName ()
+  public final String getName ()
   {
     return m_sName;
   }
@@ -99,23 +110,19 @@ public class JobDetail implements IJobDetail
    * @exception IllegalArgumentException
    *            if name is null or empty.
    */
-  public void setName (final String name)
+  public final void setName (final String name)
   {
-    if (name == null || name.trim ().length () == 0)
-    {
-      throw new IllegalArgumentException ("Job name cannot be empty.");
-    }
+    ValueEnforcer.notNull (name, "Name");
+    ValueEnforcer.isFalse (name.trim ().isEmpty (), "Job name cannot be empty.");
 
     m_sName = name;
     m_aKey = null;
   }
 
   /**
-   * <p>
    * Get the group of this <code>Job</code>.
-   * </p>
    */
-  public String getGroup ()
+  public final String getGroup ()
   {
     return m_sGroup;
   }
@@ -130,12 +137,10 @@ public class JobDetail implements IJobDetail
    * @exception IllegalArgumentException
    *            if the group is an empty string.
    */
-  public void setGroup (final String group)
+  public final void setGroup (final String group)
   {
-    if (group != null && group.trim ().length () == 0)
-    {
-      throw new IllegalArgumentException ("Group name cannot be empty.");
-    }
+    if (group != null)
+      ValueEnforcer.isFalse (group.trim ().isEmpty (), "Group name cannot be empty.");
 
     if (group == null)
       m_sGroup = IScheduler.DEFAULT_GROUP;
@@ -145,56 +150,53 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * <p>
    * Returns the 'full name' of the <code>JobDetail</code> in the format
    * "group.name".
-   * </p>
    */
-  public String getFullName ()
+  @Nonnull
+  public final String getFullName ()
   {
     return m_sGroup + "." + m_sName;
   }
 
-  public JobKey getKey ()
+  @Nullable
+  public final JobKey getKey ()
   {
     if (m_aKey == null)
     {
-      if (getName () == null)
+      if (m_sName == null)
         return null;
-      m_aKey = new JobKey (getName (), getGroup ());
+      m_aKey = new JobKey (m_sName, getGroup ());
     }
 
     return m_aKey;
   }
 
-  public void setKey (final JobKey key)
+  public final void setKey (@Nonnull final JobKey key)
   {
-    if (key == null)
-      throw new IllegalArgumentException ("Key cannot be null!");
+    ValueEnforcer.notNull (key, "Key");
 
     setName (key.getName ());
     setGroup (key.getGroup ());
     m_aKey = key;
   }
 
-  public String getDescription ()
+  public final String getDescription ()
   {
     return m_sDescription;
   }
 
   /**
-   * <p>
    * Set a description for the <code>Job</code> instance - may be useful for
    * remembering/displaying the purpose of the job, though the description has
    * no meaning to Quartz.
-   * </p>
    */
-  public void setDescription (final String description)
+  public final void setDescription (final String description)
   {
     m_sDescription = description;
   }
 
-  public Class <? extends IJob> getJobClass ()
+  public final Class <? extends IJob> getJobClass ()
   {
     return m_aJobClass;
   }
@@ -207,36 +209,27 @@ public class JobDetail implements IJobDetail
    * @exception IllegalArgumentException
    *            if jobClass is null or the class is not a <code>Job</code>.
    */
-  public void setJobClass (final Class <? extends IJob> jobClass)
+  public final void setJobClass (final Class <? extends IJob> jobClass)
   {
-    if (jobClass == null)
-    {
-      throw new IllegalArgumentException ("Job class cannot be null.");
-    }
-
-    if (!IJob.class.isAssignableFrom (jobClass))
-    {
-      throw new IllegalArgumentException ("Job class must implement the Job interface.");
-    }
-
+    ValueEnforcer.notNull (jobClass, "JobClass");
     m_aJobClass = jobClass;
   }
 
+  @Nonnull
   public JobDataMap getJobDataMap ()
   {
     if (m_aJobDataMap == null)
-    {
       m_aJobDataMap = new JobDataMap ();
-    }
     return m_aJobDataMap;
   }
 
   /**
-   * <p>
    * Set the <code>JobDataMap</code> to be associated with the <code>Job</code>.
-   * </p>
+   *
+   * @param jobDataMap
+   *        May be <code>null</code>.
    */
-  public void setJobDataMap (final JobDataMap jobDataMap)
+  public void setJobDataMap (@Nullable final JobDataMap jobDataMap)
   {
     m_aJobDataMap = jobDataMap;
   }
@@ -275,7 +268,6 @@ public class JobDetail implements IJobDetail
    */
   public boolean isPersistJobDataAfterExecution ()
   {
-
     return ClassUtils.isAnnotationPresent (m_aJobClass, PersistJobDataAfterExecution.class);
   }
 
@@ -285,7 +277,6 @@ public class JobDetail implements IJobDetail
    */
   public boolean isConcurrentExectionDisallowed ()
   {
-
     return ClassUtils.isAnnotationPresent (m_aJobClass, DisallowConcurrentExecution.class);
   }
 
@@ -305,7 +296,7 @@ public class JobDetail implements IJobDetail
     return "JobDetail '" +
            getFullName () +
            "':  jobClass: '" +
-           ((getJobClass () == null) ? null : getJobClass ().getName ()) +
+           (getJobClass () == null ? null : getJobClass ().getName ()) +
            " concurrentExectionDisallowed: " +
            isConcurrentExectionDisallowed () +
            " persistJobDataAfterExecution: " +
@@ -331,36 +322,25 @@ public class JobDetail implements IJobDetail
   @Override
   public int hashCode ()
   {
-    final JobKey key = getKey ();
-    return key == null ? 0 : getKey ().hashCode ();
+    return new HashCodeGenerator (this).append (getKey ()).getHashCode ();
   }
 
-  @Override
-  public JobDetail clone ()
-  {
-    try
-    {
-      final JobDetail copy = (JobDetail) super.clone ();
-      if (m_aJobDataMap != null)
-        copy.m_aJobDataMap = (JobDataMap) m_aJobDataMap.clone ();
-      return copy;
-    }
-    catch (final CloneNotSupportedException ex)
-    {
-      throw new IncompatibleClassChangeError ("Not Cloneable.");
-    }
-  }
-
+  @Nonnull
   public JobBuilder getJobBuilder ()
   {
-    final JobBuilder b = JobBuilder.newJob ()
-                                   .ofType (getJobClass ())
-                                   .requestRecovery (requestsRecovery ())
-                                   .storeDurably (isDurable ())
-                                   .usingJobData (getJobDataMap ())
-                                   .withDescription (getDescription ())
-                                   .withIdentity (getKey ());
-    return b;
+    return JobBuilder.newJob ()
+                     .ofType (getJobClass ())
+                     .requestRecovery (requestsRecovery ())
+                     .storeDurably (isDurable ())
+                     .usingJobData (getJobDataMap ())
+                     .withDescription (getDescription ())
+                     .withIdentity (getKey ());
+  }
+
+  @Nonnull
+  public JobDetail getClone ()
+  {
+    return new JobDetail (this);
   }
 
   @Nonnull

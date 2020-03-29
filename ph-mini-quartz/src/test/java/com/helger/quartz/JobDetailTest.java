@@ -84,7 +84,7 @@ public class JobDetailTest
     final JobDetail jobDetail = new JobDetail ();
     jobDetail.setName ("hi");
 
-    final IJobDetail clonedJobDetail = jobDetail.clone ();
+    final IJobDetail clonedJobDetail = jobDetail.getClone ();
     assertEquals (clonedJobDetail, jobDetail);
   }
 

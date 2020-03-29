@@ -18,23 +18,19 @@
  */
 package com.helger.quartz.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 public final class JobDetailTest
 {
   @Test
-  public void testHashCode ()
+  public void testBasic ()
   {
     final JobDetail job = new JobDetail ();
-    assertEquals (0, job.hashCode ());
-
-    job.setName ("test");
-    assertNotEquals (0, job.hashCode ());
-
-    job.setGroup ("test");
-    assertNotEquals (0, job.hashCode ());
+    assertNull (job.getName ());
+    assertNotNull (job.getGroup ());
+    assertNull (job.getKey ());
   }
 }

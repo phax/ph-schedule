@@ -19,11 +19,11 @@
 package com.helger.quartz.utils;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import javax.annotation.concurrent.Immutable;
+
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 
 @Immutable
 public final class ClassUtils
@@ -37,19 +37,20 @@ public final class ClassUtils
     {
       if (c.isAnnotationPresent (a))
         return true;
-      if (isAnnotationPresentOnInterfaces (c, a))
+      if (_isAnnotationPresentOnInterfacesRecursive (c, a))
         return true;
     }
     return false;
   }
 
-  private static boolean isAnnotationPresentOnInterfaces (final Class <?> clazz, final Class <? extends Annotation> a)
+  private static boolean _isAnnotationPresentOnInterfacesRecursive (final Class <?> clazz,
+                                                                    final Class <? extends Annotation> a)
   {
     for (final Class <?> i : clazz.getInterfaces ())
     {
       if (i.isAnnotationPresent (a))
         return true;
-      if (isAnnotationPresentOnInterfaces (i, a))
+      if (_isAnnotationPresentOnInterfacesRecursive (i, a))
         return true;
     }
 
@@ -63,32 +64,28 @@ public final class ClassUtils
     {
       final T anno = c.getAnnotation (aClazz);
       if (anno != null)
-      {
         return anno;
-      }
     }
 
     // Check interfaces (breadth first)
-    final Queue <Class <?>> q = new LinkedList <> ();
+    final ICommonsList <Class <?>> q = new CommonsArrayList <> ();
     q.add (clazz);
     while (!q.isEmpty ())
     {
-      final Class <?> c = q.remove ();
+      final Class <?> c = q.removeFirst ();
       if (c != null)
       {
         if (c.isInterface ())
         {
           final T anno = c.getAnnotation (aClazz);
           if (anno != null)
-          {
             return anno;
-          }
         }
         else
         {
           q.add (c.getSuperclass ());
         }
-        q.addAll (Arrays.asList (c.getInterfaces ()));
+        q.addAll (c.getInterfaces ());
       }
     }
 

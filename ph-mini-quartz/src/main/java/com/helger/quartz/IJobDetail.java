@@ -20,7 +20,10 @@ package com.helger.quartz;
 
 import java.io.Serializable;
 
-import com.helger.commons.lang.IExplicitlyCloneable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.helger.commons.lang.ICloneable;
 
 /**
  * Conveys the detail properties of a given <code>Job</code> instance.
@@ -46,42 +49,37 @@ import com.helger.commons.lang.IExplicitlyCloneable;
  * @see ITrigger
  * @author James House
  */
-public interface IJobDetail extends Serializable, IExplicitlyCloneable
+public interface IJobDetail extends Serializable, ICloneable <IJobDetail>
 {
+  @Nullable
   JobKey getKey ();
 
   /**
-   * <p>
-   * Return the description given to the <code>Job</code> instance by its creator
-   * (if any).
-   * </p>
+   * Return the description given to the <code>Job</code> instance by its
+   * creator (if any).
    *
    * @return null if no description was set.
    */
+  @Nullable
   String getDescription ();
 
   /**
-   * <p>
    * Get the instance of <code>Job</code> that will be executed.
-   * </p>
    */
+  @Nullable
   Class <? extends IJob> getJobClass ();
 
   /**
-   * <p>
-   * Get the <code>JobDataMap</code> that is associated with the <code>Job</code>.
-   * </p>
+   * Get the <code>JobDataMap</code> that is associated with the
+   * <code>Job</code>.
    */
+  @Nonnull
   JobDataMap getJobDataMap ();
 
   /**
-   * <p>
-   * Whether or not the <code>Job</code> should remain stored after it is orphaned
-   * (no <code>{@link ITrigger}s</code> point to it).
-   * </p>
-   * <p>
+   * Whether or not the <code>Job</code> should remain stored after it is
+   * orphaned (no <code>{@link ITrigger}s</code> point to it).<br>
    * If not explicitly set, the default value is <code>false</code>.
-   * </p>
    *
    * @return <code>true</code> if the Job should remain persisted after being
    *         orphaned.
@@ -116,11 +114,10 @@ public interface IJobDetail extends Serializable, IExplicitlyCloneable
    */
   boolean requestsRecovery ();
 
-  IJobDetail clone ();
-
   /**
    * Get a {@link JobBuilder} that is configured to produce a
    * <code>JobDetail</code> identical to this one.
    */
+  @Nonnull
   JobBuilder getJobBuilder ();
 }

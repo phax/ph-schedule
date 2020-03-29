@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import javax.annotation.concurrent.Immutable;
+
 import com.helger.quartz.utils.Key;
 
 /**
@@ -51,6 +53,7 @@ import com.helger.quartz.utils.Key;
  * @see ITrigger
  * @see Key#DEFAULT_GROUP
  */
+@Immutable
 public final class TriggerKey extends Key <TriggerKey>
 {
   public TriggerKey (final String name)
