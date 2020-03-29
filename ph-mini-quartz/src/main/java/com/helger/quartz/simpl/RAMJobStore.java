@@ -59,6 +59,7 @@ import com.helger.quartz.TriggerKey;
 import com.helger.quartz.TriggerTimeComparator;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.impl.matchers.StringMatcher;
+import com.helger.quartz.impl.matchers.StringMatcher.EStringOperatorName;
 import com.helger.quartz.spi.IClassLoadHelper;
 import com.helger.quartz.spi.IJobStore;
 import com.helger.quartz.spi.IOperableTrigger;
@@ -874,31 +875,28 @@ public class RAMJobStore implements IJobStore
       final StringMatcher.EStringOperatorName operator = matcher.getCompareWithOperator ();
       final String compareToValue = matcher.getCompareToValue ();
 
-      switch (operator)
+      if (operator == EStringOperatorName.EQUALS)
       {
-        case EQUALS:
-          final ICommonsMap <JobKey, JobWrapper> grpMap = m_aJobsByGroup.get (compareToValue);
-          if (grpMap != null)
+        final ICommonsMap <JobKey, JobWrapper> grpMap = m_aJobsByGroup.get (compareToValue);
+        if (grpMap != null)
+        {
+          outList = new CommonsHashSet <> ();
+          for (final JobWrapper jw : grpMap.values ())
+            if (jw != null)
+              outList.add (jw.getJobDetail ().getKey ());
+        }
+      }
+      else
+      {
+        for (final Map.Entry <String, ICommonsMap <JobKey, JobWrapper>> entry : m_aJobsByGroup.entrySet ())
+          if (operator.evaluate (entry.getKey (), compareToValue) && entry.getValue () != null)
           {
-            outList = new CommonsHashSet <> ();
-            for (final JobWrapper jw : grpMap.values ())
-              if (jw != null)
-                outList.add (jw.getJobDetail ().getKey ());
-          }
-          break;
+            if (outList == null)
+              outList = new CommonsHashSet <> ();
 
-        default:
-          for (final Map.Entry <String, ICommonsMap <JobKey, JobWrapper>> entry : m_aJobsByGroup.entrySet ())
-          {
-            if (operator.evaluate (entry.getKey (), compareToValue) && entry.getValue () != null)
-            {
-              if (outList == null)
-                outList = new CommonsHashSet <> ();
-
-              for (final JobWrapper jobWrapper : entry.getValue ().values ())
-                if (jobWrapper != null)
-                  outList.add (jobWrapper.getJobDetail ().getKey ());
-            }
+            for (final JobWrapper jobWrapper : entry.getValue ().values ())
+              if (jobWrapper != null)
+                outList.add (jobWrapper.getJobDetail ().getKey ());
           }
       }
     }
@@ -940,32 +938,28 @@ public class RAMJobStore implements IJobStore
       final StringMatcher.EStringOperatorName operator = matcher.getCompareWithOperator ();
       final String compareToValue = matcher.getCompareToValue ();
 
-      switch (operator)
+      if (operator == EStringOperatorName.EQUALS)
       {
-        case EQUALS:
-          final ICommonsMap <TriggerKey, TriggerWrapper> grpMap = m_aTriggersByGroup.get (compareToValue);
-          if (grpMap != null)
+        final ICommonsMap <TriggerKey, TriggerWrapper> grpMap = m_aTriggersByGroup.get (compareToValue);
+        if (grpMap != null)
+        {
+          outList = new CommonsHashSet <> ();
+          for (final TriggerWrapper tw : grpMap.values ())
+            if (tw != null)
+              outList.add (tw.m_aTrigger.getKey ());
+        }
+      }
+      else
+      {
+        for (final Map.Entry <String, ICommonsMap <TriggerKey, TriggerWrapper>> entry : m_aTriggersByGroup.entrySet ())
+          if (operator.evaluate (entry.getKey (), compareToValue) && entry.getValue () != null)
           {
-            outList = new CommonsHashSet <> ();
+            if (outList == null)
+              outList = new CommonsHashSet <> ();
 
-            for (final TriggerWrapper tw : grpMap.values ())
-              if (tw != null)
-                outList.add (tw.m_aTrigger.getKey ());
-          }
-          break;
-
-        default:
-          for (final Map.Entry <String, ICommonsMap <TriggerKey, TriggerWrapper>> entry : m_aTriggersByGroup.entrySet ())
-          {
-            if (operator.evaluate (entry.getKey (), compareToValue) && entry.getValue () != null)
-            {
-              if (outList == null)
-                outList = new CommonsHashSet <> ();
-
-              for (final TriggerWrapper triggerWrapper : entry.getValue ().values ())
-                if (triggerWrapper != null)
-                  outList.add (triggerWrapper.m_aTrigger.getKey ());
-            }
+            for (final TriggerWrapper triggerWrapper : entry.getValue ().values ())
+              if (triggerWrapper != null)
+                outList.add (triggerWrapper.m_aTrigger.getKey ());
           }
       }
     }
@@ -1067,24 +1061,16 @@ public class RAMJobStore implements IJobStore
 
       // does the trigger exist?
       if (tw == null || tw.m_aTrigger == null)
-      {
         return;
-      }
 
       // if the trigger is "complete" pausing it does not make sense...
       if (tw.m_nState == TriggerWrapper.STATE_COMPLETE)
-      {
         return;
-      }
 
       if (tw.m_nState == TriggerWrapper.STATE_BLOCKED)
-      {
         tw.m_nState = TriggerWrapper.STATE_PAUSED_BLOCKED;
-      }
       else
-      {
         tw.m_nState = TriggerWrapper.STATE_PAUSED;
-      }
 
       m_aTimeTriggers.remove (tw);
     }
@@ -1109,25 +1095,17 @@ public class RAMJobStore implements IJobStore
       pausedGroups = new CommonsArrayList <> ();
 
       final StringMatcher.EStringOperatorName operator = matcher.getCompareWithOperator ();
-      switch (operator)
+      if (operator == EStringOperatorName.EQUALS)
       {
-        case EQUALS:
-          if (m_aPausedTriggerGroups.add (matcher.getCompareToValue ()))
-          {
-            pausedGroups.add (matcher.getCompareToValue ());
-          }
-          break;
-        default:
-          for (final String group : m_aTriggersByGroup.keySet ())
-          {
-            if (operator.evaluate (group, matcher.getCompareToValue ()))
-            {
-              if (m_aPausedTriggerGroups.add (matcher.getCompareToValue ()))
-              {
-                pausedGroups.add (group);
-              }
-            }
-          }
+        if (m_aPausedTriggerGroups.add (matcher.getCompareToValue ()))
+          pausedGroups.add (matcher.getCompareToValue ());
+      }
+      else
+      {
+        for (final String group : m_aTriggersByGroup.keySet ())
+          if (operator.evaluate (group, matcher.getCompareToValue ()))
+            if (m_aPausedTriggerGroups.add (matcher.getCompareToValue ()))
+              pausedGroups.add (group);
       }
 
       for (final String pausedGroup : pausedGroups)
@@ -1535,7 +1513,7 @@ public class RAMJobStore implements IJobStore
 
       // If we did excluded triggers to prevent ACQUIRE state due to
       // DisallowConcurrentExecution, we need to add them back to store.
-      if (excludedTriggers.size () > 0)
+      if (!excludedTriggers.isEmpty ())
         m_aTimeTriggers.addAll (excludedTriggers);
       return result;
     }

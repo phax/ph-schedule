@@ -33,7 +33,6 @@ import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
-import com.helger.quartz.ObjectAlreadyExistsException;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerKey;
@@ -123,8 +122,7 @@ public interface IJobStore extends Serializable
    * @throws ObjectAlreadyExistsException
    *         if a <code>Job</code> with the same name/group already exists.
    */
-  void storeJobAndTrigger (IJobDetail newJob, IOperableTrigger newTrigger) throws ObjectAlreadyExistsException,
-                                                                           JobPersistenceException;
+  void storeJobAndTrigger (IJobDetail newJob, IOperableTrigger newTrigger) throws JobPersistenceException;
 
   /**
    * Store the given <code>{@link com.helger.quartz.IJobDetail}</code>.
@@ -139,11 +137,10 @@ public interface IJobStore extends Serializable
    *         if a <code>Job</code> with the same name/group already exists, and
    *         replaceExisting is set to false.
    */
-  void storeJob (IJobDetail newJob, boolean replaceExisting) throws ObjectAlreadyExistsException,
-                                                             JobPersistenceException;
+  void storeJob (IJobDetail newJob, boolean replaceExisting) throws JobPersistenceException;
 
-  public void storeJobsAndTriggers (Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
-                                    boolean replace) throws ObjectAlreadyExistsException, JobPersistenceException;
+  void storeJobsAndTriggers (Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
+                             boolean replace) throws JobPersistenceException;
 
   /**
    * Remove (delete) the <code>{@link com.helger.quartz.IJob}</code> with the
@@ -160,7 +157,7 @@ public interface IJobStore extends Serializable
    */
   boolean removeJob (JobKey jobKey) throws JobPersistenceException;
 
-  public boolean removeJobs (List <JobKey> jobKeys) throws JobPersistenceException;
+  boolean removeJobs (List <JobKey> jobKeys) throws JobPersistenceException;
 
   /**
    * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the
@@ -184,8 +181,7 @@ public interface IJobStore extends Serializable
    *         and replaceExisting is set to false.
    * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
    */
-  void storeTrigger (IOperableTrigger newTrigger, boolean replaceExisting) throws ObjectAlreadyExistsException,
-                                                                           JobPersistenceException;
+  void storeTrigger (IOperableTrigger newTrigger, boolean replaceExisting) throws JobPersistenceException;
 
   /**
    * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
@@ -206,7 +202,7 @@ public interface IJobStore extends Serializable
    */
   boolean removeTrigger (TriggerKey triggerKey) throws JobPersistenceException;
 
-  public boolean removeTriggers (List <TriggerKey> triggerKeys) throws JobPersistenceException;
+  boolean removeTriggers (List <TriggerKey> triggerKeys) throws JobPersistenceException;
 
   /**
    * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
@@ -279,7 +275,7 @@ public interface IJobStore extends Serializable
   void storeCalendar (String name,
                       ICalendar calendar,
                       boolean replaceExisting,
-                      boolean updateTriggers) throws ObjectAlreadyExistsException, JobPersistenceException;
+                      boolean updateTriggers) throws JobPersistenceException;
 
   /**
    * Remove (delete) the <code>{@link com.helger.quartz.ICalendar}</code> with

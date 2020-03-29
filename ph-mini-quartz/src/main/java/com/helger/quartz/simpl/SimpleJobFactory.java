@@ -40,9 +40,8 @@ public class SimpleJobFactory implements IJobFactory
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (SimpleJobFactory.class);
 
-  public IJob newJob (final TriggerFiredBundle bundle, final IScheduler Scheduler) throws SchedulerException
+  public IJob newJob (final TriggerFiredBundle bundle, final IScheduler aScheduler) throws SchedulerException
   {
-
     final IJobDetail jobDetail = bundle.getJobDetail ();
     final Class <? extends IJob> jobClass = jobDetail.getJobClass ();
     try
@@ -54,12 +53,7 @@ public class SimpleJobFactory implements IJobFactory
     }
     catch (final Exception e)
     {
-      final SchedulerException se = new SchedulerException ("Problem instantiating class '" +
-                                                            jobDetail.getJobClass ().getName () +
-                                                            "'",
-                                                            e);
-      throw se;
+      throw new SchedulerException ("Problem instantiating class '" + jobDetail.getJobClass ().getName () + "'", e);
     }
   }
-
 }

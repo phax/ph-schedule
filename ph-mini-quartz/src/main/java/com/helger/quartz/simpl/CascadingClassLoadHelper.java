@@ -61,6 +61,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    * the opportunity to "steal" the class loader off of the calling thread,
    * which is the thread that is initializing Quartz.
    */
+  @Override
   public void initialize ()
   {
     m_aLoadHelpers = new CommonsArrayList <> ();

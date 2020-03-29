@@ -21,6 +21,7 @@ package com.helger.quartz.simpl;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
+import com.helger.commons.collection.ArrayHelper;
 import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
@@ -70,14 +71,14 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
 
       // Create a method instance representing the protected
       // getCallerClassLoader method of class ClassLoader
-      final Method mthd = ClassLoader.class.getDeclaredMethod ("getCallerClassLoader", new Class <?> [0]);
+      final Method mthd = ClassLoader.class.getDeclaredMethod ("getCallerClassLoader", ArrayHelper.EMPTY_CLASS_ARRAY);
       if (false)
       {
         // Make the method accessible.
         AccessibleObject.setAccessible (new AccessibleObject [] { mthd }, true);
       }
       // Try to get the caller's class-loader
-      return (ClassLoader) mthd.invoke (cl, new Object [0]);
+      return (ClassLoader) mthd.invoke (cl, ArrayHelper.EMPTY_OBJECT_ARRAY);
     }
     catch (final Exception ex)
     {

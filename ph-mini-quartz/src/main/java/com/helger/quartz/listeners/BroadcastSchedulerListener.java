@@ -137,7 +137,7 @@ public class BroadcastSchedulerListener implements ISchedulerListener
   @Override
   public void schedulingDataCleared ()
   {
-    m_aListeners.forEach (x -> x.schedulingDataCleared ());
+    m_aListeners.forEach (ISchedulerListener::schedulingDataCleared);
   }
 
   @Override
@@ -173,30 +173,30 @@ public class BroadcastSchedulerListener implements ISchedulerListener
   @Override
   public void schedulerStarted ()
   {
-    m_aListeners.forEach (x -> x.schedulerStarted ());
+    m_aListeners.forEach (ISchedulerListener::schedulerStarted);
   }
 
   @Override
   public void schedulerStarting ()
   {
-    m_aListeners.forEach (x -> x.schedulerStarting ());
+    m_aListeners.forEach (ISchedulerListener::schedulerStarting);
   }
 
   @Override
   public void schedulerInStandbyMode ()
   {
-    m_aListeners.forEach (x -> x.schedulerInStandbyMode ());
+    m_aListeners.forEach (ISchedulerListener::schedulerInStandbyMode);
   }
 
   @Override
   public void schedulerShutdown ()
   {
-    m_aListeners.forEach (x -> x.schedulerShutdown ());
+    m_aListeners.forEach (ISchedulerListener::schedulerShutdown);
   }
 
   @Override
   public void schedulerShuttingdown ()
   {
-    m_aListeners.forEach (x -> x.schedulerShuttingdown ());
+    m_aListeners.forEach (ISchedulerListener::schedulerShuttingdown);
   }
 }

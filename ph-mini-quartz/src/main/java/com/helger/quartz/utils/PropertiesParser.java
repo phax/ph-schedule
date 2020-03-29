@@ -120,7 +120,7 @@ public class PropertiesParser
     return val == null ? def : Boolean.parseBoolean (val);
   }
 
-  public byte getByteProperty (final String name) throws NumberFormatException
+  public byte getByteProperty (final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -136,7 +136,7 @@ public class PropertiesParser
     }
   }
 
-  public byte getByteProperty (final String name, final byte def) throws NumberFormatException
+  public byte getByteProperty (final String name, final byte def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -163,7 +163,7 @@ public class PropertiesParser
     return sParam == null ? def : sParam.charAt (0);
   }
 
-  public double getDoubleProperty (final String name) throws NumberFormatException
+  public double getDoubleProperty (final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -179,7 +179,7 @@ public class PropertiesParser
     }
   }
 
-  public double getDoubleProperty (final String name, final double def) throws NumberFormatException
+  public double getDoubleProperty (final String name, final double def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -195,7 +195,7 @@ public class PropertiesParser
     }
   }
 
-  public float getFloatProperty (final String name) throws NumberFormatException
+  public float getFloatProperty (final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -211,7 +211,7 @@ public class PropertiesParser
     }
   }
 
-  public float getFloatProperty (final String name, final float def) throws NumberFormatException
+  public float getFloatProperty (final String name, final float def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -227,7 +227,7 @@ public class PropertiesParser
     }
   }
 
-  public int getIntProperty (final String name) throws NumberFormatException
+  public int getIntProperty (final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -243,7 +243,7 @@ public class PropertiesParser
     }
   }
 
-  public int getIntProperty (final String name, final int def) throws NumberFormatException
+  public int getIntProperty (final String name, final int def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -259,12 +259,12 @@ public class PropertiesParser
     }
   }
 
-  public int [] getIntArrayProperty (final String name) throws NumberFormatException
+  public int [] getIntArrayProperty (final String name)
   {
     return getIntArrayProperty (name, null);
   }
 
-  public int [] getIntArrayProperty (final String name, final int [] def) throws NumberFormatException
+  public int [] getIntArrayProperty (final String name, final int [] def)
   {
     final String vals = getStringProperty (name);
     if (vals == null)
@@ -297,7 +297,7 @@ public class PropertiesParser
     }
   }
 
-  public long getLongProperty (final String name) throws NumberFormatException
+  public long getLongProperty (final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -313,7 +313,7 @@ public class PropertiesParser
     }
   }
 
-  public long getLongProperty (final String name, final long def) throws NumberFormatException
+  public long getLongProperty (final String name, final long def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -329,7 +329,7 @@ public class PropertiesParser
     }
   }
 
-  public short getShortProperty (final String name) throws NumberFormatException
+  public short getShortProperty (final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -345,7 +345,7 @@ public class PropertiesParser
     }
   }
 
-  public short getShortProperty (final String name, final short def) throws NumberFormatException
+  public short getShortProperty (final String name, final short def)
   {
     final String val = getStringProperty (name);
     if (val == null)

@@ -253,7 +253,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
 
         // If the parameter wasn't originally null, but we didn't find a
         // matching parameter, then we are stuck.
-        if ((o != null) && (parm == null))
+        if (o != null && parm == null)
         {
           _handleError ("The setter on Job class " +
                         obj.getClass ().getName () +
@@ -266,7 +266,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
           continue;
         }
 
-        setMeth.invoke (obj, new Object [] { parm });
+        setMeth.invoke (obj, parm);
       }
       catch (final NumberFormatException nfe)
       {
@@ -311,6 +311,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
                       e);
       }
     }
+
   }
 
   private void _handleError (final String message) throws SchedulerException
@@ -332,7 +333,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
     }
   }
 
-  private Method _getSetMethod (final String name, final PropertyDescriptor [] props)
+  private static Method _getSetMethod (final String name, final PropertyDescriptor [] props)
   {
     for (final PropertyDescriptor prop : props)
     {

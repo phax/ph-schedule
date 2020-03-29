@@ -60,7 +60,7 @@ public class QTZ336_MissSchedulingChangeSignalTest
 
   @Test
   @Ignore ("Takes nearly a minute to execute and works")
-  public void simpleScheduleAlwaysFiredUnder50s () throws Exception
+  public void testSimpleScheduleAlwaysFiredUnder50s () throws Exception
   {
     final NonBlockingProperties properties = new NonBlockingProperties ();
     try (final InputStream propertiesIs = getClass ().getResourceAsStream ("/quartz/quartz.properties"))

@@ -137,9 +137,7 @@ public class BaseJobStore implements IJobStore
   public void setMisfireThreshold (@Nonnegative final long nMisfireThreshold)
   {
     ValueEnforcer.isGT0 (nMisfireThreshold, "MisfireThreshold");
-    m_aRWLock.writeLocked ( () -> {
-      m_nMisfireThreshold = nMisfireThreshold;
-    });
+    m_aRWLock.writeLockedLong ( () -> m_nMisfireThreshold = nMisfireThreshold);
   }
 
   public void shutdown ()
@@ -389,7 +387,7 @@ public class BaseJobStore implements IJobStore
       {
         final JobWrapper jw = m_aJobsByKey.get (tw.getJobKey ());
         final ICommonsList <IOperableTrigger> trigs = getTriggersForJob (tw.getJobKey ());
-        if ((trigs == null || trigs.size () == 0) && !jw.getJobDetail ().isDurable ())
+        if ((trigs == null || trigs.isEmpty ()) && !jw.getJobDetail ().isDurable ())
         {
           if (removeJob (jw.getJobKey ()))
             m_aSignaler.notifySchedulerListenersJobDeleted (jw.getJobKey ());
@@ -956,9 +954,7 @@ public class BaseJobStore implements IJobStore
    */
   public void resumeAll ()
   {
-    m_aRWLock.writeLocked ( () -> {
-      m_aPausedJobGroups.clear ();
-    });
+    m_aRWLock.writeLocked (m_aPausedJobGroups::clear);
 
     resumeTriggers (GroupMatcher.anyTriggerGroup ());
   }

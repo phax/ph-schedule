@@ -42,9 +42,9 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsCollection;
 import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.commons.io.file.FileHelper;
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.io.stream.NonBlockingBufferedInputStream;
-import com.helger.commons.io.stream.StreamHelper;
 import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.commons.system.SystemProperties;
 import com.helger.quartz.IJobListener;
@@ -344,29 +344,26 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
     final NonBlockingProperties props = new NonBlockingProperties ();
 
-    InputStream is = ClassPathResource.getInputStream (filename);
     try
     {
+      InputStream is = ClassPathResource.getInputStream (filename);
       if (is != null)
-      {
-        is = new NonBlockingBufferedInputStream (is);
         m_sPropSrc = "the specified file : '" + filename + "' from the class resource path.";
-      }
       else
       {
-        is = new NonBlockingBufferedInputStream (new FileInputStream (filename));
+        is = FileHelper.getInputStream (new File (filename));
         m_sPropSrc = "the specified file : '" + filename + "'";
       }
-      props.load (is);
+
+      try (final InputStream is2 = new NonBlockingBufferedInputStream (is))
+      {
+        props.load (is);
+      }
     }
     catch (final IOException ioe)
     {
       m_aInitException = new SchedulerException ("Properties file: '" + filename + "' could not be read.", ioe);
       throw m_aInitException;
-    }
-    finally
-    {
-      StreamHelper.close (is);
     }
 
     return initialize (props);
@@ -1013,8 +1010,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
   @Nonnull
   protected IScheduler instantiate (final QuartzSchedulerResources rsrcs, final QuartzScheduler qs)
   {
-    final IScheduler scheduler = new StdScheduler (qs);
-    return scheduler;
+    return new StdScheduler (qs);
   }
 
   private void _setBeanProps (final Object obj, final NonBlockingProperties props) throws NoSuchMethodException,

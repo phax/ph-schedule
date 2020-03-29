@@ -46,27 +46,26 @@ public class QTZ212_SchedulerListener_Test
 
   private static final String SCHEDULER_STARTED = "SCHEDULER_STARTED";
   private static final String SCHEDULER_STARTING = "SCHEDULER_STARTING";
-  private static List <String> methodsCalledInSchedulerListener = new ArrayList <> ();
+  private static List <String> s_aMethodsCalledInSchedulerListener = new ArrayList <> ();
 
   @Test
-  public void stdSchedulerCallsStartingBeforeStartedTest () throws SchedulerException
+  public void testStdSchedulerCallsStartingBeforeStartedTest () throws SchedulerException
   {
     final ISchedulerFactory sf = new StdSchedulerFactory ();
     final IScheduler sched = sf.getScheduler ();
     sched.getListenerManager ().addSchedulerListener (new TestSchedulerListener ());
     sched.start ();
 
-    assertEquals (SCHEDULER_STARTING, methodsCalledInSchedulerListener.get (0));
-    assertEquals (SCHEDULER_STARTED, methodsCalledInSchedulerListener.get (1));
+    assertEquals (SCHEDULER_STARTING, s_aMethodsCalledInSchedulerListener.get (0));
+    assertEquals (SCHEDULER_STARTED, s_aMethodsCalledInSchedulerListener.get (1));
 
     sched.shutdown ();
   }
 
   @Test
-  public void broadcastSchedulerListenerCallsSchedulerStartingOnAllItsListeners () throws SchedulerException
+  public void testBroadcastSchedulerListenerCallsSchedulerStartingOnAllItsListeners () throws SchedulerException
   {
-
-    methodsCalledInSchedulerListener = new ArrayList <> ();
+    s_aMethodsCalledInSchedulerListener = new ArrayList <> ();
     final ISchedulerFactory sf = new StdSchedulerFactory ();
     final IScheduler sched = sf.getScheduler ();
     final List <ISchedulerListener> listeners = new ArrayList <> ();
@@ -75,8 +74,8 @@ public class QTZ212_SchedulerListener_Test
     sched.getListenerManager ().addSchedulerListener (new BroadcastSchedulerListener (listeners));
     sched.start ();
 
-    assertEquals (SCHEDULER_STARTING, methodsCalledInSchedulerListener.get (0));
-    assertEquals (SCHEDULER_STARTED, methodsCalledInSchedulerListener.get (1));
+    assertEquals (SCHEDULER_STARTING, s_aMethodsCalledInSchedulerListener.get (0));
+    assertEquals (SCHEDULER_STARTED, s_aMethodsCalledInSchedulerListener.get (1));
 
     sched.shutdown ();
   }
@@ -86,14 +85,14 @@ public class QTZ212_SchedulerListener_Test
     @Override
     public void schedulerStarted ()
     {
-      methodsCalledInSchedulerListener.add (SCHEDULER_STARTED);
+      s_aMethodsCalledInSchedulerListener.add (SCHEDULER_STARTED);
       LOGGER.info ("schedulerStarted was called");
     }
 
     @Override
     public void schedulerStarting ()
     {
-      methodsCalledInSchedulerListener.add (SCHEDULER_STARTING);
+      s_aMethodsCalledInSchedulerListener.add (SCHEDULER_STARTING);
       LOGGER.info ("schedulerStarting was called");
     }
   }

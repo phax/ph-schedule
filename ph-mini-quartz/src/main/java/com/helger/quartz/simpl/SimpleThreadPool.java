@@ -19,7 +19,6 @@
 package com.helger.quartz.simpl;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -28,6 +27,8 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.spi.IThreadPool;
 
@@ -70,9 +71,9 @@ public class SimpleThreadPool implements IThreadPool
 
   private final Object m_aNextRunnableLock = new Object ();
 
-  private List <WorkerThread> m_aWorkers;
-  private final List <WorkerThread> m_aAvailWorkers = new LinkedList <> ();
-  private final List <WorkerThread> m_aBusyWorkers = new LinkedList <> ();
+  private ICommonsList <WorkerThread> m_aWorkers;
+  private final ICommonsList <WorkerThread> m_aAvailWorkers = new CommonsArrayList <> ();
+  private final ICommonsList <WorkerThread> m_aBusyWorkers = new CommonsArrayList <> ();
 
   private String m_sThreadNamePrefix;
 
@@ -219,7 +220,7 @@ public class SimpleThreadPool implements IThreadPool
   public void initialize () throws SchedulerConfigException
   {
     // already initialized...
-    if (m_aWorkers != null && m_aWorkers.size () > 0)
+    if (m_aWorkers != null && m_aWorkers.isNotEmpty ())
       return;
 
     if (m_nCount <= 0)
@@ -271,7 +272,7 @@ public class SimpleThreadPool implements IThreadPool
 
   protected List <WorkerThread> createWorkerThreads (final int createCount)
   {
-    m_aWorkers = new LinkedList <> ();
+    m_aWorkers = new CommonsArrayList <> ();
     for (int i = 1; i <= createCount; ++i)
     {
       String sThreadPrefix = getThreadNamePrefix ();
@@ -341,7 +342,7 @@ public class SimpleThreadPool implements IThreadPool
       // current job.
       m_aNextRunnableLock.notifyAll ();
 
-      if (waitForJobsToComplete == true)
+      if (waitForJobsToComplete)
       {
 
         boolean interrupted = false;
@@ -361,7 +362,7 @@ public class SimpleThreadPool implements IThreadPool
           }
 
           // Wait until all worker threads are shut down
-          while (m_aBusyWorkers.size () > 0)
+          while (m_aBusyWorkers.isNotEmpty ())
           {
             final WorkerThread wt = m_aBusyWorkers.get (0);
             try
@@ -430,7 +431,7 @@ public class SimpleThreadPool implements IThreadPool
       m_bHandoffPending = true;
 
       // Wait until a worker thread is available
-      while ((m_aAvailWorkers.size () < 1) && !m_bIsShutdown)
+      while (m_aAvailWorkers.isEmpty () && !m_bIsShutdown)
       {
         try
         {
@@ -474,7 +475,7 @@ public class SimpleThreadPool implements IThreadPool
     synchronized (m_aNextRunnableLock)
     {
 
-      while ((m_aAvailWorkers.size () < 1 || m_bHandoffPending) && !m_bIsShutdown)
+      while ((m_aAvailWorkers.isEmpty () || m_bHandoffPending) && !m_bIsShutdown)
       {
         try
         {
@@ -623,7 +624,7 @@ public class SimpleThreadPool implements IThreadPool
           }
           Thread.currentThread ().interrupt ();
         }
-        catch (final Throwable exceptionInRunnable)
+        catch (final Exception exceptionInRunnable)
         {
           try
           {

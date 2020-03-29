@@ -36,7 +36,7 @@ public enum ESchedulerState implements IHasID <String>
 
   private String m_sID;
 
-  private ESchedulerState (@Nonnull @Nonempty final String sID)
+  ESchedulerState (@Nonnull @Nonempty final String sID)
   {
     m_sID = sID;
   }
