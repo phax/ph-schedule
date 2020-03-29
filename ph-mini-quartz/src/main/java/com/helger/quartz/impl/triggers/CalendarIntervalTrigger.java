@@ -71,8 +71,7 @@ import com.helger.quartz.SchedulerException;
  * @author James House
  */
 public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTrigger> implements
-                                     ICalendarIntervalTrigger,
-                                     ICoreTrigger
+                                     ICalendarIntervalTrigger
 {
   private Date m_aStartTime;
   private Date m_aEndTime;
@@ -963,11 +962,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
         break;
     }
     return cb;
-  }
-
-  public boolean hasAdditionalProperties ()
-  {
-    return false;
   }
 
   @Nonnull

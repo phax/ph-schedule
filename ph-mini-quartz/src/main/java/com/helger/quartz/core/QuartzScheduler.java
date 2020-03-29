@@ -76,28 +76,26 @@ public class QuartzScheduler implements IQuartzScheduler
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (QuartzScheduler.class);
 
-  private static String VERSION_MAJOR = "UNKNOWN";
-  private static String VERSION_MINOR = "UNKNOWN";
-  private static String VERSION_ITERATION = "UNKNOWN";
+  private static final String VERSION_MAJOR;
+  private static final String VERSION_MINOR;
+  private static final String VERSION_ITERATION;
 
   static
   {
+    String sMajor = "UNKNOWN";
+    String sMinor = "UNKNOWN";
+    String sIter = "UNKNOWN";
+
     final ICommonsMap <String, String> p = PropertiesHelper.loadProperties (new ClassPathResource ("quartz/quartz-build.properties"));
     if (p != null)
     {
       final String version = p.get ("version");
       if (version != null)
       {
-        final String [] versionComponents = StringHelper.getExplodedArray ('.', version);
-        VERSION_MAJOR = versionComponents[0];
-        if (versionComponents.length > 1)
-          VERSION_MINOR = versionComponents[1];
-        else
-          VERSION_MINOR = "0";
-        if (versionComponents.length > 2)
-          VERSION_ITERATION = versionComponents[2];
-        else
-          VERSION_ITERATION = "0";
+        final String [] aVersionComponents = StringHelper.getExplodedArray ('.', version);
+        sMajor = aVersionComponents[0];
+        sMinor = aVersionComponents.length > 1 ? aVersionComponents[1] : "0";
+        sIter = aVersionComponents.length > 2 ? aVersionComponents[2] : "0";
       }
       else
       {
@@ -105,6 +103,10 @@ public class QuartzScheduler implements IQuartzScheduler
                      .error ("Can't parse Quartz version from quartz-build.properties");
       }
     }
+
+    VERSION_MAJOR = sMajor;
+    VERSION_MINOR = sMinor;
+    VERSION_ITERATION = sIter;
   }
 
   private final QuartzSchedulerResources m_aResources;

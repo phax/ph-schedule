@@ -28,9 +28,7 @@ package com.helger.quartz;
 public class UnableToInterruptJobException extends SchedulerException
 {
   /**
-   * <p>
    * Create a <code>UnableToInterruptJobException</code> with the given message.
-   * </p>
    */
   public UnableToInterruptJobException (final String msg)
   {
@@ -38,13 +36,10 @@ public class UnableToInterruptJobException extends SchedulerException
   }
 
   /**
-   * <p>
    * Create a <code>UnableToInterruptJobException</code> with the given cause.
-   * </p>
    */
   public UnableToInterruptJobException (final Throwable cause)
   {
     super (cause);
   }
-
 }

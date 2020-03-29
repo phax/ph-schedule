@@ -18,6 +18,7 @@
  */
 package com.helger.quartz;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -26,7 +27,7 @@ import java.util.Date;
  *
  * @author James House
  */
-public class SchedulerMetaData implements java.io.Serializable
+public class SchedulerMetaData implements Serializable
 {
   private final String m_sSchedName;
   private final String m_sSchedInst;

@@ -48,7 +48,7 @@ import com.helger.quartz.SimpleScheduleBuilder;
  * @author James House
  * @author contributions by Lieven Govaerts of Ebitec Nv, Belgium.
  */
-public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements ISimpleTrigger, ICoreTrigger
+public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements ISimpleTrigger
 {
   private Date m_aStartTime;
   private Date m_aEndTime;
@@ -649,16 +649,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     {
       throw new SchedulerException ("Repeat Interval cannot be zero.");
     }
-  }
-
-  /**
-   * Used by extensions of SimpleTrigger to imply that there are additional
-   * properties, specifically so that extensions can choose whether to be stored
-   * as a serialized blob, or as a flattened SimpleTrigger table.
-   */
-  public boolean hasAdditionalProperties ()
-  {
-    return false;
   }
 
   /**

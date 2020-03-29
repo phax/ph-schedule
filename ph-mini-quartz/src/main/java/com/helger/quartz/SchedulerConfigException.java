@@ -27,9 +27,7 @@ package com.helger.quartz;
 public class SchedulerConfigException extends SchedulerException
 {
   /**
-   * <p>
    * Create a <code>JobPersistenceException</code> with the given message.
-   * </p>
    */
   public SchedulerConfigException (final String msg)
   {
@@ -37,14 +35,11 @@ public class SchedulerConfigException extends SchedulerException
   }
 
   /**
-   * <p>
    * Create a <code>JobPersistenceException</code> with the given message and
    * cause.
-   * </p>
    */
   public SchedulerConfigException (final String msg, final Throwable cause)
   {
     super (msg, cause);
   }
-
 }

@@ -98,8 +98,7 @@ import com.helger.quartz.TimeOfDay;
  * @author Zemian Deng saltnlight5@gmail.com
  */
 public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeIntervalTrigger> implements
-                                      IDailyTimeIntervalTrigger,
-                                      ICoreTrigger
+                                      IDailyTimeIntervalTrigger
 {
   private Date m_aStartTime;
   private Date m_aEndTime;
@@ -1009,15 +1008,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
         break;
     }
     return cb;
-  }
-
-  /**
-   * This trigger has no additional properties besides what's defined in this
-   * class.
-   */
-  public boolean hasAdditionalProperties ()
-  {
-    return false;
   }
 
   public int getRepeatCount ()

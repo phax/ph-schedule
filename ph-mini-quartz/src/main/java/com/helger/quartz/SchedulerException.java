@@ -50,13 +50,4 @@ public class SchedulerException extends Exception
   {
     super (msg, cause);
   }
-
-  @Override
-  public String toString ()
-  {
-    final Throwable cause = getCause ();
-    if (cause == null || cause == this)
-      return super.toString ();
-    return super.toString () + " [See nested exception: " + cause + "]";
-  }
 }

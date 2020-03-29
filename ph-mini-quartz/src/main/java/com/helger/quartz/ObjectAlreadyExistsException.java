@@ -30,9 +30,7 @@ package com.helger.quartz;
 public class ObjectAlreadyExistsException extends JobPersistenceException
 {
   /**
-   * <p>
    * Create a <code>ObjectAlreadyExistsException</code> with the given message.
-   * </p>
    */
   public ObjectAlreadyExistsException (final String msg)
   {
@@ -76,5 +74,4 @@ public class ObjectAlreadyExistsException extends JobPersistenceException
            offendingTrigger.getKey ().getGroup () +
            "', because one already exists with this identification.");
   }
-
 }

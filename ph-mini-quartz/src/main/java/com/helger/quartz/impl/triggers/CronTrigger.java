@@ -46,7 +46,7 @@ import com.helger.quartz.QCloneUtils;
  * @author Sharada Jambula, James House
  * @author Contributions from Mads Henderson
  */
-public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronTrigger, ICoreTrigger
+public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronTrigger
 {
   protected static final int YEAR_TO_GIVEUP_SCHEDULING_AT = CQuartz.MAX_YEAR;
 
@@ -498,16 +498,6 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   public String getExpressionSummary ()
   {
     return m_aCronEx == null ? null : m_aCronEx.getExpressionSummary ();
-  }
-
-  /**
-   * Used by extensions of CronTrigger to imply that there are additional
-   * properties, specifically so that extensions can choose whether to be stored
-   * as a serialized blob, or as a flattened CronTrigger table.
-   */
-  public boolean hasAdditionalProperties ()
-  {
-    return false;
   }
 
   /**
