@@ -39,9 +39,9 @@ import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.QCloneUtils;
 
 /**
- * A concrete <code>{@link ITrigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.IJobDetail}</code> at given moments in time,
- * defined with Unix 'cron-like' definitions.
+ * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to
+ * fire a <code>{@link com.helger.quartz.IJobDetail}</code> at given moments in
+ * time, defined with Unix 'cron-like' definitions.
  *
  * @author Sharada Jambula, James House
  * @author Contributions from Mads Henderson

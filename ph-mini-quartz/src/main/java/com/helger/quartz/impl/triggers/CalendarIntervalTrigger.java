@@ -38,8 +38,8 @@ import com.helger.quartz.SchedulerException;
 
 /**
  * <p>
- * A concrete <code>{@link ITrigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating
+ * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to
+ * fire a <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating
  * calendar time intervals.
  * </p>
  * <p>
@@ -63,7 +63,7 @@ import com.helger.quartz.SchedulerException;
  * number of days in the month, you should use <code>CronTrigger</code>.
  * </p>
  *
- * @see ITrigger
+ * @see com.helger.quartz.ITrigger
  * @see com.helger.quartz.ICronTrigger
  * @see com.helger.quartz.ISimpleTrigger
  * @see com.helger.quartz.TriggerUtils

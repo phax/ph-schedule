@@ -37,12 +37,12 @@ import com.helger.quartz.SimpleScheduleBuilder;
 
 /**
  * <p>
- * A concrete <code>{@link ITrigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.IJobDetail}</code> at a given moment in time,
- * and optionally repeated at a specified interval.
+ * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to
+ * fire a <code>{@link com.helger.quartz.IJobDetail}</code> at a given moment in
+ * time, and optionally repeated at a specified interval.
  * </p>
  *
- * @see ITrigger
+ * @see com.helger.quartz.ITrigger
  * @see com.helger.quartz.ICronTrigger
  * @see com.helger.quartz.TriggerUtils
  * @author James House

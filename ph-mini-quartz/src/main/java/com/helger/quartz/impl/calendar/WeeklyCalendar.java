@@ -34,7 +34,7 @@ import com.helger.quartz.ICalendar;
  * </p>
  *
  * @see com.helger.quartz.ICalendar
- * @see com.helger.quartz.impl.calendar.BaseCalendar
+ * @see com.helger.quartz.impl.calendar.AbstractCalendar
  * @author Juergen Donnerstag
  */
 public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>

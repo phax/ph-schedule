@@ -362,10 +362,11 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY}
+   * instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
@@ -376,10 +377,10 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_FIRE_NOW} instruction.
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW} instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_FIRE_NOW
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionFireNow ()
@@ -390,11 +391,11 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT}
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT}
    * instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT
    */
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithExistingCount ()
@@ -405,11 +406,11 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT}
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT}
    * instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT
    */
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithRemainingCount ()
@@ -420,11 +421,11 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT}
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT}
    * instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT
    */
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithExistingCount ()
@@ -435,11 +436,11 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT}
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT}
    * instruction.
    *
    * @return the updated SimpleScheduleBuilder
-   * @see ISimpleTrigger#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT
    */
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithRemainingCount ()

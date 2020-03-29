@@ -72,7 +72,9 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
   }
 
   /**
-   * @param timeZone
+   * @param aBaseCalendar
+   *        Base calendar to use. May be <code>null</code>.
+   * @param aTimeZone
    *        The time zone to use for this Calendar, <code>null</code> if
    *        <code>{@link TimeZone#getDefault()}</code> should be used
    */
@@ -116,8 +118,8 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
   /**
    * <p>
    * Check if date/time represented by timeStamp is included. If included return
-   * true. The implementation of BaseCalendar simply calls the base calendars
-   * isTimeIncluded() method if base calendar is set.
+   * true. The implementation of AbstractCalendar simply calls the base
+   * calendars isTimeIncluded() method if base calendar is set.
    * </p>
    *
    * @see com.helger.quartz.ICalendar#isTimeIncluded(long)
@@ -152,7 +154,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
 
   /**
    * Build a <code>{@link Calendar}</code> for the given timeStamp. The new
-   * Calendar will use the <code>BaseCalendar</code> time zone if it is not
+   * Calendar will use the <code>AbstractCalendar</code> time zone if it is not
    * <code>null</code>.
    */
   protected final Calendar createJavaCalendar (final long timeStamp)
@@ -164,7 +166,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
 
   /**
    * Build a <code>{@link Calendar}</code> with the current time. The new
-   * Calendar will use the <code>BaseCalendar</code> time zone if it is not
+   * Calendar will use the <code>AbstractCalendar</code> time zone if it is not
    * <code>null</code>.
    */
   protected final Calendar createJavaCalendar ()
@@ -175,8 +177,8 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
 
   /**
    * Returns the start of the given day as a <code>{@link Calendar}</code>. This
-   * calculation will take the <code>BaseCalendar</code> time zone into account
-   * if it is not <code>null</code>.
+   * calculation will take the <code>AbstractCalendar</code> time zone into
+   * account if it is not <code>null</code>.
    *
    * @param timeInMillis
    *        A time containing the desired date for the start-of-day time
@@ -194,8 +196,8 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
 
   /**
    * Returns the end of the given day <code>{@link Calendar}</code>. This
-   * calculation will take the <code>BaseCalendar</code> time zone into account
-   * if it is not <code>null</code>.
+   * calculation will take the <code>AbstractCalendar</code> time zone into
+   * account if it is not <code>null</code>.
    *
    * @param timeInMillis
    *        a time containing the desired date for the end-of-day time.

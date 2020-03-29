@@ -40,7 +40,6 @@ import com.helger.quartz.ITriggerListener;
  *
  * @see #addListener(com.helger.quartz.ITriggerListener)
  * @see #removeListener(com.helger.quartz.ITriggerListener)
- * @see #removeListener(String)
  * @author James House (jhouse AT revolition DOT net)
  */
 public class BroadcastTriggerListener implements ITriggerListener

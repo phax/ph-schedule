@@ -107,7 +107,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
-   * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>
+   * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param rangeStartingTime
@@ -144,12 +144,12 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
-   * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>
+   * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param baseCalendar
    *        the base calendar for this calendar instance &ndash; see
-   *        {@link BaseCalendar} for more information on base calendar
+   *        {@link AbstractCalendar} for more information on base calendar
    *        functionality
    * @param rangeStartingTime
    *        a String representing the starting time for the time range
@@ -182,7 +182,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
-   * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>
+   * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param rangeStartingHourOfDay
@@ -240,12 +240,12 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
-   * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>
+   * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param baseCalendar
    *        the base calendar for this calendar instance &ndash; see
-   *        {@link BaseCalendar} for more information on base calendar
+   *        {@link AbstractCalendar} for more information on base calendar
    *        functionality
    * @param rangeStartingHourOfDay
    *        the hour of the start of the time range
@@ -303,7 +303,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
-   * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>
+   * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param rangeStartingCalendar
@@ -336,12 +336,12 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
-   * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>
+   * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param baseCalendar
    *        the base calendar for this calendar instance &ndash; see
-   *        {@link BaseCalendar} for more information on base calendar
+   *        {@link AbstractCalendar} for more information on base calendar
    *        functionality
    * @param rangeStartingCalendar
    *        a Calendar representing the starting time for the time range
@@ -373,7 +373,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
-   * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>. You should use
+   * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>. You should use
    * <code>{@link #DailyCalendar(com.helger.quartz.ICalendar, java.util.TimeZone, long, long)}</code>
    * if you don't want the given <code>rangeStartingTimeInMillis</code> and
    * <code>rangeEndingTimeInMillis</code> to be evaluated in the default time
@@ -408,7 +408,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
    * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
    * time zone is set via
-   * <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code>. You should use
+   * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>. You should use
    * <code>{@link #DailyCalendar(com.helger.quartz.ICalendar, java.util.TimeZone, long, long)} </code>
    * if you don't want the given <code>rangeStartingTimeInMillis</code> and
    * <code>rangeEndingTimeInMillis</code> to be evaluated in the default time
@@ -417,7 +417,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    *
    * @param baseCalendar
    *        the base calendar for this calendar instance &ndash; see
-   *        {@link BaseCalendar} for more information on base calendar
+   *        {@link AbstractCalendar} for more information on base calendar
    *        functionality
    * @param rangeStartingTimeInMillis
    *        a long representing the starting time for the time range
@@ -478,7 +478,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    *
    * @param baseCalendar
    *        the base calendar for this calendar instance &ndash; see
-   *        {@link BaseCalendar} for more information on base calendar
+   *        {@link AbstractCalendar} for more information on base calendar
    *        functionality
    * @param timeZone
    *        the time zone for of the <code>DailyCalendar</code> which will also
@@ -499,12 +499,12 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
 
   /**
    * Determines whether the given time (in milliseconds) is 'included' by the
-   * <CODE>BaseCalendar</CODE>
+   * <CODE>AbstractCalendar</CODE>
    *
    * @param timeInMillis
    *        the date/time to test
    * @return a boolean indicating whether the specified time is 'included' by
-   *         the <CODE>BaseCalendar</CODE>
+   *         the <CODE>AbstractCalendar</CODE>
    */
   @Override
   public boolean isTimeIncluded (final long timeInMillis)

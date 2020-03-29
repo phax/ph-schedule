@@ -351,7 +351,6 @@ public interface ITrigger extends Serializable, Comparable <ITrigger>
    * <code>MISFIRE_INSTRUCTION_SMART_POLICY</code>.
    * </p>
    *
-   * @see #MISFIRE_INSTRUCTION_SMART_POLICY
    * @see ISimpleTrigger
    * @see ICronTrigger
    */

@@ -41,7 +41,6 @@ import com.helger.quartz.JobExecutionException;
  *
  * @see #addListener(com.helger.quartz.IJobListener)
  * @see #removeListener(com.helger.quartz.IJobListener)
- * @see #removeListener(String)
  * @author James House (jhouse AT revolition DOT net)
  */
 public class BroadcastJobListener implements IJobListener

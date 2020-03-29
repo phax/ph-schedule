@@ -73,7 +73,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    *
    * @param baseCalendar
    *        the base calendar for this calendar instance &ndash; see
-   *        {@link BaseCalendar} for more information on base calendar
+   *        {@link AbstractCalendar} for more information on base calendar
    *        functionality
    * @param expression
    *        a String representation of the desired cron expression
@@ -89,7 +89,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    *
    * @param baseCalendar
    *        the base calendar for this calendar instance &ndash; see
-   *        {@link BaseCalendar} for more information on base calendar
+   *        {@link AbstractCalendar} for more information on base calendar
    *        functionality
    * @param expression
    *        a String representation of the desired cron expression
@@ -112,8 +112,8 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * Returns the time zone for which the <code>CronExpression</code> of this
    * <code>CronCalendar</code> will be resolved.
    * <p>
-   * Overrides <code>{@link BaseCalendar#getTimeZone()}</code> to defer to its
-   * <code>CronExpression</code>.
+   * Overrides <code>{@link AbstractCalendar#getTimeZone()}</code> to defer to
+   * its <code>CronExpression</code>.
    * </p>
    */
   @Override
@@ -127,8 +127,8 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * <code>CronCalendar</code> will be resolved. If <code>timeZone</code> is
    * <code>null</code> then <code>TimeZone.getDefault()</code> will be used.
    * <p>
-   * Overrides <code>{@link BaseCalendar#setTimeZone(TimeZone)}</code> to defer
-   * to its <code>CronExpression</code>.
+   * Overrides <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code> to
+   * defer to its <code>CronExpression</code>.
    * </p>
    */
   @Override
@@ -139,7 +139,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
 
   /**
    * Determines whether the given time (in milliseconds) is 'included' by the
-   * <CODE>BaseCalendar</CODE>
+   * <CODE>AbstractCalendar</CODE>
    *
    * @param timeInMillis
    *        the date/time to test

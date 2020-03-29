@@ -42,7 +42,7 @@ import com.helger.quartz.ICalendar;
  * </p>
  *
  * @see com.helger.quartz.ICalendar
- * @see com.helger.quartz.impl.calendar.BaseCalendar
+ * @see com.helger.quartz.impl.calendar.AbstractCalendar
  * @author Juergen Donnerstag
  */
 public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
@@ -88,6 +88,8 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
   }
 
   /**
+   * @param day
+   *        day to check. May not be <code>null</code>.
    * @return <code>true</code> if day is defined to be excluded.
    */
   public boolean isDayExcluded (@Nonnull final Calendar day)
@@ -96,9 +98,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
 
     // Check baseCalendar first
     if (!super.isTimeIncluded (day.getTime ().getTime ()))
-    {
       return true;
-    }
 
     final int dmonth = day.get (Calendar.MONTH);
     final int dday = day.get (Calendar.DAY_OF_MONTH);

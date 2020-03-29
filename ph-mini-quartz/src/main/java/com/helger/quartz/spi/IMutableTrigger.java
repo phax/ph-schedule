@@ -103,7 +103,6 @@ public interface IMutableTrigger extends ITrigger
    * If not explicitly set, the default value is
    * <code>MISFIRE_INSTRUCTION_SMART_POLICY</code>.
    *
-   * @see #MISFIRE_INSTRUCTION_SMART_POLICY
    * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateAfterMisfire(com.helger.quartz.ICalendar)
    * @see com.helger.quartz.ISimpleTrigger
    * @see com.helger.quartz.ICronTrigger

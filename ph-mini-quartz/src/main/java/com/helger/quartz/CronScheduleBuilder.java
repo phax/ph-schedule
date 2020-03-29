@@ -294,10 +294,11 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY}
+   * instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see ITrigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
   @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
@@ -308,10 +309,10 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ICronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see ICronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING
    */
   @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionDoNothing ()
@@ -322,10 +323,10 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link ICronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW} instruction.
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW} instruction.
    *
    * @return the updated CronScheduleBuilder
-   * @see ICronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
+   * @see EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
   @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()

@@ -119,7 +119,7 @@ public interface IJobStore extends Serializable
    *        The <code>JobDetail</code> to be stored.
    * @param newTrigger
    *        The <code>Trigger</code> to be stored.
-   * @throws ObjectAlreadyExistsException
+   * @throws JobPersistenceException
    *         if a <code>Job</code> with the same name/group already exists.
    */
   void storeJobAndTrigger (IJobDetail newJob, IOperableTrigger newTrigger) throws JobPersistenceException;
@@ -133,7 +133,7 @@ public interface IJobStore extends Serializable
    *        If <code>true</code>, any <code>Job</code> existing in the
    *        <code>JobStore</code> with the same name &amp; group should be
    *        over-written.
-   * @throws ObjectAlreadyExistsException
+   * @throws JobPersistenceException
    *         if a <code>Job</code> with the same name/group already exists, and
    *         replaceExisting is set to false.
    */
@@ -176,7 +176,7 @@ public interface IJobStore extends Serializable
    *        If <code>true</code>, any <code>Trigger</code> existing in the
    *        <code>JobStore</code> with the same name &amp; group should be
    *        over-written.
-   * @throws ObjectAlreadyExistsException
+   * @throws JobPersistenceException
    *         if a <code>Trigger</code> with the same name/group already exists,
    *         and replaceExisting is set to false.
    * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
@@ -268,7 +268,7 @@ public interface IJobStore extends Serializable
    *        <code>JobStore</code> that reference an existing Calendar with the
    *        same name with have their next fire time re-computed with the new
    *        <code>Calendar</code>.
-   * @throws ObjectAlreadyExistsException
+   * @throws JobPersistenceException
    *         if a <code>Calendar</code> with the same name already exists, and
    *         replaceExisting is set to false.
    */
