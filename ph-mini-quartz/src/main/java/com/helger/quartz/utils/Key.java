@@ -24,6 +24,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.compare.IComparable;
 import com.helger.commons.hashcode.HashCodeGenerator;
 
@@ -54,8 +55,7 @@ public class Key <T> implements IComparable <Key <T>>
    */
   public Key (@Nonnull final String name, @Nullable final String group)
   {
-    if (name == null)
-      throw new IllegalArgumentException ("Name cannot be null.");
+    ValueEnforcer.notNull (name, "Name");
     m_sName = name;
     if (group != null)
       m_sGroup = group;
@@ -69,7 +69,7 @@ public class Key <T> implements IComparable <Key <T>>
    * @return the name
    */
   @Nonnull
-  public String getName ()
+  public final String getName ()
   {
     return m_sName;
   }
@@ -80,7 +80,7 @@ public class Key <T> implements IComparable <Key <T>>
    * @return the group
    */
   @Nonnull
-  public String getGroup ()
+  public final String getGroup ()
   {
     return m_sGroup;
   }
@@ -91,7 +91,7 @@ public class Key <T> implements IComparable <Key <T>>
    *
    * @return the string representation of the key
    */
-  public String getAsString ()
+  public final String getAsString ()
   {
     return getGroup () + '.' + getName ();
   }
@@ -117,13 +117,13 @@ public class Key <T> implements IComparable <Key <T>>
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object o)
   {
-    if (this == obj)
+    if (this == o)
       return true;
-    if (obj == null || !getClass ().equals (obj.getClass ()))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    final Key <?> rhs = (Key <?>) obj;
+    final Key <?> rhs = (Key <?>) o;
     return m_sName.equals (rhs.m_sName) && m_sGroup.equals (rhs.m_sGroup);
   }
 

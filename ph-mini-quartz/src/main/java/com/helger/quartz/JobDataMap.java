@@ -21,6 +21,7 @@ package com.helger.quartz;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.collection.attr.AttributeContainerAny;
@@ -55,26 +56,20 @@ import com.helger.commons.collection.attr.AttributeContainerAny;
 public class JobDataMap extends AttributeContainerAny <String>
 {
   /**
-   * <p>
    * Create an empty <code>JobDataMap</code>.
-   * </p>
    */
   public JobDataMap ()
   {}
 
   /**
-   * <p>
-   * Create a <code>JobDataMap</code> with the given data.
-   * </p>
+   * Create a <code>JobDataMap</code> with the given map data.
+   *
+   * @param map
+   *        The map to copy from. May be <code>null</code>.
    */
-  public JobDataMap (final Map <String, ? extends Object> map)
+  public JobDataMap (@Nullable final Map <String, ? extends Object> map)
   {
     super (map);
-  }
-
-  public JobDataMap (@Nonnull final JobDataMap aOther)
-  {
-    super (aOther);
   }
 
   @Override

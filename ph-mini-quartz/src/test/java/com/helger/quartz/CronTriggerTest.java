@@ -39,7 +39,7 @@ public class CronTriggerTest
     trigger.setName ("test");
     trigger.setGroup ("testGroup");
     trigger.setCronExpression ("0 0 12 * * ?");
-    final CronTrigger trigger2 = trigger.clone ();
+    final CronTrigger trigger2 = trigger.getClone ();
 
     assertEquals ("Cloning failed", trigger, trigger2);
 
@@ -54,7 +54,7 @@ public class CronTriggerTest
     final CronTrigger trigger = new CronTrigger ();
     trigger.setName ("test");
     trigger.setGroup ("testGroup");
-    final ICronTrigger trigger2 = trigger.clone ();
+    final ICronTrigger trigger2 = trigger.getClone ();
 
     assertEquals ("Cloning failed", trigger, trigger2);
   }

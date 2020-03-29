@@ -27,14 +27,10 @@ import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.Test;
 
-import com.helger.commons.collection.impl.CommonsHashSet;
 import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
@@ -234,12 +230,11 @@ public class DailyTimeIntervalTriggerTest
     // saturday...
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
-    final ICommonsSet <DayOfWeek> daysOfWeek = new CommonsHashSet <> ();
-    daysOfWeek.add (DayOfWeek.MONDAY);
-    daysOfWeek.add (DayOfWeek.TUESDAY);
-    daysOfWeek.add (DayOfWeek.WEDNESDAY);
-    daysOfWeek.add (DayOfWeek.THURSDAY);
-    daysOfWeek.add (DayOfWeek.FRIDAY);
+    final EnumSet <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.MONDAY,
+                                                       DayOfWeek.TUESDAY,
+                                                       DayOfWeek.WEDNESDAY,
+                                                       DayOfWeek.THURSDAY,
+                                                       DayOfWeek.FRIDAY);
     trigger.setDaysOfWeek (daysOfWeek);
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -394,7 +389,7 @@ public class DailyTimeIntervalTriggerTest
   @Test
   public void testAllDaysOfTheWeek () throws Exception
   {
-    final Set <DayOfWeek> daysOfWeek = EnumSet.allOf (DayOfWeek.class);
+    final EnumSet <DayOfWeek> daysOfWeek = EnumSet.allOf (DayOfWeek.class);
     // SAT
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
@@ -418,11 +413,11 @@ public class DailyTimeIntervalTriggerTest
   @Test
   public void testMonThroughFri () throws Exception
   {
-    final Set <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.MONDAY,
-                                                   DayOfWeek.TUESDAY,
-                                                   DayOfWeek.WEDNESDAY,
-                                                   DayOfWeek.THURSDAY,
-                                                   DayOfWeek.FRIDAY);
+    final EnumSet <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.MONDAY,
+                                                       DayOfWeek.TUESDAY,
+                                                       DayOfWeek.WEDNESDAY,
+                                                       DayOfWeek.THURSDAY,
+                                                       DayOfWeek.FRIDAY);
     // SAT(7)
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
@@ -448,7 +443,7 @@ public class DailyTimeIntervalTriggerTest
   @Test
   public void testSatAndSun () throws Exception
   {
-    final Set <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    final EnumSet <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
     // SAT
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
@@ -474,9 +469,9 @@ public class DailyTimeIntervalTriggerTest
   @Test
   public void testMonOnly () throws Exception
   {
-    final Set <DayOfWeek> daysOfWeek = new HashSet <> ();
-    daysOfWeek.add (DayOfWeek.MONDAY);
-    final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011); // SAT(7)
+    final EnumSet <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.MONDAY);
+    // SAT(7)
+    final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
     final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();

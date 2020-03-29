@@ -26,7 +26,7 @@ import java.util.TimeZone;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.ValueEnforcer;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -47,15 +47,22 @@ import com.helger.quartz.ICalendar;
  * @author Juergen Donnerstag
  * @author James House
  */
-public class BaseCalendar implements ICalendar
+public abstract class AbstractCalendar implements ICalendar
 {
   // A optional base calendar
   private ICalendar m_aBaseCalendar;
   private String m_sDescription;
   private TimeZone m_aTimeZone;
 
-  public BaseCalendar (@Nonnull final BaseCalendar aOther)
+  /**
+   * Copy constructor
+   *
+   * @param aOther
+   *        Calendar to copy from. May not be <code>null</code>.
+   */
+  protected AbstractCalendar (@Nonnull final AbstractCalendar aOther)
   {
+    ValueEnforcer.notNull (aOther, "Other");
     m_aBaseCalendar = aOther.m_aBaseCalendar;
     m_sDescription = aOther.m_sDescription;
     m_aTimeZone = aOther.m_aTimeZone;
@@ -66,7 +73,7 @@ public class BaseCalendar implements ICalendar
    *        The time zone to use for this Calendar, <code>null</code> if
    *        <code>{@link TimeZone#getDefault()}</code> should be used
    */
-  public BaseCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
+  public AbstractCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
   {
     setBaseCalendar (baseCalendar);
     m_aTimeZone = timeZone;
@@ -199,12 +206,5 @@ public class BaseCalendar implements ICalendar
     endOfDay.set (Calendar.SECOND, 59);
     endOfDay.set (Calendar.MILLISECOND, 999);
     return endOfDay;
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public BaseCalendar getClone ()
-  {
-    return new BaseCalendar (this);
   }
 }

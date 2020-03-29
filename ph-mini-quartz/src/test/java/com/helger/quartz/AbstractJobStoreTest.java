@@ -80,7 +80,6 @@ public abstract class AbstractJobStoreTest
 
   protected abstract void destroyJobStore (String name);
 
-  @SuppressWarnings ("deprecation")
   @Test
   public void testAcquireNextTrigger () throws Exception
   {
@@ -88,30 +87,30 @@ public abstract class AbstractJobStoreTest
     final Date baseFireTimeDate = DateBuilder.evenMinuteDateAfterNow ();
     final long baseFireTime = baseFireTimeDate.getTime ();
 
-    final IOperableTrigger trigger1 = new SimpleTrigger ("trigger1",
-                                                         "triggerGroup1",
-                                                         m_aJobDetail.getName (),
-                                                         m_aJobDetail.getGroup (),
-                                                         new Date (baseFireTime + 200000),
-                                                         new Date (baseFireTime + 200000),
-                                                         2,
-                                                         2000);
-    final IOperableTrigger trigger2 = new SimpleTrigger ("trigger2",
-                                                         "triggerGroup1",
-                                                         m_aJobDetail.getName (),
-                                                         m_aJobDetail.getGroup (),
-                                                         new Date (baseFireTime + 50000),
-                                                         new Date (baseFireTime + 200000),
-                                                         2,
-                                                         2000);
-    final IOperableTrigger trigger3 = new SimpleTrigger ("trigger1",
-                                                         "triggerGroup2",
-                                                         m_aJobDetail.getName (),
-                                                         m_aJobDetail.getGroup (),
-                                                         new Date (baseFireTime + 100000),
-                                                         new Date (baseFireTime + 200000),
-                                                         2,
-                                                         2000);
+    final IOperableTrigger trigger1 = SimpleTrigger.create ("trigger1",
+                                                            "triggerGroup1",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime + 200000),
+                                                            new Date (baseFireTime + 200000),
+                                                            2,
+                                                            2000);
+    final IOperableTrigger trigger2 = SimpleTrigger.create ("trigger2",
+                                                            "triggerGroup1",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime + 50000),
+                                                            new Date (baseFireTime + 200000),
+                                                            2,
+                                                            2000);
+    final IOperableTrigger trigger3 = SimpleTrigger.create ("trigger1",
+                                                            "triggerGroup2",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime + 100000),
+                                                            new Date (baseFireTime + 200000),
+                                                            2,
+                                                            2000);
 
     trigger1.computeFirstFireTime (null);
     trigger2.computeFirstFireTime (null);
@@ -137,62 +136,61 @@ public abstract class AbstractJobStoreTest
                              .get (0));
   }
 
-  @SuppressWarnings ("deprecation")
   @Test
   public void testAcquireNextTriggerBatch () throws Exception
   {
 
     final long baseFireTime = System.currentTimeMillis () - 1000;
 
-    final IOperableTrigger early = new SimpleTrigger ("early",
-                                                      "triggerGroup1",
-                                                      m_aJobDetail.getName (),
-                                                      m_aJobDetail.getGroup (),
-                                                      new Date (baseFireTime),
-                                                      new Date (baseFireTime + 5),
-                                                      2,
-                                                      2000);
-    final IOperableTrigger trigger1 = new SimpleTrigger ("trigger1",
+    final IOperableTrigger early = SimpleTrigger.create ("early",
                                                          "triggerGroup1",
                                                          m_aJobDetail.getName (),
                                                          m_aJobDetail.getGroup (),
-                                                         new Date (baseFireTime + 200000),
-                                                         new Date (baseFireTime + 200005),
+                                                         new Date (baseFireTime),
+                                                         new Date (baseFireTime + 5),
                                                          2,
                                                          2000);
-    final IOperableTrigger trigger2 = new SimpleTrigger ("trigger2",
-                                                         "triggerGroup1",
-                                                         m_aJobDetail.getName (),
-                                                         m_aJobDetail.getGroup (),
-                                                         new Date (baseFireTime + 210000),
-                                                         new Date (baseFireTime + 210005),
-                                                         2,
-                                                         2000);
-    final IOperableTrigger trigger3 = new SimpleTrigger ("trigger3",
-                                                         "triggerGroup1",
-                                                         m_aJobDetail.getName (),
-                                                         m_aJobDetail.getGroup (),
-                                                         new Date (baseFireTime + 220000),
-                                                         new Date (baseFireTime + 220005),
-                                                         2,
-                                                         2000);
-    final IOperableTrigger trigger4 = new SimpleTrigger ("trigger4",
-                                                         "triggerGroup1",
-                                                         m_aJobDetail.getName (),
-                                                         m_aJobDetail.getGroup (),
-                                                         new Date (baseFireTime + 230000),
-                                                         new Date (baseFireTime + 230005),
-                                                         2,
-                                                         2000);
+    final IOperableTrigger trigger1 = SimpleTrigger.create ("trigger1",
+                                                            "triggerGroup1",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime + 200000),
+                                                            new Date (baseFireTime + 200005),
+                                                            2,
+                                                            2000);
+    final IOperableTrigger trigger2 = SimpleTrigger.create ("trigger2",
+                                                            "triggerGroup1",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime + 210000),
+                                                            new Date (baseFireTime + 210005),
+                                                            2,
+                                                            2000);
+    final IOperableTrigger trigger3 = SimpleTrigger.create ("trigger3",
+                                                            "triggerGroup1",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime + 220000),
+                                                            new Date (baseFireTime + 220005),
+                                                            2,
+                                                            2000);
+    final IOperableTrigger trigger4 = SimpleTrigger.create ("trigger4",
+                                                            "triggerGroup1",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime + 230000),
+                                                            new Date (baseFireTime + 230005),
+                                                            2,
+                                                            2000);
 
-    final IOperableTrigger trigger10 = new SimpleTrigger ("trigger10",
-                                                          "triggerGroup2",
-                                                          m_aJobDetail.getName (),
-                                                          m_aJobDetail.getGroup (),
-                                                          new Date (baseFireTime + 500000),
-                                                          new Date (baseFireTime + 700000),
-                                                          2,
-                                                          2000);
+    final IOperableTrigger trigger10 = SimpleTrigger.create ("trigger10",
+                                                             "triggerGroup2",
+                                                             m_aJobDetail.getName (),
+                                                             m_aJobDetail.getGroup (),
+                                                             new Date (baseFireTime + 500000),
+                                                             new Date (baseFireTime + 700000),
+                                                             2,
+                                                             2000);
 
     early.computeFirstFireTime (null);
     early.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
@@ -265,18 +263,17 @@ public abstract class AbstractJobStoreTest
     m_aJobStore.releaseAcquiredTrigger (trigger1);
   }
 
-  @SuppressWarnings ("deprecation")
   @Test
   public void testTriggerStates () throws Exception
   {
-    IOperableTrigger trigger = new SimpleTrigger ("trigger1",
-                                                  "triggerGroup1",
-                                                  m_aJobDetail.getName (),
-                                                  m_aJobDetail.getGroup (),
-                                                  new Date (System.currentTimeMillis () + 100000),
-                                                  new Date (System.currentTimeMillis () + 200000),
-                                                  2,
-                                                  2000);
+    IOperableTrigger trigger = SimpleTrigger.create ("trigger1",
+                                                     "triggerGroup1",
+                                                     m_aJobDetail.getName (),
+                                                     m_aJobDetail.getGroup (),
+                                                     new Date (System.currentTimeMillis () + 100000),
+                                                     new Date (System.currentTimeMillis () + 200000),
+                                                     2,
+                                                     2000);
     trigger.computeFirstFireTime (null);
     assertEquals (ETriggerState.NONE, m_aJobStore.getTriggerState (trigger.getKey ()));
     m_aJobStore.storeTrigger (trigger, false);
@@ -306,7 +303,6 @@ public abstract class AbstractJobStoreTest
   }
 
   // See: http://jira.opensymphony.com/browse/QUARTZ-606
-  @SuppressWarnings ("deprecation")
   @Test
   public void testStoreTriggerReplacesTrigger () throws Exception
   {
@@ -318,7 +314,10 @@ public abstract class AbstractJobStoreTest
 
     final String trName = "StoreTriggerReplacesTrigger";
     final String trGroup = "StoreTriggerReplacesTriggerGroup";
-    final IOperableTrigger tr = new SimpleTrigger (trName, trGroup, new Date ());
+    final SimpleTrigger tr = new SimpleTrigger ();
+    tr.setName (trName);
+    tr.setGroup (trGroup);
+    tr.setStartTime (new Date ());
     tr.setJobKey (new JobKey (jobName, jobGroup));
     tr.setCalendarName (null);
 
@@ -343,7 +342,6 @@ public abstract class AbstractJobStoreTest
                   m_aJobStore.retrieveTrigger (tr.getKey ()).getCalendarName ());
   }
 
-  @SuppressWarnings ("deprecation")
   @Test
   public void testPauseJobGroupPausesNewJob () throws Exception
   {
@@ -362,7 +360,10 @@ public abstract class AbstractJobStoreTest
 
     final String trName = "PauseJobGroupPausesNewJobTrigger";
     final String trGroup = "PauseJobGroupPausesNewJobTriggerGroup";
-    final IOperableTrigger tr = new SimpleTrigger (trName, trGroup, new Date ());
+    final SimpleTrigger tr = new SimpleTrigger ();
+    tr.setName (trName);
+    tr.setGroup (trGroup);
+    tr.setStartTime (new Date ());
     tr.setJobKey (new JobKey (jobName2, jobGroup));
     m_aJobStore.storeTrigger (tr, false);
     assertEquals (ETriggerState.PAUSED, m_aJobStore.getTriggerState (tr.getKey ()));

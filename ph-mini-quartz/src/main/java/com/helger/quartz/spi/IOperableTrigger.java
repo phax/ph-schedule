@@ -20,6 +20,9 @@ package com.helger.quartz.spi;
 
 import java.util.Date;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.ITrigger;
@@ -40,18 +43,12 @@ public interface IOperableTrigger extends IMutableTrigger
   void triggered (ICalendar calendar);
 
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
+   * This method should not be used by the Quartz client.<br>
    * Called by the scheduler at the time a <code>Trigger</code> is first added
    * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
-   * </p>
-   * <p>
+   * first fire time, based on any associated calendar.<br>
    * After this method has been called, <code>getNextFireTime()</code> should
    * return a valid answer.
-   * </p>
    *
    * @return the first time at which the <code>Trigger</code> will be fired by
    *         the scheduler, which is also the same value
@@ -76,44 +73,32 @@ public interface IOperableTrigger extends IMutableTrigger
    * @return one of the <code>CompletedExecutionInstruction</code> constants.
    * @see #triggered(ICalendar)
    */
+  @Nonnull
   ITrigger.ECompletedExecutionInstruction executionComplete (IJobExecutionContext aContext,
-                                                             JobExecutionException result);
+                                                             @Nullable JobExecutionException result);
 
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
-   * To be implemented by the concrete classes that extend this class.
-   * </p>
-   * <p>
+   * This method should not be used by the Quartz client.<br>
+   * To be implemented by the concrete classes that extend this class.<br>
    * The implementation should update the <code>Trigger</code>'s state based on
    * the MISFIRE_INSTRUCTION_XXX that was selected when the <code>Trigger</code>
    * was created.
-   * </p>
    */
   void updateAfterMisfire (ICalendar cal);
 
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
-   * To be implemented by the concrete class.
-   * </p>
-   * <p>
+   * This method should not be used by the Quartz client.<br>
+   * To be implemented by the concrete class.<br>
    * The implementation should update the <code>Trigger</code>'s state based on
    * the given new version of the associated <code>Calendar</code> (the state
    * should be updated so that it's next fire time is appropriate given the
    * Calendar's new settings).
-   * </p>
    *
    * @param cal
    */
   void updateWithNewCalendar (ICalendar cal, long misfireThreshold);
 
   /**
-   * <p>
    * Validates whether the properties of the <code>JobDetail</code> are valid
    * for submission into a <code>Scheduler</code>.
    *
@@ -123,27 +108,22 @@ public interface IOperableTrigger extends IMutableTrigger
   void validate () throws SchedulerException;
 
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
+   * This method should not be used by the Quartz client.<br>
    * Usable by <code>{@link com.helger.quartz.spi.IJobStore}</code>
    * implementations, in order to facilitate 'recognizing' instances of fired
    * <code>Trigger</code> s as their jobs complete execution.
-   * </p>
    */
-  void setFireInstanceId (String id);
+  void setFireInstanceId (@Nullable String id);
 
   /**
-   * <p>
    * This method should not be used by the Quartz client.
-   * </p>
    */
+  @Nullable
   String getFireInstanceId ();
 
   void setNextFireTime (Date nextFireTime);
 
   void setPreviousFireTime (Date previousFireTime);
 
-  IOperableTrigger clone ();
+  IOperableTrigger getClone ();
 }

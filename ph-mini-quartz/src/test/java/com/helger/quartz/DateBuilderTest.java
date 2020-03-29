@@ -168,7 +168,7 @@ public class DateBuilderTest
     vc.set (Calendar.SECOND, 12);
     vc.set (Calendar.MILLISECOND, 0);
 
-    final Calendar rd = (Calendar) vc.clone ();
+    final Calendar rd = QCloneUtils.getClone (vc);
 
     Date bd = newDate ().inYear (2013).inMonth (JUNE).onDay (1).atHourOfDay (10).atMinute (33).atSecond (12).build ();
     assertEquals ("DateBuilder-produced date is not as expected.", vc.getTime (), bd);

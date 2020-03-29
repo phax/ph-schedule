@@ -38,6 +38,7 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TimeOfDay;
 
@@ -108,11 +109,28 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   private int m_nRepeatCount = REPEAT_INDEFINITELY;
   private int m_nRepeatInterval = 1;
   private EIntervalUnit m_eRepeatIntervalUnit = EIntervalUnit.MINUTE;
-  private Set <DayOfWeek> m_aDaysOfWeek;
+  private EnumSet <DayOfWeek> m_aDaysOfWeek;
   private TimeOfDay m_aStartTimeOfDay;
   private TimeOfDay m_aEndTimeOfDay;
   private int m_nTimesTriggered = 0;
   private boolean m_bComplete = false;
+
+  public DailyTimeIntervalTrigger (@Nonnull final DailyTimeIntervalTrigger aOther)
+  {
+    super (aOther);
+    m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
+    m_aEndTime = QCloneUtils.getClone (aOther.m_aEndTime);
+    m_aNextFireTime = QCloneUtils.getClone (aOther.m_aNextFireTime);
+    m_aPreviousFireTime = QCloneUtils.getClone (aOther.m_aPreviousFireTime);
+    m_nRepeatCount = aOther.m_nRepeatCount;
+    m_nRepeatInterval = aOther.m_nRepeatInterval;
+    m_eRepeatIntervalUnit = aOther.m_eRepeatIntervalUnit;
+    m_aDaysOfWeek = QCloneUtils.getClone (aOther.m_aDaysOfWeek);
+    m_aStartTimeOfDay = aOther.m_aStartTimeOfDay;
+    m_aEndTimeOfDay = aOther.m_aEndTimeOfDay;
+    m_nTimesTriggered = aOther.m_nTimesTriggered;
+    m_bComplete = aOther.m_bComplete;
+  }
 
   /**
    * Create a <code>DailyTimeIntervalTrigger</code> with no settings.
@@ -310,85 +328,36 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     setEndTimeOfDay (endTimeOfDay);
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  /**
-   * <p>
-   * Get the time at which the <code>DailyTimeIntervalTrigger</code> should
-   * occur. It defaults to the getStartTimeOfDay of current day.
-   * </p>
-   */
-  @Override
-  public Date getStartTime ()
+  @Nonnull
+  public final Date getStartTime ()
   {
     if (m_aStartTime == null)
-    {
       m_aStartTime = new Date ();
-    }
     return m_aStartTime;
   }
 
-  /**
-   * <p>
-   * Set the time at which the <code>DailyTimeIntervalTrigger</code> should
-   * occur.
-   * </p>
-   *
-   * @exception IllegalArgumentException
-   *            if startTime is <code>null</code>.
-   */
-  @Override
-  public void setStartTime (final Date startTime)
+  public final void setStartTime (@Nonnull final Date startTime)
   {
-    if (startTime == null)
-    {
-      throw new IllegalArgumentException ("Start time cannot be null");
-    }
+    ValueEnforcer.notNull (startTime, "StartTime");
 
     final Date eTime = getEndTime ();
     if (eTime != null && eTime.before (startTime))
-    {
       throw new IllegalArgumentException ("End time cannot be before start time");
-    }
 
     m_aStartTime = startTime;
   }
 
-  /**
-   * <p>
-   * Get the time at which the <code>DailyTimeIntervalTrigger</code> should quit
-   * repeating.
-   * </p>
-   *
-   * @see #getFinalFireTime()
-   */
-  @Override
-  public Date getEndTime ()
+  @Nullable
+  public final Date getEndTime ()
   {
     return m_aEndTime;
   }
 
-  /**
-   * <p>
-   * Set the time at which the <code>DailyTimeIntervalTrigger</code> should quit
-   * repeating (and be automatically deleted).
-   * </p>
-   *
-   * @exception IllegalArgumentException
-   *            if endTime is before start time.
-   */
-  @Override
-  public void setEndTime (final Date endTime)
+  public final void setEndTime (@Nullable final Date endTime)
   {
     final Date sTime = getStartTime ();
     if (sTime != null && endTime != null && sTime.after (endTime))
-    {
       throw new IllegalArgumentException ("End time cannot be before start time");
-    }
 
     m_aEndTime = endTime;
   }
@@ -478,7 +447,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
-  @Override
   public void updateAfterMisfire (final ICalendar cal)
   {
     int instr = getMisfireInstruction ();
@@ -552,7 +520,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
-  @Override
   public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
   {
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
@@ -647,7 +614,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * <code>Trigger</code> has been added to the scheduler.
    * </p>
    */
-  @Override
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
@@ -659,7 +625,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * <code>DailyTimeIntervalTrigger</code> fired. If the trigger has not yet
    * fired, <code>null</code> will be returned.
    */
-  @Override
   public Date getPreviousFireTime ()
   {
     return m_aPreviousFireTime;
@@ -703,7 +668,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @param aAfterTime
    *        after time
    */
-  @Override
   public Date getFireTimeAfter (@Nullable final Date aAfterTime)
   {
     // Check if trigger has completed or not.
@@ -876,7 +840,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * Note that the return time may be in the past.
    * </p>
    */
-  @Override
   public Date getFinalFireTime ()
   {
     if (m_bComplete || getEndTime () == null)
@@ -904,7 +867,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * occur again.
    * </p>
    */
-  @Override
   public boolean mayFireAgain ()
   {
     return (getNextFireTime () != null);
@@ -964,29 +926,23 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public Set <DayOfWeek> getDaysOfWeek ()
+  public EnumSet <DayOfWeek> getDaysOfWeek ()
   {
     if (m_aDaysOfWeek == null)
       m_aDaysOfWeek = EnumSet.allOf (DayOfWeek.class);
     return m_aDaysOfWeek;
   }
 
-  public void setDaysOfWeek (final Set <DayOfWeek> daysOfWeek)
+  public void setDaysOfWeek (final EnumSet <DayOfWeek> daysOfWeek)
   {
     ValueEnforcer.notEmpty (daysOfWeek, "DaysOfWeek");
     m_aDaysOfWeek = daysOfWeek;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public TimeOfDay getStartTimeOfDay ()
   {
     if (m_aStartTimeOfDay == null)
-      m_aStartTimeOfDay = new TimeOfDay (0, 0, 0);
+      m_aStartTimeOfDay = TimeOfDay.START_OF_DAY;
     return m_aStartTimeOfDay;
   }
 
@@ -1043,7 +999,6 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
         cb.withMisfireHandlingInstructionFireAndProceed ();
         break;
     }
-
     return cb;
   }
 
@@ -1070,5 +1025,11 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     }
 
     m_nRepeatCount = repeatCount;
+  }
+
+  @Nonnull
+  public DailyTimeIntervalTrigger getClone ()
+  {
+    return new DailyTimeIntervalTrigger (this);
   }
 }

@@ -22,6 +22,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.CQuartz;
 import com.helger.quartz.CalendarIntervalScheduleBuilder;
@@ -29,6 +34,7 @@ import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICalendarIntervalTrigger;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 
 /**
@@ -80,12 +86,24 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   private boolean m_bPreserveHourOfDayAcrossDaylightSavings = false;
   private boolean m_bSkipDayIfHourDoesNotExist = false;
   private int m_nTimesTriggered = 0;
-  private final boolean m_bComplete = false;
+
+  public CalendarIntervalTrigger (@Nonnull final CalendarIntervalTrigger aOther)
+  {
+    super (aOther);
+    m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
+    m_aEndTime = QCloneUtils.getClone (aOther.m_aEndTime);
+    m_aNextFireTime = QCloneUtils.getClone (aOther.m_aNextFireTime);
+    m_aPreviousFireTime = QCloneUtils.getClone (aOther.m_aPreviousFireTime);
+    m_nRepeatInterval = aOther.m_nRepeatInterval;
+    m_eRepeatIntervalUnit = aOther.m_eRepeatIntervalUnit;
+    m_aTimeZone = QCloneUtils.getClone (aOther.m_aTimeZone);
+    m_bPreserveHourOfDayAcrossDaylightSavings = aOther.m_bPreserveHourOfDayAcrossDaylightSavings;
+    m_bSkipDayIfHourDoesNotExist = aOther.m_bSkipDayIfHourDoesNotExist;
+    m_nTimesTriggered = aOther.m_nTimesTriggered;
+  }
 
   /**
-   * <p>
    * Create a <code>DateIntervalTrigger</code> with no settings.
-   * </p>
    */
   public CalendarIntervalTrigger ()
   {
@@ -93,10 +111,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   }
 
   /**
-   * <p>
    * Create a <code>DateIntervalTrigger</code> that will occur immediately, and
    * repeat at the the given interval.
-   * </p>
    */
   public CalendarIntervalTrigger (final String name, final EIntervalUnit intervalUnit, final int repeatInterval)
   {
@@ -210,81 +226,35 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
     setRepeatInterval (repeatInterval);
   }
 
-  /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   */
-
-  /**
-   * <p>
-   * Get the time at which the <code>DateIntervalTrigger</code> should occur.
-   * </p>
-   */
-  @Override
-  public Date getStartTime ()
+  public final Date getStartTime ()
   {
     if (m_aStartTime == null)
       m_aStartTime = new Date ();
     return m_aStartTime;
   }
 
-  /**
-   * <p>
-   * Set the time at which the <code>DateIntervalTrigger</code> should occur.
-   * </p>
-   *
-   * @exception IllegalArgumentException
-   *            if startTime is <code>null</code>.
-   */
-  @Override
-  public void setStartTime (final Date startTime)
+  public final void setStartTime (final Date startTime)
   {
-    if (startTime == null)
-    {
-      throw new IllegalArgumentException ("Start time cannot be null");
-    }
+    ValueEnforcer.notNull (startTime, "StartTime");
 
     final Date eTime = getEndTime ();
     if (eTime != null && eTime.before (startTime))
-    {
       throw new IllegalArgumentException ("End time cannot be before start time");
-    }
 
     m_aStartTime = startTime;
   }
 
-  /**
-   * <p>
-   * Get the time at which the <code>DateIntervalTrigger</code> should quit
-   * repeating.
-   * </p>
-   *
-   * @see #getFinalFireTime()
-   */
-  @Override
-  public Date getEndTime ()
+  @Nullable
+  public final Date getEndTime ()
   {
     return m_aEndTime;
   }
 
-  /**
-   * <p>
-   * Set the time at which the <code>DateIntervalTrigger</code> should quit
-   * repeating (and be automatically deleted).
-   * </p>
-   *
-   * @exception IllegalArgumentException
-   *            if endTime is before start time.
-   */
-  @Override
-  public void setEndTime (final Date endTime)
+  public final void setEndTime (@Nullable final Date endTime)
   {
     final Date sTime = getStartTime ();
     if (sTime != null && endTime != null && sTime.after (endTime))
-    {
       throw new IllegalArgumentException ("End time cannot be before start time");
-    }
 
     m_aEndTime = endTime;
   }
@@ -455,7 +425,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
-  @Override
   public void updateAfterMisfire (final ICalendar cal)
   {
     int instr = getMisfireInstruction ();
@@ -527,7 +496,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * @see com.helger.quartz.spi.IOperableTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
-  @Override
   public void updateWithNewCalendar (final com.helger.quartz.ICalendar calendar, final long misfireThreshold)
   {
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
@@ -619,7 +587,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * <code>Trigger</code> has been added to the scheduler.
    * </p>
    */
-  @Override
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
@@ -631,7 +598,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * fired. If the trigger has not yet fired, <code>null</code> will be
    * returned.
    */
-  @Override
   public Date getPreviousFireTime ()
   {
     return m_aPreviousFireTime;
@@ -671,7 +637,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * time, <code>null</code> will be returned.
    * </p>
    */
-  @Override
   public Date getFireTimeAfter (final Date afterTime)
   {
     return getFireTimeAfter (afterTime, false);
@@ -679,11 +644,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   protected Date getFireTimeAfter (final Date aAfterTime, final boolean ignoreEndTime)
   {
-    if (m_bComplete)
-    {
-      return null;
-    }
-
     // increment afterTme by a second, so that we are
     // comparing against a time after it!
     Date afterTime = aAfterTime;
@@ -898,10 +858,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * Note that the return time may be in the past.
    * </p>
    */
-  @Override
   public Date getFinalFireTime ()
   {
-    if (m_bComplete || getEndTime () == null)
+    if (getEndTime () == null)
     {
       return null;
     }
@@ -954,7 +913,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * again.
    * </p>
    */
-  @Override
   public boolean mayFireAgain ()
   {
     return getNextFireTime () != null;
@@ -1004,5 +962,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   public boolean hasAdditionalProperties ()
   {
     return false;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public CalendarIntervalTrigger getClone ()
+  {
+    return new CalendarIntervalTrigger (this);
   }
 }

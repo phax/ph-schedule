@@ -66,21 +66,21 @@ public class AnnualCalendarTest
 
     day.set (Calendar.MONTH, 9);
     day.set (Calendar.DAY_OF_MONTH, 15);
-    annualCalendar.setDayExcluded ((Calendar) day.clone (), true);
+    annualCalendar.setDayExcluded (QCloneUtils.getClone (day), true);
 
     day.set (Calendar.MONTH, 10);
     day.set (Calendar.DAY_OF_MONTH, 12);
-    annualCalendar.setDayExcluded ((Calendar) day.clone (), true);
+    annualCalendar.setDayExcluded (QCloneUtils.getClone (day), true);
 
     day.set (Calendar.MONTH, 8);
     day.set (Calendar.DAY_OF_MONTH, 1);
-    annualCalendar.setDayExcluded ((Calendar) day.clone (), true);
+    annualCalendar.setDayExcluded (QCloneUtils.getClone (day), true);
 
     assertTrue ("The day 15 October is expected to be excluded but it is not", annualCalendar.isDayExcluded (day));
 
     day.set (Calendar.MONTH, 9);
     day.set (Calendar.DAY_OF_MONTH, 15);
-    annualCalendar.setDayExcluded ((Calendar) day.clone (), false);
+    annualCalendar.setDayExcluded (QCloneUtils.getClone (day), false);
 
     assertTrue ("The day 15 October is not expected to be excluded but it is", !annualCalendar.isDayExcluded (day));
   }
@@ -98,12 +98,12 @@ public class AnnualCalendarTest
     day.set (Calendar.YEAR, 2005);
     day.set (Calendar.DAY_OF_MONTH, 23);
 
-    annualCalendar.setDayExcluded ((Calendar) day.clone (), true);
+    annualCalendar.setDayExcluded (QCloneUtils.getClone (day), true);
 
     day.set (Calendar.YEAR, 2008);
     day.set (Calendar.MONTH, Calendar.FEBRUARY);
     day.set (Calendar.DAY_OF_MONTH, 1);
-    annualCalendar.setDayExcluded ((Calendar) day.clone (), true);
+    annualCalendar.setDayExcluded (QCloneUtils.getClone (day), true);
 
     assertTrue ("The day 1 February is expected to be excluded but it is not", annualCalendar.isDayExcluded (day));
   }
@@ -121,13 +121,13 @@ public class AnnualCalendarTest
     day.set (Calendar.YEAR, 2005);
     day.set (Calendar.DAY_OF_MONTH, 23);
 
-    annualCalendar.setDayExcluded ((Calendar) day.clone (), true);
+    annualCalendar.setDayExcluded (QCloneUtils.getClone (day), true);
 
     // Trying to remove the 23th of June
     day.set (Calendar.MONTH, Calendar.JUNE);
     day.set (Calendar.YEAR, 2008);
     day.set (Calendar.DAY_OF_MONTH, 23);
-    annualCalendar.setDayExcluded ((Calendar) day.clone (), false);
+    annualCalendar.setDayExcluded (QCloneUtils.getClone (day), false);
 
     assertTrue ("The day 23 June is not expected to be excluded but it is", !annualCalendar.isDayExcluded (day));
   }

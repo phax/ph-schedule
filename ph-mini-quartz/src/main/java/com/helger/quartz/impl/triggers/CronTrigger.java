@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.CQuartz;
 import com.helger.quartz.CronExpression;
@@ -36,6 +37,7 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.QCloneUtils;
 
 /**
  * A concrete <code>{@link ITrigger}</code> that is used to fire a
@@ -56,14 +58,21 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   private Date m_aPreviousFireTime;
   private transient TimeZone m_aTimeZone;
 
+  public CronTrigger (@Nonnull final CronTrigger aOther)
+  {
+    super (aOther);
+    m_aCronEx = QCloneUtils.getClone (aOther.m_aCronEx);
+    m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
+    m_aEndTime = QCloneUtils.getClone (aOther.m_aEndTime);
+    m_aNextFireTime = QCloneUtils.getClone (aOther.m_aNextFireTime);
+    m_aPreviousFireTime = QCloneUtils.getClone (aOther.m_aPreviousFireTime);
+    m_aTimeZone = QCloneUtils.getClone (aOther.m_aTimeZone);
+  }
+
   /**
-   * <p>
-   * Create a <code>CronTrigger</code> with no settings.
-   * </p>
-   * <p>
+   * Create a <code>CronTrigger</code> with no settings.<br>
    * The start-time will also be set to the current time, and the time zone will
    * be set the the system's default time zone.
-   * </p>
    */
   public CronTrigger ()
   {
@@ -72,51 +81,35 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
     setTimeZone (TimeZone.getDefault ());
   }
 
-  @Override
-  public CronTrigger clone ()
+  @Nullable
+  public String getCronExpression ()
   {
-    final CronTrigger copy = (CronTrigger) super.clone ();
-    if (m_aCronEx != null)
-    {
-      copy.setCronExpression (new CronExpression (m_aCronEx));
-    }
-    return copy;
+    return m_aCronEx == null ? null : m_aCronEx.getCronExpression ();
   }
 
-  public void setCronExpression (final String cronExpression) throws ParseException
+  public void setCronExpression (@Nonnull final String cronExpression) throws ParseException
   {
     final TimeZone origTz = getTimeZone ();
     m_aCronEx = new CronExpression (cronExpression);
     m_aCronEx.setTimeZone (origTz);
   }
 
-  public String getCronExpression ()
-  {
-    return m_aCronEx == null ? null : m_aCronEx.getCronExpression ();
-  }
-
   /**
    * Set the CronExpression to the given one. The TimeZone on the passed-in
    * CronExpression over-rides any that was already set on the Trigger.
    */
-  public void setCronExpression (final CronExpression cronExpression)
+  public void setCronExpression (@Nonnull final CronExpression cronExpression)
   {
     m_aCronEx = cronExpression;
     m_aTimeZone = cronExpression.getTimeZone ();
   }
 
-  /**
-   * <p>
-   * Get the time at which the <code>CronTrigger</code> should occur.
-   * </p>
-   */
-  @Override
-  public Date getStartTime ()
+  @Nullable
+  public final Date getStartTime ()
   {
     return m_aStartTime;
   }
 
-  @Override
   public final void setStartTime (@Nonnull final Date startTime)
   {
     ValueEnforcer.notNull (startTime, "StartTime");
@@ -138,108 +131,65 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
     m_aStartTime = cl.getTime ();
   }
 
-  /**
-   * <p>
-   * Get the time at which the <code>CronTrigger</code> should quit repeating -
-   * even if repeastCount isn't yet satisfied.
-   * </p>
-   *
-   * @see #getFinalFireTime()
-   */
-  @Override
-  public Date getEndTime ()
+  @Nullable
+  public final Date getEndTime ()
   {
     return m_aEndTime;
   }
 
-  @Override
-  public void setEndTime (final Date endTime)
+  public final void setEndTime (@Nullable final Date endTime)
   {
     final Date sTime = getStartTime ();
     if (sTime != null && endTime != null && sTime.after (endTime))
-    {
       throw new IllegalArgumentException ("End time cannot be before start time");
-    }
 
     m_aEndTime = endTime;
   }
 
-  /**
-   * Returns the next time at which the <code>Trigger</code> is scheduled to
-   * fire. If the trigger will not fire again, <code>null</code> will be
-   * returned. Note that the time returned can possibly be in the past, if the
-   * time that was computed for the trigger to next fire has already arrived,
-   * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).<br>
-   * The value returned is not guaranteed to be valid until after the
-   * <code>Trigger</code> has been added to the scheduler. Ssee
-   * com.helger.quartz.TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
-   * ICalendar, Date, Date)
-   */
-  @Override
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
   }
 
-  /**
-   * Returns the previous time at which the <code>CronTrigger</code> fired. If
-   * the trigger has not yet fired, <code>null</code> will be returned.
-   */
-  @Override
-  public Date getPreviousFireTime ()
-  {
-    return m_aPreviousFireTime;
-  }
-
-  /**
-   * Sets the next time at which the <code>CronTrigger</code> will fire. <b>This
-   * method should not be invoked by client code.</b>
-   */
   public void setNextFireTime (final Date nextFireTime)
   {
     m_aNextFireTime = nextFireTime;
   }
 
-  /**
-   * Set the previous time at which the <code>CronTrigger</code> fired.<br>
-   * <b>This method should not be invoked by client code.</b>
-   */
+  public Date getPreviousFireTime ()
+  {
+    return m_aPreviousFireTime;
+  }
+
   public void setPreviousFireTime (final Date previousFireTime)
   {
     m_aPreviousFireTime = previousFireTime;
   }
 
+  @Nonnull
   public TimeZone getTimeZone ()
   {
     if (m_aCronEx != null)
       return m_aCronEx.getTimeZone ();
 
     if (m_aTimeZone == null)
-    {
       m_aTimeZone = TimeZone.getDefault ();
-    }
     return m_aTimeZone;
   }
 
   /**
-   * <p>
    * Sets the time zone for which the <code>cronExpression</code> of this
-   * <code>CronTrigger</code> will be resolved.
-   * </p>
-   * <p>
+   * <code>CronTrigger</code> will be resolved.<br>
    * If {@link #setCronExpression(CronExpression)} is called after this method,
    * the TimeZon setting on the CronExpression will "win". However if
    * {@link #setCronExpression(String)} is called after this method, the time
    * zone applied by this method will remain in effect, since the String cron
    * expression does not carry a time zone!
    */
-  public void setTimeZone (final TimeZone timeZone)
+  public void setTimeZone (@Nullable final TimeZone timeZone)
   {
     if (m_aCronEx != null)
-    {
       m_aCronEx.setTimeZone (timeZone);
-    }
     m_aTimeZone = timeZone;
   }
 
@@ -257,7 +207,6 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * @param aAfterTime
    *        after time
    */
-  @Override
   public Date getFireTimeAfter (@Nullable final Date aAfterTime)
   {
     Date afterTime = aAfterTime;
@@ -293,7 +242,6 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * not validated against {@link ICalendar}
    * </p>
    */
-  @Override
   public Date getFinalFireTime ()
   {
     Date resultTime;
@@ -319,7 +267,6 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * Determines whether or not the <code>CronTrigger</code> will occur again.
    * </p>
    */
-  @Override
   public boolean mayFireAgain ()
   {
     return (getNextFireTime () != null);
@@ -347,7 +294,6 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
-  @Override
   public void updateAfterMisfire (final ICalendar cal)
   {
     int instr = getMisfireInstruction ();
@@ -414,8 +360,9 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    */
   public boolean willFireOn (final Calendar aTest, final boolean dayOnly)
   {
-    final Calendar test = (Calendar) aTest.clone ();
-    test.set (Calendar.MILLISECOND, 0); // don't compare millis.
+    final Calendar test = QCloneUtils.getClone (aTest);
+    // don't compare millis.
+    test.set (Calendar.MILLISECOND, 0);
 
     if (dayOnly)
     {
@@ -479,7 +426,6 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   /**
    * @see AbstractTrigger#updateWithNewCalendar(ICalendar, long)
    */
-  @Override
   public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
   {
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
@@ -582,27 +528,29 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
         cb.withMisfireHandlingInstructionFireAndProceed ();
         break;
     }
-
     return cb;
   }
 
-  ////////////////////////////////////////////////////////////////////////////
-  //
-  // Computation Functions
-  //
-  ////////////////////////////////////////////////////////////////////////////
-
+  @Nullable
   protected Date getTimeAfter (final Date afterTime)
   {
-    return (m_aCronEx == null) ? null : m_aCronEx.getTimeAfter (afterTime);
+    return m_aCronEx == null ? null : m_aCronEx.getTimeAfter (afterTime);
   }
 
   /**
    * NOT YET IMPLEMENTED: Returns the time before the given time that this
    * <code>CronTrigger</code> will fire.
    */
+  @Nullable
   protected Date getTimeBefore (final Date eTime)
   {
-    return (m_aCronEx == null) ? null : m_aCronEx.getTimeBefore (eTime);
+    return m_aCronEx == null ? null : m_aCronEx.getTimeBefore (eTime);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public CronTrigger getClone ()
+  {
+    return new CronTrigger (this);
   }
 }

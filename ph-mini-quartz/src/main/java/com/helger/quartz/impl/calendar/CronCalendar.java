@@ -46,7 +46,7 @@ import com.helger.quartz.ICalendar;
  *
  * @author Aaron Craven
  */
-public class CronCalendar extends BaseCalendar implements ICloneable <CronCalendar>
+public class CronCalendar extends AbstractCalendar implements ICloneable <CronCalendar>
 {
   private CronExpression m_aCronExpression;
 

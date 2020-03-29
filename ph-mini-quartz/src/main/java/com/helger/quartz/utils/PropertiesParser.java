@@ -28,6 +28,7 @@ import com.helger.commons.collection.impl.CommonsLinkedHashSet;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.commons.lang.NonBlockingProperties;
+import com.helger.commons.string.StringHelper;
 
 /**
  * <p>
@@ -71,11 +72,14 @@ public class PropertiesParser
    */
   public String getStringProperty (final String name, final String def)
   {
-    String val = m_aProps.getProperty (name, def);
-    if (val == null)
-      return def;
-    val = val.trim ();
-    return val.length () == 0 ? def : val;
+    String val = m_aProps.getProperty (name);
+    if (val != null)
+    {
+      val = val.trim ();
+      if (val.length () > 0)
+        return val;
+    }
+    return StringHelper.trim (def);
   }
 
   public String [] getStringArrayProperty (final String name)

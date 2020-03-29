@@ -38,7 +38,7 @@ import com.helger.quartz.ICalendar;
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class WeeklyCalendar extends BaseCalendar implements ICloneable <WeeklyCalendar>
+public class WeeklyCalendar extends AbstractCalendar implements ICloneable <WeeklyCalendar>
 {
   // An array to store the week days which are to be excluded.
   // Calendar.MONDAY etc. are used as index.

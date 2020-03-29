@@ -31,8 +31,9 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
+import com.helger.commons.annotation.UnsupportedOperation;
 import com.helger.commons.datetime.PDTFactory;
-import com.helger.quartz.impl.calendar.BaseCalendar;
+import com.helger.quartz.impl.calendar.AbstractCalendar;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
 /**
@@ -73,7 +74,14 @@ public class CalendarIntervalTriggerTest
     after.setTimeZone (edt);
     after.set (2013, Calendar.APRIL, 19, 2, 30, 0);
 
-    final BaseCalendar baseCalendar = new BaseCalendar (null, edt);
+    final AbstractCalendar baseCalendar = new AbstractCalendar (null, edt)
+    {
+      @UnsupportedOperation
+      public AbstractCalendar getClone ()
+      {
+        throw new IllegalStateException ();
+      }
+    };
 
     final CalendarIntervalTrigger intervalTrigger = new CalendarIntervalTrigger ("QTZ-330",
                                                                                  start.getTime (),

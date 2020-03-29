@@ -55,12 +55,12 @@ import com.helger.quartz.IJobDetail;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
-import com.helger.quartz.ITrigger.TriggerTimeComparator;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.ObjectAlreadyExistsException;
 import com.helger.quartz.TriggerKey;
+import com.helger.quartz.TriggerTimeComparator;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.impl.matchers.StringMatcher;
 import com.helger.quartz.spi.IClassLoadHelper;
@@ -311,7 +311,7 @@ public class BaseJobStore implements IJobStore
                                          aNewTrigger.getJobKey () +
                                          ") referenced by the trigger does not exist.");
 
-    final TriggerWrapper tw = new TriggerWrapper (aNewTrigger.clone ());
+    final TriggerWrapper tw = new TriggerWrapper (aNewTrigger.getClone ());
 
     m_aRWLock.writeLocked ( () -> {
       // add to triggers array
@@ -487,7 +487,7 @@ public class BaseJobStore implements IJobStore
   {
     return m_aRWLock.readLockedGet ( () -> {
       final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
-      return tw != null ? tw.getTrigger ().clone () : null;
+      return tw != null ? tw.getTrigger ().getClone () : null;
     });
   }
 
@@ -686,7 +686,7 @@ public class BaseJobStore implements IJobStore
       final ICommonsList <IOperableTrigger> ret = new CommonsArrayList <> ();
       for (final TriggerWrapper aTW : m_aTriggers)
         if (aTW.getJobKey ().equals (aJobKey))
-          ret.add (aTW.getTrigger ().clone ());
+          ret.add (aTW.getTrigger ().getClone ());
       return ret;
     });
   }
@@ -984,7 +984,7 @@ public class BaseJobStore implements IJobStore
       cal = retrieveCalendar (tw.getTrigger ().getCalendarName ());
     }
 
-    m_aSignaler.notifyTriggerListenersMisfired (tw.getTrigger ().clone ());
+    m_aSignaler.notifyTriggerListenersMisfired (tw.getTrigger ().getClone ());
 
     tw.getTrigger ().updateAfterMisfire (cal);
 
@@ -1069,7 +1069,7 @@ public class BaseJobStore implements IJobStore
 
         tw.setState (TriggerWrapper.STATE_ACQUIRED);
         tw.getTrigger ().setFireInstanceId (getFiredTriggerRecordId ());
-        final IOperableTrigger trig = tw.getTrigger ().clone ();
+        final IOperableTrigger trig = tw.getTrigger ().getClone ();
         ret.add (trig);
         if (firstAcquiredTriggerFireTime == 0)
           firstAcquiredTriggerFireTime = tw.getTrigger ().getNextFireTime ().getTime ();

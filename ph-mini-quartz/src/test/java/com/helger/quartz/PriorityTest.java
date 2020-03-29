@@ -32,7 +32,6 @@ import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 import com.helger.quartz.simpl.SimpleThreadPool;
-import com.helger.quartz.spi.IMutableTrigger;
 
 /**
  * Test Trigger priority support.
@@ -60,7 +59,6 @@ public class PriorityTest
     PriorityTest.s_aResult = new StringBuffer ();
   }
 
-  @SuppressWarnings ("deprecation")
   @Test
   public void testSameDefaultPriority () throws Exception
   {
@@ -73,8 +71,12 @@ public class PriorityTest
     final Calendar cal = PDTFactory.createCalendar ();
     cal.add (Calendar.SECOND, 1);
 
-    final IMutableTrigger trig1 = new SimpleTrigger ("T1", null, cal.getTime ());
-    final IMutableTrigger trig2 = new SimpleTrigger ("T2", null, cal.getTime ());
+    final SimpleTrigger trig1 = new SimpleTrigger ();
+    trig1.setName ("T1");
+    trig1.setStartTime (cal.getTime ());
+    final SimpleTrigger trig2 = new SimpleTrigger ();
+    trig2.setName ("T2");
+    trig2.setStartTime (cal.getTime ());
 
     final IJobDetail jobDetail = JobDetail.create ("JD", null, TestJob.class);
 
@@ -92,7 +94,6 @@ public class PriorityTest
     sched.shutdown ();
   }
 
-  @SuppressWarnings ("deprecation")
   @Test
   public void testDifferentPriority () throws Exception
   {
@@ -105,10 +106,14 @@ public class PriorityTest
     final Calendar cal = PDTFactory.createCalendar ();
     cal.add (Calendar.SECOND, 1);
 
-    final IMutableTrigger trig1 = new SimpleTrigger ("T1", null, cal.getTime ());
+    final SimpleTrigger trig1 = new SimpleTrigger ();
+    trig1.setName ("T1");
+    trig1.setStartTime (cal.getTime ());
     trig1.setPriority (5);
 
-    final IMutableTrigger trig2 = new SimpleTrigger ("T2", null, cal.getTime ());
+    final SimpleTrigger trig2 = new SimpleTrigger ();
+    trig2.setName ("T2");
+    trig2.setStartTime (cal.getTime ());
     trig2.setPriority (10);
 
     final IJobDetail jobDetail = JobDetail.create ("JD", null, TestJob.class);

@@ -25,6 +25,7 @@ import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.hashcode.HashCodeGenerator;
@@ -40,7 +41,8 @@ import com.helger.commons.hashcode.HashCodeGenerator;
  * @author James House
  * @author Zemian Deng saltnlight5@gmail.com
  */
-public class TimeOfDay implements Serializable
+@Immutable
+public class TimeOfDay implements Serializable, Comparable <TimeOfDay>
 {
   public static final TimeOfDay START_OF_DAY = new TimeOfDay (0, 0, 0);
 
@@ -108,6 +110,18 @@ public class TimeOfDay implements Serializable
     return m_nSecond;
   }
 
+  public int compareTo (@Nonnull final TimeOfDay aOther)
+  {
+    int ret = m_nHour - aOther.m_nHour;
+    if (ret == 0)
+    {
+      ret = m_nMinute - aOther.m_nMinute;
+      if (ret == 0)
+        ret = m_nSecond - aOther.m_nSecond;
+    }
+    return ret;
+  }
+
   /**
    * Determine with this time of day is before the given time of day.
    *
@@ -115,22 +129,7 @@ public class TimeOfDay implements Serializable
    */
   public boolean before (final TimeOfDay timeOfDay)
   {
-    if (timeOfDay.m_nHour > m_nHour)
-      return true;
-    if (timeOfDay.m_nHour < m_nHour)
-      return false;
-
-    if (timeOfDay.m_nMinute > m_nMinute)
-      return true;
-    if (timeOfDay.m_nMinute < m_nMinute)
-      return false;
-
-    if (timeOfDay.m_nSecond > m_nSecond)
-      return true;
-    if (timeOfDay.m_nSecond < m_nSecond)
-      return false;
-
-    return false; // must be equal...
+    return compareTo (timeOfDay) < 0;
   }
 
   @Override

@@ -46,7 +46,7 @@ import com.helger.quartz.ICalendar;
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class AnnualCalendar extends BaseCalendar implements ICloneable <AnnualCalendar>
+public class AnnualCalendar extends AbstractCalendar implements ICloneable <AnnualCalendar>
 {
   private final ICommonsList <Calendar> m_aExcludeDays = new CommonsArrayList <> ();
 

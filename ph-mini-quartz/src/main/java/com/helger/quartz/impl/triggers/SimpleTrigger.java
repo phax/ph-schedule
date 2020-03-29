@@ -21,14 +21,18 @@ package com.helger.quartz.impl.triggers;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.CQuartz;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
 
@@ -54,70 +58,34 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   private int m_nRepeatCount = 0;
   private long m_nRepeatInterval = 0;
   private int m_nTimesTriggered = 0;
-  private final boolean m_bComplete = false;
+
+  public SimpleTrigger (@Nonnull final SimpleTrigger aOther)
+  {
+    super (aOther);
+    m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
+    m_aEndTime = QCloneUtils.getClone (aOther.m_aEndTime);
+    m_aNextFireTime = QCloneUtils.getClone (aOther.m_aNextFireTime);
+    m_aPreviousFireTime = QCloneUtils.getClone (aOther.m_aPreviousFireTime);
+    m_nRepeatCount = aOther.m_nRepeatCount;
+    m_nRepeatInterval = aOther.m_nRepeatInterval;
+    m_nTimesTriggered = aOther.m_nTimesTriggered;
+  }
 
   /**
-   * <p>
    * Create a <code>SimpleTrigger</code> with no settings.
-   * </p>
    */
   public SimpleTrigger ()
-  {
-    super ();
-  }
+  {}
 
-  @Deprecated
-  public SimpleTrigger (final String name, final String group, final Date startTime)
-  {
-    super (name, group);
-
-    setStartTime (startTime);
-    setRepeatCount (0);
-    setRepeatInterval (0);
-  }
-
-  @Deprecated
-  public SimpleTrigger (final String name,
-                        final String group,
-                        final String jobName,
-                        final String jobGroup,
-                        final Date startTime,
-                        final Date endTime,
-                        final int repeatCount,
-                        final long repeatInterval)
-  {
-    super (name, group, jobName, jobGroup);
-
-    setStartTime (startTime);
-    setEndTime (endTime);
-    setRepeatCount (repeatCount);
-    setRepeatInterval (repeatInterval);
-  }
-
-  /**
-   * <p>
-   * Get the time at which the <code>SimpleTrigger</code> should occur.
-   * </p>
-   */
-  @Override
-  public Date getStartTime ()
+  @Nullable
+  public final Date getStartTime ()
   {
     return m_aStartTime;
   }
 
-  /**
-   * <p>
-   * Set the time at which the <code>SimpleTrigger</code> should occur.
-   * </p>
-   *
-   * @exception IllegalArgumentException
-   *            if startTime is <code>null</code>.
-   */
-  @Override
-  public void setStartTime (final Date startTime)
+  public void setStartTime (@Nonnull final Date startTime)
   {
-    if (startTime == null)
-      throw new IllegalArgumentException ("Start time cannot be null");
+    ValueEnforcer.notNull (startTime, "StartTime");
 
     final Date eTime = getEndTime ();
     if (eTime != null && eTime.before (startTime))
@@ -126,37 +94,17 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     m_aStartTime = startTime;
   }
 
-  /**
-   * <p>
-   * Get the time at which the <code>SimpleTrigger</code> should quit repeating
-   * - even if repeastCount isn't yet satisfied.
-   * </p>
-   *
-   * @see #getFinalFireTime()
-   */
-  @Override
-  public Date getEndTime ()
+  @Nullable
+  public final Date getEndTime ()
   {
     return m_aEndTime;
   }
 
-  /**
-   * <p>
-   * Set the time at which the <code>SimpleTrigger</code> should quit repeating
-   * (and be automatically deleted).
-   * </p>
-   *
-   * @exception IllegalArgumentException
-   *            if endTime is before start time.
-   */
-  @Override
-  public void setEndTime (final Date endTime)
+  public final void setEndTime (@Nullable final Date endTime)
   {
     final Date sTime = getStartTime ();
     if (sTime != null && endTime != null && sTime.after (endTime))
-    {
       throw new IllegalArgumentException ("End time cannot be before start time");
-    }
 
     m_aEndTime = endTime;
   }
@@ -273,7 +221,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * </li>
    * </ul>
    */
-  @Override
   public void updateAfterMisfire (final ICalendar cal)
   {
     int instr = getMisfireInstruction ();
@@ -445,7 +392,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
-  @Override
   public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
   {
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
@@ -540,7 +486,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * @see com.helger.quartz.TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
    *      ICalendar, Date, Date)
    */
-  @Override
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
@@ -550,7 +495,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * Returns the previous time at which the <code>SimpleTrigger</code> fired. If
    * the trigger has not yet fired, <code>null</code> will be returned.
    */
-  @Override
   public Date getPreviousFireTime ()
   {
     return m_aPreviousFireTime;
@@ -584,12 +528,8 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * @param aAfterTime
    *        After time. May be <code>null</code>
    */
-  @Override
   public Date getFireTimeAfter (@Nullable final Date aAfterTime)
   {
-    if (m_bComplete)
-      return null;
-
     if ((m_nTimesTriggered > m_nRepeatCount) && (m_nRepeatCount != REPEAT_INDEFINITELY))
       return null;
 
@@ -662,7 +602,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * Note that the return time may be in the past.
    * </p>
    */
-  @Override
   public Date getFinalFireTime ()
   {
     if (m_nRepeatCount == 0)
@@ -689,7 +628,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * Determines whether or not the <code>SimpleTrigger</code> will occur again.
    * </p>
    */
-  @Override
   public boolean mayFireAgain ()
   {
     return (getNextFireTime () != null);
@@ -736,7 +674,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     final SimpleScheduleBuilder sb = SimpleScheduleBuilder.simpleSchedule ()
                                                           .withIntervalInMilliseconds (getRepeatInterval ())
                                                           .withRepeatCount (getRepeatCount ());
-
     switch (getMisfireInstruction ())
     {
       case MISFIRE_INSTRUCTION_FIRE_NOW:
@@ -755,8 +692,35 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
         sb.withMisfireHandlingInstructionNowWithRemainingCount ();
         break;
     }
-
     return sb;
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public SimpleTrigger getClone ()
+  {
+    return new SimpleTrigger (this);
+  }
+
+  @Nonnull
+  public static SimpleTrigger create (@Nonnull final String name,
+                                      @Nullable final String group,
+                                      @Nonnull final String jobName,
+                                      @Nullable final String jobGroup,
+                                      final Date startTime,
+                                      final Date endTime,
+                                      final int repeatCount,
+                                      final long repeatInterval)
+  {
+    final SimpleTrigger ret = new SimpleTrigger ();
+    ret.setName (name);
+    ret.setGroup (group);
+    ret.setJobName (jobName);
+    ret.setJobGroup (jobGroup);
+    ret.setStartTime (startTime);
+    ret.setEndTime (endTime);
+    ret.setRepeatCount (repeatCount);
+    ret.setRepeatInterval (repeatInterval);
+    return ret;
+  }
 }

@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public final class ClassUtils
 {
   private ClassUtils ()

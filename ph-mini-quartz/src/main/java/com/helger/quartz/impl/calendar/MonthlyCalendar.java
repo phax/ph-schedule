@@ -38,7 +38,7 @@ import com.helger.quartz.ICalendar;
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class MonthlyCalendar extends BaseCalendar implements ICloneable <MonthlyCalendar>
+public class MonthlyCalendar extends AbstractCalendar implements ICloneable <MonthlyCalendar>
 {
   private static final int MAX_DAYS_IN_MONTH = 31;
 

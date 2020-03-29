@@ -21,9 +21,11 @@ package com.helger.quartz;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.commons.annotation.MustImplementEqualsAndHashcode;
-import com.helger.commons.compare.IComparator;
-import com.helger.commons.lang.IExplicitlyCloneable;
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.quartz.spi.IMutableTrigger;
 
 /**
@@ -54,7 +56,7 @@ import com.helger.quartz.spi.IMutableTrigger;
  * @author James House
  */
 @MustImplementEqualsAndHashcode
-public interface ITrigger extends Serializable, IExplicitlyCloneable, Comparable <ITrigger>
+public interface ITrigger extends Serializable, Comparable <ITrigger>
 {
   public enum ETriggerState
   {
@@ -150,16 +152,19 @@ public interface ITrigger extends Serializable, IExplicitlyCloneable, Comparable
    */
   int DEFAULT_PRIORITY = 5;
 
+  @Nullable
   TriggerKey getKey ();
 
+  @Nullable
   JobKey getJobKey ();
 
   /**
    * Return the description given to the <code>Trigger</code> instance by its
    * creator (if any).
    *
-   * @return null if no description was set.
+   * @return <code>null</code> if no description was set.
    */
+  @Nullable
   String getDescription ();
 
   /**
@@ -168,25 +173,23 @@ public interface ITrigger extends Serializable, IExplicitlyCloneable, Comparable
    *
    * @return <code>null</code> if there is no associated Calendar.
    */
+  @Nullable
   String getCalendarName ();
 
   /**
    * Get the <code>JobDataMap</code> that is associated with the
-   * <code>Trigger</code>.
-   * <p>
+   * <code>Trigger</code>.<br>
    * Changes made to this map during job execution are not re-persisted, and in
    * fact typically result in an <code>IllegalStateException</code>.
-   * </p>
    */
+  @Nonnull
   JobDataMap getJobDataMap ();
 
   /**
    * The priority of a <code>Trigger</code> acts as a tiebreaker such that if
    * two <code>Trigger</code>s have the same scheduled fire time, then the one
-   * with the higher priority will get first access to a worker thread.
-   * <p>
+   * with the higher priority will get first access to a worker thread.<br>
    * If not explicitly set, the default value is <code>5</code>.
-   * </p>
    *
    * @see #DEFAULT_PRIORITY
    */
@@ -205,6 +208,8 @@ public interface ITrigger extends Serializable, IExplicitlyCloneable, Comparable
 
   /**
    * Get the time at which the <code>Trigger</code> should occur.
+   * 
+   * @return The start. May be <code>null</code> depending on the implementation
    */
   Date getStartTime ();
 
@@ -213,8 +218,10 @@ public interface ITrigger extends Serializable, IExplicitlyCloneable, Comparable
    * regardless of any remaining repeats (based on the trigger's particular
    * repeat settings).
    *
+   * @return the end time or <code>null</code>.
    * @see #getFinalFireTime()
    */
+  @Nullable
   Date getEndTime ();
 
   /**
@@ -292,63 +299,19 @@ public interface ITrigger extends Serializable, IExplicitlyCloneable, Comparable
   /**
    * Trigger equality is based upon the equality of the TriggerKey.
    *
-   * @return true if the key of this Trigger equals that of the given Trigger.
+   * @return <code>true</code> if the key of this Trigger equals that of the
+   *         given Trigger.
    */
   boolean equals (Object other);
 
   /**
-   * <p>
    * Compare the next fire time of this <code>Trigger</code> to that of another
    * by comparing their keys, or in other words, sorts them according to the
    * natural (i.e. alphabetical) order of their keys.
-   * </p>
    */
   int compareTo (ITrigger other);
 
-  /**
-   * A Comparator that compares trigger's next fire times, or in other words,
-   * sorts them according to earliest next fire time. If the fire times are the
-   * same, then the triggers are sorted according to priority (highest value
-   * first), if the priorities are the same, then they are sorted by key.
-   */
-  public static class TriggerTimeComparator implements IComparator <ITrigger>
-  {
-    // This static method exists for comparator in TC clustered quartz
-    static int compare (final Date nextFireTime1,
-                        final int priority1,
-                        final TriggerKey key1,
-                        final Date nextFireTime2,
-                        final int priority2,
-                        final TriggerKey key2)
-    {
-      if (nextFireTime1 != null || nextFireTime2 != null)
-      {
-        if (nextFireTime1 == null)
-          return 1;
-        if (nextFireTime2 == null)
-          return -1;
-        if (nextFireTime1.before (nextFireTime2))
-          return -1;
-        if (nextFireTime1.after (nextFireTime2))
-          return 1;
-      }
-
-      int comp = priority2 - priority1;
-      if (comp == 0)
-        comp = key1.compareTo (key2);
-      return comp;
-    }
-
-    public int compare (final ITrigger t1, final ITrigger t2)
-    {
-      return compare (t1.getNextFireTime (),
-                      t1.getPriority (),
-                      t1.getKey (),
-                      t2.getNextFireTime (),
-                      t2.getPriority (),
-                      t2.getKey ());
-    }
-  }
-
-  ITrigger clone ();
+  @Nonnull
+  @ReturnsMutableCopy
+  ITrigger getClone ();
 }

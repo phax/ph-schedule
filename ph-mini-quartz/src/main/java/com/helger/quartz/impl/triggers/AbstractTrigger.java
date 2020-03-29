@@ -21,8 +21,13 @@ package com.helger.quartz.impl.triggers;
 import java.util.Date;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.compare.CompareHelper;
 import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduleBuilder;
@@ -31,10 +36,10 @@ import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
+import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
-import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.spi.IOperableTrigger;
 
 /**
@@ -59,8 +64,12 @@ import com.helger.quartz.spi.IOperableTrigger;
  *
  * @author James House
  * @author Sharada Jambula
+ * @param <IMPLTYPE>
+ *        Implementation type
  */
-public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOperableTrigger
+public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYPE>> implements
+                                      IOperableTrigger,
+                                      ICloneable <IMPLTYPE>
 {
   private String m_sName;
   private String m_sGroup = IScheduler.DEFAULT_GROUP;
@@ -73,6 +82,31 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
   private int m_nMisfireInstruction = MISFIRE_INSTRUCTION_SMART_POLICY;
   private int m_nPriority = DEFAULT_PRIORITY;
   private transient TriggerKey m_aKey;
+
+  /**
+   * Copy constructor
+   *
+   * @param aOther
+   *        Calendar to copy from. May not be <code>null</code>.
+   */
+  protected AbstractTrigger (@Nonnull final AbstractTrigger <IMPLTYPE> aOther)
+  {
+    ValueEnforcer.notNull (aOther, "Other");
+    m_sName = aOther.m_sName;
+    m_sGroup = aOther.m_sGroup;
+    m_sJobName = aOther.m_sJobName;
+    m_sJobGroup = aOther.m_sJobGroup;
+    m_sDescription = aOther.m_sDescription;
+    // Shallow copy the jobDataMap. Note that this means that if a user
+    // modifies a value object in this map from the cloned Trigger
+    // they will also be modifying this Trigger.
+    m_aJobDataMap = QCloneUtils.getClone (aOther.m_aJobDataMap);
+    m_sCalendarName = aOther.m_sCalendarName;
+    m_sFireInstanceId = aOther.m_sFireInstanceId;
+    m_nMisfireInstruction = aOther.m_nMisfireInstruction;
+    m_nPriority = aOther.m_nPriority;
+    m_aKey = aOther.m_aKey;
+  }
 
   /**
    * <p>
@@ -148,11 +182,9 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
   }
 
   /**
-   * <p>
    * Get the name of this <code>Trigger</code>.
-   * </p>
    */
-  public String getName ()
+  public final String getName ()
   {
     return m_sName;
   }
@@ -165,39 +197,35 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
    * @exception IllegalArgumentException
    *            if name is null or empty.
    */
-  public void setName (final String name)
+  public final void setName (@Nonnull final String name)
   {
-    if (name == null || name.trim ().length () == 0)
-      throw new IllegalArgumentException ("Trigger name cannot be null or empty.");
+    ValueEnforcer.notNull (name, "Name");
+    ValueEnforcer.isFalse (name.trim ().isEmpty (), "Trigger name cannot be null or empty.");
 
     m_sName = name;
     m_aKey = null;
   }
 
   /**
-   * <p>
    * Get the group of this <code>Trigger</code>.
-   * </p>
    */
-  public String getGroup ()
+  public final String getGroup ()
   {
     return m_sGroup;
   }
 
   /**
-   * <p>
    * Set the name of this <code>Trigger</code>.
-   * </p>
    *
    * @param group
    *        if <code>null</code>, Scheduler.DEFAULT_GROUP will be used.
    * @exception IllegalArgumentException
    *            if group is an empty string.
    */
-  public void setGroup (final String group)
+  public final void setGroup (@Nullable final String group)
   {
-    if (group != null && group.trim ().length () == 0)
-      throw new IllegalArgumentException ("Group name cannot be an empty string.");
+    if (group != null)
+      ValueEnforcer.isFalse (group.trim ().isEmpty (), "Group name cannot be an empty string.");
 
     if (group == null)
       m_sGroup = IScheduler.DEFAULT_GROUP;
@@ -206,7 +234,7 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
     m_aKey = null;
   }
 
-  public void setKey (final TriggerKey key)
+  public final void setKey (@Nonnull final TriggerKey key)
   {
     setName (key.getName ());
     setGroup (key.getGroup ());
@@ -219,7 +247,7 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
    * <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    */
-  public String getJobName ()
+  public final String getJobName ()
   {
     return m_sJobName;
   }
@@ -233,12 +261,10 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
    * @exception IllegalArgumentException
    *            if jobName is null or empty.
    */
-  public void setJobName (final String jobName)
+  public final void setJobName (@Nonnull final String jobName)
   {
-    if (jobName == null || jobName.trim ().length () == 0)
-    {
-      throw new IllegalArgumentException ("Job name cannot be null or empty.");
-    }
+    ValueEnforcer.notNull (jobName, "JobName");
+    ValueEnforcer.isFalse (jobName.trim ().isEmpty (), "Job name cannot be null or empty.");
 
     m_sJobName = jobName;
   }
@@ -249,7 +275,7 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
    * <code>{@link com.helger.quartz.IJobDetail}</code>'s group.
    * </p>
    */
-  public String getJobGroup ()
+  public final String getJobGroup ()
   {
     return m_sJobGroup;
   }
@@ -265,10 +291,10 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
    * @exception IllegalArgumentException
    *            if group is an empty string.
    */
-  public void setJobGroup (final String jobGroup)
+  public final void setJobGroup (@Nullable final String jobGroup)
   {
-    if (jobGroup != null && jobGroup.trim ().length () == 0)
-      throw new IllegalArgumentException ("Group name cannot be null or empty.");
+    if (jobGroup != null)
+      ValueEnforcer.isFalse (jobGroup.trim ().isEmpty (), "Group name cannot be null or empty.");
 
     if (jobGroup == null)
       m_sJobGroup = IScheduler.DEFAULT_GROUP;
@@ -276,36 +302,37 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
       m_sJobGroup = jobGroup;
   }
 
-  public void setJobKey (final JobKey key)
+  public final void setJobKey (@Nonnull final JobKey key)
   {
     setJobName (key.getName ());
     setJobGroup (key.getGroup ());
   }
 
   /**
-   * <p>
    * Returns the 'full name' of the <code>Trigger</code> in the format
    * "group.name".
-   * </p>
    */
-  public String getFullName ()
+  @Nonnull
+  public final String getFullName ()
   {
     return m_sGroup + "." + m_sName;
   }
 
-  public TriggerKey getKey ()
+  @Nullable
+  public final TriggerKey getKey ()
   {
     if (m_aKey == null)
     {
-      if (getName () == null)
+      if (m_sName == null)
         return null;
-      m_aKey = new TriggerKey (getName (), getGroup ());
+      m_aKey = new TriggerKey (m_sName, m_sGroup);
     }
 
     return m_aKey;
   }
 
-  public JobKey getJobKey ()
+  @Nullable
+  public final JobKey getJobKey ()
   {
     if (getJobName () == null)
       return null;
@@ -314,157 +341,78 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
   }
 
   /**
-   * <p>
    * Returns the 'full name' of the <code>Job</code> that the
    * <code>Trigger</code> points to, in the format "group.name".
-   * </p>
    */
-  public String getFullJobName ()
+  @Nonnull
+  public final String getFullJobName ()
   {
     return m_sJobGroup + "." + m_sJobName;
   }
 
-  /**
-   * <p>
-   * Return the description given to the <code>Trigger</code> instance by its
-   * creator (if any).
-   * </p>
-   *
-   * @return null if no description was set.
-   */
-  public String getDescription ()
+  @Nullable
+  public final String getDescription ()
   {
     return m_sDescription;
   }
 
-  /**
-   * <p>
-   * Set a description for the <code>Trigger</code> instance - may be useful for
-   * remembering/displaying the purpose of the trigger, though the description
-   * has no meaning to Quartz.
-   * </p>
-   */
-  public void setDescription (final String description)
+  public final void setDescription (@Nullable final String description)
   {
     m_sDescription = description;
   }
 
-  /**
-   * <p>
-   * Associate the <code>{@link ICalendar}</code> with the given name with this
-   * Trigger.
-   * </p>
-   *
-   * @param sCalendarName
-   *        use <code>null</code> to dis-associate a Calendar.
-   */
-  public void setCalendarName (final String sCalendarName)
-  {
-    m_sCalendarName = sCalendarName;
-  }
-
-  /**
-   * <p>
-   * Get the name of the <code>{@link ICalendar}</code> associated with this
-   * Trigger.
-   * </p>
-   *
-   * @return <code>null</code> if there is no associated Calendar.
-   */
-  public String getCalendarName ()
+  @Nullable
+  public final String getCalendarName ()
   {
     return m_sCalendarName;
   }
 
-  /**
-   * <p>
-   * Get the <code>JobDataMap</code> that is associated with the
-   * <code>Trigger</code>.
-   * </p>
-   * <p>
-   * Changes made to this map during job execution are not re-persisted, and in
-   * fact typically result in an <code>IllegalStateException</code>.
-   * </p>
-   */
-  public JobDataMap getJobDataMap ()
+  public final void setCalendarName (@Nullable final String sCalendarName)
+  {
+    m_sCalendarName = sCalendarName;
+  }
+
+  @Nonnull
+  public final JobDataMap getJobDataMap ()
   {
     if (m_aJobDataMap == null)
-    {
       m_aJobDataMap = new JobDataMap ();
-    }
     return m_aJobDataMap;
   }
 
-  /**
-   * <p>
-   * Set the <code>JobDataMap</code> to be associated with the
-   * <code>Trigger</code>.
-   * </p>
-   */
-  public void setJobDataMap (final JobDataMap jobDataMap)
+  public final void setJobDataMap (@Nullable final JobDataMap jobDataMap)
   {
     m_aJobDataMap = jobDataMap;
   }
 
-  /**
-   * The priority of a <code>Trigger</code> acts as a tiebreaker such that if
-   * two <code>Trigger</code>s have the same scheduled fire time, then the one
-   * with the higher priority will get first access to a worker thread.
-   * <p>
-   * If not explicitly set, the default value is <code>5</code>.
-   * </p>
-   *
-   * @see #DEFAULT_PRIORITY
-   */
-  public int getPriority ()
+  public final int getPriority ()
   {
     return m_nPriority;
   }
 
-  /**
-   * The priority of a <code>Trigger</code> acts as a tie breaker such that if
-   * two <code>Trigger</code>s have the same scheduled fire time, then Quartz
-   * will do its best to give the one with the higher priority first access to a
-   * worker thread.
-   * <p>
-   * If not explicitly set, the default value is <code>5</code>.
-   * </p>
-   *
-   * @see #DEFAULT_PRIORITY
-   */
-  public void setPriority (final int priority)
+  public final void setPriority (final int priority)
   {
     m_nPriority = priority;
   }
 
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
+   * This method should not be used by the Quartz client.<br>
    * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
    * trigger (execute the associated <code>Job</code>), in order to give the
    * <code>Trigger</code> a chance to update itself for its next triggering (if
    * any).
-   * </p>
    *
    * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
   public abstract void triggered (ICalendar calendar);
 
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
+   * This method should not be used by the Quartz client.<br>
    * Called by the scheduler at the time a <code>Trigger</code> is first added
    * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
-   * </p>
-   * <p>
+   * first fire time, based on any associated calendar.<br>
    * After this method has been called, <code>getNextFireTime()</code> should
    * return a valid answer.
-   * </p>
    *
    * @return the first time at which the <code>Trigger</code> will be fired by
    *         the scheduler, which is also the same value
@@ -474,15 +422,11 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
   public abstract Date computeFirstFireTime (ICalendar calendar);
 
   /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
+   * This method should not be used by the Quartz client.<br>
    * Called after the <code>{@link IScheduler}</code> has executed the
    * <code>{@link com.helger.quartz.IJobDetail}</code> associated with the
    * <code>Trigger</code> in order to get the final instruction code from the
    * trigger.
-   * </p>
    *
    * @param context
    *        is the <code>JobExecutionContext</code> that was used by the
@@ -494,213 +438,39 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
    * @see com.helger.quartz.ITrigger.ECompletedExecutionInstruction
    * @see #triggered(ICalendar)
    */
-  public ECompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
-                                                           final JobExecutionException result)
+  @Nonnull
+  public ITrigger.ECompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
+                                                                    @Nullable final JobExecutionException result)
   {
-    if (result != null && result.refireImmediately ())
+    if (result != null)
     {
-      return ECompletedExecutionInstruction.RE_EXECUTE_JOB;
-    }
-
-    if (result != null && result.unscheduleFiringTrigger ())
-    {
-      return ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE;
-    }
-
-    if (result != null && result.unscheduleAllTriggers ())
-    {
-      return ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE;
+      if (result.refireImmediately ())
+        return ECompletedExecutionInstruction.RE_EXECUTE_JOB;
+      if (result.unscheduleFiringTrigger ())
+        return ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE;
+      if (result.unscheduleAllTriggers ())
+        return ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE;
     }
 
     if (!mayFireAgain ())
-    {
       return ECompletedExecutionInstruction.DELETE_TRIGGER;
-    }
 
     return ECompletedExecutionInstruction.NOOP;
   }
 
-  /**
-   * <p>
-   * Used by the <code>{@link IScheduler}</code> to determine whether or not it
-   * is possible for this <code>Trigger</code> to fire again.
-   * </p>
-   * <p>
-   * If the returned value is <code>false</code> then the <code>Scheduler</code>
-   * may remove the <code>Trigger</code> from the
-   * <code>{@link com.helger.quartz.spi.IJobStore}</code>.
-   * </p>
-   */
-  public abstract boolean mayFireAgain ();
-
-  /**
-   * <p>
-   * Get the time at which the <code>Trigger</code> should occur.
-   * </p>
-   */
-  public abstract Date getStartTime ();
-
-  /**
-   * <p>
-   * The time at which the trigger's scheduling should start. May or may not be
-   * the first actual fire time of the trigger, depending upon the type of
-   * trigger and the settings of the other properties of the trigger. However
-   * the first actual first time will not be before this date.
-   * </p>
-   * <p>
-   * Setting a value in the past may cause a new trigger to compute a first fire
-   * time that is in the past, which may cause an immediate misfire of the
-   * trigger.
-   * </p>
-   */
-  public abstract void setStartTime (Date startTime);
-
-  /**
-   * Set the time at which the <code>Trigger</code> should quit repeating -
-   * regardless of any remaining repeats (based on the trigger's particular
-   * repeat settings). <br>
-   * See TriggerUtils#computeEndTimeToAllowParticularNumberOfFirings
-   */
-  public abstract void setEndTime (Date endTime);
-
-  /**
-   * <p>
-   * Get the time at which the <code>Trigger</code> should quit repeating -
-   * regardless of any remaining repeats (based on the trigger's particular
-   * repeat settings).
-   * </p>
-   *
-   * @see #getFinalFireTime()
-   */
-  public abstract Date getEndTime ();
-
-  /**
-   * Returns the next time at which the <code>Trigger</code> is scheduled to
-   * fire. If the trigger will not fire again, <code>null</code> will be
-   * returned. Note that the time returned can possibly be in the past, if the
-   * time that was computed for the trigger to next fire has already arrived,
-   * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).<br>
-   * The value returned is not guaranteed to be valid until after the
-   * <code>Trigger</code> has been added to the scheduler.<br>
-   * See
-   * com.helger.quartz.TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
-   * com.helger.quartz.ICalendar, java.util.Date, java.util.Date)
-   */
-  public abstract Date getNextFireTime ();
-
-  /**
-   * <p>
-   * Returns the previous time at which the <code>Trigger</code> fired. If the
-   * trigger has not yet fired, <code>null</code> will be returned.
-   */
-  public abstract Date getPreviousFireTime ();
-
-  /**
-   * <p>
-   * Returns the next time at which the <code>Trigger</code> will fire, after
-   * the given time. If the trigger will not fire after the given time,
-   * <code>null</code> will be returned.
-   * </p>
-   */
-  public abstract Date getFireTimeAfter (Date afterTime);
-
-  /**
-   * <p>
-   * Returns the last time at which the <code>Trigger</code> will fire, if the
-   * Trigger will repeat indefinitely, null will be returned.
-   * </p>
-   * <p>
-   * Note that the return time *may* be in the past.
-   * </p>
-   */
-  public abstract Date getFinalFireTime ();
-
-  /**
-   * <p>
-   * Set the instruction the <code>Scheduler</code> should be given for handling
-   * misfire situations for this <code>Trigger</code>- the concrete
-   * <code>Trigger</code> type that you are using will have defined a set of
-   * additional <code>MISFIRE_INSTRUCTION_XXX</code> constants that may be
-   * passed to this method.
-   * </p>
-   * <p>
-   * If not explicitly set, the default value is
-   * <code>MISFIRE_INSTRUCTION_SMART_POLICY</code>.
-   * </p>
-   *
-   * @see #MISFIRE_INSTRUCTION_SMART_POLICY
-   * @see #updateAfterMisfire(ICalendar)
-   * @see com.helger.quartz.ISimpleTrigger
-   * @see com.helger.quartz.ICronTrigger
-   */
-  public void setMisfireInstruction (final int misfireInstruction)
-  {
-    if (!validateMisfireInstruction (misfireInstruction))
-    {
-      throw new IllegalArgumentException ("The misfire instruction code is invalid for this type of trigger.");
-    }
-    m_nMisfireInstruction = misfireInstruction;
-  }
-
-  protected abstract boolean validateMisfireInstruction (int candidateMisfireInstruction);
-
-  /**
-   * <p>
-   * Get the instruction the <code>Scheduler</code> should be given for handling
-   * misfire situations for this <code>Trigger</code>- the concrete
-   * <code>Trigger</code> type that you are using will have defined a set of
-   * additional <code>MISFIRE_INSTRUCTION_XXX</code> constants that may be
-   * passed to this method.
-   * </p>
-   * <p>
-   * If not explicitly set, the default value is
-   * <code>MISFIRE_INSTRUCTION_SMART_POLICY</code>.
-   * </p>
-   *
-   * @see #MISFIRE_INSTRUCTION_SMART_POLICY
-   * @see #updateAfterMisfire(ICalendar)
-   * @see com.helger.quartz.ISimpleTrigger
-   * @see com.helger.quartz.ICronTrigger
-   */
-  public int getMisfireInstruction ()
+  public final int getMisfireInstruction ()
   {
     return m_nMisfireInstruction;
   }
 
-  /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
-   * To be implemented by the concrete classes that extend this class.
-   * </p>
-   * <p>
-   * The implementation should update the <code>Trigger</code>'s state based on
-   * the MISFIRE_INSTRUCTION_XXX that was selected when the <code>Trigger</code>
-   * was created.
-   * </p>
-   */
-  public abstract void updateAfterMisfire (ICalendar cal);
+  public final void setMisfireInstruction (final int misfireInstruction)
+  {
+    if (!validateMisfireInstruction (misfireInstruction))
+      throw new IllegalArgumentException ("The misfire instruction code is invalid for this type of trigger.");
+    m_nMisfireInstruction = misfireInstruction;
+  }
 
-  /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
-   * To be implemented by the concrete class.
-   * </p>
-   * <p>
-   * The implementation should update the <code>Trigger</code>'s state based on
-   * the given new version of the associated <code>Calendar</code> (the state
-   * should be updated so that it's next fire time is appropriate given the
-   * Calendar's new settings).
-   * </p>
-   *
-   * @param cal
-   *        the modifying calendar
-   */
-  public abstract void updateWithNewCalendar (ICalendar cal, long misfireThreshold);
+  protected abstract boolean validateMisfireInstruction (int candidateMisfireInstruction);
 
   /**
    * <p>
@@ -713,49 +483,27 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
   public void validate () throws SchedulerException
   {
     if (m_sName == null)
-    {
       throw new SchedulerException ("Trigger's name cannot be null");
-    }
 
     if (m_sGroup == null)
-    {
       throw new SchedulerException ("Trigger's group cannot be null");
-    }
 
     if (m_sJobName == null)
-    {
       throw new SchedulerException ("Trigger's related Job's name cannot be null");
-    }
 
     if (m_sJobGroup == null)
-    {
       throw new SchedulerException ("Trigger's related Job's group cannot be null");
-    }
   }
 
-  /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   * <p>
-   * Usable by <code>{@link com.helger.quartz.spi.IJobStore}</code>
-   * implementations, in order to facilitate 'recognizing' instances of fired
-   * <code>Trigger</code> s as their jobs complete execution.
-   * </p>
-   */
-  public void setFireInstanceId (final String id)
-  {
-    m_sFireInstanceId = id;
-  }
-
-  /**
-   * <p>
-   * This method should not be used by the Quartz client.
-   * </p>
-   */
-  public String getFireInstanceId ()
+  @Nullable
+  public final String getFireInstanceId ()
   {
     return m_sFireInstanceId;
+  }
+
+  public final void setFireInstanceId (@Nullable final String id)
+  {
+    m_sFireInstanceId = id;
   }
 
   /**
@@ -785,17 +533,9 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
    * natural (i.e. alphabetical) order of their keys.
    * </p>
    */
-  public int compareTo (final ITrigger other)
+  public int compareTo (@Nonnull final ITrigger aOther)
   {
-
-    if (other.getKey () == null && getKey () == null)
-      return 0;
-    if (other.getKey () == null)
-      return -1;
-    if (getKey () == null)
-      return 1;
-
-    return getKey ().compareTo (other.getKey ());
+    return CompareHelper.compare (getKey (), aOther.getKey (), false);
   }
 
   /**
@@ -819,35 +559,11 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
   @Override
   public int hashCode ()
   {
-    if (getKey () == null)
-      return super.hashCode ();
-
-    return getKey ().hashCode ();
-  }
-
-  @Override
-  public AbstractTrigger <?> clone ()
-  {
-    try
-    {
-      final AbstractTrigger <?> copy = (AbstractTrigger <?>) super.clone ();
-      // Shallow copy the jobDataMap. Note that this means that if a user
-      // modifies a value object in this map from the cloned Trigger
-      // they will also be modifying this Trigger.
-      if (m_aJobDataMap != null)
-      {
-        copy.m_aJobDataMap = (JobDataMap) m_aJobDataMap.clone ();
-      }
-      return copy;
-    }
-    catch (final CloneNotSupportedException ex)
-    {
-      throw new IncompatibleClassChangeError ("Not Cloneable.");
-    }
+    return new HashCodeGenerator (this).append (getKey ()).getHashCode ();
   }
 
   @Nonnull
-  public TriggerBuilder <T> getTriggerBuilder ()
+  public TriggerBuilder <IMPLTYPE> getTriggerBuilder ()
   {
     return TriggerBuilder.newTrigger ()
                          .forJob (getJobKey ())
@@ -862,5 +578,5 @@ public abstract class AbstractTrigger <T extends IMutableTrigger> implements IOp
   }
 
   @Nonnull
-  public abstract IScheduleBuilder <T> getScheduleBuilder ();
+  public abstract IScheduleBuilder <IMPLTYPE> getScheduleBuilder ();
 }

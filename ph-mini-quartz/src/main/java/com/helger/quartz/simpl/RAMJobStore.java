@@ -49,12 +49,13 @@ import com.helger.quartz.IJobDetail;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
-import com.helger.quartz.ITrigger.TriggerTimeComparator;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.JobPersistenceException;
 import com.helger.quartz.ObjectAlreadyExistsException;
+import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.TriggerKey;
+import com.helger.quartz.TriggerTimeComparator;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.impl.matchers.StringMatcher;
 import com.helger.quartz.spi.IClassLoadHelper;
@@ -402,7 +403,7 @@ public class RAMJobStore implements IJobStore
   public void storeTrigger (final IOperableTrigger newTrigger,
                             final boolean bReplaceExisting) throws JobPersistenceException
   {
-    final TriggerWrapper tw = new TriggerWrapper (newTrigger.clone ());
+    final TriggerWrapper tw = new TriggerWrapper (newTrigger.getClone ());
 
     synchronized (m_aLock)
     {
@@ -617,7 +618,7 @@ public class RAMJobStore implements IJobStore
     {
       final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
 
-      return (tw != null) ? (IOperableTrigger) tw.getTrigger ().clone () : null;
+      return (tw != null) ? (IOperableTrigger) tw.getTrigger ().getClone () : null;
     }
   }
 
@@ -1016,7 +1017,7 @@ public class RAMJobStore implements IJobStore
     {
       for (final TriggerWrapper tw : m_aTriggers)
         if (tw.m_aJobKey.equals (jobKey))
-          trigList.add (tw.m_aTrigger.clone ());
+          trigList.add (tw.m_aTrigger.getClone ());
     }
 
     return trigList;
@@ -1417,7 +1418,7 @@ public class RAMJobStore implements IJobStore
       cal = retrieveCalendar (tw.m_aTrigger.getCalendarName ());
     }
 
-    m_aSignaler.notifyTriggerListenersMisfired (tw.m_aTrigger.clone ());
+    m_aSignaler.notifyTriggerListenersMisfired (tw.m_aTrigger.getClone ());
 
     tw.m_aTrigger.updateAfterMisfire (cal);
 
@@ -1522,7 +1523,7 @@ public class RAMJobStore implements IJobStore
 
         tw.m_nState = TriggerWrapper.STATE_ACQUIRED;
         tw.m_aTrigger.setFireInstanceId (getFiredTriggerRecordId ());
-        final IOperableTrigger trig = tw.m_aTrigger.clone ();
+        final IOperableTrigger trig = tw.m_aTrigger.getClone ();
         if (result.isEmpty ())
         {
           batchEnd = Math.max (tw.m_aTrigger.getNextFireTime ().getTime (), System.currentTimeMillis ()) + timeWindow;
@@ -1675,12 +1676,7 @@ public class RAMJobStore implements IJobStore
 
         if (jd.isPersistJobDataAfterExecution ())
         {
-          JobDataMap newData = jobDetail.getJobDataMap ();
-          if (newData != null)
-          {
-            newData = (JobDataMap) newData.clone ();
-            // newData.clearDirtyFlag ();
-          }
+          final JobDataMap newData = QCloneUtils.getClone (jobDetail.getJobDataMap ());
           jd = jd.getJobBuilder ().setJobData (newData).build ();
           jw.setJobDetail (jd);
         }

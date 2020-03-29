@@ -45,7 +45,7 @@ import com.helger.quartz.ICalendar;
  * @author Sharada Jambula
  * @author Juergen Donnerstag
  */
-public class HolidayCalendar extends BaseCalendar implements ICloneable <HolidayCalendar>
+public class HolidayCalendar extends AbstractCalendar implements ICloneable <HolidayCalendar>
 {
   // A sorted set to store the holidays
   private final ICommonsSortedSet <Date> m_aDates = new CommonsTreeSet <> ();

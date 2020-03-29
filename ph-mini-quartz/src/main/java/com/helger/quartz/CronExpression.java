@@ -318,7 +318,7 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
     }
     if (expression.getTimeZone () != null)
     {
-      setTimeZone ((TimeZone) expression.getTimeZone ().clone ());
+      setTimeZone (QCloneUtils.getClone (expression.getTimeZone ()));
     }
   }
 

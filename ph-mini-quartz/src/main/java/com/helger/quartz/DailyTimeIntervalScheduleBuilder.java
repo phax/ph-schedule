@@ -20,15 +20,14 @@ package com.helger.quartz;
 
 import java.time.DayOfWeek;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
+import java.util.EnumSet;
 
 import javax.annotation.Nonnull;
 
 import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.collection.impl.CommonsHashSet;
-import com.helger.commons.collection.impl.ICommonsSet;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
@@ -75,7 +74,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
 {
   private int m_nInterval = 1;
   private EIntervalUnit m_eIntervalUnit = EIntervalUnit.MINUTE;
-  private Set <DayOfWeek> m_aDaysOfWeek;
+  private EnumSet <DayOfWeek> m_aDaysOfWeek;
   private TimeOfDay m_aStartTimeOfDay;
   private TimeOfDay m_aEndTimeOfDay;
   private int m_nRepeatCount = IDailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
@@ -85,30 +84,30 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * A set of all days of the week. The set contains all values between
    * {@link Calendar#SUNDAY} and {@link Calendar#SATURDAY}.
    */
-  private static final ICommonsSet <DayOfWeek> ALL_DAYS_OF_THE_WEEK;
+  private static final EnumSet <DayOfWeek> ALL_DAYS_OF_THE_WEEK;
 
   /**
    * A set of the business days of the week (for locales similar to the USA).
    * The set contains all values between {@link Calendar#MONDAY} and
    * {@link Calendar#FRIDAY}.
    */
-  private static final ICommonsSet <DayOfWeek> MONDAY_THROUGH_FRIDAY;
+  private static final EnumSet <DayOfWeek> MONDAY_THROUGH_FRIDAY;
 
   /**
    * A set of the weekend days of the week (for locales similar to the USA). The
    * set contains {@link Calendar#SATURDAY} and {@link Calendar#SUNDAY}
    */
-  private static final ICommonsSet <DayOfWeek> SATURDAY_AND_SUNDAY;
+  private static final EnumSet <DayOfWeek> SATURDAY_AND_SUNDAY;
 
   static
   {
-    ALL_DAYS_OF_THE_WEEK = new CommonsHashSet <> (DayOfWeek.values ());
-    MONDAY_THROUGH_FRIDAY = new CommonsHashSet <> (DayOfWeek.MONDAY,
-                                                   DayOfWeek.TUESDAY,
-                                                   DayOfWeek.WEDNESDAY,
-                                                   DayOfWeek.THURSDAY,
-                                                   DayOfWeek.FRIDAY);
-    SATURDAY_AND_SUNDAY = new CommonsHashSet <> (DayOfWeek.SUNDAY, DayOfWeek.SATURDAY);
+    ALL_DAYS_OF_THE_WEEK = EnumSet.allOf (DayOfWeek.class);
+    MONDAY_THROUGH_FRIDAY = EnumSet.of (DayOfWeek.MONDAY,
+                                        DayOfWeek.TUESDAY,
+                                        DayOfWeek.WEDNESDAY,
+                                        DayOfWeek.THURSDAY,
+                                        DayOfWeek.FRIDAY);
+    SATURDAY_AND_SUNDAY = EnumSet.of (DayOfWeek.SUNDAY, DayOfWeek.SATURDAY);
   }
 
   protected DailyTimeIntervalScheduleBuilder ()
@@ -144,7 +143,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
     if (m_aDaysOfWeek != null)
       st.setDaysOfWeek (m_aDaysOfWeek);
     else
-      st.setDaysOfWeek (ALL_DAYS_OF_THE_WEEK.getClone ());
+      st.setDaysOfWeek (EnumSet.copyOf (ALL_DAYS_OF_THE_WEEK));
 
     if (m_aStartTimeOfDay != null)
       st.setStartTimeOfDay (m_aStartTimeOfDay);
@@ -244,7 +243,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @Nonnull
-  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Set <DayOfWeek> onDaysOfWeek)
+  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final EnumSet <DayOfWeek> onDaysOfWeek)
   {
     ValueEnforcer.notEmpty (onDaysOfWeek, "OnDaysOfWeek");
 
@@ -264,7 +263,9 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   @Nonnull
   public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final DayOfWeek... onDaysOfWeek)
   {
-    return onDaysOfTheWeek (new CommonsHashSet <> (onDaysOfWeek));
+    final EnumSet <DayOfWeek> aSet = EnumSet.noneOf (DayOfWeek.class);
+    Collections.addAll (aSet, onDaysOfWeek);
+    return onDaysOfTheWeek (aSet);
   }
 
   /**
@@ -275,7 +276,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   @Nonnull
   public DailyTimeIntervalScheduleBuilder onMondayThroughFriday ()
   {
-    m_aDaysOfWeek = MONDAY_THROUGH_FRIDAY.getClone ();
+    m_aDaysOfWeek = EnumSet.copyOf (MONDAY_THROUGH_FRIDAY);
     return this;
   }
 
@@ -287,7 +288,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   @Nonnull
   public DailyTimeIntervalScheduleBuilder onSaturdayAndSunday ()
   {
-    m_aDaysOfWeek = SATURDAY_AND_SUNDAY.getClone ();
+    m_aDaysOfWeek = EnumSet.copyOf (SATURDAY_AND_SUNDAY);
     return this;
   }
 
@@ -299,7 +300,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   @Nonnull
   public DailyTimeIntervalScheduleBuilder onEveryDay ()
   {
-    m_aDaysOfWeek = ALL_DAYS_OF_THE_WEEK.getClone ();
+    m_aDaysOfWeek = EnumSet.copyOf (ALL_DAYS_OF_THE_WEEK);
     return this;
   }
 
