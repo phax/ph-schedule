@@ -40,15 +40,15 @@ public class NotMatcher <T extends Key <T>> implements IMatcher <T>
     m_aOperand = operand;
   }
 
-  public boolean isMatch (final T key)
-  {
-    return !m_aOperand.isMatch (key);
-  }
-
   @Nonnull
   public IMatcher <T> getOperand ()
   {
     return m_aOperand;
+  }
+
+  public boolean isMatch (final T key)
+  {
+    return !m_aOperand.isMatch (key);
   }
 
   @Override

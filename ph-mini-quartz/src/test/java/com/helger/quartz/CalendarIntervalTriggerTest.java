@@ -29,9 +29,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.annotation.Nullable;
+
 import org.junit.Test;
 
-import com.helger.commons.annotation.UnsupportedOperation;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.quartz.impl.calendar.AbstractCalendar;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
@@ -59,6 +60,19 @@ public class CalendarIntervalTriggerTest
     assertEquals (trigger.getFireTimeAfter (after), triggerTime);
   }
 
+  private static final class MockCalendar extends AbstractCalendar <MockCalendar>
+  {
+    public MockCalendar (@Nullable final ICalendar aBaseCalendar, @Nullable final TimeZone aTimeZone)
+    {
+      super (aBaseCalendar, aTimeZone);
+    }
+
+    public MockCalendar getClone ()
+    {
+      return new MockCalendar (getBaseCalendar (), getTimeZone ());
+    }
+  }
+
   @Test
   public void testQTZ330DaylightSavingsCornerCase ()
   {
@@ -74,14 +88,7 @@ public class CalendarIntervalTriggerTest
     after.setTimeZone (edt);
     after.set (2013, Calendar.APRIL, 19, 2, 30, 0);
 
-    final AbstractCalendar baseCalendar = new AbstractCalendar (null, edt)
-    {
-      @UnsupportedOperation
-      public AbstractCalendar getClone ()
-      {
-        throw new IllegalStateException ();
-      }
-    };
+    final MockCalendar baseCalendar = new MockCalendar (null, edt);
 
     final CalendarIntervalTrigger intervalTrigger = new CalendarIntervalTrigger ("QTZ-330",
                                                                                  start.getTime (),

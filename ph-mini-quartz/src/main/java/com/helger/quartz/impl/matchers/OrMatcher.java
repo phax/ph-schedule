@@ -44,11 +44,6 @@ public class OrMatcher <T extends Key <T>> implements IMatcher <T>
     m_aRightOperand = aRightOperand;
   }
 
-  public boolean isMatch (final T key)
-  {
-    return m_aLeftOperand.isMatch (key) || m_aRightOperand.isMatch (key);
-  }
-
   @Nonnull
   public IMatcher <T> getLeftOperand ()
   {
@@ -61,10 +56,9 @@ public class OrMatcher <T extends Key <T>> implements IMatcher <T>
     return m_aRightOperand;
   }
 
-  @Override
-  public int hashCode ()
+  public boolean isMatch (final T key)
   {
-    return new HashCodeGenerator (this).append (m_aLeftOperand).append (m_aRightOperand).getHashCode ();
+    return m_aLeftOperand.isMatch (key) || m_aRightOperand.isMatch (key);
   }
 
   @Override
@@ -76,5 +70,11 @@ public class OrMatcher <T extends Key <T>> implements IMatcher <T>
       return false;
     final OrMatcher <?> other = (OrMatcher <?>) o;
     return m_aLeftOperand.equals (other.m_aLeftOperand) && m_aRightOperand.equals (other.m_aRightOperand);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aLeftOperand).append (m_aRightOperand).getHashCode ();
   }
 }

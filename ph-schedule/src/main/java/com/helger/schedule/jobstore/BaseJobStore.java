@@ -606,7 +606,7 @@ public class BaseJobStore implements IJobStore
   {
     final ICommonsSet <JobKey> ret = new CommonsHashSet <> ();
 
-    final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
+    final StringMatcher.EStringOperatorName eOperator = matcher.getCompareWithOperator ();
     final String compareToValue = matcher.getCompareToValue ();
 
     m_aRWLock.readLocked ( () -> {
@@ -642,7 +642,7 @@ public class BaseJobStore implements IJobStore
   public ICommonsSet <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher)
   {
     final ICommonsSet <TriggerKey> ret = new CommonsHashSet <> ();
-    final StringMatcher.StringOperatorName operator = matcher.getCompareWithOperator ();
+    final StringMatcher.EStringOperatorName operator = matcher.getCompareWithOperator ();
     final String compareToValue = matcher.getCompareToValue ();
 
     m_aRWLock.readLocked ( () -> {
@@ -751,7 +751,7 @@ public class BaseJobStore implements IJobStore
   {
     final ICommonsList <String> ret = new CommonsArrayList <> ();
 
-    final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
+    final StringMatcher.EStringOperatorName eOperator = matcher.getCompareWithOperator ();
 
     m_aRWLock.writeLocked ( () -> {
       switch (eOperator)
@@ -805,7 +805,7 @@ public class BaseJobStore implements IJobStore
   public ICommonsList <String> pauseJobs (final GroupMatcher <JobKey> matcher)
   {
     final ICommonsList <String> pausedGroups = new CommonsArrayList <> ();
-    final StringMatcher.StringOperatorName eOperator = matcher.getCompareWithOperator ();
+    final StringMatcher.EStringOperatorName eOperator = matcher.getCompareWithOperator ();
 
     m_aRWLock.writeLocked ( () -> {
       switch (eOperator)

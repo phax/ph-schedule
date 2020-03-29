@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -47,7 +48,9 @@ import com.helger.quartz.ICalendar;
  * @author Juergen Donnerstag
  * @author James House
  */
-public abstract class AbstractCalendar implements ICalendar
+public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLTYPE>> implements
+                                       ICalendar,
+                                       ICloneable <IMPLTYPE>
 {
   // A optional base calendar
   private ICalendar m_aBaseCalendar;
@@ -60,7 +63,7 @@ public abstract class AbstractCalendar implements ICalendar
    * @param aOther
    *        Calendar to copy from. May not be <code>null</code>.
    */
-  protected AbstractCalendar (@Nonnull final AbstractCalendar aOther)
+  protected AbstractCalendar (@Nonnull final AbstractCalendar <IMPLTYPE> aOther)
   {
     ValueEnforcer.notNull (aOther, "Other");
     m_aBaseCalendar = aOther.m_aBaseCalendar;
@@ -73,10 +76,10 @@ public abstract class AbstractCalendar implements ICalendar
    *        The time zone to use for this Calendar, <code>null</code> if
    *        <code>{@link TimeZone#getDefault()}</code> should be used
    */
-  public AbstractCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
+  public AbstractCalendar (@Nullable final ICalendar aBaseCalendar, @Nullable final TimeZone aTimeZone)
   {
-    setBaseCalendar (baseCalendar);
-    m_aTimeZone = timeZone;
+    setBaseCalendar (aBaseCalendar);
+    m_aTimeZone = aTimeZone;
   }
 
   public final ICalendar getBaseCalendar ()
@@ -152,7 +155,7 @@ public abstract class AbstractCalendar implements ICalendar
    * Calendar will use the <code>BaseCalendar</code> time zone if it is not
    * <code>null</code>.
    */
-  protected Calendar createJavaCalendar (final long timeStamp)
+  protected final Calendar createJavaCalendar (final long timeStamp)
   {
     final Calendar calendar = createJavaCalendar ();
     calendar.setTime (new Date (timeStamp));
@@ -164,7 +167,7 @@ public abstract class AbstractCalendar implements ICalendar
    * Calendar will use the <code>BaseCalendar</code> time zone if it is not
    * <code>null</code>.
    */
-  protected Calendar createJavaCalendar ()
+  protected final Calendar createJavaCalendar ()
   {
     return Calendar.getInstance (getTimeZone () != null ? getTimeZone () : TimeZone.getDefault (),
                                  Locale.getDefault (Locale.Category.FORMAT));
@@ -179,7 +182,7 @@ public abstract class AbstractCalendar implements ICalendar
    *        A time containing the desired date for the start-of-day time
    * @return A <code>{@link Calendar}</code> set to the start of the given day.
    */
-  protected Calendar getStartOfDayJavaCalendar (final long timeInMillis)
+  protected final Calendar getStartOfDayJavaCalendar (final long timeInMillis)
   {
     final Calendar startOfDay = createJavaCalendar (timeInMillis);
     startOfDay.set (Calendar.HOUR_OF_DAY, 0);
@@ -198,7 +201,7 @@ public abstract class AbstractCalendar implements ICalendar
    *        a time containing the desired date for the end-of-day time.
    * @return A <code>{@link Calendar}</code> set to the end of the given day.
    */
-  protected Calendar getEndOfDayJavaCalendar (final long timeInMillis)
+  protected final Calendar getEndOfDayJavaCalendar (final long timeInMillis)
   {
     final Calendar endOfDay = createJavaCalendar (timeInMillis);
     endOfDay.set (Calendar.HOUR_OF_DAY, 23);

@@ -44,11 +44,6 @@ public class AndMatcher <T extends Key <T>> implements IMatcher <T>
     m_aRightOperand = rightOperand;
   }
 
-  public boolean isMatch (final T key)
-  {
-    return m_aLeftOperand.isMatch (key) && m_aRightOperand.isMatch (key);
-  }
-
   @Nonnull
   public IMatcher <T> getLeftOperand ()
   {
@@ -59,6 +54,11 @@ public class AndMatcher <T extends Key <T>> implements IMatcher <T>
   public IMatcher <T> getRightOperand ()
   {
     return m_aRightOperand;
+  }
+
+  public boolean isMatch (final T key)
+  {
+    return m_aLeftOperand.isMatch (key) && m_aRightOperand.isMatch (key);
   }
 
   @Override

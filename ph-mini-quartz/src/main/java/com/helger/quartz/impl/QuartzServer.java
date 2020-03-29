@@ -87,7 +87,6 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
       LOGGER.info ("   then other process may now use it.");
 
       // Don't close System.in
-      @SuppressWarnings ("resource")
       final NonBlockingBufferedReader rdr = new NonBlockingBufferedReader (new InputStreamReader (System.in,
                                                                                                   StandardCharsets.ISO_8859_1));
       while (true)

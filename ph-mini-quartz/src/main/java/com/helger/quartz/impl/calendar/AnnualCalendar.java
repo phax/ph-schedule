@@ -33,7 +33,6 @@ import com.helger.commons.annotation.ReturnsMutableObject;
 import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.compare.IComparator;
-import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -46,7 +45,7 @@ import com.helger.quartz.ICalendar;
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class AnnualCalendar extends AbstractCalendar implements ICloneable <AnnualCalendar>
+public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
 {
   private final ICommonsList <Calendar> m_aExcludeDays = new CommonsArrayList <> ();
 

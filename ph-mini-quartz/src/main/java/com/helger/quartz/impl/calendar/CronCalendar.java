@@ -25,7 +25,6 @@ import java.util.TimeZone;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.ICalendar;
 
@@ -46,7 +45,7 @@ import com.helger.quartz.ICalendar;
  *
  * @author Aaron Craven
  */
-public class CronCalendar extends AbstractCalendar implements ICloneable <CronCalendar>
+public class CronCalendar extends AbstractCalendar <CronCalendar>
 {
   private CronExpression m_aCronExpression;
 

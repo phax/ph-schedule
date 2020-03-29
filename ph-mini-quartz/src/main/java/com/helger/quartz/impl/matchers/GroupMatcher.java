@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import javax.annotation.Nonnull;
+
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.utils.Key;
@@ -29,136 +31,9 @@ import com.helger.quartz.utils.Key;
  */
 public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
 {
-  protected GroupMatcher (final String compareTo, final StringOperatorName compareWith)
+  protected GroupMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
   {
-    super (compareTo, compareWith);
-  }
-
-  /**
-   * Create a GroupMatcher that matches groups equaling the given string.
-   */
-  public static <T extends Key <T>> GroupMatcher <T> groupEquals (final String compareTo)
-  {
-    return new GroupMatcher <> (compareTo, StringOperatorName.EQUALS);
-  }
-
-  /**
-   * Create a GroupMatcher that matches job groups equaling the given string.
-   */
-  public static GroupMatcher <JobKey> jobGroupEquals (final String compareTo)
-  {
-    return GroupMatcher.groupEquals (compareTo);
-  }
-
-  /**
-   * Create a GroupMatcher that matches trigger groups equaling the given
-   * string.
-   */
-  public static GroupMatcher <TriggerKey> triggerGroupEquals (final String compareTo)
-  {
-    return GroupMatcher.groupEquals (compareTo);
-  }
-
-  /**
-   * Create a GroupMatcher that matches groups starting with the given string.
-   */
-  public static <T extends Key <T>> GroupMatcher <T> groupStartsWith (final String compareTo)
-  {
-    return new GroupMatcher <> (compareTo, StringOperatorName.STARTS_WITH);
-  }
-
-  /**
-   * Create a GroupMatcher that matches job groups starting with the given
-   * string.
-   */
-  public static GroupMatcher <JobKey> jobGroupStartsWith (final String compareTo)
-  {
-    return GroupMatcher.groupStartsWith (compareTo);
-  }
-
-  /**
-   * Create a GroupMatcher that matches trigger groups starting with the given
-   * string.
-   */
-  public static GroupMatcher <TriggerKey> triggerGroupStartsWith (final String compareTo)
-  {
-    return GroupMatcher.groupStartsWith (compareTo);
-  }
-
-  /**
-   * Create a GroupMatcher that matches groups ending with the given string.
-   */
-  public static <T extends Key <T>> GroupMatcher <T> groupEndsWith (final String compareTo)
-  {
-    return new GroupMatcher <> (compareTo, StringOperatorName.ENDS_WITH);
-  }
-
-  /**
-   * Create a GroupMatcher that matches job groups ending with the given string.
-   */
-  public static GroupMatcher <JobKey> jobGroupEndsWith (final String compareTo)
-  {
-    return GroupMatcher.groupEndsWith (compareTo);
-  }
-
-  /**
-   * Create a GroupMatcher that matches trigger groups ending with the given
-   * string.
-   */
-  public static GroupMatcher <TriggerKey> triggerGroupEndsWith (final String compareTo)
-  {
-    return GroupMatcher.groupEndsWith (compareTo);
-  }
-
-  /**
-   * Create a GroupMatcher that matches groups containing the given string.
-   */
-  public static <T extends Key <T>> GroupMatcher <T> groupContains (final String compareTo)
-  {
-    return new GroupMatcher <> (compareTo, StringOperatorName.CONTAINS);
-  }
-
-  /**
-   * Create a GroupMatcher that matches job groups containing the given string.
-   */
-  public static GroupMatcher <JobKey> jobGroupContains (final String compareTo)
-  {
-    return GroupMatcher.groupContains (compareTo);
-  }
-
-  /**
-   * Create a GroupMatcher that matches trigger groups containing the given
-   * string.
-   */
-  public static GroupMatcher <TriggerKey> triggerGroupContains (final String compareTo)
-  {
-    return GroupMatcher.groupContains (compareTo);
-  }
-
-  /**
-   * Create a GroupMatcher that matches groups starting with the given string.
-   */
-  public static <T extends Key <T>> GroupMatcher <T> anyGroup ()
-  {
-    return new GroupMatcher <> ("", StringOperatorName.ANYTHING);
-  }
-
-  /**
-   * Create a GroupMatcher that matches job groups starting with the given
-   * string.
-   */
-  public static GroupMatcher <JobKey> anyJobGroup ()
-  {
-    return GroupMatcher.anyGroup ();
-  }
-
-  /**
-   * Create a GroupMatcher that matches trigger groups starting with the given
-   * string.
-   */
-  public static GroupMatcher <TriggerKey> anyTriggerGroup ()
-  {
-    return GroupMatcher.anyGroup ();
+    super (sCompareTo, eCompareWith);
   }
 
   @Override
@@ -167,4 +42,130 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
     return key.getGroup ();
   }
 
+  /**
+   * Create a GroupMatcher that matches groups equaling the given string.
+   */
+  public static <T extends Key <T>> GroupMatcher <T> groupEquals (final String sCompareTo)
+  {
+    return new GroupMatcher <> (sCompareTo, EStringOperatorName.EQUALS);
+  }
+
+  /**
+   * Create a GroupMatcher that matches job groups equaling the given string.
+   */
+  public static GroupMatcher <JobKey> jobGroupEquals (final String sCompareTo)
+  {
+    return groupEquals (sCompareTo);
+  }
+
+  /**
+   * Create a GroupMatcher that matches trigger groups equaling the given
+   * string.
+   */
+  public static GroupMatcher <TriggerKey> triggerGroupEquals (final String sCompareTo)
+  {
+    return groupEquals (sCompareTo);
+  }
+
+  /**
+   * Create a GroupMatcher that matches groups starting with the given string.
+   */
+  public static <T extends Key <T>> GroupMatcher <T> groupStartsWith (final String sCompareTo)
+  {
+    return new GroupMatcher <> (sCompareTo, EStringOperatorName.STARTS_WITH);
+  }
+
+  /**
+   * Create a GroupMatcher that matches job groups starting with the given
+   * string.
+   */
+  public static GroupMatcher <JobKey> jobGroupStartsWith (final String sCompareTo)
+  {
+    return groupStartsWith (sCompareTo);
+  }
+
+  /**
+   * Create a GroupMatcher that matches trigger groups starting with the given
+   * string.
+   */
+  public static GroupMatcher <TriggerKey> triggerGroupStartsWith (final String sCompareTo)
+  {
+    return groupStartsWith (sCompareTo);
+  }
+
+  /**
+   * Create a GroupMatcher that matches groups ending with the given string.
+   */
+  public static <T extends Key <T>> GroupMatcher <T> groupEndsWith (final String sCompareTo)
+  {
+    return new GroupMatcher <> (sCompareTo, EStringOperatorName.ENDS_WITH);
+  }
+
+  /**
+   * Create a GroupMatcher that matches job groups ending with the given string.
+   */
+  public static GroupMatcher <JobKey> jobGroupEndsWith (final String sCompareTo)
+  {
+    return groupEndsWith (sCompareTo);
+  }
+
+  /**
+   * Create a GroupMatcher that matches trigger groups ending with the given
+   * string.
+   */
+  public static GroupMatcher <TriggerKey> triggerGroupEndsWith (final String sCompareTo)
+  {
+    return groupEndsWith (sCompareTo);
+  }
+
+  /**
+   * Create a GroupMatcher that matches groups containing the given string.
+   */
+  public static <T extends Key <T>> GroupMatcher <T> groupContains (final String sCompareTo)
+  {
+    return new GroupMatcher <> (sCompareTo, EStringOperatorName.CONTAINS);
+  }
+
+  /**
+   * Create a GroupMatcher that matches job groups containing the given string.
+   */
+  public static GroupMatcher <JobKey> jobGroupContains (final String sCompareTo)
+  {
+    return groupContains (sCompareTo);
+  }
+
+  /**
+   * Create a GroupMatcher that matches trigger groups containing the given
+   * string.
+   */
+  public static GroupMatcher <TriggerKey> triggerGroupContains (final String sCompareTo)
+  {
+    return groupContains (sCompareTo);
+  }
+
+  /**
+   * Create a GroupMatcher that matches groups starting with the given string.
+   */
+  public static <T extends Key <T>> GroupMatcher <T> anyGroup ()
+  {
+    return new GroupMatcher <> ("", EStringOperatorName.ANYTHING);
+  }
+
+  /**
+   * Create a GroupMatcher that matches job groups starting with the given
+   * string.
+   */
+  public static GroupMatcher <JobKey> anyJobGroup ()
+  {
+    return anyGroup ();
+  }
+
+  /**
+   * Create a GroupMatcher that matches trigger groups starting with the given
+   * string.
+   */
+  public static GroupMatcher <TriggerKey> anyTriggerGroup ()
+  {
+    return anyGroup ();
+  }
 }

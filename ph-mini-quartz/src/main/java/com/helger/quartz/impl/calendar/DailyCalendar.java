@@ -26,7 +26,6 @@ import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
 
-import com.helger.commons.lang.ICloneable;
 import com.helger.commons.string.StringHelper;
 
 /**
@@ -49,7 +48,7 @@ import com.helger.commons.string.StringHelper;
  *
  * @author Mike Funk, Aaron Craven
  */
-public class DailyCalendar extends AbstractCalendar implements ICloneable <DailyCalendar>
+public class DailyCalendar extends AbstractCalendar <DailyCalendar>
 {
   private static final String INVALID_HOUR_OF_DAY = "Invalid hour of day: ";
   private static final String INVALID_MINUTE = "Invalid minute: ";

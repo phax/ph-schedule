@@ -32,85 +32,86 @@ import com.helger.quartz.utils.Key;
  */
 public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
 {
-  public enum StringOperatorName
+  public enum EStringOperatorName
   {
     EQUALS
     {
       @Override
-      public boolean evaluate (final String value, final String compareTo)
+      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
       {
-        return value.equals (compareTo);
+        return value.equals (sCompareTo);
       }
     },
 
     STARTS_WITH
     {
       @Override
-      public boolean evaluate (final String value, final String compareTo)
+      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
       {
-        return value.startsWith (compareTo);
+        return value.startsWith (sCompareTo);
       }
     },
 
     ENDS_WITH
     {
       @Override
-      public boolean evaluate (final String value, final String compareTo)
+      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
       {
-        return value.endsWith (compareTo);
+        return value.endsWith (sCompareTo);
       }
     },
 
     CONTAINS
     {
       @Override
-      public boolean evaluate (final String value, final String compareTo)
+      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
       {
-        return value.contains (compareTo);
+        return value.contains (sCompareTo);
       }
     },
 
     ANYTHING
     {
       @Override
-      public boolean evaluate (final String value, final String compareTo)
+      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
       {
         return true;
       }
     };
 
-    public abstract boolean evaluate (String value, String compareTo);
+    public abstract boolean evaluate (@Nonnull String value, @Nonnull String sCompareTo);
   }
 
   private final String m_sCompareTo;
-  private final StringOperatorName m_sCompareWith;
+  private final EStringOperatorName m_eCompareWith;
 
-  protected StringMatcher (@Nonnull final String compareTo, @Nonnull final StringOperatorName compareWith)
+  protected StringMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
   {
-    ValueEnforcer.notNull (compareTo, "CompareTo");
-    ValueEnforcer.notNull (compareWith, "CompareWith");
+    ValueEnforcer.notNull (sCompareTo, "CompareTo");
+    ValueEnforcer.notNull (eCompareWith, "CompareWith");
 
-    m_sCompareTo = compareTo;
-    m_sCompareWith = compareWith;
+    m_sCompareTo = sCompareTo;
+    m_eCompareWith = eCompareWith;
   }
 
   @Nonnull
-  public String getCompareToValue ()
+  public final String getCompareToValue ()
   {
     return m_sCompareTo;
   }
 
   @Nonnull
-  public StringOperatorName getCompareWithOperator ()
+  public final EStringOperatorName getCompareWithOperator ()
   {
-    return m_sCompareWith;
+    return m_eCompareWith;
   }
 
+  @Nonnull
   protected abstract String getValue (T key);
 
-  public boolean isMatch (final T key)
+  public final boolean isMatch (final T key)
   {
-    return m_sCompareWith.evaluate (getValue (key), m_sCompareTo);
+    return m_eCompareWith.evaluate (getValue (key), m_sCompareTo);
   }
 
   @Override
@@ -121,12 +122,12 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final StringMatcher <?> other = (StringMatcher <?>) o;
-    return m_sCompareTo.equals (other.m_sCompareTo) && m_sCompareWith.equals (other.m_sCompareWith);
+    return m_sCompareTo.equals (other.m_sCompareTo) && m_eCompareWith.equals (other.m_eCompareWith);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sCompareTo).append (m_sCompareWith).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sCompareTo).append (m_eCompareWith).getHashCode ();
   }
 }

@@ -28,7 +28,7 @@ import com.helger.quartz.impl.matchers.GroupMatcher;
  */
 public class TriggerKeyGroupMatcher extends GroupMatcher <TriggerKey>
 {
-  public TriggerKeyGroupMatcher (@Nonnull final String sCompareTo, @Nonnull final StringOperatorName eCompareWith)
+  public TriggerKeyGroupMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
   {
     super (sCompareTo, eCompareWith);
   }
@@ -36,6 +36,6 @@ public class TriggerKeyGroupMatcher extends GroupMatcher <TriggerKey>
   @Nonnull
   public static TriggerKeyGroupMatcher createEquals (@Nonnull final String sCompareTo)
   {
-    return new TriggerKeyGroupMatcher (sCompareTo, StringOperatorName.EQUALS);
+    return new TriggerKeyGroupMatcher (sCompareTo, EStringOperatorName.EQUALS);
   }
 }

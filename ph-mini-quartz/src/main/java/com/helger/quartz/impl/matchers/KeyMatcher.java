@@ -40,29 +40,15 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
     m_aCompareTo = compareTo;
   }
 
-  /**
-   * Create a KeyMatcher that matches Keys that equal the given key.
-   */
-  public static <U extends Key <U>> KeyMatcher <U> keyEquals (final U compareTo)
-  {
-    return new KeyMatcher <> (compareTo);
-  }
-
-  public boolean isMatch (final T key)
-  {
-    return m_aCompareTo.equals (key);
-  }
-
   @Nonnull
   public T getCompareToValue ()
   {
     return m_aCompareTo;
   }
 
-  @Override
-  public int hashCode ()
+  public boolean isMatch (final T key)
   {
-    return new HashCodeGenerator (this).append (m_aCompareTo).getHashCode ();
+    return m_aCompareTo.equals (key);
   }
 
   @Override
@@ -74,5 +60,19 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
       return false;
     final KeyMatcher <?> other = (KeyMatcher <?>) o;
     return m_aCompareTo.equals (other.m_aCompareTo);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aCompareTo).getHashCode ();
+  }
+
+  /**
+   * Create a KeyMatcher that matches Keys that equal the given key.
+   */
+  public static <U extends Key <U>> KeyMatcher <U> keyEquals (final U compareTo)
+  {
+    return new KeyMatcher <> (compareTo);
   }
 }

@@ -24,7 +24,6 @@ import java.util.TimeZone;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.collection.ArrayHelper;
-import com.helger.commons.lang.ICloneable;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -38,7 +37,7 @@ import com.helger.quartz.ICalendar;
  * @see com.helger.quartz.impl.calendar.BaseCalendar
  * @author Juergen Donnerstag
  */
-public class MonthlyCalendar extends AbstractCalendar implements ICloneable <MonthlyCalendar>
+public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
 {
   private static final int MAX_DAYS_IN_MONTH = 31;
 

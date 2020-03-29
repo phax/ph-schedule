@@ -28,7 +28,7 @@ import com.helger.quartz.impl.matchers.GroupMatcher;
  */
 public class JobKeyGroupMatcher extends GroupMatcher <JobKey>
 {
-  public JobKeyGroupMatcher (@Nonnull final String sCompareTo, @Nonnull final StringOperatorName eCompareWith)
+  public JobKeyGroupMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
   {
     super (sCompareTo, eCompareWith);
   }
@@ -36,6 +36,6 @@ public class JobKeyGroupMatcher extends GroupMatcher <JobKey>
   @Nonnull
   public static JobKeyGroupMatcher createEquals (@Nonnull final String sCompareTo)
   {
-    return new JobKeyGroupMatcher (sCompareTo, StringOperatorName.EQUALS);
+    return new JobKeyGroupMatcher (sCompareTo, EStringOperatorName.EQUALS);
   }
 }

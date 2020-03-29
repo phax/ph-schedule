@@ -871,7 +871,7 @@ public class RAMJobStore implements IJobStore
     synchronized (m_aLock)
     {
 
-      final StringMatcher.StringOperatorName operator = matcher.getCompareWithOperator ();
+      final StringMatcher.EStringOperatorName operator = matcher.getCompareWithOperator ();
       final String compareToValue = matcher.getCompareToValue ();
 
       switch (operator)
@@ -937,7 +937,7 @@ public class RAMJobStore implements IJobStore
     synchronized (m_aLock)
     {
 
-      final StringMatcher.StringOperatorName operator = matcher.getCompareWithOperator ();
+      final StringMatcher.EStringOperatorName operator = matcher.getCompareWithOperator ();
       final String compareToValue = matcher.getCompareToValue ();
 
       switch (operator)
@@ -1108,7 +1108,7 @@ public class RAMJobStore implements IJobStore
     {
       pausedGroups = new CommonsArrayList <> ();
 
-      final StringMatcher.StringOperatorName operator = matcher.getCompareWithOperator ();
+      final StringMatcher.EStringOperatorName operator = matcher.getCompareWithOperator ();
       switch (operator)
       {
         case EQUALS:
@@ -1177,7 +1177,7 @@ public class RAMJobStore implements IJobStore
     final ICommonsList <String> pausedGroups = new CommonsArrayList <> ();
     synchronized (m_aLock)
     {
-      final StringMatcher.StringOperatorName operator = matcher.getCompareWithOperator ();
+      final StringMatcher.EStringOperatorName operator = matcher.getCompareWithOperator ();
       switch (operator)
       {
         case EQUALS:
