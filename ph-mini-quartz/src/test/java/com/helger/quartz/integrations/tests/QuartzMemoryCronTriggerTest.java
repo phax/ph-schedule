@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
+import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobDetail;
@@ -56,7 +57,7 @@ public class QuartzMemoryCronTriggerTest extends QuartzMemoryTestSupport
 
     for (int i = 0; i < 20 && scheduledTimes.size () < 3; i++)
     {
-      Thread.sleep (500);
+      ThreadHelper.sleep (500);
     }
     assertTrue (scheduledTimes.size () >= 3);
 

@@ -23,6 +23,7 @@ import java.util.TimeZone;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
 /**
@@ -61,7 +62,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
   private int m_nInterval = 1;
   private EIntervalUnit m_eIntervalUnit = EIntervalUnit.DAY;
 
-  private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private EMisfireInstruction m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY;
   private TimeZone m_aTimeZone;
   private boolean m_bPreserveHourOfDayAcrossDaylightSavings;
   private boolean m_bSkipDayIfHourDoesNotExist;
@@ -93,7 +94,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
     final CalendarIntervalTrigger st = new CalendarIntervalTrigger ();
     st.setRepeatInterval (m_nInterval);
     st.setRepeatIntervalUnit (m_eIntervalUnit);
-    st.setMisfireInstruction (m_nMisfireInstruction);
+    st.setMisfireInstruction (m_eMisfireInstruction);
     st.setTimeZone (m_aTimeZone);
     st.setPreserveHourOfDayAcrossDaylightSavings (m_bPreserveHourOfDayAcrossDaylightSavings);
     st.setSkipDayIfHourDoesNotExist (m_bSkipDayIfHourDoesNotExist);
@@ -264,7 +265,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
   @Nonnull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
@@ -279,7 +280,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
   @Nonnull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    m_nMisfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
@@ -294,7 +295,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
   @Nonnull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    m_nMisfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 

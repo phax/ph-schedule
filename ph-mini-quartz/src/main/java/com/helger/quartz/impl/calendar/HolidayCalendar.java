@@ -87,14 +87,11 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
   @Override
   public boolean isTimeIncluded (final long timeStamp)
   {
-    if (super.isTimeIncluded (timeStamp) == false)
-    {
+    if (!super.isTimeIncluded (timeStamp))
       return false;
-    }
 
     final Date lookFor = getStartOfDayJavaCalendar (timeStamp).getTime ();
-
-    return !(m_aDates.contains (lookFor));
+    return !m_aDates.contains (lookFor);
   }
 
   /**
@@ -105,20 +102,19 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
   @Override
   public long getNextIncludedTime (final long nTimeStamp)
   {
-
     // Call base calendar implementation first
     long timeStamp = nTimeStamp;
     final long baseTime = super.getNextIncludedTime (timeStamp);
-    if ((baseTime > 0) && (baseTime > timeStamp))
+    if (baseTime > 0 && baseTime > timeStamp)
     {
       timeStamp = baseTime;
     }
 
     // Get timestamp for 00:00:00
     final Calendar day = getStartOfDayJavaCalendar (timeStamp);
-    while (isTimeIncluded (day.getTime ().getTime ()) == false)
+    while (!isTimeIncluded (day.getTime ().getTime ()))
     {
-      day.add (Calendar.DATE, 1);
+      day.add (Calendar.DAY_OF_MONTH, 1);
     }
 
     return day.getTime ().getTime ();

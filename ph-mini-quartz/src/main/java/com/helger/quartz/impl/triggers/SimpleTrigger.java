@@ -31,7 +31,6 @@ import com.helger.quartz.CQuartz;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.ISimpleTrigger;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
@@ -180,19 +179,21 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   }
 
   @Override
-  protected boolean validateMisfireInstruction (final int misfireInstruction)
+  protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
   {
-    if (misfireInstruction < MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+    switch (misfireInstruction)
     {
-      return false;
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+      case MISFIRE_INSTRUCTION_SMART_POLICY:
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+      case MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT:
+      case MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT:
+      case MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT:
+      case MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT:
+        return true;
+      default:
+        return false;
     }
-
-    if (misfireInstruction > MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT)
-    {
-      return false;
-    }
-
-    return true;
   }
 
   /**
@@ -223,40 +224,37 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    */
   public void updateAfterMisfire (final ICalendar cal)
   {
-    int instr = getMisfireInstruction ();
-
-    if (instr == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
-      return;
-
-    if (instr == ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY)
+    EMisfireInstruction instr = getMisfireInstruction ();
+    if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY)
     {
+      // What is smart
       if (getRepeatCount () == 0)
-      {
-        instr = MISFIRE_INSTRUCTION_FIRE_NOW;
-      }
+        instr = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
       else
         if (getRepeatCount () == REPEAT_INDEFINITELY)
-        {
-          instr = MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
-        }
+          instr = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
         else
         {
           // if (getRepeatCount() > 0)
-          instr = MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
+          instr = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
         }
     }
     else
-      if (instr == MISFIRE_INSTRUCTION_FIRE_NOW && getRepeatCount () != 0)
+      if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW && getRepeatCount () != 0)
       {
-        instr = MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;
+        instr = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;
       }
 
-    if (instr == MISFIRE_INSTRUCTION_FIRE_NOW)
+    switch (instr)
     {
-      setNextFireTime (new Date ());
-    }
-    else
-      if (instr == MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT)
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+        return;
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+      {
+        setNextFireTime (new Date ());
+        break;
+      }
+      case MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT:
       {
         Date newFireTime = getFireTimeAfter (new Date ());
         while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
@@ -275,83 +273,84 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
           }
         }
         setNextFireTime (newFireTime);
+        break;
       }
-      else
-        if (instr == MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT)
+      case MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT:
+      {
+        Date newFireTime = getFireTimeAfter (new Date ());
+        while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
         {
-          Date newFireTime = getFireTimeAfter (new Date ());
-          while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
+          newFireTime = getFireTimeAfter (newFireTime);
+
+          if (newFireTime == null)
+            break;
+
+          // avoid infinite loop
+          final Calendar c = PDTFactory.createCalendar ();
+          c.setTime (newFireTime);
+          if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
           {
-            newFireTime = getFireTimeAfter (newFireTime);
-
-            if (newFireTime == null)
-              break;
-
-            // avoid infinite loop
-            final Calendar c = PDTFactory.createCalendar ();
-            c.setTime (newFireTime);
-            if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
-            {
-              newFireTime = null;
-            }
+            newFireTime = null;
           }
-          if (newFireTime != null)
-          {
-            final int timesMissed = computeNumTimesFiredBetween (m_aNextFireTime, newFireTime);
-            setTimesTriggered (getTimesTriggered () + timesMissed);
-          }
+        }
+        if (newFireTime != null)
+        {
+          final int timesMissed = computeNumTimesFiredBetween (m_aNextFireTime, newFireTime);
+          setTimesTriggered (getTimesTriggered () + timesMissed);
+        }
 
-          setNextFireTime (newFireTime);
+        setNextFireTime (newFireTime);
+        break;
+      }
+      case MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT:
+      {
+        final Date newFireTime = new Date ();
+        if (m_nRepeatCount != 0 && m_nRepeatCount != REPEAT_INDEFINITELY)
+        {
+          setRepeatCount (getRepeatCount () - getTimesTriggered ());
+          setTimesTriggered (0);
+        }
+
+        if (getEndTime () != null && getEndTime ().before (newFireTime))
+        {
+          setNextFireTime (null); // We are past the end time
         }
         else
-          if (instr == MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT)
+        {
+          setStartTime (newFireTime);
+          setNextFireTime (newFireTime);
+        }
+        break;
+      }
+      case MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT:
+      {
+        final Date newFireTime = new Date ();
+
+        final int timesMissed = computeNumTimesFiredBetween (m_aNextFireTime, newFireTime);
+
+        if (m_nRepeatCount != 0 && m_nRepeatCount != REPEAT_INDEFINITELY)
+        {
+          int remainingCount = getRepeatCount () - (getTimesTriggered () + timesMissed);
+          if (remainingCount <= 0)
           {
-            final Date newFireTime = new Date ();
-            if (m_nRepeatCount != 0 && m_nRepeatCount != REPEAT_INDEFINITELY)
-            {
-              setRepeatCount (getRepeatCount () - getTimesTriggered ());
-              setTimesTriggered (0);
-            }
-
-            if (getEndTime () != null && getEndTime ().before (newFireTime))
-            {
-              setNextFireTime (null); // We are past the end time
-            }
-            else
-            {
-              setStartTime (newFireTime);
-              setNextFireTime (newFireTime);
-            }
+            remainingCount = 0;
           }
-          else
-            if (instr == MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT)
-            {
-              final Date newFireTime = new Date ();
+          setRepeatCount (remainingCount);
+          setTimesTriggered (0);
+        }
 
-              final int timesMissed = computeNumTimesFiredBetween (m_aNextFireTime, newFireTime);
-
-              if (m_nRepeatCount != 0 && m_nRepeatCount != REPEAT_INDEFINITELY)
-              {
-                int remainingCount = getRepeatCount () - (getTimesTriggered () + timesMissed);
-                if (remainingCount <= 0)
-                {
-                  remainingCount = 0;
-                }
-                setRepeatCount (remainingCount);
-                setTimesTriggered (0);
-              }
-
-              if (getEndTime () != null && getEndTime ().before (newFireTime))
-              {
-                setNextFireTime (null); // We are past the end time
-              }
-              else
-              {
-                setStartTime (newFireTime);
-                setNextFireTime (newFireTime);
-              }
-            }
-
+        if (getEndTime () != null && getEndTime ().before (newFireTime))
+        {
+          setNextFireTime (null); // We are past the end time
+        }
+        else
+        {
+          setStartTime (newFireTime);
+          setNextFireTime (newFireTime);
+        }
+        break;
+      }
+    }
   }
 
   /**
@@ -676,7 +675,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
                                                           .withRepeatCount (getRepeatCount ());
     switch (getMisfireInstruction ())
     {
-      case MISFIRE_INSTRUCTION_FIRE_NOW:
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
         sb.withMisfireHandlingInstructionFireNow ();
         break;
       case MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT:
@@ -700,6 +699,20 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   public SimpleTrigger getClone ()
   {
     return new SimpleTrigger (this);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    // New field, no change
+    return super.equals (o);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    // New field, no change
+    return super.hashCode ();
   }
 
   @Nonnull

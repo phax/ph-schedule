@@ -73,22 +73,6 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
   int REPEAT_INDEFINITELY = -1;
 
   /**
-   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
-   * situation, the <code>{@link IDailyTimeIntervalTrigger}</code> wants to be
-   * fired now by <code>Scheduler</code>.
-   */
-  int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
-
-  /**
-   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
-   * situation, the <code>{@link IDailyTimeIntervalTrigger}</code> wants to have
-   * it's next-fire-time updated to the next time in the schedule after the
-   * current time (taking into account any associated <code>Calendar</code>, but
-   * it does not want to be fired now.
-   */
-  int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
-
-  /**
    * Get the interval unit - the time unit on with the interval applies. <br>
    * The only intervals that are valid for this type of trigger are
    * {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and

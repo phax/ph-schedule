@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.simpl.SimpleThreadPool;
@@ -55,19 +56,13 @@ public class InterruptableJobTest
       {
         sync.await (); // wait for test thread to notice the job is now running
       }
-      catch (final InterruptedException e1)
-      {}
-      catch (final BrokenBarrierException e1)
+      catch (final InterruptedException | BrokenBarrierException e1)
       {}
       for (int i = 0; i < 200; i++)
       {
-        try
-        {
-          Thread.sleep (50); // simulate being busy for a while, then checking
-                             // interrupted flag...
-        }
-        catch (final InterruptedException ingore)
-        {}
+        // simulate being busy for a while, then
+        // checking interrupted flag...
+        ThreadHelper.sleep (50);
         if (TestInterruptableJob.interrupted.get ())
         {
           LOGGER.info ("TestInterruptableJob main loop detected interrupt signal.");
@@ -79,9 +74,7 @@ public class InterruptableJobTest
         LOGGER.info ("TestInterruptableJob exiting with interrupted = " + interrupted);
         sync.await ();
       }
-      catch (final InterruptedException e)
-      {}
-      catch (final BrokenBarrierException e)
+      catch (final InterruptedException | BrokenBarrierException e)
       {}
     }
 

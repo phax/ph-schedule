@@ -37,7 +37,6 @@ import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.IScheduleBuilder;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TimeOfDay;
@@ -380,9 +379,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
   {
     if (m_eRepeatIntervalUnit == null ||
-        !((m_eRepeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
-           m_eRepeatIntervalUnit.equals (EIntervalUnit.MINUTE) ||
-           m_eRepeatIntervalUnit.equals (EIntervalUnit.HOUR))))
+        !(m_eRepeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
+          m_eRepeatIntervalUnit.equals (EIntervalUnit.MINUTE) ||
+          m_eRepeatIntervalUnit.equals (EIntervalUnit.HOUR)))
       throw new IllegalArgumentException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
     m_eRepeatIntervalUnit = intervalUnit;
   }
@@ -425,11 +424,18 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   }
 
   @Override
-  protected boolean validateMisfireInstruction (final int misfireInstruction)
+  protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
   {
-    return misfireInstruction >= MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY &&
-           misfireInstruction <= MISFIRE_INSTRUCTION_DO_NOTHING;
-
+    switch (misfireInstruction)
+    {
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+      case MISFIRE_INSTRUCTION_SMART_POLICY:
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+      case MISFIRE_INSTRUCTION_DO_NOTHING:
+        return true;
+      default:
+        return false;
+    }
   }
 
   /**
@@ -449,27 +455,18 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    */
   public void updateAfterMisfire (final ICalendar cal)
   {
-    int instr = getMisfireInstruction ();
-
-    if (instr == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
-      return;
-
-    if (instr == MISFIRE_INSTRUCTION_SMART_POLICY)
+    EMisfireInstruction instr = getMisfireInstruction ();
+    if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY)
     {
-      instr = MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+      // What's smart here
+      instr = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     }
 
-    if (instr == MISFIRE_INSTRUCTION_DO_NOTHING)
+    switch (instr)
     {
-      Date newFireTime = getFireTimeAfter (new Date ());
-      while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
-      {
-        newFireTime = getFireTimeAfter (newFireTime);
-      }
-      setNextFireTime (newFireTime);
-    }
-    else
-      if (instr == MISFIRE_INSTRUCTION_FIRE_ONCE_NOW)
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+        return;
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
       {
         // fire once now...
         setNextFireTime (new Date ());
@@ -478,7 +475,19 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
         // because of the way getFireTimeAfter() works - in its always
         // restarting
         // computation from the start time.
+        break;
       }
+      case MISFIRE_INSTRUCTION_DO_NOTHING:
+      {
+        Date newFireTime = getFireTimeAfter (new Date ());
+        while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
+        {
+          newFireTime = getFireTimeAfter (newFireTime);
+        }
+        setNextFireTime (newFireTime);
+        break;
+      }
+    }
   }
 
   /**
@@ -926,17 +935,17 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     }
   }
 
-  public EnumSet <DayOfWeek> getDaysOfWeek ()
+  public Set <DayOfWeek> getDaysOfWeek ()
   {
     if (m_aDaysOfWeek == null)
       m_aDaysOfWeek = EnumSet.allOf (DayOfWeek.class);
     return m_aDaysOfWeek;
   }
 
-  public void setDaysOfWeek (final EnumSet <DayOfWeek> daysOfWeek)
+  public void setDaysOfWeek (final Set <DayOfWeek> daysOfWeek)
   {
     ValueEnforcer.notEmpty (daysOfWeek, "DaysOfWeek");
-    m_aDaysOfWeek = daysOfWeek;
+    m_aDaysOfWeek = EnumSet.copyOf (daysOfWeek);
   }
 
   public TimeOfDay getStartTimeOfDay ()
@@ -1031,5 +1040,19 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   public DailyTimeIntervalTrigger getClone ()
   {
     return new DailyTimeIntervalTrigger (this);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    // New field, no change
+    return super.equals (o);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    // New field, no change
+    return super.hashCode ();
   }
 }

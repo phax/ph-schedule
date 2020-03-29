@@ -170,25 +170,6 @@ import java.util.TimeZone;
  */
 public interface ICronTrigger extends ITrigger
 {
-  /**
-   * <p>
-   * Instructs the {@link IScheduler} that upon a mis-fire situation, the
-   * {@link ICronTrigger} wants to be fired now by {@link IScheduler}.
-   * </p>
-   */
-  int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
-
-  /**
-   * <p>
-   * Instructs the {@link IScheduler} that upon a mis-fire situation, the
-   * {@link ICronTrigger} wants to have it's next-fire-time updated to the next
-   * time in the schedule after the current time (taking into account any
-   * associated {@link java.util.Calendar}, but it does not want to be fired
-   * now.
-   * </p>
-   */
-  int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
-
   String getCronExpression ();
 
   /**

@@ -27,6 +27,7 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.impl.CommonsHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.quartz.IJobExecutionContext;
+import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
@@ -51,7 +52,7 @@ import com.helger.quartz.SchedulerException;
  *
  * @author James House (jhouse AT revolition DOT net)
  */
-public class JobChainingJobListener extends AbstractJobListenerSupport
+public class JobChainingJobListener implements IJobListener
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (JobChainingJobListener.class);
 
@@ -70,6 +71,7 @@ public class JobChainingJobListener extends AbstractJobListenerSupport
     m_sName = name;
   }
 
+  @Nonnull
   public String getName ()
   {
     return m_sName;

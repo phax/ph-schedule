@@ -24,11 +24,12 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.commons.io.stream.NonBlockingBufferedReader;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
+import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 
 /**
  * <p>
@@ -55,7 +56,7 @@ import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
  *
  * @author James House
  */
-public class QuartzServer extends AbstractSchedulerListenerSupport
+public class QuartzServer implements ISchedulerListener
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (QuartzServer.class);
 
@@ -70,12 +71,7 @@ public class QuartzServer extends AbstractSchedulerListenerSupport
 
     sched.start ();
 
-    try
-    {
-      Thread.sleep (3000l);
-    }
-    catch (final Exception ignore)
-    {}
+    ThreadHelper.sleep (3000l);
 
     LOGGER.info ("\n*** The scheduler successfully started.");
 

@@ -33,7 +33,6 @@ import com.helger.quartz.CalendarIntervalScheduleBuilder;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICalendarIntervalTrigger;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 
@@ -400,14 +399,18 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   }
 
   @Override
-  protected boolean validateMisfireInstruction (final int misfireInstruction)
+  protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
   {
-    if (misfireInstruction < MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+    switch (misfireInstruction)
     {
-      return false;
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+      case MISFIRE_INSTRUCTION_SMART_POLICY:
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+      case MISFIRE_INSTRUCTION_DO_NOTHING:
+        return true;
+      default:
+        return false;
     }
-
-    return misfireInstruction <= MISFIRE_INSTRUCTION_DO_NOTHING;
   }
 
   /**
@@ -427,27 +430,18 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    */
   public void updateAfterMisfire (final ICalendar cal)
   {
-    int instr = getMisfireInstruction ();
-
-    if (instr == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
-      return;
-
-    if (instr == MISFIRE_INSTRUCTION_SMART_POLICY)
+    EMisfireInstruction instr = getMisfireInstruction ();
+    if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY)
     {
-      instr = MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+      // What's smart here
+      instr = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     }
 
-    if (instr == MISFIRE_INSTRUCTION_DO_NOTHING)
+    switch (instr)
     {
-      Date newFireTime = getFireTimeAfter (new Date ());
-      while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
-      {
-        newFireTime = getFireTimeAfter (newFireTime);
-      }
-      setNextFireTime (newFireTime);
-    }
-    else
-      if (instr == MISFIRE_INSTRUCTION_FIRE_ONCE_NOW)
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+        return;
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
       {
         // fire once now...
         setNextFireTime (new Date ());
@@ -456,7 +450,19 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
         // because of the way getFireTimeAfter() works - in its always
         // restarting
         // computation from the start time.
+        break;
       }
+      case MISFIRE_INSTRUCTION_DO_NOTHING:
+      {
+        Date newFireTime = getFireTimeAfter (new Date ());
+        while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
+        {
+          newFireTime = getFireTimeAfter (newFireTime);
+        }
+        setNextFireTime (newFireTime);
+        break;
+      }
+    }
   }
 
   /**
@@ -969,5 +975,19 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   public CalendarIntervalTrigger getClone ()
   {
     return new CalendarIntervalTrigger (this);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    // New field, no change
+    return super.equals (o);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    // New field, no change
+    return super.hashCode ();
   }
 }

@@ -53,25 +53,6 @@ import java.util.TimeZone;
 public interface ICalendarIntervalTrigger extends ITrigger
 {
   /**
-   * <p>
-   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
-   * situation, the <code>{@link ICalendarIntervalTrigger}</code> wants to be
-   * fired now by <code>Scheduler</code>.
-   * </p>
-   */
-  int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
-  /**
-   * <p>
-   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
-   * situation, the <code>{@link ICalendarIntervalTrigger}</code> wants to have
-   * it's next-fire-time updated to the next time in the schedule after the
-   * current time (taking into account any associated <code>Calendar</code>, but
-   * it does not want to be fired now.
-   * </p>
-   */
-  int MISFIRE_INSTRUCTION_DO_NOTHING = 2;
-
-  /**
    * @return the interval unit - the time unit on with the interval applies.
    */
   EIntervalUnit getRepeatIntervalUnit ();

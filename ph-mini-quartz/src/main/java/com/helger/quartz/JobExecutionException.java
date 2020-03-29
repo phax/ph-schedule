@@ -37,85 +37,60 @@ package com.helger.quartz;
  */
 public class JobExecutionException extends SchedulerException
 {
-  private boolean m_bRefire = false;
-  private boolean m_bUnscheduleTrigg = false;
-  private boolean m_bUnscheduleAllTriggs = false;
+  private final boolean m_bRefire;
+  private final boolean m_bUnscheduleTrigg = false;
+  private final boolean m_bUnscheduleAllTriggs = false;
 
   /**
-   * <p>
    * Create a JobExcecutionException, with the 're-fire immediately' flag set to
    * <code>false</code>.
-   * </p>
    */
   public JobExecutionException ()
-  {}
+  {
+    this (null, null, false);
+  }
 
   /**
-   * <p>
    * Create a JobExcecutionException, with the given cause.
-   * </p>
    */
   public JobExecutionException (final Throwable cause)
   {
-    super (cause);
+    this (null, cause, false);
   }
 
   /**
-   * <p>
    * Create a JobExcecutionException, with the given message.
-   * </p>
    */
   public JobExecutionException (final String msg)
   {
-    super (msg);
+    this (msg, null, false);
   }
 
   /**
-   * <p>
    * Create a JobExcecutionException with the 're-fire immediately' flag set to
    * the given value.
-   * </p>
    */
   public JobExecutionException (final boolean refireImmediately)
   {
-    m_bRefire = refireImmediately;
+    this (null, null, refireImmediately);
   }
 
   /**
-   * <p>
-   * Create a JobExcecutionException with the given underlying exception, and the
-   * 're-fire immediately' flag set to the given value.
-   * </p>
+   * Create a JobExcecutionException with the given underlying exception, and
+   * the 're-fire immediately' flag set to the given value.
    */
   public JobExecutionException (final Throwable cause, final boolean refireImmediately)
   {
-    super (cause);
-
-    m_bRefire = refireImmediately;
+    this (null, cause, refireImmediately);
   }
 
   /**
-   * <p>
    * Create a JobExcecutionException with the given message, and underlying
    * exception.
-   * </p>
    */
   public JobExecutionException (final String msg, final Throwable cause)
   {
-    super (msg, cause);
-  }
-
-  /**
-   * <p>
-   * Create a JobExcecutionException with the given message, and underlying
-   * exception, and the 're-fire immediately' flag set to the given value.
-   * </p>
-   */
-  public JobExecutionException (final String msg, final Throwable cause, final boolean refireImmediately)
-  {
-    super (msg, cause);
-
-    m_bRefire = refireImmediately;
+    this (msg, cause, false);
   }
 
   /**
@@ -124,14 +99,18 @@ public class JobExecutionException extends SchedulerException
    */
   public JobExecutionException (final String msg, final boolean refireImmediately)
   {
-    super (msg);
-
-    m_bRefire = refireImmediately;
+    this (msg, null, refireImmediately);
   }
 
-  public void setRefireImmediately (final boolean refire)
+  /**
+   * Create a JobExcecutionException with the given message, and underlying
+   * exception, and the 're-fire immediately' flag set to the given value.
+   */
+  public JobExecutionException (final String msg, final Throwable cause, final boolean refireImmediately)
   {
-    m_bRefire = refire;
+    super (msg, cause);
+
+    m_bRefire = refireImmediately;
   }
 
   public boolean refireImmediately ()
@@ -139,24 +118,13 @@ public class JobExecutionException extends SchedulerException
     return m_bRefire;
   }
 
-  public void setUnscheduleFiringTrigger (final boolean unscheduleTrigg)
-  {
-    m_bUnscheduleTrigg = unscheduleTrigg;
-  }
-
   public boolean unscheduleFiringTrigger ()
   {
     return m_bUnscheduleTrigg;
-  }
-
-  public void setUnscheduleAllTriggers (final boolean unscheduleAllTriggs)
-  {
-    m_bUnscheduleAllTriggs = unscheduleAllTriggs;
   }
 
   public boolean unscheduleAllTriggers ()
   {
     return m_bUnscheduleAllTriggs;
   }
-
 }

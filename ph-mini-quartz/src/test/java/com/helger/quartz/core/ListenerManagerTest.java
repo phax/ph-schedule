@@ -34,16 +34,13 @@ import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.NameMatcher;
-import com.helger.quartz.listeners.AbstractJobListenerSupport;
-import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
-import com.helger.quartz.listeners.AbstractTriggerListenerSupport;
 
 /**
  * Test ListenerManagerImpl functionality
  */
 public final class ListenerManagerTest
 {
-  public static class TestJobListener extends AbstractJobListenerSupport
+  public static class TestJobListener implements IJobListener
   {
     private final String m_sName;
 
@@ -58,7 +55,7 @@ public final class ListenerManagerTest
     }
   }
 
-  public static class TestTriggerListener extends AbstractTriggerListenerSupport
+  public static class TestTriggerListener implements ITriggerListener
   {
     private final String m_sName;
 
@@ -73,7 +70,7 @@ public final class ListenerManagerTest
     }
   }
 
-  public static class TestSchedulerListener extends AbstractSchedulerListenerSupport
+  public static class TestSchedulerListener implements ISchedulerListener
   {}
 
   @Test

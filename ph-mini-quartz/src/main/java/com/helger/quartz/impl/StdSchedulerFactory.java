@@ -120,7 +120,7 @@ import com.helger.quartz.utils.PropertiesParser;
  */
 public class StdSchedulerFactory implements ISchedulerFactory
 {
-  public static final String PROPERTIES_FILE = "org.quartz.properties";
+  public static final String PROP_PROPERTIES_FILE = "org.quartz.properties";
   public static final String PROP_SCHED_INSTANCE_NAME = "org.quartz.scheduler.instanceName";
   public static final String PROP_SCHED_INSTANCE_ID = "org.quartz.scheduler.instanceId";
   public static final String PROP_SCHED_INSTANCE_ID_GENERATOR_PREFIX = "org.quartz.scheduler.instanceIdGenerator";
@@ -155,6 +155,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
   public static final String PROP_THREAD_EXECUTOR = "org.quartz.threadExecutor";
   public static final String PROP_THREAD_EXECUTOR_CLASS = "org.quartz.threadExecutor.class";
   public static final String SYSTEM_PROPERTY_AS_INSTANCE_ID = "SYS_PROP";
+
+  public static final String DEFAULT_FILENAME = "quartz.properties";
 
   private static final Logger LOGGER = LoggerFactory.getLogger (StdSchedulerFactory.class);
 
@@ -209,87 +211,83 @@ public class StdSchedulerFactory implements ISchedulerFactory
       throw m_aInitException;
     }
 
-    final String requestedFile = SystemProperties.getPropertyValueOrNull (PROPERTIES_FILE);
-    final String propFileName = requestedFile != null ? requestedFile : "quartz.properties";
+    final String requestedFilename = SystemProperties.getPropertyValueOrNull (PROP_PROPERTIES_FILE);
+    final String propFileName = requestedFilename != null ? requestedFilename : DEFAULT_FILENAME;
     final File propFile = new File (propFileName);
 
     final NonBlockingProperties props = new NonBlockingProperties ();
 
-    InputStream in = null;
-    try
+    if (propFile.exists ())
     {
-      if (propFile.exists ())
+      try
       {
-        try
-        {
-          if (requestedFile != null)
-            m_sPropSrc = "specified file: '" + requestedFile + "'";
-          else
-            m_sPropSrc = "default file in current working dir: 'quartz.properties'";
+        if (requestedFilename != null)
+          m_sPropSrc = "specified file: '" + requestedFilename + "'";
+        else
+          m_sPropSrc = "default file in current working dir: '" + DEFAULT_FILENAME + "'";
 
-          in = new NonBlockingBufferedInputStream (new FileInputStream (propFileName));
+        try (final InputStream in = new NonBlockingBufferedInputStream (new FileInputStream (propFileName)))
+        {
           props.load (in);
+        }
+      }
+      catch (final IOException ioe)
+      {
+        m_aInitException = new SchedulerException ("Properties file: '" + propFileName + "' could not be read.", ioe);
+        throw m_aInitException;
+      }
+    }
+    else
+      if (requestedFilename != null)
+      {
+        final InputStream in = ClassPathResource.getInputStream (requestedFilename);
+        if (in == null)
+        {
+          m_aInitException = new SchedulerException ("Properties file: '" +
+                                                     requestedFilename +
+                                                     "' could not be found.");
+          throw m_aInitException;
+        }
+
+        m_sPropSrc = "specified file: '" + requestedFilename + "' in the class resource path.";
+
+        try (final InputStream in2 = new NonBlockingBufferedInputStream (in))
+        {
+          props.load (in2);
         }
         catch (final IOException ioe)
         {
-          m_aInitException = new SchedulerException ("Properties file: '" + propFileName + "' could not be read.", ioe);
+          m_aInitException = new SchedulerException ("Properties file: '" + requestedFilename + "' could not be read.",
+                                                     ioe);
           throw m_aInitException;
         }
       }
       else
-        if (requestedFile != null)
+      {
+        m_sPropSrc = "default resource file in Quartz package: '" + DEFAULT_FILENAME + "'";
+
+        InputStream in = ClassPathResource.getInputStream (DEFAULT_FILENAME);
+        if (in == null)
+          in = ClassPathResource.getInputStream ("quartz/" + DEFAULT_FILENAME);
+        if (in == null)
         {
-          in = ClassPathResource.getInputStream (requestedFile);
-          if (in == null)
-          {
-            m_aInitException = new SchedulerException ("Properties file: '" + requestedFile + "' could not be found.");
-            throw m_aInitException;
-          }
-
-          m_sPropSrc = "specified file: '" + requestedFile + "' in the class resource path.";
-
-          in = new NonBlockingBufferedInputStream (in);
-          try
-          {
-            props.load (in);
-          }
-          catch (final IOException ioe)
-          {
-            m_aInitException = new SchedulerException ("Properties file: '" + requestedFile + "' could not be read.",
-                                                       ioe);
-            throw m_aInitException;
-          }
+          m_aInitException = new SchedulerException ("Default " + DEFAULT_FILENAME + " not found in class path");
+          throw m_aInitException;
         }
-        else
+
+        try (final InputStream in2 = new NonBlockingBufferedInputStream (in))
         {
-          m_sPropSrc = "default resource file in Quartz package: 'quartz.properties'";
-
-          in = ClassPathResource.getInputStream ("quartz.properties");
-          if (in == null)
-            in = ClassPathResource.getInputStream ("quartz/quartz.properties");
-
-          if (in == null)
-          {
-            m_aInitException = new SchedulerException ("Default quartz.properties not found in class path");
-            throw m_aInitException;
-          }
-          try
-          {
-            props.load (in);
-          }
-          catch (final IOException ioe)
-          {
-            m_aInitException = new SchedulerException ("Resource properties file: 'quartz/quartz.properties' " +
-                                                       "could not be read from the classpath.",
-                                                       ioe);
-            throw m_aInitException;
-          }
+          props.load (in2);
         }
-    }
-    finally
-    {
-      StreamHelper.close (in);
-    }
+        catch (final IOException ioe)
+        {
+          m_aInitException = new SchedulerException ("Resource properties file: " +
+                                                     DEFAULT_FILENAME +
+                                                     " could not be read from the classpath.",
+                                                     ioe);
+          throw m_aInitException;
+        }
+      }
 
     return initialize (_overrideWithSysProps (props));
   }
@@ -299,7 +297,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * any properties that already exist in the given <code>props</code>.
    */
   @Nonnull
-  private NonBlockingProperties _overrideWithSysProps (@Nonnull final NonBlockingProperties props)
+  private static NonBlockingProperties _overrideWithSysProps (@Nonnull final NonBlockingProperties props)
   {
     Properties sysProps = null;
     try
@@ -319,7 +317,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
     if (sysProps != null)
     {
-      for (final Map.Entry <?, ?> aEntry : sysProps.entrySet ())
+      for (final Map.Entry <Object, Object> aEntry : sysProps.entrySet ())
         props.put ((String) aEntry.getKey (), (String) aEntry.getValue ());
     }
 
@@ -741,7 +739,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
         }
         if (nameSetter != null)
         {
-          nameSetter.invoke (listener, new Object [] { jobListenerName });
+          nameSetter.invoke (listener, jobListenerName);
         }
         _setBeanProps (listener, lp);
       }
@@ -801,7 +799,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
         }
         if (nameSetter != null)
         {
-          nameSetter.invoke (listener, new Object [] { triggerListenerName });
+          nameSetter.invoke (listener, triggerListenerName);
         }
         _setBeanProps (listener, lp);
       }
@@ -981,27 +979,17 @@ public class StdSchedulerFactory implements ISchedulerFactory
       schedRep.bind (scheduler);
       return scheduler;
     }
-    catch (final SchedulerException e)
+    catch (final Exception ex)
     {
       _shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
-      throw e;
-    }
-    catch (final RuntimeException re)
-    {
-      _shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
-      throw re;
-    }
-    catch (final Error re)
-    {
-      _shutdownFromInstantiateException (tp, qs, tpInited, qsInited);
-      throw re;
+      throw ex;
     }
   }
 
-  private void _shutdownFromInstantiateException (final IThreadPool tp,
-                                                  final QuartzScheduler qs,
-                                                  final boolean tpInited,
-                                                  final boolean qsInited)
+  private static void _shutdownFromInstantiateException (final IThreadPool tp,
+                                                         final QuartzScheduler qs,
+                                                         final boolean tpInited,
+                                                         final boolean qsInited)
   {
     try
     {
@@ -1075,32 +1063,32 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
         if (params[0].equals (int.class))
         {
-          setMeth.invoke (obj, new Object [] { Integer.valueOf (refProps.getIntProperty (refName)) });
+          setMeth.invoke (obj, Integer.valueOf (refProps.getIntProperty (refName)));
         }
         else
           if (params[0].equals (long.class))
           {
-            setMeth.invoke (obj, new Object [] { Long.valueOf (refProps.getLongProperty (refName)) });
+            setMeth.invoke (obj, Long.valueOf (refProps.getLongProperty (refName)));
           }
           else
             if (params[0].equals (float.class))
             {
-              setMeth.invoke (obj, new Object [] { Float.valueOf (refProps.getFloatProperty (refName)) });
+              setMeth.invoke (obj, Float.valueOf (refProps.getFloatProperty (refName)));
             }
             else
               if (params[0].equals (double.class))
               {
-                setMeth.invoke (obj, new Object [] { Double.valueOf (refProps.getDoubleProperty (refName)) });
+                setMeth.invoke (obj, Double.valueOf (refProps.getDoubleProperty (refName)));
               }
               else
                 if (params[0].equals (boolean.class))
                 {
-                  setMeth.invoke (obj, new Object [] { Boolean.valueOf (refProps.getBooleanProperty (refName)) });
+                  setMeth.invoke (obj, Boolean.valueOf (refProps.getBooleanProperty (refName)));
                 }
                 else
                   if (params[0].equals (String.class))
                   {
-                    setMeth.invoke (obj, new Object [] { refProps.getStringProperty (refName) });
+                    setMeth.invoke (obj, refProps.getStringProperty (refName));
                   }
                   else
                   {
@@ -1117,7 +1105,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
   }
 
-  private java.lang.reflect.Method _getSetMethod (final String name, final PropertyDescriptor [] props)
+  private static java.lang.reflect.Method _getSetMethod (final String name, final PropertyDescriptor [] props)
   {
     for (final PropertyDescriptor prop : props)
     {

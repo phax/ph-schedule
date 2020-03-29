@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.datetime.util.PDTHelper;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.CronTrigger;
 
 /**
@@ -62,7 +63,7 @@ import com.helger.quartz.impl.triggers.CronTrigger;
 public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
 {
   private final CronExpression m_aCronExpression;
-  private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private EMisfireInstruction m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   protected CronScheduleBuilder (@Nonnull final CronExpression aCronExpression)
   {
@@ -83,7 +84,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
     final CronTrigger ct = new CronTrigger ();
     ct.setCronExpression (m_aCronExpression);
     ct.setTimeZone (m_aCronExpression.getTimeZone ());
-    ct.setMisfireInstruction (m_nMisfireInstruction);
+    ct.setMisfireInstruction (m_eMisfireInstruction);
     return ct;
   }
 
@@ -301,7 +302,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
@@ -315,7 +316,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    m_nMisfireInstruction = ICronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
@@ -329,7 +330,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   @Nonnull
   public CronScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    m_nMisfireInstruction = ICronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 }

@@ -240,7 +240,7 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
   }
 
   @VisibleForTesting
-  static enum EType
+  enum EType
   {
     SECOND,
     MINUTE,
@@ -408,11 +408,8 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
         break;
 
       difference = newDate.getTime () - lastDate.getTime ();
-
       if (difference == 1000)
-      {
         lastDate = newDate;
-      }
     }
 
     return new Date (lastDate.getTime () + 1000);
@@ -1286,9 +1283,9 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
     cl.setTime (afterTime);
     cl.set (Calendar.MILLISECOND, 0);
 
-    boolean gotOne = false;
+    boolean bGotOne = false;
     // loop until we've computed the next time, or we've past the endTime
-    while (!gotOne)
+    while (!bGotOne)
     {
       // if (endTime != null && cl.getTime().after(endTime)) return null;
       if (cl.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
@@ -1740,19 +1737,17 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
       // 1-based
 
       year = cl.get (Calendar.YEAR);
-      t = -1;
 
       // get year...................................................
       st = m_aYears.tailSet (Integer.valueOf (year));
-      if (st != null && !st.isEmpty ())
+      if (st == null || st.isEmpty ())
       {
-        t = year;
-        year = st.first ().intValue ();
+        // ran out of years...
+        return null;
       }
-      else
-      {
-        return null; // ran out of years...
-      }
+
+      t = year;
+      year = st.first ().intValue ();
 
       if (year != t)
       {
@@ -1768,7 +1763,7 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
       }
       cl.set (Calendar.YEAR, year);
 
-      gotOne = true;
+      bGotOne = true;
     } // while( !done )
 
     return cl.getTime ();

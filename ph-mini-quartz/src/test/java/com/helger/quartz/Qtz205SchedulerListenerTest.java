@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.impl.StdSchedulerFactory;
@@ -39,7 +40,7 @@ import com.helger.quartz.impl.StdSchedulerFactory;
  */
 public class Qtz205SchedulerListenerTest
 {
-  private static Logger logger = LoggerFactory.getLogger (Qtz205SchedulerListenerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (Qtz205SchedulerListenerTest.class);
 
   public static class Qtz205Job implements IJob
   {
@@ -48,9 +49,8 @@ public class Qtz205SchedulerListenerTest
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       jobExecutionCount++;
-      logger.info ("Job executed. jobExecutionCount=" + jobExecutionCount);
+      LOGGER.info ("Job executed. jobExecutionCount=" + jobExecutionCount);
     }
-
   }
 
   public static class Qtz205TriggerListener implements ITriggerListener
@@ -70,14 +70,14 @@ public class Qtz205SchedulerListenerTest
     public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
     {
       fireCount++;
-      logger.info ("Trigger fired. count " + fireCount);
+      LOGGER.info ("Trigger fired. count " + fireCount);
     }
 
     public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
     {
       if (fireCount >= 3)
       {
-        logger.info ("Job execution vetoed.");
+        LOGGER.info ("Job execution vetoed.");
         return true;
       }
       return false;
@@ -111,7 +111,7 @@ public class Qtz205SchedulerListenerTest
     public void triggerFinalized (final ITrigger trigger)
     {
       triggerFinalizedCount++;
-      logger.info ("triggerFinalized " + trigger);
+      LOGGER.info ("triggerFinalized " + trigger);
     }
 
     public void triggerPaused (final TriggerKey triggerKey)
@@ -191,7 +191,7 @@ public class Qtz205SchedulerListenerTest
                                           .build ();
     scheduler.scheduleJob (job, trigger);
     scheduler.start ();
-    Thread.sleep (5000);
+    ThreadHelper.sleep (5000);
 
     scheduler.shutdown (true);
 

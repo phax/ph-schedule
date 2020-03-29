@@ -509,7 +509,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   @Override
   public boolean isTimeIncluded (final long timeInMillis)
   {
-    if ((getBaseCalendar () != null) && (getBaseCalendar ().isTimeIncluded (timeInMillis) == false))
+    if (getBaseCalendar () != null && !getBaseCalendar ().isTimeIncluded (timeInMillis))
     {
       return false;
     }
@@ -520,10 +520,10 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
     final long timeRangeEndingTimeInMillis = getTimeRangeEndingTimeInMillis (timeInMillis);
     if (!m_bInvertTimeRange)
     {
-      return ((timeInMillis > startOfDayInMillis && timeInMillis < timeRangeStartingTimeInMillis) ||
-              (timeInMillis > timeRangeEndingTimeInMillis && timeInMillis < endOfDayInMillis));
+      return (timeInMillis > startOfDayInMillis && timeInMillis < timeRangeStartingTimeInMillis) ||
+             (timeInMillis > timeRangeEndingTimeInMillis && timeInMillis < endOfDayInMillis);
     }
-    return ((timeInMillis >= timeRangeStartingTimeInMillis) && (timeInMillis <= timeRangeEndingTimeInMillis));
+    return timeInMillis >= timeRangeStartingTimeInMillis && timeInMillis <= timeRangeEndingTimeInMillis;
   }
 
   /**
@@ -550,14 +550,13 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
         // excluded by the baseCalendar, ask it the next time it
         // includes and begin testing from there. Failing this, add one
         // millisecond and continue testing.
-        if ((nextIncludedTime >= getTimeRangeStartingTimeInMillis (nextIncludedTime)) &&
-            (nextIncludedTime <= getTimeRangeEndingTimeInMillis (nextIncludedTime)))
+        if (nextIncludedTime >= getTimeRangeStartingTimeInMillis (nextIncludedTime) &&
+            nextIncludedTime <= getTimeRangeEndingTimeInMillis (nextIncludedTime))
         {
-
           nextIncludedTime = getTimeRangeEndingTimeInMillis (nextIncludedTime) + ONE_MILLIS;
         }
         else
-          if ((getBaseCalendar () != null) && (!getBaseCalendar ().isTimeIncluded (nextIncludedTime)))
+          if (getBaseCalendar () != null && !getBaseCalendar ().isTimeIncluded (nextIncludedTime))
           {
             nextIncludedTime = getBaseCalendar ().getNextIncludedTime (nextIncludedTime);
           }
@@ -586,7 +585,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
             nextIncludedTime += 1l;
           }
           else
-            if ((getBaseCalendar () != null) && (!getBaseCalendar ().isTimeIncluded (nextIncludedTime)))
+            if (getBaseCalendar () != null && !getBaseCalendar ().isTimeIncluded (nextIncludedTime))
             {
               nextIncludedTime = getBaseCalendar ().getNextIncludedTime (nextIncludedTime);
             }
@@ -675,7 +674,8 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
     final NumberFormat numberFormatter = NumberFormat.getNumberInstance (Locale.getDefault (Category.FORMAT));
     numberFormatter.setMaximumFractionDigits (0);
     numberFormatter.setMinimumIntegerDigits (2);
-    final StringBuffer buffer = new StringBuffer ();
+
+    final StringBuilder buffer = new StringBuilder ();
     buffer.append ("base calendar: [");
     if (getBaseCalendar () != null)
       buffer.append (getBaseCalendar ().toString ());

@@ -103,7 +103,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
     final int dmonth = day.get (Calendar.MONTH);
     final int dday = day.get (Calendar.DAY_OF_MONTH);
 
-    if (m_bDataSorted == false)
+    if (!m_bDataSorted)
     {
       Collections.sort (m_aExcludeDays, new CalendarComparator ());
       m_bDataSorted = true;
@@ -257,12 +257,13 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
 
     // Get timestamp for 00:00:00
     final Calendar day = getStartOfDayJavaCalendar (timeStamp);
-    if (isDayExcluded (day) == false)
+    if (!isDayExcluded (day))
     {
-      return timeStamp; // return the original value
+      // return the original value
+      return timeStamp;
     }
 
-    while (isDayExcluded (day) == true)
+    while (isDayExcluded (day))
     {
       day.add (Calendar.DATE, 1);
     }

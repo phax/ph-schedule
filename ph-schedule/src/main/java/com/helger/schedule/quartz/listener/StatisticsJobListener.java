@@ -47,14 +47,17 @@ public class StatisticsJobListener implements IJobListener
     return "quartz." + ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
   }
 
+  @Override
   public void jobToBeExecuted (@Nonnull final IJobExecutionContext aContext)
   {}
 
+  @Override
   public void jobExecutionVetoed (@Nonnull final IJobExecutionContext aContext)
   {
     StatisticsManager.getCounterHandler (getStatisticsName (aContext) + "$VETOED").increment ();
   }
 
+  @Override
   public void jobWasExecuted (@Nonnull final IJobExecutionContext aContext, final JobExecutionException aJobException)
   {
     StatisticsManager.getCounterHandler (getStatisticsName (aContext) + "$EXEC").increment ();

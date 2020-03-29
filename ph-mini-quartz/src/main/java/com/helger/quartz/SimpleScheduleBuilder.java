@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 
 /**
@@ -58,7 +59,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
 {
   private long m_nInterval = 0;
   private int m_nRepeatCount = 0;
-  private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private EMisfireInstruction m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   protected SimpleScheduleBuilder ()
   {}
@@ -253,7 +254,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
     final SimpleTrigger ret = new SimpleTrigger ();
     ret.setRepeatInterval (m_nInterval);
     ret.setRepeatCount (m_nRepeatCount);
-    ret.setMisfireInstruction (m_nMisfireInstruction);
+    ret.setMisfireInstruction (m_eMisfireInstruction);
     return ret;
   }
 
@@ -369,7 +370,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
@@ -383,7 +384,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionFireNow ()
   {
-    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 
@@ -398,7 +399,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithExistingCount ()
   {
-    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT;
     return this;
   }
 
@@ -413,7 +414,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithRemainingCount ()
   {
-    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
     return this;
   }
 
@@ -428,7 +429,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithExistingCount ()
   {
-    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
     return this;
   }
 
@@ -443,7 +444,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
   @Nonnull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithRemainingCount ()
   {
-    m_nMisfireInstruction = ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;
     return this;
   }
 }

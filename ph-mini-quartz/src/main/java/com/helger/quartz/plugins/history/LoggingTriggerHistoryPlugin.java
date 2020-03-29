@@ -330,6 +330,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
     return m_sName;
   }
 
+  @Override
   public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
   {
     if (LOGGER.isInfoEnabled ())
@@ -346,6 +347,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
     }
   }
 
+  @Override
   public void triggerMisfired (final ITrigger trigger)
   {
     if (LOGGER.isInfoEnabled ())
@@ -361,6 +363,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
     }
   }
 
+  @Override
   public void triggerComplete (final ITrigger trigger,
                                final IJobExecutionContext context,
                                final ECompletedExecutionInstruction triggerInstructionCode)
@@ -407,6 +410,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
     }
   }
 
+  @Override
   public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
   {
     return false;

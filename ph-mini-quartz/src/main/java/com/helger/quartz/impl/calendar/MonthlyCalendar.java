@@ -161,13 +161,8 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
   public boolean areAllDaysExcluded ()
   {
     for (int i = 1; i <= MAX_DAYS_IN_MONTH; i++)
-    {
-      if (isDayExcluded (i) == false)
-      {
+      if (!isDayExcluded (i))
         return false;
-      }
-    }
-
     return true;
   }
 
@@ -190,15 +185,12 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
 
     // Test the base calendar first. Only if the base calendar not already
     // excludes the time/date, continue evaluating this calendar instance.
-    if (super.isTimeIncluded (timeStamp) == false)
-    {
+    if (!super.isTimeIncluded (timeStamp))
       return false;
-    }
 
     final Calendar cl = createJavaCalendar (timeStamp);
     final int day = cl.get (Calendar.DAY_OF_MONTH);
-
-    return !(isDayExcluded (day));
+    return !isDayExcluded (day);
   }
 
   /**
@@ -220,7 +212,7 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
     // Call base calendar implementation first
     long timeStamp = nTimeStamp;
     final long baseTime = super.getNextIncludedTime (timeStamp);
-    if ((baseTime > 0) && (baseTime > timeStamp))
+    if (baseTime > 0 && baseTime > timeStamp)
     {
       timeStamp = baseTime;
     }

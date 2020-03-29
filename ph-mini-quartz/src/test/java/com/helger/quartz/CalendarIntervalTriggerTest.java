@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import org.junit.Test;
 
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.calendar.AbstractCalendar;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
 
@@ -510,10 +511,10 @@ public class CalendarIntervalTriggerTest
 
     try
     {
-      trigger.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
-      trigger.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY);
-      trigger.setMisfireInstruction (ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING);
-      trigger.setMisfireInstruction (ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_DO_NOTHING);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
     }
     catch (final Exception e)
     {
@@ -522,7 +523,7 @@ public class CalendarIntervalTriggerTest
 
     try
     {
-      trigger.setMisfireInstruction (ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING + 1);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT);
 
       fail ("Expected exception while setting invalid misfire instruction but did not get it.");
     }

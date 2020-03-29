@@ -32,7 +32,6 @@ import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.impl.StdSchedulerFactory;
-import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.listeners.BroadcastSchedulerListener;
 
 /**
@@ -47,7 +46,7 @@ public class QTZ212_SchedulerListener_Test
 
   private static final String SCHEDULER_STARTED = "SCHEDULER_STARTED";
   private static final String SCHEDULER_STARTING = "SCHEDULER_STARTING";
-  private static List <String> methodsCalledInSchedulerListener = new ArrayList<> ();
+  private static List <String> methodsCalledInSchedulerListener = new ArrayList <> ();
 
   @Test
   public void stdSchedulerCallsStartingBeforeStartedTest () throws SchedulerException
@@ -67,10 +66,10 @@ public class QTZ212_SchedulerListener_Test
   public void broadcastSchedulerListenerCallsSchedulerStartingOnAllItsListeners () throws SchedulerException
   {
 
-    methodsCalledInSchedulerListener = new ArrayList<> ();
+    methodsCalledInSchedulerListener = new ArrayList <> ();
     final ISchedulerFactory sf = new StdSchedulerFactory ();
     final IScheduler sched = sf.getScheduler ();
-    final List <ISchedulerListener> listeners = new ArrayList<> ();
+    final List <ISchedulerListener> listeners = new ArrayList <> ();
     listeners.add (new TestSchedulerListener ());
 
     sched.getListenerManager ().addSchedulerListener (new BroadcastSchedulerListener (listeners));
@@ -82,9 +81,8 @@ public class QTZ212_SchedulerListener_Test
     sched.shutdown ();
   }
 
-  public static class TestSchedulerListener extends AbstractSchedulerListenerSupport
+  public static class TestSchedulerListener implements ISchedulerListener
   {
-
     @Override
     public void schedulerStarted ()
     {
@@ -98,7 +96,5 @@ public class QTZ212_SchedulerListener_Test
       methodsCalledInSchedulerListener.add (SCHEDULER_STARTING);
       LOGGER.info ("schedulerStarting was called");
     }
-
   }
-
 }

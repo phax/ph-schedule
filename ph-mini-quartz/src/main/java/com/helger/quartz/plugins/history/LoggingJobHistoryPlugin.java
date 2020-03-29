@@ -405,9 +405,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
     return m_sName;
   }
 
-  /**
-   * @see com.helger.quartz.IJobListener#jobToBeExecuted(IJobExecutionContext)
-   */
+  @Override
   public void jobToBeExecuted (final IJobExecutionContext context)
   {
     if (LOGGER.isInfoEnabled ())
@@ -427,10 +425,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
     }
   }
 
-  /**
-   * @see com.helger.quartz.IJobListener#jobWasExecuted(IJobExecutionContext,
-   *      JobExecutionException)
-   */
+  @Override
   public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
     final ITrigger trigger = context.getTrigger ();
@@ -473,9 +468,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
     }
   }
 
-  /**
-   * @see com.helger.quartz.IJobListener#jobExecutionVetoed(com.helger.quartz.IJobExecutionContext)
-   */
+  @Override
   public void jobExecutionVetoed (final IJobExecutionContext context)
   {
     if (LOGGER.isInfoEnabled ())

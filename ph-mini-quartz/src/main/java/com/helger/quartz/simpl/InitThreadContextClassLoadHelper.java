@@ -20,7 +20,7 @@ package com.helger.quartz.simpl;
 
 import java.lang.ref.WeakReference;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 import com.helger.quartz.spi.IClassLoadHelper;
 
@@ -45,6 +45,7 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
    * the opportunity to "steal" the class loader off of the calling thread,
    * which is the thread that is initializing Quartz.
    */
+  @Override
   public void initialize ()
   {
     m_aInitClassLoader = new WeakReference <> (Thread.currentThread ().getContextClassLoader ());
@@ -55,9 +56,12 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
    *
    * @return the class-loader user be the helper.
    */
-  @Nullable
+  @Nonnull
   public ClassLoader getClassLoader ()
   {
-    return m_aInitClassLoader.get ();
+    final ClassLoader ret = m_aInitClassLoader.get ();
+    if (ret == null)
+      throw new IllegalStateException ("Classload vanished :(");
+    return ret;
   }
 }

@@ -43,6 +43,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.utils.Key;
@@ -242,16 +243,8 @@ public abstract class AbstractSchedulerTest
     jobKeys = sched.getJobKeys (GroupMatcher.jobGroupEquals ("g1"));
     triggerKeys = sched.getTriggerKeys (GroupMatcher.triggerGroupEquals ("g1"));
 
-    assertTrue ("Number of jobs expected in 'g1' group was 1 ", jobKeys.size () == 2); // job
-                                                                                       // should
-                                                                                       // have
-                                                                                       // been
-                                                                                       // deleted
-                                                                                       // also,
-                                                                                       // because
-                                                                                       // it
-                                                                                       // is
-                                                                                       // non-durable
+    // job should have been deleted also, because it is non-durable
+    assertTrue ("Number of jobs expected in 'g1' group was 1 ", jobKeys.size () == 2);
     assertTrue ("Number of triggers expected in 'g1' group was 1 ", triggerKeys.size () == 2);
 
     assertTrue ("Scheduler should have returned 'true' from attempt to unschedule existing trigger. ",
@@ -260,17 +253,8 @@ public abstract class AbstractSchedulerTest
     jobKeys = sched.getJobKeys (GroupMatcher.jobGroupEquals (Key.DEFAULT_GROUP));
     triggerKeys = sched.getTriggerKeys (GroupMatcher.triggerGroupEquals (Key.DEFAULT_GROUP));
 
-    assertTrue ("Number of jobs expected in default group was 1 ", jobKeys.size () == 1); // job
-                                                                                          // should
-                                                                                          // have
-                                                                                          // been
-                                                                                          // left
-                                                                                          // in
-                                                                                          // place,
-                                                                                          // because
-                                                                                          // it
-                                                                                          // is
-                                                                                          // non-durable
+    // job should have been left in place, because it is non-durable
+    assertTrue ("Number of jobs expected in default group was 1 ", jobKeys.size () == 1);
     assertTrue ("Number of triggers expected in default group was 0 ", triggerKeys.size () == 0);
 
     sched.shutdown (true);
@@ -322,13 +306,13 @@ public abstract class AbstractSchedulerTest
     final IScheduler scheduler = createScheduler ("testShutdownWithSleepReturnsAfterAllThreadsAreStopped",
                                                   threadPoolSize);
 
-    Thread.sleep (500L);
+    ThreadHelper.sleep (500L);
 
     final Map <Thread, StackTraceElement []> allThreadsRunning = Thread.getAllStackTraces ();
 
     scheduler.shutdown (true);
 
-    Thread.sleep (200L);
+    ThreadHelper.sleep (200L);
 
     final Map <Thread, StackTraceElement []> allThreadsEnd = Thread.getAllStackTraces ();
     final Set <Thread> endingThreads = new HashSet <> (allThreadsEnd.keySet ());
@@ -416,15 +400,9 @@ public abstract class AbstractSchedulerTest
 
     final long fTime = jobExecTimestamps.get (0).longValue ();
 
-    assertTrue ("Immediate trigger did not fire within a reasonable amount of time.", (fTime - sTime < 7000L)); // This
-                                                                                                                // is
-                                                                                                                // dangerously
-                                                                                                                // subjective!
-                                                                                                                // but
-                                                                                                                // what
-                                                                                                                // else
-                                                                                                                // to
-                                                                                                                // do?
+    // This is dangerously subjective!
+    // but what else to do?
+    assertTrue ("Immediate trigger did not fire within a reasonable amount of time.", (fTime - sTime < 7000L));
   }
 
   @Test
@@ -455,15 +433,9 @@ public abstract class AbstractSchedulerTest
 
     final long fTime = jobExecTimestamps.get (0).longValue ();
 
-    assertTrue ("Immediate trigger did not fire within a reasonable amount of time.", (fTime - sTime < 7000L)); // This
-                                                                                                                // is
-                                                                                                                // dangerously
-                                                                                                                // subjective!
-                                                                                                                // but
-                                                                                                                // what
-                                                                                                                // else
-                                                                                                                // to
-                                                                                                                // do?
+    // This is dangerously subjective!
+    // but what else to do?
+    assertTrue ("Immediate trigger did not fire within a reasonable amount of time.", (fTime - sTime < 7000L));
   }
 
   @Test
@@ -541,7 +513,7 @@ public abstract class AbstractSchedulerTest
       scheduler.scheduleJob (newTrigger ().forJob ("job").startNow ().build ());
       while (scheduler.getCurrentlyExecutingJobs ().isEmpty ())
       {
-        Thread.sleep (50);
+        ThreadHelper.sleep (50);
       }
     }
     finally
@@ -591,7 +563,7 @@ public abstract class AbstractSchedulerTest
       scheduler.scheduleJob (newTrigger ().forJob ("job").startNow ().build ());
       while (scheduler.getCurrentlyExecutingJobs ().isEmpty ())
       {
-        Thread.sleep (50);
+        ThreadHelper.sleep (50);
       }
     }
     finally
@@ -613,7 +585,7 @@ public abstract class AbstractSchedulerTest
         }
       };
       t.start ();
-      Thread.sleep (1000);
+      ThreadHelper.sleep (1000);
       assertFalse (shutdown.get ());
       barrier.await (TEST_TIMEOUT_SECONDS, TimeUnit.SECONDS);
       t.join ();

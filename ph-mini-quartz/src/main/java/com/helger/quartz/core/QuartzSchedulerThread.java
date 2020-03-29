@@ -46,6 +46,7 @@ import com.helger.quartz.spi.TriggerFiredResult;
 public class QuartzSchedulerThread extends Thread
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (QuartzSchedulerThread.class);
+  private static final long DEFAULT_IDLE_WAIT_TIME = 30L * 1000L;
 
   private QuartzScheduler m_aQS;
   private QuartzSchedulerResources m_aQSRsrcs;
@@ -57,7 +58,6 @@ public class QuartzSchedulerThread extends Thread
   private final Random m_aRandom = new Random ();
   // When the scheduler finds there is no current trigger to fire, how long
   // it should wait until checking again...
-  private static long DEFAULT_IDLE_WAIT_TIME = 30L * 1000L;
   private long m_nIdleWaitTime = DEFAULT_IDLE_WAIT_TIME;
   private int m_nIdleWaitVariablness = 7 * 1000;
 
@@ -107,7 +107,7 @@ public class QuartzSchedulerThread extends Thread
     m_nIdleWaitVariablness = (int) (waitTime * 0.2);
   }
 
-  private long getRandomizedIdleWaitTime ()
+  private long _getRandomizedIdleWaitTime ()
   {
     return m_nIdleWaitTime - m_aRandom.nextInt (m_nIdleWaitVariablness);
   }
@@ -325,7 +325,7 @@ public class QuartzSchedulerThread extends Thread
                 {
                   break;
                 }
-                if (!isCandidateNewTimeEarlierWithinReason (triggerTime, false))
+                if (!_isCandidateNewTimeEarlierWithinReason (triggerTime, false))
                 {
                   try
                   {
@@ -342,7 +342,7 @@ public class QuartzSchedulerThread extends Thread
                   }
                 }
               }
-              if (releaseIfScheduleChangedSignificantly (triggers, triggerTime))
+              if (_releaseIfScheduleChangedSignificantly (triggers, triggerTime))
               {
                 break;
               }
@@ -423,7 +423,7 @@ public class QuartzSchedulerThread extends Thread
                 continue;
               }
 
-              if (m_aQSRsrcs.getThreadPool ().runInThread (shell) == false)
+              if (!m_aQSRsrcs.getThreadPool ().runInThread (shell))
               {
                 // this case should never happen, as it is indicative of the
                 // scheduler being shutdown or a bug in the thread pool or
@@ -449,7 +449,7 @@ public class QuartzSchedulerThread extends Thread
         }
 
         final long now = System.currentTimeMillis ();
-        final long waitTime = now + getRandomizedIdleWaitTime ();
+        final long waitTime = now + _getRandomizedIdleWaitTime ();
         final long timeUntilContinue = waitTime - now;
         synchronized (m_aSigLock)
         {
@@ -488,9 +488,10 @@ public class QuartzSchedulerThread extends Thread
     m_aQSRsrcs = null;
   }
 
-  private boolean releaseIfScheduleChangedSignificantly (final List <IOperableTrigger> triggers, final long triggerTime)
+  private boolean _releaseIfScheduleChangedSignificantly (final List <IOperableTrigger> triggers,
+                                                          final long triggerTime)
   {
-    if (isCandidateNewTimeEarlierWithinReason (triggerTime, true))
+    if (_isCandidateNewTimeEarlierWithinReason (triggerTime, true))
     {
       // above call does a clearSignaledSchedulingChange()
       for (final IOperableTrigger trigger : triggers)
@@ -503,9 +504,8 @@ public class QuartzSchedulerThread extends Thread
     return false;
   }
 
-  private boolean isCandidateNewTimeEarlierWithinReason (final long oldTime, final boolean clearSignal)
+  private boolean _isCandidateNewTimeEarlierWithinReason (final long oldTime, final boolean clearSignal)
   {
-
     // So here's the deal: We know due to being signaled that 'the schedule'
     // has changed. We may know (if getSignaledNextFireTime() != 0) the
     // new earliest fire time. We may not (in which case we will assume
@@ -526,24 +526,17 @@ public class QuartzSchedulerThread extends Thread
 
     synchronized (m_aSigLock)
     {
-
       if (!isScheduleChanged ())
         return false;
 
-      boolean earlier = false;
+      boolean bEarlier = getSignaledNextFireTime () == 0 || getSignaledNextFireTime () < oldTime;
 
-      if (getSignaledNextFireTime () == 0)
-        earlier = true;
-      else
-        if (getSignaledNextFireTime () < oldTime)
-          earlier = true;
-
-      if (earlier)
+      if (bEarlier)
       {
         // so the new time is considered earlier, but is it enough earlier?
         final long diff = oldTime - System.currentTimeMillis ();
         if (diff < (m_aQSRsrcs.getJobStore ().supportsPersistence () ? 70L : 7L))
-          earlier = false;
+          bEarlier = false;
       }
 
       if (clearSignal)
@@ -551,7 +544,7 @@ public class QuartzSchedulerThread extends Thread
         clearSignaledSchedulingChange ();
       }
 
-      return earlier;
+      return bEarlier;
     }
   }
 }

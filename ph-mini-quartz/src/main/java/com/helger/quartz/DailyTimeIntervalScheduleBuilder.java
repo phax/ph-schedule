@@ -23,12 +23,14 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import com.helger.commons.CGlobal;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
 /**
@@ -78,7 +80,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   private TimeOfDay m_aStartTimeOfDay;
   private TimeOfDay m_aEndTimeOfDay;
   private int m_nRepeatCount = IDailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
-  private int m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+  private EMisfireInstruction m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   /**
    * A set of all days of the week. The set contains all values between
@@ -137,7 +139,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
     final DailyTimeIntervalTrigger st = new DailyTimeIntervalTrigger ();
     st.setRepeatInterval (m_nInterval);
     st.setRepeatIntervalUnit (m_eIntervalUnit);
-    st.setMisfireInstruction (m_nMisfireInstruction);
+    st.setMisfireInstruction (m_eMisfireInstruction);
     st.setRepeatCount (m_nRepeatCount);
 
     if (m_aDaysOfWeek != null)
@@ -243,11 +245,11 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @Nonnull
-  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final EnumSet <DayOfWeek> onDaysOfWeek)
+  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Set <DayOfWeek> onDaysOfWeek)
   {
     ValueEnforcer.notEmpty (onDaysOfWeek, "OnDaysOfWeek");
 
-    m_aDaysOfWeek = onDaysOfWeek;
+    m_aDaysOfWeek = EnumSet.copyOf (onDaysOfWeek);
     return this;
   }
 
@@ -401,7 +403,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   @Nonnull
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
-    m_nMisfireInstruction = ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
     return this;
   }
 
@@ -416,7 +418,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   @Nonnull
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
-    m_nMisfireInstruction = IDailyTimeIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_DO_NOTHING;
     return this;
   }
 
@@ -431,7 +433,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   @Nonnull
   public DailyTimeIntervalScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
-    m_nMisfireInstruction = ICalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+    m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     return this;
   }
 
@@ -444,9 +446,9 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the new DailyTimeIntervalScheduleBuilder
    */
   @Nonnull
-  public DailyTimeIntervalScheduleBuilder withRepeatCount (final int repeatCount)
+  public DailyTimeIntervalScheduleBuilder withRepeatCount (final int nRepeatCount)
   {
-    m_nRepeatCount = repeatCount;
+    m_nRepeatCount = nRepeatCount;
     return this;
   }
 

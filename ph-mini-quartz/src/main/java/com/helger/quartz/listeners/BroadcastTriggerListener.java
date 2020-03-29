@@ -18,8 +18,6 @@
  */
 package com.helger.quartz.listeners;
 
-import java.util.Iterator;
-
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
@@ -94,21 +92,6 @@ public class BroadcastTriggerListener implements ITriggerListener
     return m_aListeners.remove (listener);
   }
 
-  public boolean removeListener (final String listenerName)
-  {
-    final Iterator <ITriggerListener> itr = m_aListeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final ITriggerListener l = itr.next ();
-      if (l.getName ().equals (listenerName))
-      {
-        itr.remove ();
-        return true;
-      }
-    }
-    return false;
-  }
-
   @Nonnull
   @ReturnsMutableCopy
   public ICommonsList <ITriggerListener> getListeners ()
@@ -116,24 +99,25 @@ public class BroadcastTriggerListener implements ITriggerListener
     return m_aListeners.getClone ();
   }
 
+  @Override
   public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
   {
     m_aListeners.forEach (x -> x.triggerFired (trigger, context));
   }
 
+  @Override
   public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
   {
-    for (final ITriggerListener l : m_aListeners)
-      if (l.vetoJobExecution (trigger, context))
-        return true;
-    return false;
+    return m_aListeners.containsAny (x -> x.vetoJobExecution (trigger, context));
   }
 
+  @Override
   public void triggerMisfired (final ITrigger trigger)
   {
     m_aListeners.forEach (x -> x.triggerMisfired (trigger));
   }
 
+  @Override
   public void triggerComplete (final ITrigger trigger,
                                final IJobExecutionContext context,
                                final ECompletedExecutionInstruction triggerInstructionCode)

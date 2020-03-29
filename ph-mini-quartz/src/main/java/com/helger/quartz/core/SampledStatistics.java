@@ -25,9 +25,9 @@ import javax.annotation.Nonnull;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
+import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
-import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.utils.counter.CounterConfig;
 import com.helger.quartz.utils.counter.CounterManager;
 import com.helger.quartz.utils.counter.ICounterManager;
@@ -35,18 +35,18 @@ import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounterConfig;
 import com.helger.quartz.utils.counter.sampled.SampledRateCounterConfig;
 
-public class SampledStatistics extends AbstractSchedulerListenerSupport implements ISampledStatistics, IJobListener
+public class SampledStatistics implements ISampledStatistics, IJobListener, ISchedulerListener
 {
-  private static final String NAME = "QuartzSampledStatistics";
+  public static final String NAME = "QuartzSampledStatistics";
 
   private static final int DEFAULT_HISTORY_SIZE = 30;
   private static final int DEFAULT_INTERVAL_SECS = 1;
-  private final static SampledCounterConfig DEFAULT_SAMPLED_COUNTER_CONFIG = new SampledCounterConfig (DEFAULT_INTERVAL_SECS,
+  private static final SampledCounterConfig DEFAULT_SAMPLED_COUNTER_CONFIG = new SampledCounterConfig (DEFAULT_INTERVAL_SECS,
                                                                                                        DEFAULT_HISTORY_SIZE,
                                                                                                        true,
                                                                                                        0L);
   @SuppressWarnings ("unused")
-  private final static SampledRateCounterConfig DEFAULT_SAMPLED_RATE_COUNTER_CONFIG = new SampledRateCounterConfig (DEFAULT_INTERVAL_SECS,
+  private static final SampledRateCounterConfig DEFAULT_SAMPLED_RATE_COUNTER_CONFIG = new SampledRateCounterConfig (DEFAULT_INTERVAL_SECS,
                                                                                                                     DEFAULT_HISTORY_SIZE,
                                                                                                                     true);
 
@@ -112,16 +112,19 @@ public class SampledStatistics extends AbstractSchedulerListenerSupport implemen
     m_aJobsScheduledCount.increment ();
   }
 
+  @Override
   public void jobExecutionVetoed (final IJobExecutionContext context)
   {
     /**/
   }
 
+  @Override
   public void jobToBeExecuted (final IJobExecutionContext context)
   {
     m_aJobsExecutingCount.increment ();
   }
 
+  @Override
   public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
     m_aJobsCompletedCount.increment ();

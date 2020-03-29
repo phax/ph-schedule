@@ -57,17 +57,20 @@ public class LoggingJobListener implements IJobListener
     return ret;
   }
 
+  @Override
   public void jobToBeExecuted (@Nonnull final IJobExecutionContext aContext)
   {
     if (LOGGER.isDebugEnabled ())
       LOGGER.debug ("Job to be executed: " + getJobName (aContext));
   }
 
+  @Override
   public void jobExecutionVetoed (@Nonnull final IJobExecutionContext aContext)
   {
     LOGGER.warn ("Job execution vetoed by trigger listener: " + getJobName (aContext));
   }
 
+  @Override
   public void jobWasExecuted (@Nonnull final IJobExecutionContext aContext, final JobExecutionException aJobException)
   {
     final Object aResult = aContext.getResult ();

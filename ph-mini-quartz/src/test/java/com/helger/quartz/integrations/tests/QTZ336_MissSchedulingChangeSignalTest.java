@@ -116,24 +116,24 @@ public class QTZ336_MissSchedulingChangeSignalTest
   }
 
   /**
-   * A simple job for collecting fire times in order to check that we did not miss
-   * one call, for having the race condition the job must be real quick and not
-   * allowing concurrent executions.
+   * A simple job for collecting fire times in order to check that we did not
+   * miss one call, for having the race condition the job must be real quick and
+   * not allowing concurrent executions.
    */
   @DisallowConcurrentExecution
   public static class CollectDuractionBetweenFireTimesJob implements IJob
   {
-    private static final Logger log = LoggerFactory.getLogger (CollectDuractionBetweenFireTimesJob.class);
-    private static final List <Long> m_aDurationBetweenFireTimes = Collections.synchronizedList (new ArrayList <Long> ());
+    private static final Logger LOG = LoggerFactory.getLogger (CollectDuractionBetweenFireTimesJob.class);
+    private static final List <Long> s_aDurationBetweenFireTimes = Collections.synchronizedList (new ArrayList <Long> ());
     private static Long m_aLastFireTime = null;
 
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       final Date now = new Date ();
-      log.info ("Fire time: " + now);
+      LOG.info ("Fire time: " + now);
       if (m_aLastFireTime != null)
       {
-        m_aDurationBetweenFireTimes.add (Long.valueOf (now.getTime () - m_aLastFireTime.longValue ()));
+        s_aDurationBetweenFireTimes.add (Long.valueOf (now.getTime () - m_aLastFireTime.longValue ()));
       }
       m_aLastFireTime = Long.valueOf (now.getTime ());
     }
@@ -145,12 +145,11 @@ public class QTZ336_MissSchedulingChangeSignalTest
      */
     public static List <Long> getDurations ()
     {
-      synchronized (m_aDurationBetweenFireTimes)
+      synchronized (s_aDurationBetweenFireTimes)
       {
-        return Collections.unmodifiableList (new ArrayList <> (m_aDurationBetweenFireTimes));
+        return Collections.unmodifiableList (s_aDurationBetweenFireTimes);
       }
     }
-
   }
 
   /**
@@ -166,14 +165,9 @@ public class QTZ336_MissSchedulingChangeSignalTest
       final ICommonsList <IOperableTrigger> nextTriggers = super.acquireNextTriggers (noLaterThan,
                                                                                       maxCount,
                                                                                       timeWindow);
-      try
-      {
-        // Wait just a bit for hopefully having a context switch leading to the
-        // race condition
-        Thread.sleep (10);
-      }
-      catch (final InterruptedException e)
-      {}
+      // Wait just a bit for hopefully having a context switch leading to the
+      // race condition
+      ThreadHelper.sleep (10);
       return nextTriggers;
     }
   }

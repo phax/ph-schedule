@@ -119,33 +119,110 @@ public interface ITrigger extends Serializable, Comparable <ITrigger>
     SET_ALL_JOB_TRIGGERS_ERROR
   }
 
-  /**
-   * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
-   * situation, the <code>updateAfterMisfire()</code> method will be called on
-   * the <code>Trigger</code> to determine the mis-fire instruction, which logic
-   * will be trigger-implementation-dependent.
-   * <p>
-   * In order to see if this instruction fits your needs, you should look at the
-   * documentation for the <code>getSmartMisfirePolicy()</code> method on the
-   * particular <code>Trigger</code> implementation you are using.
-   * </p>
-   */
-  int MISFIRE_INSTRUCTION_SMART_POLICY = 0;
+  public enum EMisfireInstruction
+  {
+    /**
+     * Instructs the <code>{@link IScheduler}</code> that the
+     * <code>Trigger</code> will never be evaluated for a misfire situation, and
+     * that the scheduler will simply try to fire it as soon as it can, and then
+     * update the Trigger as if it had fired at the proper time.<br>
+     * NOTE: if a trigger uses this instruction, and it has missed several of
+     * its scheduled firings, then several rapid firings may occur as the
+     * trigger attempt to catch back up to where it would have been. For
+     * example, a SimpleTrigger that fires every 15 seconds which has misfired
+     * for 5 minutes will fire 20 times once it gets the chance to fire.
+     */
+    MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY, // -1
 
-  /**
-   * Instructs the <code>{@link IScheduler}</code> that the <code>Trigger</code>
-   * will never be evaluated for a misfire situation, and that the scheduler
-   * will simply try to fire it as soon as it can, and then update the Trigger
-   * as if it had fired at the proper time.
-   * <p>
-   * NOTE: if a trigger uses this instruction, and it has missed several of its
-   * scheduled firings, then several rapid firings may occur as the trigger
-   * attempt to catch back up to where it would have been. For example, a
-   * SimpleTrigger that fires every 15 seconds which has misfired for 5 minutes
-   * will fire 20 times once it gets the chance to fire.
-   * </p>
-   */
-  int MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY = -1;
+    /**
+     * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
+     * situation, the <code>updateAfterMisfire()</code> method will be called on
+     * the <code>Trigger</code> to determine the mis-fire instruction, which
+     * logic will be trigger-implementation-dependent.<br>
+     * In order to see if this instruction fits your needs, you should look at
+     * the documentation for the <code>getSmartMisfirePolicy()</code> method on
+     * the particular <code>Trigger</code> implementation you are using.
+     */
+    MISFIRE_INSTRUCTION_SMART_POLICY, // 0
+
+    /**
+     * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
+     * situation, the <code>Trigger</code> wants to be fired now by
+     * <code>Scheduler</code>.
+     */
+    MISFIRE_INSTRUCTION_FIRE_ONCE_NOW, // 1
+    /**
+     * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
+     * situation, the <code>Trigger</code> wants to have it's next-fire-time
+     * updated to the next time in the schedule after the current time (taking
+     * into account any associated <code>Calendar</code>, but it does not want
+     * to be fired now.<br>
+     * Not applicable to ISimpleTrigger
+     */
+    MISFIRE_INSTRUCTION_DO_NOTHING, // 2
+
+    /**
+     * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
+     * situation, the <code>{@link ISimpleTrigger}</code> wants to be
+     * re-scheduled to 'now' (even if the associated
+     * <code>{@link ICalendar}</code> excludes 'now') with the repeat count left
+     * as-is. This does obey the <code>Trigger</code> end-time however, so if
+     * 'now' is after the end-time the <code>Trigger</code> will not fire
+     * again.<br>
+     * <i>NOTE:</i> Use of this instruction causes the trigger to 'forget' the
+     * start-time and repeat-count that it was originally setup with (this is
+     * only an issue if you for some reason wanted to be able to tell what the
+     * original values were at some later time).<br>
+     * Only applicable to ISimpleTrigger
+     */
+    MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT, // 2
+
+    /**
+     * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
+     * situation, the <code>{@link ISimpleTrigger}</code> wants to be
+     * re-scheduled to 'now' (even if the associated
+     * <code>{@link ICalendar}</code> excludes 'now') with the repeat count set
+     * to what it would be, if it had not missed any firings. This does obey the
+     * <code>Trigger</code> end-time however, so if 'now' is after the end-time
+     * the <code>Trigger</code> will not fire again.<br>
+     * <i>NOTE:</i> Use of this instruction causes the trigger to 'forget' the
+     * start-time and repeat-count that it was originally setup with. Instead,
+     * the repeat count on the trigger will be changed to whatever the remaining
+     * repeat count is (this is only an issue if you for some reason wanted to
+     * be able to tell what the original values were at some later time).<br>
+     * <i>NOTE:</i> This instruction could cause the <code>Trigger</code> to go
+     * to the 'COMPLETE' state after firing 'now', if all the repeat-fire-times
+     * where missed.<br>
+     * Only applicable to ISimpleTrigger
+     */
+    MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT, // 3
+
+    /**
+     * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
+     * situation, the <code>{@link ISimpleTrigger}</code> wants to be
+     * re-scheduled to the next scheduled time after 'now' - taking into account
+     * any associated <code>{@link ICalendar}</code>, and with the repeat count
+     * set to what it would be, if it had not missed any firings.<br>
+     * <i>NOTE/WARNING:</i> This instruction could cause the
+     * <code>Trigger</code> to go directly to the 'COMPLETE' state if all
+     * fire-times where missed.<br>
+     * Only applicable to ISimpleTrigger
+     */
+    MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT, // 4
+
+    /**
+     * Instructs the <code>{@link IScheduler}</code> that upon a mis-fire
+     * situation, the <code>{@link ISimpleTrigger}</code> wants to be
+     * re-scheduled to the next scheduled time after 'now' - taking into account
+     * any associated <code>{@link ICalendar}</code>, and with the repeat count
+     * left unchanged.<br>
+     * <i>NOTE/WARNING:</i> This instruction could cause the
+     * <code>Trigger</code> to go directly to the 'COMPLETE' state if the
+     * end-time of the trigger has arrived.<br>
+     * Only applicable to ISimpleTrigger
+     */
+    MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT // 5
+  }
 
   /**
    * The default value for priority.
@@ -278,7 +355,7 @@ public interface ITrigger extends Serializable, Comparable <ITrigger>
    * @see ISimpleTrigger
    * @see ICronTrigger
    */
-  int getMisfireInstruction ();
+  EMisfireInstruction getMisfireInstruction ();
 
   /**
    * Get a {@link TriggerBuilder} that is configured to produce a

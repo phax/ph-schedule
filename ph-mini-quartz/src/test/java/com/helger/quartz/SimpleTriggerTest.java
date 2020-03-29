@@ -29,6 +29,7 @@ import java.util.TimeZone;
 import org.junit.Test;
 
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 
 /**
@@ -61,7 +62,7 @@ public class SimpleTriggerTest
     endTime.set (2005, Calendar.JULY, 5, 10, 0, 0);
 
     final SimpleTrigger simpleTrigger = new SimpleTrigger ();
-    simpleTrigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
+    simpleTrigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
     simpleTrigger.setRepeatCount (5);
     simpleTrigger.setStartTime (startTime.getTime ());
     simpleTrigger.setEndTime (endTime.getTime ());
@@ -125,13 +126,13 @@ public class SimpleTriggerTest
 
     try
     {
-      trigger.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
-      trigger.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_SMART_POLICY);
-      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
-      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT);
-      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
-      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
-      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT);
     }
     catch (final Exception e)
     {
@@ -140,7 +141,7 @@ public class SimpleTriggerTest
 
     try
     {
-      trigger.setMisfireInstruction (ISimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT + 1);
+      trigger.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_DO_NOTHING);
 
       fail ("Expected exception while setting invalid misfire instruction but did not get it.");
     }

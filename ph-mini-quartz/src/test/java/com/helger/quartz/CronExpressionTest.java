@@ -38,7 +38,6 @@ import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
 import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
-@SuppressWarnings ("unused")
 public final class CronExpressionTest
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (CronExpressionTest.class);
@@ -173,7 +172,7 @@ public final class CronExpressionTest
   {
     try
     {
-      new CronExpression ("* * * * Foo ? ");
+      CronExpression.validateExpression ("* * * * Foo ? ");
       fail ("Expected ParseException did not fire for non-existent month");
     }
     catch (final ParseException pe)
@@ -183,7 +182,7 @@ public final class CronExpressionTest
 
     try
     {
-      new CronExpression ("* * * * Jan-Foo ? ");
+      CronExpression.validateExpression ("* * * * Jan-Foo ? ");
       fail ("Expected ParseException did not fire for non-existent month");
     }
     catch (final ParseException pe)
@@ -197,7 +196,7 @@ public final class CronExpressionTest
   {
     try
     {
-      new CronExpression ("0 0 * * * *");
+      CronExpression.validateExpression ("0 0 * * * *");
       fail ("Expected ParseException did not fire for wildcard day-of-month and day-of-week");
     }
     catch (final ParseException pe)
@@ -208,7 +207,7 @@ public final class CronExpressionTest
     }
     try
     {
-      new CronExpression ("0 0 * 4 * *");
+      CronExpression.validateExpression ("0 0 * 4 * *");
       fail ("Expected ParseException did not fire for specified day-of-month and wildcard day-of-week");
     }
     catch (final ParseException pe)
@@ -219,7 +218,7 @@ public final class CronExpressionTest
     }
     try
     {
-      new CronExpression ("0 0 * * * 4");
+      CronExpression.validateExpression ("0 0 * * * 4");
       fail ("Expected ParseException did not fire for wildcard day-of-month and specified day-of-week");
     }
     catch (final ParseException pe)
@@ -235,7 +234,7 @@ public final class CronExpressionTest
   {
     try
     {
-      new CronExpression ("0 43 9 1,5,29,L * ?");
+      CronExpression.validateExpression ("0 43 9 1,5,29,L * ?");
       fail ("Expected ParseException did not fire for L combined with other days of the month");
     }
     catch (final ParseException pe)
@@ -246,7 +245,7 @@ public final class CronExpressionTest
     }
     try
     {
-      new CronExpression ("0 43 9 ? * SAT,SUN,L");
+      CronExpression.validateExpression ("0 43 9 ? * SAT,SUN,L");
       fail ("Expected ParseException did not fire for L combined with other days of the week");
     }
     catch (final ParseException pe)
@@ -257,7 +256,7 @@ public final class CronExpressionTest
     }
     try
     {
-      new CronExpression ("0 43 9 ? * 6,7,L");
+      CronExpression.validateExpression ("0 43 9 ? * 6,7,L");
       fail ("Expected ParseException did not fire for L combined with other days of the week");
     }
     catch (final ParseException pe)
@@ -268,7 +267,7 @@ public final class CronExpressionTest
     }
     try
     {
-      new CronExpression ("0 43 9 ? * 5L");
+      CronExpression.validateExpression ("0 43 9 ? * 5L");
     }
     catch (final ParseException pe)
     {
@@ -281,13 +280,12 @@ public final class CronExpressionTest
   {
     try
     {
-      new CronExpression ("0/5 * * 32W 1 ?");
+      CronExpression.validateExpression ("0/5 * * 32W 1 ?");
       fail ("Expected ParseException did not fire for W with value larger than 31");
     }
     catch (final ParseException pe)
     {
-      assertTrue ("Incorrect ParseException thrown: " +
-                  pe.getMessage (),
+      assertTrue ("Incorrect ParseException thrown: " + pe.getMessage (),
                   pe.getMessage ().startsWith ("The 'W' option does not make sense with values larger than"));
     }
   }

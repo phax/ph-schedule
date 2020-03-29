@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.matchers.GroupMatcher;
@@ -193,7 +194,7 @@ public abstract class AbstractJobStoreTest
                                                              2000);
 
     early.computeFirstFireTime (null);
-    early.setMisfireInstruction (ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
+    early.setMisfireInstruction (EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY);
     trigger1.computeFirstFireTime (null);
     trigger2.computeFirstFireTime (null);
     trigger3.computeFirstFireTime (null);
@@ -395,8 +396,8 @@ public abstract class AbstractJobStoreTest
       assertEquals (jobKey, storedJob.getKey ());
     }
     // Retrieve by group
-    assertEquals ("Wrong number of jobs in group 'a'", store.getJobKeys (GroupMatcher.jobGroupEquals ("a")).size (), 5);
-    assertEquals ("Wrong number of jobs in group 'b'", store.getJobKeys (GroupMatcher.jobGroupEquals ("b")).size (), 5);
+    assertEquals ("Wrong number of jobs in group 'a'", 5, store.getJobKeys (GroupMatcher.jobGroupEquals ("a")).size ());
+    assertEquals ("Wrong number of jobs in group 'b'", 5, store.getJobKeys (GroupMatcher.jobGroupEquals ("b")).size ());
   }
 
   @Test
@@ -437,11 +438,11 @@ public abstract class AbstractJobStoreTest
     }
     // Retrieve by group
     assertEquals ("Wrong number of triggers in group 'a'",
-                  store.getTriggerKeys (GroupMatcher.triggerGroupEquals ("a")).size (),
-                  5);
+                  5,
+                  store.getTriggerKeys (GroupMatcher.triggerGroupEquals ("a")).size ());
     assertEquals ("Wrong number of triggers in group 'b'",
-                  store.getTriggerKeys (GroupMatcher.triggerGroupEquals ("b")).size (),
-                  5);
+                  5,
+                  store.getTriggerKeys (GroupMatcher.triggerGroupEquals ("b")).size ());
   }
 
   @Test

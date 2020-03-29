@@ -80,101 +80,121 @@ public class BroadcastSchedulerListener implements ISchedulerListener
     return m_aListeners.getClone ();
   }
 
+  @Override
   public void jobAdded (final IJobDetail jobDetail)
   {
     m_aListeners.forEach (x -> x.jobAdded (jobDetail));
   }
 
+  @Override
   public void jobDeleted (final JobKey jobKey)
   {
     m_aListeners.forEach (x -> x.jobDeleted (jobKey));
   }
 
+  @Override
   public void jobScheduled (final ITrigger trigger)
   {
     m_aListeners.forEach (x -> x.jobScheduled (trigger));
   }
 
+  @Override
   public void jobUnscheduled (final TriggerKey triggerKey)
   {
     m_aListeners.forEach (x -> x.jobUnscheduled (triggerKey));
   }
 
+  @Override
   public void triggerFinalized (final ITrigger trigger)
   {
     m_aListeners.forEach (x -> x.triggerFinalized (trigger));
   }
 
+  @Override
   public void triggerPaused (final TriggerKey key)
   {
     m_aListeners.forEach (x -> x.triggerPaused (key));
   }
 
+  @Override
   public void triggersPaused (final String triggerGroup)
   {
     m_aListeners.forEach (x -> x.triggersPaused (triggerGroup));
   }
 
+  @Override
   public void triggerResumed (final TriggerKey key)
   {
     m_aListeners.forEach (x -> x.triggerResumed (key));
   }
 
+  @Override
   public void triggersResumed (final String triggerGroup)
   {
     m_aListeners.forEach (x -> x.triggersResumed (triggerGroup));
   }
 
+  @Override
   public void schedulingDataCleared ()
   {
     m_aListeners.forEach (x -> x.schedulingDataCleared ());
   }
 
+  @Override
   public void jobPaused (final JobKey key)
   {
     m_aListeners.forEach (x -> x.jobPaused (key));
   }
 
+  @Override
   public void jobsPaused (final String jobGroup)
   {
     m_aListeners.forEach (x -> x.jobsPaused (jobGroup));
   }
 
+  @Override
   public void jobResumed (final JobKey key)
   {
     m_aListeners.forEach (x -> x.jobResumed (key));
   }
 
+  @Override
   public void jobsResumed (final String jobGroup)
   {
     m_aListeners.forEach (x -> x.jobsResumed (jobGroup));
   }
 
+  @Override
   public void schedulerError (final String msg, final SchedulerException cause)
   {
     m_aListeners.forEach (x -> x.schedulerError (msg, cause));
   }
 
+  @Override
   public void schedulerStarted ()
   {
     m_aListeners.forEach (x -> x.schedulerStarted ());
   }
 
+  @Override
   public void schedulerStarting ()
   {
     m_aListeners.forEach (x -> x.schedulerStarting ());
   }
 
+  @Override
   public void schedulerInStandbyMode ()
   {
     m_aListeners.forEach (x -> x.schedulerInStandbyMode ());
   }
 
+  @Override
   public void schedulerShutdown ()
   {
     m_aListeners.forEach (x -> x.schedulerShutdown ());
   }
 
+  @Override
   public void schedulerShuttingdown ()
   {
     m_aListeners.forEach (x -> x.schedulerShuttingdown ());

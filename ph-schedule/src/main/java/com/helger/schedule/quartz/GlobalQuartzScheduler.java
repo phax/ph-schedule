@@ -58,6 +58,9 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
   private final IScheduler m_aScheduler;
   private String m_sGroupName = GROUP_NAME;
 
+  /**
+   * @deprecated Called via {@link #getInstance()}
+   */
   @Deprecated
   @UsedViaReflection
   public GlobalQuartzScheduler ()
@@ -166,11 +169,11 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 
       final TriggerKey ret = aTrigger.getKey ();
       LOGGER.info ("Succesfully scheduled job '" +
-                      sJobName +
-                      "' with TriggerKey " +
-                      ret.toString () +
-                      " - starting at " +
-                      PDTFactory.createLocalDateTime (aTrigger.getStartTime ()));
+                   sJobName +
+                   "' with TriggerKey " +
+                   ret.toString () +
+                   " - starting at " +
+                   PDTFactory.createLocalDateTime (aTrigger.getStartTime ()));
       return ret;
     }
     catch (final SchedulerException ex)

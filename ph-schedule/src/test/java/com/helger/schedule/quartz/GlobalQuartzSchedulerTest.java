@@ -22,6 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
+import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.commons.mutable.MutableBoolean;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
@@ -49,7 +50,7 @@ public final class GlobalQuartzSchedulerTest
                                        .withSchedule (SimpleScheduleBuilder.repeatMinutelyForTotalCount (1)),
                      MockJob.class,
                      null);
-    Thread.sleep (100);
+    ThreadHelper.sleep (100);
     assertTrue (EXEC_LOG.booleanValue ());
   }
 }

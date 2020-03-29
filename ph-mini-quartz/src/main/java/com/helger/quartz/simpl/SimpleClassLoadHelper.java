@@ -41,12 +41,14 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
    * the opportunity to "steal" the class loader off of the calling thread,
    * which is the thread that is initializing Quartz.
    */
+  @Override
   public void initialize ()
   {}
 
   /**
    * Return the class with the given name.
    */
+  @Override
   public Class <?> loadClass (final String name) throws ClassNotFoundException
   {
     return Class.forName (name);
@@ -77,7 +79,7 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
       // Try to get the caller's class-loader
       return (ClassLoader) mthd.invoke (cl, new Object [0]);
     }
-    catch (final Throwable all)
+    catch (final Exception ex)
     {
       // Use this class' class-loader
       return getClass ().getClassLoader ();

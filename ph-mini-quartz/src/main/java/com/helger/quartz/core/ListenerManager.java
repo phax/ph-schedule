@@ -18,8 +18,8 @@
  */
 package com.helger.quartz.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -61,7 +61,7 @@ public class ListenerManager implements IListenerManager
     {
       m_aGlobalJobListeners.put (jobListener.getName (), jobListener);
       final ICommonsList <IMatcher <JobKey>> matchersL = new CommonsArrayList <> ();
-      if (matchers != null && matchers.size () > 0)
+      if (matchers != null && !matchers.isEmpty ())
         matchersL.addAll (matchers);
       else
         matchersL.add (EverythingMatcher.allJobs ());
@@ -188,8 +188,8 @@ public class ListenerManager implements IListenerManager
     {
       m_aGlobalTriggerListeners.put (triggerListener.getName (), triggerListener);
 
-      final LinkedList <IMatcher <TriggerKey>> matchersL = new LinkedList <> ();
-      if (matchers != null && matchers.size () > 0)
+      final List <IMatcher <TriggerKey>> matchersL = new ArrayList <> ();
+      if (matchers != null && !matchers.isEmpty ())
         matchersL.addAll (matchers);
       else
         matchersL.add (EverythingMatcher.allTriggers ());
@@ -209,14 +209,12 @@ public class ListenerManager implements IListenerManager
       throw new IllegalArgumentException ("Null value not acceptable for matcher.");
 
     if (triggerListener.getName () == null || triggerListener.getName ().length () == 0)
-    {
       throw new IllegalArgumentException ("TriggerListener name cannot be empty.");
-    }
 
     synchronized (m_aGlobalTriggerListeners)
     {
       m_aGlobalTriggerListeners.put (triggerListener.getName (), triggerListener);
-      final List <IMatcher <TriggerKey>> matchers = new LinkedList <> ();
+      final List <IMatcher <TriggerKey>> matchers = new ArrayList <> ();
       matchers.add (matcher);
       m_aGlobalTriggerListenersMatchers.put (triggerListener.getName (), matchers);
     }

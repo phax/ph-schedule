@@ -160,17 +160,17 @@ public abstract class AbstractJob implements IJob
         if (LOGGER.isDebugEnabled ())
           LOGGER.debug ("Successfully finished executing scheduled job " + sJobClassName);
       }
-      catch (final Throwable t)
+      catch (final Exception ex)
       {
         // Increment statistics
         s_aStatsCounterFailure.increment (sJobClassName);
 
         // Notify custom exception handler
-        triggerCustomExceptionHandler (t, sJobClassName, this);
+        triggerCustomExceptionHandler (ex, sJobClassName, this);
 
-        if (t instanceof JobExecutionException)
-          throw (JobExecutionException) t;
-        throw new JobExecutionException ("Internal job execution error of " + sJobClassName, t);
+        if (ex instanceof JobExecutionException)
+          throw (JobExecutionException) ex;
+        throw new JobExecutionException ("Internal job execution error of " + sJobClassName, ex);
       }
     }
     finally

@@ -18,8 +18,6 @@
  */
 package com.helger.quartz.impl.triggers;
 
-import java.util.Date;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -28,7 +26,6 @@ import com.helger.commons.compare.CompareHelper;
 import com.helger.commons.equals.EqualsHelper;
 import com.helger.commons.hashcode.HashCodeGenerator;
 import com.helger.commons.lang.ICloneable;
-import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
@@ -79,7 +76,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
   private JobDataMap m_aJobDataMap;
   private String m_sCalendarName;
   private String m_sFireInstanceId;
-  private int m_nMisfireInstruction = MISFIRE_INSTRUCTION_SMART_POLICY;
+  private EMisfireInstruction m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY;
   private int m_nPriority = DEFAULT_PRIORITY;
   private transient TriggerKey m_aKey;
 
@@ -103,7 +100,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
     m_aJobDataMap = QCloneUtils.getClone (aOther.m_aJobDataMap);
     m_sCalendarName = aOther.m_sCalendarName;
     m_sFireInstanceId = aOther.m_sFireInstanceId;
-    m_nMisfireInstruction = aOther.m_nMisfireInstruction;
+    m_eMisfireInstruction = aOther.m_eMisfireInstruction;
     m_nPriority = aOther.m_nPriority;
     m_aKey = aOther.m_aKey;
   }
@@ -397,32 +394,6 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
 
   /**
    * This method should not be used by the Quartz client.<br>
-   * Called when the <code>{@link IScheduler}</code> has decided to 'fire' the
-   * trigger (execute the associated <code>Job</code>), in order to give the
-   * <code>Trigger</code> a chance to update itself for its next triggering (if
-   * any).
-   *
-   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
-   */
-  public abstract void triggered (ICalendar calendar);
-
-  /**
-   * This method should not be used by the Quartz client.<br>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added
-   * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.<br>
-   * After this method has been called, <code>getNextFireTime()</code> should
-   * return a valid answer.
-   *
-   * @return the first time at which the <code>Trigger</code> will be fired by
-   *         the scheduler, which is also the same value
-   *         <code>getNextFireTime()</code> will return (until after the first
-   *         firing of the <code>Trigger</code>).
-   */
-  public abstract Date computeFirstFireTime (ICalendar calendar);
-
-  /**
-   * This method should not be used by the Quartz client.<br>
    * Called after the <code>{@link IScheduler}</code> has executed the
    * <code>{@link com.helger.quartz.IJobDetail}</code> associated with the
    * <code>Trigger</code> in order to get the final instruction code from the
@@ -458,19 +429,19 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
     return ECompletedExecutionInstruction.NOOP;
   }
 
-  public final int getMisfireInstruction ()
+  public final EMisfireInstruction getMisfireInstruction ()
   {
-    return m_nMisfireInstruction;
+    return m_eMisfireInstruction;
   }
 
-  public final void setMisfireInstruction (final int misfireInstruction)
+  public final void setMisfireInstruction (final EMisfireInstruction misfireInstruction)
   {
     if (!validateMisfireInstruction (misfireInstruction))
       throw new IllegalArgumentException ("The misfire instruction code is invalid for this type of trigger.");
-    m_nMisfireInstruction = misfireInstruction;
+    m_eMisfireInstruction = misfireInstruction;
   }
 
-  protected abstract boolean validateMisfireInstruction (int candidateMisfireInstruction);
+  protected abstract boolean validateMisfireInstruction (EMisfireInstruction candidateMisfireInstruction);
 
   /**
    * <p>

@@ -18,13 +18,14 @@
  */
 package com.helger.quartz.listeners;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
@@ -46,7 +47,7 @@ import com.helger.quartz.JobExecutionException;
 public class BroadcastJobListener implements IJobListener
 {
   private final String m_sName;
-  private final List <IJobListener> m_aListeners = new LinkedList <> ();
+  private final ICommonsList <IJobListener> m_aListeners = new CommonsArrayList <> ();
 
   /**
    * Construct an instance with the given name. (Remember to add some delegate
@@ -91,57 +92,28 @@ public class BroadcastJobListener implements IJobListener
     return m_aListeners.remove (listener);
   }
 
-  public boolean removeListener (final String listenerName)
+  @Nonnull
+  @ReturnsMutableCopy
+  public ICommonsList <IJobListener> getListeners ()
   {
-    final Iterator <IJobListener> itr = m_aListeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final IJobListener jl = itr.next ();
-      if (jl.getName ().equals (listenerName))
-      {
-        itr.remove ();
-        return true;
-      }
-    }
-    return false;
+    return m_aListeners.getClone ();
   }
 
-  public List <IJobListener> getListeners ()
-  {
-    return java.util.Collections.unmodifiableList (m_aListeners);
-  }
-
+  @Override
   public void jobToBeExecuted (final IJobExecutionContext context)
   {
-
-    final Iterator <IJobListener> itr = m_aListeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final IJobListener jl = itr.next ();
-      jl.jobToBeExecuted (context);
-    }
+    m_aListeners.forEach (x -> x.jobToBeExecuted (context));
   }
 
+  @Override
   public void jobExecutionVetoed (final IJobExecutionContext context)
   {
-
-    final Iterator <IJobListener> itr = m_aListeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final IJobListener jl = itr.next ();
-      jl.jobExecutionVetoed (context);
-    }
+    m_aListeners.forEach (x -> x.jobExecutionVetoed (context));
   }
 
+  @Override
   public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
-
-    final Iterator <IJobListener> itr = m_aListeners.iterator ();
-    while (itr.hasNext ())
-    {
-      final IJobListener jl = itr.next ();
-      jl.jobWasExecuted (context, jobException);
-    }
+    m_aListeners.forEach (x -> x.jobWasExecuted (context, jobException));
   }
-
 }

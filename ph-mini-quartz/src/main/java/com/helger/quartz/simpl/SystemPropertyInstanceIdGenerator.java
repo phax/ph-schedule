@@ -60,18 +60,18 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
    */
   public String generateInstanceId () throws SchedulerException
   {
-    String property = System.getProperty (getSystemPropertyName ());
-    if (property == null)
+    String ret = System.getProperty (getSystemPropertyName ());
+    if (ret == null)
       throw new SchedulerException ("No value for '" +
                                     SYSTEM_PROPERTY +
                                     "' system property found, please configure your environment accordingly!");
 
     if (getPrepend () != null)
-      property = getPrepend () + property;
+      ret = getPrepend () + ret;
     if (getPostpend () != null)
-      property = property + getPostpend ();
+      ret = ret + getPostpend ();
 
-    return property;
+    return ret;
   }
 
   /**

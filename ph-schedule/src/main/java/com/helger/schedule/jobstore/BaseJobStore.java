@@ -54,6 +54,7 @@ import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
@@ -972,7 +973,7 @@ public class BaseJobStore implements IJobStore
     final Date tnft = tw.getTrigger ().getNextFireTime ();
     if (tnft == null ||
         tnft.getTime () > misfireTime ||
-        tw.getTrigger ().getMisfireInstruction () == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+        tw.getTrigger ().getMisfireInstruction () == EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
     {
       return false;
     }

@@ -107,13 +107,11 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
    */
   public void setDaysExcluded (final boolean [] weekDays)
   {
-    if (weekDays == null)
+    if (weekDays != null)
     {
-      return;
+      m_aExcludeDays = weekDays;
+      m_bExcludeAll = areAllDaysExcluded ();
     }
-
-    m_aExcludeDays = weekDays;
-    m_bExcludeAll = areAllDaysExcluded ();
   }
 
   /**
@@ -163,15 +161,12 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
 
     // Test the base calendar first. Only if the base calendar not already
     // excludes the time/date, continue evaluating this calendar instance.
-    if (super.isTimeIncluded (timeStamp) == false)
-    {
+    if (!super.isTimeIncluded (timeStamp))
       return false;
-    }
 
     final Calendar cl = createJavaCalendar (timeStamp);
     final int wday = cl.get (Calendar.DAY_OF_WEEK);
-
-    return !(isDayExcluded (wday));
+    return !isDayExcluded (wday);
   }
 
   /**
@@ -193,7 +188,7 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
     // Call base calendar implementation first
     long timeStamp = nTimeStamp;
     final long baseTime = super.getNextIncludedTime (timeStamp);
-    if ((baseTime > 0) && (baseTime > timeStamp))
+    if (baseTime > 0 && baseTime > timeStamp)
     {
       timeStamp = baseTime;
     }

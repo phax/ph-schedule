@@ -77,6 +77,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    * Return the class with the given name.
    */
   @Nonnull
+  @Override
   public Class <?> loadClass (final String sClassName) throws ClassNotFoundException
   {
     if (m_aBestCandidate != null)
@@ -85,13 +86,13 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
       {
         return m_aBestCandidate.loadClass (sClassName);
       }
-      catch (final Throwable t)
+      catch (final Exception ex)
       {
         m_aBestCandidate = null;
       }
     }
 
-    Throwable aThrowable = null;
+    Exception aThrowable = null;
     Class <?> ret = null;
     IClassLoadHelper aLoadHelper = null;
 
@@ -104,9 +105,9 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
         ret = aLoadHelper.loadClass (sClassName);
         break;
       }
-      catch (final Throwable t)
+      catch (final Exception ex)
       {
-        aThrowable = t;
+        aThrowable = ex;
       }
     }
 
@@ -124,6 +125,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
 
   @SuppressWarnings ("unchecked")
   @Nonnull
+  @Override
   public <T> Class <? extends T> loadClass (final String sClassName,
                                             final Class <T> dummy) throws ClassNotFoundException
   {
@@ -139,6 +141,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    * @return a java.net.URL object
    */
   @Nullable
+  @Override
   public URL getResource (final String name)
   {
     URL ret = null;
@@ -175,6 +178,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    * @return a java.io.InputStream object
    */
   @Nullable
+  @Override
   public InputStream getResourceAsStream (final String name)
   {
     InputStream ret = null;

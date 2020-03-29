@@ -50,10 +50,10 @@ import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.SchedulerRepository;
 import com.helger.quartz.impl.matchers.GroupMatcher;
-import com.helger.quartz.listeners.AbstractSchedulerListenerSupport;
 import com.helger.quartz.simpl.PropertySettingJobFactory;
 import com.helger.quartz.spi.IJobFactory;
 import com.helger.quartz.spi.IOperableTrigger;
+import com.helger.quartz.spi.ISchedulerPlugin;
 import com.helger.quartz.spi.ISchedulerSignaler;
 import com.helger.quartz.spi.IThreadExecutor;
 import com.helger.quartz.utils.Key;
@@ -480,13 +480,13 @@ public class QuartzScheduler implements IQuartzScheduler
           {
             ((IInterruptableJob) job.getJobInstance ()).interrupt ();
           }
-          catch (final Throwable t)
+          catch (final Exception e)
           {
             // do nothing, this was just a courtesy effort
             LOGGER.warn ("Encountered error when interrupting job " +
                          job.getJobDetail ().getKey () +
                          " during shutdown",
-                         t);
+                         e);
           }
       }
     }
@@ -1022,7 +1022,7 @@ public class QuartzScheduler implements IQuartzScheduler
     notifySchedulerListenersPausedTrigger (triggerKey);
   }
 
-  private <T extends Key <T>> GroupMatcher <T> _getOrDefault (final GroupMatcher <T> matcher)
+  private static <T extends Key <T>> GroupMatcher <T> _getOrDefault (final GroupMatcher <T> matcher)
   {
     return matcher != null ? matcher : GroupMatcher.groupEquals (IScheduler.DEFAULT_GROUP);
   }
@@ -1686,7 +1686,6 @@ public class QuartzScheduler implements IQuartzScheduler
 
   public boolean notifyTriggerListenersFired (final IJobExecutionContext jec) throws SchedulerException
   {
-
     boolean vetoedExecution = false;
 
     // build a list of all trigger listeners that are to be notified...
@@ -1708,12 +1707,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        final SchedulerException se = new SchedulerException ("TriggerListener '" +
-                                                              tl.getName () +
-                                                              "' threw exception: " +
-                                                              e.getMessage (),
-                                                              e);
-        throw se;
+        throw new SchedulerException ("TriggerListener '" + tl.getName () + "' threw exception: " + e.getMessage (), e);
       }
     }
 
@@ -1736,12 +1730,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        final SchedulerException se = new SchedulerException ("TriggerListener '" +
-                                                              tl.getName () +
-                                                              "' threw exception: " +
-                                                              e.getMessage (),
-                                                              e);
-        throw se;
+        throw new SchedulerException ("TriggerListener '" + tl.getName () + "' threw exception: " + e.getMessage (), e);
       }
     }
   }
@@ -1763,12 +1752,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        final SchedulerException se = new SchedulerException ("TriggerListener '" +
-                                                              tl.getName () +
-                                                              "' threw exception: " +
-                                                              e.getMessage (),
-                                                              e);
-        throw se;
+        throw new SchedulerException ("TriggerListener '" + tl.getName () + "' threw exception: " + e.getMessage (), e);
       }
     }
   }
@@ -1789,12 +1773,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        final SchedulerException se = new SchedulerException ("JobListener '" +
-                                                              jl.getName () +
-                                                              "' threw exception: " +
-                                                              e.getMessage (),
-                                                              e);
-        throw se;
+        throw new SchedulerException ("JobListener '" + jl.getName () + "' threw exception: " + e.getMessage (), e);
       }
     }
   }
@@ -1815,12 +1794,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        final SchedulerException se = new SchedulerException ("JobListener '" +
-                                                              jl.getName () +
-                                                              "' threw exception: " +
-                                                              e.getMessage (),
-                                                              e);
-        throw se;
+        throw new SchedulerException ("JobListener '" + jl.getName () + "' threw exception: " + e.getMessage (), e);
       }
     }
   }
@@ -1842,12 +1816,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        final SchedulerException se = new SchedulerException ("JobListener '" +
-                                                              jl.getName () +
-                                                              "' threw exception: " +
-                                                              e.getMessage (),
-                                                              e);
-        throw se;
+        throw new SchedulerException ("JobListener '" + jl.getName () + "' threw exception: " + e.getMessage (), e);
       }
     }
   }
@@ -2323,16 +2292,16 @@ public class QuartzScheduler implements IQuartzScheduler
 
   private void _shutdownPlugins ()
   {
-    m_aResources.getSchedulerPlugins ().forEach (x -> x.shutdown ());
+    m_aResources.getSchedulerPlugins ().forEach (ISchedulerPlugin::shutdown);
   }
 
   private void _startPlugins ()
   {
-    m_aResources.getSchedulerPlugins ().forEach (x -> x.start ());
+    m_aResources.getSchedulerPlugins ().forEach (ISchedulerPlugin::start);
   }
 }
 
-class ErrorLogger extends AbstractSchedulerListenerSupport
+class ErrorLogger implements ISchedulerListener
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ErrorLogger.class);
 
@@ -2367,6 +2336,7 @@ class ExecutingJobsManager implements IJobListener
     }
   }
 
+  @Override
   public void jobToBeExecuted (final IJobExecutionContext context)
   {
     m_aNumJobsFired.incrementAndGet ();
@@ -2377,6 +2347,7 @@ class ExecutingJobsManager implements IJobListener
     }
   }
 
+  @Override
   public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
   {
     synchronized (m_aExecutingJobs)
@@ -2398,6 +2369,7 @@ class ExecutingJobsManager implements IJobListener
     }
   }
 
+  @Override
   public void jobExecutionVetoed (final IJobExecutionContext context)
   {}
 }

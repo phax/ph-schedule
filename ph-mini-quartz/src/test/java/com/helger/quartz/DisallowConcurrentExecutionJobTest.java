@@ -33,9 +33,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.commons.lang.NonBlockingProperties;
 import com.helger.quartz.impl.StdSchedulerFactory;
-import com.helger.quartz.listeners.AbstractJobListenerSupport;
 
 /**
  * Integration test for using DisallowConcurrentExecution annotation.
@@ -65,17 +65,17 @@ public class DisallowConcurrentExecutionJobTest
                              System.currentTimeMillis (); sleepFor > 0; sleepFor = sleepTill -
                                                                                    System.currentTimeMillis ())
         {
-          Thread.sleep (sleepFor);
+          ThreadHelper.sleep (sleepFor);
         }
       }
-      catch (final InterruptedException | SchedulerException e)
+      catch (final SchedulerException e)
       {
         throw new JobExecutionException ("Failed to wait/lookup datestamp collection.", e);
       }
     }
   }
 
-  public static class TestJobListener extends AbstractJobListenerSupport
+  public static class TestJobListener implements IJobListener
   {
     private static final Logger LOGGER = LoggerFactory.getLogger (DisallowConcurrentExecutionJobTest.TestJobListener.class);
 

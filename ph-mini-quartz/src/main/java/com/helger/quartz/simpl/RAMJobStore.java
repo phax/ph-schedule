@@ -48,6 +48,7 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
@@ -1406,7 +1407,7 @@ public class RAMJobStore implements IJobStore
     final Date tnft = tw.m_aTrigger.getNextFireTime ();
     if (tnft == null ||
         tnft.getTime () > misfireTime ||
-        tw.m_aTrigger.getMisfireInstruction () == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
+        tw.m_aTrigger.getMisfireInstruction () == EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
     {
       return false;
     }

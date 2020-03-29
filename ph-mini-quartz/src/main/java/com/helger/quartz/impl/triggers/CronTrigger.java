@@ -36,7 +36,6 @@ import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IScheduleBuilder;
-import com.helger.quartz.ITrigger;
 import com.helger.quartz.QCloneUtils;
 
 /**
@@ -265,10 +264,18 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   }
 
   @Override
-  protected boolean validateMisfireInstruction (final int misfireInstruction)
+  protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
   {
-    return misfireInstruction >= MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY &&
-           misfireInstruction <= MISFIRE_INSTRUCTION_DO_NOTHING;
+    switch (misfireInstruction)
+    {
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+      case MISFIRE_INSTRUCTION_SMART_POLICY:
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+      case MISFIRE_INSTRUCTION_DO_NOTHING:
+        return true;
+      default:
+        return false;
+    }
   }
 
   /**
@@ -288,30 +295,33 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    */
   public void updateAfterMisfire (final ICalendar cal)
   {
-    int instr = getMisfireInstruction ();
-
-    if (instr == ITrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY)
-      return;
-
-    if (instr == MISFIRE_INSTRUCTION_SMART_POLICY)
+    EMisfireInstruction instr = getMisfireInstruction ();
+    if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY)
     {
-      instr = MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
+      // What's smart here
+      instr = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
     }
 
-    if (instr == MISFIRE_INSTRUCTION_DO_NOTHING)
+    switch (instr)
     {
-      Date newFireTime = getFireTimeAfter (new Date ());
-      while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
-      {
-        newFireTime = getFireTimeAfter (newFireTime);
-      }
-      setNextFireTime (newFireTime);
-    }
-    else
-      if (instr == MISFIRE_INSTRUCTION_FIRE_ONCE_NOW)
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+        return;
+      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
       {
         setNextFireTime (new Date ());
+        break;
       }
+      case MISFIRE_INSTRUCTION_DO_NOTHING:
+      {
+        Date newFireTime = getFireTimeAfter (new Date ());
+        while (newFireTime != null && cal != null && !cal.isTimeIncluded (newFireTime.getTime ()))
+        {
+          newFireTime = getFireTimeAfter (newFireTime);
+        }
+        setNextFireTime (newFireTime);
+        break;
+      }
+    }
   }
 
   /**
@@ -544,5 +554,19 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   public CronTrigger getClone ()
   {
     return new CronTrigger (this);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    // New field, no change
+    return super.equals (o);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    // New field, no change
+    return super.hashCode ();
   }
 }
