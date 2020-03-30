@@ -455,11 +455,8 @@ public class QuartzScheduler implements IQuartzScheduler
    */
   public void shutdown (final boolean waitForJobsToComplete)
   {
-
     if (m_bShuttingDown || m_bClosed)
-    {
       return;
-    }
 
     m_bShuttingDown = true;
 

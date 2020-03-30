@@ -146,18 +146,14 @@ public class QuartzSchedulerThread extends Thread
       m_aHalted.set (true);
 
       if (m_bPaused)
-      {
         m_aSigLock.notifyAll ();
-      }
       else
-      {
         signalSchedulingChange (0);
-      }
     }
 
     if (wait)
     {
-      boolean interrupted = false;
+      boolean bInterrupted = false;
       try
       {
         while (true)
@@ -169,16 +165,14 @@ public class QuartzSchedulerThread extends Thread
           }
           catch (final InterruptedException ex)
           {
-            interrupted = true;
+            bInterrupted = true;
           }
         }
       }
       finally
       {
-        if (interrupted)
-        {
+        if (bInterrupted)
           Thread.currentThread ().interrupt ();
-        }
       }
     }
   }
@@ -261,7 +255,7 @@ public class QuartzSchedulerThread extends Thread
             }
             catch (final InterruptedException ignore)
             {
-              Thread.currentThread ().interrupt ();
+              // Thread.currentThread ().interrupt ();
             }
           }
 
@@ -338,7 +332,7 @@ public class QuartzSchedulerThread extends Thread
                   }
                   catch (final InterruptedException ignore)
                   {
-                    Thread.currentThread ().interrupt ();
+                    // Thread.currentThread ().interrupt ();
                   }
                 }
               }
@@ -472,7 +466,7 @@ public class QuartzSchedulerThread extends Thread
           }
           catch (final InterruptedException ignore)
           {
-            Thread.currentThread ().interrupt ();
+            // Thread.currentThread ().interrupt ();
           }
         }
 
