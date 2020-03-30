@@ -255,7 +255,7 @@ public class QuartzSchedulerThread extends Thread
             }
             catch (final InterruptedException ignore)
             {
-              // Thread.currentThread ().interrupt ();
+              Thread.currentThread ().interrupt ();
             }
           }
 
@@ -332,7 +332,7 @@ public class QuartzSchedulerThread extends Thread
                   }
                   catch (final InterruptedException ignore)
                   {
-                    // Thread.currentThread ().interrupt ();
+                    Thread.currentThread ().interrupt ();
                   }
                 }
               }
@@ -466,7 +466,7 @@ public class QuartzSchedulerThread extends Thread
           }
           catch (final InterruptedException ignore)
           {
-            // Thread.currentThread ().interrupt ();
+            Thread.currentThread ().interrupt ();
           }
         }
 
@@ -475,7 +475,7 @@ public class QuartzSchedulerThread extends Thread
       {
         LOGGER.error ("Runtime error occurred in main trigger firing loop.", re);
       }
-    } // while (!halted)
+    }
 
     // drop references to scheduler stuff to aid garbage collection...
     m_aQS = null;
