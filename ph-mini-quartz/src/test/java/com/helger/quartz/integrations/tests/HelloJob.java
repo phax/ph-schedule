@@ -71,8 +71,8 @@ public class HelloJob implements IJob
   /**
    * <p>
    * Called by the <code>{@link com.helger.quartz.IScheduler}</code> when a
-   * <code>{@link com.helger.quartz.ITrigger}</code> fires that is associated with the
-   * <code>Job</code>.
+   * <code>{@link com.helger.quartz.ITrigger}</code> fires that is associated
+   * with the <code>Job</code>.
    * </p>
    * 
    * @throws JobExecutionException

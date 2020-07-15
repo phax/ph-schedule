@@ -55,13 +55,11 @@ public class TriggerBuilderTest
     ITrigger trigger = newTrigger ().build ();
 
     assertTrue ("Expected non-null trigger name ", trigger.getKey ().getName () != null);
-    assertTrue ("Unexpected trigger group: " +
-                trigger.getKey ().getGroup (),
+    assertTrue ("Unexpected trigger group: " + trigger.getKey ().getGroup (),
                 trigger.getKey ().getGroup ().equals (Key.DEFAULT_GROUP));
     assertTrue ("Unexpected job key: " + trigger.getJobKey (), trigger.getJobKey () == null);
     assertTrue ("Unexpected job description: " + trigger.getDescription (), trigger.getDescription () == null);
-    assertTrue ("Unexpected trigger priortiy: " +
-                trigger.getPriority (),
+    assertTrue ("Unexpected trigger priortiy: " + trigger.getPriority (),
                 trigger.getPriority () == ITrigger.DEFAULT_PRIORITY);
     assertTrue ("Unexpected start-time: " + trigger.getStartTime (), trigger.getStartTime () != null);
     assertTrue ("Unexpected end-time: " + trigger.getEndTime (), trigger.getEndTime () == null);
@@ -76,12 +74,10 @@ public class TriggerBuilderTest
                            .build ();
 
     assertTrue ("Unexpected trigger name " + trigger.getKey ().getName (), trigger.getKey ().getName ().equals ("t1"));
-    assertTrue ("Unexpected trigger group: " +
-                trigger.getKey ().getGroup (),
+    assertTrue ("Unexpected trigger group: " + trigger.getKey ().getGroup (),
                 trigger.getKey ().getGroup ().equals (Key.DEFAULT_GROUP));
     assertTrue ("Unexpected job key: " + trigger.getJobKey (), trigger.getJobKey () == null);
-    assertTrue ("Unexpected job description: " +
-                trigger.getDescription (),
+    assertTrue ("Unexpected job description: " + trigger.getDescription (),
                 trigger.getDescription ().equals ("my description"));
     assertTrue ("Unexpected trigger priortiy: " + trigger, trigger.getPriority () == 2);
     assertTrue ("Unexpected start-time: " + trigger.getStartTime (), trigger.getStartTime ().equals (stime));

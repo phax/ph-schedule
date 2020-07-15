@@ -81,9 +81,7 @@ public final class QuartzSchedulerHelper
     }
     catch (final SchedulerException ex)
     {
-      throw new IllegalStateException ("Failed to create" +
-                                       (bStartAutomatically ? " and start" : "") +
-                                       " scheduler!",
+      throw new IllegalStateException ("Failed to create" + (bStartAutomatically ? " and start" : "") + " scheduler!",
                                        ex);
     }
   }

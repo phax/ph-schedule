@@ -61,8 +61,7 @@ public class JobBuilderTest
     IJobDetail job = newJob ().ofType (TestJob.class).withIdentity ("j1").storeDurably ().build ();
 
     assertTrue ("Unexpected job name: " + job.getKey ().getName (), job.getKey ().getName ().equals ("j1"));
-    assertTrue ("Unexpected job group: " +
-                job.getKey ().getGroup (),
+    assertTrue ("Unexpected job group: " + job.getKey ().getGroup (),
                 job.getKey ().getGroup ().equals (Key.DEFAULT_GROUP));
     assertTrue ("Unexpected job key: " + job.getKey (), job.getKey ().equals (jobKey ("j1")));
     assertTrue ("Unexpected job description: " + job.getDescription (), job.getDescription () == null);
@@ -79,8 +78,7 @@ public class JobBuilderTest
                    .requestRecovery ()
                    .build ();
 
-    assertTrue ("Unexpected job description: " +
-                job.getDescription (),
+    assertTrue ("Unexpected job description: " + job.getDescription (),
                 job.getDescription ().equals ("my description"));
     assertTrue ("Expected isDurable == true ", job.isDurable ());
     assertTrue ("Expected requestsRecovery == true ", job.requestsRecovery ());

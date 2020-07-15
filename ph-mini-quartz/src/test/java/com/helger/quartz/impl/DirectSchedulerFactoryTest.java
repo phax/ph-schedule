@@ -60,12 +60,13 @@ public class DirectSchedulerFactoryTest
 
     final IThreadPool threadPool = new SimpleThreadPool (1, 5);
     threadPool.initialize ();
-    DirectSchedulerFactory.getInstance ().createScheduler ("MyScheduler",
-                                                           "Instance1",
-                                                           threadPool,
-                                                           new RAMJobStore (),
-                                                           Collections.singletonMap ("TestPlugin", testPlugin),
-                                                           -1);
+    DirectSchedulerFactory.getInstance ()
+                          .createScheduler ("MyScheduler",
+                                            "Instance1",
+                                            threadPool,
+                                            new RAMJobStore (),
+                                            Collections.singletonMap ("TestPlugin", testPlugin),
+                                            -1);
 
     final IScheduler scheduler = DirectSchedulerFactory.getInstance ().getScheduler ("MyScheduler");
     scheduler.start ();

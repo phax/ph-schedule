@@ -32,9 +32,9 @@ public class SampledRateCounterConfig extends SampledCounterConfig
   private final long m_nInitialDenominatorValue;
 
   /**
-   * Constructor accepting the interval time in seconds, history-size and whether
-   * counters should reset on each sample or not. Initial values of both numerator
-   * and denominator are zeroes
+   * Constructor accepting the interval time in seconds, history-size and
+   * whether counters should reset on each sample or not. Initial values of both
+   * numerator and denominator are zeroes
    *
    * @param intervalSecs
    *        seconds
@@ -49,9 +49,9 @@ public class SampledRateCounterConfig extends SampledCounterConfig
   }
 
   /**
-   * Constructor accepting the interval time in seconds, history-size and whether
-   * counters should reset on each sample or not. Also the initial values for the
-   * numerator and the denominator
+   * Constructor accepting the interval time in seconds, history-size and
+   * whether counters should reset on each sample or not. Also the initial
+   * values for the numerator and the denominator
    *
    * @param intervalSecs
    *        seconds

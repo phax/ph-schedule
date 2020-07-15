@@ -66,14 +66,14 @@ public class CircularLossyQueue <T>
   }
 
   /**
-   * Returns an array of the current elements in the queue. The order of elements
-   * is in reverse order of the order items were added.
+   * Returns an array of the current elements in the queue. The order of
+   * elements is in reverse order of the order items were added.
    *
    * @param type
    *        destination
    * @return An array containing the current elements in the queue. The first
-   *         element of the array is the tail of the queue and the last element is
-   *         the head of the queue
+   *         element of the array is the tail of the queue and the last element
+   *         is the head of the queue
    */
   public T [] toArray (@Nonnull final T [] type)
   {
