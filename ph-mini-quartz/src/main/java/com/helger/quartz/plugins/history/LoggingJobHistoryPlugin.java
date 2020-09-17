@@ -46,7 +46,7 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <p>
  * JobToBeFiredMessage - available message data are:
  * </p>
- * <table summary="">
+ * <table>
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -100,7 +100,7 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <p>
  * JobSuccessMessage - available message data are:
  * </p>
- * <table summary="">
+ * <table>
  * <tr>
  * <th>Element</th>
  * <th>Data Type</th>
@@ -376,9 +376,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    * @throws SchedulerException
    *         if there is an error initializing.
    */
-  public void initialize (final String pname,
-                          final IScheduler scheduler,
-                          final IClassLoadHelper classLoadHelper) throws SchedulerException
+  public void initialize (final String pname, final IScheduler scheduler, final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
     m_sName = pname;
     scheduler.getListenerManager ().addJobListener (this, EverythingMatcher.allJobs ());

@@ -59,62 +59,62 @@ import com.helger.commons.regex.RegExHelper;
  * Cron expressions are comprised of 6 required fields and one optional field
  * separated by white space. The fields respectively are described as follows:
  * </p>
- * <table cellspacing="8" summary="examples">
+ * <table>
  * <tr>
- * <th align="left">Field Name</th>
- * <th align="left">&nbsp;</th>
- * <th align="left">Allowed Values</th>
- * <th align="left">&nbsp;</th>
- * <th align="left">Allowed Special Characters</th>
+ * <th>Field Name</th>
+ * <th>&nbsp;</th>
+ * <th>Allowed Values</th>
+ * <th>&nbsp;</th>
+ * <th>Allowed Special Characters</th>
  * </tr>
  * <tr>
- * <td align="left"><code>Seconds</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>0-59</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>, - * /</code></td>
+ * <td><code>Seconds</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>0-59</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>, - * /</code></td>
  * </tr>
  * <tr>
- * <td align="left"><code>Minutes</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>0-59</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>, - * /</code></td>
+ * <td><code>Minutes</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>0-59</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>, - * /</code></td>
  * </tr>
  * <tr>
- * <td align="left"><code>Hours</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>0-23</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>, - * /</code></td>
+ * <td><code>Hours</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>0-23</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>, - * /</code></td>
  * </tr>
  * <tr>
- * <td align="left"><code>Day-of-month</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>1-31</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>, - * ? / L W</code></td>
+ * <td><code>Day-of-month</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>1-31</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>, - * ? / L W</code></td>
  * </tr>
  * <tr>
- * <td align="left"><code>Month</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>0-11 or JAN-DEC</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>, - * /</code></td>
+ * <td><code>Month</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>0-11 or JAN-DEC</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>, - * /</code></td>
  * </tr>
  * <tr>
- * <td align="left"><code>Day-of-Week</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>1-7 or SUN-SAT</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>, - * ? / L #</code></td>
+ * <td><code>Day-of-Week</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>1-7 or SUN-SAT</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>, - * ? / L #</code></td>
  * </tr>
  * <tr>
- * <td align="left"><code>Year (Optional)</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>empty, 1970-2199</code></td>
- * <td align="left">&nbsp;</td>
- * <td align="left"><code>, - * /</code></td>
+ * <td><code>Year (Optional)</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>empty, 1970-2199</code></td>
+ * <td>&nbsp;</td>
+ * <td><code>, - * /</code></td>
  * </tr>
  * </table>
  * <p>
@@ -263,12 +263,10 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
   static
   {
     for (final Month e : Month.values ())
-      MONTH_MAP.put (e.getDisplayName (TextStyle.SHORT, Locale.US).toUpperCase (Locale.US),
-                     Integer.valueOf (e.getValue () - 1));
+      MONTH_MAP.put (e.getDisplayName (TextStyle.SHORT, Locale.US).toUpperCase (Locale.US), Integer.valueOf (e.getValue () - 1));
 
     for (final DayOfWeek e : DayOfWeek.values ())
-      DAY_OF_WEEK_MAP.put (e.getDisplayName (TextStyle.SHORT, Locale.US).toUpperCase (Locale.US),
-                           Integer.valueOf (e.getValue ()));
+      DAY_OF_WEEK_MAP.put (e.getDisplayName (TextStyle.SHORT, Locale.US).toUpperCase (Locale.US), Integer.valueOf (e.getValue ()));
   }
 
   private final String m_sCronExpression;
@@ -512,8 +510,7 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
         if (exprOn == EType.DAY_OF_MONTH)
         {
           if (expr.indexOf ('L') != -1 && expr.length () > 1 && expr.indexOf (',') >= 0)
-            throw new ParseException ("Support for specifying 'L' and 'LW' with other days of the month is not implemented",
-                                      -1);
+            throw new ParseException ("Support for specifying 'L' and 'LW' with other days of the month is not implemented", -1);
         }
         if (exprOn == EType.DAY_OF_WEEK)
         {
@@ -551,8 +548,7 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
 
       if (dayOfMSpec && dayOfWSpec)
       {
-        throw new ParseException ("Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.",
-                                  0);
+        throw new ParseException ("Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.", 0);
       }
     }
     catch (final ParseException pe)
@@ -573,11 +569,7 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
 
     int incr = 0;
     char c = s.charAt (i);
-    if (c >= 'A' &&
-        c <= 'Z' &&
-        !s.equals ("L") &&
-        !s.equals ("LW") &&
-        !RegExHelper.stringMatchesPattern ("^L-[0-9]*[W]?", s))
+    if (c >= 'A' && c <= 'Z' && !s.equals ("L") && !s.equals ("LW") && !RegExHelper.stringMatchesPattern ("^L-[0-9]*[W]?", s))
     {
       String sub = s.substring (i, i + 3);
       int sval = -1;
@@ -832,8 +824,7 @@ public final class CronExpression implements Serializable, ICloneable <CronExpre
         throw new ParseException ("'W' option is not valid here. (pos=" + i + ")", i);
       }
       if (val > 31)
-        throw new ParseException ("The 'W' option does not make sense with values larger than 31 (max number of days in a month)",
-                                  i);
+        throw new ParseException ("The 'W' option does not make sense with values larger than 31 (max number of days in a month)", i);
       final Set <Integer> set = getSet (type);
       set.add (Integer.valueOf (val));
       i++;

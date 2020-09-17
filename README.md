@@ -1,9 +1,23 @@
 # ph-schedule
 
-Java scheduling library based on Quartz with scope support (see [ph-commons](https://github.com/phax/ph-commons))
+Java scheduling library based on Quartz with ph-scope support (see [ph-commons](https://github.com/phax/ph-commons))
+
+# Maven usage
+
+Add the following to your pom.xml to use this artifact, replacing `x.y.z` with the effective version number:
+
+```xml
+<dependency>
+  <groupId>com.helger</groupId>
+  <artifactId>ph-schedule</artifactId>
+  <version>x.y.z</version>
+</dependency>
+```
 
 # News and noteworthy
 
+* v4.1.1 - 2020-09-17
+    * Updated dependencies
 * v4.1.0 - 2020-03-29
     * Improved debug logging
     * Improved code quality slightly
@@ -19,18 +33,6 @@ Java scheduling library based on Quartz with scope support (see [ph-commons](htt
     * Moved AbstractScopeAwareJob to ph-web (reverted dependencies)
 * v3.5.0 - 2016-07-22
     * Using a forked version of Quartz with less dependencies - "Mini quartz"  
-
-# Maven usage
-
-Add the following to your pom.xml to use this artifact:
-
-```xml
-<dependency>
-  <groupId>com.helger</groupId>
-  <artifactId>ph-schedule</artifactId>
-  <version>4.1.0</version>
-</dependency>
-```
 
 ---
 

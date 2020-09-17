@@ -292,6 +292,8 @@ public class TriggerBuilder <T extends ITrigger>
    * @see SimpleScheduleBuilder
    * @see CronScheduleBuilder
    * @see CalendarIntervalScheduleBuilder
+   * @param <SBT>
+   *        Type to use
    */
   @SuppressWarnings ("unchecked")
   @Nonnull
@@ -373,6 +375,10 @@ public class TriggerBuilder <T extends ITrigger>
   /**
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
+   * @param dataKey
+   *        data key
+   * @param value
+   *        value
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
@@ -386,6 +392,10 @@ public class TriggerBuilder <T extends ITrigger>
   /**
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
+   * @param dataKey
+   *        data key
+   * @param value
+   *        value
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
@@ -399,6 +409,10 @@ public class TriggerBuilder <T extends ITrigger>
   /**
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
+   * @param dataKey
+   *        data key
+   * @param value
+   *        value
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
@@ -412,6 +426,10 @@ public class TriggerBuilder <T extends ITrigger>
   /**
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
+   * @param dataKey
+   *        data key
+   * @param value
+   *        value
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
@@ -425,6 +443,10 @@ public class TriggerBuilder <T extends ITrigger>
   /**
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
+   * @param dataKey
+   *        data key
+   * @param value
+   *        value
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
@@ -438,6 +460,10 @@ public class TriggerBuilder <T extends ITrigger>
   /**
    * Add the given key-value pair to the Trigger's {@link JobDataMap}.
    *
+   * @param dataKey
+   *        data key
+   * @param value
+   *        value
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
@@ -453,6 +479,8 @@ public class TriggerBuilder <T extends ITrigger>
    * already set on this TriggerBuilder using any of the other 'usingJobData'
    * methods.
    *
+   * @param newJobDataMap
+   *        New job data map
    * @return the updated TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */

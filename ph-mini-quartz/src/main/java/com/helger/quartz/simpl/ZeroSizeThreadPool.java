@@ -37,8 +37,6 @@ import com.helger.quartz.spi.IThreadPool;
  * where the scheduler instance only exists in order to schedule jobs, but which
  * will never execute jobs (e.g. will never have start() called on it).
  * </p>
- * <p>
- * </p>
  *
  * @author Wayne Fay
  */
