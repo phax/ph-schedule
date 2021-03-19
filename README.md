@@ -8,7 +8,7 @@ Add the following to your pom.xml to use this artifact, replacing `x.y.z` with t
 
 ```xml
 <dependency>
-  <groupId>com.helger</groupId>
+  <groupId>com.helger.schedule</groupId>
   <artifactId>ph-schedule</artifactId>
   <version>x.y.z</version>
 </dependency>
@@ -16,6 +16,9 @@ Add the following to your pom.xml to use this artifact, replacing `x.y.z` with t
 
 # News and noteworthy
 
+* v4.2.0 - work in progress
+    * Updated to ph-commons 10
+    * Changed Maven group ID from `com.helger` to `com.helger.schedule`
 * v4.1.1 - 2020-09-17
     * Updated dependencies
 * v4.1.0 - 2020-03-29
