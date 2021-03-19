@@ -18,13 +18,19 @@
  */
 package com.helger.quartz;
 
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.datetime.PDTFactory;
 
 /**
  * Quartz constants
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -34,4 +40,22 @@ public final class CQuartz
 
   private CQuartz ()
   {}
+
+  /**
+   * Return a date with time of day reset to this object values. The millisecond
+   * value will be zero.
+   */
+  @Nullable
+  public static Date onDate (@Nonnull final LocalTime aLT, @Nullable final Date dateTime)
+  {
+    if (dateTime == null)
+      return null;
+    final Calendar cal = PDTFactory.createCalendar ();
+    cal.setTime (dateTime);
+    cal.set (Calendar.HOUR_OF_DAY, aLT.getHour ());
+    cal.set (Calendar.MINUTE, aLT.getMinute ());
+    cal.set (Calendar.SECOND, aLT.getSecond ());
+    cal.clear (Calendar.MILLISECOND);
+    return cal.getTime ();
+  }
 }

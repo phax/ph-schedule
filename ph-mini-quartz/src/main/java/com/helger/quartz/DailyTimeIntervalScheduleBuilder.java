@@ -19,6 +19,7 @@
 package com.helger.quartz;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -77,8 +78,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   private int m_nInterval = 1;
   private EIntervalUnit m_eIntervalUnit = EIntervalUnit.MINUTE;
   private EnumSet <DayOfWeek> m_aDaysOfWeek;
-  private TimeOfDay m_aStartTimeOfDay;
-  private TimeOfDay m_aEndTimeOfDay;
+  private LocalTime m_aStartTimeOfDay;
+  private LocalTime m_aEndTimeOfDay;
   private int m_nRepeatCount = IDailyTimeIntervalTrigger.REPEAT_INDEFINITELY;
   private EMisfireInstruction m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY;
 
@@ -150,12 +151,12 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
     if (m_aStartTimeOfDay != null)
       st.setStartTimeOfDay (m_aStartTimeOfDay);
     else
-      st.setStartTimeOfDay (TimeOfDay.hourAndMinuteOfDay (0, 0));
+      st.setStartTimeOfDay (LocalTime.MIDNIGHT);
 
     if (m_aEndTimeOfDay != null)
       st.setEndTimeOfDay (m_aEndTimeOfDay);
     else
-      st.setEndTimeOfDay (TimeOfDay.hourMinuteAndSecondOfDay (23, 59, 59));
+      st.setEndTimeOfDay (PDTFactory.createLocalTime (23, 59, 59));
 
     return st;
   }
@@ -312,7 +313,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @Nonnull
-  public DailyTimeIntervalScheduleBuilder startingDailyAt (final TimeOfDay timeOfDay)
+  public DailyTimeIntervalScheduleBuilder startingDailyAt (final LocalTime timeOfDay)
   {
     if (timeOfDay == null)
       throw new IllegalArgumentException ("Start time of day cannot be null!");
@@ -328,7 +329,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @Nonnull
-  public DailyTimeIntervalScheduleBuilder endingDailyAt (final TimeOfDay timeOfDay)
+  public DailyTimeIntervalScheduleBuilder endingDailyAt (final LocalTime timeOfDay)
   {
     m_aEndTimeOfDay = timeOfDay;
     return this;
@@ -349,8 +350,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
       throw new IllegalArgumentException ("You must set the startDailyAt() before calling this endingDailyAfterCount()!");
 
     final Date today = new Date ();
-    final Date startTimeOfDayDate = m_aStartTimeOfDay.getTimeOfDayForDate (today);
-    final Date maxEndTimeOfDayDate = TimeOfDay.hourMinuteAndSecondOfDay (23, 59, 59).getTimeOfDayForDate (today);
+    final Date startTimeOfDayDate = CQuartz.onDate (m_aStartTimeOfDay, today);
+    final Date maxEndTimeOfDayDate = CQuartz.onDate (PDTFactory.createLocalTime (23, 59, 59), today);
     final long remainingMillisInDay = maxEndTimeOfDayDate.getTime () - startTimeOfDayDate.getTime ();
     long intervalInMillis;
     if (m_eIntervalUnit == EIntervalUnit.SECOND)
@@ -389,7 +390,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
     final int minute = cal.get (Calendar.MINUTE);
     final int second = cal.get (Calendar.SECOND);
 
-    m_aEndTimeOfDay = TimeOfDay.hourMinuteAndSecondOfDay (hour, minute, second);
+    m_aEndTimeOfDay = PDTFactory.createLocalTime (hour, minute, second);
     return this;
   }
 

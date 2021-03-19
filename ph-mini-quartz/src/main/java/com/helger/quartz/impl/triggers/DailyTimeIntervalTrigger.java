@@ -19,6 +19,7 @@
 package com.helger.quartz.impl.triggers;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
@@ -39,7 +40,6 @@ import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.TimeOfDay;
 
 /**
  * A concrete implementation of DailyTimeIntervalTrigger that is used to fire a
@@ -108,8 +108,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   private int m_nRepeatInterval = 1;
   private EIntervalUnit m_eRepeatIntervalUnit = EIntervalUnit.MINUTE;
   private EnumSet <DayOfWeek> m_aDaysOfWeek;
-  private TimeOfDay m_aStartTimeOfDay;
-  private TimeOfDay m_aEndTimeOfDay;
+  private LocalTime m_aStartTimeOfDay;
+  private LocalTime m_aEndTimeOfDay;
   private int m_nTimesTriggered = 0;
   private boolean m_bComplete = false;
 
@@ -143,10 +143,10 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * </p>
    *
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
+   *        The <code>LocalTime</code> that the repeating should begin
    *        occurring.
    * @param endTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should stop occurring.
+   *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
    *        type of trigger are {@link EIntervalUnit#SECOND},
@@ -156,8 +156,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    *         or less.
    */
   public DailyTimeIntervalTrigger (final String name,
-                                   final TimeOfDay startTimeOfDay,
-                                   final TimeOfDay endTimeOfDay,
+                                   final LocalTime startTimeOfDay,
+                                   final LocalTime endTimeOfDay,
                                    final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
@@ -171,10 +171,10 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * </p>
    *
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
+   *        The <code>LocalTime</code> that the repeating should begin
    *        occurring.
    * @param endTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should stop occurring.
+   *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
    *        type of trigger are {@link EIntervalUnit#SECOND},
@@ -185,8 +185,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    */
   public DailyTimeIntervalTrigger (final String name,
                                    final String group,
-                                   final TimeOfDay startTimeOfDay,
-                                   final TimeOfDay endTimeOfDay,
+                                   final LocalTime startTimeOfDay,
+                                   final LocalTime endTimeOfDay,
                                    final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
@@ -206,10 +206,10 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    *        A <code>Date</code> set to the time for the <code>Trigger</code> to
    *        quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
+   *        The <code>LocalTime</code> that the repeating should begin
    *        occurring.
    * @param endTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should stop occurring.
+   *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
    *        type of trigger are {@link EIntervalUnit#SECOND},
@@ -223,8 +223,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   public DailyTimeIntervalTrigger (final String name,
                                    final Date startTime,
                                    final Date endTime,
-                                   final TimeOfDay startTimeOfDay,
-                                   final TimeOfDay endTimeOfDay,
+                                   final LocalTime startTimeOfDay,
+                                   final LocalTime endTimeOfDay,
                                    final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
@@ -244,10 +244,10 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    *        A <code>Date</code> set to the time for the <code>Trigger</code> to
    *        quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
+   *        The <code>LocalTime</code> that the repeating should begin
    *        occurring.
    * @param endTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should stop occurring.
+   *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
    *        type of trigger are {@link EIntervalUnit#SECOND},
@@ -262,8 +262,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
                                    final String group,
                                    final Date startTime,
                                    final Date endTime,
-                                   final TimeOfDay startTimeOfDay,
-                                   final TimeOfDay endTimeOfDay,
+                                   final LocalTime startTimeOfDay,
+                                   final LocalTime endTimeOfDay,
                                    final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
@@ -291,10 +291,10 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    *        A <code>Date</code> set to the time for the <code>Trigger</code> to
    *        quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should begin
+   *        The <code>LocalTime</code> that the repeating should begin
    *        occurring.
    * @param endTimeOfDay
-   *        The <code>TimeOfDay</code> that the repeating should stop occurring.
+   *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
    *        The repeat interval unit. The only intervals that are valid for this
    *        type of trigger are {@link EIntervalUnit#SECOND},
@@ -311,8 +311,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
                                    final String jobGroup,
                                    final Date startTime,
                                    final Date endTime,
-                                   final TimeOfDay startTimeOfDay,
-                                   final TimeOfDay endTimeOfDay,
+                                   final LocalTime startTimeOfDay,
+                                   final LocalTime endTimeOfDay,
                                    final EIntervalUnit intervalUnit,
                                    final int repeatInterval)
   {
@@ -703,7 +703,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     boolean afterTimePastEndTimeOfDay = false;
     if (m_aEndTimeOfDay != null)
     {
-      afterTimePastEndTimeOfDay = afterTime.getTime () > m_aEndTimeOfDay.getTimeOfDayForDate (afterTime).getTime ();
+      afterTimePastEndTimeOfDay = afterTime.getTime () > CQuartz.onDate (m_aEndTimeOfDay, afterTime).getTime ();
     }
     // c. now we need to move move to the next valid day of week if either:
     // the given time is past the end time of day, or given time is not on a
@@ -713,15 +713,15 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
       return null;
 
     // d. Calculate and save fireTimeEndDate variable for later use
-    Date fireTimeEndDate = null;
+    final Date fireTimeEndDate;
     if (m_aEndTimeOfDay == null)
-      fireTimeEndDate = new TimeOfDay (23, 59, 59).getTimeOfDayForDate (fireTime);
+      fireTimeEndDate = CQuartz.onDate (PDTFactory.createLocalTime (23, 59, 59), fireTime);
     else
-      fireTimeEndDate = m_aEndTimeOfDay.getTimeOfDayForDate (fireTime);
+      fireTimeEndDate = CQuartz.onDate (m_aEndTimeOfDay, fireTime);
 
     // e. Check fireTime against startTime or startTimeOfDay to see which go
     // first.
-    final Date fireTimeStartDate = m_aStartTimeOfDay.getTimeOfDayForDate (fireTime);
+    final Date fireTimeStartDate = CQuartz.onDate (m_aStartTimeOfDay, fireTime);
     if (fireTime.before (fireTimeStartDate))
     {
       return fireTimeStartDate;
@@ -769,7 +769,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     {
       fireTime = _advanceToNextDayOfWeekIfNecessary (fireTime, _isSameDay (fireTime, fireTimeEndDate));
       // make sure we hit the startTimeOfDay on the new day
-      fireTime = m_aStartTimeOfDay.getTimeOfDayForDate (fireTime);
+      fireTime = CQuartz.onDate (m_aStartTimeOfDay, fireTime);
     }
 
     // i. Return calculated fireTime.
@@ -802,8 +802,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     // a. Advance or adjust to next dayOfWeek if need to first, starting next
     // day with startTimeOfDay.
     Date fireTime = aFireTime;
-    final TimeOfDay sTimeOfDay = getStartTimeOfDay ();
-    final Date fireTimeStartDate = sTimeOfDay.getTimeOfDayForDate (fireTime);
+    final LocalTime aimeOfDay = getStartTimeOfDay ();
+    final Date fireTimeStartDate = CQuartz.onDate (aimeOfDay, fireTime);
     final Calendar fireTimeStartDateCal = _createCalendarTime (fireTimeStartDate);
     int nDayOfWeekOfFireTime = fireTimeStartDateCal.get (Calendar.DAY_OF_WEEK);
     final int nCalDay = nDayOfWeekOfFireTime;
@@ -860,7 +860,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     Date eTime = getEndTime ();
     if (m_aEndTimeOfDay != null)
     {
-      final Date endTimeOfDayDate = m_aEndTimeOfDay.getTimeOfDayForDate (eTime);
+      final Date endTimeOfDayDate = CQuartz.onDate (m_aEndTimeOfDay, eTime);
       if (eTime.getTime () < endTimeOfDayDate.getTime ())
       {
         eTime = endTimeOfDayDate;
@@ -925,7 +925,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     }
 
     // Ensure timeOfDay is in order.
-    if (getEndTimeOfDay () != null && !getStartTimeOfDay ().before (getEndTimeOfDay ()))
+    if (getEndTimeOfDay () != null && !getStartTimeOfDay ().isBefore (getEndTimeOfDay ()))
     {
       throw new SchedulerException ("StartTimeOfDay " +
                                     m_aStartTimeOfDay +
@@ -947,19 +947,19 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     m_aDaysOfWeek = EnumSet.copyOf (daysOfWeek);
   }
 
-  public TimeOfDay getStartTimeOfDay ()
+  public LocalTime getStartTimeOfDay ()
   {
     if (m_aStartTimeOfDay == null)
-      m_aStartTimeOfDay = TimeOfDay.START_OF_DAY;
+      m_aStartTimeOfDay = LocalTime.MIDNIGHT;
     return m_aStartTimeOfDay;
   }
 
-  public void setStartTimeOfDay (final TimeOfDay startTimeOfDay)
+  public void setStartTimeOfDay (final LocalTime startTimeOfDay)
   {
     ValueEnforcer.notNull (startTimeOfDay, "StartTimeOfDay");
 
-    final TimeOfDay aEndTimeOfDay = getEndTimeOfDay ();
-    if (aEndTimeOfDay != null && aEndTimeOfDay.before (startTimeOfDay))
+    final LocalTime aEndTimeOfDay = getEndTimeOfDay ();
+    if (aEndTimeOfDay != null && aEndTimeOfDay.isBefore (startTimeOfDay))
       throw new IllegalArgumentException ("End time of day cannot be before start time of day");
 
     m_aStartTimeOfDay = startTimeOfDay;
@@ -968,16 +968,16 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   /**
    * {@inheritDoc}
    */
-  public TimeOfDay getEndTimeOfDay ()
+  public LocalTime getEndTimeOfDay ()
   {
     return m_aEndTimeOfDay;
   }
 
-  public void setEndTimeOfDay (final TimeOfDay aEndTimeOfDay)
+  public void setEndTimeOfDay (final LocalTime aEndTimeOfDay)
   {
     ValueEnforcer.notNull (aEndTimeOfDay, "EndTimeOfDay");
-    final TimeOfDay aStartTimeOfDay = getStartTimeOfDay ();
-    if (aStartTimeOfDay != null && aEndTimeOfDay.before (aEndTimeOfDay))
+    final LocalTime aStartTimeOfDay = getStartTimeOfDay ();
+    if (aStartTimeOfDay != null && aEndTimeOfDay.isBefore (aEndTimeOfDay))
       throw new IllegalArgumentException ("End time of day cannot be before start time of day");
     m_aEndTimeOfDay = aEndTimeOfDay;
   }

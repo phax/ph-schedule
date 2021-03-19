@@ -19,6 +19,7 @@
 package com.helger.quartz;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.Set;
 
 /**
@@ -98,12 +99,12 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
   /**
    * The time of day to start firing at the given interval.
    */
-  TimeOfDay getStartTimeOfDay ();
+  LocalTime getStartTimeOfDay ();
 
   /**
    * The time of day to complete firing at the given interval.
    */
-  TimeOfDay getEndTimeOfDay ();
+  LocalTime getEndTimeOfDay ();
 
   /**
    * The days of the week upon which to fire.

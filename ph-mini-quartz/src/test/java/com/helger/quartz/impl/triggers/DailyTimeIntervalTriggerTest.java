@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +37,6 @@ import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
-import com.helger.quartz.TimeOfDay;
 import com.helger.quartz.TriggerUtils;
 import com.helger.quartz.impl.calendar.CronCalendar;
 
@@ -51,8 +51,8 @@ public class DailyTimeIntervalTriggerTest
   public void testNormalExample () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (11, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (11, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -73,7 +73,7 @@ public class DailyTimeIntervalTriggerTest
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
-    trigger.setStartTimeOfDay (TimeOfDay.hourAndMinuteOfDay (8, 0));
+    trigger.setStartTimeOfDay (PDTFactory.createLocalTime (8, 0, 0));
     trigger.setRepeatIntervalUnit (EIntervalUnit.MINUTE);
     trigger.setRepeatInterval (60);
 
@@ -91,8 +91,8 @@ public class DailyTimeIntervalTriggerTest
   public void testValidateTimeOfDayOrder () throws Exception
   {
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
-    trigger.setStartTimeOfDay (new TimeOfDay (12, 0, 0));
-    trigger.setEndTimeOfDay (new TimeOfDay (8, 0, 0));
+    trigger.setStartTimeOfDay (PDTFactory.createLocalTime (12, 0, 0));
+    trigger.setEndTimeOfDay (PDTFactory.createLocalTime (8, 0, 0));
     try
     {
       trigger.validate ();
@@ -208,7 +208,7 @@ public class DailyTimeIntervalTriggerTest
   public void testStartTimeBeforeStartTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -228,7 +228,7 @@ public class DailyTimeIntervalTriggerTest
                                                                      // 2011 was
                                                                      // a
     // saturday...
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     final EnumSet <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.MONDAY,
                                                        DayOfWeek.TUESDAY,
@@ -254,7 +254,7 @@ public class DailyTimeIntervalTriggerTest
   public void testStartTimeAfterStartTimeOfDay () throws Exception
   {
     final Date startTime = dateOf (9, 23, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -272,7 +272,7 @@ public class DailyTimeIntervalTriggerTest
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final Date endTime = dateOf (16, 0, 0, 2, Month.JANUARY, 2011);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
@@ -292,7 +292,7 @@ public class DailyTimeIntervalTriggerTest
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final Date endTime = dateOf (18, 0, 0, 2, Month.JANUARY, 2011);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
@@ -311,8 +311,8 @@ public class DailyTimeIntervalTriggerTest
   public void testTimeOfDayWithStartTime () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -339,8 +339,8 @@ public class DailyTimeIntervalTriggerTest
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final Date endTime = dateOf (0, 0, 0, 4, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
@@ -367,12 +367,14 @@ public class DailyTimeIntervalTriggerTest
   public void testTimeOfDayWithEndTime2 () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 23, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (23, 59, 59); // edge case when
-                                                               // endTime is
-                                                               // last second of
-                                                               // day, which is
-                                                               // default too.
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 23, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (23, 59, 59); // edge
+                                                                            // case
+                                                                            // when
+    // endTime is
+    // last second of
+    // day, which is
+    // default too.
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -392,8 +394,8 @@ public class DailyTimeIntervalTriggerTest
     final EnumSet <DayOfWeek> daysOfWeek = EnumSet.allOf (DayOfWeek.class);
     // SAT
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -420,8 +422,8 @@ public class DailyTimeIntervalTriggerTest
                                                        DayOfWeek.FRIDAY);
     // SAT(7)
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -446,8 +448,8 @@ public class DailyTimeIntervalTriggerTest
     final EnumSet <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
     // SAT
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -472,8 +474,8 @@ public class DailyTimeIntervalTriggerTest
     final EnumSet <DayOfWeek> daysOfWeek = EnumSet.of (DayOfWeek.MONDAY);
     // SAT(7)
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (17, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (17, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -504,8 +506,8 @@ public class DailyTimeIntervalTriggerTest
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final Date endTime = dateOf (0, 0, 0, 4, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (10, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (10, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setEndTime (endTime);
@@ -526,8 +528,8 @@ public class DailyTimeIntervalTriggerTest
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
     final Date endTime = dateOf (13, 0, 0, 15, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 1, 15);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (16, 1, 15);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 1, 15);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (16, 1, 15);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -546,8 +548,8 @@ public class DailyTimeIntervalTriggerTest
   public void testSecondInterval () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 2);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (13, 30, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 2);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (13, 30, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -565,8 +567,8 @@ public class DailyTimeIntervalTriggerTest
   public void testRepeatCountInf () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (11, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (11, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -588,8 +590,8 @@ public class DailyTimeIntervalTriggerTest
   public void testRepeatCount () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (11, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (11, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -608,8 +610,8 @@ public class DailyTimeIntervalTriggerTest
   public void testRepeatCount0 () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (11, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (11, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -627,8 +629,8 @@ public class DailyTimeIntervalTriggerTest
   public void testGetFireTime () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2011);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (13, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (13, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -656,8 +658,8 @@ public class DailyTimeIntervalTriggerTest
   public void testGetFireTimeWithDateBeforeStartTime () throws Exception
   {
     final Date startTime = dateOf (0, 0, 0, 1, Month.JANUARY, 2012);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (13, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (13, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -694,8 +696,8 @@ public class DailyTimeIntervalTriggerTest
   {
     // A test case for QTZ-369
     final Date startTime = dateOf (8, 0, 0, 1, Month.JANUARY, 2012);
-    final TimeOfDay startTimeOfDay = new TimeOfDay (8, 0, 0);
-    final TimeOfDay endTimeOfDay = new TimeOfDay (13, 0, 0);
+    final LocalTime startTimeOfDay = PDTFactory.createLocalTime (8, 0, 0);
+    final LocalTime endTimeOfDay = PDTFactory.createLocalTime (13, 0, 0);
     final DailyTimeIntervalTrigger trigger = new DailyTimeIntervalTrigger ();
     trigger.setStartTime (startTime);
     trigger.setStartTimeOfDay (startTimeOfDay);
@@ -718,8 +720,8 @@ public class DailyTimeIntervalTriggerTest
                                                                      "jobGroup",
                                                                      dateOf (8, 0, 0, 1, Month.JANUARY, 2012),
                                                                      null,
-                                                                     new TimeOfDay (8, 0, 0),
-                                                                     new TimeOfDay (17, 0, 0),
+                                                                     PDTFactory.createLocalTime (8, 0, 0),
+                                                                     PDTFactory.createLocalTime (17, 0, 0),
                                                                      EIntervalUnit.HOUR,
                                                                      1);
 
@@ -729,8 +731,8 @@ public class DailyTimeIntervalTriggerTest
     assertEquals ("jobGroup", trigger.getJobGroup ());
     assertEquals (dateOf (8, 0, 0, 1, Month.JANUARY, 2012), trigger.getStartTime ());
     assertEquals (null, trigger.getEndTime ());
-    assertEquals (new TimeOfDay (8, 0, 0), trigger.getStartTimeOfDay ());
-    assertEquals (new TimeOfDay (17, 0, 0), trigger.getEndTimeOfDay ());
+    assertEquals (PDTFactory.createLocalTime (8, 0, 0), trigger.getStartTimeOfDay ());
+    assertEquals (PDTFactory.createLocalTime (17, 0, 0), trigger.getEndTimeOfDay ());
     assertEquals (EIntervalUnit.HOUR, trigger.getRepeatIntervalUnit ());
     assertEquals (1, trigger.getRepeatInterval ());
 
@@ -738,8 +740,8 @@ public class DailyTimeIntervalTriggerTest
                                             "triggerGroup",
                                             dateOf (8, 0, 0, 1, Month.JANUARY, 2012),
                                             null,
-                                            new TimeOfDay (8, 0, 0),
-                                            new TimeOfDay (17, 0, 0),
+                                            PDTFactory.createLocalTime (8, 0, 0),
+                                            PDTFactory.createLocalTime (17, 0, 0),
                                             EIntervalUnit.HOUR,
                                             1);
 
@@ -749,8 +751,8 @@ public class DailyTimeIntervalTriggerTest
     assertEquals ("DEFAULT", trigger.getJobGroup ());
     assertEquals (dateOf (8, 0, 0, 1, Month.JANUARY, 2012), trigger.getStartTime ());
     assertEquals (null, trigger.getEndTime ());
-    assertEquals (new TimeOfDay (8, 0, 0), trigger.getStartTimeOfDay ());
-    assertEquals (new TimeOfDay (17, 0, 0), trigger.getEndTimeOfDay ());
+    assertEquals (PDTFactory.createLocalTime (8, 0, 0), trigger.getStartTimeOfDay ());
+    assertEquals (PDTFactory.createLocalTime (17, 0, 0), trigger.getEndTimeOfDay ());
     assertEquals (EIntervalUnit.HOUR, trigger.getRepeatIntervalUnit ());
     assertEquals (1, trigger.getRepeatInterval ());
   }
