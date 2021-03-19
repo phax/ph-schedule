@@ -18,8 +18,7 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
-
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -36,15 +35,11 @@ import javax.annotation.Nullable;
  * Sundays&quot; could be implemented with a <code>SimpleTrigger</code> and a
  * <code>WeeklyCalendar</code> which excludes Sundays)
  * </p>
- * <p>
- * Implementations MUST take care of being properly <code>Cloneable</code> and
- * <code>Serializable</code>.
- * </p>
  *
  * @author James House
  * @author Juergen Donnerstag
  */
-public interface ICalendar extends Serializable
+public interface ICalendar
 {
   int MONTH = 0;
 
@@ -93,5 +88,6 @@ public interface ICalendar extends Serializable
    */
   long getNextIncludedTime (long timeStamp);
 
+  @Nonnull
   ICalendar getClone ();
 }

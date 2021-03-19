@@ -18,8 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
-
 /**
  * The interface to be implemented by classes that want to be informed when a
  * <code>{@link com.helger.quartz.IJobDetail}</code> executes. In general,
@@ -34,7 +32,7 @@ import java.io.Serializable;
  * @see ITriggerListener
  * @author James House
  */
-public interface IJobListener extends Serializable
+public interface IJobListener
 {
   /**
    * <p>

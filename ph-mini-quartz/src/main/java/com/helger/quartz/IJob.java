@@ -18,8 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
-
 /**
  * <p>
  * The interface to be implemented by classes which represent a 'job' to be
@@ -42,7 +40,7 @@ import java.io.Serializable;
  * @see IScheduler
  * @author James House
  */
-public interface IJob extends Serializable
+public interface IJob
 {
   /**
    * <p>

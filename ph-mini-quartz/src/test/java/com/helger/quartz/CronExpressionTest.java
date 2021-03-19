@@ -23,8 +23,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,8 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.datetime.PDTFactory;
-import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
-import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
 public final class CronExpressionTest
 {
@@ -95,32 +91,6 @@ public final class CronExpressionTest
                                                      // friday in 2010)
     assertTrue (cronExpression.isSatisfiedBy (cal.getTime ()));
 
-  }
-
-  /*
-   * QUARTZ-571: Showing that expressions with months correctly serialize.
-   */
-  @Test
-  public void testQuartz571 () throws Exception
-  {
-    final CronExpression cronExpression = new CronExpression ("19 15 10 4 Apr ? ");
-
-    try (final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ())
-    {
-      try (final ObjectOutputStream oos = new ObjectOutputStream (baos))
-      {
-        oos.writeObject (cronExpression);
-      }
-      try (final NonBlockingByteArrayInputStream bais = new NonBlockingByteArrayInputStream (baos.toByteArray ());
-           final ObjectInputStream ois = new ObjectInputStream (bais))
-      {
-        final CronExpression newExpression = (CronExpression) ois.readObject ();
-        assertEquals (newExpression.getCronExpression (), cronExpression.getCronExpression ());
-
-        // if broken, this will throw an exception
-        newExpression.getNextValidTimeAfter (new Date ());
-      }
-    }
   }
 
   /**

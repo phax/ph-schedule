@@ -18,15 +18,13 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
-import java.io.Serializable;
-
 /**
  * A counter value at a particular time instance
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8
  */
-public class TimeStampedCounterValue implements Serializable
+public class TimeStampedCounterValue
 {
   private final long m_nCounterValue;
   private final long m_nTimestamp;

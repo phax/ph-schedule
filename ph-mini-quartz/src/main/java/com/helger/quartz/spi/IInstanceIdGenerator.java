@@ -18,8 +18,6 @@
  */
 package com.helger.quartz.spi;
 
-import java.io.Serializable;
-
 import com.helger.quartz.SchedulerException;
 
 /**
@@ -36,7 +34,7 @@ import com.helger.quartz.SchedulerException;
  * @see com.helger.quartz.simpl.SimpleInstanceIdGenerator
  */
 @FunctionalInterface
-public interface IInstanceIdGenerator extends Serializable
+public interface IInstanceIdGenerator
 {
   /**
    * Generate the instance id for a <code>Scheduler</code>

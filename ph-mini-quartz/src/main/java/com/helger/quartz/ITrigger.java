@@ -18,7 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.annotation.Nonnull;
@@ -56,7 +55,7 @@ import com.helger.quartz.spi.IMutableTrigger;
  * @author James House
  */
 @MustImplementEqualsAndHashcode
-public interface ITrigger extends Serializable, Comparable <ITrigger>
+public interface ITrigger extends Comparable <ITrigger>
 {
   public enum ETriggerState
   {

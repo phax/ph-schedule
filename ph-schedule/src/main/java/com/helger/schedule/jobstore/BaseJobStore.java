@@ -16,7 +16,6 @@
  */
 package com.helger.schedule.jobstore;
 
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
@@ -1338,7 +1337,7 @@ public class BaseJobStore implements IJobStore
   }
 }
 
-final class TriggerWrapperComparator implements Comparator <TriggerWrapper>, Serializable
+final class TriggerWrapperComparator implements Comparator <TriggerWrapper>
 {
   private final TriggerTimeComparator m_aComp = new TriggerTimeComparator ();
 

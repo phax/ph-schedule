@@ -18,8 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
-
 import javax.annotation.Nonnull;
 
 import com.helger.commons.annotation.MustImplementEqualsAndHashcode;
@@ -36,7 +34,7 @@ import com.helger.quartz.utils.Key;
  * @since 2.0
  */
 @MustImplementEqualsAndHashcode
-public interface IMatcher <T extends Key <T>> extends Serializable
+public interface IMatcher <T extends Key <T>>
 {
   boolean isMatch (T key);
 

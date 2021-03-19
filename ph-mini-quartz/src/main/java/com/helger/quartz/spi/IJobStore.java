@@ -18,7 +18,6 @@
  */
 package com.helger.quartz.spi;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -59,7 +58,7 @@ import com.helger.quartz.impl.matchers.GroupMatcher;
  * @author James House
  * @author Eric Mueller
  */
-public interface IJobStore extends Serializable
+public interface IJobStore
 {
   /**
    * Called by the QuartzScheduler before the <code>JobStore</code> is used, in

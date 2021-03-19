@@ -18,7 +18,6 @@
  */
 package com.helger.quartz.spi;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.helger.quartz.ICalendar;
@@ -33,7 +32,7 @@ import com.helger.quartz.IJobDetail;
  * @see com.helger.quartz.core.QuartzSchedulerThread
  * @author James House
  */
-public class TriggerFiredBundle implements Serializable
+public class TriggerFiredBundle
 {
   private final IJobDetail m_aJob;
   private final IOperableTrigger m_aTrigger;

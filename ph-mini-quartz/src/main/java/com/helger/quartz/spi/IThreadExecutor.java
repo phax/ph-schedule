@@ -18,8 +18,6 @@
  */
 package com.helger.quartz.spi;
 
-import java.io.Serializable;
-
 /**
  * Allows different strategies for scheduling threads. The {@link #initialize()}
  * method is required to be called before the first call to
@@ -29,7 +27,7 @@ import java.io.Serializable;
  * @author matt.accola
  * @version $Revision$ $Date$
  */
-public interface IThreadExecutor extends Serializable
+public interface IThreadExecutor
 {
   /**
    * Submit a task for execution

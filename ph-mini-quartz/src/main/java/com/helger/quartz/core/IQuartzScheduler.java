@@ -18,7 +18,6 @@
  */
 package com.helger.quartz.core;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ import com.helger.quartz.spi.IOperableTrigger;
 /**
  * @author James House
  */
-public interface IQuartzScheduler extends Serializable
+public interface IQuartzScheduler
 {
   String getSchedulerName ();
 

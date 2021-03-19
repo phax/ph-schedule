@@ -18,14 +18,12 @@
  */
 package com.helger.quartz.spi;
 
-import java.io.Serializable;
-
 import javax.annotation.Nullable;
 
 /**
  * @author lorban
  */
-public class TriggerFiredResult implements Serializable
+public class TriggerFiredResult
 {
   private final TriggerFiredBundle m_aTriggerFiredBundle;
   private final Exception m_aException;

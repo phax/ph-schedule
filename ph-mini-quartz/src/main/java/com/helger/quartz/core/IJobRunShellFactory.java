@@ -18,8 +18,6 @@
  */
 package com.helger.quartz.core;
 
-import java.io.Serializable;
-
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
@@ -33,7 +31,7 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  *
  * @author James House
  */
-public interface IJobRunShellFactory extends Serializable
+public interface IJobRunShellFactory
 {
   /**
    * <p>

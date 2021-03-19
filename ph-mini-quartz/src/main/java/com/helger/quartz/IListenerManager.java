@@ -18,7 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.helger.commons.collection.impl.ICommonsList;
@@ -41,7 +40,7 @@ import com.helger.commons.collection.impl.ICommonsList;
  * @since 2.0 - previously listeners were managed directly on the Scheduler
  *        interface.
  */
-public interface IListenerManager extends Serializable
+public interface IListenerManager
 {
   /**
    * Add the given <code>{@link IJobListener}</code> to the

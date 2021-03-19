@@ -18,7 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -27,7 +26,7 @@ import java.util.Date;
  *
  * @author James House
  */
-public class SchedulerMetaData implements Serializable
+public class SchedulerMetaData
 {
   private final String m_sSchedName;
   private final String m_sSchedInst;
@@ -76,9 +75,7 @@ public class SchedulerMetaData implements Serializable
   }
 
   /**
-   * <p>
    * Returns the name of the <code>Scheduler</code>.
-   * </p>
    */
   public String getSchedulerName ()
   {
@@ -86,9 +83,7 @@ public class SchedulerMetaData implements Serializable
   }
 
   /**
-   * <p>
    * Returns the instance Id of the <code>Scheduler</code>.
-   * </p>
    */
   public String getSchedulerInstanceId ()
   {
@@ -96,9 +91,7 @@ public class SchedulerMetaData implements Serializable
   }
 
   /**
-   * <p>
    * Returns the class-name of the <code>Scheduler</code> instance.
-   * </p>
    */
   public Class <?> getSchedulerClass ()
   {
@@ -106,9 +99,7 @@ public class SchedulerMetaData implements Serializable
   }
 
   /**
-   * <p>
    * Returns the <code>Date</code> at which the Scheduler started running.
-   * </p>
    *
    * @return null if the scheduler has not been started.
    */
@@ -118,10 +109,8 @@ public class SchedulerMetaData implements Serializable
   }
 
   /**
-   * <p>
    * Returns the number of jobs executed since the <code>Scheduler</code>
-   * started..
-   * </p>
+   * started.
    */
   public int getNumberOfJobsExecuted ()
   {

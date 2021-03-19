@@ -18,7 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -42,7 +41,7 @@ import com.helger.commons.hashcode.HashCodeGenerator;
  * @author Zemian Deng saltnlight5@gmail.com
  */
 @Immutable
-public class TimeOfDay implements Serializable, Comparable <TimeOfDay>
+public class TimeOfDay implements Comparable <TimeOfDay>
 {
   public static final TimeOfDay START_OF_DAY = new TimeOfDay (0, 0, 0);
 

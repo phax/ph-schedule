@@ -18,8 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
-
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 
 /**
@@ -34,12 +32,10 @@ import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
  * @see IJobExecutionContext
  * @author James House
  */
-public interface ITriggerListener extends Serializable
+public interface ITriggerListener
 {
   /**
-   * <p>
    * Get the name of the <code>TriggerListener</code>.
-   * </p>
    */
   String getName ();
 

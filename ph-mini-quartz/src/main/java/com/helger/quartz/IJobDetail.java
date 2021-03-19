@@ -18,8 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -49,7 +47,7 @@ import com.helger.commons.lang.ICloneable;
  * @see ITrigger
  * @author James House
  */
-public interface IJobDetail extends Serializable, ICloneable <IJobDetail>
+public interface IJobDetail extends ICloneable <IJobDetail>
 {
   @Nullable
   JobKey getKey ();

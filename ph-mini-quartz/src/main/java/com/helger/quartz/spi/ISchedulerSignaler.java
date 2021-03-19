@@ -18,8 +18,6 @@
  */
 package com.helger.quartz.spi;
 
-import java.io.Serializable;
-
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
@@ -30,7 +28,7 @@ import com.helger.quartz.SchedulerException;
  *
  * @author jhouse
  */
-public interface ISchedulerSignaler extends Serializable
+public interface ISchedulerSignaler
 {
   void notifyTriggerListenersMisfired (ITrigger trigger);
 

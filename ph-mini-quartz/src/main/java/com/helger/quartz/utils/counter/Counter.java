@@ -18,7 +18,6 @@
  */
 package com.helger.quartz.utils.counter;
 
-import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -27,7 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8
  */
-public class Counter implements ICounter, Serializable
+public class Counter implements ICounter
 {
   private final AtomicLong m_aValue;
 

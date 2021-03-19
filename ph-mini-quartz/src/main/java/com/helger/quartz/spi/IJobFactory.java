@@ -18,8 +18,6 @@
  */
 package com.helger.quartz.spi;
 
-import java.io.Serializable;
-
 import com.helger.quartz.IJob;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
@@ -40,7 +38,7 @@ import com.helger.quartz.SchedulerException;
  * @see com.helger.quartz.simpl.PropertySettingJobFactory
  * @author James House
  */
-public interface IJobFactory extends Serializable
+public interface IJobFactory
 {
   /**
    * Called by the scheduler at the time of the trigger firing, in order to

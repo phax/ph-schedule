@@ -18,8 +18,6 @@
  */
 package com.helger.quartz;
 
-import java.io.Serializable;
-
 /**
  * The interface to be implemented by classes that want to be informed of major
  * <code>{@link IScheduler}</code> events.
@@ -29,13 +27,11 @@ import java.io.Serializable;
  * @see ITriggerListener
  * @author James House
  */
-public interface ISchedulerListener extends Serializable
+public interface ISchedulerListener
 {
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link com.helger.quartz.IJobDetail}</code> is scheduled.
-   * </p>
    *
    * @param trigger
    */
@@ -43,10 +39,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link com.helger.quartz.IJobDetail}</code> is unscheduled.
-   * </p>
    *
    * @param triggerKey
    * @see ISchedulerListener#schedulingDataCleared()
@@ -55,11 +49,9 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link ITrigger}</code> has reached the condition in which it will
    * never fire again.
-   * </p>
    *
    * @param trigger
    */
@@ -67,10 +59,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link ITrigger}</code> has been paused.
-   * </p>
    *
    * @param triggerKey
    */
@@ -78,13 +68,9 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a group of
-   * <code>{@link ITrigger}s</code> has been paused.
-   * </p>
-   * <p>
-   * If all groups were paused then triggerGroup will be null
-   * </p>
+   * <code>{@link ITrigger}s</code> has been paused. If all groups were paused
+   * then triggerGroup will be null.
    *
    * @param triggerGroup
    *        the paused group, or null if all were paused
@@ -93,10 +79,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link ITrigger}</code> has been un-paused.
-   * </p>
    *
    * @param triggerKey
    */
@@ -104,10 +88,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a group of
    * <code>{@link ITrigger}s</code> has been un-paused.
-   * </p>
    *
    * @param triggerGroup
    */
@@ -115,10 +97,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link com.helger.quartz.IJobDetail}</code> has been added.
-   * </p>
    *
    * @param jobDetail
    */
@@ -126,10 +106,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link com.helger.quartz.IJobDetail}</code> has been deleted.
-   * </p>
    *
    * @param jobKey
    */
@@ -137,10 +115,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link com.helger.quartz.IJobDetail}</code> has been paused.
-   * </p>
    *
    * @param jobKey
    */
@@ -148,10 +124,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a group of
    * <code>{@link com.helger.quartz.IJobDetail}s</code> has been paused.
-   * </p>
    *
    * @param jobGroup
    *        the paused group, or null if all were paused
@@ -160,10 +134,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a
    * <code>{@link com.helger.quartz.IJobDetail}</code> has been un-paused.
-   * </p>
    *
    * @param jobKey
    */
@@ -171,10 +143,8 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> when a group of
    * <code>{@link com.helger.quartz.IJobDetail}s</code> has been un-paused.
-   * </p>
    *
    * @param jobGroup
    */
@@ -201,46 +171,36 @@ public interface ISchedulerListener extends Serializable
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> to inform the listener that
    * it has move to standby mode.
-   * </p>
    */
   default void schedulerInStandbyMode ()
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> to inform the listener that
    * it has started.
-   * </p>
    */
   default void schedulerStarted ()
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> to inform the listener that
    * it is starting.
-   * </p>
    */
   default void schedulerStarting ()
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> to inform the listener that
    * it has shutdown.
-   * </p>
    */
   default void schedulerShutdown ()
   {}
 
   /**
-   * <p>
    * Called by the <code>{@link IScheduler}</code> to inform the listener that
    * it has begun the shutdown sequence.
-   * </p>
    */
   default void schedulerShuttingdown ()
   {}
