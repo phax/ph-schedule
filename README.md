@@ -16,7 +16,7 @@ Add the following to your pom.xml to use this artifact, replacing `x.y.z` with t
 
 # News and noteworthy
 
-* v4.2.0 - work in progress
+* v4.2.0 - 2021-03-21
     * Updated to ph-commons 10
     * Changed Maven group ID from `com.helger` to `com.helger.schedule`
 * v4.1.1 - 2020-09-17
