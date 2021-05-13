@@ -472,7 +472,6 @@ public final class CronExpression implements ICloneable <CronExpression>
     }
   }
 
-  @SuppressWarnings ("unused")
   public static void validateExpression (final String cronExpression) throws ParseException
   {
     new CronExpression (cronExpression);
