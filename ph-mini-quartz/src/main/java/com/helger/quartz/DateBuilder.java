@@ -1,4 +1,4 @@
-/**
+/*
  * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
  *
  * Copyright (C) 2016-2021 Philip Helger (www.helger.com)
