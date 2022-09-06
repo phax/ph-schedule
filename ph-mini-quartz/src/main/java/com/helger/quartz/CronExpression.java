@@ -262,28 +262,30 @@ public final class CronExpression implements ICloneable <CronExpression>
   static
   {
     for (final Month e : Month.values ())
-      MONTH_MAP.put (e.getDisplayName (TextStyle.SHORT, Locale.US).toUpperCase (Locale.US), Integer.valueOf (e.getValue () - 1));
+      MONTH_MAP.put (e.getDisplayName (TextStyle.SHORT, Locale.US).toUpperCase (Locale.US),
+                     Integer.valueOf (e.getValue () - 1));
 
     for (final DayOfWeek e : DayOfWeek.values ())
-      DAY_OF_WEEK_MAP.put (e.getDisplayName (TextStyle.SHORT, Locale.US).toUpperCase (Locale.US), Integer.valueOf (e.getValue ()));
+      DAY_OF_WEEK_MAP.put (e.getDisplayName (TextStyle.SHORT, Locale.US).toUpperCase (Locale.US),
+                           Integer.valueOf (e.getValue ()));
   }
 
   private final String m_sCronExpression;
   private TimeZone m_aTimeZone;
 
-  private transient TreeSet <Integer> m_aSeconds;
-  private transient TreeSet <Integer> m_aMinutes;
-  private transient TreeSet <Integer> m_aHours;
-  private transient TreeSet <Integer> m_aDaysOfMonth;
-  private transient TreeSet <Integer> m_aMonths;
-  private transient TreeSet <Integer> m_aDaysOfWeek;
-  private transient TreeSet <Integer> m_aYears;
+  private TreeSet <Integer> m_aSeconds;
+  private TreeSet <Integer> m_aMinutes;
+  private TreeSet <Integer> m_aHours;
+  private TreeSet <Integer> m_aDaysOfMonth;
+  private TreeSet <Integer> m_aMonths;
+  private TreeSet <Integer> m_aDaysOfWeek;
+  private TreeSet <Integer> m_aYears;
 
-  private transient boolean m_bLastdayOfWeek = false;
-  private transient int m_nNthdayOfWeek = 0;
-  private transient boolean m_bLastdayOfMonth = false;
-  private transient boolean m_bNearestWeekday = false;
-  private transient int m_nLastdayOffset = 0;
+  private boolean m_bLastdayOfWeek = false;
+  private int m_nNthdayOfWeek = 0;
+  private boolean m_bLastdayOfMonth = false;
+  private boolean m_bNearestWeekday = false;
+  private int m_nLastdayOffset = 0;
 
   /**
    * Constructs a new <CODE>CronExpression</CODE> based on the specified
@@ -326,10 +328,7 @@ public final class CronExpression implements ICloneable <CronExpression>
     {
       throw new AssertionError ();
     }
-    if (expression.getTimeZone () != null)
-    {
-      setTimeZone (QCloneUtils.getClone (expression.getTimeZone ()));
-    }
+    setTimeZone (QCloneUtils.getClone (expression.getTimeZone ()));
   }
 
   /**
@@ -470,7 +469,6 @@ public final class CronExpression implements ICloneable <CronExpression>
     }
   }
 
-  @SuppressWarnings ("unused")
   public static void validateExpression (final String cronExpression) throws ParseException
   {
     // Parse the exception - throws an exception in case of error
@@ -510,7 +508,8 @@ public final class CronExpression implements ICloneable <CronExpression>
         if (exprOn == EType.DAY_OF_MONTH)
         {
           if (expr.indexOf ('L') != -1 && expr.length () > 1 && expr.indexOf (',') >= 0)
-            throw new ParseException ("Support for specifying 'L' and 'LW' with other days of the month is not implemented", -1);
+            throw new ParseException ("Support for specifying 'L' and 'LW' with other days of the month is not implemented",
+                                      -1);
         }
         if (exprOn == EType.DAY_OF_WEEK)
         {
@@ -548,7 +547,8 @@ public final class CronExpression implements ICloneable <CronExpression>
 
       if (dayOfMSpec && dayOfWSpec)
       {
-        throw new ParseException ("Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.", 0);
+        throw new ParseException ("Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.",
+                                  0);
       }
     }
     catch (final ParseException pe)
@@ -569,7 +569,11 @@ public final class CronExpression implements ICloneable <CronExpression>
 
     int incr = 0;
     char c = s.charAt (i);
-    if (c >= 'A' && c <= 'Z' && !s.equals ("L") && !s.equals ("LW") && !RegExHelper.stringMatchesPattern ("^L-[0-9]*[W]?", s))
+    if (c >= 'A' &&
+        c <= 'Z' &&
+        !s.equals ("L") &&
+        !s.equals ("LW") &&
+        !RegExHelper.stringMatchesPattern ("^L-[0-9]*[W]?", s))
     {
       String sub = s.substring (i, i + 3);
       int sval = -1;
@@ -824,7 +828,8 @@ public final class CronExpression implements ICloneable <CronExpression>
         throw new ParseException ("'W' option is not valid here. (pos=" + i + ")", i);
       }
       if (val > 31)
-        throw new ParseException ("The 'W' option does not make sense with values larger than 31 (max number of days in a month)", i);
+        throw new ParseException ("The 'W' option does not make sense with values larger than 31 (max number of days in a month)",
+                                  i);
       final Set <Integer> set = getSet (type);
       set.add (Integer.valueOf (val));
       i++;
