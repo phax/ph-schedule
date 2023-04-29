@@ -333,34 +333,28 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
   @Override
   public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
   {
-    if (LOGGER.isInfoEnabled ())
-    {
-      final Object [] args = { trigger.getKey ().getName (),
-                               trigger.getKey ().getGroup (),
-                               trigger.getPreviousFireTime (),
-                               trigger.getNextFireTime (),
-                               new Date (),
-                               context.getJobDetail ().getKey ().getName (),
-                               context.getJobDetail ().getKey ().getGroup (),
-                               Integer.valueOf (context.getRefireCount ()) };
-      LOGGER.info (new MessageFormat (getTriggerFiredMessage (), Locale.US).format (args));
-    }
+    final Object [] args = { trigger.getKey ().getName (),
+                             trigger.getKey ().getGroup (),
+                             trigger.getPreviousFireTime (),
+                             trigger.getNextFireTime (),
+                             new Date (),
+                             context.getJobDetail ().getKey ().getName (),
+                             context.getJobDetail ().getKey ().getGroup (),
+                             Integer.valueOf (context.getRefireCount ()) };
+    LOGGER.info (new MessageFormat (getTriggerFiredMessage (), Locale.US).format (args));
   }
 
   @Override
   public void triggerMisfired (final ITrigger trigger)
   {
-    if (LOGGER.isInfoEnabled ())
-    {
-      final Object [] args = { trigger.getKey ().getName (),
-                               trigger.getKey ().getGroup (),
-                               trigger.getPreviousFireTime (),
-                               trigger.getNextFireTime (),
-                               new Date (),
-                               trigger.getJobKey ().getName (),
-                               trigger.getJobKey ().getGroup () };
-      LOGGER.info (new MessageFormat (getTriggerMisfiredMessage (), Locale.US).format (args));
-    }
+    final Object [] args = { trigger.getKey ().getName (),
+                             trigger.getKey ().getGroup (),
+                             trigger.getPreviousFireTime (),
+                             trigger.getNextFireTime (),
+                             new Date (),
+                             trigger.getJobKey ().getName (),
+                             trigger.getJobKey ().getGroup () };
+    LOGGER.info (new MessageFormat (getTriggerMisfiredMessage (), Locale.US).format (args));
   }
 
   @Override
@@ -368,46 +362,43 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
                                final IJobExecutionContext context,
                                final ECompletedExecutionInstruction triggerInstructionCode)
   {
-    if (LOGGER.isInfoEnabled ())
+    String instrCode = "UNKNOWN";
+    if (triggerInstructionCode == ECompletedExecutionInstruction.DELETE_TRIGGER)
     {
-      String instrCode = "UNKNOWN";
-      if (triggerInstructionCode == ECompletedExecutionInstruction.DELETE_TRIGGER)
+      instrCode = "DELETE TRIGGER";
+    }
+    else
+      if (triggerInstructionCode == ECompletedExecutionInstruction.NOOP)
       {
-        instrCode = "DELETE TRIGGER";
+        instrCode = "DO NOTHING";
       }
       else
-        if (triggerInstructionCode == ECompletedExecutionInstruction.NOOP)
+        if (triggerInstructionCode == ECompletedExecutionInstruction.RE_EXECUTE_JOB)
         {
-          instrCode = "DO NOTHING";
+          instrCode = "RE-EXECUTE JOB";
         }
         else
-          if (triggerInstructionCode == ECompletedExecutionInstruction.RE_EXECUTE_JOB)
+          if (triggerInstructionCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE)
           {
-            instrCode = "RE-EXECUTE JOB";
+            instrCode = "SET ALL OF JOB'S TRIGGERS COMPLETE";
           }
           else
-            if (triggerInstructionCode == ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_COMPLETE)
+            if (triggerInstructionCode == ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
             {
-              instrCode = "SET ALL OF JOB'S TRIGGERS COMPLETE";
+              instrCode = "SET THIS TRIGGER COMPLETE";
             }
-            else
-              if (triggerInstructionCode == ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE)
-              {
-                instrCode = "SET THIS TRIGGER COMPLETE";
-              }
 
-      final Object [] args = { trigger.getKey ().getName (),
-                               trigger.getKey ().getGroup (),
-                               trigger.getPreviousFireTime (),
-                               trigger.getNextFireTime (),
-                               new Date (),
-                               context.getJobDetail ().getKey ().getName (),
-                               context.getJobDetail ().getKey ().getGroup (),
-                               Integer.valueOf (context.getRefireCount ()),
-                               triggerInstructionCode.toString (),
-                               instrCode };
-      LOGGER.info (new MessageFormat (getTriggerCompleteMessage (), Locale.US).format (args));
-    }
+    final Object [] args = { trigger.getKey ().getName (),
+                             trigger.getKey ().getGroup (),
+                             trigger.getPreviousFireTime (),
+                             trigger.getNextFireTime (),
+                             new Date (),
+                             context.getJobDetail ().getKey ().getName (),
+                             context.getJobDetail ().getKey ().getGroup (),
+                             Integer.valueOf (context.getRefireCount ()),
+                             triggerInstructionCode.toString (),
+                             instrCode };
+    LOGGER.info (new MessageFormat (getTriggerCompleteMessage (), Locale.US).format (args));
   }
 
   @Override

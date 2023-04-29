@@ -376,7 +376,9 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    * @throws SchedulerException
    *         if there is an error initializing.
    */
-  public void initialize (final String pname, final IScheduler scheduler, final IClassLoadHelper classLoadHelper) throws SchedulerException
+  public void initialize (final String pname,
+                          final IScheduler scheduler,
+                          final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
     m_sName = pname;
     scheduler.getListenerManager ().addJobListener (this, EverythingMatcher.allJobs ());
@@ -406,21 +408,18 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   @Override
   public void jobToBeExecuted (final IJobExecutionContext context)
   {
-    if (LOGGER.isInfoEnabled ())
-    {
-      final ITrigger trigger = context.getTrigger ();
+    final ITrigger trigger = context.getTrigger ();
 
-      final Object [] args = { context.getJobDetail ().getKey ().getName (),
-                               context.getJobDetail ().getKey ().getGroup (),
-                               new Date (),
-                               trigger.getKey ().getName (),
-                               trigger.getKey ().getGroup (),
-                               trigger.getPreviousFireTime (),
-                               trigger.getNextFireTime (),
-                               Integer.valueOf (context.getRefireCount ()) };
+    final Object [] args = { context.getJobDetail ().getKey ().getName (),
+                             context.getJobDetail ().getKey ().getGroup (),
+                             new Date (),
+                             trigger.getKey ().getName (),
+                             trigger.getKey ().getGroup (),
+                             trigger.getPreviousFireTime (),
+                             trigger.getNextFireTime (),
+                             Integer.valueOf (context.getRefireCount ()) };
 
-      LOGGER.info (new MessageFormat (getJobToBeFiredMessage (), Locale.US).format (args));
-    }
+    LOGGER.info (new MessageFormat (getJobToBeFiredMessage (), Locale.US).format (args));
   }
 
   @Override
@@ -430,49 +429,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
 
     if (jobException != null)
     {
-      if (LOGGER.isWarnEnabled ())
-      {
-        final String errMsg = jobException.getMessage ();
-        final Object [] args = new Object [] { context.getJobDetail ().getKey ().getName (),
-                                               context.getJobDetail ().getKey ().getGroup (),
-                                               new Date (),
-                                               trigger.getKey ().getName (),
-                                               trigger.getKey ().getGroup (),
-                                               trigger.getPreviousFireTime (),
-                                               trigger.getNextFireTime (),
-                                               Integer.valueOf (context.getRefireCount ()),
-                                               errMsg };
-
-        LOGGER.warn (new MessageFormat (getJobFailedMessage (), Locale.US).format (args), jobException);
-      }
-    }
-    else
-    {
-      if (LOGGER.isInfoEnabled ())
-      {
-        final String result = String.valueOf (context.getResult ());
-        final Object [] args = new Object [] { context.getJobDetail ().getKey ().getName (),
-                                               context.getJobDetail ().getKey ().getGroup (),
-                                               new Date (),
-                                               trigger.getKey ().getName (),
-                                               trigger.getKey ().getGroup (),
-                                               trigger.getPreviousFireTime (),
-                                               trigger.getNextFireTime (),
-                                               Integer.valueOf (context.getRefireCount ()),
-                                               result };
-
-        LOGGER.info (new MessageFormat (getJobSuccessMessage (), Locale.US).format (args));
-      }
-    }
-  }
-
-  @Override
-  public void jobExecutionVetoed (final IJobExecutionContext context)
-  {
-    if (LOGGER.isInfoEnabled ())
-    {
-      final ITrigger trigger = context.getTrigger ();
-
+      final String errMsg = jobException.getMessage ();
       final Object [] args = { context.getJobDetail ().getKey ().getName (),
                                context.getJobDetail ().getKey ().getGroup (),
                                new Date (),
@@ -480,9 +437,42 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
                                trigger.getKey ().getGroup (),
                                trigger.getPreviousFireTime (),
                                trigger.getNextFireTime (),
-                               Integer.valueOf (context.getRefireCount ()) };
+                               Integer.valueOf (context.getRefireCount ()),
+                               errMsg };
 
-      LOGGER.info (new MessageFormat (getJobWasVetoedMessage (), Locale.US).format (args));
+      LOGGER.warn (new MessageFormat (getJobFailedMessage (), Locale.US).format (args), jobException);
     }
+    else
+    {
+      final String result = String.valueOf (context.getResult ());
+      final Object [] args = { context.getJobDetail ().getKey ().getName (),
+                               context.getJobDetail ().getKey ().getGroup (),
+                               new Date (),
+                               trigger.getKey ().getName (),
+                               trigger.getKey ().getGroup (),
+                               trigger.getPreviousFireTime (),
+                               trigger.getNextFireTime (),
+                               Integer.valueOf (context.getRefireCount ()),
+                               result };
+
+      LOGGER.info (new MessageFormat (getJobSuccessMessage (), Locale.US).format (args));
+    }
+  }
+
+  @Override
+  public void jobExecutionVetoed (final IJobExecutionContext context)
+  {
+    final ITrigger trigger = context.getTrigger ();
+
+    final Object [] args = { context.getJobDetail ().getKey ().getName (),
+                             context.getJobDetail ().getKey ().getGroup (),
+                             new Date (),
+                             trigger.getKey ().getName (),
+                             trigger.getKey ().getGroup (),
+                             trigger.getPreviousFireTime (),
+                             trigger.getNextFireTime (),
+                             Integer.valueOf (context.getRefireCount ()) };
+
+    LOGGER.info (new MessageFormat (getJobWasVetoedMessage (), Locale.US).format (args));
   }
 }
