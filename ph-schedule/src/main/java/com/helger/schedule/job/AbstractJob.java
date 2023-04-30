@@ -45,12 +45,12 @@ import com.helger.quartz.JobExecutionException;
 public abstract class AbstractJob implements IJob
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (AbstractJob.class);
-  private static final IMutableStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (AbstractJob.class);
-  private static final IMutableStatisticsHandlerKeyedCounter s_aStatsCounterSuccess = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
-                                                                                                                                "$success");
-  private static final IMutableStatisticsHandlerKeyedCounter s_aStatsCounterFailure = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
-                                                                                                                                "$failure");
-  private static final CallbackList <IJobExceptionCallback> s_aExceptionCallbacks = new CallbackList <> ();
+  private static final IMutableStatisticsHandlerKeyedTimer STATS_TIMER = StatisticsManager.getKeyedTimerHandler (AbstractJob.class);
+  private static final IMutableStatisticsHandlerKeyedCounter STATS_COUNTER_SUCCESS = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
+                                                                                                                               "$success");
+  private static final IMutableStatisticsHandlerKeyedCounter STATS_COUNTER_FAILURE = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
+                                                                                                                               "$failure");
+  private static final CallbackList <IJobExceptionCallback> EXCEPTION_CALLBACKS = new CallbackList <> ();
 
   public AbstractJob ()
   {}
@@ -62,7 +62,7 @@ public abstract class AbstractJob implements IJob
   @ReturnsMutableObject
   public static CallbackList <IJobExceptionCallback> exceptionCallbacks ()
   {
-    return s_aExceptionCallbacks;
+    return EXCEPTION_CALLBACKS;
   }
 
   /**
@@ -154,8 +154,8 @@ public abstract class AbstractJob implements IJob
         eExecSuccess = ESuccess.SUCCESS;
 
         // Increment statistics
-        s_aStatsTimer.addTime (sJobClassName, aSW.stopAndGetMillis ());
-        s_aStatsCounterSuccess.increment (sJobClassName);
+        STATS_TIMER.addTime (sJobClassName, aSW.stopAndGetMillis ());
+        STATS_COUNTER_SUCCESS.increment (sJobClassName);
 
         if (LOGGER.isDebugEnabled ())
           LOGGER.debug ("Successfully finished executing scheduled job " + sJobClassName);
@@ -163,7 +163,7 @@ public abstract class AbstractJob implements IJob
       catch (final Exception ex)
       {
         // Increment statistics
-        s_aStatsCounterFailure.increment (sJobClassName);
+        STATS_COUNTER_FAILURE.increment (sJobClassName);
 
         // Notify custom exception handler
         triggerCustomExceptionHandler (ex, sJobClassName, this);

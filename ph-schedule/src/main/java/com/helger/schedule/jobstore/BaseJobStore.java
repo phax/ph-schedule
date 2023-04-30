@@ -79,7 +79,7 @@ import com.helger.quartz.spi.TriggerFiredResult;
 public class BaseJobStore implements IJobStore
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (BaseJobStore.class);
-  private static final AtomicLong s_aFiredTriggerRecordID = new AtomicLong (System.currentTimeMillis ());
+  private static final AtomicLong FIRED_TRIGGER_RECORD_ID = new AtomicLong (System.currentTimeMillis ());
 
   private final SimpleReadWriteLock m_aRWLock = new SimpleReadWriteLock ();
   private ISchedulerSignaler m_aSignaler;
@@ -998,7 +998,7 @@ public class BaseJobStore implements IJobStore
 
   protected String getFiredTriggerRecordId ()
   {
-    return Long.toString (s_aFiredTriggerRecordID.incrementAndGet ());
+    return Long.toString (FIRED_TRIGGER_RECORD_ID.incrementAndGet ());
   }
 
   public ICommonsList <IOperableTrigger> acquireNextTriggers (final long noLaterThan,

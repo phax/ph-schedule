@@ -34,7 +34,7 @@ import com.helger.quartz.impl.StdSchedulerFactory;
 public final class QuartzSchedulerHelper
 {
   public static final boolean DEFAULT_START_AUTOMATICALLY = true;
-  private static final ISchedulerFactory s_aSchedulerFactory = new StdSchedulerFactory ();
+  private static final ISchedulerFactory SCHEDULER_FACTORY = new StdSchedulerFactory ();
 
   private QuartzSchedulerHelper ()
   {}
@@ -46,7 +46,7 @@ public final class QuartzSchedulerHelper
   @Nonnull
   public static ISchedulerFactory getSchedulerFactory ()
   {
-    return s_aSchedulerFactory;
+    return SCHEDULER_FACTORY;
   }
 
   /**
@@ -74,7 +74,7 @@ public final class QuartzSchedulerHelper
     try
     {
       // Don't try to use a name - results in NPE
-      final IScheduler aScheduler = s_aSchedulerFactory.getScheduler ();
+      final IScheduler aScheduler = SCHEDULER_FACTORY.getScheduler ();
       if (bStartAutomatically && !aScheduler.isStarted ())
         aScheduler.start ();
       return aScheduler;
@@ -98,7 +98,7 @@ public final class QuartzSchedulerHelper
     try
     {
       // Get the scheduler without starting it
-      return s_aSchedulerFactory.getScheduler ().getMetaData ();
+      return SCHEDULER_FACTORY.getScheduler ().getMetaData ();
     }
     catch (final SchedulerException ex)
     {
@@ -115,7 +115,7 @@ public final class QuartzSchedulerHelper
     try
     {
       // Get the scheduler without starting it
-      final IScheduler aScheduler = s_aSchedulerFactory.getScheduler ();
+      final IScheduler aScheduler = SCHEDULER_FACTORY.getScheduler ();
       if (aScheduler.isStarted ())
         return ESchedulerState.STARTED;
       if (aScheduler.isInStandbyMode ())

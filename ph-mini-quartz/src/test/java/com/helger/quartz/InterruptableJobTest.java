@@ -43,18 +43,18 @@ public class InterruptableJobTest
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (InterruptableJobTest.class);
 
-  static final CyclicBarrier sync = new CyclicBarrier (2);
+  static final CyclicBarrier SYNC = new CyclicBarrier (2);
 
   public static class TestInterruptableJob implements IInterruptableJob
   {
-    public static final AtomicBoolean interrupted = new AtomicBoolean (false);
+    public static final AtomicBoolean INTERRUPTED = new AtomicBoolean (false);
 
     public void execute (final IJobExecutionContext context) throws JobExecutionException
     {
       LOGGER.info ("TestInterruptableJob is executing.");
       try
       {
-        sync.await (); // wait for test thread to notice the job is now running
+        SYNC.await (); // wait for test thread to notice the job is now running
       }
       catch (final InterruptedException | BrokenBarrierException e1)
       {}
@@ -63,7 +63,7 @@ public class InterruptableJobTest
         // simulate being busy for a while, then
         // checking interrupted flag...
         ThreadHelper.sleep (50);
-        if (TestInterruptableJob.interrupted.get ())
+        if (INTERRUPTED.get ())
         {
           LOGGER.info ("TestInterruptableJob main loop detected interrupt signal.");
           break;
@@ -71,8 +71,8 @@ public class InterruptableJobTest
       }
       try
       {
-        LOGGER.info ("TestInterruptableJob exiting with interrupted = " + interrupted);
-        sync.await ();
+        LOGGER.info ("TestInterruptableJob exiting with interrupted = " + INTERRUPTED);
+        SYNC.await ();
       }
       catch (final InterruptedException | BrokenBarrierException e)
       {}
@@ -80,7 +80,7 @@ public class InterruptableJobTest
 
     public void interrupt () throws UnableToInterruptJobException
     {
-      TestInterruptableJob.interrupted.set (true);
+      TestInterruptableJob.INTERRUPTED.set (true);
       LOGGER.info ("TestInterruptableJob.interrupt() called.");
     }
   }
@@ -101,14 +101,14 @@ public class InterruptableJobTest
     final IJobDetail job = newJob ().ofType (TestInterruptableJob.class).withIdentity ("j1").build ();
     final ITrigger trigger = newTrigger ().withIdentity ("t1").forJob (job).startNow ().build ();
     sched.scheduleJob (job, trigger);
-    sync.await (); // make sure the job starts running...
+    SYNC.await (); // make sure the job starts running...
     final List <IJobExecutionContext> executingJobs = sched.getCurrentlyExecutingJobs ();
     assertTrue ("Number of executing jobs should be 1 ", executingJobs.size () == 1);
     final IJobExecutionContext jec = executingJobs.get (0);
     final boolean interruptResult = sched.interrupt (jec.getFireInstanceId ());
-    sync.await (); // wait for the job to terminate
+    SYNC.await (); // wait for the job to terminate
     assertTrue ("Expected successful result from interruption of job ", interruptResult);
-    assertTrue ("Expected interrupted flag to be set on job class ", TestInterruptableJob.interrupted.get ());
+    assertTrue ("Expected interrupted flag to be set on job class ", TestInterruptableJob.INTERRUPTED.get ());
     sched.clear ();
     sched.shutdown ();
   }
