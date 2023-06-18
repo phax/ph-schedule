@@ -350,8 +350,9 @@ public abstract class AbstractSchedulerTest
                      ")  in group: " +
                      t.getThreadGroup ().getName () +
                      " with parent group: " +
-                     (t.getThreadGroup ().getParent () == null ? "-none-"
-                                                               : t.getThreadGroup ().getParent ().getName ()));
+                     (t.getThreadGroup ().getParent () == null ? "-none-" : t.getThreadGroup ()
+                                                                             .getParent ()
+                                                                             .getName ()));
       }
       // log all threads that were running before shutdown
       for (final Thread t : allThreadsRunning.keySet ())
@@ -361,13 +362,12 @@ public abstract class AbstractSchedulerTest
                      " (of type " +
                      t.getClass ().getName () +
                      ")  in group: " +
-                     (t.getThreadGroup () == null ? "-none-"
-                                                  : (t.getThreadGroup ().getName () +
-                                                     " with parent group: " +
-                                                     (t.getThreadGroup ().getParent () == null ? "-none-"
-                                                                                               : t.getThreadGroup ()
-                                                                                                  .getParent ()
-                                                                                                  .getName ()))));
+                     (t.getThreadGroup () == null ? "-none-" : (t.getThreadGroup ().getName () +
+                                                                " with parent group: " +
+                                                                (t.getThreadGroup ().getParent () == null ? "-none-" : t
+                                                                                                                        .getThreadGroup ()
+                                                                                                                        .getParent ()
+                                                                                                                        .getName ()))));
       }
     }
     assertTrue ("Found unexpected new threads (see console output for listing)", allThreadsEnd.size () == 0);
@@ -376,8 +376,7 @@ public abstract class AbstractSchedulerTest
   @Test
   public void testAbilityToFireImmediatelyWhenStartedBefore () throws Exception
   {
-
-    final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <Long> ());
+    final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
     final IScheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedBefore", 5);
@@ -408,8 +407,7 @@ public abstract class AbstractSchedulerTest
   @Test
   public void testAbilityToFireImmediatelyWhenStartedBeforeWithTriggerJob () throws Exception
   {
-
-    final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <Long> ());
+    final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
     final IScheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedBeforeWithTriggerJob", 5);
@@ -441,8 +439,7 @@ public abstract class AbstractSchedulerTest
   @Test
   public void testAbilityToFireImmediatelyWhenStartedAfter () throws Exception
   {
-
-    final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <Long> ());
+    final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
     final IScheduler sched = createScheduler ("testAbilityToFireImmediatelyWhenStartedAfter", 5);
@@ -470,7 +467,6 @@ public abstract class AbstractSchedulerTest
   @Test
   public void testScheduleMultipleTriggersForAJob () throws SchedulerException
   {
-
     final IJobDetail job = newJob (TestJob.class).withIdentity ("job1", "group1").build ();
     final ITrigger trigger1 = newTrigger ().withIdentity ("trigger1", "group1")
                                            .startNow ()
@@ -551,7 +547,7 @@ public abstract class AbstractSchedulerTest
   public void testShutdownWithWaitIsClean () throws Exception
   {
     final AtomicBoolean shutdown = new AtomicBoolean (false);
-    final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <Long> ());
+    final List <Long> jobExecTimestamps = Collections.synchronizedList (new ArrayList <> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
     final IScheduler scheduler = createScheduler ("testShutdownWithWaitIsClean", 8);
     try

@@ -61,9 +61,8 @@ public class DisallowConcurrentExecutionJobTest
         final long firedAt = System.currentTimeMillis ();
         jobExecDates.add (new Date (firedAt));
         final long sleepTill = firedAt + JOB_BLOCK_TIME;
-        for (long sleepFor = sleepTill -
-                             System.currentTimeMillis (); sleepFor > 0; sleepFor = sleepTill -
-                                                                                   System.currentTimeMillis ())
+        for (long sleepFor = sleepTill - System.currentTimeMillis (); sleepFor > 0; sleepFor = sleepTill -
+                                                                                               System.currentTimeMillis ())
         {
           ThreadHelper.sleep (sleepFor);
         }
@@ -114,7 +113,7 @@ public class DisallowConcurrentExecutionJobTest
   @Test
   public void testNoConcurrentExecOnSameJob () throws Exception
   {
-    final List <Date> jobExecDates = Collections.synchronizedList (new ArrayList <Date> ());
+    final List <Date> jobExecDates = Collections.synchronizedList (new ArrayList <> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
     // make the triggers fire at the same time.
@@ -157,8 +156,7 @@ public class DisallowConcurrentExecutionJobTest
   @Test
   public void testNoConcurrentExecOnSameJobWithBatching () throws Exception
   {
-
-    final List <Date> jobExecDates = Collections.synchronizedList (new ArrayList <Date> ());
+    final List <Date> jobExecDates = Collections.synchronizedList (new ArrayList <> ());
     final CyclicBarrier barrier = new CyclicBarrier (2);
 
     // make the triggers fire at the same time.

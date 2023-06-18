@@ -124,7 +124,7 @@ public class QTZ336_MissSchedulingChangeSignalTest
   public static class CollectDuractionBetweenFireTimesJob implements IJob
   {
     private static final Logger LOG = LoggerFactory.getLogger (CollectDuractionBetweenFireTimesJob.class);
-    private static final List <Long> s_aDurationBetweenFireTimes = Collections.synchronizedList (new ArrayList <Long> ());
+    private static final List <Long> DURATION_BETWEEN_FIRE_TIMES = Collections.synchronizedList (new ArrayList <> ());
     private static Long m_aLastFireTime = null;
 
     public void execute (final IJobExecutionContext context) throws JobExecutionException
@@ -133,7 +133,7 @@ public class QTZ336_MissSchedulingChangeSignalTest
       LOG.info ("Fire time: " + now);
       if (m_aLastFireTime != null)
       {
-        s_aDurationBetweenFireTimes.add (Long.valueOf (now.getTime () - m_aLastFireTime.longValue ()));
+        DURATION_BETWEEN_FIRE_TIMES.add (Long.valueOf (now.getTime () - m_aLastFireTime.longValue ()));
       }
       m_aLastFireTime = Long.valueOf (now.getTime ());
     }
@@ -145,9 +145,9 @@ public class QTZ336_MissSchedulingChangeSignalTest
      */
     public static List <Long> getDurations ()
     {
-      synchronized (s_aDurationBetweenFireTimes)
+      synchronized (DURATION_BETWEEN_FIRE_TIMES)
       {
-        return Collections.unmodifiableList (s_aDurationBetweenFireTimes);
+        return Collections.unmodifiableList (DURATION_BETWEEN_FIRE_TIMES);
       }
     }
   }

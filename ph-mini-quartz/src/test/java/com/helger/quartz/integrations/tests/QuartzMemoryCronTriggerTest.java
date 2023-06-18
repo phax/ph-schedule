@@ -50,7 +50,7 @@ public class QuartzMemoryCronTriggerTest extends QuartzMemoryTestSupport
                                                .withIdentity ("test")
                                                .withSchedule (CronScheduleBuilder.cronSchedule ("* * * * * ?"))
                                                .build ();
-    final List <Long> scheduledTimes = Collections.synchronizedList (new LinkedList <Long> ());
+    final List <Long> scheduledTimes = Collections.synchronizedList (new LinkedList <> ());
     scheduler.getContext ().put (SCHEDULED_TIMES_KEY, scheduledTimes);
     final IJobDetail jobDetail = JobBuilder.newJob (TrackingJob.class).withIdentity ("test").build ();
     scheduler.scheduleJob (jobDetail, trigger);
