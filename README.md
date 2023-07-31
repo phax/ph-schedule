@@ -1,5 +1,9 @@
 # ph-schedule
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.helger.schedule/ph-schedule-parent-pom/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.helger.schedule/ph-schedule-parent-pom) 
+[![javadoc](https://javadoc.io/badge2/com.helger.schedule/ph-schedule-parent-pom/javadoc.svg)](https://javadoc.io/doc/com.helger.schedule/ph-schedule-parent-pom)
+[![CodeCov](https://codecov.io/gh/phax/ph-schedule/branch/master/graph/badge.svg)](https://codecov.io/gh/phax/ph-schedule)
+
 Java scheduling library based on Quartz with ph-scope support (see [ph-commons](https://github.com/phax/ph-commons))
 
 # Maven usage
