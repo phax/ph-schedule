@@ -72,7 +72,7 @@ public final class ClassUtils
     q.add (clazz);
     while (!q.isEmpty ())
     {
-      final Class <?> c = q.removeFirst ();
+      final Class <?> c = q.removeFirstOrNull ();
       if (c != null)
       {
         if (c.isInterface ())

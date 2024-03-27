@@ -98,7 +98,22 @@
         <configuration>
           <instructions>
             <Automatic-Module-Name>com.helger.quartz</Automatic-Module-Name>
-            <Export-Package>com.helger.quartz.*</Export-Package>
+            <Export-Package>
+              com.helger.quartz,
+              com.helger.quartz.core,
+              com.helger.quartz.impl,
+              com.helger.quartz.impl.calendar,
+              com.helger.quartz.impl.matchers,
+              com.helger.quartz.impl.triggers,
+              com.helger.quartz.listeners,
+              com.helger.quartz.plugins.history,
+              com.helger.quartz.plugins.management,
+              com.helger.quartz.simpl,
+              com.helger.quartz.spi,
+              com.helger.quartz.utils,
+              com.helger.quartz.utils.counter,
+              com.helger.quartz.utils.counter.sampled
+            </Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
           </instructions>
         </configuration>

@@ -65,7 +65,7 @@ public class QuartzServer implements ISchedulerListener
   QuartzServer ()
   {}
 
-  public void serve (final ISchedulerFactory schedFact, final boolean console) throws Exception
+  public void serve (final ISchedulerFactory schedFact, final boolean bConsole) throws Exception
   {
     sched = schedFact.getScheduler ();
 
@@ -75,7 +75,7 @@ public class QuartzServer implements ISchedulerListener
 
     LOGGER.info ("\n*** The scheduler successfully started.");
 
-    if (console)
+    if (bConsole)
     {
       LOGGER.info ("\n");
       LOGGER.info ("The scheduler will now run until you type \"exit\"");
@@ -83,6 +83,7 @@ public class QuartzServer implements ISchedulerListener
       LOGGER.info ("   then other process may now use it.");
 
       // Don't close System.in
+      @SuppressWarnings ("resource")
       final NonBlockingBufferedReader rdr = new NonBlockingBufferedReader (new InputStreamReader (System.in,
                                                                                                   StandardCharsets.ISO_8859_1));
       while (true)
@@ -134,7 +135,6 @@ public class QuartzServer implements ISchedulerListener
 
   public static void main (final String [] args) throws Exception
   {
-
     // //Configure Log4J
     // org.apache.log4j.PropertyConfigurator.configure(
     // System.getProperty("log4jConfigFile", "log4j.properties"));

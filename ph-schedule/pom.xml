@@ -88,7 +88,15 @@
         <configuration>
           <instructions>
             <Automatic-Module-Name>com.helger.schedule</Automatic-Module-Name>
-            <Export-Package>com.helger.schedule.*</Export-Package>
+            <Export-Package>
+              com.helger.schedule.config,
+              com.helger.schedule.job,
+              com.helger.schedule.jobstore,
+              com.helger.schedule.quartz,
+              com.helger.schedule.quartz.listener,
+              com.helger.schedule.quartz-trigger,
+              com.helger.schedule.quartz.utils
+            </Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
             <Require-Capability>osgi.extender; filter:="(osgi.extender=osgi.serviceloader.registrar)"</Require-Capability>
             <Provide-Capability>osgi.serviceloader; osgi.serviceloader=com.helger.commons.thirdparty.IThirdPartyModuleProviderSPI</Provide-Capability>
