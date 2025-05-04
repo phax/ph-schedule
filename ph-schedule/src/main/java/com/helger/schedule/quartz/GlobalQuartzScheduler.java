@@ -79,8 +79,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
   }
 
   /**
-   * @return The Quartz internal group name to be used. Defaults to
-   *         {@link #GROUP_NAME}.
+   * @return The Quartz internal group name to be used. Defaults to {@link #GROUP_NAME}.
    */
   @Nonnull
   @Nonempty
@@ -93,8 +92,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * Set the Quartz internal group name.
    *
    * @param sGroupName
-   *        The new group name to be used. May neither be <code>null</code> nor
-   *        empty.
+   *        The new group name to be used. May neither be <code>null</code> nor empty.
    */
   public void setGroupName (@Nonnull @Nonempty final String sGroupName)
   {
@@ -135,8 +133,8 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * This method is only for testing purposes.
    *
    * @param sJobName
-   *        Name of the job. Needs to be unique since no two job details with
-   *        the same name may exist.
+   *        Name of the job. Needs to be unique since no two job details with the same name may
+   *        exist.
    * @param aTriggerBuilder
    *        The trigger builder instance to schedule the job
    * @param aJobClass
@@ -168,7 +166,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
       m_aScheduler.scheduleJob (aJobDetail, aTrigger);
 
       final TriggerKey ret = aTrigger.getKey ();
-      LOGGER.info ("Succesfully scheduled job '" +
+      LOGGER.info ("Successfully scheduled job '" +
                    sJobName +
                    "' with TriggerKey " +
                    ret.toString () +
@@ -224,7 +222,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     {
       if (m_aScheduler.unscheduleJob (aTriggerKey))
       {
-        LOGGER.info ("Succesfully unscheduled job with TriggerKey " + aTriggerKey.toString ());
+        LOGGER.info ("Successfully unscheduled job with TriggerKey " + aTriggerKey.toString ());
         return EChange.CHANGED;
       }
     }
@@ -249,7 +247,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     try
     {
       m_aScheduler.pauseTrigger (aTriggerKey);
-      LOGGER.info ("Succesfully paused job with TriggerKey " + aTriggerKey.toString ());
+      LOGGER.info ("Successfully paused job with TriggerKey " + aTriggerKey.toString ());
     }
     catch (final SchedulerException ex)
     {
@@ -270,7 +268,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     try
     {
       m_aScheduler.resumeTrigger (aTriggerKey);
-      LOGGER.info ("Succesfully resumed job with TriggerKey " + aTriggerKey.toString ());
+      LOGGER.info ("Successfully resumed job with TriggerKey " + aTriggerKey.toString ());
     }
     catch (final SchedulerException ex)
     {
