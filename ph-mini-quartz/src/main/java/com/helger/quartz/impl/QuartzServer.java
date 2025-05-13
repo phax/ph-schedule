@@ -33,25 +33,22 @@ import com.helger.quartz.SchedulerException;
 
 /**
  * <p>
- * Instantiates an instance of Quartz Scheduler as a stand-alone program, if the
- * scheduler is configured for RMI it will be made available.
+ * Instantiates an instance of Quartz Scheduler as a stand-alone program, if the scheduler is
+ * configured for RMI it will be made available.
  * </p>
  * <p>
- * The main() method of this class currently accepts 0 or 1 arguemtns, if there
- * is an argument, and its value is <code>"console"</code>, then the program
- * will print a short message on the console (std-out) and wait for the user to
- * type "exit" - at which time the scheduler will be shutdown.
+ * The main() method of this class currently accepts 0 or 1 arguemtns, if there is an argument, and
+ * its value is <code>"console"</code>, then the program will print a short message on the console
+ * (std-out) and wait for the user to type "exit" - at which time the scheduler will be shutdown.
  * </p>
  * <p>
- * Future versions of this server should allow additional configuration for
- * responding to scheduler events by allowing the user to specify
- * <code>{@link com.helger.quartz.IJobListener}</code>,
+ * Future versions of this server should allow additional configuration for responding to scheduler
+ * events by allowing the user to specify <code>{@link com.helger.quartz.IJobListener}</code>,
  * <code>{@link com.helger.quartz.ITriggerListener}</code> and
  * <code>{@link com.helger.quartz.ISchedulerListener}</code> classes.
  * </p>
  * <p>
- * Please read the Quartz FAQ entries about RMI before asking questions in the
- * forums or mail-lists.
+ * Please read the Quartz FAQ entries about RMI before asking questions in the forums or mail-lists.
  * </p>
  *
  * @author James House
@@ -71,7 +68,7 @@ public class QuartzServer implements ISchedulerListener
 
     sched.start ();
 
-    ThreadHelper.sleep (3000l);
+    ThreadHelper.sleep (3000L);
 
     LOGGER.info ("\n*** The scheduler successfully started.");
 
@@ -103,15 +100,13 @@ public class QuartzServer implements ISchedulerListener
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> when a serious error has
-   * occured within the scheduler - such as repeated failures in the
-   * <code>JobStore</code>, or the inability to instantiate a <code>Job</code>
-   * instance when its <code>Trigger</code> has fired.
+   * Called by the <code>{@link IScheduler}</code> when a serious error has occured within the
+   * scheduler - such as repeated failures in the <code>JobStore</code>, or the inability to
+   * instantiate a <code>Job</code> instance when its <code>Trigger</code> has fired.
    * </p>
    * <p>
-   * The <code>getErrorCode()</code> method of the given SchedulerException can
-   * be used to determine more specific information about the type of error that
-   * was encountered.
+   * The <code>getErrorCode()</code> method of the given SchedulerException can be used to determine
+   * more specific information about the type of error that was encountered.
    * </p>
    */
   @Override
@@ -122,8 +117,7 @@ public class QuartzServer implements ISchedulerListener
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that
-   * it has shutdown.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that it has shutdown.
    * </p>
    */
   @Override
@@ -138,11 +132,6 @@ public class QuartzServer implements ISchedulerListener
     // //Configure Log4J
     // org.apache.log4j.PropertyConfigurator.configure(
     // System.getProperty("log4jConfigFile", "log4j.properties"));
-
-    if (System.getSecurityManager () == null)
-    {
-      System.setSecurityManager (new SecurityManager ());
-    }
 
     try
     {
