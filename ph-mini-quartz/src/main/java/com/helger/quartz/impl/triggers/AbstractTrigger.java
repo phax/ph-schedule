@@ -44,19 +44,17 @@ import com.helger.quartz.spi.IOperableTrigger;
  * The base abstract class to be extended by all <code>Trigger</code>s.
  * </p>
  * <p>
- * <code>Triggers</code> s have a name and group associated with them, which
- * should uniquely identify them within a single
- * <code>{@link IScheduler}</code>.
+ * <code>Triggers</code> s have a name and group associated with them, which should uniquely
+ * identify them within a single <code>{@link IScheduler}</code>.
  * </p>
  * <p>
- * <code>Trigger</code>s are the 'mechanism' by which <code>Job</code> s are
- * scheduled. Many <code>Trigger</code> s can point to the same
- * <code>Job</code>, but a single <code>Trigger</code> can only point to one
- * <code>Job</code>.
+ * <code>Trigger</code>s are the 'mechanism' by which <code>Job</code> s are scheduled. Many
+ * <code>Trigger</code> s can point to the same <code>Job</code>, but a single <code>Trigger</code>
+ * can only point to one <code>Job</code>.
  * </p>
  * <p>
- * Triggers can 'send' parameters/data to <code>Job</code>s by placing contents
- * into the <code>JobDataMap</code> on the <code>Trigger</code>.
+ * Triggers can 'send' parameters/data to <code>Job</code>s by placing contents into the
+ * <code>JobDataMap</code> on the <code>Trigger</code>.
  * </p>
  *
  * @author James House
@@ -112,9 +110,8 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * </p>
    * <p>
    * Note that the {@link #setName(String)},{@link #setGroup(String)}and the
-   * {@link #setJobName(String)}and {@link #setJobGroup(String)}methods must be
-   * called before the <code>Trigger</code> can be placed into a
-   * {@link IScheduler}.
+   * {@link #setJobName(String)}and {@link #setJobGroup(String)}methods must be called before the
+   * <code>Trigger</code> can be placed into a {@link IScheduler}.
    * </p>
    */
   public AbstractTrigger ()
@@ -125,9 +122,8 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * Create a <code>Trigger</code> with the given name, and default group.
    * </p>
    * <p>
-   * Note that the {@link #setJobName(String)}and
-   * {@link #setJobGroup(String)}methods must be called before the
-   * <code>Trigger</code> can be placed into a {@link IScheduler}.
+   * Note that the {@link #setJobName(String)}and {@link #setJobGroup(String)}methods must be called
+   * before the <code>Trigger</code> can be placed into a {@link IScheduler}.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -144,9 +140,8 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * Create a <code>Trigger</code> with the given name, and group.
    * </p>
    * <p>
-   * Note that the {@link #setJobName(String)}and
-   * {@link #setJobGroup(String)}methods must be called before the
-   * <code>Trigger</code> can be placed into a {@link IScheduler}.
+   * Note that the {@link #setJobName(String)}and {@link #setJobGroup(String)}methods must be called
+   * before the <code>Trigger</code> can be placed into a {@link IScheduler}.
    * </p>
    *
    * @param group
@@ -240,8 +235,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
 
   /**
    * <p>
-   * Get the name of the associated
-   * <code>{@link com.helger.quartz.IJobDetail}</code>.
+   * Get the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    */
   public final String getJobName ()
@@ -251,8 +245,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
 
   /**
    * <p>
-   * Set the name of the associated
-   * <code>{@link com.helger.quartz.IJobDetail}</code>.
+   * Set the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -268,8 +261,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
 
   /**
    * <p>
-   * Get the name of the associated
-   * <code>{@link com.helger.quartz.IJobDetail}</code>'s group.
+   * Get the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>'s group.
    * </p>
    */
   public final String getJobGroup ()
@@ -279,8 +271,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
 
   /**
    * <p>
-   * Set the name of the associated
-   * <code>{@link com.helger.quartz.IJobDetail}</code>'s group.
+   * Set the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>'s group.
    * </p>
    *
    * @param jobGroup
@@ -306,8 +297,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
   }
 
   /**
-   * Returns the 'full name' of the <code>Trigger</code> in the format
-   * "group.name".
+   * Returns the 'full name' of the <code>Trigger</code> in the format "group.name".
    */
   @Nonnull
   public final String getFullName ()
@@ -338,8 +328,8 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
   }
 
   /**
-   * Returns the 'full name' of the <code>Job</code> that the
-   * <code>Trigger</code> points to, in the format "group.name".
+   * Returns the 'full name' of the <code>Job</code> that the <code>Trigger</code> points to, in the
+   * format "group.name".
    */
   @Nonnull
   public final String getFullJobName ()
@@ -395,19 +385,18 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
   /**
    * This method should not be used by the Quartz client.<br>
    * Called after the <code>{@link IScheduler}</code> has executed the
-   * <code>{@link com.helger.quartz.IJobDetail}</code> associated with the
-   * <code>Trigger</code> in order to get the final instruction code from the
-   * trigger.
+   * <code>{@link com.helger.quartz.IJobDetail}</code> associated with the <code>Trigger</code> in
+   * order to get the final instruction code from the trigger.
    *
    * @param context
    *        is the <code>JobExecutionContext</code> that was used by the
    *        <code>Job</code>'s<code>execute(xx)</code> method.
    * @param result
-   *        is the <code>JobExecutionException</code> thrown by the
-   *        <code>Job</code>, if any (may be null).
+   *        is the <code>JobExecutionException</code> thrown by the <code>Job</code>, if any (may be
+   *        null).
    * @return one of the CompletedExecutionInstruction constants.
    * @see com.helger.quartz.ITrigger.ECompletedExecutionInstruction
-   * @see #triggered(ICalendar)
+   * @see #triggered(com.helger.quartz.ICalendar)
    */
   @Nonnull
   public ITrigger.ECompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
@@ -445,8 +434,8 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
 
   /**
    * <p>
-   * Validates whether the properties of the <code>JobDetail</code> are valid
-   * for submission into a <code>Scheduler</code>.
+   * Validates whether the properties of the <code>JobDetail</code> are valid for submission into a
+   * <code>Scheduler</code>.
    *
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.
@@ -499,9 +488,9 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
 
   /**
    * <p>
-   * Compare the next fire time of this <code>Trigger</code> to that of another
-   * by comparing their keys, or in other words, sorts them according to the
-   * natural (i.e. alphabetical) order of their keys.
+   * Compare the next fire time of this <code>Trigger</code> to that of another by comparing their
+   * keys, or in other words, sorts them according to the natural (i.e. alphabetical) order of their
+   * keys.
    * </p>
    */
   public int compareTo (@Nonnull final ITrigger aOther)
@@ -524,7 +513,6 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
 
     final AbstractTrigger <?> rhs = (AbstractTrigger <?>) o;
     return EqualsHelper.equals (getKey (), rhs.getKey ());
-
   }
 
   @Override

@@ -38,29 +38,25 @@ import com.helger.quartz.SchedulerException;
 
 /**
  * <p>
- * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to
- * fire a <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating
- * calendar time intervals.
+ * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to fire a
+ * <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating calendar time intervals.
  * </p>
  * <p>
- * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) units of
- * calendar time (see {@link #setRepeatIntervalUnit(EIntervalUnit)}) as
- * specified in the trigger's definition. This trigger can achieve schedules
- * that are not possible with {@link com.helger.quartz.ISimpleTrigger} (e.g
- * because months are not a fixed number of seconds) or
- * {@link com.helger.quartz.ICronTrigger} (e.g. because "every 5 months" is not
- * an even divisor of 12).
+ * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) units of calendar time (see
+ * {@link #setRepeatIntervalUnit(EIntervalUnit)}) as specified in the trigger's definition. This
+ * trigger can achieve schedules that are not possible with {@link com.helger.quartz.ISimpleTrigger}
+ * (e.g because months are not a fixed number of seconds) or {@link com.helger.quartz.ICronTrigger}
+ * (e.g. because "every 5 months" is not an even divisor of 12).
  * </p>
  * <p>
- * If you use an interval unit of <code>MONTH</code> then care should be taken
- * when setting a <code>startTime</code> value that is on a day near the end of
- * the month. For example, if you choose a start time that occurs on January
- * 31st, and have a trigger with unit <code>MONTH</code> and interval
- * <code>1</code>, then the next fire time will be February 28th, and the next
- * time after that will be March 28th - and essentially each subsequent firing
- * will occur on the 28th of the month, even if a 31st day exists. If you want a
- * trigger that always fires on the last day of the month - regardless of the
- * number of days in the month, you should use <code>CronTrigger</code>.
+ * If you use an interval unit of <code>MONTH</code> then care should be taken when setting a
+ * <code>startTime</code> value that is on a day near the end of the month. For example, if you
+ * choose a start time that occurs on January 31st, and have a trigger with unit <code>MONTH</code>
+ * and interval <code>1</code>, then the next fire time will be February 28th, and the next time
+ * after that will be March 28th - and essentially each subsequent firing will occur on the 28th of
+ * the month, even if a 31st day exists. If you want a trigger that always fires on the last day of
+ * the month - regardless of the number of days in the month, you should use
+ * <code>CronTrigger</code>.
  * </p>
  *
  * @see com.helger.quartz.ITrigger
@@ -105,12 +101,11 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    */
   public CalendarIntervalTrigger ()
   {
-    super ();
   }
 
   /**
-   * Create a <code>DateIntervalTrigger</code> that will occur immediately, and
-   * repeat at the the given interval.
+   * Create a <code>DateIntervalTrigger</code> that will occur immediately, and repeat at the the
+   * given interval.
    */
   public CalendarIntervalTrigger (final String name, final EIntervalUnit intervalUnit, final int repeatInterval)
   {
@@ -119,8 +114,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur immediately, and
-   * repeat at the the given interval.
+   * Create a <code>DateIntervalTrigger</code> that will occur immediately, and repeat at the the
+   * given interval.
    * </p>
    */
   public CalendarIntervalTrigger (final String name,
@@ -133,16 +128,14 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given
-   * time, and repeat at the the given interval until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given time, and repeat at the
+   * the given interval until the given end time.
    * </p>
    *
    * @param startTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        fire.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to fire.
    * @param endTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        quit repeat firing.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to quit repeat firing.
    * @param intervalUnit
    *        The repeat interval unit (minutes, days, months, etc).
    * @param repeatInterval
@@ -159,16 +152,14 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given
-   * time, and repeat at the the given interval until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given time, and repeat at the
+   * the given interval until the given end time.
    * </p>
    *
    * @param startTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        fire.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to fire.
    * @param endTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        quit repeat firing.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to quit repeat firing.
    * @param intervalUnit
    *        The repeat interval unit (minutes, days, months, etc).
    * @param repeatInterval
@@ -191,17 +182,14 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Create a <code>DateIntervalTrigger</code> that will occur at the given
-   * time, fire the identified <code>Job</code> and repeat at the the given
-   * interval until the given end time.
+   * Create a <code>DateIntervalTrigger</code> that will occur at the given time, fire the
+   * identified <code>Job</code> and repeat at the the given interval until the given end time.
    * </p>
    *
    * @param startTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        fire.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to fire.
    * @param endTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        quit repeat firing.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to quit repeat firing.
    * @param intervalUnit
    *        The repeat interval unit (minutes, days, months, etc).
    * @param repeatInterval
@@ -279,9 +267,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * set the the time interval that will be added to the
-   * <code>DateIntervalTrigger</code>'s fire time (in the set repeat interval
-   * unit) in order to calculate the time of the next trigger repeat.
+   * set the the time interval that will be added to the <code>DateIntervalTrigger</code>'s fire
+   * time (in the set repeat interval unit) in order to calculate the time of the next trigger
+   * repeat.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -297,7 +285,6 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   public TimeZone getTimeZone ()
   {
-
     if (m_aTimeZone == null)
     {
       m_aTimeZone = TimeZone.getDefault ();
@@ -307,8 +294,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Sets the time zone within which time calculations related to this trigger
-   * will be performed.
+   * Sets the time zone within which time calculations related to this trigger will be performed.
    * </p>
    *
    * @param timeZone
@@ -320,23 +306,19 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   }
 
   /**
-   * If intervals are a day or greater, this property (set to true) will cause
-   * the firing of the trigger to always occur at the same time of day, (the
-   * time of day of the startTime) regardless of daylight saving time
-   * transitions. Default value is false.
+   * If intervals are a day or greater, this property (set to true) will cause the firing of the
+   * trigger to always occur at the same time of day, (the time of day of the startTime) regardless
+   * of daylight saving time transitions. Default value is false.
    * <p>
-   * For example, without the property set, your trigger may have a start time
-   * of 9:00 am on March 1st, and a repeat interval of 2 days. But after the
-   * daylight saving transition occurs, the trigger may start firing at 8:00 am
-   * every other day.
+   * For example, without the property set, your trigger may have a start time of 9:00 am on March
+   * 1st, and a repeat interval of 2 days. But after the daylight saving transition occurs, the
+   * trigger may start firing at 8:00 am every other day.
    * </p>
    * <p>
-   * If however, the time of day does not exist on a given day to fire (e.g.
-   * 2:00 am in the United States on the days of daylight saving transition),
-   * the trigger will go ahead and fire one hour off on that day, and then
-   * resume the normal hour on other days. If you wish for the trigger to never
-   * fire at the "wrong" hour, then you should set the property
-   * skipDayIfHourDoesNotExist.
+   * If however, the time of day does not exist on a given day to fire (e.g. 2:00 am in the United
+   * States on the days of daylight saving transition), the trigger will go ahead and fire one hour
+   * off on that day, and then resume the normal hour on other days. If you wish for the trigger to
+   * never fire at the "wrong" hour, then you should set the property skipDayIfHourDoesNotExist.
    * </p>
    *
    * @see #isSkipDayIfHourDoesNotExist()
@@ -354,19 +336,17 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   }
 
   /**
-   * If intervals are a day or greater, and
-   * preserveHourOfDayAcrossDaylightSavings property is set to true, and the
-   * hour of the day does not exist on a given day for which the trigger would
-   * fire, the day will be skipped and the trigger advanced a second interval if
-   * this property is set to true. Defaults to false.
+   * If intervals are a day or greater, and preserveHourOfDayAcrossDaylightSavings property is set
+   * to true, and the hour of the day does not exist on a given day for which the trigger would
+   * fire, the day will be skipped and the trigger advanced a second interval if this property is
+   * set to true. Defaults to false.
    * <p>
-   * <b>CAUTION!</b> If you enable this property, and your hour of day happens
-   * to be that of daylight savings transition (e.g. 2:00 am in the United
-   * States) and the trigger's interval would have had the trigger fire on that
-   * day, then you may actually completely miss a firing on the day of
-   * transition if that hour of day does not exist on that day! In such a case
-   * the next fire time of the trigger will be computed as double (if the
-   * interval is 2 days, then a span of 4 days between firings will occur).
+   * <b>CAUTION!</b> If you enable this property, and your hour of day happens to be that of
+   * daylight savings transition (e.g. 2:00 am in the United States) and the trigger's interval
+   * would have had the trigger fire on that day, then you may actually completely miss a firing on
+   * the day of transition if that hour of day does not exist on that day! In such a case the next
+   * fire time of the trigger will be computed as double (if the interval is 2 days, then a span of
+   * 4 days between firings will occur).
    * </p>
    *
    * @see #isPreserveHourOfDayAcrossDaylightSavings()
@@ -388,8 +368,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Set the number of times the <code>DateIntervalTrigger</code> has already
-   * fired.
+   * Set the number of times the <code>DateIntervalTrigger</code> has already fired.
    * </p>
    */
   public void setTimesTriggered (final int timesTriggered)
@@ -414,17 +393,15 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Updates the <code>DateIntervalTrigger</code>'s state based on the
-   * MISFIRE_INSTRUCTION_XXX that was selected when the
-   * <code>DateIntervalTrigger</code> was created.
+   * Updates the <code>DateIntervalTrigger</code>'s state based on the MISFIRE_INSTRUCTION_XXX that
+   * was selected when the <code>DateIntervalTrigger</code> was created.
    * </p>
    * <p>
-   * If the misfire instruction is set to MISFIRE_INSTRUCTION_SMART_POLICY, then
-   * the following scheme will be used: <br>
+   * If the misfire instruction is set to MISFIRE_INSTRUCTION_SMART_POLICY, then the following
+   * scheme will be used: <br>
    * </p>
    * <ul>
-   * <li>The instruction will be interpreted as
-   * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
+   * <li>The instruction will be interpreted as <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
   public void updateAfterMisfire (final ICalendar cal)
@@ -465,12 +442,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   }
 
   /**
-   * Called when the <code>Scheduler</code> has decided to 'fire' the trigger
-   * (execute the associated <code>Job</code>), in order to give the
-   * <code>Trigger</code> a chance to update itself for its next triggering (if
-   * any).
+   * Called when the <code>Scheduler</code> has decided to 'fire' the trigger (execute the
+   * associated <code>Job</code>), in order to give the <code>Trigger</code> a chance to update
+   * itself for its next triggering (if any).
    *
-   * @see #executionComplete(IJobExecutionContext, JobExecutionException)
+   * @see #executionComplete(com.helger.quartz.IJobExecutionContext,
+   *      com.helger.quartz.JobExecutionException)
    */
   @Override
   public void triggered (final com.helger.quartz.ICalendar calendar)
@@ -540,19 +517,17 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added
-   * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added to the scheduler, in
+   * order to have the <code>Trigger</code> compute its first fire time, based on any associated
+   * calendar.
    * </p>
    * <p>
-   * After this method has been called, <code>getNextFireTime()</code> should
-   * return a valid answer.
+   * After this method has been called, <code>getNextFireTime()</code> should return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by
-   *         the scheduler, which is also the same value
-   *         <code>getNextFireTime()</code> will return (until after the first
-   *         firing of the <code>Trigger</code>).
+   * @return the first time at which the <code>Trigger</code> will be fired by the scheduler, which
+   *         is also the same value <code>getNextFireTime()</code> will return (until after the
+   *         first firing of the <code>Trigger</code>).
    */
   @Override
   public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)
@@ -580,16 +555,15 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Returns the next time at which the <code>Trigger</code> is scheduled to
-   * fire. If the trigger will not fire again, <code>null</code> will be
-   * returned. Note that the time returned can possibly be in the past, if the
-   * time that was computed for the trigger to next fire has already arrived,
-   * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).
+   * Returns the next time at which the <code>Trigger</code> is scheduled to fire. If the trigger
+   * will not fire again, <code>null</code> will be returned. Note that the time returned can
+   * possibly be in the past, if the time that was computed for the trigger to next fire has already
+   * arrived, but the scheduler has not yet been able to fire the trigger (which would likely be due
+   * to lack of resources e.g. threads).
    * </p>
    * <p>
-   * The value returned is not guaranteed to be valid until after the
-   * <code>Trigger</code> has been added to the scheduler.
+   * The value returned is not guaranteed to be valid until after the <code>Trigger</code> has been
+   * added to the scheduler.
    * </p>
    */
   public Date getNextFireTime ()
@@ -599,9 +573,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Returns the previous time at which the <code>DateIntervalTrigger</code>
-   * fired. If the trigger has not yet fired, <code>null</code> will be
-   * returned.
+   * Returns the previous time at which the <code>DateIntervalTrigger</code> fired. If the trigger
+   * has not yet fired, <code>null</code> will be returned.
    */
   public Date getPreviousFireTime ()
   {
@@ -610,8 +583,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Set the next time at which the <code>DateIntervalTrigger</code> should
-   * fire.
+   * Set the next time at which the <code>DateIntervalTrigger</code> should fire.
    * </p>
    * <p>
    * <b>This method should not be invoked by client code.</b>
@@ -637,9 +609,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Returns the next time at which the <code>DateIntervalTrigger</code> will
-   * fire, after the given time. If the trigger will not fire after the given
-   * time, <code>null</code> will be returned.
+   * Returns the next time at which the <code>DateIntervalTrigger</code> will fire, after the given
+   * time. If the trigger will not fire after the given time, <code>null</code> will be returned.
    * </p>
    */
   public Date getFireTimeAfter (final Date afterTime)
@@ -856,8 +827,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Returns the final time at which the <code>DateIntervalTrigger</code> will
-   * fire, if there is no end time set, null will be returned.
+   * Returns the final time at which the <code>DateIntervalTrigger</code> will fire, if there is no
+   * end time set, null will be returned.
    * </p>
    * <p>
    * Note that the return time may be in the past.
@@ -914,8 +885,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Determines whether or not the <code>DateIntervalTrigger</code> will occur
-   * again.
+   * Determines whether or not the <code>DateIntervalTrigger</code> will occur again.
    * </p>
    */
   public boolean mayFireAgain ()
@@ -925,8 +895,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
 
   /**
    * <p>
-   * Validates whether the properties of the <code>JobDetail</code> are valid
-   * for submission into a <code>Scheduler</code>.
+   * Validates whether the properties of the <code>JobDetail</code> are valid for submission into a
+   * <code>Scheduler</code>.
    *
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.
@@ -941,8 +911,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   }
 
   /**
-   * Get a {@link com.helger.quartz.IScheduleBuilder} that is configured to
-   * produce a schedule identical to this trigger's schedule.
+   * Get a {@link com.helger.quartz.IScheduleBuilder} that is configured to produce a schedule
+   * identical to this trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */
