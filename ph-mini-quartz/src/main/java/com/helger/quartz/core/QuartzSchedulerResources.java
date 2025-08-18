@@ -29,8 +29,8 @@ import com.helger.quartz.spi.IThreadPool;
 
 /**
  * <p>
- * Contains all of the resources (<code>JobStore</code>,<code>ThreadPool</code>,
- * etc.) necessary to create a <code>{@link QuartzScheduler}</code> instance.
+ * Contains all of the resources (<code>JobStore</code>,<code>ThreadPool</code>, etc.) necessary to
+ * create a <code>{@link QuartzScheduler}</code> instance.
  * </p>
  *
  * @see QuartzScheduler
@@ -169,8 +169,7 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Get the <code>{@link IThreadPool}</code> for the
-   * <code>{@link QuartzScheduler}</code> to use.
+   * Get the <code>{@link IThreadPool}</code> for the <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
   public IThreadPool getThreadPool ()
@@ -180,8 +179,7 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Set the <code>{@link IThreadPool}</code> for the
-   * <code>{@link QuartzScheduler}</code> to use.
+   * Set the <code>{@link IThreadPool}</code> for the <code>{@link QuartzScheduler}</code> to use.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -199,8 +197,7 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Get the <code>{@link IJobStore}</code> for the
-   * <code>{@link QuartzScheduler}</code> to use.
+   * Get the <code>{@link IJobStore}</code> for the <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
   public IJobStore getJobStore ()
@@ -210,8 +207,7 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Set the <code>{@link IJobStore}</code> for the
-   * <code>{@link QuartzScheduler}</code> to use.
+   * Set the <code>{@link IJobStore}</code> for the <code>{@link QuartzScheduler}</code> to use.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -229,8 +225,8 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Get the <code>{@link IJobRunShellFactory}</code> for the
-   * <code>{@link QuartzScheduler}</code> to use.
+   * Get the <code>{@link IJobRunShellFactory}</code> for the <code>{@link QuartzScheduler}</code>
+   * to use.
    * </p>
    */
   public IJobRunShellFactory getJobRunShellFactory ()
@@ -240,8 +236,8 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Set the <code>{@link IJobRunShellFactory}</code> for the
-   * <code>{@link QuartzScheduler}</code> to use.
+   * Set the <code>{@link IJobRunShellFactory}</code> for the <code>{@link QuartzScheduler}</code>
+   * to use.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -259,10 +255,9 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Add the given <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>
-   * for the <code>{@link QuartzScheduler}</code> to use. This method expects
-   * the plugin's "initialize" method to be invoked externally (either before or
-   * after this method is called).
+   * Add the given <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code> for the
+   * <code>{@link QuartzScheduler}</code> to use. This method expects the plugin's "initialize"
+   * method to be invoked externally (either before or after this method is called).
    * </p>
    */
   public void addSchedulerPlugin (final ISchedulerPlugin plugin)
@@ -272,9 +267,8 @@ public class QuartzSchedulerResources
 
   /**
    * <p>
-   * Get the <code>List</code> of all
-   * <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s for the
-   * <code>{@link QuartzScheduler}</code> to use.
+   * Get the <code>List</code> of all <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s
+   * for the <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
   public List <ISchedulerPlugin> getSchedulerPlugins ()
@@ -303,8 +297,8 @@ public class QuartzSchedulerResources
   }
 
   /**
-   * Get whether to set the class load context of spawned threads to that of the
-   * initializing thread.
+   * Get whether to set the class load context of spawned threads to that of the initializing
+   * thread.
    */
   public boolean isThreadsInheritInitializersClassLoadContext ()
   {
@@ -312,8 +306,8 @@ public class QuartzSchedulerResources
   }
 
   /**
-   * Set whether to set the class load context of spawned threads to that of the
-   * initializing thread.
+   * Set whether to set the class load context of spawned threads to that of the initializing
+   * thread.
    */
   public void setThreadsInheritInitializersClassLoadContext (final boolean threadsInheritInitializersClassLoadContext)
   {

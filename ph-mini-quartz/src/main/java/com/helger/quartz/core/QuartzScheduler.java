@@ -245,11 +245,6 @@ public class QuartzScheduler implements IQuartzScheduler
     if (m_aThreadGroup == null)
     {
       m_aThreadGroup = new ThreadGroup ("MiniQuartzScheduler:" + getSchedulerName ());
-      if (m_aResources.getMakeSchedulerThreadDaemon ())
-      {
-        // Deprecated since Java 16
-        m_aThreadGroup.setDaemon (true);
-      }
     }
 
     return m_aThreadGroup;

@@ -193,6 +193,7 @@ public class SimpleThreadPool implements IThreadPool
   /**
    * @return Returns the value of makeThreadsDaemons.
    */
+  @Deprecated (forRemoval = true, since = "6.0.0")
   public final boolean isMakeThreadsDaemons ()
   {
     return m_bMakeThreadsDaemons;
@@ -202,6 +203,7 @@ public class SimpleThreadPool implements IThreadPool
    * @param makeThreadsDaemons
    *        The value of makeThreadsDaemons to set.
    */
+  @Deprecated (forRemoval = true, since = "6.0.0")
   public final void setMakeThreadsDaemons (final boolean makeThreadsDaemons)
   {
     m_bMakeThreadsDaemons = makeThreadsDaemons;
@@ -250,7 +252,7 @@ public class SimpleThreadPool implements IThreadPool
       if (isMakeThreadsDaemons ())
       {
         // Deprecated since Java 16
-        m_aThreadGroup.setDaemon (true);
+        // m_aThreadGroup.setDaemon (true);
       }
     }
 
