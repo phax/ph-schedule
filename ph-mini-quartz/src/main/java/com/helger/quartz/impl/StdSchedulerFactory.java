@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -289,7 +290,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
   @Nonnull
   private static NonBlockingProperties _overrideWithSysProps (@Nonnull final NonBlockingProperties props)
   {
-    return SystemProperties.getAllProperties ();
+    for (final Map.Entry <String, String> aEntry : SystemProperties.getAllProperties ().entrySet ())
+      props.put (aEntry.getKey (), aEntry.getValue ());
+    return props;
   }
 
   /**
