@@ -18,14 +18,11 @@
  */
 package com.helger.quartz.impl.triggers;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.compare.CompareHelper;
-import com.helger.commons.equals.EqualsHelper;
-import com.helger.commons.hashcode.HashCodeGenerator;
-import com.helger.commons.lang.ICloneable;
+import com.helger.base.clone.ICloneable;
+import com.helger.base.compare.CompareHelper;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.equals.EqualsHelper;
+import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.IScheduler;
@@ -38,6 +35,9 @@ import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.spi.IOperableTrigger;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * <p>

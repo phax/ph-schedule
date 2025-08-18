@@ -20,11 +20,11 @@ package com.helger.quartz;
 
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <code>CalendarIntervalScheduleBuilder</code> is a {@link IScheduleBuilder}

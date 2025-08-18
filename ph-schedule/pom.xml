@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.helger.schedule</groupId>
     <artifactId>ph-schedule-parent-pom</artifactId>
-    <version>5.0.2-SNAPSHOT</version>
+    <version>6.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>ph-schedule</artifactId>
   <packaging>bundle</packaging>
@@ -56,7 +56,7 @@
   <dependencies>
     <dependency>
       <groupId>com.helger.commons</groupId>
-      <artifactId>ph-commons</artifactId>
+      <artifactId>ph-collection</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.commons</groupId>
@@ -75,6 +75,11 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.helger.commons</groupId>
+      <artifactId>ph-unittest-support-ext</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

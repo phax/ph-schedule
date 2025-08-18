@@ -18,12 +18,12 @@
  */
 package com.helger.quartz;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.CGlobal;
-import com.helger.commons.ValueEnforcer;
+import com.helger.base.CGlobal;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <code>SimpleScheduleBuilder</code> is a {@link IScheduleBuilder} that defines

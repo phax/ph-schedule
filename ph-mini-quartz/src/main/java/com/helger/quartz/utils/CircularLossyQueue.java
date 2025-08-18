@@ -21,7 +21,7 @@ package com.helger.quartz.utils;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * An implementation of a CircularQueue data-structure. When the number of items

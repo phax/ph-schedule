@@ -18,8 +18,8 @@
  */
 package com.helger.quartz;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * An interface to be implemented by objects that define spaces of time during

@@ -20,13 +20,13 @@ package com.helger.quartz;
 
 import java.util.Date;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.annotation.concurrent.Immutable;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.spi.IOperableTrigger;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Convenience and utility methods for working with

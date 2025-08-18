@@ -24,9 +24,9 @@ import java.util.Locale;
 import java.util.Locale.Category;
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
+import com.helger.base.string.StringHelper;
 
-import com.helger.commons.string.StringHelper;
+import jakarta.annotation.Nonnull;
 
 /**
  * This implementation of the Calendar excludes (or includes - see below) a

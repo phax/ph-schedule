@@ -20,11 +20,11 @@ package com.helger.quartz;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.typeconvert.collection.AttributeContainerAny;
 
-import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.collection.attr.AttributeContainerAny;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Holds state information for <code>Job</code> instances.

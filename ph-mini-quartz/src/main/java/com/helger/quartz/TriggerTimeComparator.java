@@ -20,7 +20,7 @@ package com.helger.quartz;
 
 import java.util.Date;
 
-import com.helger.commons.compare.IComparator;
+import com.helger.base.compare.IComparator;
 
 /**
  * A Comparator that compares trigger's next fire times, or in other words,

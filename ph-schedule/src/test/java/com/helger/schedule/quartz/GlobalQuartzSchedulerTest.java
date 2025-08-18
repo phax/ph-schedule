@@ -22,8 +22,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
-import com.helger.commons.concurrent.ThreadHelper;
-import com.helger.commons.mutable.MutableBoolean;
+import com.helger.base.concurrent.ThreadHelper;
+import com.helger.base.numeric.mutable.MutableBoolean;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
 import com.helger.scope.mock.ScopeTestRule;

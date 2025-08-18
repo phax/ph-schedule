@@ -18,9 +18,9 @@
  */
 package com.helger.quartz;
 
-import javax.annotation.Nonnull;
-
 import com.helger.quartz.spi.IMutableTrigger;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Terracotta

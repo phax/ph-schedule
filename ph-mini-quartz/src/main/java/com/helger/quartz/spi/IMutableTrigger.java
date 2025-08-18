@@ -20,13 +20,13 @@ package com.helger.quartz.spi;
 
 import java.util.Date;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public interface IMutableTrigger extends ITrigger
 {

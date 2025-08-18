@@ -16,11 +16,11 @@
  */
 package com.helger.schedule.job;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.callback.ICallback;
+import com.helger.base.callback.ICallback;
 import com.helger.quartz.IJob;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Callback interface to handle thrown exception objects from the

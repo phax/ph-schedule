@@ -31,8 +31,8 @@ import java.util.EnumSet;
 
 import org.junit.Test;
 
-import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.datetime.PDTFactory;
+import com.helger.collection.commons.ICommonsList;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.EIntervalUnit;
 import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.JobKey;

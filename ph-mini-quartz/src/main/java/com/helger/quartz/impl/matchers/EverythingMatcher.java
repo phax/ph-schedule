@@ -18,7 +18,7 @@
  */
 package com.helger.quartz.impl.matchers;
 
-import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;

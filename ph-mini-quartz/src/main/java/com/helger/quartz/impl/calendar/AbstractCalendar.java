@@ -23,12 +23,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.lang.ICloneable;
+import com.helger.base.clone.ICloneable;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ICalendar;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * <p>

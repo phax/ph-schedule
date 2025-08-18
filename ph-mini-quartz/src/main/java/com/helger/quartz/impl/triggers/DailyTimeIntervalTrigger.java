@@ -25,12 +25,9 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.CGlobal;
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.datetime.PDTFactory;
+import com.helger.base.CGlobal;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.datetime.util.PDTHelper;
 import com.helger.quartz.CQuartz;
 import com.helger.quartz.DailyTimeIntervalScheduleBuilder;
@@ -40,6 +37,9 @@ import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A concrete implementation of DailyTimeIntervalTrigger that is used to fire a

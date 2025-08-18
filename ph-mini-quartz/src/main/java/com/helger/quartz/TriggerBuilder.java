@@ -20,11 +20,11 @@ package com.helger.quartz;
 
 import java.util.Date;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.lang.GenericReflection;
+import com.helger.base.reflection.GenericReflection;
 import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.utils.Key;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <code>TriggerBuilder</code> is used to instantiate {@link ITrigger}s.

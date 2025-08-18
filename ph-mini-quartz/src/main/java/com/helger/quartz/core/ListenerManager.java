@@ -22,13 +22,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.CommonsLinkedHashMap;
-import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.collection.impl.ICommonsMap;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.CommonsLinkedHashMap;
+import com.helger.collection.commons.ICommonsList;
+import com.helger.collection.commons.ICommonsMap;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IListenerManager;
 import com.helger.quartz.IMatcher;
@@ -37,6 +35,8 @@ import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
+
+import jakarta.annotation.Nonnull;
 
 public class ListenerManager implements IListenerManager
 {

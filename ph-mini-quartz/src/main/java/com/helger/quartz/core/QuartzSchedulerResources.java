@@ -20,8 +20,8 @@ package com.helger.quartz.core;
 
 import java.util.List;
 
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.spi.IJobStore;
 import com.helger.quartz.spi.ISchedulerPlugin;
 import com.helger.quartz.spi.IThreadExecutor;

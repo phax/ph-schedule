@@ -22,12 +22,12 @@ import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.util.PDTHelper;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.CronTrigger;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <code>CronScheduleBuilder</code> is a {@link IScheduleBuilder} that defines

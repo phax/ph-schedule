@@ -28,7 +28,7 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
-import com.helger.commons.datetime.PDTFactory;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
 

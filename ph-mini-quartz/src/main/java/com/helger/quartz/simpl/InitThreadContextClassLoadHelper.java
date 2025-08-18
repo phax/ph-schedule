@@ -20,9 +20,9 @@ package com.helger.quartz.simpl;
 
 import java.lang.ref.WeakReference;
 
-import javax.annotation.Nonnull;
-
 import com.helger.quartz.spi.IClassLoadHelper;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * A <code>ClassLoadHelper</code> that uses either the context class loader of

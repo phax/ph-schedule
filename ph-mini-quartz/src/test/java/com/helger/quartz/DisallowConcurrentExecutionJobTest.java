@@ -33,8 +33,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.concurrent.ThreadHelper;
-import com.helger.commons.lang.NonBlockingProperties;
+import com.helger.base.concurrent.ThreadHelper;
+import com.helger.base.rt.NonBlockingProperties;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
 /**

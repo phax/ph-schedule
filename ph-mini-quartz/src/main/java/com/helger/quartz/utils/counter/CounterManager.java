@@ -20,13 +20,13 @@ package com.helger.quartz.utils.counter;
 
 import java.util.Timer;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounter;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * An implementation of a {@link ICounterManager}.

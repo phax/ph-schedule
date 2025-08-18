@@ -20,15 +20,15 @@ package com.helger.quartz.listeners;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Holds a List of references to JobListener instances and broadcasts all events

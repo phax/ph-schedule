@@ -21,12 +21,10 @@ package com.helger.quartz.impl;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.Nonnull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.collection.impl.ICommonsCollection;
+import com.helger.collection.commons.ICommonsCollection;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.SchedulerException;
@@ -41,6 +39,8 @@ import com.helger.quartz.spi.IJobStore;
 import com.helger.quartz.spi.ISchedulerPlugin;
 import com.helger.quartz.spi.IThreadExecutor;
 import com.helger.quartz.spi.IThreadPool;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <p>

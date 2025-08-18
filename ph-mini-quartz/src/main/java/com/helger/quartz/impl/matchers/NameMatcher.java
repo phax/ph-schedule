@@ -18,11 +18,11 @@
  */
 package com.helger.quartz.impl.matchers;
 
-import javax.annotation.Nonnull;
-
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.utils.Key;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Matches on name (ignores group) property of Keys.

@@ -21,12 +21,11 @@ package com.helger.quartz.simpl;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
-import com.helger.commons.collection.ArrayHelper;
+import com.helger.base.CGlobal;
 import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
- * A <code>ClassLoadHelper</code> that simply calls
- * <code>Class.forName(..)</code>.
+ * A <code>ClassLoadHelper</code> that simply calls <code>Class.forName(..)</code>.
  *
  * @see com.helger.quartz.spi.IClassLoadHelper
  * @see com.helger.quartz.simpl.ThreadContextClassLoadHelper
@@ -38,9 +37,9 @@ import com.helger.quartz.spi.IClassLoadHelper;
 public class SimpleClassLoadHelper implements IClassLoadHelper
 {
   /**
-   * Called to give the ClassLoadHelper a chance to initialize itself, including
-   * the opportunity to "steal" the class loader off of the calling thread,
-   * which is the thread that is initializing Quartz.
+   * Called to give the ClassLoadHelper a chance to initialize itself, including the opportunity to
+   * "steal" the class loader off of the calling thread, which is the thread that is initializing
+   * Quartz.
    */
   @Override
   public void initialize ()
@@ -71,14 +70,14 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
 
       // Create a method instance representing the protected
       // getCallerClassLoader method of class ClassLoader
-      final Method mthd = ClassLoader.class.getDeclaredMethod ("getCallerClassLoader", ArrayHelper.EMPTY_CLASS_ARRAY);
+      final Method mthd = ClassLoader.class.getDeclaredMethod ("getCallerClassLoader", CGlobal.EMPTY_CLASS_ARRAY);
       if (false)
       {
         // Make the method accessible.
         AccessibleObject.setAccessible (new AccessibleObject [] { mthd }, true);
       }
       // Try to get the caller's class-loader
-      return (ClassLoader) mthd.invoke (cl, ArrayHelper.EMPTY_OBJECT_ARRAY);
+      return (ClassLoader) mthd.invoke (cl, CGlobal.EMPTY_OBJECT_ARRAY);
     }
     catch (final Exception ex)
     {

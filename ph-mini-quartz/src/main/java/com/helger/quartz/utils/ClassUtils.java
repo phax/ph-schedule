@@ -20,10 +20,9 @@ package com.helger.quartz.utils;
 
 import java.lang.annotation.Annotation;
 
-import javax.annotation.concurrent.Immutable;
-
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.annotation.concurrent.Immutable;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 
 @Immutable
 public final class ClassUtils
