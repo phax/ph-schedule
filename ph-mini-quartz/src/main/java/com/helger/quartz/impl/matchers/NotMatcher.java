@@ -34,10 +34,10 @@ public class NotMatcher <T extends Key <T>> implements IMatcher <T>
 {
   private final IMatcher <T> m_aOperand;
 
-  public NotMatcher (@Nonnull final IMatcher <T> operand)
+  public NotMatcher (@Nonnull final IMatcher <T> aOperand)
   {
-    ValueEnforcer.notNull (operand, "Operand");
-    m_aOperand = operand;
+    ValueEnforcer.notNull (aOperand, "Operand");
+    m_aOperand = aOperand;
   }
 
   @Nonnull
@@ -46,9 +46,9 @@ public class NotMatcher <T extends Key <T>> implements IMatcher <T>
     return m_aOperand;
   }
 
-  public boolean isMatch (final T key)
+  public boolean isMatch (final T aKey)
   {
-    return !m_aOperand.isMatch (key);
+    return !m_aOperand.isMatch (aKey);
   }
 
   @Override

@@ -31,15 +31,15 @@ import jakarta.annotation.Nonnull;
  */
 public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
 {
-  protected NameMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName compareWith)
+  protected NameMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
   {
-    super (sCompareTo, compareWith);
+    super (sCompareTo, eCompareWith);
   }
 
   @Override
-  protected String getValue (final T key)
+  protected String getValue (final T aKey)
   {
-    return key.getName ();
+    return aKey.getName ();
   }
 
   /**

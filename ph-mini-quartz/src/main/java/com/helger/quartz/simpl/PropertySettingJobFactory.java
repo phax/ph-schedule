@@ -37,21 +37,19 @@ import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
 /**
- * A JobFactory that instantiates the Job instance (using the default no-arg
- * constructor, or more specifically: <code>class.newInstance()</code>), and
- * then attempts to set all values from the <code>SchedulerContext</code> and
- * the <code>JobExecutionContext</code>'s merged <code>JobDataMap</code> onto
- * bean properties of the <code>Job</code>.
+ * A JobFactory that instantiates the Job instance (using the default no-arg constructor, or more
+ * specifically: <code>class.newInstance()</code>), and then attempts to set all values from the
+ * <code>SchedulerContext</code> and the <code>JobExecutionContext</code>'s merged
+ * <code>JobDataMap</code> onto bean properties of the <code>Job</code>.
  * <p>
- * Set the warnIfPropertyNotFound property to true if you'd like noisy logging
- * in the case of values in the JobDataMap not mapping to properties on your Job
- * class. This may be useful for troubleshooting typos of property names, etc.
- * but very noisy if you regularly (and purposely) have extra things in your
- * JobDataMap.
+ * Set the warnIfPropertyNotFound property to true if you'd like noisy logging in the case of values
+ * in the JobDataMap not mapping to properties on your Job class. This may be useful for
+ * troubleshooting typos of property names, etc. but very noisy if you regularly (and purposely)
+ * have extra things in your JobDataMap.
  * </p>
  * <p>
- * Also of possible interest is the throwIfPropertyNotFound property which will
- * throw exceptions on unmatched JobDataMap keys.
+ * Also of possible interest is the throwIfPropertyNotFound property which will throw exceptions on
+ * unmatched JobDataMap keys.
  * </p>
  *
  * @see com.helger.quartz.spi.IJobFactory
@@ -139,9 +137,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
 
           if (paramType.equals (int.class))
           {
-            if (o instanceof String)
+            if (o instanceof final String s)
             {
-              parm = Integer.valueOf ((String) o);
+              parm = Integer.valueOf (s);
             }
             else
               if (o instanceof Integer)
@@ -152,9 +150,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
           else
             if (paramType.equals (long.class))
             {
-              if (o instanceof String)
+              if (o instanceof final String s)
               {
-                parm = Long.valueOf ((String) o);
+                parm = Long.valueOf (s);
               }
               else
                 if (o instanceof Long)
@@ -165,9 +163,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
             else
               if (paramType.equals (float.class))
               {
-                if (o instanceof String)
+                if (o instanceof final String s)
                 {
-                  parm = Float.valueOf ((String) o);
+                  parm = Float.valueOf (s);
                 }
                 else
                   if (o instanceof Float)
@@ -178,9 +176,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
               else
                 if (paramType.equals (double.class))
                 {
-                  if (o instanceof String)
+                  if (o instanceof final String s)
                   {
-                    parm = Double.valueOf ((String) o);
+                    parm = Double.valueOf (s);
                   }
                   else
                     if (o instanceof Double)
@@ -191,9 +189,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
                 else
                   if (paramType.equals (boolean.class))
                   {
-                    if (o instanceof String)
+                    if (o instanceof final String s)
                     {
-                      parm = Boolean.valueOf ((String) o);
+                      parm = Boolean.valueOf (s);
                     }
                     else
                       if (o instanceof Boolean)
@@ -204,9 +202,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
                   else
                     if (paramType.equals (byte.class))
                     {
-                      if (o instanceof String)
+                      if (o instanceof final String s)
                       {
-                        parm = Byte.valueOf ((String) o);
+                        parm = Byte.valueOf (s);
                       }
                       else
                         if (o instanceof Byte)
@@ -217,9 +215,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
                     else
                       if (paramType.equals (short.class))
                       {
-                        if (o instanceof String)
+                        if (o instanceof final String s)
                         {
-                          parm = Short.valueOf ((String) o);
+                          parm = Short.valueOf (s);
                         }
                         else
                           if (o instanceof Short)
@@ -230,12 +228,11 @@ public class PropertySettingJobFactory extends SimpleJobFactory
                       else
                         if (paramType.equals (char.class))
                         {
-                          if (o instanceof String)
+                          if (o instanceof final String s)
                           {
-                            final String str = (String) o;
-                            if (str.length () == 1)
+                            if (s.length () == 1)
                             {
-                              parm = Character.valueOf (str.charAt (0));
+                              parm = Character.valueOf (s.charAt (0));
                             }
                           }
                           else
@@ -268,18 +265,6 @@ public class PropertySettingJobFactory extends SimpleJobFactory
 
         setMeth.invoke (obj, parm);
       }
-      catch (final NumberFormatException nfe)
-      {
-        _handleError ("The setter on Job class " +
-                      obj.getClass ().getName () +
-                      " for property '" +
-                      name +
-                      "' expects a " +
-                      paramType +
-                      " but was given " +
-                      o.getClass ().getName (),
-                      nfe);
-      }
       catch (final IllegalArgumentException e)
       {
         _handleError ("The setter on Job class " +
@@ -311,7 +296,6 @@ public class PropertySettingJobFactory extends SimpleJobFactory
                       e);
       }
     }
-
   }
 
   private void _handleError (final String message) throws SchedulerException
@@ -352,9 +336,8 @@ public class PropertySettingJobFactory extends SimpleJobFactory
   }
 
   /**
-   * Whether the JobInstantiation should fail and throw and exception if a key
-   * (name) and value (type) found in the JobDataMap does not correspond to a
-   * property setter on the Job class.
+   * Whether the JobInstantiation should fail and throw and exception if a key (name) and value
+   * (type) found in the JobDataMap does not correspond to a property setter on the Job class.
    *
    * @return Returns the throwIfNotFound.
    */
@@ -364,9 +347,8 @@ public class PropertySettingJobFactory extends SimpleJobFactory
   }
 
   /**
-   * Whether the JobInstantiation should fail and throw and exception if a key
-   * (name) and value (type) found in the JobDataMap does not correspond to a
-   * proptery setter on the Job class.
+   * Whether the JobInstantiation should fail and throw and exception if a key (name) and value
+   * (type) found in the JobDataMap does not correspond to a proptery setter on the Job class.
    *
    * @param throwIfNotFound
    *        defaults to <code>false</code>.
@@ -377,9 +359,8 @@ public class PropertySettingJobFactory extends SimpleJobFactory
   }
 
   /**
-   * Whether a warning should be logged if a key (name) and value (type) found
-   * in the JobDataMap does not correspond to a proptery setter on the Job
-   * class.
+   * Whether a warning should be logged if a key (name) and value (type) found in the JobDataMap
+   * does not correspond to a proptery setter on the Job class.
    *
    * @return Returns the warnIfNotFound.
    */
@@ -389,9 +370,8 @@ public class PropertySettingJobFactory extends SimpleJobFactory
   }
 
   /**
-   * Whether a warning should be logged if a key (name) and value (type) found
-   * in the JobDataMap does not correspond to a proptery setter on the Job
-   * class.
+   * Whether a warning should be logged if a key (name) and value (type) found in the JobDataMap
+   * does not correspond to a proptery setter on the Job class.
    *
    * @param warnIfNotFound
    *        defaults to <code>true</code>.

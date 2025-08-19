@@ -41,8 +41,8 @@ public class CounterManager implements ICounterManager
   private final ICommonsList <ICounter> m_aCounters = new CommonsArrayList <> ();
 
   /**
-   * Constructor that accepts a timer that will be used for scheduling sampled
-   * counter if any is created
+   * Constructor that accepts a timer that will be used for scheduling sampled counter if any is
+   * created
    */
   public CounterManager (@Nonnull final Timer timer)
   {
@@ -61,8 +61,8 @@ public class CounterManager implements ICounterManager
       {
         // shutdown the counters of this counterManager
         for (final ICounter counter : m_aCounters)
-          if (counter instanceof ISampledCounter)
-            ((ISampledCounter) counter).shutdown ();
+          if (counter instanceof final ISampledCounter aSampledCounter)
+            aSampledCounter.shutdown ();
 
         if (killTimer)
           m_aTimer.cancel ();
@@ -83,12 +83,11 @@ public class CounterManager implements ICounterManager
     ValueEnforcer.isFalse (m_bShutdown, "counter manager is shutdown");
 
     final ICounter aCounter = config.createCounter ();
-    if (aCounter instanceof SampledCounter)
+    if (aCounter instanceof final SampledCounter aSampledCounter)
     {
-      final SampledCounter sampledCounter = (SampledCounter) aCounter;
-      m_aTimer.schedule (sampledCounter.getTimerTask (),
-                         sampledCounter.getIntervalMillis (),
-                         sampledCounter.getIntervalMillis ());
+      m_aTimer.schedule (aSampledCounter.getTimerTask (),
+                         aSampledCounter.getIntervalMillis (),
+                         aSampledCounter.getIntervalMillis ());
     }
     m_aCounters.add (aCounter);
     return aCounter;
@@ -99,7 +98,7 @@ public class CounterManager implements ICounterManager
    */
   public void shutdownCounter (final ICounter counter)
   {
-    if (counter instanceof ISampledCounter)
-      ((ISampledCounter) counter).shutdown ();
+    if (counter instanceof final ISampledCounter aSampledCounter)
+      aSampledCounter.shutdown ();
   }
 }

@@ -36,9 +36,9 @@ import jakarta.annotation.Nonnull;
 @MustImplementEqualsAndHashcode
 public interface IMatcher <T extends Key <T>>
 {
-  boolean isMatch (T key);
+  boolean isMatch (T aKey);
 
-  boolean equals (Object obj);
+  boolean equals (Object aObj);
 
   int hashCode ();
 

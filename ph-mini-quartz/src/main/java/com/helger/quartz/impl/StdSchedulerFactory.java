@@ -858,11 +858,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
       threadExecutor.initialize ();
 
       rsrcs.setThreadPool (tp);
-      if (tp instanceof SimpleThreadPool)
-      {
-        if (threadsInheritInitalizersClassLoader)
-          ((SimpleThreadPool) tp).setThreadsInheritContextClassLoaderOfInitializingThread (threadsInheritInitalizersClassLoader);
-      }
+      if (tp instanceof final SimpleThreadPool aSTP && threadsInheritInitalizersClassLoader)
+        aSTP.setThreadsInheritContextClassLoaderOfInitializingThread (threadsInheritInitalizersClassLoader);
 
       if (LOGGER.isDebugEnabled ())
         LOGGER.debug ("Initializing ThreadPool");

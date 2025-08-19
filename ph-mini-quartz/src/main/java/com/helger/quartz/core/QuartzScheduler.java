@@ -139,10 +139,8 @@ public class QuartzScheduler implements IQuartzScheduler
   public QuartzScheduler (final QuartzSchedulerResources resources, final long idleWaitTime) throws SchedulerException
   {
     m_aResources = resources;
-    if (resources.getJobStore () instanceof IJobListener)
-    {
-      addInternalJobListener ((IJobListener) resources.getJobStore ());
-    }
+    if (resources.getJobStore () instanceof final IJobListener aJobListener)
+      addInternalJobListener (aJobListener);
 
     m_aSchedThread = new QuartzSchedulerThread (this, resources);
     final IThreadExecutor schedThreadExecutor = resources.getThreadExecutor ();
@@ -467,10 +465,10 @@ public class QuartzScheduler implements IQuartzScheduler
       final ICommonsList <IJobExecutionContext> jobs = getCurrentlyExecutingJobs ();
       for (final IJobExecutionContext job : jobs)
       {
-        if (job.getJobInstance () instanceof IInterruptableJob)
+        if (job.getJobInstance () instanceof final IInterruptableJob aInterruptableJob)
           try
           {
-            ((IInterruptableJob) job.getJobInstance ()).interrupt ();
+            aInterruptableJob.interrupt ();
           }
           catch (final Exception e)
           {
@@ -2191,7 +2189,7 @@ public class QuartzScheduler implements IQuartzScheduler
     IJobDetail jobDetail = null;
     IJob job = null;
 
-    boolean interrupted = false;
+    boolean bInterrupted = false;
 
     for (final IJobExecutionContext jec : jobs)
     {
@@ -2199,10 +2197,10 @@ public class QuartzScheduler implements IQuartzScheduler
       if (jobKey.equals (jobDetail.getKey ()))
       {
         job = jec.getJobInstance ();
-        if (job instanceof IInterruptableJob)
+        if (job instanceof final IInterruptableJob aInterruptableJob)
         {
-          ((IInterruptableJob) job).interrupt ();
-          interrupted = true;
+          aInterruptableJob.interrupt ();
+          bInterrupted = true;
         }
         else
         {
@@ -2214,7 +2212,7 @@ public class QuartzScheduler implements IQuartzScheduler
       }
     }
 
-    return interrupted;
+    return bInterrupted;
   }
 
   /**
@@ -2237,9 +2235,9 @@ public class QuartzScheduler implements IQuartzScheduler
       if (jec.getFireInstanceId ().equals (fireInstanceId))
       {
         job = jec.getJobInstance ();
-        if (job instanceof IInterruptableJob)
+        if (job instanceof final IInterruptableJob aInterruptableJob)
         {
-          ((IInterruptableJob) job).interrupt ();
+          aInterruptableJob.interrupt ();
           return true;
         }
         throw new UnableToInterruptJobException ("Job " +

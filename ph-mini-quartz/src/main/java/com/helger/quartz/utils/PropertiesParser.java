@@ -56,9 +56,8 @@ public class PropertiesParser
   }
 
   /**
-   * Get the trimmed String value of the property with the given
-   * <code>name</code>. If the value the empty String (after trimming), then it
-   * returns null.
+   * Get the trimmed String value of the property with the given <code>name</code>. If the value the
+   * empty String (after trimming), then it returns null.
    */
   public String getStringProperty (final String name)
   {
@@ -66,73 +65,72 @@ public class PropertiesParser
   }
 
   /**
-   * Get the trimmed String value of the property with the given
-   * <code>name</code> or the given default value if the value is null or empty
-   * after trimming.
+   * Get the trimmed String value of the property with the given <code>name</code> or the given
+   * default value if the value is null or empty after trimming.
    */
-  public String getStringProperty (final String name, final String def)
+  public String getStringProperty (final String sName, final String sDefault)
   {
-    String val = m_aProps.getProperty (name);
+    String val = m_aProps.getProperty (sName);
     if (val != null)
     {
       val = val.trim ();
       if (val.length () > 0)
         return val;
     }
-    return StringHelper.trim (def);
+    return StringHelper.trim (sDefault);
   }
 
-  public String [] getStringArrayProperty (final String name)
+  public String [] getStringArrayProperty (final String sName)
   {
-    return getStringArrayProperty (name, null);
+    return getStringArrayProperty (sName, null);
   }
 
-  public String [] getStringArrayProperty (final String name, final String [] def)
+  public String [] getStringArrayProperty (final String sName, final String [] aDefault)
   {
-    final String vals = getStringProperty (name);
-    if (vals == null)
-      return def;
+    final String sVals = getStringProperty (sName);
+    if (sVals == null)
+      return aDefault;
 
-    final StringTokenizer stok = new StringTokenizer (vals, ",");
-    final ICommonsList <String> strs = new CommonsArrayList <> ();
+    final StringTokenizer aTokenizer = new StringTokenizer (sVals, ",");
+    final ICommonsList <String> aList = new CommonsArrayList <> ();
     try
     {
-      while (stok.hasMoreTokens ())
+      while (aTokenizer.hasMoreTokens ())
       {
-        strs.add (stok.nextToken ().trim ());
+        aList.add (aTokenizer.nextToken ().trim ());
       }
-      return strs.toArray (new String [strs.size ()]);
+      return aList.toArray (new String [aList.size ()]);
     }
     catch (final Exception e)
     {
-      return def;
+      return aDefault;
     }
   }
 
-  public boolean getBooleanProperty (final String name)
+  public boolean getBooleanProperty (final String sName)
   {
-    return getBooleanProperty (name, false);
+    return getBooleanProperty (sName, false);
   }
 
-  public boolean getBooleanProperty (final String name, final boolean def)
+  public boolean getBooleanProperty (final String sName, final boolean bDefault)
   {
-    final String val = getStringProperty (name);
-    return val == null ? def : Boolean.parseBoolean (val);
+    final String val = getStringProperty (sName);
+    return val == null ? bDefault : Boolean.parseBoolean (val);
   }
 
-  public byte getByteProperty (final String name)
+  public byte getByteProperty (final String sName)
   {
-    final String val = getStringProperty (name);
-    if (val == null)
+    final String sValue = getStringProperty (sName);
+    if (sValue == null)
       throw new NumberFormatException (" null string");
 
     try
     {
-      return Byte.parseByte (val);
+      return Byte.parseByte (sValue);
     }
     catch (final NumberFormatException nfe)
     {
-      throw new NumberFormatException (" '" + val + "'");
+      throw new NumberFormatException (" '" + sValue + "'");
     }
   }
 
@@ -393,53 +391,51 @@ public class PropertiesParser
    * Get all properties that start with the given prefix.
    *
    * @param sPrefix
-   *        The prefix for which to search. If it does not end in a "." then one
-   *        will be added to it for search purposes.
+   *        The prefix for which to search. If it does not end in a "." then one will be added to it
+   *        for search purposes.
    * @param bStripPrefix
-   *        Whether to strip off the given <code>prefix</code> in the result's
-   *        keys.
-   * @param excludedPrefixes
-   *        Optional array of fully qualified prefixes to exclude. For example
-   *        if <code>prefix</code> is "a.b.c", then
-   *        <code>excludedPrefixes</code> might be "a.b.c.ignore".
-   * @return Group of <code>NonBlockingProperties</code> that start with the
-   *         given prefix, optionally have that prefix removed, and do not
-   *         include properties that start with one of the given excluded
-   *         prefixes.
+   *        Whether to strip off the given <code>prefix</code> in the result's keys.
+   * @param aExcludedPrefixes
+   *        Optional array of fully qualified prefixes to exclude. For example if
+   *        <code>prefix</code> is "a.b.c", then <code>excludedPrefixes</code> might be
+   *        "a.b.c.ignore".
+   * @return Group of <code>NonBlockingProperties</code> that start with the given prefix,
+   *         optionally have that prefix removed, and do not include properties that start with one
+   *         of the given excluded prefixes.
    */
   public NonBlockingProperties getPropertyGroup (final String sPrefix,
                                                  final boolean bStripPrefix,
-                                                 final String [] excludedPrefixes)
+                                                 final String [] aExcludedPrefixes)
   {
     final NonBlockingProperties group = new NonBlockingProperties ();
 
-    String prefix = sPrefix;
-    if (!prefix.endsWith ("."))
-      prefix += ".";
+    String sRealPrefix = sPrefix;
+    if (!sRealPrefix.endsWith ("."))
+      sRealPrefix += '.';
 
-    for (final String key : m_aProps.keySet ())
-    {
-      if (key.startsWith (prefix))
+    for (final String sKey : m_aProps.keySet ())
+      if (sKey.startsWith (sRealPrefix))
       {
         boolean bExclude = false;
-        if (excludedPrefixes != null)
+        if (aExcludedPrefixes != null)
         {
-          for (int i = 0; i < excludedPrefixes.length && !bExclude; i++)
-          {
-            bExclude = key.startsWith (excludedPrefixes[i]);
-          }
+          for (int i = 0; i < aExcludedPrefixes.length && !bExclude; i++)
+            if (sKey.startsWith (aExcludedPrefixes[i]))
+            {
+              bExclude = true;
+              break;
+            }
         }
 
         if (!bExclude)
         {
-          final String value = getStringProperty (key, "");
+          final String sValue = getStringProperty (sKey, "");
           if (bStripPrefix)
-            group.put (key.substring (prefix.length ()), value);
+            group.put (sKey.substring (sRealPrefix.length ()), sValue);
           else
-            group.put (key, value);
+            group.put (sKey, sValue);
         }
       }
-    }
 
     return group;
   }

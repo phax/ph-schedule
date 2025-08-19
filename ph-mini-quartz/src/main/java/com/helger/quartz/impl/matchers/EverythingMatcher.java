@@ -34,22 +34,6 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
   protected EverythingMatcher ()
   {}
 
-  /**
-   * Create an EverythingMatcher that matches all jobs.
-   */
-  public static EverythingMatcher <JobKey> allJobs ()
-  {
-    return new EverythingMatcher <> ();
-  }
-
-  /**
-   * Create an EverythingMatcher that matches all triggers.
-   */
-  public static EverythingMatcher <TriggerKey> allTriggers ()
-  {
-    return new EverythingMatcher <> ();
-  }
-
   public boolean isMatch (final T key)
   {
     return true;
@@ -69,5 +53,21 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
   public int hashCode ()
   {
     return new HashCodeGenerator (this).getHashCode ();
+  }
+
+  /**
+   * Create an EverythingMatcher that matches all jobs.
+   */
+  public static EverythingMatcher <JobKey> allJobs ()
+  {
+    return new EverythingMatcher <> ();
+  }
+
+  /**
+   * Create an EverythingMatcher that matches all triggers.
+   */
+  public static EverythingMatcher <TriggerKey> allTriggers ()
+  {
+    return new EverythingMatcher <> ();
   }
 }
