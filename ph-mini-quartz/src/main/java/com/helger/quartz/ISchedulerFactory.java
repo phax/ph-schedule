@@ -18,7 +18,7 @@
  */
 package com.helger.quartz;
 
-import com.helger.commons.collection.impl.ICommonsCollection;
+import com.helger.collection.commons.ICommonsCollection;
 
 /**
  * Provides a mechanism for obtaining client-usable handles to

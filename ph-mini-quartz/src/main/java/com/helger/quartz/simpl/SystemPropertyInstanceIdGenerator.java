@@ -18,12 +18,12 @@
  */
 package com.helger.quartz.simpl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.string.StringHelper;
+import com.helger.base.string.StringHelper;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IInstanceIdGenerator;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * InstanceIdGenerator that will use a

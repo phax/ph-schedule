@@ -18,7 +18,7 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
-import com.helger.commons.ValueEnforcer;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.utils.counter.CounterConfig;
 import com.helger.quartz.utils.counter.ICounter;
 

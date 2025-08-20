@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.commons.lang.NonBlockingProperties;
+import com.helger.base.rt.NonBlockingProperties;
 
 /**
  * Unit tests for PropertiesParser.

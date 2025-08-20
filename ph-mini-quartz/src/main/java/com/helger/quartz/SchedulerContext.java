@@ -20,10 +20,10 @@ package com.helger.quartz;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.typeconvert.collection.AttributeContainerAny;
 
-import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.collection.attr.AttributeContainerAny;
+import jakarta.annotation.Nonnull;
 
 /**
  * Holds context/environment data that can be made available to Jobs as they are

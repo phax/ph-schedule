@@ -28,25 +28,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.AccessControlException;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
-
-import javax.annotation.Nonnull;
-import javax.annotation.WillNotClose;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsCollection;
-import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.io.file.FileHelper;
-import com.helger.commons.io.resource.ClassPathResource;
-import com.helger.commons.io.stream.NonBlockingBufferedInputStream;
-import com.helger.commons.lang.NonBlockingProperties;
-import com.helger.commons.system.SystemProperties;
+import com.helger.annotation.WillNotClose;
+import com.helger.base.io.nonblocking.NonBlockingBufferedInputStream;
+import com.helger.base.rt.NonBlockingProperties;
+import com.helger.base.system.SystemProperties;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsCollection;
+import com.helger.collection.commons.ICommonsList;
+import com.helger.io.file.FileHelper;
+import com.helger.io.resource.ClassPathResource;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
@@ -70,6 +66,8 @@ import com.helger.quartz.spi.ISchedulerPlugin;
 import com.helger.quartz.spi.IThreadExecutor;
 import com.helger.quartz.spi.IThreadPool;
 import com.helger.quartz.utils.PropertiesParser;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <p>
@@ -292,28 +290,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
   @Nonnull
   private static NonBlockingProperties _overrideWithSysProps (@Nonnull final NonBlockingProperties props)
   {
-    Properties sysProps = null;
-    try
-    {
-      sysProps = System.getProperties ();
-    }
-    catch (final AccessControlException e)
-    {
-      LOGGER.warn ("Skipping overriding MiniQuartz properties with System properties " +
-                   "during initialization because of an AccessControlException.  " +
-                   "This is likely due to not having read/write access for " +
-                   "java.util.PropertyPermission as required by java.lang.System.getProperties().  " +
-                   "To resolve this warning, either add this permission to your policy file or " +
-                   "use a non-default version of initialize().",
-                   e);
-    }
-
-    if (sysProps != null)
-    {
-      for (final Map.Entry <Object, Object> aEntry : sysProps.entrySet ())
-        props.put ((String) aEntry.getKey (), (String) aEntry.getValue ());
-    }
-
+    for (final Map.Entry <String, String> aEntry : SystemProperties.getAllProperties ().entrySet ())
+      props.put (aEntry.getKey (), aEntry.getValue ());
     return props;
   }
 
@@ -880,11 +858,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
       threadExecutor.initialize ();
 
       rsrcs.setThreadPool (tp);
-      if (tp instanceof SimpleThreadPool)
-      {
-        if (threadsInheritInitalizersClassLoader)
-          ((SimpleThreadPool) tp).setThreadsInheritContextClassLoaderOfInitializingThread (threadsInheritInitalizersClassLoader);
-      }
+      if (tp instanceof final SimpleThreadPool aSTP && threadsInheritInitalizersClassLoader)
+        aSTP.setThreadsInheritContextClassLoaderOfInitializingThread (threadsInheritInitalizersClassLoader);
 
       if (LOGGER.isDebugEnabled ())
         LOGGER.debug ("Initializing ThreadPool");

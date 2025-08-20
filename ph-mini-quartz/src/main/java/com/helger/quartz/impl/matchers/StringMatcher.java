@@ -18,12 +18,12 @@
  */
 package com.helger.quartz.impl.matchers;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * An abstract base class for some types of matchers.
@@ -37,49 +37,49 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     EQUALS
     {
       @Override
-      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
+      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
       {
-        return value.equals (sCompareTo);
+        return sValue.equals (sCompareTo);
       }
     },
 
     STARTS_WITH
     {
       @Override
-      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
+      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
       {
-        return value.startsWith (sCompareTo);
+        return sValue.startsWith (sCompareTo);
       }
     },
 
     ENDS_WITH
     {
       @Override
-      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
+      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
       {
-        return value.endsWith (sCompareTo);
+        return sValue.endsWith (sCompareTo);
       }
     },
 
     CONTAINS
     {
       @Override
-      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
+      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
       {
-        return value.contains (sCompareTo);
+        return sValue.contains (sCompareTo);
       }
     },
 
     ANYTHING
     {
       @Override
-      public boolean evaluate (@Nonnull final String value, @Nonnull final String sCompareTo)
+      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
       {
         return true;
       }
     };
 
-    public abstract boolean evaluate (@Nonnull String value, @Nonnull String sCompareTo);
+    public abstract boolean evaluate (@Nonnull String sValue, @Nonnull String sCompareTo);
   }
 
   private final String m_sCompareTo;

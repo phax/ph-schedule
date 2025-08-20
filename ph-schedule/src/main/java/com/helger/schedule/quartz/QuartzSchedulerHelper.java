@@ -16,14 +16,14 @@
  */
 package com.helger.schedule.quartz;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
+import com.helger.annotation.concurrent.Immutable;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SchedulerMetaData;
 import com.helger.quartz.impl.StdSchedulerFactory;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Misc utility methods around Quartz schedulers

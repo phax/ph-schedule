@@ -18,7 +18,7 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * An implementation of {@link ISampledRateCounter}

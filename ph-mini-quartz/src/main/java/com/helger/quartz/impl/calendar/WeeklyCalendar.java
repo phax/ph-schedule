@@ -21,10 +21,10 @@ package com.helger.quartz.impl.calendar;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.collection.ArrayHelper;
+import com.helger.base.array.ArrayHelper;
 import com.helger.quartz.ICalendar;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <p>

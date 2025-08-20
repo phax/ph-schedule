@@ -20,7 +20,7 @@ package com.helger.quartz;
 
 import java.util.List;
 
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.collection.commons.ICommonsList;
 
 /**
  * Client programs may be interested in the 'listener' interfaces that are

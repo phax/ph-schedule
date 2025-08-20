@@ -24,11 +24,11 @@ import java.util.Date;
 import java.util.SortedSet;
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.collection.impl.CommonsTreeSet;
-import com.helger.commons.collection.impl.ICommonsSortedSet;
+import com.helger.collection.commons.CommonsTreeSet;
+import com.helger.collection.commons.ICommonsSortedSet;
 import com.helger.quartz.ICalendar;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <p>

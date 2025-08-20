@@ -22,11 +22,11 @@ import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import com.helger.annotation.concurrent.Immutable;
+import com.helger.datetime.helper.PDTFactory;
 
-import com.helger.commons.datetime.PDTFactory;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Quartz constants

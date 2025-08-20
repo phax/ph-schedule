@@ -25,29 +25,27 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotation.ELockType;
-import com.helger.commons.annotation.IsLocked;
-import com.helger.commons.annotation.MustBeLocked;
-import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.CommonsHashMap;
-import com.helger.commons.collection.impl.CommonsHashSet;
-import com.helger.commons.collection.impl.CommonsTreeSet;
-import com.helger.commons.collection.impl.ICommonsCollection;
-import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.collection.impl.ICommonsMap;
-import com.helger.commons.collection.impl.ICommonsNavigableSet;
-import com.helger.commons.collection.impl.ICommonsSet;
-import com.helger.commons.concurrent.SimpleReadWriteLock;
-import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.annotation.Nonnegative;
+import com.helger.annotation.concurrent.ELockType;
+import com.helger.annotation.concurrent.Immutable;
+import com.helger.annotation.concurrent.IsLocked;
+import com.helger.annotation.concurrent.MustBeLocked;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.base.concurrent.SimpleReadWriteLock;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.hashcode.HashCodeGenerator;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.CommonsHashMap;
+import com.helger.collection.commons.CommonsHashSet;
+import com.helger.collection.commons.CommonsTreeSet;
+import com.helger.collection.commons.ICommonsCollection;
+import com.helger.collection.commons.ICommonsList;
+import com.helger.collection.commons.ICommonsMap;
+import com.helger.collection.commons.ICommonsNavigableSet;
+import com.helger.collection.commons.ICommonsSet;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -69,6 +67,8 @@ import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.ISchedulerSignaler;
 import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * {@link IJobStore} implementation based on

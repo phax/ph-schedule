@@ -21,13 +21,13 @@ package com.helger.quartz.utils;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import com.helger.annotation.concurrent.Immutable;
+import com.helger.base.compare.IComparable;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.hashcode.HashCodeGenerator;
 
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.compare.IComparable;
-import com.helger.commons.hashcode.HashCodeGenerator;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * <p>

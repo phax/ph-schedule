@@ -22,15 +22,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.annotation.Nullable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.spi.IThreadPool;
+
+import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -39,12 +39,11 @@ import com.helger.quartz.spi.IThreadPool;
  * </p>
  * <p>
  * <CODE>Runnable</CODE> objects are sent to the pool with the
- * <code>{@link #runInThread(Runnable)}</code> method, which blocks until a
- * <code>Thread</code> becomes available.
+ * <code>{@link #runInThread(Runnable)}</code> method, which blocks until a <code>Thread</code>
+ * becomes available.
  * </p>
  * <p>
- * The pool has a fixed number of <code>Thread</code>s, and does not grow or
- * shrink based on demand.
+ * The pool has a fixed number of <code>Thread</code>s, and does not grow or shrink based on demand.
  * </p>
  *
  * @author James House
@@ -90,13 +89,12 @@ public class SimpleThreadPool implements IThreadPool
 
   /**
    * <p>
-   * Create a new <code>SimpleThreadPool</code> with the specified number of
-   * <code>Thread</code> s that have the given priority.
+   * Create a new <code>SimpleThreadPool</code> with the specified number of <code>Thread</code> s
+   * that have the given priority.
    * </p>
    *
    * @param threadCount
-   *        the number of worker <code>Threads</code> in the pool, must be &gt;
-   *        0.
+   *        the number of worker <code>Threads</code> in the pool, must be &gt; 0.
    * @param threadPriority
    *        the thread priority for the worker threads.
    * @see java.lang.Thread
@@ -114,13 +112,13 @@ public class SimpleThreadPool implements IThreadPool
 
   /**
    * <p>
-   * Set the number of worker threads in the pool - has no effect after
-   * <code>initialize()</code> has been called.
+   * Set the number of worker threads in the pool - has no effect after <code>initialize()</code>
+   * has been called.
    * </p>
    */
-  public final void setThreadCount (final int count)
+  public final void setThreadCount (final int nCount)
   {
-    m_nCount = count;
+    m_nCount = nCount;
   }
 
   /**
@@ -195,6 +193,7 @@ public class SimpleThreadPool implements IThreadPool
   /**
    * @return Returns the value of makeThreadsDaemons.
    */
+  @Deprecated (forRemoval = true, since = "6.0.0")
   public final boolean isMakeThreadsDaemons ()
   {
     return m_bMakeThreadsDaemons;
@@ -204,6 +203,7 @@ public class SimpleThreadPool implements IThreadPool
    * @param makeThreadsDaemons
    *        The value of makeThreadsDaemons to set.
    */
+  @Deprecated (forRemoval = true, since = "6.0.0")
   public final void setMakeThreadsDaemons (final boolean makeThreadsDaemons)
   {
     m_bMakeThreadsDaemons = makeThreadsDaemons;
@@ -224,7 +224,7 @@ public class SimpleThreadPool implements IThreadPool
       return;
 
     if (m_nCount <= 0)
-      throw new SchedulerConfigException ("Thread count must be > 0");
+      throw new SchedulerConfigException ("Thread count must be > 0 but is " + m_nCount);
 
     if (m_nPrio < Thread.MIN_PRIORITY || m_nPrio > Thread.MAX_PRIORITY)
       throw new SchedulerConfigException ("Thread priority must be <= " +
@@ -250,7 +250,10 @@ public class SimpleThreadPool implements IThreadPool
       }
       m_aThreadGroup = new ThreadGroup (aParent, m_sSchedulerInstanceName + "-SimpleThreadPool");
       if (isMakeThreadsDaemons ())
-        m_aThreadGroup.setDaemon (true);
+      {
+        // Deprecated since Java 16
+        // m_aThreadGroup.setDaemon (true);
+      }
     }
 
     if (isThreadsInheritContextClassLoaderOfInitializingThread ())
@@ -258,22 +261,19 @@ public class SimpleThreadPool implements IThreadPool
       LOGGER.info ("Job execution threads will use class loader of thread: " + Thread.currentThread ().getName ());
     }
 
-    // create the worker threads and start them
-    final Iterator <WorkerThread> workerThreads = createWorkerThreads (m_nCount).iterator ();
-    while (workerThreads.hasNext ())
+    for (final WorkerThread aWT : createWorkerThreads (m_nCount))
     {
-      final WorkerThread wt = workerThreads.next ();
-      wt.start ();
-      m_aAvailWorkers.add (wt);
+      aWT.start ();
+      m_aAvailWorkers.add (aWT);
     }
 
     LOGGER.info ("Initialized " + m_nCount + " worker threads");
   }
 
-  protected List <WorkerThread> createWorkerThreads (final int createCount)
+  protected List <WorkerThread> createWorkerThreads (final int nCreateCount)
   {
     m_aWorkers = new CommonsArrayList <> ();
-    for (int i = 1; i <= createCount; ++i)
+    for (int i = 1; i <= nCreateCount; ++i)
     {
       String sThreadPrefix = getThreadNamePrefix ();
       if (sThreadPrefix == null)
@@ -413,9 +413,9 @@ public class SimpleThreadPool implements IThreadPool
 
   /**
    * <p>
-   * Run the given <code>Runnable</code> object in the next available
-   * <code>Thread</code>. If while waiting the thread pool is asked to shut
-   * down, the Runnable is executed immediately within a new additional thread.
+   * Run the given <code>Runnable</code> object in the next available <code>Thread</code>. If while
+   * waiting the thread pool is asked to shut down, the Runnable is executed immediately within a
+   * new additional thread.
    * </p>
    *
    * @param aRunnable
@@ -526,9 +526,8 @@ public class SimpleThreadPool implements IThreadPool
     private boolean m_bRunOnce = false;
 
     /*
-     * Create a worker thread and start it. Waiting for the next Runnable,
-     * executing it, and waiting for the next Runnable, until the shutdown flag
-     * is set.
+     * Create a worker thread and start it. Waiting for the next Runnable, executing it, and waiting
+     * for the next Runnable, until the shutdown flag is set.
      */
     WorkerThread (final SimpleThreadPool aSTP,
                   final ThreadGroup aThreadGroup,
@@ -536,13 +535,12 @@ public class SimpleThreadPool implements IThreadPool
                   final int nPrio,
                   final boolean bIsDaemon)
     {
-
       this (aSTP, aThreadGroup, sName, nPrio, bIsDaemon, null);
     }
 
     /*
-     * Create a worker thread, start it, execute the runnable and terminate the
-     * thread (one time execution).
+     * Create a worker thread, start it, execute the runnable and terminate the thread (one time
+     * execution).
      */
     WorkerThread (final SimpleThreadPool aSTP,
                   final ThreadGroup aThreadGroup,
@@ -551,7 +549,6 @@ public class SimpleThreadPool implements IThreadPool
                   final boolean bIsDaemon,
                   final Runnable aRunnable)
     {
-
       super (aThreadGroup, sName);
       m_aSTP = aSTP;
       m_aRunnable = aRunnable;

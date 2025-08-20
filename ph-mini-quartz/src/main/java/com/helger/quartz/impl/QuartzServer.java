@@ -24,8 +24,8 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.concurrent.ThreadHelper;
-import com.helger.commons.io.stream.NonBlockingBufferedReader;
+import com.helger.base.concurrent.ThreadHelper;
+import com.helger.base.io.nonblocking.NonBlockingBufferedReader;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.ISchedulerListener;

@@ -18,10 +18,8 @@ package com.helger.schedule.quartz.trigger;
 
 import java.time.LocalDateTime;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.datetime.PDTFactory;
-import com.helger.commons.lang.GenericReflection;
+import com.helger.base.reflection.GenericReflection;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.DateBuilder;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobDetail;
@@ -34,6 +32,8 @@ import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.utils.Key;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <code>JDK8TriggerBuilder</code> is used to instantiate {@link ITrigger}s.

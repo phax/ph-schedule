@@ -20,28 +20,15 @@ package com.helger.quartz.utils;
 
 import java.lang.annotation.Annotation;
 
-import javax.annotation.concurrent.Immutable;
-
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.annotation.concurrent.Immutable;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 
 @Immutable
 public final class ClassUtils
 {
   private ClassUtils ()
   {}
-
-  public static boolean isAnnotationPresent (final Class <?> clazz, final Class <? extends Annotation> a)
-  {
-    for (Class <?> c = clazz; c != null; c = c.getSuperclass ())
-    {
-      if (c.isAnnotationPresent (a))
-        return true;
-      if (_isAnnotationPresentOnInterfacesRecursive (c, a))
-        return true;
-    }
-    return false;
-  }
 
   private static boolean _isAnnotationPresentOnInterfacesRecursive (final Class <?> clazz,
                                                                     final Class <? extends Annotation> a)
@@ -57,35 +44,51 @@ public final class ClassUtils
     return false;
   }
 
-  public static <T extends Annotation> T getAnnotation (final Class <?> clazz, final Class <T> aClazz)
+  public static boolean isAnnotationPresent (final Class <?> clazz, final Class <? extends Annotation> a)
+  {
+    Class <?> c = clazz;
+    while (c != null)
+    {
+      if (c.isAnnotationPresent (a))
+        return true;
+      if (_isAnnotationPresentOnInterfacesRecursive (c, a))
+        return true;
+      c = c.getSuperclass ();
+    }
+    return false;
+  }
+
+  public static <T extends Annotation> T getAnnotation (final Class <?> clazz, final Class <T> aAnnotationClass)
   {
     // Check class hierarchy
-    for (Class <?> c = clazz; c != null; c = c.getSuperclass ())
+    Class <?> c = clazz;
+    while (c != null)
     {
-      final T anno = c.getAnnotation (aClazz);
+      final T anno = c.getAnnotation (aAnnotationClass);
       if (anno != null)
         return anno;
+      c = c.getSuperclass ();
     }
 
     // Check interfaces (breadth first)
-    final ICommonsList <Class <?>> q = new CommonsArrayList <> ();
-    q.add (clazz);
-    while (!q.isEmpty ())
+    final ICommonsList <Class <?>> aQueue = new CommonsArrayList <> ();
+    aQueue.add (clazz);
+    while (!aQueue.isEmpty ())
     {
-      final Class <?> c = q.removeFirstOrNull ();
+      c = aQueue.removeFirstOrNull ();
       if (c != null)
       {
         if (c.isInterface ())
         {
-          final T anno = c.getAnnotation (aClazz);
+          final T anno = c.getAnnotation (aAnnotationClass);
           if (anno != null)
             return anno;
         }
         else
         {
-          q.add (c.getSuperclass ());
+          aQueue.add (c.getSuperclass ());
         }
-        q.addAll (c.getInterfaces ());
+        aQueue.addAll (c.getInterfaces ());
       }
     }
 

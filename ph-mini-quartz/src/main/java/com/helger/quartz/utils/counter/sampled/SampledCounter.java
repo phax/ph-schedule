@@ -20,10 +20,10 @@ package com.helger.quartz.utils.counter.sampled;
 
 import java.util.TimerTask;
 
-import javax.annotation.Nonnull;
-
 import com.helger.quartz.utils.CircularLossyQueue;
 import com.helger.quartz.utils.counter.Counter;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * An implementation of {@link ISampledCounter}

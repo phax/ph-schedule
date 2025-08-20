@@ -24,12 +24,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.datetime.PDTFactory;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.CQuartz;
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.CronScheduleBuilder;
@@ -37,6 +34,9 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.QCloneUtils;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to

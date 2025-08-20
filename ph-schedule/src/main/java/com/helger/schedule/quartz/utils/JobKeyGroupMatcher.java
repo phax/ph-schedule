@@ -16,10 +16,10 @@
  */
 package com.helger.schedule.quartz.utils;
 
-import javax.annotation.Nonnull;
-
 import com.helger.quartz.JobKey;
 import com.helger.quartz.impl.matchers.GroupMatcher;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Type-safe implementation of GroupMatcher for {@link JobKey}

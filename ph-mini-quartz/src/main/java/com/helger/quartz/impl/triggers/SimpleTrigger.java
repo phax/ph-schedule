@@ -21,12 +21,9 @@ package com.helger.quartz.impl.triggers;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.datetime.PDTFactory;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.CQuartz;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IScheduleBuilder;
@@ -34,6 +31,9 @@ import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * <p>

@@ -18,13 +18,13 @@
  */
 package com.helger.quartz;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.annotation.MustImplementEqualsAndHashcode;
+import com.helger.annotation.style.MustImplementEqualsAndHashcode;
 import com.helger.quartz.impl.matchers.AndMatcher;
 import com.helger.quartz.impl.matchers.NotMatcher;
 import com.helger.quartz.impl.matchers.OrMatcher;
 import com.helger.quartz.utils.Key;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Matchers can be used in various {@link IScheduler} API methods to select the
@@ -36,9 +36,9 @@ import com.helger.quartz.utils.Key;
 @MustImplementEqualsAndHashcode
 public interface IMatcher <T extends Key <T>>
 {
-  boolean isMatch (T key);
+  boolean isMatch (T aKey);
 
-  boolean equals (Object obj);
+  boolean equals (Object aObj);
 
   int hashCode ();
 

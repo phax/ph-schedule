@@ -18,12 +18,9 @@
  */
 package com.helger.quartz.impl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.equals.EqualsHelper;
-import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.equals.EqualsHelper;
+import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -34,6 +31,9 @@ import com.helger.quartz.JobKey;
 import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.utils.ClassUtils;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * <p>

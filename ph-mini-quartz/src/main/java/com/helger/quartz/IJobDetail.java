@@ -18,10 +18,10 @@
  */
 package com.helger.quartz;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.helger.base.clone.ICloneable;
 
-import com.helger.commons.lang.ICloneable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Conveys the detail properties of a given <code>Job</code> instance.

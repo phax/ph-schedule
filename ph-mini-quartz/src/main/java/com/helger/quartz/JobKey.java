@@ -18,8 +18,7 @@
  */
 package com.helger.quartz;
 
-import javax.annotation.concurrent.Immutable;
-
+import com.helger.annotation.concurrent.Immutable;
 import com.helger.quartz.utils.Key;
 
 /**

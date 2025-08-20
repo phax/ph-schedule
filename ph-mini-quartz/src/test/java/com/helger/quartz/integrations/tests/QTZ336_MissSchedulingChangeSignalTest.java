@@ -35,9 +35,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.collection.impl.ICommonsList;
-import com.helger.commons.concurrent.ThreadHelper;
-import com.helger.commons.lang.NonBlockingProperties;
+import com.helger.base.concurrent.ThreadHelper;
+import com.helger.base.rt.NonBlockingProperties;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.DisallowConcurrentExecution;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;

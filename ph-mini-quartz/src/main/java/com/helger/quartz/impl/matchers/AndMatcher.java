@@ -18,12 +18,12 @@
  */
 package com.helger.quartz.impl.matchers;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Matches using an AND operator on two Matcher operands.
@@ -35,13 +35,13 @@ public class AndMatcher <T extends Key <T>> implements IMatcher <T>
   private final IMatcher <T> m_aLeftOperand;
   private final IMatcher <T> m_aRightOperand;
 
-  public AndMatcher (@Nonnull final IMatcher <T> leftOperand, @Nonnull final IMatcher <T> rightOperand)
+  public AndMatcher (@Nonnull final IMatcher <T> aLeftOperand, @Nonnull final IMatcher <T> aRightOperand)
   {
-    ValueEnforcer.notNull (leftOperand, "LeftOperand");
-    ValueEnforcer.notNull (rightOperand, "RightOperand");
+    ValueEnforcer.notNull (aLeftOperand, "LeftOperand");
+    ValueEnforcer.notNull (aRightOperand, "RightOperand");
 
-    m_aLeftOperand = leftOperand;
-    m_aRightOperand = rightOperand;
+    m_aLeftOperand = aLeftOperand;
+    m_aRightOperand = aRightOperand;
   }
 
   @Nonnull

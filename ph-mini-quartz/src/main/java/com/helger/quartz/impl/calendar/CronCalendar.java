@@ -22,11 +22,11 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.ICalendar;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * This implementation of the Calendar excludes the set of times expressed by a

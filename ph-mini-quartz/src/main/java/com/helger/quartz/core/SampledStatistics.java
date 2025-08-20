@@ -20,8 +20,6 @@ package com.helger.quartz.core;
 
 import java.util.Timer;
 
-import javax.annotation.Nonnull;
-
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
@@ -34,6 +32,8 @@ import com.helger.quartz.utils.counter.ICounterManager;
 import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounterConfig;
 import com.helger.quartz.utils.counter.sampled.SampledRateCounterConfig;
+
+import jakarta.annotation.Nonnull;
 
 public class SampledStatistics implements ISampledStatistics, IJobListener, ISchedulerListener
 {

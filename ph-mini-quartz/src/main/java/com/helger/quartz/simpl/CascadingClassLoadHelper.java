@@ -22,25 +22,24 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.collection.impl.CommonsArrayList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.base.reflection.GenericReflection;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.spi.IClassLoadHelper;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 /**
- * A <code>ClassLoadHelper</code> uses all of the <code>ClassLoadHelper</code>
- * types that are found in this package in its attempts to load a class, when
- * one scheme is found to work, it is promoted to the scheme that will be used
- * first the next time a class is loaded (in order to improve performance).
+ * A <code>ClassLoadHelper</code> uses all of the <code>ClassLoadHelper</code> types that are found
+ * in this package in its attempts to load a class, when one scheme is found to work, it is promoted
+ * to the scheme that will be used first the next time a class is loaded (in order to improve
+ * performance).
  * <p>
- * This approach is used because of the wide variance in class loader behavior
- * between the various environments in which Quartz runs (e.g. disparate
- * application servers, stand-alone, mobile devices, etc.). Because of this
- * disparity, Quartz ran into difficulty with a one class-load style fits-all
- * design. Thus, this class loader finds the approach that works, then
- * 'remembers' it.
+ * This approach is used because of the wide variance in class loader behavior between the various
+ * environments in which Quartz runs (e.g. disparate application servers, stand-alone, mobile
+ * devices, etc.). Because of this disparity, Quartz ran into difficulty with a one class-load style
+ * fits-all design. Thus, this class loader finds the approach that works, then 'remembers' it.
  * </p>
  *
  * @see com.helger.quartz.spi.IClassLoadHelper
@@ -57,9 +56,9 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
   private IClassLoadHelper m_aBestCandidate;
 
   /**
-   * Called to give the ClassLoadHelper a chance to initialize itself, including
-   * the opportunity to "steal" the class loader off of the calling thread,
-   * which is the thread that is initializing Quartz.
+   * Called to give the ClassLoadHelper a chance to initialize itself, including the opportunity to
+   * "steal" the class loader off of the calling thread, which is the thread that is initializing
+   * Quartz.
    */
   @Override
   public void initialize ()
@@ -114,8 +113,8 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
 
     if (ret == null)
     {
-      if (aThrowable instanceof ClassNotFoundException)
-        throw (ClassNotFoundException) aThrowable;
+      if (aThrowable instanceof final ClassNotFoundException aCNFEx)
+        throw aCNFEx;
       throw new ClassNotFoundException ("Unable to load class " + sClassName + " by any known loaders.", aThrowable);
     }
 
@@ -124,18 +123,17 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
     return ret;
   }
 
-  @SuppressWarnings ("unchecked")
   @Nonnull
   @Override
-  public <T> Class <? extends T> loadClass (final String sClassName,
-                                            final Class <T> dummy) throws ClassNotFoundException
+  public <T> Class <? extends T> loadClass (final String sClassName, final Class <T> dummy)
+                                                                                            throws ClassNotFoundException
   {
-    return (Class <? extends T>) loadClass (sClassName);
+    return GenericReflection.uncheckedCast (loadClass (sClassName));
   }
 
   /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
+   * Finds a resource with a given name. This method returns null if no resource with this name is
+   * found.
    *
    * @param name
    *        name of the desired resource
@@ -156,7 +154,6 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
     }
 
     IClassLoadHelper aLoadHelper = null;
-
     final Iterator <IClassLoadHelper> iter = m_aLoadHelpers.iterator ();
     while (iter.hasNext ())
     {
@@ -171,8 +168,8 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
   }
 
   /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
+   * Finds a resource with a given name. This method returns null if no resource with this name is
+   * found.
    *
    * @param name
    *        name of the desired resource
@@ -213,7 +210,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
   @Nonnull
   public ClassLoader getClassLoader ()
   {
-    return m_aBestCandidate == null ? Thread.currentThread ().getContextClassLoader ()
-                                    : m_aBestCandidate.getClassLoader ();
+    return m_aBestCandidate == null ? Thread.currentThread ().getContextClassLoader () : m_aBestCandidate
+                                                                                                         .getClassLoader ();
   }
 }

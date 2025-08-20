@@ -18,17 +18,14 @@ package com.helger.schedule.quartz;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotation.Nonempty;
-import com.helger.commons.annotation.UsedViaReflection;
-import com.helger.commons.datetime.PDTFactory;
-import com.helger.commons.state.EChange;
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.style.UsedViaReflection;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.state.EChange;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobListener;
@@ -43,6 +40,9 @@ import com.helger.schedule.quartz.listener.StatisticsJobListener;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
 import com.helger.scope.IScope;
 import com.helger.scope.singleton.AbstractGlobalSingleton;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Global scheduler instance.

@@ -23,10 +23,10 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.TimeZone;
 
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import com.helger.annotation.concurrent.Immutable;
+import com.helger.base.clone.ICloneable;
 
-import com.helger.commons.lang.ICloneable;
+import jakarta.annotation.Nullable;
 
 /**
  * Internal clone helper class.

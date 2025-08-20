@@ -43,7 +43,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.concurrent.ThreadHelper;
+import com.helger.base.concurrent.ThreadHelper;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.utils.Key;

@@ -26,8 +26,8 @@ import java.util.concurrent.CountDownLatch;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.helger.commons.datetime.PDTFactory;
-import com.helger.commons.lang.NonBlockingProperties;
+import com.helger.base.rt.NonBlockingProperties;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.impl.triggers.SimpleTrigger;

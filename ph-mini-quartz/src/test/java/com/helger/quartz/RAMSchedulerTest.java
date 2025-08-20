@@ -18,7 +18,7 @@
  */
 package com.helger.quartz;
 
-import com.helger.commons.lang.NonBlockingProperties;
+import com.helger.base.rt.NonBlockingProperties;
 import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.simpl.SimpleThreadPool;
 

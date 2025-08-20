@@ -18,7 +18,7 @@
  */
 package com.helger.quartz.utils.counter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Config for a simple Counter

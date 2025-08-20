@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import com.helger.commons.concurrent.ThreadHelper;
+import com.helger.base.concurrent.ThreadHelper;
 import com.helger.quartz.CronScheduleBuilder;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IJobDetail;

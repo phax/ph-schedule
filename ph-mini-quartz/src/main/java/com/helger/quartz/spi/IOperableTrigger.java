@@ -20,14 +20,14 @@ package com.helger.quartz.spi;
 
 import java.util.Date;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.SchedulerException;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public interface IOperableTrigger extends IMutableTrigger
 {

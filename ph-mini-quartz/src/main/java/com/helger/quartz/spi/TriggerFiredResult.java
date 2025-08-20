@@ -18,7 +18,7 @@
  */
 package com.helger.quartz.spi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author lorban

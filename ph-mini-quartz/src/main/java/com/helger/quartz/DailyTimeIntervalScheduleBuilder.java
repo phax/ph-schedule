@@ -26,13 +26,13 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.CGlobal;
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.datetime.PDTFactory;
+import com.helger.base.CGlobal;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * A {@link IScheduleBuilder} implementation that build schedule for

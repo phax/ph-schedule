@@ -18,18 +18,18 @@
  */
 package com.helger.quartz.listeners;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.annotation.ReturnsMutableCopy;
-import com.helger.commons.collection.impl.CommonsLinkedList;
-import com.helger.commons.collection.impl.ICommonsList;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.collection.commons.CommonsLinkedList;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.ISchedulerListener;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerKey;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Holds a List of references to SchedulerListener instances and broadcasts all

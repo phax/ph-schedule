@@ -18,12 +18,12 @@
  */
 package com.helger.quartz.impl.matchers;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Matches on the complete key being equal (both name and group).
@@ -34,10 +34,10 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
 {
   private final T m_aCompareTo;
 
-  protected KeyMatcher (@Nonnull final T compareTo)
+  protected KeyMatcher (@Nonnull final T aCompareTo)
   {
-    ValueEnforcer.notNull (compareTo, "CompareTo");
-    m_aCompareTo = compareTo;
+    ValueEnforcer.notNull (aCompareTo, "CompareTo");
+    m_aCompareTo = aCompareTo;
   }
 
   @Nonnull
@@ -46,9 +46,9 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
     return m_aCompareTo;
   }
 
-  public boolean isMatch (final T key)
+  public boolean isMatch (final T aKey)
   {
-    return m_aCompareTo.equals (key);
+    return m_aCompareTo.equals (aKey);
   }
 
   @Override
@@ -71,8 +71,8 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
   /**
    * Create a KeyMatcher that matches Keys that equal the given key.
    */
-  public static <U extends Key <U>> KeyMatcher <U> keyEquals (final U compareTo)
+  public static <U extends Key <U>> KeyMatcher <U> keyEquals (@Nonnull final U aCompareTo)
   {
-    return new KeyMatcher <> (compareTo);
+    return new KeyMatcher <> (aCompareTo);
   }
 }
