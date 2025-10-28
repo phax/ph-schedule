@@ -25,6 +25,7 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.ITrigger;
+import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.JobBuilder;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
@@ -38,19 +39,17 @@ import jakarta.annotation.Nonnull;
 /**
  * <code>JDK8TriggerBuilder</code> is used to instantiate {@link ITrigger}s.
  * <p>
- * The builder will always try to keep itself in a valid state, with reasonable
- * defaults set for calling build() at any point. For instance if you do not
- * invoke <i>withSchedule(..)</i> method, a default schedule of firing once
- * immediately will be used. As another example, if you do not invoked
- * <i>withIdentity(..)</i> a trigger name will be generated for you.
+ * The builder will always try to keep itself in a valid state, with reasonable defaults set for
+ * calling build() at any point. For instance if you do not invoke <i>withSchedule(..)</i> method, a
+ * default schedule of firing once immediately will be used. As another example, if you do not
+ * invoked <i>withIdentity(..)</i> a trigger name will be generated for you.
  * </p>
  * <p>
- * Quartz provides a builder-style API for constructing scheduling-related
- * entities via a Domain-Specific Language (DSL). The DSL can best be utilized
- * through the usage of static imports of the methods on the classes
- * <code>JDK8TriggerBuilder</code>, <code>JobBuilder</code>,
- * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and
- * the various <code>ScheduleBuilder</code> implementations.
+ * Quartz provides a builder-style API for constructing scheduling-related entities via a
+ * Domain-Specific Language (DSL). The DSL can best be utilized through the usage of static imports
+ * of the methods on the classes <code>JDK8TriggerBuilder</code>, <code>JobBuilder</code>,
+ * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and the various
+ * <code>ScheduleBuilder</code> implementations.
  * </p>
  * <p>
  * Client code can then use the DSL to write code such as this:
@@ -83,13 +82,13 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   private JobKey m_aJobKey;
   private JobDataMap m_aJobDataMap = new JobDataMap ();
   private IScheduleBuilder <? extends ITrigger> m_aScheduleBuilder;
+  private EMisfireInstruction m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   protected JDK8TriggerBuilder ()
   {}
 
   /**
-   * Create a new JDK8TriggerBuilder with which to define a specification for a
-   * Trigger.
+   * Create a new JDK8TriggerBuilder with which to define a specification for a Trigger.
    *
    * @return the new JDK8TriggerBuilder
    */
@@ -123,15 +122,15 @@ public class JDK8TriggerBuilder <T extends ITrigger>
 
     if (!m_aJobDataMap.isEmpty ())
       trig.setJobDataMap (m_aJobDataMap);
+    trig.setMisfireInstruction (m_eMisfireInstruction);
     return GenericReflection.uncheckedCast (trig);
   }
 
   /**
-   * Use a <code>TriggerKey</code> with the given name and default group to
-   * identify the Trigger.
+   * Use a <code>TriggerKey</code> with the given name and default group to identify the Trigger.
    * <p>
-   * If none of the 'withIdentity' methods are set on the JDK8TriggerBuilder,
-   * then a random, unique TriggerKey will be generated.
+   * If none of the 'withIdentity' methods are set on the JDK8TriggerBuilder, then a random, unique
+   * TriggerKey will be generated.
    * </p>
    *
    * @param name
@@ -150,8 +149,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   /**
    * Use a TriggerKey with the given name and group to identify the Trigger.
    * <p>
-   * If none of the 'withIdentity' methods are set on the JDK8TriggerBuilder,
-   * then a random, unique TriggerKey will be generated.
+   * If none of the 'withIdentity' methods are set on the JDK8TriggerBuilder, then a random, unique
+   * TriggerKey will be generated.
    * </p>
    *
    * @param name
@@ -172,8 +171,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   /**
    * Use the given TriggerKey to identify the Trigger.
    * <p>
-   * If none of the 'withIdentity' methods are set on the JDK8TriggerBuilder,
-   * then a random, unique TriggerKey will be generated.
+   * If none of the 'withIdentity' methods are set on the JDK8TriggerBuilder, then a random, unique
+   * TriggerKey will be generated.
    * </p>
    *
    * @param triggerKey
@@ -205,8 +204,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the Trigger's priority. When more than one Trigger have the same fire
-   * time, the scheduler will fire the one with the highest priority first.
+   * Set the Trigger's priority. When more than one Trigger have the same fire time, the scheduler
+   * will fire the one with the highest priority first.
    *
    * @param triggerPriority
    *        the priority for the Trigger
@@ -221,8 +220,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the name of the {@link ICalendar} that should be applied to this
-   * Trigger's schedule.
+   * Set the name of the {@link ICalendar} that should be applied to this Trigger's schedule.
    *
    * @param calName
    *        the name of the Calendar to reference.
@@ -238,10 +236,9 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the time the Trigger should start at - the trigger may or may not fire
-   * at this time - depending upon the schedule configured for the Trigger.
-   * However the Trigger will NOT fire before this time, regardless of the
-   * Trigger's schedule.
+   * Set the time the Trigger should start at - the trigger may or may not fire at this time -
+   * depending upon the schedule configured for the Trigger. However the Trigger will NOT fire
+   * before this time, regardless of the Trigger's schedule.
    *
    * @param triggerStartTime
    *        the start time for the Trigger.
@@ -257,9 +254,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the time the Trigger should start at to the current moment - the
-   * trigger may or may not fire at this time - depending upon the schedule
-   * configured for the Trigger.
+   * Set the time the Trigger should start at to the current moment - the trigger may or may not
+   * fire at this time - depending upon the schedule configured for the Trigger.
    *
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getStartTime()
@@ -271,8 +267,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the time at which the Trigger will no longer fire - even if it's
-   * schedule has remaining repeats.
+   * Set the time at which the Trigger will no longer fire - even if it's schedule has remaining
+   * repeats.
    *
    * @param triggerEndTime
    *        the end time for the Trigger. If null, the end time is indefinite.
@@ -288,11 +284,10 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the {@link IScheduleBuilder} that will be used to define the Trigger's
-   * schedule.
+   * Set the {@link IScheduleBuilder} that will be used to define the Trigger's schedule.
    * <p>
-   * The particular <code>SchedulerBuilder</code> used will dictate the concrete
-   * type of Trigger that is produced by the JDK8TriggerBuilder.
+   * The particular <code>SchedulerBuilder</code> used will dictate the concrete type of Trigger
+   * that is produced by the JDK8TriggerBuilder.
    * </p>
    *
    * @param schedBuilder
@@ -304,6 +299,21 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   public JDK8TriggerBuilder <T> withSchedule (final IScheduleBuilder <? extends T> schedBuilder)
   {
     m_aScheduleBuilder = schedBuilder;
+    return this;
+  }
+
+  /**
+   * What to do on misfire.
+   *
+   * @param e
+   *        Misfire instructions. May not be <code>null</code>.
+   * @return this for chaining
+   * @since 6.0.1
+   */
+  @Nonnull
+  public JDK8TriggerBuilder <T> withMisfireInstruction (@Nonnull final EMisfireInstruction e)
+  {
+    m_eMisfireInstruction = e;
     return this;
   }
 
@@ -322,9 +332,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the identity of the Job which should be fired by the produced Trigger -
-   * a <code>JobKey</code> will be produced with the given name and default
-   * group.
+   * Set the identity of the Job which should be fired by the produced Trigger - a
+   * <code>JobKey</code> will be produced with the given name and default group.
    *
    * @param jobName
    *        the name of the job (in default group) to fire.
@@ -339,8 +348,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the identity of the Job which should be fired by the produced Trigger -
-   * a <code>JobKey</code> will be produced with the given name and group.
+   * Set the identity of the Job which should be fired by the produced Trigger - a
+   * <code>JobKey</code> will be produced with the given name and group.
    *
    * @param jobName
    *        the name of the job to fire.
@@ -357,8 +366,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the identity of the Job which should be fired by the produced Trigger,
-   * by extracting the JobKey from the given job.
+   * Set the identity of the Job which should be fired by the produced Trigger, by extracting the
+   * JobKey from the given job.
    *
    * @param jobDetail
    *        the Job to fire.
@@ -473,9 +482,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
   }
 
   /**
-   * Set the Trigger's {@link JobDataMap}, adding any values to it that were
-   * already set on this JDK8TriggerBuilder using any of the other
-   * 'usingJobData' methods.
+   * Set the Trigger's {@link JobDataMap}, adding any values to it that were already set on this
+   * JDK8TriggerBuilder using any of the other 'usingJobData' methods.
    *
    * @param newJobDataMap
    *        New map to use. May not be <code>null</code>.
