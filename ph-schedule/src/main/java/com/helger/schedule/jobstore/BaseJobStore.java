@@ -25,6 +25,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +68,6 @@ import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.ISchedulerSignaler;
 import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * {@link IJobStore} implementation based on
@@ -248,7 +247,7 @@ public class BaseJobStore implements IJobStore
     });
   }
 
-  public boolean removeJobs (@Nonnull final List <JobKey> jobKeys) throws JobPersistenceException
+  public boolean removeJobs (@NonNull final List <JobKey> jobKeys) throws JobPersistenceException
   {
     boolean bAllFound = true;
     for (final JobKey key : jobKeys)
@@ -257,7 +256,7 @@ public class BaseJobStore implements IJobStore
     return bAllFound;
   }
 
-  public boolean removeTriggers (@Nonnull final List <TriggerKey> triggerKeys) throws JobPersistenceException
+  public boolean removeTriggers (@NonNull final List <TriggerKey> triggerKeys) throws JobPersistenceException
   {
     boolean bAllFound = true;
     for (final TriggerKey key : triggerKeys)
@@ -291,7 +290,7 @@ public class BaseJobStore implements IJobStore
     }
   }
 
-  public void storeTrigger (@Nonnull final IOperableTrigger aNewTrigger,
+  public void storeTrigger (@NonNull final IOperableTrigger aNewTrigger,
                             final boolean bReplaceExisting) throws JobPersistenceException
   {
     final TriggerKey aTriggerKey = aNewTrigger.getKey ();
@@ -347,13 +346,13 @@ public class BaseJobStore implements IJobStore
    * @return <code>true</code> if a <code>Trigger</code> with the given name and
    *         group was found and removed from the store.
    */
-  public boolean removeTrigger (@Nonnull final TriggerKey triggerKey)
+  public boolean removeTrigger (@NonNull final TriggerKey triggerKey)
   {
     return _removeTrigger (triggerKey, true);
   }
 
   @IsLocked (ELockType.WRITE)
-  private boolean _removeTrigger (@Nonnull final TriggerKey key, final boolean bRemoveOrphanedJob)
+  private boolean _removeTrigger (@NonNull final TriggerKey key, final boolean bRemoveOrphanedJob)
   {
     return m_aRWLock.writeLockedBoolean ( () -> {
       // remove from triggers by FQN map
@@ -498,7 +497,7 @@ public class BaseJobStore implements IJobStore
     return m_aRWLock.readLockedBoolean ( () -> m_aTriggersByKey.containsKey (aTriggerKey));
   }
 
-  @Nonnull
+  @NonNull
   public ETriggerState getTriggerState (final TriggerKey triggerKey) throws JobPersistenceException
   {
     return m_aRWLock.readLockedGet ( () -> {
@@ -629,7 +628,7 @@ public class BaseJobStore implements IJobStore
     return ret;
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public ICommonsList <String> getCalendarNames ()
   {
@@ -675,7 +674,7 @@ public class BaseJobStore implements IJobStore
     return m_aRWLock.readLockedGet ( () -> new CommonsArrayList <> (m_aTriggersByGroup.keySet ()));
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public ICommonsList <IOperableTrigger> getTriggersForJob (final JobKey aJobKey)
   {
@@ -688,7 +687,7 @@ public class BaseJobStore implements IJobStore
     });
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   protected ICommonsList <TriggerWrapper> getTriggerWrappersForJob (final JobKey aJobKey)
   {
@@ -701,7 +700,7 @@ public class BaseJobStore implements IJobStore
     });
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   protected ICommonsList <TriggerWrapper> getTriggerWrappersForCalendar (final String calName)
   {
@@ -1369,25 +1368,25 @@ final class JobWrapper
   private final JobKey m_aKey;
   private IJobDetail m_aJobDetail;
 
-  JobWrapper (@Nonnull final IJobDetail aJobDetail)
+  JobWrapper (@NonNull final IJobDetail aJobDetail)
   {
     m_aKey = aJobDetail.getKey ();
     setJobDetail (aJobDetail);
   }
 
-  @Nonnull
+  @NonNull
   public JobKey getJobKey ()
   {
     return m_aKey;
   }
 
-  @Nonnull
+  @NonNull
   public IJobDetail getJobDetail ()
   {
     return m_aJobDetail;
   }
 
-  public void setJobDetail (@Nonnull final IJobDetail aJobDetail)
+  public void setJobDetail (@NonNull final IJobDetail aJobDetail)
   {
     ValueEnforcer.notNull (aJobDetail, "JobDetail");
     ValueEnforcer.isTrue (aJobDetail.getKey ().equals (m_aKey), "Different JobKey!");
@@ -1428,7 +1427,7 @@ final class TriggerWrapper
   private final JobKey m_aJobKey;
   private int m_nState = STATE_WAITING;
 
-  TriggerWrapper (@Nonnull final IOperableTrigger aTrigger)
+  TriggerWrapper (@NonNull final IOperableTrigger aTrigger)
   {
     ValueEnforcer.notNull (aTrigger, "Trigger");
     m_aTrigger = aTrigger;
@@ -1436,19 +1435,19 @@ final class TriggerWrapper
     m_aJobKey = aTrigger.getJobKey ();
   }
 
-  @Nonnull
+  @NonNull
   public IOperableTrigger getTrigger ()
   {
     return m_aTrigger;
   }
 
-  @Nonnull
+  @NonNull
   public TriggerKey getTriggerKey ()
   {
     return m_aTriggerKey;
   }
 
-  @Nonnull
+  @NonNull
   public JobKey getJobKey ()
   {
     return m_aJobKey;

@@ -16,10 +16,10 @@
  */
 package com.helger.schedule.quartz.utils;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.GroupMatcher;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Type-safe implementation of GroupMatcher for {@link TriggerKey}
@@ -28,13 +28,13 @@ import jakarta.annotation.Nonnull;
  */
 public class TriggerKeyGroupMatcher extends GroupMatcher <TriggerKey>
 {
-  public TriggerKeyGroupMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
+  public TriggerKeyGroupMatcher (@NonNull final String sCompareTo, @NonNull final EStringOperatorName eCompareWith)
   {
     super (sCompareTo, eCompareWith);
   }
 
-  @Nonnull
-  public static TriggerKeyGroupMatcher createEquals (@Nonnull final String sCompareTo)
+  @NonNull
+  public static TriggerKeyGroupMatcher createEquals (@NonNull final String sCompareTo)
   {
     return new TriggerKeyGroupMatcher (sCompareTo, EStringOperatorName.EQUALS);
   }

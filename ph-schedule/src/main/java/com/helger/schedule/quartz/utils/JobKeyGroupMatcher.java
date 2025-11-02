@@ -16,10 +16,10 @@
  */
 package com.helger.schedule.quartz.utils;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.quartz.JobKey;
 import com.helger.quartz.impl.matchers.GroupMatcher;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Type-safe implementation of GroupMatcher for {@link JobKey}
@@ -28,13 +28,13 @@ import jakarta.annotation.Nonnull;
  */
 public class JobKeyGroupMatcher extends GroupMatcher <JobKey>
 {
-  public JobKeyGroupMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
+  public JobKeyGroupMatcher (@NonNull final String sCompareTo, @NonNull final EStringOperatorName eCompareWith)
   {
     super (sCompareTo, eCompareWith);
   }
 
-  @Nonnull
-  public static JobKeyGroupMatcher createEquals (@Nonnull final String sCompareTo)
+  @NonNull
+  public static JobKeyGroupMatcher createEquals (@NonNull final String sCompareTo)
   {
     return new JobKeyGroupMatcher (sCompareTo, EStringOperatorName.EQUALS);
   }

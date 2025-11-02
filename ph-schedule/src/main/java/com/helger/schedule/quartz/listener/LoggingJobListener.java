@@ -16,6 +16,7 @@
  */
 package com.helger.schedule.quartz.listener;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +25,6 @@ import com.helger.base.lang.clazz.ClassHelper;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * An implementation of the {@link IJobListener} interface that logs job
@@ -39,16 +38,16 @@ public class LoggingJobListener implements IJobListener
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (LoggingJobListener.class);
 
-  @Nonnull
+  @NonNull
   @Nonempty
   public String getName ()
   {
     return "LoggingJobListener";
   }
 
-  @Nonnull
+  @NonNull
   @Nonempty
-  protected String getJobName (@Nonnull final IJobExecutionContext aContext)
+  protected String getJobName (@NonNull final IJobExecutionContext aContext)
   {
     String ret = aContext.getJobDetail ().getKey ().toString ();
     final String sClassName = ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
@@ -58,20 +57,20 @@ public class LoggingJobListener implements IJobListener
   }
 
   @Override
-  public void jobToBeExecuted (@Nonnull final IJobExecutionContext aContext)
+  public void jobToBeExecuted (@NonNull final IJobExecutionContext aContext)
   {
     if (LOGGER.isDebugEnabled ())
       LOGGER.debug ("Job to be executed: " + getJobName (aContext));
   }
 
   @Override
-  public void jobExecutionVetoed (@Nonnull final IJobExecutionContext aContext)
+  public void jobExecutionVetoed (@NonNull final IJobExecutionContext aContext)
   {
     LOGGER.warn ("Job execution vetoed by trigger listener: " + getJobName (aContext));
   }
 
   @Override
-  public void jobWasExecuted (@Nonnull final IJobExecutionContext aContext, final JobExecutionException aJobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext aContext, final JobExecutionException aJobException)
   {
     final Object aResult = aContext.getResult ();
     final long nRuntimeMilliSecs = aContext.getJobRunTime ();

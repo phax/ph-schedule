@@ -16,6 +16,8 @@
  */
 package com.helger.schedule.job;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +34,6 @@ import com.helger.quartz.JobExecutionException;
 import com.helger.statistics.api.IMutableStatisticsHandlerKeyedCounter;
 import com.helger.statistics.api.IMutableStatisticsHandlerKeyedTimer;
 import com.helger.statistics.impl.StatisticsManager;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Abstract {@link IJob} implementation with an exception handler etc.
@@ -58,7 +57,7 @@ public abstract class AbstractJob implements IJob
   /**
    * @return The custom exception handler. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   @ReturnsMutableObject
   public static CallbackList <IJobExceptionCallback> exceptionCallbacks ()
   {
@@ -76,7 +75,7 @@ public abstract class AbstractJob implements IJob
    *        The current job execution context. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final IJobExecutionContext aContext)
+  protected void beforeExecute (@NonNull final JobDataMap aJobDataMap, @NonNull final IJobExecutionContext aContext)
   {}
 
   /**
@@ -90,8 +89,8 @@ public abstract class AbstractJob implements IJob
    *         In case of an error in execution
    */
   @OverrideOnDemand
-  protected abstract void onExecute (@Nonnull final JobDataMap aJobDataMap,
-                                     @Nonnull final IJobExecutionContext aContext) throws JobExecutionException;
+  protected abstract void onExecute (@NonNull final JobDataMap aJobDataMap,
+                                     @NonNull final IJobExecutionContext aContext) throws JobExecutionException;
 
   /**
    * Called after the job gets executed. This method is called after the scopes
@@ -105,9 +104,9 @@ public abstract class AbstractJob implements IJob
    *        The execution success state. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap,
-                               @Nonnull final IJobExecutionContext aContext,
-                               @Nonnull final ESuccess eExecSuccess)
+  protected void afterExecute (@NonNull final JobDataMap aJobDataMap,
+                               @NonNull final IJobExecutionContext aContext,
+                               @NonNull final ESuccess eExecSuccess)
   {}
 
   /**
@@ -120,14 +119,14 @@ public abstract class AbstractJob implements IJob
    * @param aJob
    *        The {@link IJob} instance
    */
-  protected static void triggerCustomExceptionHandler (@Nonnull final Throwable t,
+  protected static void triggerCustomExceptionHandler (@NonNull final Throwable t,
                                                        @Nullable final String sJobClassName,
-                                                       @Nonnull final IJob aJob)
+                                                       @NonNull final IJob aJob)
   {
     exceptionCallbacks ().forEach (x -> x.onScheduledJobException (t, sJobClassName, aJob));
   }
 
-  public final void execute (@Nonnull final IJobExecutionContext aContext) throws JobExecutionException
+  public final void execute (@NonNull final IJobExecutionContext aContext) throws JobExecutionException
   {
     // State variables
     ESuccess eExecSuccess = ESuccess.FAILURE;

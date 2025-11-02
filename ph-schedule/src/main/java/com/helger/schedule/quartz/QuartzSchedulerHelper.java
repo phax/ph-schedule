@@ -16,14 +16,14 @@
  */
 package com.helger.schedule.quartz;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SchedulerMetaData;
 import com.helger.quartz.impl.StdSchedulerFactory;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Misc utility methods around Quartz schedulers
@@ -43,7 +43,7 @@ public final class QuartzSchedulerHelper
    * @return The global scheduler factory that is used. Never <code>null</code>.
    * @since 1.8.2
    */
-  @Nonnull
+  @NonNull
   public static ISchedulerFactory getSchedulerFactory ()
   {
     return SCHEDULER_FACTORY;
@@ -54,7 +54,7 @@ public final class QuartzSchedulerHelper
    *         started. Never <code>null</code>.
    * @see #getScheduler(boolean)
    */
-  @Nonnull
+  @NonNull
   public static IScheduler getScheduler ()
   {
     return getScheduler (DEFAULT_START_AUTOMATICALLY);
@@ -68,7 +68,7 @@ public final class QuartzSchedulerHelper
    *        started. If <code>false</code> the state is not changed.
    * @return The underlying Quartz scheduler. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public static IScheduler getScheduler (final boolean bStartAutomatically)
   {
     try
@@ -92,7 +92,7 @@ public final class QuartzSchedulerHelper
    *
    * @return The metadata of the underlying scheduler.
    */
-  @Nonnull
+  @NonNull
   public static SchedulerMetaData getSchedulerMetaData ()
   {
     try
@@ -109,7 +109,7 @@ public final class QuartzSchedulerHelper
   /**
    * @return The state of the scheduler. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public static ESchedulerState getSchedulerState ()
   {
     try

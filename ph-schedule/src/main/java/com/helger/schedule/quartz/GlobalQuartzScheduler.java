@@ -18,6 +18,8 @@ package com.helger.schedule.quartz;
 
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,9 +42,6 @@ import com.helger.schedule.quartz.listener.StatisticsJobListener;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
 import com.helger.scope.IScope;
 import com.helger.scope.singleton.AbstractGlobalSingleton;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Global scheduler instance.
@@ -72,7 +71,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     addJobListener (new StatisticsJobListener ());
   }
 
-  @Nonnull
+  @NonNull
   public static GlobalQuartzScheduler getInstance ()
   {
     return getGlobalSingleton (GlobalQuartzScheduler.class);
@@ -81,7 +80,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
   /**
    * @return The Quartz internal group name to be used. Defaults to {@link #GROUP_NAME}.
    */
-  @Nonnull
+  @NonNull
   @Nonempty
   public String getGroupName ()
   {
@@ -94,7 +93,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @param sGroupName
    *        The new group name to be used. May neither be <code>null</code> nor empty.
    */
-  public void setGroupName (@Nonnull @Nonempty final String sGroupName)
+  public void setGroupName (@NonNull @Nonempty final String sGroupName)
   {
     ValueEnforcer.notEmpty (sGroupName, "GroupName");
     m_sGroupName = sGroupName;
@@ -106,7 +105,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @param aJobListener
    *        The job listener to be added. May not be <code>null</code>.
    */
-  public void addJobListener (@Nonnull final IJobListener aJobListener)
+  public void addJobListener (@NonNull final IJobListener aJobListener)
   {
     ValueEnforcer.notNull (aJobListener, "JobListener");
 
@@ -123,7 +122,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
   /**
    * @return The underlying Quartz scheduler object. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public IScheduler getScheduler ()
   {
     return m_aScheduler;
@@ -143,10 +142,10 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    *        Additional parameters. May be <code>null</code>.
    * @return The created trigger key for further usage. Never <code>null</code>.
    */
-  @Nonnull
-  public TriggerKey scheduleJob (@Nonnull final String sJobName,
-                                 @Nonnull final JDK8TriggerBuilder <? extends ITrigger> aTriggerBuilder,
-                                 @Nonnull final Class <? extends IJob> aJobClass,
+  @NonNull
+  public TriggerKey scheduleJob (@NonNull final String sJobName,
+                                 @NonNull final JDK8TriggerBuilder <? extends ITrigger> aTriggerBuilder,
+                                 @NonNull final Class <? extends IJob> aJobClass,
                                  @Nullable final Map <String, ? extends Object> aJobData)
   {
     ValueEnforcer.notNull (sJobName, "JobName");
@@ -191,9 +190,9 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    *        Optional job data map.
    * @return The created trigger key for further usage. Never <code>null</code>.
    */
-  @Nonnull
-  public TriggerKey scheduleJobNowOnce (@Nonnull final String sJobName,
-                                        @Nonnull final Class <? extends IJob> aJobClass,
+  @NonNull
+  public TriggerKey scheduleJobNowOnce (@NonNull final String sJobName,
+                                        @NonNull final Class <? extends IJob> aJobClass,
                                         @Nullable final Map <String, ? extends Object> aJobData)
   {
     return scheduleJob (sJobName,
@@ -214,8 +213,8 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    *        Trigger key to use. May not be <code>null</code>.
    * @return {@link EChange}.
    */
-  @Nonnull
-  public EChange unscheduleJob (@Nonnull final TriggerKey aTriggerKey)
+  @NonNull
+  public EChange unscheduleJob (@NonNull final TriggerKey aTriggerKey)
   {
     ValueEnforcer.notNull (aTriggerKey, "TriggerKey");
     try
@@ -241,7 +240,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    *        Trigger key to use. May not be <code>null</code>.
    * @see #resumeJob(TriggerKey)
    */
-  public void pauseJob (@Nonnull final TriggerKey aTriggerKey)
+  public void pauseJob (@NonNull final TriggerKey aTriggerKey)
   {
     ValueEnforcer.notNull (aTriggerKey, "TriggerKey");
     try
@@ -262,7 +261,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @param aTriggerKey
    *        Trigger key to use. May not be <code>null</code>.
    */
-  public void resumeJob (@Nonnull final TriggerKey aTriggerKey)
+  public void resumeJob (@NonNull final TriggerKey aTriggerKey)
   {
     ValueEnforcer.notNull (aTriggerKey, "TriggerKey");
     try
@@ -298,7 +297,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
   }
 
   @Override
-  protected void onDestroy (@Nonnull final IScope aScopeInDestruction) throws Exception
+  protected void onDestroy (@NonNull final IScope aScopeInDestruction) throws Exception
   {
     shutdown ();
   }

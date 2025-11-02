@@ -18,6 +18,8 @@ package com.helger.schedule.quartz.trigger;
 
 import java.time.LocalDateTime;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.reflection.GenericReflection;
 import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.DateBuilder;
@@ -33,8 +35,6 @@ import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.utils.Key;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <code>JDK8TriggerBuilder</code> is used to instantiate {@link ITrigger}s.
@@ -92,7 +92,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    *
    * @return the new JDK8TriggerBuilder
    */
-  @Nonnull
+  @NonNull
   public static JDK8TriggerBuilder <ITrigger> newTrigger ()
   {
     return new JDK8TriggerBuilder <> ();
@@ -103,7 +103,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    *
    * @return a Trigger that meets the specifications of the builder.
    */
-  @Nonnull
+  @NonNull
   public T build ()
   {
     if (m_aScheduleBuilder == null)
@@ -139,7 +139,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @see TriggerKey
    * @see ITrigger#getKey()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> withIdentity (final String name)
   {
     m_aTriggerKey = new TriggerKey (name, null);
@@ -161,7 +161,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @see TriggerKey
    * @see ITrigger#getKey()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> withIdentity (final String name, final String group)
   {
     m_aTriggerKey = new TriggerKey (name, group);
@@ -181,7 +181,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @see TriggerKey
    * @see ITrigger#getKey()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> withIdentity (final TriggerKey triggerKey)
   {
     m_aTriggerKey = triggerKey;
@@ -196,7 +196,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getDescription()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> withDescription (final String triggerDescription)
   {
     m_sDescription = triggerDescription;
@@ -228,7 +228,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @see ICalendar
    * @see ITrigger#getCalendarName()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> modifiedByCalendar (final String calName)
   {
     m_sCalendarName = calName;
@@ -246,7 +246,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getStartTime()
    * @see DateBuilder
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> startAt (final LocalDateTime triggerStartTime)
   {
     m_aStartTime = triggerStartTime;
@@ -260,7 +260,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getStartTime()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> startNow ()
   {
     return startAt (PDTFactory.getCurrentLocalDateTime ());
@@ -276,7 +276,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getEndTime()
    * @see DateBuilder
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> endAt (final LocalDateTime triggerEndTime)
   {
     m_aEndTime = triggerEndTime;
@@ -295,7 +295,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> withSchedule (final IScheduleBuilder <? extends T> schedBuilder)
   {
     m_aScheduleBuilder = schedBuilder;
@@ -310,8 +310,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return this for chaining
    * @since 6.0.1
    */
-  @Nonnull
-  public JDK8TriggerBuilder <T> withMisfireInstruction (@Nonnull final EMisfireInstruction e)
+  @NonNull
+  public JDK8TriggerBuilder <T> withMisfireInstruction (@NonNull final EMisfireInstruction e)
   {
     m_eMisfireInstruction = e;
     return this;
@@ -340,7 +340,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobKey()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> forJob (final String jobName)
   {
     m_aJobKey = new JobKey (jobName, null);
@@ -358,7 +358,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobKey()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> forJob (final String jobName, final String jobGroup)
   {
     m_aJobKey = new JobKey (jobName, jobGroup);
@@ -374,7 +374,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobKey()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> forJob (final IJobDetail jobDetail)
   {
     final JobKey k = jobDetail.getKey ();
@@ -394,7 +394,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final Object value)
   {
     m_aJobDataMap.put (dataKey, value);
@@ -411,7 +411,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final int value)
   {
     return usingJobData (dataKey, Integer.valueOf (value));
@@ -427,7 +427,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final long value)
   {
     return usingJobData (dataKey, Long.valueOf (value));
@@ -443,7 +443,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final float value)
   {
     return usingJobData (dataKey, Float.valueOf (value));
@@ -459,7 +459,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final double value)
   {
     return usingJobData (dataKey, Double.valueOf (value));
@@ -475,7 +475,7 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
-  @Nonnull
+  @NonNull
   public JDK8TriggerBuilder <T> usingJobData (final String dataKey, final boolean value)
   {
     return usingJobData (dataKey, Boolean.valueOf (value));
@@ -490,8 +490,8 @@ public class JDK8TriggerBuilder <T extends ITrigger>
    * @return the updated JDK8TriggerBuilder
    * @see ITrigger#getJobDataMap()
    */
-  @Nonnull
-  public JDK8TriggerBuilder <T> usingJobData (@Nonnull final JobDataMap newJobDataMap)
+  @NonNull
+  public JDK8TriggerBuilder <T> usingJobData (@NonNull final JobDataMap newJobDataMap)
   {
     // add any existing data to this new map
     newJobDataMap.putAll (m_aJobDataMap);

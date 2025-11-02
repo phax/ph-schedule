@@ -16,11 +16,11 @@
  */
 package com.helger.schedule.job;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.callback.ICallback;
 import com.helger.quartz.IJob;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Callback interface to handle thrown exception objects from the
@@ -40,5 +40,5 @@ public interface IJobExceptionCallback extends ICallback
    * @param aJob
    *        The {@link IJob} instance
    */
-  void onScheduledJobException (@Nonnull Throwable t, @Nullable String sJobClassName, @Nonnull IJob aJob);
+  void onScheduledJobException (@NonNull Throwable t, @Nullable String sJobClassName, @NonNull IJob aJob);
 }
