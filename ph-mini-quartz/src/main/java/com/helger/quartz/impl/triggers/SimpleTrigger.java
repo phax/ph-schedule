@@ -21,6 +21,9 @@ package com.helger.quartz.impl.triggers;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
@@ -31,9 +34,6 @@ import com.helger.quartz.ISimpleTrigger;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -58,7 +58,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   private long m_nRepeatInterval = 0;
   private int m_nTimesTriggered = 0;
 
-  public SimpleTrigger (@Nonnull final SimpleTrigger aOther)
+  public SimpleTrigger (@NonNull final SimpleTrigger aOther)
   {
     super (aOther);
     m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
@@ -82,7 +82,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     return m_aStartTime;
   }
 
-  public void setStartTime (@Nonnull final Date startTime)
+  public void setStartTime (@NonNull final Date startTime)
   {
     ValueEnforcer.notNull (startTime, "StartTime");
 
@@ -684,7 +684,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     return sb;
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public SimpleTrigger getClone ()
   {
@@ -705,10 +705,10 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     return super.hashCode ();
   }
 
-  @Nonnull
-  public static SimpleTrigger create (@Nonnull final String name,
+  @NonNull
+  public static SimpleTrigger create (@NonNull final String name,
                                       @Nullable final String group,
-                                      @Nonnull final String jobName,
+                                      @NonNull final String jobName,
                                       @Nullable final String jobGroup,
                                       final Date startTime,
                                       final Date endTime,

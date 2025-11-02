@@ -21,7 +21,7 @@ package com.helger.quartz.utils;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An implementation of a CircularQueue data-structure. When the number of items
@@ -75,7 +75,7 @@ public class CircularLossyQueue <T>
    *         element of the array is the tail of the queue and the last element
    *         is the head of the queue
    */
-  public T [] toArray (@Nonnull final T [] type)
+  public T [] toArray (@NonNull final T [] type)
   {
     if (type.length > m_nMaxSize)
       throw new IllegalArgumentException ("Size of array passed in cannot be greater than " + m_nMaxSize);

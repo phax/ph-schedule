@@ -21,6 +21,7 @@ package com.helger.quartz.impl;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +40,6 @@ import com.helger.quartz.spi.IJobStore;
 import com.helger.quartz.spi.ISchedulerPlugin;
 import com.helger.quartz.spi.IThreadExecutor;
 import com.helger.quartz.spi.IThreadPool;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <p>
@@ -122,7 +121,7 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   protected DirectSchedulerFactory ()
   {}
 
-  @Nonnull
+  @NonNull
   public static DirectSchedulerFactory getInstance ()
   {
     return s_aInstance;

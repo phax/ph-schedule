@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.impl.triggers;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.clone.ICloneable;
 import com.helger.base.compare.CompareHelper;
 import com.helger.base.enforce.ValueEnforcer;
@@ -35,9 +38,6 @@ import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.spi.IOperableTrigger;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -84,7 +84,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @param aOther
    *        Calendar to copy from. May not be <code>null</code>.
    */
-  protected AbstractTrigger (@Nonnull final AbstractTrigger <IMPLTYPE> aOther)
+  protected AbstractTrigger (@NonNull final AbstractTrigger <IMPLTYPE> aOther)
   {
     ValueEnforcer.notNull (aOther, "Other");
     m_sName = aOther.m_sName;
@@ -189,7 +189,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @exception IllegalArgumentException
    *            if name is null or empty.
    */
-  public final void setName (@Nonnull final String name)
+  public final void setName (@NonNull final String name)
   {
     ValueEnforcer.notNull (name, "Name");
     ValueEnforcer.isFalse (name.trim ().isEmpty (), "Trigger name cannot be null or empty.");
@@ -226,7 +226,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
     m_aKey = null;
   }
 
-  public final void setKey (@Nonnull final TriggerKey key)
+  public final void setKey (@NonNull final TriggerKey key)
   {
     setName (key.getName ());
     setGroup (key.getGroup ());
@@ -251,7 +251,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @exception IllegalArgumentException
    *            if jobName is null or empty.
    */
-  public final void setJobName (@Nonnull final String jobName)
+  public final void setJobName (@NonNull final String jobName)
   {
     ValueEnforcer.notNull (jobName, "JobName");
     ValueEnforcer.isFalse (jobName.trim ().isEmpty (), "Job name cannot be null or empty.");
@@ -290,7 +290,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
       m_sJobGroup = jobGroup;
   }
 
-  public final void setJobKey (@Nonnull final JobKey key)
+  public final void setJobKey (@NonNull final JobKey key)
   {
     setJobName (key.getName ());
     setJobGroup (key.getGroup ());
@@ -299,7 +299,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
   /**
    * Returns the 'full name' of the <code>Trigger</code> in the format "group.name".
    */
-  @Nonnull
+  @NonNull
   public final String getFullName ()
   {
     return m_sGroup + "." + m_sName;
@@ -331,7 +331,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * Returns the 'full name' of the <code>Job</code> that the <code>Trigger</code> points to, in the
    * format "group.name".
    */
-  @Nonnull
+  @NonNull
   public final String getFullJobName ()
   {
     return m_sJobGroup + "." + m_sJobName;
@@ -359,7 +359,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
     m_sCalendarName = sCalendarName;
   }
 
-  @Nonnull
+  @NonNull
   public final JobDataMap getJobDataMap ()
   {
     if (m_aJobDataMap == null)
@@ -398,9 +398,8 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @see com.helger.quartz.ITrigger.ECompletedExecutionInstruction
    * @see #triggered(com.helger.quartz.ICalendar)
    */
-  @Nonnull
-  public ITrigger.ECompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
-                                                                    @Nullable final JobExecutionException result)
+  public ITrigger.@NonNull ECompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
+                                                                             @Nullable final JobExecutionException result)
   {
     if (result != null)
     {
@@ -493,7 +492,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * keys.
    * </p>
    */
-  public int compareTo (@Nonnull final ITrigger aOther)
+  public int compareTo (@NonNull final ITrigger aOther)
   {
     return CompareHelper.compare (getKey (), aOther.getKey (), false);
   }
@@ -521,7 +520,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
     return new HashCodeGenerator (this).append (getKey ()).getHashCode ();
   }
 
-  @Nonnull
+  @NonNull
   public TriggerBuilder <IMPLTYPE> getTriggerBuilder ()
   {
     return TriggerBuilder.newTrigger ()
@@ -536,6 +535,6 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
                          .withSchedule (getScheduleBuilder ());
   }
 
-  @Nonnull
+  @NonNull
   public abstract IScheduleBuilder <IMPLTYPE> getScheduleBuilder ();
 }

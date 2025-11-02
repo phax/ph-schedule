@@ -18,7 +18,7 @@
  */
 package com.helger.quartz.utils.counter;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Config for a simple Counter
@@ -56,7 +56,7 @@ public class CounterConfig
    *
    * @return The counter created by this config
    */
-  @Nonnull
+  @NonNull
   public ICounter createCounter ()
   {
     return new Counter (m_nInitialValue);

@@ -24,6 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.compare.IComparator;
@@ -31,9 +34,6 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.ICalendar;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -52,7 +52,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
   // true, if excludeDays is sorted
   private boolean m_bDataSorted = false;
 
-  public AnnualCalendar (@Nonnull final AnnualCalendar aRhs)
+  public AnnualCalendar (@NonNull final AnnualCalendar aRhs)
   {
     super (aRhs);
     m_aExcludeDays.addAll (aRhs.m_aExcludeDays);
@@ -92,7 +92,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
    *        day to check. May not be <code>null</code>.
    * @return <code>true</code> if day is defined to be excluded.
    */
-  public boolean isDayExcluded (@Nonnull final Calendar day)
+  public boolean isDayExcluded (@NonNull final Calendar day)
   {
     ValueEnforcer.notNull (day, "Day");
 
@@ -272,7 +272,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public AnnualCalendar getClone ()
   {

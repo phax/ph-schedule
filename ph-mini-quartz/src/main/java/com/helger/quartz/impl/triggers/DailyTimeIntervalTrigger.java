@@ -25,6 +25,9 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.CGlobal;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
@@ -37,9 +40,6 @@ import com.helger.quartz.IDailyTimeIntervalTrigger;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * A concrete implementation of DailyTimeIntervalTrigger that is used to fire a
@@ -113,7 +113,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   private int m_nTimesTriggered = 0;
   private boolean m_bComplete = false;
 
-  public DailyTimeIntervalTrigger (@Nonnull final DailyTimeIntervalTrigger aOther)
+  public DailyTimeIntervalTrigger (@NonNull final DailyTimeIntervalTrigger aOther)
   {
     super (aOther);
     m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
@@ -326,7 +326,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     setEndTimeOfDay (endTimeOfDay);
   }
 
-  @Nonnull
+  @NonNull
   public final Date getStartTime ()
   {
     if (m_aStartTime == null)
@@ -334,7 +334,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     return m_aStartTime;
   }
 
-  public final void setStartTime (@Nonnull final Date startTime)
+  public final void setStartTime (@NonNull final Date startTime)
   {
     ValueEnforcer.notNull (startTime, "StartTime");
 
@@ -600,7 +600,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     return m_aNextFireTime;
   }
 
-  @Nonnull
+  @NonNull
   private static Calendar _createCalendarTime (final Date dateTime)
   {
     final Calendar cal = PDTFactory.createCalendar ();
@@ -1026,7 +1026,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     m_nRepeatCount = repeatCount;
   }
 
-  @Nonnull
+  @NonNull
   public DailyTimeIntervalTrigger getClone ()
   {
     return new DailyTimeIntervalTrigger (this);

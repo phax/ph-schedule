@@ -20,9 +20,9 @@ package com.helger.quartz.simpl;
 
 import java.lang.ref.WeakReference;
 
-import com.helger.quartz.spi.IClassLoadHelper;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
  * A <code>ClassLoadHelper</code> that uses either the context class loader of
@@ -56,7 +56,7 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
    *
    * @return the class-loader user be the helper.
    */
-  @Nonnull
+  @NonNull
   public ClassLoader getClassLoader ()
   {
     final ClassLoader ret = m_aInitClassLoader.get ();

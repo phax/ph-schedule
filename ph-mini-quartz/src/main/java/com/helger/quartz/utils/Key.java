@@ -21,13 +21,13 @@ package com.helger.quartz.utils;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.base.compare.IComparable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.hashcode.HashCodeGenerator;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -55,7 +55,7 @@ public class Key <T> implements IComparable <Key <T>>
    * @param group
    *        the group
    */
-  public Key (@Nonnull final String name, @Nullable final String group)
+  public Key (@NonNull final String name, @Nullable final String group)
   {
     ValueEnforcer.notNull (name, "Name");
     m_sName = name;
@@ -70,7 +70,7 @@ public class Key <T> implements IComparable <Key <T>>
    *
    * @return the name
    */
-  @Nonnull
+  @NonNull
   public final String getName ()
   {
     return m_sName;
@@ -81,7 +81,7 @@ public class Key <T> implements IComparable <Key <T>>
    *
    * @return the group
    */
-  @Nonnull
+  @NonNull
   public final String getGroup ()
   {
     return m_sGroup;
@@ -142,7 +142,7 @@ public class Key <T> implements IComparable <Key <T>>
     return ret;
   }
 
-  @Nonnull
+  @NonNull
   public static String createUniqueName (final String sGroup)
   {
     final String n1 = UUID.randomUUID ().toString ();

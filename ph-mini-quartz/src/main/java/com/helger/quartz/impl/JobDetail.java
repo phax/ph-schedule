@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.impl;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
@@ -31,9 +34,6 @@ import com.helger.quartz.JobKey;
 import com.helger.quartz.PersistJobDataAfterExecution;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.utils.ClassUtils;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -71,7 +71,7 @@ public class JobDetail implements IJobDetail
   private boolean m_bShouldRecover = false;
   private transient JobKey m_aKey;
 
-  public JobDetail (@Nonnull final JobDetail aOther)
+  public JobDetail (@NonNull final JobDetail aOther)
   {
     ValueEnforcer.notNull (aOther, "Other");
     m_sName = aOther.m_sName;
@@ -153,7 +153,7 @@ public class JobDetail implements IJobDetail
    * Returns the 'full name' of the <code>JobDetail</code> in the format
    * "group.name".
    */
-  @Nonnull
+  @NonNull
   public final String getFullName ()
   {
     return m_sGroup + "." + m_sName;
@@ -172,7 +172,7 @@ public class JobDetail implements IJobDetail
     return m_aKey;
   }
 
-  public final void setKey (@Nonnull final JobKey key)
+  public final void setKey (@NonNull final JobKey key)
   {
     ValueEnforcer.notNull (key, "Key");
 
@@ -215,7 +215,7 @@ public class JobDetail implements IJobDetail
     m_aJobClass = jobClass;
   }
 
-  @Nonnull
+  @NonNull
   public JobDataMap getJobDataMap ()
   {
     if (m_aJobDataMap == null)
@@ -325,7 +325,7 @@ public class JobDetail implements IJobDetail
     return new HashCodeGenerator (this).append (getKey ()).getHashCode ();
   }
 
-  @Nonnull
+  @NonNull
   public JobBuilder getJobBuilder ()
   {
     return JobBuilder.newJob ()
@@ -337,13 +337,13 @@ public class JobDetail implements IJobDetail
                      .withIdentity (getKey ());
   }
 
-  @Nonnull
+  @NonNull
   public JobDetail getClone ()
   {
     return new JobDetail (this);
   }
 
-  @Nonnull
+  @NonNull
   public static JobDetail create (final String name, final String group, final Class <? extends IJob> jobClass)
   {
     final JobDetail ret = new JobDetail ();

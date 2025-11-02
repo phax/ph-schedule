@@ -20,11 +20,11 @@ package com.helger.quartz;
 
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <code>CalendarIntervalScheduleBuilder</code> is a {@link IScheduleBuilder}
@@ -75,7 +75,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    *
    * @return the new CalendarIntervalScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static CalendarIntervalScheduleBuilder calendarIntervalSchedule ()
   {
     return new CalendarIntervalScheduleBuilder ();
@@ -88,7 +88,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    *
    * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalTrigger build ()
   {
     final CalendarIntervalTrigger st = new CalendarIntervalTrigger ();
@@ -112,8 +112,8 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  @Nonnull
-  public CalendarIntervalScheduleBuilder withInterval (final int timeInterval, @Nonnull final EIntervalUnit unit)
+  @NonNull
+  public CalendarIntervalScheduleBuilder withInterval (final int timeInterval, @NonNull final EIntervalUnit unit)
   {
     ValueEnforcer.notNull (unit, "Unit");
     _validateInterval (timeInterval);
@@ -132,7 +132,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withIntervalInSeconds (final int intervalInSeconds)
   {
     _validateInterval (intervalInSeconds);
@@ -151,7 +151,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withIntervalInMinutes (final int intervalInMinutes)
   {
     _validateInterval (intervalInMinutes);
@@ -170,7 +170,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withIntervalInHours (final int intervalInHours)
   {
     _validateInterval (intervalInHours);
@@ -189,7 +189,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withIntervalInDays (final int intervalInDays)
   {
     _validateInterval (intervalInDays);
@@ -208,7 +208,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withIntervalInWeeks (final int intervalInWeeks)
   {
     _validateInterval (intervalInWeeks);
@@ -227,7 +227,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withIntervalInMonths (final int intervalInMonths)
   {
     _validateInterval (intervalInMonths);
@@ -246,7 +246,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getRepeatInterval()
    * @see ICalendarIntervalTrigger#getRepeatIntervalUnit()
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withIntervalInYears (final int intervalInYears)
   {
     _validateInterval (intervalInYears);
@@ -263,7 +263,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @return the updated CronScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
@@ -277,7 +277,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @return the updated CalendarIntervalScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionDoNothing ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_DO_NOTHING;
@@ -291,7 +291,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @return the updated CalendarIntervalScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder withMisfireHandlingInstructionFireAndProceed ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
@@ -306,7 +306,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @return the updated CalendarIntervalScheduleBuilder
    * @see ICalendarIntervalTrigger#getTimeZone()
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder inTimeZone (final TimeZone timezone)
   {
     m_aTimeZone = timezone;
@@ -340,7 +340,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see #inTimeZone(TimeZone)
    * @see TriggerBuilder#startAt(java.util.Date)
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder preserveHourOfDayAcrossDaylightSavings (final boolean bPreserveHourOfDay)
   {
     m_bPreserveHourOfDayAcrossDaylightSavings = bPreserveHourOfDay;
@@ -368,7 +368,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @return this for chaining
    * @see #preserveHourOfDayAcrossDaylightSavings(boolean)
    */
-  @Nonnull
+  @NonNull
   public CalendarIntervalScheduleBuilder skipDayIfHourDoesNotExist (final boolean bSkipDay)
   {
     m_bSkipDayIfHourDoesNotExist = bSkipDay;

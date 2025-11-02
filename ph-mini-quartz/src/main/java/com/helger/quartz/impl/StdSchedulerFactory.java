@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,8 +67,6 @@ import com.helger.quartz.spi.ISchedulerPlugin;
 import com.helger.quartz.spi.IThreadExecutor;
 import com.helger.quartz.spi.IThreadPool;
 import com.helger.quartz.utils.PropertiesParser;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <p>
@@ -184,7 +183,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * @throws SchedulerException
    *         In case of error
    */
-  @Nonnull
+  @NonNull
   public StdSchedulerFactory initialize () throws SchedulerException
   {
     if (LOGGER.isDebugEnabled ())
@@ -287,8 +286,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * Add all System properties to the given <code>props</code>. Will override any properties that
    * already exist in the given <code>props</code>.
    */
-  @Nonnull
-  private static NonBlockingProperties _overrideWithSysProps (@Nonnull final NonBlockingProperties props)
+  @NonNull
+  private static NonBlockingProperties _overrideWithSysProps (@NonNull final NonBlockingProperties props)
   {
     for (final Map.Entry <String, String> aEntry : SystemProperties.getAllProperties ().entrySet ())
       props.put (aEntry.getKey (), aEntry.getValue ());
@@ -303,7 +302,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    *
    * @return this
    */
-  @Nonnull
+  @NonNull
   public StdSchedulerFactory initialize (final String filename) throws SchedulerException
   {
     // short-circuit if already initialized
@@ -348,8 +347,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
    *
    * @return this
    */
-  @Nonnull
-  public StdSchedulerFactory initialize (@Nonnull @WillNotClose final InputStream propertiesStream) throws SchedulerException
+  @NonNull
+  public StdSchedulerFactory initialize (@NonNull @WillNotClose final InputStream propertiesStream) throws SchedulerException
   {
     // short-circuit if already initialized
     if (m_aCfg != null)
@@ -389,7 +388,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    *         on error
    * @return this
    */
-  @Nonnull
+  @NonNull
   public StdSchedulerFactory initialize (final NonBlockingProperties props) throws SchedulerException
   {
     if (m_sPropSrc == null)
@@ -974,7 +973,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * @param qs
    * @return Never null
    */
-  @Nonnull
+  @NonNull
   protected IScheduler instantiate (final QuartzSchedulerResources rsrcs, final QuartzScheduler qs)
   {
     return new StdScheduler (qs);

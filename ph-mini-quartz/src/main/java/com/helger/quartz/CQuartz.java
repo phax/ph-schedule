@@ -22,11 +22,11 @@ import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.datetime.helper.PDTFactory;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Quartz constants
@@ -46,7 +46,7 @@ public final class CQuartz
    * value will be zero.
    */
   @Nullable
-  public static Date onDate (@Nonnull final LocalTime aLT, @Nullable final Date dateTime)
+  public static Date onDate (@NonNull final LocalTime aLT, @Nullable final Date dateTime)
   {
     if (dateTime == null)
       return null;

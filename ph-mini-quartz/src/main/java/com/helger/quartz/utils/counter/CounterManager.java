@@ -20,13 +20,13 @@ package com.helger.quartz.utils.counter;
 
 import java.util.Timer;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.utils.counter.sampled.ISampledCounter;
 import com.helger.quartz.utils.counter.sampled.SampledCounter;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * An implementation of a {@link ICounterManager}.
@@ -44,7 +44,7 @@ public class CounterManager implements ICounterManager
    * Constructor that accepts a timer that will be used for scheduling sampled counter if any is
    * created
    */
-  public CounterManager (@Nonnull final Timer timer)
+  public CounterManager (@NonNull final Timer timer)
   {
     ValueEnforcer.notNull (timer, "Timer");
     m_aTimer = timer;

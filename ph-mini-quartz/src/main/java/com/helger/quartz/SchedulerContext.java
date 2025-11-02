@@ -20,10 +20,10 @@ package com.helger.quartz;
 
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.typeconvert.collection.AttributeContainerAny;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Holds context/environment data that can be made available to Jobs as they are
@@ -54,13 +54,13 @@ public class SchedulerContext extends AttributeContainerAny <String>
     super (map);
   }
 
-  public SchedulerContext (@Nonnull final SchedulerContext aOther)
+  public SchedulerContext (@NonNull final SchedulerContext aOther)
   {
     super (aOther);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public SchedulerContext getClone ()
   {

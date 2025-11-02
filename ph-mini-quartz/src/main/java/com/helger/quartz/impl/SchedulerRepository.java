@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.impl;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.concurrent.SimpleReadWriteLock;
 import com.helger.collection.commons.CommonsHashMap;
@@ -25,8 +27,6 @@ import com.helger.collection.commons.ICommonsList;
 import com.helger.collection.commons.ICommonsMap;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <p>
@@ -50,7 +50,7 @@ public class SchedulerRepository
   private SchedulerRepository ()
   {}
 
-  @Nonnull
+  @NonNull
   public static SchedulerRepository getInstance ()
   {
     return SingletonHolder.INSTANCE;
@@ -76,7 +76,7 @@ public class SchedulerRepository
     return m_aRWLock.readLockedGet ( () -> m_aSchedulers.get (schedName));
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public ICommonsList <IScheduler> lookupAll ()
   {

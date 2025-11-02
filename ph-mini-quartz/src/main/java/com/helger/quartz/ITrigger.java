@@ -20,12 +20,12 @@ package com.helger.quartz;
 
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.style.MustImplementEqualsAndHashcode;
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.quartz.spi.IMutableTrigger;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * The base interface with properties common to all <code>Trigger</code>s - use
@@ -258,7 +258,7 @@ public interface ITrigger extends Comparable <ITrigger>
    * Changes made to this map during job execution are not re-persisted, and in
    * fact typically result in an <code>IllegalStateException</code>.
    */
-  @Nonnull
+  @NonNull
   JobDataMap getJobDataMap ();
 
   /**
@@ -386,7 +386,7 @@ public interface ITrigger extends Comparable <ITrigger>
    */
   int compareTo (ITrigger other);
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   ITrigger getClone ();
 }

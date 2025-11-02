@@ -20,13 +20,13 @@ package com.helger.quartz;
 
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.spi.IOperableTrigger;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Convenience and utility methods for working with
@@ -59,7 +59,7 @@ public final class TriggerUtils
    *        The number of next fire times to produce
    * @return List of java.util.Date objects
    */
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public static ICommonsList <Date> computeFireTimes (final IOperableTrigger trigg,
                                                       final ICalendar cal,

@@ -18,6 +18,7 @@
  */
 package com.helger.quartz.listeners;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +30,6 @@ import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Keeps a collection of mappings of which Job to trigger after the completion
@@ -65,13 +64,13 @@ public class JobChainingJobListener implements IJobListener
    * @param name
    *        the name of this instance
    */
-  public JobChainingJobListener (@Nonnull final String name)
+  public JobChainingJobListener (@NonNull final String name)
   {
     ValueEnforcer.notNull (name, "Name");
     m_sName = name;
   }
 
-  @Nonnull
+  @NonNull
   public String getName ()
   {
     return m_sName;
@@ -97,7 +96,7 @@ public class JobChainingJobListener implements IJobListener
   }
 
   @Override
-  public void jobWasExecuted (@Nonnull final IJobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext context, final JobExecutionException jobException)
   {
     final JobKey sj = m_aChainLinks.get (context.getJobDetail ().getKey ());
     if (sj == null)

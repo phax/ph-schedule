@@ -18,12 +18,12 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.CGlobal;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.SimpleTrigger;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <code>SimpleScheduleBuilder</code> is a {@link IScheduleBuilder} that defines
@@ -69,7 +69,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder simpleSchedule ()
   {
     return new SimpleScheduleBuilder ();
@@ -81,7 +81,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatMinutelyForever ()
   {
     return repeatMinutelyForever (1);
@@ -93,7 +93,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatMinutelyForever (final int minutes)
   {
     return simpleSchedule ().withIntervalInMinutes (minutes).repeatForever ();
@@ -105,7 +105,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatSecondlyForever ()
   {
     return repeatSecondlyForever (1);
@@ -117,7 +117,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatSecondlyForever (final int seconds)
   {
     return simpleSchedule ().withIntervalInSeconds (seconds).repeatForever ();
@@ -129,7 +129,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatHourlyForever ()
   {
     return repeatHourlyForever (1);
@@ -141,7 +141,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatHourlyForever (final int nHours)
   {
     return simpleSchedule ().withIntervalInHours (nHours).repeatForever ();
@@ -156,7 +156,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatMinutelyForTotalCount (final int nCount)
   {
     return repeatMinutelyForTotalCount (nCount, 1);
@@ -171,7 +171,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatMinutelyForTotalCount (final int nCount, final int nMinutes)
   {
     ValueEnforcer.isGT0 (nCount, "Count");
@@ -187,7 +187,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatSecondlyForTotalCount (final int nCount)
   {
     return repeatSecondlyForTotalCount (nCount, 1);
@@ -202,7 +202,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatSecondlyForTotalCount (final int nCount, final int nSeconds)
   {
     ValueEnforcer.isGT0 (nCount, "Count");
@@ -218,7 +218,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatHourlyForTotalCount (final int nCount)
   {
     return repeatHourlyForTotalCount (nCount, 1);
@@ -233,7 +233,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    *
    * @return the new SimpleScheduleBuilder
    */
-  @Nonnull
+  @NonNull
   public static SimpleScheduleBuilder repeatHourlyForTotalCount (final int nCount, final int nHours)
   {
     ValueEnforcer.isGT0 (nCount, "Count");
@@ -248,7 +248,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
   @Override
-  @Nonnull
+  @NonNull
   public SimpleTrigger build ()
   {
     final SimpleTrigger ret = new SimpleTrigger ();
@@ -267,7 +267,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withIntervalInMilliseconds (final long nIntervalInMillis)
   {
     m_nInterval = nIntervalInMillis;
@@ -284,7 +284,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withIntervalInSeconds (final int nIntervalInSeconds)
   {
     m_nInterval = nIntervalInSeconds * CGlobal.MILLISECONDS_PER_SECOND;
@@ -301,7 +301,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withIntervalInMinutes (final int nIntervalInMinutes)
   {
     m_nInterval = nIntervalInMinutes * CGlobal.MILLISECONDS_PER_MINUTE;
@@ -318,7 +318,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @see ISimpleTrigger#getRepeatInterval()
    * @see #withRepeatCount(int)
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withIntervalInHours (final int intervalInHours)
   {
     m_nInterval = intervalInHours * CGlobal.MILLISECONDS_PER_HOUR;
@@ -335,7 +335,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @see ISimpleTrigger#getRepeatCount()
    * @see #repeatForever()
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withRepeatCount (final int triggerRepeatCount)
   {
     m_nRepeatCount = triggerRepeatCount;
@@ -353,7 +353,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @see #withIntervalInMinutes(int)
    * @see #withIntervalInHours(int)
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder repeatForever ()
   {
     m_nRepeatCount = ISimpleTrigger.REPEAT_INDEFINITELY;
@@ -368,7 +368,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @return the updated CronScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withMisfireHandlingInstructionIgnoreMisfires ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
@@ -382,7 +382,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withMisfireHandlingInstructionFireNow ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
@@ -397,7 +397,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithExistingCount ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT;
@@ -412,7 +412,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNextWithRemainingCount ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT;
@@ -427,7 +427,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithExistingCount ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT;
@@ -442,7 +442,7 @@ public class SimpleScheduleBuilder implements IScheduleBuilder <SimpleTrigger>
    * @return the updated SimpleScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT
    */
-  @Nonnull
+  @NonNull
   public SimpleScheduleBuilder withMisfireHandlingInstructionNowWithRemainingCount ()
   {
     m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT;

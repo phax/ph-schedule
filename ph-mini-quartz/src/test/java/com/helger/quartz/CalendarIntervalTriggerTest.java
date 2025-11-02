@@ -29,14 +29,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.Nullable;
 import org.junit.Test;
 
 import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.calendar.AbstractCalendar;
 import com.helger.quartz.impl.triggers.CalendarIntervalTrigger;
-
-import jakarta.annotation.Nullable;
 
 /**
  * Unit tests for DateIntervalTrigger.

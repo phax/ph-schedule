@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.listeners;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsLinkedList;
@@ -28,8 +30,6 @@ import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerKey;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Holds a List of references to SchedulerListener instances and broadcasts all
@@ -62,7 +62,7 @@ public class BroadcastSchedulerListener implements ISchedulerListener
     m_aListeners.addAll (listeners);
   }
 
-  public void addListener (@Nonnull final ISchedulerListener listener)
+  public void addListener (@NonNull final ISchedulerListener listener)
   {
     ValueEnforcer.notNull (listener, "Listener");
     m_aListeners.add (listener);
@@ -73,7 +73,7 @@ public class BroadcastSchedulerListener implements ISchedulerListener
     return m_aListeners.remove (listener);
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public ICommonsList <ISchedulerListener> getListeners ()
   {

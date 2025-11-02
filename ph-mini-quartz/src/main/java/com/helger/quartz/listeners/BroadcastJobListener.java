@@ -20,6 +20,8 @@ package com.helger.quartz.listeners;
 
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
@@ -27,8 +29,6 @@ import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Holds a List of references to JobListener instances and broadcasts all events
@@ -55,7 +55,7 @@ public class BroadcastJobListener implements IJobListener
    * @param name
    *        the name of this instance
    */
-  public BroadcastJobListener (@Nonnull final String name)
+  public BroadcastJobListener (@NonNull final String name)
   {
     ValueEnforcer.notNull (name, "Listener Name");
     m_sName = name;
@@ -69,13 +69,13 @@ public class BroadcastJobListener implements IJobListener
    * @param listeners
    *        the initial List of JobListeners to broadcast to.
    */
-  public BroadcastJobListener (@Nonnull final String name, final List <IJobListener> listeners)
+  public BroadcastJobListener (@NonNull final String name, final List <IJobListener> listeners)
   {
     this (name);
     m_aListeners.addAll (listeners);
   }
 
-  @Nonnull
+  @NonNull
   public String getName ()
   {
     return m_sName;
@@ -91,7 +91,7 @@ public class BroadcastJobListener implements IJobListener
     return m_aListeners.remove (listener);
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public ICommonsList <IJobListener> getListeners ()
   {

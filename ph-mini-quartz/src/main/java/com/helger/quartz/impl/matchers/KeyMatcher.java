@@ -18,12 +18,12 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Matches on the complete key being equal (both name and group).
@@ -34,13 +34,13 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
 {
   private final T m_aCompareTo;
 
-  protected KeyMatcher (@Nonnull final T aCompareTo)
+  protected KeyMatcher (@NonNull final T aCompareTo)
   {
     ValueEnforcer.notNull (aCompareTo, "CompareTo");
     m_aCompareTo = aCompareTo;
   }
 
-  @Nonnull
+  @NonNull
   public T getCompareToValue ()
   {
     return m_aCompareTo;
@@ -71,7 +71,7 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
   /**
    * Create a KeyMatcher that matches Keys that equal the given key.
    */
-  public static <U extends Key <U>> KeyMatcher <U> keyEquals (@Nonnull final U aCompareTo)
+  public static <U extends Key <U>> KeyMatcher <U> keyEquals (@NonNull final U aCompareTo)
   {
     return new KeyMatcher <> (aCompareTo);
   }

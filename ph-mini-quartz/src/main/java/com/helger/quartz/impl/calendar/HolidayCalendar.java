@@ -24,11 +24,11 @@ import java.util.Date;
 import java.util.SortedSet;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.collection.commons.CommonsTreeSet;
 import com.helger.collection.commons.ICommonsSortedSet;
 import com.helger.quartz.ICalendar;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <p>
@@ -49,7 +49,7 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
   // A sorted set to store the holidays
   private final ICommonsSortedSet <Date> m_aDates = new CommonsTreeSet <> ();
 
-  public HolidayCalendar (@Nonnull final HolidayCalendar aOther)
+  public HolidayCalendar (@NonNull final HolidayCalendar aOther)
   {
     super (aOther);
     m_aDates.addAll (aOther.m_aDates);
@@ -152,7 +152,7 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public HolidayCalendar getClone ()
   {
     return new HolidayCalendar (this);

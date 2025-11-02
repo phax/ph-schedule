@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.listeners;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
@@ -26,8 +28,6 @@ import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITriggerListener;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Holds a List of references to TriggerListener instances and broadcasts all
@@ -54,7 +54,7 @@ public class BroadcastTriggerListener implements ITriggerListener
    * @param name
    *        the name of this instance
    */
-  public BroadcastTriggerListener (@Nonnull final String name)
+  public BroadcastTriggerListener (@NonNull final String name)
   {
     ValueEnforcer.notNull (name, "Name");
     m_sName = name;
@@ -68,19 +68,19 @@ public class BroadcastTriggerListener implements ITriggerListener
    * @param listeners
    *        the initial List of TriggerListeners to broadcast to.
    */
-  public BroadcastTriggerListener (@Nonnull final String name, final Iterable <? extends ITriggerListener> listeners)
+  public BroadcastTriggerListener (@NonNull final String name, final Iterable <? extends ITriggerListener> listeners)
   {
     this (name);
     m_aListeners.addAll (listeners);
   }
 
-  @Nonnull
+  @NonNull
   public String getName ()
   {
     return m_sName;
   }
 
-  public void addListener (@Nonnull final ITriggerListener listener)
+  public void addListener (@NonNull final ITriggerListener listener)
   {
     ValueEnforcer.notNull (listener, "Listener");
     m_aListeners.add (listener);
@@ -91,7 +91,7 @@ public class BroadcastTriggerListener implements ITriggerListener
     return m_aListeners.remove (listener);
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public ICommonsList <ITriggerListener> getListeners ()
   {

@@ -21,8 +21,8 @@ package com.helger.quartz.spi;
 import java.io.InputStream;
 import java.net.URL;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An interface for classes wishing to provide the service of loading classes
@@ -105,6 +105,6 @@ public interface IClassLoadHelper
    *
    * @return the class-loader user be the helper.
    */
-  @Nonnull
+  @NonNull
   ClassLoader getClassLoader ();
 }

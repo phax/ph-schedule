@@ -18,13 +18,13 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.style.MustImplementEqualsAndHashcode;
 import com.helger.quartz.impl.matchers.AndMatcher;
 import com.helger.quartz.impl.matchers.NotMatcher;
 import com.helger.quartz.impl.matchers.OrMatcher;
 import com.helger.quartz.utils.Key;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Matchers can be used in various {@link IScheduler} API methods to select the
@@ -46,15 +46,15 @@ public interface IMatcher <T extends Key <T>>
    * Create an AndMatcher that depends upon the result of both of the given
    * matchers.
    */
-  @Nonnull
-  static <U extends Key <U>> AndMatcher <U> and (@Nonnull final IMatcher <U> leftOperand,
-                                                 @Nonnull final IMatcher <U> rightOperand)
+  @NonNull
+  static <U extends Key <U>> AndMatcher <U> and (@NonNull final IMatcher <U> leftOperand,
+                                                 @NonNull final IMatcher <U> rightOperand)
   {
     return new AndMatcher <> (leftOperand, rightOperand);
   }
 
-  @Nonnull
-  default AndMatcher <T> and (@Nonnull final IMatcher <T> rightOperand)
+  @NonNull
+  default AndMatcher <T> and (@NonNull final IMatcher <T> rightOperand)
   {
     return and (this, rightOperand);
   }
@@ -63,15 +63,15 @@ public interface IMatcher <T extends Key <T>>
    * Create an OrMatcher that depends upon the result of at least one of the
    * given matchers.
    */
-  @Nonnull
-  static <U extends Key <U>> OrMatcher <U> or (@Nonnull final IMatcher <U> leftOperand,
-                                               @Nonnull final IMatcher <U> rightOperand)
+  @NonNull
+  static <U extends Key <U>> OrMatcher <U> or (@NonNull final IMatcher <U> leftOperand,
+                                               @NonNull final IMatcher <U> rightOperand)
   {
     return new OrMatcher <> (leftOperand, rightOperand);
   }
 
-  @Nonnull
-  default OrMatcher <T> or (@Nonnull final IMatcher <T> rightOperand)
+  @NonNull
+  default OrMatcher <T> or (@NonNull final IMatcher <T> rightOperand)
   {
     return or (this, rightOperand);
   }
@@ -79,13 +79,13 @@ public interface IMatcher <T extends Key <T>>
   /**
    * Create a NotMatcher that reverses the result of the given matcher.
    */
-  @Nonnull
-  static <U extends Key <U>> NotMatcher <U> not (@Nonnull final IMatcher <U> operand)
+  @NonNull
+  static <U extends Key <U>> NotMatcher <U> not (@NonNull final IMatcher <U> operand)
   {
     return new NotMatcher <> (operand);
   }
 
-  @Nonnull
+  @NonNull
   default NotMatcher <T> not ()
   {
     return not (this);

@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,8 +65,6 @@ import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.ISchedulerSignaler;
 import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <p>
@@ -1418,7 +1417,7 @@ public class RAMJobStore implements IJobStore
     return true;
   }
 
-  @Nonnull
+  @NonNull
   @Nonempty
   protected String getFiredTriggerRecordId ()
   {
@@ -1839,19 +1838,19 @@ final class JobWrapper
   final JobKey m_aKey;
   private IJobDetail m_aJobDetail;
 
-  JobWrapper (@Nonnull final IJobDetail jobDetail)
+  JobWrapper (@NonNull final IJobDetail jobDetail)
   {
     m_aKey = jobDetail.getKey ();
     m_aJobDetail = jobDetail;
   }
 
-  @Nonnull
+  @NonNull
   public IJobDetail getJobDetail ()
   {
     return m_aJobDetail;
   }
 
-  public void setJobDetail (@Nonnull final IJobDetail aJobDetail)
+  public void setJobDetail (@NonNull final IJobDetail aJobDetail)
   {
     m_aJobDetail = aJobDetail;
   }
@@ -1891,7 +1890,7 @@ final class TriggerWrapper
 
   int m_nState = STATE_WAITING;
 
-  TriggerWrapper (@Nonnull final IOperableTrigger trigger)
+  TriggerWrapper (@NonNull final IOperableTrigger trigger)
   {
     ValueEnforcer.notNull (trigger, "Trigger");
     m_aTrigger = trigger;

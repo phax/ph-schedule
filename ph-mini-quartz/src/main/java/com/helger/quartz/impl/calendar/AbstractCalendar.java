@@ -23,12 +23,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.clone.ICloneable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ICalendar;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -63,7 +63,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
    * @param aOther
    *        Calendar to copy from. May not be <code>null</code>.
    */
-  protected AbstractCalendar (@Nonnull final AbstractCalendar <IMPLTYPE> aOther)
+  protected AbstractCalendar (@NonNull final AbstractCalendar <IMPLTYPE> aOther)
   {
     ValueEnforcer.notNull (aOther, "Other");
     m_aBaseCalendar = aOther.m_aBaseCalendar;

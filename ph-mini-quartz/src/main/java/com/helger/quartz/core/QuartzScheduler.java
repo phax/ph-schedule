@@ -27,6 +27,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,9 +57,6 @@ import com.helger.quartz.spi.ISchedulerPlugin;
 import com.helger.quartz.spi.ISchedulerSignaler;
 import com.helger.quartz.spi.IThreadExecutor;
 import com.helger.quartz.utils.Key;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -1397,7 +1396,7 @@ public class QuartzScheduler implements IQuartzScheduler
     return m_aResources.getJobStore ().getCalendarNames ();
   }
 
-  @Nonnull
+  @NonNull
   public IListenerManager getListenerManager ()
   {
     return m_aListenerManager;
@@ -1442,7 +1441,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public ICommonsList <IJobListener> getInternalJobListeners ()
   {
@@ -1506,7 +1505,7 @@ public class QuartzScheduler implements IQuartzScheduler
    * the <code>Scheduler</code>'s <i>internal</i> list.
    * </p>
    */
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public ICommonsList <ITriggerListener> getInternalTriggerListeners ()
   {

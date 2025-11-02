@@ -21,10 +21,10 @@ package com.helger.quartz.impl.calendar;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.array.ArrayHelper;
 import com.helger.quartz.ICalendar;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <p>
@@ -46,7 +46,7 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
   // Will be set to true, if all week days are excluded
   private boolean m_bExcludeAll = false;
 
-  public WeeklyCalendar (@Nonnull final WeeklyCalendar aOther)
+  public WeeklyCalendar (@NonNull final WeeklyCalendar aOther)
   {
     super (aOther);
     m_aExcludeDays = ArrayHelper.getCopy (aOther.m_aExcludeDays);
@@ -213,7 +213,7 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public WeeklyCalendar getClone ()
   {
     return new WeeklyCalendar (this);

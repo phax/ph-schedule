@@ -18,8 +18,8 @@
  */
 package com.helger.quartz;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An interface to be implemented by objects that define spaces of time during
@@ -88,6 +88,6 @@ public interface ICalendar
    */
   long getNextIncludedTime (long timeStamp);
 
-  @Nonnull
+  @NonNull
   ICalendar getClone ();
 }

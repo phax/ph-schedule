@@ -24,9 +24,9 @@ import java.util.Locale;
 import java.util.Locale.Category;
 import java.util.TimeZone;
 
-import com.helger.base.string.StringHelper;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.string.StringHelper;
 
 /**
  * This implementation of the Calendar excludes (or includes - see below) a
@@ -70,7 +70,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
 
   private boolean m_bInvertTimeRange = false;
 
-  public DailyCalendar (@Nonnull final DailyCalendar aOther)
+  public DailyCalendar (@NonNull final DailyCalendar aOther)
   {
     super (aOther);
     m_nRangeStartingHourOfDay = aOther.m_nRangeStartingHourOfDay;
@@ -905,7 +905,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public DailyCalendar getClone ()
   {
     return new DailyCalendar (this);

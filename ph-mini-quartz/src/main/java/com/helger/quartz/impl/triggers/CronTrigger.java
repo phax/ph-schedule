@@ -24,6 +24,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
@@ -34,9 +37,6 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICronTrigger;
 import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.QCloneUtils;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to
@@ -57,7 +57,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   private Date m_aPreviousFireTime;
   private transient TimeZone m_aTimeZone;
 
-  public CronTrigger (@Nonnull final CronTrigger aOther)
+  public CronTrigger (@NonNull final CronTrigger aOther)
   {
     super (aOther);
     m_aCronEx = QCloneUtils.getClone (aOther.m_aCronEx);
@@ -86,7 +86,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
     return m_aCronEx == null ? null : m_aCronEx.getCronExpression ();
   }
 
-  public void setCronExpression (@Nonnull final String cronExpression) throws ParseException
+  public void setCronExpression (@NonNull final String cronExpression) throws ParseException
   {
     final TimeZone origTz = getTimeZone ();
     m_aCronEx = new CronExpression (cronExpression);
@@ -97,7 +97,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * Set the CronExpression to the given one. The TimeZone on the passed-in
    * CronExpression over-rides any that was already set on the Trigger.
    */
-  public void setCronExpression (@Nonnull final CronExpression cronExpression)
+  public void setCronExpression (@NonNull final CronExpression cronExpression)
   {
     m_aCronEx = cronExpression;
     m_aTimeZone = cronExpression.getTimeZone ();
@@ -109,7 +109,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
     return m_aStartTime;
   }
 
-  public final void setStartTime (@Nonnull final Date startTime)
+  public final void setStartTime (@NonNull final Date startTime)
   {
     ValueEnforcer.notNull (startTime, "StartTime");
 
@@ -165,7 +165,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
     m_aPreviousFireTime = previousFireTime;
   }
 
-  @Nonnull
+  @NonNull
   public TimeZone getTimeZone ()
   {
     if (m_aCronEx != null)
@@ -539,7 +539,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
     return m_aCronEx == null ? null : m_aCronEx.getTimeBefore (eTime);
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public CronTrigger getClone ()
   {

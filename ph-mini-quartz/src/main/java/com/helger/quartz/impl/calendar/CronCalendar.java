@@ -22,11 +22,11 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.CronExpression;
 import com.helger.quartz.ICalendar;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * This implementation of the Calendar excludes the set of times expressed by a
@@ -49,7 +49,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
 {
   private CronExpression m_aCronExpression;
 
-  public CronCalendar (@Nonnull final CronCalendar aOther)
+  public CronCalendar (@NonNull final CronCalendar aOther)
   {
     super (aOther);
     m_aCronExpression = aOther.m_aCronExpression.getClone ();
@@ -230,7 +230,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * @return the cron expression
    * @see com.helger.quartz.CronExpression
    */
-  @Nonnull
+  @NonNull
   public CronExpression getCronExpression ()
   {
     return m_aCronExpression;
@@ -244,7 +244,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * @throws ParseException
    *         if the string expression cannot be parsed
    */
-  public void setCronExpression (@Nonnull final String expression) throws ParseException
+  public void setCronExpression (@NonNull final String expression) throws ParseException
   {
     final CronExpression newExp = new CronExpression (expression);
     setCronExpression (newExp);
@@ -256,7 +256,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * @param expression
    *        the new cron expression
    */
-  public void setCronExpression (@Nonnull final CronExpression expression)
+  public void setCronExpression (@NonNull final CronExpression expression)
   {
     ValueEnforcer.notNull (expression, "Expression");
 
@@ -264,7 +264,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public CronCalendar getClone ()
   {
     return new CronCalendar (this);

@@ -20,11 +20,11 @@ package com.helger.quartz;
 
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.typeconvert.collection.AttributeContainerAny;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Holds state information for <code>Job</code> instances.
@@ -73,7 +73,7 @@ public class JobDataMap extends AttributeContainerAny <String>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public JobDataMap getClone ()
   {

@@ -25,11 +25,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.CGlobal;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * <code>DateBuilder</code> is used to conveniently create
@@ -156,7 +156,7 @@ public final class DateBuilder
   /**
    * Build the Date defined by this builder instance.
    */
-  @Nonnull
+  @NonNull
   public Date build ()
   {
     Calendar cal;

@@ -20,19 +20,19 @@ package com.helger.quartz.spi;
 
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobDataMap;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
 public interface IMutableTrigger extends ITrigger
 {
-  void setKey (@Nonnull TriggerKey key);
+  void setKey (@NonNull TriggerKey key);
 
-  void setJobKey (@Nonnull JobKey key);
+  void setJobKey (@NonNull JobKey key);
 
   /**
    * Set a description for the <code>Trigger</code> instance - may be useful for
@@ -81,7 +81,7 @@ public interface IMutableTrigger extends ITrigger
    * @param startTime
    *        start time
    */
-  void setStartTime (@Nonnull Date startTime);
+  void setStartTime (@NonNull Date startTime);
 
   /**
    * <p>

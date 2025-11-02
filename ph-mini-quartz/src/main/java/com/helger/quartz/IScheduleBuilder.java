@@ -18,9 +18,9 @@
  */
 package com.helger.quartz;
 
-import com.helger.quartz.spi.IMutableTrigger;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.quartz.spi.IMutableTrigger;
 
 /**
  * @author Terracotta
@@ -29,6 +29,6 @@ import jakarta.annotation.Nonnull;
  */
 public interface IScheduleBuilder <T extends IMutableTrigger>
 {
-  @Nonnull
+  @NonNull
   T build ();
 }

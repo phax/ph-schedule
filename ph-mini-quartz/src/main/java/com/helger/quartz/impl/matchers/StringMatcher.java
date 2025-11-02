@@ -18,12 +18,12 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * An abstract base class for some types of matchers.
@@ -37,7 +37,7 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     EQUALS
     {
       @Override
-      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
+      public boolean evaluate (@NonNull final String sValue, @NonNull final String sCompareTo)
       {
         return sValue.equals (sCompareTo);
       }
@@ -46,7 +46,7 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     STARTS_WITH
     {
       @Override
-      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
+      public boolean evaluate (@NonNull final String sValue, @NonNull final String sCompareTo)
       {
         return sValue.startsWith (sCompareTo);
       }
@@ -55,7 +55,7 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     ENDS_WITH
     {
       @Override
-      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
+      public boolean evaluate (@NonNull final String sValue, @NonNull final String sCompareTo)
       {
         return sValue.endsWith (sCompareTo);
       }
@@ -64,7 +64,7 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     CONTAINS
     {
       @Override
-      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
+      public boolean evaluate (@NonNull final String sValue, @NonNull final String sCompareTo)
       {
         return sValue.contains (sCompareTo);
       }
@@ -73,19 +73,19 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     ANYTHING
     {
       @Override
-      public boolean evaluate (@Nonnull final String sValue, @Nonnull final String sCompareTo)
+      public boolean evaluate (@NonNull final String sValue, @NonNull final String sCompareTo)
       {
         return true;
       }
     };
 
-    public abstract boolean evaluate (@Nonnull String sValue, @Nonnull String sCompareTo);
+    public abstract boolean evaluate (@NonNull String sValue, @NonNull String sCompareTo);
   }
 
   private final String m_sCompareTo;
   private final EStringOperatorName m_eCompareWith;
 
-  protected StringMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
+  protected StringMatcher (@NonNull final String sCompareTo, @NonNull final EStringOperatorName eCompareWith)
   {
     ValueEnforcer.notNull (sCompareTo, "CompareTo");
     ValueEnforcer.notNull (eCompareWith, "CompareWith");
@@ -94,19 +94,19 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
     m_eCompareWith = eCompareWith;
   }
 
-  @Nonnull
+  @NonNull
   public final String getCompareToValue ()
   {
     return m_sCompareTo;
   }
 
-  @Nonnull
+  @NonNull
   public final EStringOperatorName getCompareWithOperator ()
   {
     return m_eCompareWith;
   }
 
-  @Nonnull
+  @NonNull
   protected abstract String getValue (T key);
 
   public final boolean isMatch (final T key)

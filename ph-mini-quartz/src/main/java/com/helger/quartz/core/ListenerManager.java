@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.CommonsLinkedHashMap;
@@ -35,8 +37,6 @@ import com.helger.quartz.ITriggerListener;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
-
-import jakarta.annotation.Nonnull;
 
 public class ListenerManager implements IListenerManager
 {
@@ -133,7 +133,7 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean setJobListenerMatchers (final String listenerName, @Nonnull final List <IMatcher <JobKey>> matchers)
+  public boolean setJobListenerMatchers (final String listenerName, @NonNull final List <IMatcher <JobKey>> matchers)
   {
     ValueEnforcer.notNull (matchers, "Matchers");
 
@@ -261,7 +261,7 @@ public class ListenerManager implements IListenerManager
   }
 
   public boolean setTriggerListenerMatchers (final String listenerName,
-                                             @Nonnull final List <IMatcher <TriggerKey>> matchers)
+                                             @NonNull final List <IMatcher <TriggerKey>> matchers)
   {
     ValueEnforcer.noNullValue (matchers, "Matchers");
 

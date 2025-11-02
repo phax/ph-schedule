@@ -18,12 +18,12 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.utils.Key;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Matches using an NOT operator on another Matcher.
@@ -34,13 +34,13 @@ public class NotMatcher <T extends Key <T>> implements IMatcher <T>
 {
   private final IMatcher <T> m_aOperand;
 
-  public NotMatcher (@Nonnull final IMatcher <T> aOperand)
+  public NotMatcher (@NonNull final IMatcher <T> aOperand)
   {
     ValueEnforcer.notNull (aOperand, "Operand");
     m_aOperand = aOperand;
   }
 
-  @Nonnull
+  @NonNull
   public IMatcher <T> getOperand ()
   {
     return m_aOperand;

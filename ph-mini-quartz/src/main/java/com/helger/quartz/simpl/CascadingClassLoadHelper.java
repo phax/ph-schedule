@@ -22,13 +22,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.reflection.GenericReflection;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.spi.IClassLoadHelper;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * A <code>ClassLoadHelper</code> uses all of the <code>ClassLoadHelper</code> types that are found
@@ -76,7 +76,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
   /**
    * Return the class with the given name.
    */
-  @Nonnull
+  @NonNull
   @Override
   public Class <?> loadClass (final String sClassName) throws ClassNotFoundException
   {
@@ -123,7 +123,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
     return ret;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public <T> Class <? extends T> loadClass (final String sClassName, final Class <T> dummy)
                                                                                             throws ClassNotFoundException
@@ -207,7 +207,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    *
    * @return the class-loader user be the helper.
    */
-  @Nonnull
+  @NonNull
   public ClassLoader getClassLoader ()
   {
     return m_aBestCandidate == null ? Thread.currentThread ().getContextClassLoader () : m_aBestCandidate

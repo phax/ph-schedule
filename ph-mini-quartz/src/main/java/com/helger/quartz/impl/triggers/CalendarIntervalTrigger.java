@@ -22,6 +22,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
@@ -32,9 +35,6 @@ import com.helger.quartz.ICalendar;
 import com.helger.quartz.ICalendarIntervalTrigger;
 import com.helger.quartz.QCloneUtils;
 import com.helger.quartz.SchedulerException;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -81,7 +81,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   private boolean m_bSkipDayIfHourDoesNotExist = false;
   private int m_nTimesTriggered = 0;
 
-  public CalendarIntervalTrigger (@Nonnull final CalendarIntervalTrigger aOther)
+  public CalendarIntervalTrigger (@NonNull final CalendarIntervalTrigger aOther)
   {
     super (aOther);
     m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
@@ -934,7 +934,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
     return cb;
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public CalendarIntervalTrigger getClone ()
   {

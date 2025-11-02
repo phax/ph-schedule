@@ -36,6 +36,9 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.annotation.style.VisibleForTesting;
 import com.helger.base.clone.ICloneable;
@@ -43,9 +46,6 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.cache.regex.RegExHelper;
 import com.helger.collection.commons.CommonsHashMap;
 import com.helger.collection.commons.ICommonsMap;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * <p>
@@ -298,7 +298,7 @@ public final class CronExpression implements ICloneable <CronExpression>
    *         if the string expression cannot be parsed into a valid
    *         <CODE>CronExpression</CODE>
    */
-  public CronExpression (@Nonnull final String cronExpression) throws ParseException
+  public CronExpression (@NonNull final String cronExpression) throws ParseException
   {
     ValueEnforcer.notNull (cronExpression, "CronExpression");
 
@@ -415,7 +415,7 @@ public final class CronExpression implements ICloneable <CronExpression>
    * @return the time zone for which this <code>CronExpression</code> will be
    *         resolved.
    */
-  @Nonnull
+  @NonNull
   public TimeZone getTimeZone ()
   {
     if (m_aTimeZone == null)
@@ -1194,7 +1194,7 @@ public final class CronExpression implements ICloneable <CronExpression>
 
   @Nullable
   @VisibleForTesting
-  TreeSet <Integer> getSet (@Nonnull final EType type)
+  TreeSet <Integer> getSet (@NonNull final EType type)
   {
     switch (type)
     {
@@ -1216,7 +1216,7 @@ public final class CronExpression implements ICloneable <CronExpression>
     throw new IllegalStateException ("oops");
   }
 
-  @Nonnull
+  @NonNull
   private static ValueSet _getValue (final int v, final String s, final int nI)
   {
     int nIndex = nI;
@@ -1863,7 +1863,7 @@ public final class CronExpression implements ICloneable <CronExpression>
     }
   }
 
-  @Nonnull
+  @NonNull
   @ReturnsMutableCopy
   public CronExpression getClone ()
   {

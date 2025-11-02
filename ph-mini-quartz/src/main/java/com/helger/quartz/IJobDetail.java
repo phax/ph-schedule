@@ -18,10 +18,10 @@
  */
 package com.helger.quartz;
 
-import com.helger.base.clone.ICloneable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.clone.ICloneable;
 
 /**
  * Conveys the detail properties of a given <code>Job</code> instance.
@@ -71,7 +71,7 @@ public interface IJobDetail extends ICloneable <IJobDetail>
    * Get the <code>JobDataMap</code> that is associated with the
    * <code>Job</code>.
    */
-  @Nonnull
+  @NonNull
   JobDataMap getJobDataMap ();
 
   /**
@@ -116,6 +116,6 @@ public interface IJobDetail extends ICloneable <IJobDetail>
    * Get a {@link JobBuilder} that is configured to produce a
    * <code>JobDetail</code> identical to this one.
    */
-  @Nonnull
+  @NonNull
   JobBuilder getJobBuilder ();
 }

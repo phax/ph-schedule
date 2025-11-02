@@ -18,12 +18,12 @@
  */
 package com.helger.quartz.simpl;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.string.StringHelper;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IInstanceIdGenerator;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * InstanceIdGenerator that will use a
@@ -122,7 +122,7 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
    * The name of the system property from which to obtain the instanceId.
    * Defaults to {@link #SYSTEM_PROPERTY}.
    */
-  @Nonnull
+  @NonNull
   public String getSystemPropertyName ()
   {
     return m_sSystemPropertyName;

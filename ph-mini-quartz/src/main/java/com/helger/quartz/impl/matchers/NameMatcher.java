@@ -18,11 +18,11 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.quartz.JobKey;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.utils.Key;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Matches on name (ignores group) property of Keys.
@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
  */
 public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
 {
-  protected NameMatcher (@Nonnull final String sCompareTo, @Nonnull final EStringOperatorName eCompareWith)
+  protected NameMatcher (@NonNull final String sCompareTo, @NonNull final EStringOperatorName eCompareWith)
   {
     super (sCompareTo, eCompareWith);
   }

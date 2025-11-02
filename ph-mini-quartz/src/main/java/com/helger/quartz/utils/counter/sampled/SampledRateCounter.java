@@ -18,7 +18,7 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An implementation of {@link ISampledRateCounter}
@@ -39,7 +39,7 @@ public class SampledRateCounter extends SampledCounter implements ISampledRateCo
    * @param config
    *        config
    */
-  public SampledRateCounter (@Nonnull final SampledRateCounterConfig config)
+  public SampledRateCounter (@NonNull final SampledRateCounterConfig config)
   {
     super (config);
   }
