@@ -20,6 +20,10 @@ Add the following to your pom.xml to use this artifact, replacing `x.y.z` with t
 
 # News and noteworthy
 
+v6.1.0 - 2025-11-16
+* Updated to ph-commons 12.1.0
+* Using JSpecify annotations
+
 v6.0.1 - 2025-10-28
 * Added misfireInstruction support to `JDK8TriggerBuilder`
 
