@@ -35,17 +35,15 @@ import com.helger.quartz.spi.TriggerFiredBundle;
 
 /**
  * <p>
- * JobRunShell instances are responsible for providing the 'safe' environment
- * for <code>Job</code> s to run in, and for performing all of the work of
- * executing the <code>Job</code>, catching ANY thrown exceptions, updating the
- * <code>Trigger</code> with the <code>Job</code>'s completion code, etc.
+ * JobRunShell instances are responsible for providing the 'safe' environment for <code>Job</code> s
+ * to run in, and for performing all of the work of executing the <code>Job</code>, catching ANY
+ * thrown exceptions, updating the <code>Trigger</code> with the <code>Job</code>'s completion code,
+ * etc.
  * </p>
  * <p>
- * A <code>JobRunShell</code> instance is created by a
- * <code>JobRunShellFactory</code> on behalf of the
- * <code>QuartzSchedulerThread</code> which then runs the shell in a thread from
- * the configured <code>ThreadPool</code> when the scheduler determines that a
- * <code>Job</code> has been triggered.
+ * A <code>JobRunShell</code> instance is created by a <code>JobRunShellFactory</code> on behalf of
+ * the <code>QuartzSchedulerThread</code> which then runs the shell in a thread from the configured
+ * <code>ThreadPool</code> when the scheduler determines that a <code>Job</code> has been triggered.
  * </p>
  *
  * @see IJobRunShellFactory
@@ -70,8 +68,8 @@ public class JobRunShell implements Runnable, ISchedulerListener
    * </p>
    *
    * @param scheduler
-   *        The <code>Scheduler</code> instance that should be made available
-   *        within the <code>JobExecutionContext</code>.
+   *        The <code>Scheduler</code> instance that should be made available within the
+   *        <code>JobExecutionContext</code>.
    */
   public JobRunShell (final IScheduler scheduler, final TriggerFiredBundle bndle)
   {
@@ -294,7 +292,9 @@ public class JobRunShell implements Runnable, ISchedulerListener
 
   /**
    * @param successfulExecution
+   *        was the execution successful?
    * @throws SchedulerException
+   *         in case of error
    */
   protected void complete (final boolean successfulExecution) throws SchedulerException
   {}
@@ -307,7 +307,6 @@ public class JobRunShell implements Runnable, ISchedulerListener
 
   private boolean _notifyListenersBeginning (final IJobExecutionContext jobExCtxt) throws VetoedException
   {
-
     boolean vetoed = false;
 
     // notify all trigger listeners

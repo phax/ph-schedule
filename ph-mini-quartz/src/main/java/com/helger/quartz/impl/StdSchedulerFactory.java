@@ -358,22 +358,19 @@ public class StdSchedulerFactory implements ISchedulerFactory
       throw m_aInitException;
 
     final NonBlockingProperties props = new NonBlockingProperties ();
-    if (propertiesStream != null)
-    {
-      try
-      {
-        props.load (propertiesStream);
-        m_sPropSrc = "an externally opened InputStream.";
-      }
-      catch (final IOException e)
-      {
-        m_aInitException = new SchedulerException ("Error loading property data from InputStream", e);
-        throw m_aInitException;
-      }
-    }
-    else
+    if (propertiesStream == null)
     {
       m_aInitException = new SchedulerException ("Error loading property data from InputStream - InputStream is null.");
+      throw m_aInitException;
+    }
+    try
+    {
+      props.load (propertiesStream);
+      m_sPropSrc = "an externally opened InputStream.";
+    }
+    catch (final IOException e)
+    {
+      m_aInitException = new SchedulerException ("Error loading property data from InputStream", e);
       throw m_aInitException;
     }
 
@@ -970,8 +967,10 @@ public class StdSchedulerFactory implements ISchedulerFactory
 
   /**
    * @param rsrcs
+   *        resources
    * @param qs
-   * @return Never null
+   *        scheduled
+   * @return Never <code>null</code>.
    */
   @NonNull
   protected IScheduler instantiate (final QuartzSchedulerResources rsrcs, final QuartzScheduler qs)
@@ -1143,10 +1142,9 @@ public class StdSchedulerFactory implements ISchedulerFactory
       if (LOGGER.isDebugEnabled ())
         LOGGER.debug ("Reusing existing scheduler with name '" + _getSchedulerName () + "'");
 
-      if (sched.isShutdown ())
-        schedRep.remove (_getSchedulerName ());
-      else
+      if (!sched.isShutdown ())
         return sched;
+      schedRep.remove (_getSchedulerName ());
     }
 
     sched = _instantiate ();
