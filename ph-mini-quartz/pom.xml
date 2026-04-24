@@ -27,12 +27,11 @@
     <version>6.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>ph-mini-quartz</artifactId>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <name>ph-mini-quartz</name>
   <description>Mini version of Quartz 2.2.3</description>
   <url>https://github.com/phax/ph-schedule/ph-mini-quartz</url>
   <inceptionYear>2016</inceptionYear>
-  
   <licenses>
     <license>
       <name>Apache 2</name>
@@ -40,12 +39,10 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
   <organization>
     <name>Philip Helger</name>
     <url>https://www.helger.com</url>
   </organization>
-  
   <developers>
     <developer>
       <id>philip</id>
@@ -54,7 +51,6 @@
       <url>https://www.helger.com</url>
     </developer>
   </developers>
-
   <dependencies>
     <dependency>
       <groupId>com.helger.commons</groupId>
@@ -64,14 +60,12 @@
       <groupId>com.helger.commons</groupId>
       <artifactId>ph-datetime</artifactId>
     </dependency>
-    
     <dependency>
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
   <build>
     <resources>
       <resource>
@@ -89,35 +83,7 @@
         </excludes>
       </resource>
     </resources>
-
     <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Automatic-Module-Name>com.helger.quartz</Automatic-Module-Name>
-            <Export-Package>
-              com.helger.quartz,
-              com.helger.quartz.core,
-              com.helger.quartz.impl,
-              com.helger.quartz.impl.calendar,
-              com.helger.quartz.impl.matchers,
-              com.helger.quartz.impl.triggers,
-              com.helger.quartz.listeners,
-              com.helger.quartz.plugins.history,
-              com.helger.quartz.plugins.management,
-              com.helger.quartz.simpl,
-              com.helger.quartz.spi,
-              com.helger.quartz.utils,
-              com.helger.quartz.utils.counter,
-              com.helger.quartz.utils.counter.sampled
-            </Export-Package>
-            <Import-Package>!org.jspecify.annotations.*,*</Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
