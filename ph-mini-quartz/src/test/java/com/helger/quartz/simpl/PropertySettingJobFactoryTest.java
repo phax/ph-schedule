@@ -19,10 +19,12 @@
 package com.helger.quartz.simpl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -51,7 +53,7 @@ public class PropertySettingJobFactoryTest
   {
     final JobDataMap jobDataMap = new JobDataMap ();
     jobDataMap.put ("intValue", Integer.valueOf (1));
-    jobDataMap.put ("longValue", Long.valueOf (2l));
+    jobDataMap.put ("longValue", Long.valueOf (2L));
     jobDataMap.put ("floatValue", Float.valueOf (3.0f));
     jobDataMap.put ("doubleValue", Double.valueOf (4.0));
     jobDataMap.put ("booleanValue", Boolean.TRUE);
@@ -65,7 +67,7 @@ public class PropertySettingJobFactoryTest
     m_aFactory.setBeanProps (myBean, jobDataMap);
 
     assertEquals (1, myBean.getIntValue ());
-    assertEquals (2l, myBean.getLongValue ());
+    assertEquals (2L, myBean.getLongValue ());
     assertEquals (3.0f, myBean.getFloatValue (), 0.0001);
     assertEquals (4.0, myBean.getDoubleValue (), 0.0001);
     assertTrue (myBean.getBooleanValue ());
@@ -183,6 +185,89 @@ public class PropertySettingJobFactoryTest
   }
 
   @Test
+  public void testAllowedPropertiesEmptyByDefault ()
+  {
+    assertFalse (new PropertySettingJobFactory ().hasAllowedProperties ());
+  }
+
+  @Test
+  public void testAllowedPropertiesSkipsNonListedKey ()
+  {
+    // Allow-list does not include "intValue" — even though the JobDataMap has it
+    // and the bean has a matching setter, the property must not be set.
+    // throwIfPropertyNotFound is true (set in @Before), so a non-allowed key
+    // must produce a SchedulerException.
+    m_aFactory.setAllowedProperties (Collections.singletonList ("stringValue"));
+
+    final JobDataMap jobDataMap = new JobDataMap ();
+    jobDataMap.put ("intValue", Integer.valueOf (42));
+    try
+    {
+      m_aFactory.setBeanProps (new TestBean (), jobDataMap);
+      fail ("expected SchedulerException for non-allowed property");
+    }
+    catch (final SchedulerException ignore)
+    {
+      // expected
+    }
+  }
+
+  @Test
+  public void testAllowedPropertiesAllowsListedKey () throws SchedulerException
+  {
+    m_aFactory.setAllowedProperties (Arrays.asList ("intValue", "stringValue"));
+
+    final JobDataMap jobDataMap = new JobDataMap ();
+    jobDataMap.put ("intValue", Integer.valueOf (42));
+    jobDataMap.put ("stringValue", "hello");
+
+    final TestBean myBean = new TestBean ();
+    m_aFactory.setBeanProps (myBean, jobDataMap);
+
+    assertEquals (42, myBean.getIntValue ());
+    assertEquals ("hello", myBean.getStringValue ());
+  }
+
+  @Test
+  public void testAllowedPropertiesCanBeCleared () throws SchedulerException
+  {
+    // First restrict, then clear with null. After clearing, the legacy
+    // behavior should be back (every key is eligible).
+    m_aFactory.setAllowedProperties (Collections.singletonList ("stringValue"));
+    assertTrue (m_aFactory.hasAllowedProperties ());
+
+    m_aFactory.setAllowedProperties (null);
+    assertFalse (m_aFactory.hasAllowedProperties ());
+
+    final JobDataMap jobDataMap = new JobDataMap ();
+    jobDataMap.put ("intValue", Integer.valueOf (5));
+
+    final TestBean myBean = new TestBean ();
+    m_aFactory.setBeanProps (myBean, jobDataMap);
+    assertEquals (5, myBean.getIntValue ());
+  }
+
+  @Test
+  public void testAddAllowedPropertyActivatesList ()
+  {
+    assertFalse (m_aFactory.hasAllowedProperties ());
+    m_aFactory.addAllowedProperty ("intValue");
+    assertTrue (m_aFactory.hasAllowedProperties ());
+
+    final JobDataMap jobDataMap = new JobDataMap ();
+    jobDataMap.put ("stringValue", "should-be-rejected");
+    try
+    {
+      m_aFactory.setBeanProps (new TestBean (), jobDataMap);
+      fail ("expected SchedulerException for non-allowed property");
+    }
+    catch (final SchedulerException ignore)
+    {
+      // expected
+    }
+  }
+
+  @Test
   public void testSetBeanPropsFromStrings () throws SchedulerException
   {
     final JobDataMap jobDataMap = new JobDataMap ();
@@ -199,7 +284,7 @@ public class PropertySettingJobFactoryTest
     m_aFactory.setBeanProps (myBean, jobDataMap);
 
     assertEquals (1, myBean.getIntValue ());
-    assertEquals (2l, myBean.getLongValue ());
+    assertEquals (2L, myBean.getLongValue ());
     assertEquals (3.0f, myBean.getFloatValue (), 0.0001);
     assertEquals (4.0, myBean.getDoubleValue (), 0.0001);
     assertTrue (myBean.getBooleanValue ());

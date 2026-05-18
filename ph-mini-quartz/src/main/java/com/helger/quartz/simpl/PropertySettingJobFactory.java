@@ -24,12 +24,18 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.collection.commons.CommonsHashSet;
+import com.helger.collection.commons.ICommonsSet;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.JobDataMap;
@@ -51,6 +57,15 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  * Also of possible interest is the throwIfPropertyNotFound property which will throw exceptions on
  * unmatched JobDataMap keys.
  * </p>
+ * <p>
+ * <b>Security note:</b> by default, this factory will attempt to invoke <em>any</em> public setter
+ * on the Job class whose name matches a key in the merged JobDataMap. If the JobDataMap is
+ * populated from untrusted input, this allows an attacker to invoke arbitrary setters on the Job
+ * class, including setters with side effects. To restrict the factory to a fixed set of properties,
+ * call {@link #setAllowedProperties(Collection)} or {@link #addAllowedProperty(String)} — keys not
+ * on the allow-list are then treated the same as unknown properties (skipped, or warned/thrown
+ * about depending on the other flags). The default is no allow-list, for backwards compatibility.
+ * </p>
  *
  * @see com.helger.quartz.spi.IJobFactory
  * @see SimpleJobFactory
@@ -58,6 +73,7 @@ import com.helger.quartz.spi.TriggerFiredBundle;
  * @see com.helger.quartz.IJobExecutionContext#getMergedJobDataMap()
  * @see #setWarnIfPropertyNotFound(boolean)
  * @see #setThrowIfPropertyNotFound(boolean)
+ * @see #setAllowedProperties(Collection)
  * @author jhouse
  */
 public class PropertySettingJobFactory extends SimpleJobFactory
@@ -66,6 +82,10 @@ public class PropertySettingJobFactory extends SimpleJobFactory
 
   private boolean m_bWarnIfNotFound = false;
   private boolean m_bThrowIfNotFound = false;
+  // null = no allow-list (back-compat default, all keys allowed).
+  // non-null = only keys in this set are accepted; everything else is handled
+  // by _handleError, same as a missing setter.
+  private ICommonsSet <String> m_aAllowedProperties = null;
 
   @Override
   public IJob newJob (final TriggerFiredBundle bundle, final IScheduler scheduler) throws SchedulerException
@@ -103,6 +123,17 @@ public class PropertySettingJobFactory extends SimpleJobFactory
       final Map.Entry <?, ?> entry = (Map.Entry <?, ?>) name2;
 
       final String name = (String) entry.getKey ();
+
+      if (m_aAllowedProperties != null && !m_aAllowedProperties.contains (name))
+      {
+        _handleError ("Property '" +
+                      name +
+                      "' is not on the allow-list for Job class " +
+                      obj.getClass ().getName () +
+                      " and will not be set.");
+        continue;
+      }
+
       final String c = name.substring (0, 1).toUpperCase (Locale.US);
       final String methName = "set" + c + name.substring (1);
 
@@ -138,92 +169,64 @@ public class PropertySettingJobFactory extends SimpleJobFactory
           if (paramType.equals (int.class))
           {
             if (o instanceof final String s)
-            {
               parm = Integer.valueOf (s);
-            }
             else
               if (o instanceof Integer)
-              {
                 parm = o;
-              }
           }
           else
             if (paramType.equals (long.class))
             {
               if (o instanceof final String s)
-              {
                 parm = Long.valueOf (s);
-              }
               else
                 if (o instanceof Long)
-                {
                   parm = o;
-                }
             }
             else
               if (paramType.equals (float.class))
               {
                 if (o instanceof final String s)
-                {
                   parm = Float.valueOf (s);
-                }
                 else
                   if (o instanceof Float)
-                  {
                     parm = o;
-                  }
               }
               else
                 if (paramType.equals (double.class))
                 {
                   if (o instanceof final String s)
-                  {
                     parm = Double.valueOf (s);
-                  }
                   else
                     if (o instanceof Double)
-                    {
                       parm = o;
-                    }
                 }
                 else
                   if (paramType.equals (boolean.class))
                   {
                     if (o instanceof final String s)
-                    {
                       parm = Boolean.valueOf (s);
-                    }
                     else
                       if (o instanceof Boolean)
-                      {
                         parm = o;
-                      }
                   }
                   else
                     if (paramType.equals (byte.class))
                     {
                       if (o instanceof final String s)
-                      {
                         parm = Byte.valueOf (s);
-                      }
                       else
                         if (o instanceof Byte)
-                        {
                           parm = o;
-                        }
                     }
                     else
                       if (paramType.equals (short.class))
                       {
                         if (o instanceof final String s)
-                        {
                           parm = Short.valueOf (s);
-                        }
                         else
                           if (o instanceof Short)
-                          {
                             parm = o;
-                          }
                       }
                       else
                         if (paramType.equals (char.class))
@@ -231,15 +234,11 @@ public class PropertySettingJobFactory extends SimpleJobFactory
                           if (o instanceof final String s)
                           {
                             if (s.length () == 1)
-                            {
                               parm = Character.valueOf (s.charAt (0));
-                            }
                           }
                           else
                             if (o instanceof Character)
-                            {
                               parm = o;
-                            }
                         }
         }
         else
@@ -348,7 +347,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
 
   /**
    * Whether the JobInstantiation should fail and throw and exception if a key (name) and value
-   * (type) found in the JobDataMap does not correspond to a proptery setter on the Job class.
+   * (type) found in the JobDataMap does not correspond to a property setter on the Job class.
    *
    * @param throwIfNotFound
    *        defaults to <code>false</code>.
@@ -360,7 +359,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
 
   /**
    * Whether a warning should be logged if a key (name) and value (type) found in the JobDataMap
-   * does not correspond to a proptery setter on the Job class.
+   * does not correspond to a property setter on the Job class.
    *
    * @return Returns the warnIfNotFound.
    */
@@ -371,7 +370,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
 
   /**
    * Whether a warning should be logged if a key (name) and value (type) found in the JobDataMap
-   * does not correspond to a proptery setter on the Job class.
+   * does not correspond to a property setter on the Job class.
    *
    * @param warnIfNotFound
    *        defaults to <code>true</code>.
@@ -379,5 +378,64 @@ public class PropertySettingJobFactory extends SimpleJobFactory
   public void setWarnIfPropertyNotFound (final boolean warnIfNotFound)
   {
     m_bWarnIfNotFound = warnIfNotFound;
+  }
+
+  /**
+   * @return The current allow-list of property names. If <code>null</code>, no allow-list is in
+   *         effect and all keys in the JobDataMap are eligible (the legacy / default behavior).
+   * @see #setAllowedProperties(Collection)
+   * @see #addAllowedProperty(String)
+   * @since 6.1.1
+   */
+  @Nullable
+  @ReturnsMutableCopy
+  public ICommonsSet <String> getAllowedProperties ()
+  {
+    return m_aAllowedProperties == null ? null : m_aAllowedProperties.getClone ();
+  }
+
+  /**
+   * Replace the allow-list of property names that may be set from the JobDataMap. Keys not in this
+   * set are skipped (or warned/thrown about, depending on
+   * {@link #setWarnIfPropertyNotFound(boolean)} and {@link #setThrowIfPropertyNotFound(boolean)}).
+   * Pass <code>null</code> or an empty collection to clear the allow-list and restore the legacy
+   * behavior where every key is eligible.
+   *
+   * @param allowedProperties
+   *        The set of property names that may be set, or <code>null</code> / empty to disable the
+   *        allow-list. Names are matched case-sensitively against the JobDataMap key.
+   * @since 6.1.1
+   */
+  public void setAllowedProperties (@Nullable final Collection <String> allowedProperties)
+  {
+    if (allowedProperties == null || allowedProperties.isEmpty ())
+      m_aAllowedProperties = null;
+    else
+      m_aAllowedProperties = new CommonsHashSet <> (allowedProperties);
+  }
+
+  /**
+   * Add a single property name to the allow-list. If no allow-list is in effect yet, this activates
+   * it with this single entry.
+   *
+   * @param propertyName
+   *        Property name to allow. May not be <code>null</code>.
+   * @since 6.1.1
+   */
+  public void addAllowedProperty (@NonNull final String propertyName)
+  {
+    if (m_aAllowedProperties == null)
+      m_aAllowedProperties = new CommonsHashSet <> ();
+    m_aAllowedProperties.add (propertyName);
+  }
+
+  /**
+   * @return <code>true</code> if an allow-list is currently in effect (only listed properties will
+   *         be set from the JobDataMap), <code>false</code> if every key is eligible.
+   * @since 6.1.1
+   */
+  public boolean hasAllowedProperties ()
+  {
+    return m_aAllowedProperties != null;
   }
 }
