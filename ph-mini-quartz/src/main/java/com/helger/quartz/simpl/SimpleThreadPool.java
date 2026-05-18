@@ -620,11 +620,14 @@ public class SimpleThreadPool implements IThreadPool
           }
           Thread.currentThread ().interrupt ();
         }
-        catch (final Exception exceptionInRunnable)
+        catch (final Throwable throwableInRunnable)
         {
+          // Catch Throwable (not just Exception) so that an Error thrown by
+          // the runnable does not silently kill the worker thread and leak it
+          // out of the pool (worker would never be returned to availWorkers).
           try
           {
-            LOGGER.error ("Error while executing the Runnable: ", exceptionInRunnable);
+            LOGGER.error ("Error while executing the Runnable: ", throwableInRunnable);
           }
           catch (final Exception e)
           {

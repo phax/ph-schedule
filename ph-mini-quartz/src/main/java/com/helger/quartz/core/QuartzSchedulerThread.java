@@ -35,9 +35,8 @@ import com.helger.quartz.spi.TriggerFiredBundle;
 import com.helger.quartz.spi.TriggerFiredResult;
 
 /**
- * The thread responsible for performing the work of firing
- * <code>{@link ITrigger}</code> s that are registered with the
- * <code>{@link QuartzScheduler}</code>.
+ * The thread responsible for performing the work of firing <code>{@link ITrigger}</code> s that are
+ * registered with the <code>{@link QuartzScheduler}</code>.
  *
  * @see QuartzScheduler
  * @see ITrigger
@@ -62,9 +61,8 @@ public class QuartzSchedulerThread extends Thread
   private int m_nIdleWaitVariablness = 7 * 1000;
 
   /**
-   * Construct a new <code>QuartzSchedulerThread</code> for the given
-   * <code>QuartzScheduler</code> as a non-daemon <code>Thread</code> with
-   * normal priority.
+   * Construct a new <code>QuartzSchedulerThread</code> for the given <code>QuartzScheduler</code>
+   * as a non-daemon <code>Thread</code> with normal priority.
    */
   QuartzSchedulerThread (final QuartzScheduler qs, final QuartzSchedulerResources qsRsrcs)
   {
@@ -72,9 +70,8 @@ public class QuartzSchedulerThread extends Thread
   }
 
   /**
-   * Construct a new <code>QuartzSchedulerThread</code> for the given
-   * <code>QuartzScheduler</code> as a <code>Thread</code> with the given
-   * attributes.
+   * Construct a new <code>QuartzSchedulerThread</code> for the given <code>QuartzScheduler</code>
+   * as a <code>Thread</code> with the given attributes.
    */
   QuartzSchedulerThread (final QuartzScheduler qs,
                          final QuartzSchedulerResources qsRsrcs,
@@ -95,16 +92,19 @@ public class QuartzSchedulerThread extends Thread
     setPriority (threadPrio);
 
     // start the underlying thread, but put this object into the 'paused'
-    // state
-    // so processing doesn't start yet...
+    // state so processing doesn't start yet...
     m_bPaused = true;
     m_aHalted = new AtomicBoolean (false);
+
+    // Make sure we don't die unnotified
+    setUncaughtExceptionHandler ( (t, e) -> LOGGER.error ("QuartzSchedulerThread.uncaughtException in Thread " + t, e));
   }
 
   void setIdleWaitTime (final long waitTime)
   {
     m_nIdleWaitTime = waitTime;
-    m_nIdleWaitVariablness = (int) (waitTime * 0.2);
+    // Random.nextInt requires a strictly positive bound
+    m_nIdleWaitVariablness = Math.max (1, (int) (waitTime * 0.2));
   }
 
   private long _getRandomizedIdleWaitTime ()
@@ -184,15 +184,14 @@ public class QuartzSchedulerThread extends Thread
 
   /**
    * <p>
-   * Signals the main processing loop that a change in scheduling has been made
-   * - in order to interrupt any sleeping that may be occuring while waiting for
-   * the fire time to arrive.
+   * Signals the main processing loop that a change in scheduling has been made - in order to
+   * interrupt any sleeping that may be occuring while waiting for the fire time to arrive.
    * </p>
    *
    * @param candidateNewNextFireTime
-   *        the time (in millis) when the newly scheduled trigger will fire. If
-   *        this method is being called do to some other even (rather than
-   *        scheduling a trigger), the caller should pass zero (0).
+   *        the time (in millis) when the newly scheduled trigger will fire. If this method is being
+   *        called do to some other even (rather than scheduling a trigger), the caller should pass
+   *        zero (0).
    */
   public void signalSchedulingChange (final long candidateNewNextFireTime)
   {
@@ -255,7 +254,11 @@ public class QuartzSchedulerThread extends Thread
             }
             catch (final InterruptedException ignore)
             {
-              Thread.currentThread ().interrupt ();
+              // Do not re-assert the interrupt flag here: this is the top of
+              // the call stack, halt() signals via m_aHalted (not
+              // Thread.interrupt()), and re-setting the flag would make the
+              // next wait() in this loop throw immediately, producing a busy
+              // spin.
             }
           }
 
@@ -332,7 +335,8 @@ public class QuartzSchedulerThread extends Thread
                   }
                   catch (final InterruptedException ignore)
                   {
-                    Thread.currentThread ().interrupt ();
+                    // See the comment on the paused-wait catch above:
+                    // do not re-assert the interrupt flag here.
                   }
                 }
               }
@@ -466,14 +470,25 @@ public class QuartzSchedulerThread extends Thread
           }
           catch (final InterruptedException ignore)
           {
-            Thread.currentThread ().interrupt ();
+            // See the comment on the paused-wait catch above:
+            // do not re-assert the interrupt flag here.
           }
         }
 
       }
-      catch (final RuntimeException re)
+      catch (final Throwable t)
       {
-        LOGGER.error ("Runtime error occurred in main trigger firing loop.", re);
+        // Catch Throwable (not just RuntimeException) so the scheduler thread
+        // survives Errors like OutOfMemoryError or NoClassDefFoundError; the
+        // thread previously died silently on these and no further jobs fired.
+        if (t instanceof InterruptedException)
+        {
+          // Preserve interrupt status if an InterruptedException ever reaches
+          // here (e.g., wrapped in a runtime by called code). All known wait()
+          // sites in this loop catch it locally, so this is defensive only.
+          Thread.currentThread ().interrupt ();
+        }
+        LOGGER.error ("Error occurred in main trigger firing loop.", t);
       }
     }
 

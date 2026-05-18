@@ -23,6 +23,12 @@ Add the following to your pom.xml to use this artifact, replacing `x.y.z` with t
 
 v6.1.1 - work in progress
 * Removed OSGI bundling
+* `QuartzSchedulerThread` now catches `Throwable` (instead of only `RuntimeException`) in its main loop, so the scheduler thread no longer dies silently on `Error`s like `OutOfMemoryError` or `NoClassDefFoundError`
+* `QuartzSchedulerThread` now installs an `UncaughtExceptionHandler` so any remaining thread death is logged
+* `QuartzSchedulerThread.setIdleWaitTime` now guards against a zero/negative `nextInt` bound
+* `SimpleThreadPool.WorkerThread` now catches `Throwable` while running a job, so a worker thrown out by an `Error` is no longer leaked out of the pool
+* `QuartzSchedulerThread` no longer re-asserts the interrupt flag inside its three inner `wait()` catches; the previous pattern caused a 100% CPU busy spin if the scheduler thread was externally interrupted, because each subsequent `wait()` re-threw `InterruptedException` immediately
+* `QuartzSchedulerThread`'s outer `Throwable` catch now preserves the interrupt flag if it ever sees an `InterruptedException` (defensive — all known `wait()` sites catch it locally)
 
 v6.1.0 - 2025-11-16
 * Updated to ph-commons 12.1.0
