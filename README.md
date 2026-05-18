@@ -19,9 +19,17 @@ Add the following to your pom.xml to use this artifact, replacing `x.y.z` with t
 </dependency>
 ```
 
+# Security notes
+
+This library is an in-process scheduler. Three points are worth knowing when integrating it into a host application:
+
+* **`SchedulerRepository` is process-wide.** `com.helger.quartz.impl.SchedulerRepository` is a static singleton keyed by scheduler name, and `lookup(String)` / `lookupAll()` are public with no access check. In a deployment where `ph-mini-quartz` lives in a *shared* classloader serving multiple applications (e.g. dropped into `$CATALINA_HOME/lib` of a Tomcat hosting several WARs), application A can retrieve and manipulate application B's scheduler. Either ship `ph-mini-quartz` inside each application's own classloader (e.g. `WEB-INF/lib`), or do not mix mutually untrusting applications in the same JVM.
+* **`PropertySettingJobFactory` and untrusted `JobDataMap` contents.** By default this factory invokes any public setter on the Job class whose name matches a key in the merged `JobDataMap`. If the `JobDataMap` is populated from external input, an attacker can invoke arbitrary setters — including any with side effects. Since v6.1.1 you can restrict the factory to a fixed set of keys via `setAllowedProperties(Collection<String>)` or `addAllowedProperty(String)`; non-listed keys are then skipped (or warned/thrown about, depending on the existing flags). The default factory used by `StdSchedulerFactory` is `SimpleJobFactory`, which does not call any setters — `PropertySettingJobFactory` is opt-in.
+* **`org.quartz.properties` is a trust-sensitive system property.** `StdSchedulerFactory` reads it as a filesystem path with no canonicalization, then loads it via `FileInputStream`. The property values inside that file (`org.quartz.threadPool.class`, `org.quartz.jobStore.class`, `org.quartz.plugin.*`, listener classes, etc.) become arguments to `Class.forName(...).newInstance()`. This is by design for plugin-driven scheduling, but it means an attacker who can set this system property at JVM startup can load arbitrary classes from the classpath. Treat it like a `-D` flag passed by an operator; never derive it from data your application receives at runtime.
+
 # News and noteworthy
 
-v6.1.1 - work in progress
+v6.1.1 - 2026-05-18
 * Removed OSGI bundling
 * `QuartzSchedulerThread` now catches `Throwable` (instead of only `RuntimeException`) in its main loop, so the scheduler thread no longer dies silently on `Error`s like `OutOfMemoryError` or `NoClassDefFoundError`
 * `QuartzSchedulerThread` now installs an `UncaughtExceptionHandler` so any remaining thread death is logged
@@ -29,6 +37,7 @@ v6.1.1 - work in progress
 * `SimpleThreadPool.WorkerThread` now catches `Throwable` while running a job, so a worker thrown out by an `Error` is no longer leaked out of the pool
 * `QuartzSchedulerThread` no longer re-asserts the interrupt flag inside its three inner `wait()` catches; the previous pattern caused a 100% CPU busy spin if the scheduler thread was externally interrupted, because each subsequent `wait()` re-threw `InterruptedException` immediately
 * `QuartzSchedulerThread`'s outer `Throwable` catch now preserves the interrupt flag if it ever sees an `InterruptedException` (defensive — all known `wait()` sites catch it locally)
+* `PropertySettingJobFactory` now supports an opt-in allow-list of property names via `setAllowedProperties(Collection)` / `addAllowedProperty(String)`. When set, only listed keys in the merged `JobDataMap` are eligible for setter invocation; non-listed keys are skipped (or warned/thrown about, depending on the existing flags). Default behavior is unchanged.
 
 v6.1.0 - 2025-11-16
 * Updated to ph-commons 12.1.0
