@@ -3,6 +3,8 @@
 <!-- ph-badge-start -->
 [![Sonatype Central](https://maven-badges.sml.io/sonatype-central/com.helger.schedule/ph-schedule-parent-pom/badge.svg)](https://maven-badges.sml.io/sonatype-central/com.helger.schedule/ph-schedule-parent-pom/)
 [![javadoc](https://javadoc.io/badge2/com.helger.schedule/ph-mini-quartz/javadoc.svg)](https://javadoc.io/doc/com.helger.schedule/ph-mini-quartz)
+
+> If this project saved you some time or made your day a little easier, a star would mean a lot — it helps others find it too.
 <!-- ph-badge-end -->
 
 Java scheduling library based on Quartz with ph-scope support (see [ph-commons](https://github.com/phax/ph-commons))
