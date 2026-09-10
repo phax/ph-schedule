@@ -43,52 +43,45 @@ import com.helger.quartz.SchedulerException;
 
 /**
  * A concrete implementation of DailyTimeIntervalTrigger that is used to fire a
- * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating
- * time intervals.
+ * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating time intervals.
  * <p>
- * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) seconds,
- * minutes or hours (see {@link #setRepeatIntervalUnit(EIntervalUnit)}) during a
- * given time window on specified days of the week.
+ * The trigger will fire every N (see {@link #setRepeatInterval(int)} ) seconds, minutes or hours
+ * (see {@link #setRepeatIntervalUnit(EIntervalUnit)}) during a given time window on specified days
+ * of the week.
  * </p>
  * <p>
- * For example#1, a trigger can be set to fire every 72 minutes between 8:00 and
- * 11:00 everyday. It's fire times would be 8:00, 9:12, 10:24, then next day
- * would repeat: 8:00, 9:12, 10:24 again.
+ * For example#1, a trigger can be set to fire every 72 minutes between 8:00 and 11:00 everyday.
+ * It's fire times would be 8:00, 9:12, 10:24, then next day would repeat: 8:00, 9:12, 10:24 again.
  * </p>
  * <p>
- * For example#2, a trigger can be set to fire every 23 minutes between 9:20 and
- * 16:47 Monday through Friday.
+ * For example#2, a trigger can be set to fire every 23 minutes between 9:20 and 16:47 Monday
+ * through Friday.
  * </p>
  * <p>
- * On each day, the starting fire time is reset to startTimeOfDay value, and
- * then it will add repeatInterval value to it until the endTimeOfDay is
- * reached. If you set daysOfWeek values, then fire time will only occur during
- * those week days period. Again, remember this trigger will reset fire time
- * each day with startTimeOfDay, regardless of your interval or endTimeOfDay!
+ * On each day, the starting fire time is reset to startTimeOfDay value, and then it will add
+ * repeatInterval value to it until the endTimeOfDay is reached. If you set daysOfWeek values, then
+ * fire time will only occur during those week days period. Again, remember this trigger will reset
+ * fire time each day with startTimeOfDay, regardless of your interval or endTimeOfDay!
  * </p>
  * <p>
- * The default values for fields if not set are: startTimeOfDay defaults to
- * 00:00:00, the endTimeOfDay default to 23:59:59, and daysOfWeek is default to
- * every day. The startTime default to current time-stamp now, while endTime has
- * not value.
+ * The default values for fields if not set are: startTimeOfDay defaults to 00:00:00, the
+ * endTimeOfDay default to 23:59:59, and daysOfWeek is default to every day. The startTime default
+ * to current time-stamp now, while endTime has not value.
  * </p>
  * <p>
- * If startTime is before startTimeOfDay, then startTimeOfDay will be used and
- * startTime has no affect other than to specify the first day of firing. Else
- * if startTime is after startTimeOfDay, then the first fire time for that day
- * will be the next interval after the startTime. For example, if you set
- * startingTimeOfDay=9am, endingTimeOfDay=11am, interval=15 mins, and
- * startTime=9:33am, then the next fire time will be 9:45pm. Note also that if
- * you do not set startTime value, the trigger builder will default to current
- * time, and current time maybe before or after the startTimeOfDay! So be aware
- * how you set your startTime.
+ * If startTime is before startTimeOfDay, then startTimeOfDay will be used and startTime has no
+ * affect other than to specify the first day of firing. Else if startTime is after startTimeOfDay,
+ * then the first fire time for that day will be the next interval after the startTime. For example,
+ * if you set startingTimeOfDay=9am, endingTimeOfDay=11am, interval=15 mins, and startTime=9:33am,
+ * then the next fire time will be 9:45pm. Note also that if you do not set startTime value, the
+ * trigger builder will default to current time, and current time maybe before or after the
+ * startTimeOfDay! So be aware how you set your startTime.
  * </p>
  * <p>
- * This trigger also supports "repeatCount" feature to end the trigger fire time
- * after a certain number of count is reached. Just as the SimpleTrigger,
- * setting repeatCount=0 means trigger will fire once only! Setting any positive
- * count then the trigger will repeat count + 1 times. Unlike SimpleTrigger, the
- * default value of repeatCount of this trigger is set to REPEAT_INDEFINITELY
+ * This trigger also supports "repeatCount" feature to end the trigger fire time after a certain
+ * number of count is reached. Just as the SimpleTrigger, setting repeatCount=0 means trigger will
+ * fire once only! Setting any positive count then the trigger will repeat count + 1 times. Unlike
+ * SimpleTrigger, the default value of repeatCount of this trigger is set to REPEAT_INDEFINITELY
  * instead of 0 though.
  *
  * @see IDailyTimeIntervalTrigger
@@ -138,22 +131,20 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Create a <code>DailyTimeIntervalTrigger</code> that will occur immediately,
-   * and repeat at the the given interval.
+   * Create a <code>DailyTimeIntervalTrigger</code> that will occur immediately, and repeat at the
+   * the given interval.
    * </p>
    *
    * @param startTimeOfDay
-   *        The <code>LocalTime</code> that the repeating should begin
-   *        occurring.
+   *        The <code>LocalTime</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
-   *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link EIntervalUnit#SECOND},
-   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
+   *        The repeat interval unit. The only intervals that are valid for this type of trigger are
+   *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   *        {@link EIntervalUnit#HOUR}.
    * @throws IllegalArgumentException
-   *         if an invalid IntervalUnit is given, or the repeat interval is zero
-   *         or less.
+   *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
   public DailyTimeIntervalTrigger (final String name,
                                    final LocalTime startTimeOfDay,
@@ -166,22 +157,20 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Create a <code>DailyTimeIntervalTrigger</code> that will occur immediately,
-   * and repeat at the the given interval.
+   * Create a <code>DailyTimeIntervalTrigger</code> that will occur immediately, and repeat at the
+   * the given interval.
    * </p>
    *
    * @param startTimeOfDay
-   *        The <code>LocalTime</code> that the repeating should begin
-   *        occurring.
+   *        The <code>LocalTime</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
-   *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link EIntervalUnit#SECOND},
-   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
+   *        The repeat interval unit. The only intervals that are valid for this type of trigger are
+   *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   *        {@link EIntervalUnit#HOUR}.
    * @throws IllegalArgumentException
-   *         if an invalid IntervalUnit is given, or the repeat interval is zero
-   *         or less.
+   *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
   public DailyTimeIntervalTrigger (final String name,
                                    final String group,
@@ -195,30 +184,26 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Create a <code>DailyTimeIntervalTrigger</code> that will occur at the given
-   * time, and repeat at the the given interval until the given end time.
+   * Create a <code>DailyTimeIntervalTrigger</code> that will occur at the given time, and repeat at
+   * the the given interval until the given end time.
    * </p>
    *
    * @param startTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        fire.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to fire.
    * @param endTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        quit repeat firing.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>LocalTime</code> that the repeating should begin
-   *        occurring.
+   *        The <code>LocalTime</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
-   *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link EIntervalUnit#SECOND},
-   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
+   *        The repeat interval unit. The only intervals that are valid for this type of trigger are
+   *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   *        {@link EIntervalUnit#HOUR}.
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    * @throws IllegalArgumentException
-   *         if an invalid IntervalUnit is given, or the repeat interval is zero
-   *         or less.
+   *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
   public DailyTimeIntervalTrigger (final String name,
                                    final Date startTime,
@@ -233,30 +218,26 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Create a <code>DailyTimeIntervalTrigger</code> that will occur at the given
-   * time, and repeat at the the given interval until the given end time.
+   * Create a <code>DailyTimeIntervalTrigger</code> that will occur at the given time, and repeat at
+   * the the given interval until the given end time.
    * </p>
    *
    * @param startTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        fire.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to fire.
    * @param endTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        quit repeat firing.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>LocalTime</code> that the repeating should begin
-   *        occurring.
+   *        The <code>LocalTime</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
-   *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link EIntervalUnit#SECOND},
-   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
+   *        The repeat interval unit. The only intervals that are valid for this type of trigger are
+   *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   *        {@link EIntervalUnit#HOUR}.
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    * @throws IllegalArgumentException
-   *         if an invalid IntervalUnit is given, or the repeat interval is zero
-   *         or less.
+   *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
   public DailyTimeIntervalTrigger (final String name,
                                    final String group,
@@ -279,31 +260,26 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Create a <code>DailyTimeIntervalTrigger</code> that will occur at the given
-   * time, fire the identified <code>Job</code> and repeat at the the given
-   * interval until the given end time.
+   * Create a <code>DailyTimeIntervalTrigger</code> that will occur at the given time, fire the
+   * identified <code>Job</code> and repeat at the the given interval until the given end time.
    * </p>
    *
    * @param startTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        fire.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to fire.
    * @param endTime
-   *        A <code>Date</code> set to the time for the <code>Trigger</code> to
-   *        quit repeat firing.
+   *        A <code>Date</code> set to the time for the <code>Trigger</code> to quit repeat firing.
    * @param startTimeOfDay
-   *        The <code>LocalTime</code> that the repeating should begin
-   *        occurring.
+   *        The <code>LocalTime</code> that the repeating should begin occurring.
    * @param endTimeOfDay
    *        The <code>LocalTime</code> that the repeating should stop occurring.
    * @param intervalUnit
-   *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link EIntervalUnit#SECOND},
-   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
+   *        The repeat interval unit. The only intervals that are valid for this type of trigger are
+   *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   *        {@link EIntervalUnit#HOUR}.
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    * @throws IllegalArgumentException
-   *         if an invalid IntervalUnit is given, or the repeat interval is zero
-   *         or less.
+   *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
   public DailyTimeIntervalTrigger (final String name,
                                    final String group,
@@ -371,9 +347,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * </p>
    *
    * @param intervalUnit
-   *        The repeat interval unit. The only intervals that are valid for this
-   *        type of trigger are {@link EIntervalUnit#SECOND},
-   *        {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
+   *        The repeat interval unit. The only intervals that are valid for this type of trigger are
+   *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   *        {@link EIntervalUnit#HOUR}.
    */
   public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
   {
@@ -392,9 +368,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * set the the time interval that will be added to the
-   * <code>DailyTimeIntervalTrigger</code>'s fire time (in the set repeat
-   * interval unit) in order to calculate the time of the next trigger repeat.
+   * set the the time interval that will be added to the <code>DailyTimeIntervalTrigger</code>'s
+   * fire time (in the set repeat interval unit) in order to calculate the time of the next trigger
+   * repeat.
    * </p>
    *
    * @exception IllegalArgumentException
@@ -413,8 +389,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Set the number of times the <code>DailyTimeIntervalTrigger</code> has
-   * already fired.
+   * Set the number of times the <code>DailyTimeIntervalTrigger</code> has already fired.
    * </p>
    */
   public void setTimesTriggered (final int timesTriggered)
@@ -439,17 +414,15 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Updates the <code>DailyTimeIntervalTrigger</code>'s state based on the
-   * MISFIRE_INSTRUCTION_XXX that was selected when the
-   * <code>DailyTimeIntervalTrigger</code> was created.
+   * Updates the <code>DailyTimeIntervalTrigger</code>'s state based on the MISFIRE_INSTRUCTION_XXX
+   * that was selected when the <code>DailyTimeIntervalTrigger</code> was created.
    * </p>
    * <p>
-   * If the misfire instruction is set to MISFIRE_INSTRUCTION_SMART_POLICY, then
-   * the following scheme will be used: <br>
+   * If the misfire instruction is set to MISFIRE_INSTRUCTION_SMART_POLICY, then the following
+   * scheme will be used: <br>
    * </p>
    * <ul>
-   * <li>The instruction will be interpreted as
-   * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
+   * <li>The instruction will be interpreted as <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
   public void updateAfterMisfire (final ICalendar cal)
@@ -490,10 +463,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   }
 
   /**
-   * Called when the <code>{@link com.helger.quartz.IScheduler}</code> has
-   * decided to 'fire' the trigger (execute the associated <code>Job</code>), in
-   * order to give the <code>Trigger</code> a chance to update itself for its
-   * next triggering (if any).
+   * Called when the <code>{@link com.helger.quartz.IScheduler}</code> has decided to 'fire' the
+   * trigger (execute the associated <code>Job</code>), in order to give the <code>Trigger</code> a
+   * chance to update itself for its next triggering (if any).
    *
    * @see #executionComplete(com.helger.quartz.IJobExecutionContext,
    *      com.helger.quartz.JobExecutionException)
@@ -562,19 +534,17 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added
-   * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added to the scheduler, in
+   * order to have the <code>Trigger</code> compute its first fire time, based on any associated
+   * calendar.
    * </p>
    * <p>
-   * After this method has been called, <code>getNextFireTime()</code> should
-   * return a valid answer.
+   * After this method has been called, <code>getNextFireTime()</code> should return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by
-   *         the scheduler, which is also the same value
-   *         <code>getNextFireTime()</code> will return (until after the first
-   *         firing of the <code>Trigger</code>).
+   * @return the first time at which the <code>Trigger</code> will be fired by the scheduler, which
+   *         is also the same value <code>getNextFireTime()</code> will return (until after the
+   *         first firing of the <code>Trigger</code>).
    */
   @Override
   public Date computeFirstFireTime (final ICalendar calendar)
@@ -610,16 +580,15 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Returns the next time at which the <code>Trigger</code> is scheduled to
-   * fire. If the trigger will not fire again, <code>null</code> will be
-   * returned. Note that the time returned can possibly be in the past, if the
-   * time that was computed for the trigger to next fire has already arrived,
-   * but the scheduler has not yet been able to fire the trigger (which would
-   * likely be due to lack of resources e.g. threads).
+   * Returns the next time at which the <code>Trigger</code> is scheduled to fire. If the trigger
+   * will not fire again, <code>null</code> will be returned. Note that the time returned can
+   * possibly be in the past, if the time that was computed for the trigger to next fire has already
+   * arrived, but the scheduler has not yet been able to fire the trigger (which would likely be due
+   * to lack of resources e.g. threads).
    * </p>
    * <p>
-   * The value returned is not guaranteed to be valid until after the
-   * <code>Trigger</code> has been added to the scheduler.
+   * The value returned is not guaranteed to be valid until after the <code>Trigger</code> has been
+   * added to the scheduler.
    * </p>
    */
   public Date getNextFireTime ()
@@ -629,9 +598,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Returns the previous time at which the
-   * <code>DailyTimeIntervalTrigger</code> fired. If the trigger has not yet
-   * fired, <code>null</code> will be returned.
+   * Returns the previous time at which the <code>DailyTimeIntervalTrigger</code> fired. If the
+   * trigger has not yet fired, <code>null</code> will be returned.
    */
   public Date getPreviousFireTime ()
   {
@@ -640,8 +608,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Set the next time at which the <code>DailyTimeIntervalTrigger</code> should
-   * fire.
+   * Set the next time at which the <code>DailyTimeIntervalTrigger</code> should fire.
    * </p>
    * <p>
    * <b>This method should not be invoked by client code.</b>
@@ -654,8 +621,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Set the previous time at which the <code>DailyTimeIntervalTrigger</code>
-   * fired.
+   * Set the previous time at which the <code>DailyTimeIntervalTrigger</code> fired.
    * </p>
    * <p>
    * <b>This method should not be invoked by client code.</b>
@@ -668,9 +634,9 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Returns the next time at which the <code>DailyTimeIntervalTrigger</code>
-   * will fire, after the given time. If the trigger will not fire after the
-   * given time, <code>null</code> will be returned.
+   * Returns the next time at which the <code>DailyTimeIntervalTrigger</code> will fire, after the
+   * given time. If the trigger will not fire after the given time, <code>null</code> will be
+   * returned.
    * </p>
    *
    * @param aAfterTime
@@ -785,16 +751,16 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   }
 
   /**
-   * Given fireTime time determine if it is on a valid day of week. If so,
-   * simply return it unaltered, if not, advance to the next valid week day, and
-   * set the time of day to the start time of day
+   * Given fireTime time determine if it is on a valid day of week. If so, simply return it
+   * unaltered, if not, advance to the next valid week day, and set the time of day to the start
+   * time of day
    *
    * @param aFireTime
    *        - given next fireTime.
    * @param forceToAdvanceNextDay
-   *        - flag to whether to advance day without check existing week day.
-   *        This scenario can happen when a caller determine fireTime has passed
-   *        the endTimeOfDay that fireTime should move to next day anyway.
+   *        - flag to whether to advance day without check existing week day. This scenario can
+   *        happen when a caller determine fireTime has passed the endTimeOfDay that fireTime should
+   *        move to next day anyway.
    * @return a next day fireTime.
    */
   private Date _advanceToNextDayOfWeekIfNecessary (final Date aFireTime, final boolean forceToAdvanceNextDay)
@@ -841,8 +807,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Returns the final time at which the <code>DailyTimeIntervalTrigger</code>
-   * will fire, if there is no end time set, null will be returned.
+   * Returns the final time at which the <code>DailyTimeIntervalTrigger</code> will fire, if there
+   * is no end time set, null will be returned.
    * </p>
    * <p>
    * Note that the return time may be in the past.
@@ -871,8 +837,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Determines whether or not the <code>DailyTimeIntervalTrigger</code> will
-   * occur again.
+   * Determines whether or not the <code>DailyTimeIntervalTrigger</code> will occur again.
    * </p>
    */
   public boolean mayFireAgain ()
@@ -882,8 +847,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
 
   /**
    * <p>
-   * Validates whether the properties of the <code>JobDetail</code> are valid
-   * for submission into a <code>Scheduler</code>.
+   * Validates whether the properties of the <code>JobDetail</code> are valid for submission into a
+   * <code>Scheduler</code>.
    *
    * @throws IllegalStateException
    *         if a required property (such as Name, Group, Class) is not set.
@@ -983,8 +948,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   }
 
   /**
-   * Get a {@link IScheduleBuilder} that is configured to produce a schedule
-   * identical to this trigger's schedule.
+   * Get a {@link IScheduleBuilder} that is configured to produce a schedule identical to this
+   * trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */

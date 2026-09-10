@@ -19,8 +19,8 @@
 package com.helger.quartz;
 
 /**
- * An exception that is thrown to indicate that a call to
- * InterruptableJob.interrupt() failed without interrupting the Job.
+ * An exception that is thrown to indicate that a call to InterruptableJob.interrupt() failed
+ * without interrupting the Job.
  *
  * @see com.helger.quartz.IInterruptableJob#interrupt()
  * @author James House

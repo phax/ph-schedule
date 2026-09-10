@@ -27,8 +27,8 @@ import com.helger.quartz.impl.matchers.OrMatcher;
 import com.helger.quartz.utils.Key;
 
 /**
- * Matchers can be used in various {@link IScheduler} API methods to select the
- * entities that should be operated upon.
+ * Matchers can be used in various {@link IScheduler} API methods to select the entities that should
+ * be operated upon.
  *
  * @author jhouse
  * @since 2.0
@@ -43,8 +43,7 @@ public interface IMatcher <T extends Key <T>>
   int hashCode ();
 
   /**
-   * Create an AndMatcher that depends upon the result of both of the given
-   * matchers.
+   * Create an AndMatcher that depends upon the result of both of the given matchers.
    */
   @NonNull
   static <U extends Key <U>> AndMatcher <U> and (@NonNull final IMatcher <U> leftOperand,
@@ -60,8 +59,7 @@ public interface IMatcher <T extends Key <T>>
   }
 
   /**
-   * Create an OrMatcher that depends upon the result of at least one of the
-   * given matchers.
+   * Create an OrMatcher that depends upon the result of at least one of the given matchers.
    */
   @NonNull
   static <U extends Key <U>> OrMatcher <U> or (@NonNull final IMatcher <U> leftOperand,

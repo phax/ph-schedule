@@ -21,8 +21,7 @@ package com.helger.quartz;
 import java.util.Date;
 
 /**
- * Describes the settings and capabilities of a given
- * <code>{@link IScheduler}</code> instance.
+ * Describes the settings and capabilities of a given <code>{@link IScheduler}</code> instance.
  *
  * @author James House
  */
@@ -109,8 +108,7 @@ public class SchedulerMetaData
   }
 
   /**
-   * Returns the number of jobs executed since the <code>Scheduler</code>
-   * started.
+   * Returns the number of jobs executed since the <code>Scheduler</code> started.
    */
   public int getNumberOfJobsExecuted ()
   {
@@ -151,8 +149,8 @@ public class SchedulerMetaData
 
   /**
    * <p>
-   * Returns the class-name of the <code>JobStore</code> instance that is being
-   * used by the <code>Scheduler</code>.
+   * Returns the class-name of the <code>JobStore</code> instance that is being used by the
+   * <code>Scheduler</code>.
    * </p>
    */
   public Class <?> getJobStoreClass ()
@@ -162,8 +160,8 @@ public class SchedulerMetaData
 
   /**
    * <p>
-   * Returns whether or not the <code>Scheduler</code>'s<code>JobStore</code>
-   * instance supports persistence.
+   * Returns whether or not the <code>Scheduler</code>'s<code>JobStore</code> instance supports
+   * persistence.
    * </p>
    */
   public boolean isJobStoreSupportsPersistence ()
@@ -173,8 +171,7 @@ public class SchedulerMetaData
 
   /**
    * <p>
-   * Returns whether or not the <code>Scheduler</code>'s<code>JobStore</code> is
-   * clustered.
+   * Returns whether or not the <code>Scheduler</code>'s<code>JobStore</code> is clustered.
    * </p>
    */
   public boolean isJobStoreClustered ()
@@ -184,8 +181,8 @@ public class SchedulerMetaData
 
   /**
    * <p>
-   * Returns the class-name of the <code>ThreadPool</code> instance that is
-   * being used by the <code>Scheduler</code>.
+   * Returns the class-name of the <code>ThreadPool</code> instance that is being used by the
+   * <code>Scheduler</code>.
    * </p>
    */
   public Class <?> getThreadPoolClass ()
@@ -234,8 +231,8 @@ public class SchedulerMetaData
 
   /**
    * <p>
-   * Returns a formatted (human readable) String describing all the
-   * <code>Scheduler</code>'s meta-data values.
+   * Returns a formatted (human readable) String describing all the <code>Scheduler</code>'s
+   * meta-data values.
    * </p>
    * <p>
    * The format of the String looks something like this:

@@ -51,7 +51,6 @@ public class TriggerBuilderTest
   @Test
   public void testTriggerBuilder () throws Exception
   {
-
     ITrigger trigger = newTrigger ().build ();
 
     assertTrue ("Expected non-null trigger name ", trigger.getKey ().getName () != null);
@@ -82,7 +81,6 @@ public class TriggerBuilderTest
     assertTrue ("Unexpected trigger priortiy: " + trigger, trigger.getPriority () == 2);
     assertTrue ("Unexpected start-time: " + trigger.getStartTime (), trigger.getStartTime ().equals (stime));
     assertTrue ("Unexpected end-time: " + trigger.getEndTime (), trigger.getEndTime () != null);
-
   }
 
   /** QTZ-157 */

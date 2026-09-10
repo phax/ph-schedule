@@ -51,8 +51,7 @@ import com.helger.quartz.simpl.RAMJobStore;
 import com.helger.quartz.spi.IOperableTrigger;
 
 /**
- * Integration test for reproducing QTZ-336 where we don't check for the
- * scheduling change signal.
+ * Integration test for reproducing QTZ-336 where we don't check for the scheduling change signal.
  */
 public class QTZ336_MissSchedulingChangeSignalTest
 {
@@ -116,9 +115,8 @@ public class QTZ336_MissSchedulingChangeSignalTest
   }
 
   /**
-   * A simple job for collecting fire times in order to check that we did not
-   * miss one call, for having the race condition the job must be real quick and
-   * not allowing concurrent executions.
+   * A simple job for collecting fire times in order to check that we did not miss one call, for
+   * having the race condition the job must be real quick and not allowing concurrent executions.
    */
   @DisallowConcurrentExecution
   public static class CollectDuractionBetweenFireTimesJob implements IJob

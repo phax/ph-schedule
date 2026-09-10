@@ -21,8 +21,7 @@ package com.helger.quartz.simpl;
 import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
- * A <code>ClassLoadHelper</code> that uses either the current thread's context
- * class loader
+ * A <code>ClassLoadHelper</code> that uses either the current thread's context class loader
  * (<code>Thread.currentThread().getContextClassLoader().loadClass( .. )</code>).
  *
  * @see com.helger.quartz.spi.IClassLoadHelper

@@ -36,7 +36,6 @@ public class TriggerComparatorTest
   @Test
   public void testTriggerSort ()
   {
-
     // build trigger in expected sort order
     final ITrigger t1 = newTrigger ().withIdentity ("a").build ();
     final ITrigger t2 = newTrigger ().withIdentity ("b").build ();
@@ -69,7 +68,6 @@ public class TriggerComparatorTest
   @Test
   public void testTriggerTimeSort ()
   {
-
     // build trigger in expected sort order
     final ITrigger t1 = newTrigger ().withIdentity ("a").startAt (futureDate (1, MINUTE)).build ();
     ((IOperableTrigger) t1).computeFirstFireTime (null);

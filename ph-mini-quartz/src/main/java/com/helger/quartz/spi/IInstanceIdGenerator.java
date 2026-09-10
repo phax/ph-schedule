@@ -22,13 +22,12 @@ import com.helger.quartz.SchedulerException;
 
 /**
  * <p>
- * An InstanceIdGenerator is responsible for generating the clusterwide unique
- * instance id for a <code>Scheduler</code> node.
+ * An InstanceIdGenerator is responsible for generating the clusterwide unique instance id for a
+ * <code>Scheduler</code> node.
  * </p>
  * <p>
- * This interface may be of use to those wishing to have specific control over
- * the mechanism by which the <code>Scheduler</code> instances in their
- * application are named.
+ * This interface may be of use to those wishing to have specific control over the mechanism by
+ * which the <code>Scheduler</code> instances in their application are named.
  * </p>
  *
  * @see com.helger.quartz.simpl.SimpleInstanceIdGenerator

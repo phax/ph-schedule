@@ -25,8 +25,8 @@ import com.helger.quartz.IJobDetail;
 
 /**
  * <p>
- * A simple class (structure) used for returning execution-time data from the
- * JobStore to the <code>QuartzSchedulerThread</code>.
+ * A simple class (structure) used for returning execution-time data from the JobStore to the
+ * <code>QuartzSchedulerThread</code>.
  * </p>
  *
  * @see com.helger.quartz.core.QuartzSchedulerThread

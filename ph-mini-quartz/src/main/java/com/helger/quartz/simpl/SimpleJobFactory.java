@@ -29,8 +29,7 @@ import com.helger.quartz.spi.IJobFactory;
 import com.helger.quartz.spi.TriggerFiredBundle;
 
 /**
- * The default JobFactory used by Quartz - simply calls
- * <code>newInstance()</code> on the job class.
+ * The default JobFactory used by Quartz - simply calls <code>newInstance()</code> on the job class.
  *
  * @see IJobFactory
  * @see PropertySettingJobFactory

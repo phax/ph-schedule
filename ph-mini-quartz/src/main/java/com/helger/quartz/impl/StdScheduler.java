@@ -45,9 +45,8 @@ import com.helger.quartz.spi.IJobFactory;
 
 /**
  * <p>
- * An implementation of the <code>Scheduler</code> interface that directly
- * proxies all method calls to the equivalent call on a given
- * <code>QuartzScheduler</code> instance.
+ * An implementation of the <code>Scheduler</code> interface that directly proxies all method calls
+ * to the equivalent call on a given <code>QuartzScheduler</code> instance.
  * </p>
  *
  * @see com.helger.quartz.IScheduler
@@ -60,9 +59,8 @@ public class StdScheduler implements IScheduler
 
   /**
    * <p>
-   * Construct a <code>StdScheduler</code> instance to proxy the given
-   * <code>QuartzScheduler</code> instance, and with the given
-   * <code>SchedulingContext</code>.
+   * Construct a <code>StdScheduler</code> instance to proxy the given <code>QuartzScheduler</code>
+   * instance, and with the given <code>SchedulingContext</code>.
    * </p>
    */
   public StdScheduler (final QuartzScheduler sched)
@@ -71,8 +69,7 @@ public class StdScheduler implements IScheduler
   }
 
   /*
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * Interface.
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Interface.
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    */
 
@@ -112,7 +109,6 @@ public class StdScheduler implements IScheduler
                                   m_aSched.getThreadPoolClass (),
                                   m_aSched.getThreadPoolSize (),
                                   m_aSched.getVersion ());
-
   }
 
   /**
@@ -164,10 +160,9 @@ public class StdScheduler implements IScheduler
   /**
    * Whether the scheduler has been started.
    * <p>
-   * Note: This only reflects whether <code>{@link #start()}</code> has ever
-   * been called on this Scheduler, so it will return <code>true</code> even if
-   * the <code>Scheduler</code> is currently in standby mode or has been since
-   * shutdown.
+   * Note: This only reflects whether <code>{@link #start()}</code> has ever been called on this
+   * Scheduler, so it will return <code>true</code> even if the <code>Scheduler</code> is currently
+   * in standby mode or has been since shutdown.
    * </p>
    *
    * @see #start()

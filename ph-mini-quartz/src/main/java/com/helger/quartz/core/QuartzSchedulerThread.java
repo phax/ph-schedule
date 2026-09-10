@@ -97,7 +97,7 @@ public class QuartzSchedulerThread extends Thread
     m_aHalted = new AtomicBoolean (false);
 
     // Make sure we don't die unnotified
-    setUncaughtExceptionHandler ( (t, e) -> LOGGER.error ("QuartzSchedulerThread.uncaughtException in Thread " + t, e));
+    setUncaughtExceptionHandler ((t, e) -> LOGGER.error ("QuartzSchedulerThread.uncaughtException in Thread " + t, e));
   }
 
   void setIdleWaitTime (final long waitTime)

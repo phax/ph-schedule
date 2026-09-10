@@ -57,7 +57,6 @@ public class JobBuilderTest
   @Test
   public void testJobBuilder () throws Exception
   {
-
     IJobDetail job = newJob ().ofType (TestJob.class).withIdentity ("j1").storeDurably ().build ();
 
     assertTrue ("Unexpected job name: " + job.getKey ().getName (), job.getKey ().getName ().equals ("j1"));
@@ -92,7 +91,6 @@ public class JobBuilderTest
     assertFalse ("Expected requestsRecovery == false ", job.requestsRecovery ());
     assertTrue ("Expected isConcurrentExectionDisallowed == true ", job.isConcurrentExectionDisallowed ());
     assertTrue ("Expected isPersistJobDataAfterExecution == true ", job.isPersistJobDataAfterExecution ());
-
   }
 
 }

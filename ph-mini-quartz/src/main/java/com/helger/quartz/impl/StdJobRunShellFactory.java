@@ -26,9 +26,8 @@ import com.helger.quartz.spi.TriggerFiredBundle;
 
 /**
  * <p>
- * Responsible for creating the instances of
- * <code>{@link com.helger.quartz.core.JobRunShell}</code> to be used within the
- * <code>{@link com.helger.quartz.core.QuartzScheduler}</code> instance.
+ * Responsible for creating the instances of <code>{@link com.helger.quartz.core.JobRunShell}</code>
+ * to be used within the <code>{@link com.helger.quartz.core.QuartzScheduler}</code> instance.
  * </p>
  *
  * @author James House
@@ -38,9 +37,8 @@ public class StdJobRunShellFactory implements IJobRunShellFactory
   private IScheduler m_aScheduler;
 
   /**
-   * Initialize the factory, providing a handle to the {@link IScheduler} that
-   * should be made available within the {@link JobRunShell} and the
-   * JobExecutionContexts within it.
+   * Initialize the factory, providing a handle to the {@link IScheduler} that should be made
+   * available within the {@link JobRunShell} and the JobExecutionContexts within it.
    */
   public void initialize (final IScheduler aScheduler)
   {
@@ -49,8 +47,8 @@ public class StdJobRunShellFactory implements IJobRunShellFactory
 
   /**
    * <p>
-   * Called by the {@link com.helger.quartz.core.QuartzSchedulerThread} to
-   * obtain instances of {@link com.helger.quartz.core.JobRunShell}.
+   * Called by the {@link com.helger.quartz.core.QuartzSchedulerThread} to obtain instances of
+   * {@link com.helger.quartz.core.JobRunShell}.
    * </p>
    */
   public JobRunShell createJobRunShell (final TriggerFiredBundle bndle) throws SchedulerException

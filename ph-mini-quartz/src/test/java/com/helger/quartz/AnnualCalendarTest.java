@@ -34,8 +34,8 @@ import com.helger.quartz.impl.calendar.AnnualCalendar;
 public class AnnualCalendarTest
 {
   /**
-   * Tests if method <code>setDaysExcluded</code> protects the property
-   * daysExcluded against nulling. See: QUARTZ-590
+   * Tests if method <code>setDaysExcluded</code> protects the property daysExcluded against
+   * nulling. See: QUARTZ-590
    */
   @Test
   public void testDaysExcluded ()
@@ -49,8 +49,8 @@ public class AnnualCalendarTest
   }
 
   /**
-   * Tests the parameter <code>exclude</code> in a method
-   * <code>setDaysExcluded</code> of class {@link AnnualCalendar}
+   * Tests the parameter <code>exclude</code> in a method <code>setDaysExcluded</code> of class
+   * {@link AnnualCalendar}
    */
   @Test
   public void testExclude ()

@@ -31,8 +31,7 @@ import com.helger.quartz.impl.calendar.MonthlyCalendar;
 public final class MonthlyCalendarTest
 {
   /**
-   * Tests whether greater than the 7th of the month causes infinite looping.
-   * See: QUARTZ-636
+   * Tests whether greater than the 7th of the month causes infinite looping. See: QUARTZ-636
    */
   @Test
   public void testForInfiniteLoop ()

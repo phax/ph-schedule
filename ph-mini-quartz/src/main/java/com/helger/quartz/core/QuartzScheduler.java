@@ -329,7 +329,7 @@ public class QuartzScheduler implements IQuartzScheduler
       throw new SchedulerException ("The Scheduler cannot be restarted after shutdown() has been called.");
     }
 
-    final Thread t = new Thread ( () -> {
+    final Thread t = new Thread (() -> {
       try
       {
         Thread.sleep (seconds * 1000L);
@@ -757,8 +757,8 @@ public class QuartzScheduler implements IQuartzScheduler
     return result;
   }
 
-  public void scheduleJobs (final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs, final boolean replace)
-                                                                                                                     throws SchedulerException
+  public void scheduleJobs (final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
+                            final boolean replace) throws SchedulerException
   {
     validateState ();
 
@@ -1762,8 +1762,8 @@ public class QuartzScheduler implements IQuartzScheduler
     }
   }
 
-  public void notifyJobListenersWasExecuted (final IJobExecutionContext jec, final JobExecutionException je)
-                                                                                                             throws SchedulerException
+  public void notifyJobListenersWasExecuted (final IJobExecutionContext jec,
+                                             final JobExecutionException je) throws SchedulerException
   {
     // build a list of all job listeners that are to be notified...
     final ICommonsList <IJobListener> jobListeners = _buildJobListenerList ();

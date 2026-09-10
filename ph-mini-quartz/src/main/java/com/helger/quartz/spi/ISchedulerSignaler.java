@@ -23,8 +23,8 @@ import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
 
 /**
- * An interface to be used by <code>JobStore</code> instances in order to
- * communicate signals back to the <code>QuartzScheduler</code>.
+ * An interface to be used by <code>JobStore</code> instances in order to communicate signals back
+ * to the <code>QuartzScheduler</code>.
  *
  * @author jhouse
  */

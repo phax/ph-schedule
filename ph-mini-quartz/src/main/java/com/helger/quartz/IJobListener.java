@@ -20,9 +20,8 @@ package com.helger.quartz;
 
 /**
  * The interface to be implemented by classes that want to be informed when a
- * <code>{@link com.helger.quartz.IJobDetail}</code> executes. In general,
- * applications that use a <code>Scheduler</code> will not have use for this
- * mechanism.
+ * <code>{@link com.helger.quartz.IJobDetail}</code> executes. In general, applications that use a
+ * <code>Scheduler</code> will not have use for this mechanism.
  *
  * @see IListenerManager#addJobListener(IJobListener, IMatcher)
  * @see IMatcher
@@ -44,8 +43,8 @@ public interface IJobListener
   /**
    * <p>
    * Called by the <code>{@link IScheduler}</code> when a
-   * <code>{@link com.helger.quartz.IJobDetail}</code> is about to be executed
-   * (an associated <code>{@link ITrigger}</code> has occurred).
+   * <code>{@link com.helger.quartz.IJobDetail}</code> is about to be executed (an associated
+   * <code>{@link ITrigger}</code> has occurred).
    * </p>
    * <p>
    * This method will not be invoked if the execution of the Job was vetoed by a
@@ -61,9 +60,9 @@ public interface IJobListener
   /**
    * <p>
    * Called by the <code>{@link IScheduler}</code> when a
-   * <code>{@link com.helger.quartz.IJobDetail}</code> was about to be executed
-   * (an associated <code>{@link ITrigger}</code> has occurred), but a
-   * <code>{@link ITriggerListener}</code> vetoed it's execution.
+   * <code>{@link com.helger.quartz.IJobDetail}</code> was about to be executed (an associated
+   * <code>{@link ITrigger}</code> has occurred), but a <code>{@link ITriggerListener}</code> vetoed
+   * it's execution.
    * </p>
    *
    * @param context
@@ -75,9 +74,8 @@ public interface IJobListener
   /**
    * <p>
    * Called by the <code>{@link IScheduler}</code> after a
-   * <code>{@link com.helger.quartz.IJobDetail}</code> has been executed, and be
-   * for the associated <code>Trigger</code>'s <code>triggered(xx)</code> method
-   * has been called.
+   * <code>{@link com.helger.quartz.IJobDetail}</code> has been executed, and be for the associated
+   * <code>Trigger</code>'s <code>triggered(xx)</code> method has been called.
    * </p>
    *
    * @param context

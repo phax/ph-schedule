@@ -90,7 +90,6 @@ public final class CronExpressionTest
                                                      // day - 1 (29th is a
                                                      // friday in 2010)
     assertTrue (cronExpression.isSatisfiedBy (cal.getTime ()));
-
   }
 
   /**
@@ -134,8 +133,7 @@ public final class CronExpressionTest
   }
 
   /*
-   * QUARTZ-574: Showing that storeExpressionVals correctly calculates the month
-   * number
+   * QUARTZ-574: Showing that storeExpressionVals correctly calculates the month number
    */
   @Test
   public void testQuartz574 ()

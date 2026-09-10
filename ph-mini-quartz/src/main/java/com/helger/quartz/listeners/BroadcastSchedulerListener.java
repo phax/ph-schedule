@@ -32,12 +32,11 @@ import com.helger.quartz.SchedulerException;
 import com.helger.quartz.TriggerKey;
 
 /**
- * Holds a List of references to SchedulerListener instances and broadcasts all
- * events to them (in order).
+ * Holds a List of references to SchedulerListener instances and broadcasts all events to them (in
+ * order).
  * <p>
- * This may be more convenient than registering all of the listeners directly
- * with the Scheduler, and provides the flexibility of easily changing which
- * listeners get notified.
+ * This may be more convenient than registering all of the listeners directly with the Scheduler,
+ * and provides the flexibility of easily changing which listeners get notified.
  * </p>
  *
  * @see #addListener(com.helger.quartz.ISchedulerListener)

@@ -24,17 +24,16 @@ import com.helger.quartz.utils.Key;
 /**
  * <code>JobBuilder</code> is used to instantiate {@link IJobDetail}s.
  * <p>
- * The builder will always try to keep itself in a valid state, with reasonable
- * defaults set for calling build() at any point. For instance if you do not
- * invoke <i>withIdentity(..)</i> a job name will be generated for you.
+ * The builder will always try to keep itself in a valid state, with reasonable defaults set for
+ * calling build() at any point. For instance if you do not invoke <i>withIdentity(..)</i> a job
+ * name will be generated for you.
  * </p>
  * <p>
- * Quartz provides a builder-style API for constructing scheduling-related
- * entities via a Domain-Specific Language (DSL). The DSL can best be utilized
- * through the usage of static imports of the methods on the classes
- * <code>TriggerBuilder</code>, <code>JobBuilder</code>,
- * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and
- * the various <code>ScheduleBuilder</code> implementations.
+ * Quartz provides a builder-style API for constructing scheduling-related entities via a
+ * Domain-Specific Language (DSL). The DSL can best be utilized through the usage of static imports
+ * of the methods on the classes <code>TriggerBuilder</code>, <code>JobBuilder</code>,
+ * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and the various
+ * <code>ScheduleBuilder</code> implementations.
  * </p>
  * <p>
  * Client code can then use the DSL to write code such as this:
@@ -77,8 +76,8 @@ public class JobBuilder
   }
 
   /**
-   * Create a JobBuilder with which to define a <code>JobDetail</code>, and set
-   * the class name of the <code>Job</code> to be executed.
+   * Create a JobBuilder with which to define a <code>JobDetail</code>, and set the class name of
+   * the <code>Job</code> to be executed.
    *
    * @return a new JobBuilder
    */
@@ -90,14 +89,12 @@ public class JobBuilder
   }
 
   /**
-   * Produce the <code>JobDetail</code> instance defined by this
-   * <code>JobBuilder</code>.
+   * Produce the <code>JobDetail</code> instance defined by this <code>JobBuilder</code>.
    *
    * @return the defined JobDetail.
    */
   public IJobDetail build ()
   {
-
     final JobDetail job = new JobDetail ();
 
     job.setJobClass (m_aJobClass);
@@ -115,11 +112,10 @@ public class JobBuilder
   }
 
   /**
-   * Use a <code>JobKey</code> with the given name and default group to identify
-   * the JobDetail.
+   * Use a <code>JobKey</code> with the given name and default group to identify the JobDetail.
    * <p>
-   * If none of the 'withIdentity' methods are set on the JobBuilder, then a
-   * random, unique JobKey will be generated.
+   * If none of the 'withIdentity' methods are set on the JobBuilder, then a random, unique JobKey
+   * will be generated.
    * </p>
    *
    * @param name
@@ -135,11 +131,10 @@ public class JobBuilder
   }
 
   /**
-   * Use a <code>JobKey</code> with the given name and group to identify the
-   * JobDetail.
+   * Use a <code>JobKey</code> with the given name and group to identify the JobDetail.
    * <p>
-   * If none of the 'withIdentity' methods are set on the JobBuilder, then a
-   * random, unique JobKey will be generated.
+   * If none of the 'withIdentity' methods are set on the JobBuilder, then a random, unique JobKey
+   * will be generated.
    * </p>
    *
    * @param name
@@ -159,8 +154,8 @@ public class JobBuilder
   /**
    * Use a <code>JobKey</code> to identify the JobDetail.
    * <p>
-   * If none of the 'withIdentity' methods are set on the JobBuilder, then a
-   * random, unique JobKey will be generated.
+   * If none of the 'withIdentity' methods are set on the JobBuilder, then a random, unique JobKey
+   * will be generated.
    * </p>
    *
    * @param jobKey
@@ -190,8 +185,8 @@ public class JobBuilder
   }
 
   /**
-   * Set the class which will be instantiated and executed when a Trigger fires
-   * that is associated with this JobDetail.
+   * Set the class which will be instantiated and executed when a Trigger fires that is associated
+   * with this JobDetail.
    *
    * @param jobClazz
    *        a class implementing the Job interface.
@@ -205,9 +200,8 @@ public class JobBuilder
   }
 
   /**
-   * Instructs the <code>Scheduler</code> whether or not the <code>Job</code>
-   * should be re-executed if a 'recovery' or 'fail-over' situation is
-   * encountered.
+   * Instructs the <code>Scheduler</code> whether or not the <code>Job</code> should be re-executed
+   * if a 'recovery' or 'fail-over' situation is encountered.
    * <p>
    * If not explicitly set, the default value is <code>false</code>.
    * </p>
@@ -222,9 +216,8 @@ public class JobBuilder
   }
 
   /**
-   * Instructs the <code>Scheduler</code> whether or not the <code>Job</code>
-   * should be re-executed if a 'recovery' or 'fail-over' situation is
-   * encountered.
+   * Instructs the <code>Scheduler</code> whether or not the <code>Job</code> should be re-executed
+   * if a 'recovery' or 'fail-over' situation is encountered.
    * <p>
    * If not explicitly set, the default value is <code>false</code>.
    * </p>
@@ -240,11 +233,11 @@ public class JobBuilder
   }
 
   /**
-   * Whether or not the <code>Job</code> should remain stored after it is
-   * orphaned (no <code>{@link ITrigger}s</code> point to it).
+   * Whether or not the <code>Job</code> should remain stored after it is orphaned (no
+   * <code>{@link ITrigger}s</code> point to it).
    * <p>
-   * If not explicitly set, the default value is <code>false</code> - this
-   * method sets the value to <code>true</code>.
+   * If not explicitly set, the default value is <code>false</code> - this method sets the value to
+   * <code>true</code>.
    * </p>
    *
    * @return the updated JobBuilder
@@ -257,8 +250,8 @@ public class JobBuilder
   }
 
   /**
-   * Whether or not the <code>Job</code> should remain stored after it is
-   * orphaned (no <code>{@link ITrigger}s</code> point to it).
+   * Whether or not the <code>Job</code> should remain stored after it is orphaned (no
+   * <code>{@link ITrigger}s</code> point to it).
    * <p>
    * If not explicitly set, the default value is <code>false</code>.
    * </p>
@@ -347,8 +340,8 @@ public class JobBuilder
   }
 
   /**
-   * Add all the data from the given {@link JobDataMap} to the
-   * {@code JobDetail}'s {@code JobDataMap}.
+   * Add all the data from the given {@link JobDataMap} to the {@code JobDetail}'s
+   * {@code JobDataMap}.
    *
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
@@ -360,8 +353,7 @@ public class JobBuilder
   }
 
   /**
-   * Replace the {@code JobDetail}'s {@link JobDataMap} with the given
-   * {@code JobDataMap}.
+   * Replace the {@code JobDetail}'s {@link JobDataMap} with the given {@code JobDataMap}.
    *
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()

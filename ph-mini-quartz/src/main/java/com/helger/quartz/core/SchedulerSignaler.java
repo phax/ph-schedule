@@ -27,8 +27,8 @@ import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.ISchedulerSignaler;
 
 /**
- * An interface to be used by <code>JobStore</code> instances in order to
- * communicate signals back to the <code>QuartzScheduler</code>.
+ * An interface to be used by <code>JobStore</code> instances in order to communicate signals back
+ * to the <code>QuartzScheduler</code>.
  *
  * @author jhouse
  */

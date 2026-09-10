@@ -978,11 +978,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
     return new StdScheduler (qs);
   }
 
-  private void _setBeanProps (final Object obj, final NonBlockingProperties props) throws NoSuchMethodException,
-                                                                                   IllegalAccessException,
-                                                                                   InvocationTargetException,
-                                                                                   IntrospectionException,
-                                                                                   SchedulerConfigException
+  private void _setBeanProps (final Object obj,
+                              final NonBlockingProperties props) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IntrospectionException, SchedulerConfigException
   {
     props.remove ("class");
 

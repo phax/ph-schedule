@@ -100,8 +100,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * Create a <code>DateIntervalTrigger</code> with no settings.
    */
   public CalendarIntervalTrigger ()
-  {
-  }
+  {}
 
   /**
    * Create a <code>DateIntervalTrigger</code> that will occur immediately, and repeat at the the

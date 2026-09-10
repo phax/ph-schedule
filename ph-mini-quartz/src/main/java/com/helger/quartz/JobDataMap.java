@@ -29,22 +29,20 @@ import com.helger.typeconvert.collection.AttributeContainerAny;
 /**
  * Holds state information for <code>Job</code> instances.
  * <p>
- * <code>JobDataMap</code> instances are stored once when the <code>Job</code>
- * is added to a scheduler. They are also re-persisted after every execution of
- * jobs annotated with <code>@PersistJobDataAfterExecution</code>.
+ * <code>JobDataMap</code> instances are stored once when the <code>Job</code> is added to a
+ * scheduler. They are also re-persisted after every execution of jobs annotated with
+ * <code>@PersistJobDataAfterExecution</code>.
  * </p>
  * <p>
- * <code>JobDataMap</code> instances can also be stored with a
- * <code>Trigger</code>. This can be useful in the case where you have a Job
- * that is stored in the scheduler for regular/repeated use by multiple
- * Triggers, yet with each independent triggering, you want to supply the Job
- * with different data inputs.
+ * <code>JobDataMap</code> instances can also be stored with a <code>Trigger</code>. This can be
+ * useful in the case where you have a Job that is stored in the scheduler for regular/repeated use
+ * by multiple Triggers, yet with each independent triggering, you want to supply the Job with
+ * different data inputs.
  * </p>
  * <p>
- * The <code>JobExecutionContext</code> passed to a Job at execution time also
- * contains a convenience <code>JobDataMap</code> that is the result of merging
- * the contents of the trigger's JobDataMap (if any) over the Job's JobDataMap
- * (if any).
+ * The <code>JobExecutionContext</code> passed to a Job at execution time also contains a
+ * convenience <code>JobDataMap</code> that is the result of merging the contents of the trigger's
+ * JobDataMap (if any) over the Job's JobDataMap (if any).
  * </p>
  *
  * @see IJob

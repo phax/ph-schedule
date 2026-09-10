@@ -76,7 +76,6 @@ public final class ListenerManagerTest
   @Test
   public void testManagementOfJobListeners () throws Exception
   {
-
     final IJobListener tl1 = new TestJobListener ("tl1");
     final IJobListener tl2 = new TestJobListener ("tl2");
 
@@ -121,7 +120,6 @@ public final class ListenerManagerTest
   @Test
   public void testManagementOfTriggerListeners () throws Exception
   {
-
     final ITriggerListener tl1 = new TestTriggerListener ("tl1");
     final ITriggerListener tl2 = new TestTriggerListener ("tl2");
 
@@ -166,7 +164,6 @@ public final class ListenerManagerTest
   @Test
   public void testManagementOfSchedulerListeners () throws Exception
   {
-
     final ISchedulerListener tl1 = new TestSchedulerListener ();
     final ISchedulerListener tl2 = new TestSchedulerListener ();
 

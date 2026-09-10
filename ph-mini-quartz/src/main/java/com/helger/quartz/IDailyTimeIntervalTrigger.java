@@ -24,39 +24,33 @@ import java.util.Set;
 
 /**
  * A <code>{@link ITrigger}</code> that is used to fire a
- * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating
- * time intervals.
+ * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating time intervals.
  * <p>
- * The trigger will fire every N (see {@link #getRepeatInterval()} ) seconds,
- * minutes or hours (see {@link #getRepeatIntervalUnit()}) during a given time
- * window on specified days of the week.
+ * The trigger will fire every N (see {@link #getRepeatInterval()} ) seconds, minutes or hours (see
+ * {@link #getRepeatIntervalUnit()}) during a given time window on specified days of the week.
  * </p>
  * <p>
- * For example#1, a trigger can be set to fire every 72 minutes between 8:00 and
- * 11:00 everyday. It's fire times would be 8:00, 9:12, 10:24, then next day
- * would repeat: 8:00, 9:12, 10:24 again.
+ * For example#1, a trigger can be set to fire every 72 minutes between 8:00 and 11:00 everyday.
+ * It's fire times would be 8:00, 9:12, 10:24, then next day would repeat: 8:00, 9:12, 10:24 again.
  * </p>
  * <p>
- * For example#2, a trigger can be set to fire every 23 minutes between 9:20 and
- * 16:47 Monday through Friday.
+ * For example#2, a trigger can be set to fire every 23 minutes between 9:20 and 16:47 Monday
+ * through Friday.
  * </p>
  * <p>
- * On each day, the starting fire time is reset to startTimeOfDay value, and
- * then it will add repeatInterval value to it until the endTimeOfDay is
- * reached. If you set daysOfWeek values, then fire time will only occur during
- * those week days period.
+ * On each day, the starting fire time is reset to startTimeOfDay value, and then it will add
+ * repeatInterval value to it until the endTimeOfDay is reached. If you set daysOfWeek values, then
+ * fire time will only occur during those week days period.
  * </p>
  * <p>
- * The default values for fields if not set are: startTimeOfDay defaults to
- * 00:00:00, the endTimeOfDay default to 23:59:59, and daysOfWeek is default to
- * every day. The startTime default to current time-stamp now, while endTime has
- * not value.
+ * The default values for fields if not set are: startTimeOfDay defaults to 00:00:00, the
+ * endTimeOfDay default to 23:59:59, and daysOfWeek is default to every day. The startTime default
+ * to current time-stamp now, while endTime has not value.
  * </p>
  * <p>
- * If startTime is before startTimeOfDay, then it has no affect. Else if
- * startTime after startTimeOfDay, then the first fire time for that day will be
- * normal startTimeOfDay incremental values after startTime value. Same reversal
- * logic is applied to endTime with endTimeOfDay.
+ * If startTime is before startTimeOfDay, then it has no affect. Else if startTime after
+ * startTimeOfDay, then the first fire time for that day will be normal startTimeOfDay incremental
+ * values after startTime value. Same reversal logic is applied to endTime with endTimeOfDay.
  * </p>
  *
  * @see DailyTimeIntervalScheduleBuilder
@@ -67,32 +61,30 @@ import java.util.Set;
 public interface IDailyTimeIntervalTrigger extends ITrigger
 {
   /**
-   * Used to indicate the 'repeat count' of the trigger is indefinite. Or in
-   * other words, the trigger should repeat continually until the trigger's
-   * ending timestamp.
+   * Used to indicate the 'repeat count' of the trigger is indefinite. Or in other words, the
+   * trigger should repeat continually until the trigger's ending timestamp.
    */
   int REPEAT_INDEFINITELY = -1;
 
   /**
    * Get the interval unit - the time unit on with the interval applies. <br>
-   * The only intervals that are valid for this type of trigger are
-   * {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
-   * {@link EIntervalUnit#HOUR}.
+   * The only intervals that are valid for this type of trigger are {@link EIntervalUnit#SECOND},
+   * {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
    */
   EIntervalUnit getRepeatIntervalUnit ();
 
   /**
-   * Get the the number of times for interval this trigger should repeat, after
-   * which it will be automatically deleted.
+   * Get the the number of times for interval this trigger should repeat, after which it will be
+   * automatically deleted.
    *
    * @see #REPEAT_INDEFINITELY
    */
   int getRepeatCount ();
 
   /**
-   * Get the the time interval that will be added to the
-   * <code>DateIntervalTrigger</code>'s fire time (in the set repeat interval
-   * unit) in order to calculate the time of the next trigger repeat.
+   * Get the the time interval that will be added to the <code>DateIntervalTrigger</code>'s fire
+   * time (in the set repeat interval unit) in order to calculate the time of the next trigger
+   * repeat.
    */
   int getRepeatInterval ();
 
@@ -114,8 +106,7 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
   Set <DayOfWeek> getDaysOfWeek ();
 
   /**
-   * Get the number of times the <code>DateIntervalTrigger</code> has already
-   * fired.
+   * Get the number of times the <code>DateIntervalTrigger</code> has already fired.
    */
   int getTimesTriggered ();
 

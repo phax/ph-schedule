@@ -86,7 +86,6 @@ public class DateBuilderTest
   @Test
   public void testBuilder ()
   {
-
     Calendar vc = PDTFactory.createCalendar ();
     vc.set (Calendar.YEAR, 2013);
     vc.set (Calendar.MONTH, Calendar.JULY);
@@ -152,13 +151,11 @@ public class DateBuilderTest
                                             .atSecond (12)
                                             .build ();
     assertEquals ("DateBuilder-produced date is not as expected.", vc.getTime (), bd);
-
   }
 
   @Test
   public void testEvensBuilders ()
   {
-
     final Calendar vc = PDTFactory.createCalendar ();
     vc.set (Calendar.YEAR, 2013);
     vc.set (Calendar.MONTH, Calendar.JUNE);
@@ -230,7 +227,6 @@ public class DateBuilderTest
   @Test
   public void testGivenBuilders ()
   {
-
     final Calendar vc = PDTFactory.createCalendar ();
 
     vc.set (Calendar.SECOND, 54);
@@ -257,7 +253,6 @@ public class DateBuilderTest
   @Test
   public void testAtBuilders ()
   {
-
     final Calendar rd = PDTFactory.createCalendar ();
     final Calendar vc = PDTFactory.createCalendar ();
 
@@ -292,7 +287,6 @@ public class DateBuilderTest
   @Test
   public void testTranslate ()
   {
-
     final TimeZone tz1 = TimeZone.getTimeZone ("GMT-2:00");
     final TimeZone tz2 = TimeZone.getTimeZone ("GMT-4:00");
 
@@ -324,7 +318,6 @@ public class DateBuilderTest
   @Test
   public void testMonthTranslations ()
   {
-
     final Calendar vc = PDTFactory.createCalendar ();
 
     Date bd = newDate ().inYear (2013).inMonthOnDay (JANUARY, 1).atHourMinuteAndSecond (10, 30, 0).build ();
@@ -374,7 +367,6 @@ public class DateBuilderTest
     bd = newDate ().inYear (2013).inMonthOnDay (DECEMBER, 1).atHourMinuteAndSecond (10, 30, 0).build ();
     vc.setTime (bd);
     assertEquals ("DateBuilder-produced date is not as expected.", Calendar.DECEMBER, vc.get (Calendar.MONTH));
-
   }
 
 }

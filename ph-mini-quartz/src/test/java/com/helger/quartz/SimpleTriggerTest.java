@@ -54,7 +54,6 @@ public class SimpleTriggerTest
   @Test
   public void testUpdateAfterMisfire ()
   {
-
     final Calendar startTime = PDTFactory.createCalendar ();
     startTime.set (2005, Calendar.JULY, 5, 9, 0, 0);
 

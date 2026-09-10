@@ -35,8 +35,7 @@ import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.listeners.BroadcastSchedulerListener;
 
 /**
- * Test that verifies that schedulerStarting() is called before the
- * schedulerStarted()
+ * Test that verifies that schedulerStarting() is called before the schedulerStarted()
  *
  * @author adahanne
  */

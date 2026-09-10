@@ -24,8 +24,8 @@ import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IInstanceIdGenerator;
 
 /**
- * The default InstanceIdGenerator used by Quartz when instance id is to be
- * automatically generated. Instance id is of the form HOSTNAME + CURRENT_TIME.
+ * The default InstanceIdGenerator used by Quartz when instance id is to be automatically generated.
+ * Instance id is of the form HOSTNAME + CURRENT_TIME.
  *
  * @see IInstanceIdGenerator
  * @see HostnameInstanceIdGenerator

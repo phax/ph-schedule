@@ -28,9 +28,8 @@ import com.helger.quartz.ICalendar;
 
 /**
  * <p>
- * This implementation of the Calendar excludes a set of days of the month. You
- * may use it to exclude every first day of each month for example. But you may
- * define any day of a month.
+ * This implementation of the Calendar excludes a set of days of the month. You may use it to
+ * exclude every first day of each month for example. But you may define any day of a month.
  * </p>
  *
  * @see com.helger.quartz.ICalendar
@@ -80,9 +79,8 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
 
   /**
    * <p>
-   * Get the array which defines the exclude-value of each day of month. Only
-   * the first 31 elements of the array are relevant, with the 0 index element
-   * representing the first day of the month.
+   * Get the array which defines the exclude-value of each day of month. Only the first 31 elements
+   * of the array are relevant, with the 0 index element representing the first day of the month.
    * </p>
    */
   public boolean [] getDaysExcluded ()
@@ -110,9 +108,8 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
 
   /**
    * <p>
-   * Redefine the array of days excluded. The array must non-null and of size
-   * greater or equal to 31. The 0 index element represents the first day of the
-   * month.
+   * Redefine the array of days excluded. The array must non-null and of size greater or equal to
+   * 31. The 0 index element represents the first day of the month.
    * </p>
    */
   public void setDaysExcluded (final boolean [] days)
@@ -135,8 +132,7 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
 
   /**
    * <p>
-   * Redefine a certain day of the month to be excluded (true) or included
-   * (false).
+   * Redefine a certain day of the month to be excluded (true) or included (false).
    * </p>
    *
    * @param day
@@ -168,8 +164,7 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
 
   /**
    * <p>
-   * Determine whether the given time (in milliseconds) is 'included' by the
-   * Calendar.
+   * Determine whether the given time (in milliseconds) is 'included' by the Calendar.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -195,9 +190,8 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time. Return the original value if timeStamp is
-   * included. Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar after the given
+   * time. Return the original value if timeStamp is included. Return 0 if all days are excluded.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.

@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.jspecify.annotations.NonNull;
 
 /**
- * An implementation of a CircularQueue data-structure. When the number of items
- * added exceeds the maximum capacity, items that were added first are lost.
+ * An implementation of a CircularQueue data-structure. When the number of items added exceeds the
+ * maximum capacity, items that were added first are lost.
  *
  * @param <T>
  *        Type of the item's to add in this queue
@@ -66,14 +66,13 @@ public class CircularLossyQueue <T>
   }
 
   /**
-   * Returns an array of the current elements in the queue. The order of
-   * elements is in reverse order of the order items were added.
+   * Returns an array of the current elements in the queue. The order of elements is in reverse
+   * order of the order items were added.
    *
    * @param type
    *        destination
-   * @return An array containing the current elements in the queue. The first
-   *         element of the array is the tail of the queue and the last element
-   *         is the head of the queue
+   * @return An array containing the current elements in the queue. The first element of the array
+   *         is the tail of the queue and the last element is the head of the queue
    */
   public T [] toArray (@NonNull final T [] type)
   {

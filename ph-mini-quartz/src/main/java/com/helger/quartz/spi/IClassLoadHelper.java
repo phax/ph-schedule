@@ -25,8 +25,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
- * An interface for classes wishing to provide the service of loading classes
- * and resources within the scheduler...
+ * An interface for classes wishing to provide the service of loading classes and resources within
+ * the scheduler...
  *
  * @author jhouse
  * @author pl47ypus
@@ -34,9 +34,9 @@ import org.jspecify.annotations.Nullable;
 public interface IClassLoadHelper
 {
   /**
-   * Called to give the ClassLoadHelper a chance to initialize itself, including
-   * the opportunity to "steal" the class loader off of the calling thread,
-   * which is the thread that is initializing Quartz.
+   * Called to give the ClassLoadHelper a chance to initialize itself, including the opportunity to
+   * "steal" the class loader off of the calling thread, which is the thread that is initializing
+   * Quartz.
    */
   default void initialize ()
   {}
@@ -73,8 +73,8 @@ public interface IClassLoadHelper
   }
 
   /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
+   * Finds a resource with a given name. This method returns null if no resource with this name is
+   * found.
    *
    * @param sName
    *        name of the desired resource
@@ -87,8 +87,8 @@ public interface IClassLoadHelper
   }
 
   /**
-   * Finds a resource with a given name. This method returns null if no resource
-   * with this name is found.
+   * Finds a resource with a given name. This method returns null if no resource with this name is
+   * found.
    *
    * @param sName
    *        name of the desired resource

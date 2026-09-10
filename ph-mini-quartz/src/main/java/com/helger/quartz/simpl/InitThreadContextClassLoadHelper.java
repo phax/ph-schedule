@@ -25,8 +25,8 @@ import org.jspecify.annotations.NonNull;
 import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
- * A <code>ClassLoadHelper</code> that uses either the context class loader of
- * the thread that initialized Quartz.
+ * A <code>ClassLoadHelper</code> that uses either the context class loader of the thread that
+ * initialized Quartz.
  *
  * @see com.helger.quartz.spi.IClassLoadHelper
  * @see com.helger.quartz.simpl.ThreadContextClassLoadHelper
@@ -41,9 +41,9 @@ public class InitThreadContextClassLoadHelper implements IClassLoadHelper
   private WeakReference <ClassLoader> m_aInitClassLoader;
 
   /**
-   * Called to give the ClassLoadHelper a chance to initialize itself, including
-   * the opportunity to "steal" the class loader off of the calling thread,
-   * which is the thread that is initializing Quartz.
+   * Called to give the ClassLoadHelper a chance to initialize itself, including the opportunity to
+   * "steal" the class loader off of the calling thread, which is the thread that is initializing
+   * Quartz.
    */
   @Override
   public void initialize ()

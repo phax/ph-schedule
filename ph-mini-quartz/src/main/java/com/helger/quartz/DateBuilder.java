@@ -32,15 +32,14 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
 
 /**
- * <code>DateBuilder</code> is used to conveniently create
- * <code>java.util.Date</code> instances that meet particular criteria.
+ * <code>DateBuilder</code> is used to conveniently create <code>java.util.Date</code> instances
+ * that meet particular criteria.
  * <p>
- * Quartz provides a builder-style API for constructing scheduling-related
- * entities via a Domain-Specific Language (DSL). The DSL can best be utilized
- * through the usage of static imports of the methods on the classes
- * <code>TriggerBuilder</code>, <code>JobBuilder</code>,
- * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and
- * the various <code>ScheduleBuilder</code> implementations.
+ * Quartz provides a builder-style API for constructing scheduling-related entities via a
+ * Domain-Specific Language (DSL). The DSL can best be utilized through the usage of static imports
+ * of the methods on the classes <code>TriggerBuilder</code>, <code>JobBuilder</code>,
+ * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and the various
+ * <code>ScheduleBuilder</code> implementations.
  * </p>
  * <p>
  * Client code can then use the DSL to write code such as this:
@@ -73,8 +72,8 @@ public final class DateBuilder
   private int m_nSecond;
 
   /**
-   * Create a DateBuilder, with initial settings for the current date and time
-   * in the system default timezone.
+   * Create a DateBuilder, with initial settings for the current date and time in the system default
+   * timezone.
    */
   private DateBuilder ()
   {
@@ -82,8 +81,8 @@ public final class DateBuilder
   }
 
   /**
-   * Create a DateBuilder, with initial settings for the current date and time
-   * in the given timezone.
+   * Create a DateBuilder, with initial settings for the current date and time in the given
+   * timezone.
    */
   private DateBuilder (final TimeZone tz)
   {
@@ -91,8 +90,7 @@ public final class DateBuilder
   }
 
   /**
-   * Create a DateBuilder, with initial settings for the current date and time
-   * in the given locale.
+   * Create a DateBuilder, with initial settings for the current date and time in the given locale.
    */
   private DateBuilder (final Locale lc)
   {
@@ -100,8 +98,8 @@ public final class DateBuilder
   }
 
   /**
-   * Create a DateBuilder, with initial settings for the current date and time
-   * in the given timezone and locale.
+   * Create a DateBuilder, with initial settings for the current date and time in the given timezone
+   * and locale.
    */
   private DateBuilder (final TimeZone tz, final Locale lc)
   {
@@ -118,8 +116,8 @@ public final class DateBuilder
   }
 
   /**
-   * Create a DateBuilder, with initial settings for the current date and time
-   * in the system default timezone.
+   * Create a DateBuilder, with initial settings for the current date and time in the system default
+   * timezone.
    */
   public static DateBuilder newDate ()
   {
@@ -127,8 +125,8 @@ public final class DateBuilder
   }
 
   /**
-   * Create a DateBuilder, with initial settings for the current date and time
-   * in the given timezone.
+   * Create a DateBuilder, with initial settings for the current date and time in the given
+   * timezone.
    */
   public static DateBuilder newDateInTimezone (final TimeZone tz)
   {
@@ -136,8 +134,7 @@ public final class DateBuilder
   }
 
   /**
-   * Create a DateBuilder, with initial settings for the current date and time
-   * in the given locale.
+   * Create a DateBuilder, with initial settings for the current date and time in the given locale.
    */
   public static DateBuilder newDateInLocale (final Locale lc)
   {
@@ -145,8 +142,8 @@ public final class DateBuilder
   }
 
   /**
-   * Create a DateBuilder, with initial settings for the current date and time
-   * in the given timezone and locale.
+   * Create a DateBuilder, with initial settings for the current date and time in the given timezone
+   * and locale.
    */
   public static DateBuilder newDateInTimeZoneAndLocale (final TimeZone tz, final Locale lc)
   {
@@ -204,8 +201,8 @@ public final class DateBuilder
   }
 
   /**
-   * Set the second (0-59) for the Date that will be built by this builder, and
-   * truncate the milliseconds to 000.
+   * Set the second (0-59) for the Date that will be built by this builder, and truncate the
+   * milliseconds to 000.
    */
   public DateBuilder atSecond (final int atSecond)
   {
@@ -228,8 +225,7 @@ public final class DateBuilder
   }
 
   /**
-   * Set the day of month (1-31) for the Date that will be built by this
-   * builder.
+   * Set the day of month (1-31) for the Date that will be built by this builder.
    */
   public DateBuilder onDay (final int onDay)
   {
@@ -272,8 +268,8 @@ public final class DateBuilder
   }
 
   /**
-   * Set the TimeZone for the Date that will be built by this builder (if
-   * "null", system default will be used)
+   * Set the TimeZone for the Date that will be built by this builder (if "null", system default
+   * will be used)
    */
   public DateBuilder inTimeZone (final TimeZone timezone)
   {
@@ -282,8 +278,8 @@ public final class DateBuilder
   }
 
   /**
-   * Set the Locale for the Date that will be built by this builder (if "null",
-   * system default will be used)
+   * Set the Locale for the Date that will be built by this builder (if "null", system default will
+   * be used)
    */
   public DateBuilder inLocale (final Locale locale)
   {
@@ -293,7 +289,6 @@ public final class DateBuilder
 
   public static Date futureDate (final int interval, final EIntervalUnit unit)
   {
-
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (new Date ());
     c.setLenient (true);
@@ -330,8 +325,7 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Get a <code>Date</code> object that represents the given time, on
-   * tomorrow's date.
+   * Get a <code>Date</code> object that represents the given time, on tomorrow's date.
    * </p>
    *
    * @param second
@@ -367,8 +361,8 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Get a <code>Date</code> object that represents the given time, on today's
-   * date (equivalent to {@link #dateOf(int, int, int)}).
+   * Get a <code>Date</code> object that represents the given time, on today's date (equivalent to
+   * {@link #dateOf(int, int, int)}).
    * </p>
    *
    * @param second
@@ -386,8 +380,8 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Get a <code>Date</code> object that represents the given time, on today's
-   * date (equivalent to {@link #todayAt(int, int, int)}).
+   * Get a <code>Date</code> object that represents the given time, on today's date (equivalent to
+   * {@link #todayAt(int, int, int)}).
    * </p>
    *
    * @param second
@@ -420,8 +414,7 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Get a <code>Date</code> object that represents the given time, on the given
-   * date.
+   * Get a <code>Date</code> object that represents the given time, on the given date.
    * </p>
    *
    * @param second
@@ -465,8 +458,7 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Get a <code>Date</code> object that represents the given time, on the given
-   * date.
+   * Get a <code>Date</code> object that represents the given time, on the given date.
    * </p>
    *
    * @param second
@@ -515,13 +507,12 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the next even hour after the current
-   * time.
+   * Returns a date that is rounded to the next even hour after the current time.
    * </p>
    * <p>
-   * For example a current time of 08:13:54 would result in a date with the time
-   * of 09:00:00. If the date's time is in the 23rd hour, the date's 'day' will
-   * be promoted, and the time will be set to 00:00:00.
+   * For example a current time of 08:13:54 would result in a date with the time of 09:00:00. If the
+   * date's time is in the 23rd hour, the date's 'day' will be promoted, and the time will be set to
+   * 00:00:00.
    * </p>
    *
    * @return the new rounded date
@@ -536,14 +527,13 @@ public final class DateBuilder
    * Returns a date that is rounded to the next even hour above the given date.
    * </p>
    * <p>
-   * For example an input date with a time of 08:13:54 would result in a date
-   * with the time of 09:00:00. If the date's time is in the 23rd hour, the
-   * date's 'day' will be promoted, and the time will be set to 00:00:00.
+   * For example an input date with a time of 08:13:54 would result in a date with the time of
+   * 09:00:00. If the date's time is in the 23rd hour, the date's 'day' will be promoted, and the
+   * time will be set to 00:00:00.
    * </p>
    *
    * @param date
-   *        the Date to round, if <code>null</code> the current time will be
-   *        used
+   *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
   public static Date evenHourDate (final Date date)
@@ -562,17 +552,15 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the previous even hour below the given
-   * date.
+   * Returns a date that is rounded to the previous even hour below the given date.
    * </p>
    * <p>
-   * For example an input date with a time of 08:13:54 would result in a date
-   * with the time of 08:00:00.
+   * For example an input date with a time of 08:13:54 would result in a date with the time of
+   * 08:00:00.
    * </p>
    *
    * @param date
-   *        the Date to round, if <code>null</code> the current time will be
-   *        used
+   *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
   public static Date evenHourDateBefore (final Date date)
@@ -589,13 +577,11 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the next even minute after the current
-   * time.
+   * Returns a date that is rounded to the next even minute after the current time.
    * </p>
    * <p>
-   * For example a current time of 08:13:54 would result in a date with the time
-   * of 08:14:00. If the date's time is in the 59th minute, then the hour (and
-   * possibly the day) will be promoted.
+   * For example a current time of 08:13:54 would result in a date with the time of 08:14:00. If the
+   * date's time is in the 59th minute, then the hour (and possibly the day) will be promoted.
    * </p>
    *
    * @return the new rounded date
@@ -607,18 +593,16 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the next even minute above the given
-   * date.
+   * Returns a date that is rounded to the next even minute above the given date.
    * </p>
    * <p>
-   * For example an input date with a time of 08:13:54 would result in a date
-   * with the time of 08:14:00. If the date's time is in the 59th minute, then
-   * the hour (and possibly the day) will be promoted.
+   * For example an input date with a time of 08:13:54 would result in a date with the time of
+   * 08:14:00. If the date's time is in the 59th minute, then the hour (and possibly the day) will
+   * be promoted.
    * </p>
    *
    * @param date
-   *        the Date to round, if <code>null</code> the current time will be
-   *        used
+   *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
   public static Date evenMinuteDate (final Date date)
@@ -635,17 +619,15 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the previous even minute below the given
-   * date.
+   * Returns a date that is rounded to the previous even minute below the given date.
    * </p>
    * <p>
-   * For example an input date with a time of 08:13:54 would result in a date
-   * with the time of 08:13:00.
+   * For example an input date with a time of 08:13:54 would result in a date with the time of
+   * 08:13:00.
    * </p>
    *
    * @param date
-   *        the Date to round, if <code>null</code> the current time will be
-   *        used
+   *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
   public static Date evenMinuteDateBefore (final Date date)
@@ -659,8 +641,7 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the next even second after the current
-   * time.
+   * Returns a date that is rounded to the next even second after the current time.
    * </p>
    *
    * @return the new rounded date
@@ -672,13 +653,11 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the next even second above the given
-   * date.
+   * Returns a date that is rounded to the next even second above the given date.
    * </p>
    *
    * @param date
-   *        the Date to round, if <code>null</code> the current time will be
-   *        used
+   *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
   public static Date evenSecondDate (final Date date)
@@ -693,17 +672,15 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the previous even second below the given
-   * date.
+   * Returns a date that is rounded to the previous even second below the given date.
    * </p>
    * <p>
-   * For example an input date with a time of 08:13:54.341 would result in a
-   * date with the time of 08:13:54.000.
+   * For example an input date with a time of 08:13:54.341 would result in a date with the time of
+   * 08:13:54.000.
    * </p>
    *
    * @param date
-   *        the Date to round, if <code>null</code> the current time will be
-   *        used
+   *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
   public static Date evenSecondDateBefore (final Date date)
@@ -716,15 +693,13 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the next even multiple of the given
-   * minute.
+   * Returns a date that is rounded to the next even multiple of the given minute.
    * </p>
    * <p>
-   * For example an input date with a time of 08:13:54, and an input minute-base
-   * of 5 would result in a date with the time of 08:15:00. The same input date
-   * with an input minute-base of 10 would result in a date with the time of
-   * 08:20:00. But a date with the time 08:53:31 and an input minute-base of 45
-   * would result in 09:00:00, because the even-hour is the next 'base' for
+   * For example an input date with a time of 08:13:54, and an input minute-base of 5 would result
+   * in a date with the time of 08:15:00. The same input date with an input minute-base of 10 would
+   * result in a date with the time of 08:20:00. But a date with the time 08:53:31 and an input
+   * minute-base of 45 would result in 09:00:00, because the even-hour is the next 'base' for
    * 45-minute intervals.
    * </p>
    * <p>
@@ -799,8 +774,7 @@ public final class DateBuilder
    * </table>
    *
    * @param date
-   *        the Date to round, if <code>null</code> the current time will be
-   *        used
+   *        the Date to round, if <code>null</code> the current time will be used
    * @param minuteBase
    *        the base-minute to set the time on
    * @return the new rounded date
@@ -849,17 +823,15 @@ public final class DateBuilder
 
   /**
    * <p>
-   * Returns a date that is rounded to the next even multiple of the given
-   * minute.
+   * Returns a date that is rounded to the next even multiple of the given minute.
    * </p>
    * <p>
-   * The rules for calculating the second are the same as those for calculating
-   * the minute in the method <code>getNextGivenMinuteDate(..)</code>.
+   * The rules for calculating the second are the same as those for calculating the minute in the
+   * method <code>getNextGivenMinuteDate(..)</code>.
    * </p>
    *
    * @param date
-   *        the Date to round, if <code>null</code> the current time will be
-   *        used
+   *        the Date to round, if <code>null</code> the current time will be used
    * @param secondBase
    *        the base-second to set the time on
    * @return the new rounded date
@@ -901,9 +873,8 @@ public final class DateBuilder
   }
 
   /**
-   * Translate a date &amp; time from a users time zone to the another (probably
-   * server) time zone to assist in creating a simple trigger with the right
-   * date &amp; time.
+   * Translate a date &amp; time from a users time zone to the another (probably server) time zone
+   * to assist in creating a simple trigger with the right date &amp; time.
    *
    * @param date
    *        the date to translate

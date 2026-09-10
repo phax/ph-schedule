@@ -61,8 +61,8 @@ public class HelloJob implements IJob
    * Empty constructor for job initilization
    * </p>
    * <p>
-   * Quartz requires a public empty constructor so that the scheduler can
-   * instantiate the class whenever it needs.
+   * Quartz requires a public empty constructor so that the scheduler can instantiate the class
+   * whenever it needs.
    * </p>
    */
   public HelloJob ()
@@ -71,8 +71,8 @@ public class HelloJob implements IJob
   /**
    * <p>
    * Called by the <code>{@link com.helger.quartz.IScheduler}</code> when a
-   * <code>{@link com.helger.quartz.ITrigger}</code> fires that is associated
-   * with the <code>Job</code>.
+   * <code>{@link com.helger.quartz.ITrigger}</code> fires that is associated with the
+   * <code>Job</code>.
    * </p>
    * 
    * @throws JobExecutionException
@@ -80,7 +80,6 @@ public class HelloJob implements IJob
    */
   public void execute (final IJobExecutionContext context) throws JobExecutionException
   {
-
     // Say Hello to the World and display the date/time
     _log.info ("Hello World! - " + new Date ());
   }

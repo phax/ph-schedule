@@ -32,16 +32,14 @@ import com.helger.quartz.ICalendar;
 
 /**
  * <p>
- * This implementation of the Calendar may be used (you don't have to) as a base
- * class for more sophisticated one's. It merely implements the base
- * functionality required by each Calendar.
+ * This implementation of the Calendar may be used (you don't have to) as a base class for more
+ * sophisticated one's. It merely implements the base functionality required by each Calendar.
  * </p>
  * <p>
- * Regarded as base functionality is the treatment of base calendars. Base
- * calendar allow you to chain (stack) as much calendars as you may need. For
- * example to exclude weekends you may use WeeklyCalendar. In order to exclude
- * holidays as well you may define a WeeklyCalendar instance to be the base
- * calendar for HolidayCalendar instance.
+ * Regarded as base functionality is the treatment of base calendars. Base calendar allow you to
+ * chain (stack) as much calendars as you may need. For example to exclude weekends you may use
+ * WeeklyCalendar. In order to exclude holidays as well you may define a WeeklyCalendar instance to
+ * be the base calendar for HolidayCalendar instance.
  * </p>
  *
  * @see com.helger.quartz.ICalendar
@@ -117,9 +115,9 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
 
   /**
    * <p>
-   * Check if date/time represented by timeStamp is included. If included return
-   * true. The implementation of AbstractCalendar simply calls the base
-   * calendars isTimeIncluded() method if base calendar is set.
+   * Check if date/time represented by timeStamp is included. If included return true. The
+   * implementation of AbstractCalendar simply calls the base calendars isTimeIncluded() method if
+   * base calendar is set.
    * </p>
    *
    * @see com.helger.quartz.ICalendar#isTimeIncluded(long)
@@ -134,9 +132,8 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time. Return the original value if timeStamp is
-   * included. Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar after the given
+   * time. Return the original value if timeStamp is included. Return 0 if all days are excluded.
    * </p>
    *
    * @see com.helger.quartz.ICalendar#getNextIncludedTime(long)
@@ -153,9 +150,8 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
   }
 
   /**
-   * Build a <code>{@link Calendar}</code> for the given timeStamp. The new
-   * Calendar will use the <code>AbstractCalendar</code> time zone if it is not
-   * <code>null</code>.
+   * Build a <code>{@link Calendar}</code> for the given timeStamp. The new Calendar will use the
+   * <code>AbstractCalendar</code> time zone if it is not <code>null</code>.
    */
   protected final Calendar createJavaCalendar (final long timeStamp)
   {
@@ -165,9 +161,8 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
   }
 
   /**
-   * Build a <code>{@link Calendar}</code> with the current time. The new
-   * Calendar will use the <code>AbstractCalendar</code> time zone if it is not
-   * <code>null</code>.
+   * Build a <code>{@link Calendar}</code> with the current time. The new Calendar will use the
+   * <code>AbstractCalendar</code> time zone if it is not <code>null</code>.
    */
   protected final Calendar createJavaCalendar ()
   {
@@ -176,9 +171,8 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
   }
 
   /**
-   * Returns the start of the given day as a <code>{@link Calendar}</code>. This
-   * calculation will take the <code>AbstractCalendar</code> time zone into
-   * account if it is not <code>null</code>.
+   * Returns the start of the given day as a <code>{@link Calendar}</code>. This calculation will
+   * take the <code>AbstractCalendar</code> time zone into account if it is not <code>null</code>.
    *
    * @param timeInMillis
    *        A time containing the desired date for the start-of-day time
@@ -195,9 +189,8 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
   }
 
   /**
-   * Returns the end of the given day <code>{@link Calendar}</code>. This
-   * calculation will take the <code>AbstractCalendar</code> time zone into
-   * account if it is not <code>null</code>.
+   * Returns the end of the given day <code>{@link Calendar}</code>. This calculation will take the
+   * <code>AbstractCalendar</code> time zone into account if it is not <code>null</code>.
    *
    * @param timeInMillis
    *        a time containing the desired date for the end-of-day time.

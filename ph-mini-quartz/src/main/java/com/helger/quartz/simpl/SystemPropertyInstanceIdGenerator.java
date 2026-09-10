@@ -26,14 +26,12 @@ import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IInstanceIdGenerator;
 
 /**
- * InstanceIdGenerator that will use a
- * {@link SystemPropertyInstanceIdGenerator#SYSTEM_PROPERTY system property} to
- * configure the scheduler. The default system property name to use the value of
- * {@link #SYSTEM_PROPERTY}, but can be specified via the "systemPropertyName"
- * property. You can also set the properties "postpend" and "prepend" to String
- * values that will be added to the beginning or end (respectively) of the value
- * found in the system property. If no value set for the property, a
- * {@link com.helger.quartz.SchedulerException} is thrown
+ * InstanceIdGenerator that will use a {@link SystemPropertyInstanceIdGenerator#SYSTEM_PROPERTY
+ * system property} to configure the scheduler. The default system property name to use the value of
+ * {@link #SYSTEM_PROPERTY}, but can be specified via the "systemPropertyName" property. You can
+ * also set the properties "postpend" and "prepend" to String values that will be added to the
+ * beginning or end (respectively) of the value found in the system property. If no value set for
+ * the property, a {@link com.helger.quartz.SchedulerException} is thrown
  *
  * @author Alex Snaps
  */
@@ -49,12 +47,10 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   private String m_sSystemPropertyName = SYSTEM_PROPERTY;
 
   /**
-   * Returns the cluster wide value for this scheduler instance's id, based on a
-   * system property
+   * Returns the cluster wide value for this scheduler instance's id, based on a system property
    *
-   * @return the value of the system property named by the value of
-   *         {@link #getSystemPropertyName()} - which defaults to
-   *         {@link #SYSTEM_PROPERTY}.
+   * @return the value of the system property named by the value of {@link #getSystemPropertyName()}
+   *         - which defaults to {@link #SYSTEM_PROPERTY}.
    * @throws SchedulerException
    *         Shouldn't a value be found
    */
@@ -75,8 +71,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to prepend (add to the beginning) to the instanceId found
-   * in the system property.
+   * A String of text to prepend (add to the beginning) to the instanceId found in the system
+   * property.
    */
   @Nullable
   public String getPrepend ()
@@ -85,8 +81,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to prepend (add to the beginning) to the instanceId found
-   * in the system property.
+   * A String of text to prepend (add to the beginning) to the instanceId found in the system
+   * property.
    *
    * @param prepend
    *        the value to prepend, or null if none is desired.
@@ -97,8 +93,7 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to postpend (add to the end) to the instanceId found in
-   * the system property.
+   * A String of text to postpend (add to the end) to the instanceId found in the system property.
    */
   @Nullable
   public String getPostpend ()
@@ -107,8 +102,7 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * A String of text to postpend (add to the end) to the instanceId found in
-   * the system property.
+   * A String of text to postpend (add to the end) to the instanceId found in the system property.
    *
    * @param postpend
    *        the value to postpend, or null if none is desired.
@@ -119,8 +113,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * The name of the system property from which to obtain the instanceId.
-   * Defaults to {@link #SYSTEM_PROPERTY}.
+   * The name of the system property from which to obtain the instanceId. Defaults to
+   * {@link #SYSTEM_PROPERTY}.
    */
   @NonNull
   public String getSystemPropertyName ()
@@ -129,8 +123,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
   }
 
   /**
-   * The name of the system property from which to obtain the instanceId.
-   * Defaults to {@link #SYSTEM_PROPERTY}.
+   * The name of the system property from which to obtain the instanceId. Defaults to
+   * {@link #SYSTEM_PROPERTY}.
    *
    * @param systemPropertyName
    *        the system property name

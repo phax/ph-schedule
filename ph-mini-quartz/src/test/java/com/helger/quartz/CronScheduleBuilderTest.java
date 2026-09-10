@@ -36,7 +36,6 @@ public class CronScheduleBuilderTest
   @Test
   public void testAtHourAndMinuteOnGivenDaysOfWeek ()
   {
-
     ICronTrigger trigger = newTrigger ().withIdentity ("test")
                                         .withSchedule (atHourAndMinuteOnGivenDaysOfWeek (10,
                                                                                          0,

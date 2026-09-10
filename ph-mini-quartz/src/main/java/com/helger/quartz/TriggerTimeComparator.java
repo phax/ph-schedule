@@ -23,10 +23,9 @@ import java.util.Date;
 import com.helger.base.compare.IComparator;
 
 /**
- * A Comparator that compares trigger's next fire times, or in other words,
- * sorts them according to earliest next fire time. If the fire times are the
- * same, then the triggers are sorted according to priority (highest value
- * first), if the priorities are the same, then they are sorted by key.
+ * A Comparator that compares trigger's next fire times, or in other words, sorts them according to
+ * earliest next fire time. If the fire times are the same, then the triggers are sorted according
+ * to priority (highest value first), if the priorities are the same, then they are sorted by key.
  */
 public class TriggerTimeComparator implements IComparator <ITrigger>
 {

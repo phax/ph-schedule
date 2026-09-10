@@ -31,12 +31,11 @@ import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
 
 /**
- * Holds a List of references to JobListener instances and broadcasts all events
- * to them (in order).
+ * Holds a List of references to JobListener instances and broadcasts all events to them (in order).
  * <p>
- * The broadcasting behavior of this listener to delegate listeners may be more
- * convenient than registering all of the listeners directly with the Scheduler,
- * and provides the flexibility of easily changing which listeners get notified.
+ * The broadcasting behavior of this listener to delegate listeners may be more convenient than
+ * registering all of the listeners directly with the Scheduler, and provides the flexibility of
+ * easily changing which listeners get notified.
  * </p>
  *
  * @see #addListener(com.helger.quartz.IJobListener)
@@ -49,8 +48,7 @@ public class BroadcastJobListener implements IJobListener
   private final ICommonsList <IJobListener> m_aListeners = new CommonsArrayList <> ();
 
   /**
-   * Construct an instance with the given name. (Remember to add some delegate
-   * listeners!)
+   * Construct an instance with the given name. (Remember to add some delegate listeners!)
    *
    * @param name
    *        the name of this instance

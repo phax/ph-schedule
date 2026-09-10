@@ -19,8 +19,7 @@
 package com.helger.quartz.utils.counter.sampled;
 
 /**
- * Interface of a sampled rate counter -- a counter that keeps sampled values of
- * rates
+ * Interface of a sampled rate counter -- a counter that keeps sampled values of rates
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.8

@@ -19,11 +19,10 @@
 package com.helger.quartz;
 
 /**
- * An exception that is thrown to indicate that an attempt to store a new object
- * (i.e.
- * <code>{@link com.helger.quartz.IJobDetail}</code>,<code>{@link ITrigger}</code>
- * or <code>{@link ICalendar}</code>) in a <code>{@link IScheduler}</code>
- * failed, because one with the same name &amp; group already exists.
+ * An exception that is thrown to indicate that an attempt to store a new object (i.e.
+ * <code>{@link com.helger.quartz.IJobDetail}</code>,<code>{@link ITrigger}</code> or
+ * <code>{@link ICalendar}</code>) in a <code>{@link IScheduler}</code> failed, because one with the
+ * same name &amp; group already exists.
  *
  * @author James House
  */
@@ -39,13 +38,13 @@ public class ObjectAlreadyExistsException extends JobPersistenceException
 
   /**
    * <p>
-   * Create a <code>ObjectAlreadyExistsException</code> and auto-generate a
-   * message using the name/group from the given <code>JobDetail</code>.
+   * Create a <code>ObjectAlreadyExistsException</code> and auto-generate a message using the
+   * name/group from the given <code>JobDetail</code>.
    * </p>
    * <p>
    * The message will read: <BR>
-   * "Unable to store Job with name: '__' and group: '__', because one already
-   * exists with this identification."
+   * "Unable to store Job with name: '__' and group: '__', because one already exists with this
+   * identification."
    * </p>
    */
   public ObjectAlreadyExistsException (final IJobDetail offendingJob)
@@ -57,13 +56,13 @@ public class ObjectAlreadyExistsException extends JobPersistenceException
 
   /**
    * <p>
-   * Create a <code>ObjectAlreadyExistsException</code> and auto-generate a
-   * message using the name/group from the given <code>Trigger</code>.
+   * Create a <code>ObjectAlreadyExistsException</code> and auto-generate a message using the
+   * name/group from the given <code>Trigger</code>.
    * </p>
    * <p>
    * The message will read: <BR>
-   * "Unable to store Trigger with name: '__' and group: '__', because one
-   * already exists with this identification."
+   * "Unable to store Trigger with name: '__' and group: '__', because one already exists with this
+   * identification."
    * </p>
    */
   public ObjectAlreadyExistsException (final ITrigger offendingTrigger)

@@ -36,12 +36,11 @@ import com.helger.quartz.spi.IClassLoadHelper;
 import com.helger.quartz.spi.ISchedulerPlugin;
 
 /**
- * Logs a history of all job executions (and execution vetos) via the Jakarta
- * Commons-Logging framework.
+ * Logs a history of all job executions (and execution vetos) via the Jakarta Commons-Logging
+ * framework.
  * <p>
- * The logged message is customizable by setting one of the following message
- * properties to a String that conforms to the syntax of
- * <code>java.util.MessageFormat</code>.
+ * The logged message is customizable by setting one of the following message properties to a String
+ * that conforms to the syntax of <code>java.util.MessageFormat</code>.
  * </p>
  * <p>
  * JobToBeFiredMessage - available message data are:
@@ -94,8 +93,8 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * </tr>
  * </table>
  * <p>
- * The default message text is <i>"Job {1}.{0} fired (by trigger {4}.{3}) at:
- * {2, date, HH:mm:ss MM/dd/yyyy}"</i>
+ * The default message text is <i>"Job {1}.{0} fired (by trigger {4}.{3}) at: {2, date, HH:mm:ss
+ * MM/dd/yyyy}"</i>
  * </p>
  * <p>
  * JobSuccessMessage - available message data are:
@@ -149,14 +148,13 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <tr>
  * <td>8</td>
  * <td>Object</td>
- * <td>The string value (toString() having been called) of the result (if any)
- * that the Job set on the JobExecutionContext, with on it. "NULL" if no result
- * was set.</td>
+ * <td>The string value (toString() having been called) of the result (if any) that the Job set on
+ * the JobExecutionContext, with on it. "NULL" if no result was set.</td>
  * </tr>
  * </table>
  * <p>
- * The default message text is <i>"Job {1}.{0} execution complete at {2, date,
- * HH:mm:ss MM/dd/yyyy} and reports: {8}"</i>
+ * The default message text is <i>"Job {1}.{0} execution complete at {2, date, HH:mm:ss MM/dd/yyyy}
+ * and reports: {8}"</i>
  * </p>
  * <p>
  * JobFailedMessage - available message data are:
@@ -214,8 +212,8 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * </tr>
  * </table>
  * <p>
- * The default message text is <i>"Job {1}.{0} execution failed at {2, date,
- * HH:mm:ss MM/dd/yyyy} and reports: {8}"</i>
+ * The default message text is <i>"Job {1}.{0} execution failed at {2, date, HH:mm:ss MM/dd/yyyy}
+ * and reports: {8}"</i>
  * </p>
  * <p>
  * JobWasVetoedMessage - available message data are:
@@ -268,8 +266,8 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * </tr>
  * </table>
  * <p>
- * The default message text is <i>"Job {1}.{0} was vetoed. It was to be fired
- * (by trigger {4}.{3}) at: {2, date, HH:mm:ss MM/dd/yyyy}"</i>
+ * The default message text is <i>"Job {1}.{0} was vetoed. It was to be fired (by trigger {4}.{3})
+ * at: {2, date, HH:mm:ss MM/dd/yyyy}"</i>
  * </p>
  *
  * @author James House
@@ -288,8 +286,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   {}
 
   /**
-   * Get the message that is logged when a Job successfully completes its
-   * execution.
+   * Get the message that is logged when a Job successfully completes its execution.
    */
   public String getJobSuccessMessage ()
   {
@@ -313,8 +310,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   }
 
   /**
-   * Set the message that is logged when a Job successfully completes its
-   * execution.
+   * Set the message that is logged when a Job successfully completes its execution.
    *
    * @param jobSuccessMessage
    *        String in java.text.MessageFormat syntax.
@@ -347,8 +343,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   }
 
   /**
-   * Get the message that is logged when a Job execution is vetoed by a trigger
-   * listener.
+   * Get the message that is logged when a Job execution is vetoed by a trigger listener.
    */
   public String getJobWasVetoedMessage ()
   {
@@ -356,8 +351,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   }
 
   /**
-   * Set the message that is logged when a Job execution is vetoed by a trigger
-   * listener.
+   * Set the message that is logged when a Job execution is vetoed by a trigger listener.
    *
    * @param jobWasVetoedMessage
    *        String in java.text.MessageFormat syntax.
@@ -391,8 +385,8 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
 
   /**
    * <p>
-   * Called in order to inform the <code>SchedulerPlugin</code> that it should
-   * free up all of it's resources because the scheduler is shutting down.
+   * Called in order to inform the <code>SchedulerPlugin</code> that it should free up all of it's
+   * resources because the scheduler is shutting down.
    * </p>
    */
   public void shutdown ()

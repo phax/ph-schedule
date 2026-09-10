@@ -43,15 +43,14 @@ import com.helger.quartz.spi.IThreadPool;
 
 /**
  * <p>
- * A singleton implementation of
- * <code>{@link com.helger.quartz.ISchedulerFactory}</code>.
+ * A singleton implementation of <code>{@link com.helger.quartz.ISchedulerFactory}</code>.
  * </p>
  * <p>
  * Here are some examples of using this class:
  * </p>
  * <p>
- * To create a scheduler that does not write anything to the database (is not
- * persistent), you can call <code>createVolatileScheduler</code>:
+ * To create a scheduler that does not write anything to the database (is not persistent), you can
+ * call <code>createVolatileScheduler</code>:
  *
  * <pre>
  * DirectSchedulerFactory.getInstance ().createVolatileScheduler (10); // 10
@@ -66,8 +65,8 @@ import com.helger.quartz.spi.IThreadPool;
  *                                                                     // DirectSchedulerFactory.getInstance().getScheduler().start();
  * </pre>
  * <p>
- * Several create methods are provided for convenience. All create methods
- * eventually end up calling the create method with all the parameters:
+ * Several create methods are provided for convenience. All create methods eventually end up calling
+ * the create method with all the parameters:
  * </p>
  *
  * <pre>
@@ -128,8 +127,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Creates an in memory job store (<code>{@link RAMJobStore}</code>) The
-   * thread priority is set to Thread.NORM_PRIORITY
+   * Creates an in memory job store (<code>{@link RAMJobStore}</code>) The thread priority is set to
+   * Thread.NORM_PRIORITY
    *
    * @param nMaxThreads
    *        The number of threads in the thread pool
@@ -145,9 +144,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Creates a scheduler using the specified thread pool and job store. This
-   * scheduler can be retrieved via
-   * {@link DirectSchedulerFactory#getScheduler()}
+   * Creates a scheduler using the specified thread pool and job store. This scheduler can be
+   * retrieved via {@link DirectSchedulerFactory#getScheduler()}
    *
    * @param threadPool
    *        The thread pool for executing jobs
@@ -164,9 +162,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   /**
    * Same as
    * {@link DirectSchedulerFactory#createScheduler(IThreadPool threadPool, IJobStore jobStore)},
-   * with the addition of specifying the scheduler name and instance ID. This
-   * scheduler can only be retrieved via
-   * {@link DirectSchedulerFactory#getScheduler(String)}
+   * with the addition of specifying the scheduler name and instance ID. This scheduler can only be
+   * retrieved via {@link DirectSchedulerFactory#getScheduler(String)}
    *
    * @param schedulerName
    *        The name for the scheduler.
@@ -188,8 +185,7 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Creates a scheduler using the specified thread pool and job store and binds
-   * it to RMI.
+   * Creates a scheduler using the specified thread pool and job store and binds it to RMI.
    *
    * @param schedulerName
    *        The name for the scheduler.
@@ -200,8 +196,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * @param jobStore
    *        The type of job store
    * @param idleWaitTime
-   *        The idle wait time in milliseconds. You can specify "-1" for the
-   *        default value, which is currently 30000 ms.
+   *        The idle wait time in milliseconds. You can specify "-1" for the default value, which is
+   *        currently 30000 ms.
    * @throws SchedulerException
    *         if initialization failed
    */
@@ -220,8 +216,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Creates a scheduler using the specified thread pool, job store, and
-   * plugins, and binds it to RMI.
+   * Creates a scheduler using the specified thread pool, job store, and plugins, and binds it to
+   * RMI.
    *
    * @param schedulerName
    *        The name for the scheduler.
@@ -233,11 +229,11 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can
-   *        use "null" if no plugins are required.
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null" if no
+   *        plugins are required.
    * @param idleWaitTime
-   *        The idle wait time in milliseconds. You can specify "-1" for the
-   *        default value, which is currently 30000 ms.
+   *        The idle wait time in milliseconds. You can specify "-1" for the default value, which is
+   *        currently 30000 ms.
    * @throws SchedulerException
    *         if initialization failed
    */
@@ -258,8 +254,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Creates a scheduler using the specified thread pool, job store, and
-   * plugins, and binds it to RMI.
+   * Creates a scheduler using the specified thread pool, job store, and plugins, and binds it to
+   * RMI.
    *
    * @param schedulerName
    *        The name for the scheduler.
@@ -273,11 +269,11 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can
-   *        use "null" if no plugins are required.
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null" if no
+   *        plugins are required.
    * @param idleWaitTime
-   *        The idle wait time in milliseconds. You can specify "-1" for the
-   *        default value, which is currently 30000 ms.
+   *        The idle wait time in milliseconds. You can specify "-1" for the default value, which is
+   *        currently 30000 ms.
    * @throws SchedulerException
    *         if initialization failed
    */
@@ -301,8 +297,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
   }
 
   /**
-   * Creates a scheduler using the specified thread pool, job store, and
-   * plugins, and binds it to RMI.
+   * Creates a scheduler using the specified thread pool, job store, and plugins, and binds it to
+   * RMI.
    *
    * @param schedulerName
    *        The name for the scheduler.
@@ -316,16 +312,15 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    *        The type of job store
    * @param schedulerPluginMap
    *        Map from a <code>String</code> plugin names to
-   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can
-   *        use "null" if no plugins are required.
+   *        <code>{@link com.helger.quartz.spi.ISchedulerPlugin}</code>s. Can use "null" if no
+   *        plugins are required.
    * @param idleWaitTime
-   *        The idle wait time in milliseconds. You can specify "-1" for the
-   *        default value, which is currently 30000 ms.
+   *        The idle wait time in milliseconds. You can specify "-1" for the default value, which is
+   *        currently 30000 ms.
    * @param maxBatchSize
    *        The maximum batch size of triggers, when acquiring them
    * @param batchTimeWindow
-   *        The time window for which it is allowed to "pre-acquire" triggers to
-   *        fire
+   *        The time window for which it is allowed to "pre-acquire" triggers to fire
    * @throws SchedulerException
    *         if initialization failed
    */
@@ -413,8 +408,7 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * Returns a handle to the Scheduler produced by this factory.
    * </p>
    * <p>
-   * you must call createRemoteScheduler or createScheduler methods before
-   * calling getScheduler()
+   * you must call createRemoteScheduler or createScheduler methods before calling getScheduler()
    * </p>
    */
   public IScheduler getScheduler () throws SchedulerException
@@ -439,8 +433,7 @@ public class DirectSchedulerFactory implements ISchedulerFactory
 
   /**
    * <p>
-   * Returns a handle to all known Schedulers (made by any StdSchedulerFactory
-   * instance.).
+   * Returns a handle to all known Schedulers (made by any StdSchedulerFactory instance.).
    * </p>
    */
   public ICommonsCollection <IScheduler> getAllSchedulers () throws SchedulerException

@@ -19,15 +19,13 @@
 package com.helger.quartz;
 
 /**
- * An exception that can be thrown by a
- * <code>{@link com.helger.quartz.IJob}</code> to indicate to the Quartz
- * <code>{@link IScheduler}</code> that an error occurred while executing, and
- * whether or not the <code>Job</code> requests to be re-fired immediately
- * (using the same <code>{@link IJobExecutionContext}</code>, or whether it
- * wants to be unscheduled.
+ * An exception that can be thrown by a <code>{@link com.helger.quartz.IJob}</code> to indicate to
+ * the Quartz <code>{@link IScheduler}</code> that an error occurred while executing, and whether or
+ * not the <code>Job</code> requests to be re-fired immediately (using the same
+ * <code>{@link IJobExecutionContext}</code>, or whether it wants to be unscheduled.
  * <p>
- * Note that if the flag for 'refire immediately' is set, the flags for
- * unscheduling the Job are ignored.
+ * Note that if the flag for 'refire immediately' is set, the flags for unscheduling the Job are
+ * ignored.
  * </p>
  *
  * @see IJob
@@ -42,8 +40,7 @@ public class JobExecutionException extends SchedulerException
   private final boolean m_bUnscheduleAllTriggs = false;
 
   /**
-   * Create a JobExcecutionException, with the 're-fire immediately' flag set to
-   * <code>false</code>.
+   * Create a JobExcecutionException, with the 're-fire immediately' flag set to <code>false</code>.
    */
   public JobExecutionException ()
   {
@@ -67,8 +64,7 @@ public class JobExecutionException extends SchedulerException
   }
 
   /**
-   * Create a JobExcecutionException with the 're-fire immediately' flag set to
-   * the given value.
+   * Create a JobExcecutionException with the 're-fire immediately' flag set to the given value.
    */
   public JobExecutionException (final boolean refireImmediately)
   {
@@ -76,8 +72,8 @@ public class JobExecutionException extends SchedulerException
   }
 
   /**
-   * Create a JobExcecutionException with the given underlying exception, and
-   * the 're-fire immediately' flag set to the given value.
+   * Create a JobExcecutionException with the given underlying exception, and the 're-fire
+   * immediately' flag set to the given value.
    */
   public JobExecutionException (final Throwable cause, final boolean refireImmediately)
   {
@@ -85,8 +81,7 @@ public class JobExecutionException extends SchedulerException
   }
 
   /**
-   * Create a JobExcecutionException with the given message, and underlying
-   * exception.
+   * Create a JobExcecutionException with the given message, and underlying exception.
    */
   public JobExecutionException (final String msg, final Throwable cause)
   {
@@ -94,8 +89,8 @@ public class JobExecutionException extends SchedulerException
   }
 
   /**
-   * Create a JobExcecutionException with the given message and the 're-fire
-   * immediately' flag set to the given value.
+   * Create a JobExcecutionException with the given message and the 're-fire immediately' flag set
+   * to the given value.
    */
   public JobExecutionException (final String msg, final boolean refireImmediately)
   {
@@ -103,8 +98,8 @@ public class JobExecutionException extends SchedulerException
   }
 
   /**
-   * Create a JobExcecutionException with the given message, and underlying
-   * exception, and the 're-fire immediately' flag set to the given value.
+   * Create a JobExcecutionException with the given message, and underlying exception, and the
+   * 're-fire immediately' flag set to the given value.
    */
   public JobExecutionException (final String msg, final Throwable cause, final boolean refireImmediately)
   {

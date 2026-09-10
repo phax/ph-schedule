@@ -125,8 +125,8 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
 
   @NonNull
   @Override
-  public <T> Class <? extends T> loadClass (final String sClassName, final Class <T> dummy)
-                                                                                            throws ClassNotFoundException
+  public <T> Class <? extends T> loadClass (final String sClassName,
+                                            final Class <T> dummy) throws ClassNotFoundException
   {
     return GenericReflection.uncheckedCast (loadClass (sClassName));
   }
@@ -210,7 +210,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
   @NonNull
   public ClassLoader getClassLoader ()
   {
-    return m_aBestCandidate == null ? Thread.currentThread ().getContextClassLoader () : m_aBestCandidate
-                                                                                                         .getClassLoader ();
+    return m_aBestCandidate == null ? Thread.currentThread ().getContextClassLoader ()
+                                    : m_aBestCandidate.getClassLoader ();
   }
 }

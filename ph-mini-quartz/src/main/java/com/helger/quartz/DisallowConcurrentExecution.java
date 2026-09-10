@@ -25,10 +25,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * An annotation that marks a {@link IJob} class as one that must not have
- * multiple instances executed concurrently (where instance is based-upon a
- * {@link IJobDetail} definition - or in other words based upon a
- * {@link JobKey}).
+ * An annotation that marks a {@link IJob} class as one that must not have multiple instances
+ * executed concurrently (where instance is based-upon a {@link IJobDetail} definition - or in other
+ * words based upon a {@link JobKey}).
  *
  * @see PersistJobDataAfterExecution
  * @author jhouse

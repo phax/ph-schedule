@@ -59,8 +59,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a GroupMatcher that matches trigger groups equaling the given
-   * string.
+   * Create a GroupMatcher that matches trigger groups equaling the given string.
    */
   public static GroupMatcher <TriggerKey> triggerGroupEquals (final String sCompareTo)
   {
@@ -76,8 +75,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a GroupMatcher that matches job groups starting with the given
-   * string.
+   * Create a GroupMatcher that matches job groups starting with the given string.
    */
   public static GroupMatcher <JobKey> jobGroupStartsWith (final String sCompareTo)
   {
@@ -85,8 +83,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a GroupMatcher that matches trigger groups starting with the given
-   * string.
+   * Create a GroupMatcher that matches trigger groups starting with the given string.
    */
   public static GroupMatcher <TriggerKey> triggerGroupStartsWith (final String sCompareTo)
   {
@@ -110,8 +107,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a GroupMatcher that matches trigger groups ending with the given
-   * string.
+   * Create a GroupMatcher that matches trigger groups ending with the given string.
    */
   public static GroupMatcher <TriggerKey> triggerGroupEndsWith (final String sCompareTo)
   {
@@ -135,8 +131,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a GroupMatcher that matches trigger groups containing the given
-   * string.
+   * Create a GroupMatcher that matches trigger groups containing the given string.
    */
   public static GroupMatcher <TriggerKey> triggerGroupContains (final String sCompareTo)
   {
@@ -152,8 +147,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a GroupMatcher that matches job groups starting with the given
-   * string.
+   * Create a GroupMatcher that matches job groups starting with the given string.
    */
   public static GroupMatcher <JobKey> anyJobGroup ()
   {
@@ -161,8 +155,7 @@ public class GroupMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a GroupMatcher that matches trigger groups starting with the given
-   * string.
+   * Create a GroupMatcher that matches trigger groups starting with the given string.
    */
   public static GroupMatcher <TriggerKey> anyTriggerGroup ()
   {

@@ -49,9 +49,8 @@ public interface ISchedulerListener
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> when a
-   * <code>{@link ITrigger}</code> has reached the condition in which it will
-   * never fire again.
+   * Called by the <code>{@link IScheduler}</code> when a <code>{@link ITrigger}</code> has reached
+   * the condition in which it will never fire again.
    *
    * @param trigger
    */
@@ -59,8 +58,8 @@ public interface ISchedulerListener
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> when a
-   * <code>{@link ITrigger}</code> has been paused.
+   * Called by the <code>{@link IScheduler}</code> when a <code>{@link ITrigger}</code> has been
+   * paused.
    *
    * @param triggerKey
    */
@@ -68,9 +67,8 @@ public interface ISchedulerListener
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> when a group of
-   * <code>{@link ITrigger}s</code> has been paused. If all groups were paused
-   * then triggerGroup will be null.
+   * Called by the <code>{@link IScheduler}</code> when a group of <code>{@link ITrigger}s</code>
+   * has been paused. If all groups were paused then triggerGroup will be null.
    *
    * @param triggerGroup
    *        the paused group, or null if all were paused
@@ -79,8 +77,8 @@ public interface ISchedulerListener
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> when a
-   * <code>{@link ITrigger}</code> has been un-paused.
+   * Called by the <code>{@link IScheduler}</code> when a <code>{@link ITrigger}</code> has been
+   * un-paused.
    *
    * @param triggerKey
    */
@@ -88,8 +86,8 @@ public interface ISchedulerListener
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> when a group of
-   * <code>{@link ITrigger}s</code> has been un-paused.
+   * Called by the <code>{@link IScheduler}</code> when a group of <code>{@link ITrigger}s</code>
+   * has been un-paused.
    *
    * @param triggerGroup
    */
@@ -153,15 +151,13 @@ public interface ISchedulerListener
 
   /**
    * <p>
-   * Called by the <code>{@link IScheduler}</code> when a serious error has
-   * occurred within the scheduler - such as repeated failures in the
-   * <code>JobStore</code>, or the inability to instantiate a <code>Job</code>
-   * instance when its <code>Trigger</code> has fired.
+   * Called by the <code>{@link IScheduler}</code> when a serious error has occurred within the
+   * scheduler - such as repeated failures in the <code>JobStore</code>, or the inability to
+   * instantiate a <code>Job</code> instance when its <code>Trigger</code> has fired.
    * </p>
    * <p>
-   * The <code>getErrorCode()</code> method of the given SchedulerException can
-   * be used to determine more specific information about the type of error that
-   * was encountered.
+   * The <code>getErrorCode()</code> method of the given SchedulerException can be used to determine
+   * more specific information about the type of error that was encountered.
    * </p>
    *
    * @param msg
@@ -171,43 +167,40 @@ public interface ISchedulerListener
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that
-   * it has move to standby mode.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that it has move to
+   * standby mode.
    */
   default void schedulerInStandbyMode ()
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that
-   * it has started.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that it has started.
    */
   default void schedulerStarted ()
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that
-   * it is starting.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that it is starting.
    */
   default void schedulerStarting ()
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that
-   * it has shutdown.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that it has shutdown.
    */
   default void schedulerShutdown ()
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that
-   * it has begun the shutdown sequence.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that it has begun the
+   * shutdown sequence.
    */
   default void schedulerShuttingdown ()
   {}
 
   /**
-   * Called by the <code>{@link IScheduler}</code> to inform the listener that
-   * all jobs, triggers and calendars were deleted.
+   * Called by the <code>{@link IScheduler}</code> to inform the listener that all jobs, triggers
+   * and calendars were deleted.
    */
   default void schedulingDataCleared ()
   {}

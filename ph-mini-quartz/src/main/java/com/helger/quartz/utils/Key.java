@@ -88,8 +88,7 @@ public class Key <T> implements IComparable <Key <T>>
   }
 
   /**
-   * Return the string representation of the key. The format will be:
-   * &lt;group&gt;.&lt;name&gt;.
+   * Return the string representation of the key. The format will be: &lt;group&gt;.&lt;name&gt;.
    *
    * @return the string representation of the key
    */
@@ -100,8 +99,7 @@ public class Key <T> implements IComparable <Key <T>>
 
   /**
    * <p>
-   * Return the string representation of the key. The format will be:
-   * &lt;group&gt;.&lt;name&gt;.
+   * Return the string representation of the key. The format will be: &lt;group&gt;.&lt;name&gt;.
    * </p>
    *
    * @return the string representation of the key
@@ -146,8 +144,8 @@ public class Key <T> implements IComparable <Key <T>>
   public static String createUniqueName (final String sGroup)
   {
     final String n1 = UUID.randomUUID ().toString ();
-    final String n2 = UUID.nameUUIDFromBytes ((sGroup != null ? sGroup
-                                                              : DEFAULT_GROUP).getBytes (StandardCharsets.ISO_8859_1))
+    final String n2 = UUID.nameUUIDFromBytes ((sGroup != null ? sGroup : DEFAULT_GROUP).getBytes (
+                                                                                                  StandardCharsets.ISO_8859_1))
                           .toString ();
 
     return n2.substring (24) + "-" + n1;

@@ -29,8 +29,7 @@ import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.spi.IOperableTrigger;
 
 /**
- * Convenience and utility methods for working with
- * <code>{@link ITrigger}s</code>.
+ * Convenience and utility methods for working with <code>{@link ITrigger}s</code>.
  *
  * @see ICronTrigger
  * @see ISimpleTrigger
@@ -47,9 +46,9 @@ public final class TriggerUtils
   {}
 
   /**
-   * Returns a list of Dates that are the next fire times of a
-   * <code>Trigger</code>. The input trigger will be cloned before any work is
-   * done, so you need not worry about its state being altered by this method.
+   * Returns a list of Dates that are the next fire times of a <code>Trigger</code>. The input
+   * trigger will be cloned before any work is done, so you need not worry about its state being
+   * altered by this method.
    *
    * @param trigg
    *        The trigger upon which to do the work
@@ -89,11 +88,10 @@ public final class TriggerUtils
   }
 
   /**
-   * Compute the <code>Date</code> that is 1 second after the Nth firing of the
-   * given <code>Trigger</code>, taking the triger's associated
-   * <code>Calendar</code> into consideration. The input trigger will be cloned
-   * before any work is done, so you need not worry about its state being
-   * altered by this method.
+   * Compute the <code>Date</code> that is 1 second after the Nth firing of the given
+   * <code>Trigger</code>, taking the triger's associated <code>Calendar</code> into consideration.
+   * The input trigger will be cloned before any work is done, so you need not worry about its state
+   * being altered by this method.
    *
    * @param trigg
    *        The trigger upon which to do the work
@@ -101,8 +99,8 @@ public final class TriggerUtils
    *        The calendar to apply to the trigger's schedule
    * @param numTimes
    *        The number of next fire times to produce
-   * @return the computed Date, or null if the trigger (as configured) will not
-   *         fire that many times.
+   * @return the computed Date, or null if the trigger (as configured) will not fire that many
+   *         times.
    */
   public static Date computeEndTimeToAllowParticularNumberOfFirings (final IOperableTrigger trigg,
                                                                      final ICalendar cal,
@@ -138,14 +136,12 @@ public final class TriggerUtils
   }
 
   /**
-   * Returns a list of Dates that are the next fire times of a
-   * <code>Trigger</code> that fall within the given date range. The input
-   * trigger will be cloned before any work is done, so you need not worry about
-   * its state being altered by this method.
+   * Returns a list of Dates that are the next fire times of a <code>Trigger</code> that fall within
+   * the given date range. The input trigger will be cloned before any work is done, so you need not
+   * worry about its state being altered by this method.
    * <p>
-   * NOTE: if this is a trigger that has previously fired within the given date
-   * range, then firings which have already occurred will not be listed in the
-   * output List.
+   * NOTE: if this is a trigger that has previously fired within the given date range, then firings
+   * which have already occurred will not be listed in the output List.
    * </p>
    *
    * @param trigg

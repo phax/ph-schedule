@@ -36,12 +36,10 @@ import com.helger.quartz.spi.IClassLoadHelper;
 import com.helger.quartz.spi.ISchedulerPlugin;
 
 /**
- * Logs a history of all trigger firings via the Jakarta Commons-Logging
- * framework.
+ * Logs a history of all trigger firings via the Jakarta Commons-Logging framework.
  * <p>
- * The logged message is customizable by setting one of the following message
- * properties to a String that conforms to the syntax of
- * <code>java.util.MessageFormat</code>.
+ * The logged message is customizable by setting one of the following message properties to a String
+ * that conforms to the syntax of <code>java.util.MessageFormat</code>.
  * </p>
  * <p>
  * TriggerFiredMessage - available message data are:
@@ -94,8 +92,8 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * </tr>
  * </table>
  * <p>
- * The default message text is <i>"Trigger {1}.{0} fired job {6}.{5} at: {4,
- * date, HH:mm:ss MM/dd/yyyy}"</i>
+ * The default message text is <i>"Trigger {1}.{0} fired job {6}.{5} at: {4, date, HH:mm:ss
+ * MM/dd/yyyy}"</i>
  * </p>
  * <p>
  * TriggerMisfiredMessage - available message data are:
@@ -143,9 +141,8 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * </tr>
  * </table>
  * <p>
- * The default message text is <i>"Trigger {1}.{0} misfired job {6}.{5} at: {4,
- * date, HH:mm:ss MM/dd/yyyy}. Should have fired at: {3, date, HH:mm:ss
- * MM/dd/yyyy}"</i>
+ * The default message text is <i>"Trigger {1}.{0} misfired job {6}.{5} at: {4, date, HH:mm:ss
+ * MM/dd/yyyy}. Should have fired at: {3, date, HH:mm:ss MM/dd/yyyy}"</i>
  * </p>
  * <p>
  * TriggerCompleteMessage - available message data are:
@@ -204,14 +201,12 @@ import com.helger.quartz.spi.ISchedulerPlugin;
  * <tr>
  * <td>9</td>
  * <td>String</td>
- * <td>A human-readable translation of the trigger's resulting instruction
- * code.</td>
+ * <td>A human-readable translation of the trigger's resulting instruction code.</td>
  * </tr>
  * </table>
  * <p>
- * The default message text is <i>"Trigger {1}.{0} completed firing job {6}.{5}
- * at {4, date, HH:mm:ss MM/dd/yyyy} with resulting trigger instruction code:
- * {9}"</i>
+ * The default message text is <i>"Trigger {1}.{0} completed firing job {6}.{5} at {4, date,
+ * HH:mm:ss MM/dd/yyyy} with resulting trigger instruction code: {9}"</i>
  * </p>
  *
  * @author James House
@@ -316,8 +311,8 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
 
   /**
    * <p>
-   * Called in order to inform the <code>SchedulerPlugin</code> that it should
-   * free up all of it's resources because the scheduler is shutting down.
+   * Called in order to inform the <code>SchedulerPlugin</code> that it should free up all of it's
+   * resources because the scheduler is shutting down.
    * </p>
    */
   public void shutdown ()

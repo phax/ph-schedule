@@ -40,18 +40,17 @@ import com.helger.quartz.utils.ClassUtils;
  * Conveys the detail properties of a given <code>Job</code> instance.
  * </p>
  * <p>
- * Quartz does not store an actual instance of a <code>Job</code> class, but
- * instead allows you to define an instance of one, through the use of a
- * <code>JobDetail</code>.
+ * Quartz does not store an actual instance of a <code>Job</code> class, but instead allows you to
+ * define an instance of one, through the use of a <code>JobDetail</code>.
  * </p>
  * <p>
- * <code>Job</code>s have a name and group associated with them, which should
- * uniquely identify them within a single <code>{@link IScheduler}</code>.
+ * <code>Job</code>s have a name and group associated with them, which should uniquely identify them
+ * within a single <code>{@link IScheduler}</code>.
  * </p>
  * <p>
- * <code>Trigger</code>s are the 'mechanism' by which <code>Job</code>s are
- * scheduled. Many <code>Trigger</code>s can point to the same <code>Job</code>,
- * but a single <code>Trigger</code> can only point to one <code>Job</code>.
+ * <code>Trigger</code>s are the 'mechanism' by which <code>Job</code>s are scheduled. Many
+ * <code>Trigger</code>s can point to the same <code>Job</code>, but a single <code>Trigger</code>
+ * can only point to one <code>Job</code>.
  * </p>
  *
  * @see IJob
@@ -85,11 +84,11 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * Create a <code>JobDetail</code> with no specified name or group, and the
-   * default settings of all the other properties.<br>
+   * Create a <code>JobDetail</code> with no specified name or group, and the default settings of
+   * all the other properties.<br>
    * Note that the {@link #setName(String)},{@link #setGroup(String)}and
-   * {@link #setJobClass(Class)}methods must be called before the job can be
-   * placed into a {@link IScheduler}
+   * {@link #setJobClass(Class)}methods must be called before the job can be placed into a
+   * {@link IScheduler}
    */
   public JobDetail ()
   {}
@@ -150,8 +149,7 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * Returns the 'full name' of the <code>JobDetail</code> in the format
-   * "group.name".
+   * Returns the 'full name' of the <code>JobDetail</code> in the format "group.name".
    */
   @NonNull
   public final String getFullName ()
@@ -187,9 +185,8 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * Set a description for the <code>Job</code> instance - may be useful for
-   * remembering/displaying the purpose of the job, though the description has
-   * no meaning to Quartz.
+   * Set a description for the <code>Job</code> instance - may be useful for remembering/displaying
+   * the purpose of the job, though the description has no meaning to Quartz.
    */
   public final void setDescription (final String description)
   {
@@ -235,8 +232,8 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * Set whether or not the <code>Job</code> should remain stored after it is
-   * orphaned (no <code>Triggers</code> point to it).<br>
+   * Set whether or not the <code>Job</code> should remain stored after it is orphaned (no
+   * <code>Triggers</code> point to it).<br>
    * If not explicitly set, the default value is <code>false</code>.
    */
   public void setDurability (final boolean durability)
@@ -245,9 +242,8 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * Set whether or not the the <code>Scheduler</code> should re-execute the
-   * <code>Job</code> if a 'recovery' or 'fail-over' situation is
-   * encountered.<br>
+   * Set whether or not the the <code>Scheduler</code> should re-execute the <code>Job</code> if a
+   * 'recovery' or 'fail-over' situation is encountered.<br>
    * If not explicitly set, the default value is <code>false</code>.
    *
    * @see com.helger.quartz.IJobExecutionContext#isRecovering()
@@ -263,8 +259,8 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * @return whether the associated Job class carries the
-   *         {@link PersistJobDataAfterExecution} annotation.
+   * @return whether the associated Job class carries the {@link PersistJobDataAfterExecution}
+   *         annotation.
    */
   public boolean isPersistJobDataAfterExecution ()
   {
@@ -272,8 +268,8 @@ public class JobDetail implements IJobDetail
   }
 
   /**
-   * @return whether the associated Job class carries the
-   *         {@link DisallowConcurrentExecution} annotation.
+   * @return whether the associated Job class carries the {@link DisallowConcurrentExecution}
+   *         annotation.
    */
   public boolean isConcurrentExectionDisallowed ()
   {

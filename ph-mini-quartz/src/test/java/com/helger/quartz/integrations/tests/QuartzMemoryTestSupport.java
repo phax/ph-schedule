@@ -30,9 +30,8 @@ import com.helger.quartz.impl.StdSchedulerFactory;
 import com.helger.quartz.simpl.SimpleThreadPool;
 
 /**
- * A base class to support in-memory scheduler integration testing. Each test
- * will have a fresh scheduler created and started, and it will auto shutdown
- * upon each test run.
+ * A base class to support in-memory scheduler integration testing. Each test will have a fresh
+ * scheduler created and started, and it will auto shutdown upon each test run.
  *
  * @author Zemian Deng
  */

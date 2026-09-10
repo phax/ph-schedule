@@ -29,22 +29,19 @@ import org.jspecify.annotations.NonNull;
 import com.helger.base.string.StringHelper;
 
 /**
- * This implementation of the Calendar excludes (or includes - see below) a
- * specified time range each day. For example, you could use this calendar to
- * exclude business hours (8AM - 5PM) every day. Each <CODE>DailyCalendar</CODE>
- * only allows a single time range to be specified, and that time range may not
- * cross daily boundaries (i.e. you cannot specify a time range from 8PM - 5AM).
- * If the property <CODE>invertTimeRange</CODE> is <CODE>false</CODE> (default),
- * the time range defines a range of times in which triggers are not allowed to
- * fire. If <CODE>invertTimeRange</CODE> is <CODE>true</CODE>, the time range is
- * inverted &ndash; that is, all times <I>outside</I> the defined time range are
- * excluded.
+ * This implementation of the Calendar excludes (or includes - see below) a specified time range
+ * each day. For example, you could use this calendar to exclude business hours (8AM - 5PM) every
+ * day. Each <CODE>DailyCalendar</CODE> only allows a single time range to be specified, and that
+ * time range may not cross daily boundaries (i.e. you cannot specify a time range from 8PM - 5AM).
+ * If the property <CODE>invertTimeRange</CODE> is <CODE>false</CODE> (default), the time range
+ * defines a range of times in which triggers are not allowed to fire. If
+ * <CODE>invertTimeRange</CODE> is <CODE>true</CODE>, the time range is inverted &ndash; that is,
+ * all times <I>outside</I> the defined time range are excluded.
  * <P>
- * Note when using <CODE>DailyCalendar</CODE>, it behaves on the same principals
- * as, for example, {@link com.helger.quartz.impl.calendar.WeeklyCalendar
- * WeeklyCalendar}. <CODE>WeeklyCalendar</CODE> defines a set of days that are
- * excluded <I>every week</I>. Likewise, <CODE>DailyCalendar</CODE> defines a
- * set of times that are excluded <I>every day</I>.
+ * Note when using <CODE>DailyCalendar</CODE>, it behaves on the same principals as, for example,
+ * {@link com.helger.quartz.impl.calendar.WeeklyCalendar WeeklyCalendar}.
+ * <CODE>WeeklyCalendar</CODE> defines a set of days that are excluded <I>every week</I>. Likewise,
+ * <CODE>DailyCalendar</CODE> defines a set of times that are excluded <I>every day</I>.
  *
  * @author Mike Funk, Aaron Craven
  */
@@ -85,28 +82,22 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified strings and no <CODE>baseCalendar</CODE>.
-   * <CODE>rangeStartingTime</CODE> and <CODE>rangeEndingTime</CODE> must be in
-   * the format &quot;HH:MM[:SS[:mmm]]&quot; where:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified strings and no
+   * <CODE>baseCalendar</CODE>. <CODE>rangeStartingTime</CODE> and <CODE>rangeEndingTime</CODE> must
+   * be in the format &quot;HH:MM[:SS[:mmm]]&quot; where:
    * <UL>
-   * <LI>HH is the hour of the specified time. The hour should be specified
-   * using military (24-hour) time and must be in the range 0 to 23.</LI>
-   * <LI>MM is the minute of the specified time and must be in the range 0 to
-   * 59.</LI>
-   * <LI>SS is the second of the specified time and must be in the range 0 to
-   * 59.</LI>
-   * <LI>mmm is the millisecond of the specified time and must be in the range 0
-   * to 999.</LI>
+   * <LI>HH is the hour of the specified time. The hour should be specified using military (24-hour)
+   * time and must be in the range 0 to 23.</LI>
+   * <LI>MM is the minute of the specified time and must be in the range 0 to 59.</LI>
+   * <LI>SS is the second of the specified time and must be in the range 0 to 59.</LI>
+   * <LI>mmm is the millisecond of the specified time and must be in the range 0 to 999.</LI>
    * <LI>items enclosed in brackets ('[', ']') are optional.</LI>
-   * <LI>The time range starting time must be before the time range ending time.
-   * Note this means that a time range may not cross daily boundaries (10PM -
-   * 2AM)</LI>
+   * <LI>The time range starting time must be before the time range ending time. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM)</LI>
    * </UL>
    * <p>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
-   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
-   * time zone is set via
+   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit time zone is set via
    * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
@@ -122,35 +113,28 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified strings and the specified <CODE>baseCalendar</CODE>.
-   * <CODE>rangeStartingTime</CODE> and <CODE>rangeEndingTime</CODE> must be in
-   * the format &quot;HH:MM[:SS[:mmm]]&quot; where:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified strings and the
+   * specified <CODE>baseCalendar</CODE>. <CODE>rangeStartingTime</CODE> and
+   * <CODE>rangeEndingTime</CODE> must be in the format &quot;HH:MM[:SS[:mmm]]&quot; where:
    * <UL>
-   * <LI>HH is the hour of the specified time. The hour should be specified
-   * using military (24-hour) time and must be in the range 0 to 23.</LI>
-   * <LI>MM is the minute of the specified time and must be in the range 0 to
-   * 59.</LI>
-   * <LI>SS is the second of the specified time and must be in the range 0 to
-   * 59.</LI>
-   * <LI>mmm is the millisecond of the specified time and must be in the range 0
-   * to 999.</LI>
+   * <LI>HH is the hour of the specified time. The hour should be specified using military (24-hour)
+   * time and must be in the range 0 to 23.</LI>
+   * <LI>MM is the minute of the specified time and must be in the range 0 to 59.</LI>
+   * <LI>SS is the second of the specified time and must be in the range 0 to 59.</LI>
+   * <LI>mmm is the millisecond of the specified time and must be in the range 0 to 999.</LI>
    * <LI>items enclosed in brackets ('[', ']') are optional.</LI>
-   * <LI>The time range starting time must be before the time range ending time.
-   * Note this means that a time range may not cross daily boundaries (10PM -
-   * 2AM)</LI>
+   * <LI>The time range starting time must be before the time range ending time. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM)</LI>
    * </UL>
    * <p>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
-   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
-   * time zone is set via
+   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit time zone is set via
    * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param baseCalendar
-   *        the base calendar for this calendar instance &ndash; see
-   *        {@link AbstractCalendar} for more information on base calendar
-   *        functionality
+   *        the base calendar for this calendar instance &ndash; see {@link AbstractCalendar} for
+   *        more information on base calendar functionality
    * @param rangeStartingTime
    *        a String representing the starting time for the time range
    * @param rangeEndingTime
@@ -165,23 +149,19 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified values and no <CODE>baseCalendar</CODE>. Values are subject to
-   * the following validations:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified values and no
+   * <CODE>baseCalendar</CODE>. Values are subject to the following validations:
    * <UL>
-   * <LI>Hours must be in the range 0-23 and are expressed using military
-   * (24-hour) time.</LI>
+   * <LI>Hours must be in the range 0-23 and are expressed using military (24-hour) time.</LI>
    * <LI>Minutes must be in the range 0-59</LI>
    * <LI>Seconds must be in the range 0-59</LI>
    * <LI>Milliseconds must be in the range 0-999</LI>
-   * <LI>The time range starting time must be before the time range ending time.
-   * Note this means that a time range may not cross daily boundaries (10PM -
-   * 2AM)</LI>
+   * <LI>The time range starting time must be before the time range ending time. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM)</LI>
    * </UL>
    * <p>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
-   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
-   * time zone is set via
+   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit time zone is set via
    * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
@@ -223,30 +203,25 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified values and the specified <CODE>baseCalendar</CODE>. Values are
-   * subject to the following validations:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified values and the
+   * specified <CODE>baseCalendar</CODE>. Values are subject to the following validations:
    * <UL>
-   * <LI>Hours must be in the range 0-23 and are expressed using military
-   * (24-hour) time.</LI>
+   * <LI>Hours must be in the range 0-23 and are expressed using military (24-hour) time.</LI>
    * <LI>Minutes must be in the range 0-59</LI>
    * <LI>Seconds must be in the range 0-59</LI>
    * <LI>Milliseconds must be in the range 0-999</LI>
-   * <LI>The time range starting time must be before the time range ending time.
-   * Note this means that a time range may not cross daily boundaries (10PM -
-   * 2AM)</LI>
+   * <LI>The time range starting time must be before the time range ending time. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM)</LI>
    * </UL>
    * <p>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
-   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
-   * time zone is set via
+   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit time zone is set via
    * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param baseCalendar
-   *        the base calendar for this calendar instance &ndash; see
-   *        {@link AbstractCalendar} for more information on base calendar
-   *        functionality
+   *        the base calendar for this calendar instance &ndash; see {@link AbstractCalendar} for
+   *        more information on base calendar functionality
    * @param rangeStartingHourOfDay
    *        the hour of the start of the time range
    * @param rangeStartingMinute
@@ -286,23 +261,21 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified <CODE>Calendar</CODE>s and no <CODE>baseCalendar</CODE>. The
-   * Calendars are subject to the following considerations:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified
+   * <CODE>Calendar</CODE>s and no <CODE>baseCalendar</CODE>. The Calendars are subject to the
+   * following considerations:
    * <UL>
-   * <LI>Only the time-of-day fields of the specified Calendars will be used
-   * (the date fields will be ignored)</LI>
-   * <LI>The starting time must be before the ending time of the defined time
-   * range. Note this means that a time range may not cross daily boundaries
-   * (10PM - 2AM). <I>(because only time fields are are used, it is possible for
-   * two Calendars to represent a valid time range and
+   * <LI>Only the time-of-day fields of the specified Calendars will be used (the date fields will
+   * be ignored)</LI>
+   * <LI>The starting time must be before the ending time of the defined time range. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM). <I>(because only time fields are
+   * are used, it is possible for two Calendars to represent a valid time range and
    * <CODE>rangeStartingCalendar.after(rangeEndingCalendar) ==
    *         true</CODE>)</I></LI>
    * </UL>
    * <p>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
-   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
-   * time zone is set via
+   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit time zone is set via
    * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
@@ -318,31 +291,27 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified <CODE>Calendar</CODE>s and the specified
-   * <CODE>baseCalendar</CODE>. The Calendars are subject to the following
-   * considerations:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified
+   * <CODE>Calendar</CODE>s and the specified <CODE>baseCalendar</CODE>. The Calendars are subject
+   * to the following considerations:
    * <UL>
-   * <LI>Only the time-of-day fields of the specified Calendars will be used
-   * (the date fields will be ignored)</LI>
-   * <LI>The starting time must be before the ending time of the defined time
-   * range. Note this means that a time range may not cross daily boundaries
-   * (10PM - 2AM). <I>(because only time fields are are used, it is possible for
-   * two Calendars to represent a valid time range and
+   * <LI>Only the time-of-day fields of the specified Calendars will be used (the date fields will
+   * be ignored)</LI>
+   * <LI>The starting time must be before the ending time of the defined time range. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM). <I>(because only time fields are
+   * are used, it is possible for two Calendars to represent a valid time range and
    * <CODE>rangeStartingCalendar.after(rangeEndingCalendar) ==
    *         true</CODE>)</I></LI>
    * </UL>
    * <p>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
-   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
-   * time zone is set via
+   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit time zone is set via
    * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>
    * </p>
    *
    * @param baseCalendar
-   *        the base calendar for this calendar instance &ndash; see
-   *        {@link AbstractCalendar} for more information on base calendar
-   *        functionality
+   *        the base calendar for this calendar instance &ndash; see {@link AbstractCalendar} for
+   *        more information on base calendar functionality
    * @param rangeStartingCalendar
    *        a Calendar representing the starting time for the time range
    * @param rangeEndingCalendar
@@ -357,27 +326,23 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified values and no <CODE>baseCalendar</CODE>. The values are subject
-   * to the following considerations:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified values and no
+   * <CODE>baseCalendar</CODE>. The values are subject to the following considerations:
    * <UL>
    * <LI>Only the time-of-day portion of the specified values will be used</LI>
-   * <LI>The starting time must be before the ending time of the defined time
-   * range. Note this means that a time range may not cross daily boundaries
-   * (10PM - 2AM). <I>(because only time value are are used, it is possible for
-   * the two values to represent a valid time range and
+   * <LI>The starting time must be before the ending time of the defined time range. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM). <I>(because only time value are
+   * are used, it is possible for the two values to represent a valid time range and
    * <CODE>rangeStartingTime &gt;
    *         rangeEndingTime</CODE>)</I></LI>
    * </UL>
    * <p>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
-   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
-   * time zone is set via
+   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit time zone is set via
    * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>. You should use
    * <code>{@link #DailyCalendar(com.helger.quartz.ICalendar, java.util.TimeZone, long, long)}</code>
    * if you don't want the given <code>rangeStartingTimeInMillis</code> and
-   * <code>rangeEndingTimeInMillis</code> to be evaluated in the default time
-   * zone.
+   * <code>rangeEndingTimeInMillis</code> to be evaluated in the default time zone.
    * </p>
    *
    * @param rangeStartingTimeInMillis
@@ -392,33 +357,28 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified values and the specified <CODE>baseCalendar</CODE>. The values
-   * are subject to the following considerations:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified values and the
+   * specified <CODE>baseCalendar</CODE>. The values are subject to the following considerations:
    * <UL>
    * <LI>Only the time-of-day portion of the specified values will be used</LI>
-   * <LI>The starting time must be before the ending time of the defined time
-   * range. Note this means that a time range may not cross daily boundaries
-   * (10PM - 2AM). <I>(because only time value are are used, it is possible for
-   * the two values to represent a valid time range and
+   * <LI>The starting time must be before the ending time of the defined time range. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM). <I>(because only time value are
+   * are used, it is possible for the two values to represent a valid time range and
    * <CODE>rangeStartingTime &gt;
    *         rangeEndingTime</CODE>)</I></LI>
    * </UL>
    * <p>
    * <b>Note:</b> This <CODE>DailyCalendar</CODE> will use the
-   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit
-   * time zone is set via
+   * <code>{@link TimeZone#getDefault()}</code> time zone unless an explicit time zone is set via
    * <code>{@link AbstractCalendar#setTimeZone(TimeZone)}</code>. You should use
    * <code>{@link #DailyCalendar(com.helger.quartz.ICalendar, java.util.TimeZone, long, long)} </code>
    * if you don't want the given <code>rangeStartingTimeInMillis</code> and
-   * <code>rangeEndingTimeInMillis</code> to be evaluated in the default time
-   * zone.
+   * <code>rangeEndingTimeInMillis</code> to be evaluated in the default time zone.
    * </p>
    *
    * @param baseCalendar
-   *        the base calendar for this calendar instance &ndash; see
-   *        {@link AbstractCalendar} for more information on base calendar
-   *        functionality
+   *        the base calendar for this calendar instance &ndash; see {@link AbstractCalendar} for
+   *        more information on base calendar functionality
    * @param rangeStartingTimeInMillis
    *        a long representing the starting time for the time range
    * @param rangeEndingTimeInMillis
@@ -433,22 +393,20 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified values and no <CODE>baseCalendar</CODE>. The values are subject
-   * to the following considerations:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified values and no
+   * <CODE>baseCalendar</CODE>. The values are subject to the following considerations:
    * <UL>
    * <LI>Only the time-of-day portion of the specified values will be used</LI>
-   * <LI>The starting time must be before the ending time of the defined time
-   * range. Note this means that a time range may not cross daily boundaries
-   * (10PM - 2AM). <I>(because only time value are are used, it is possible for
-   * the two values to represent a valid time range and
+   * <LI>The starting time must be before the ending time of the defined time range. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM). <I>(because only time value are
+   * are used, it is possible for the two values to represent a valid time range and
    * <CODE>rangeStartingTime &gt;
    *         rangeEndingTime</CODE>)</I></LI>
    * </UL>
    *
    * @param timeZone
-   *        the time zone for of the <code>DailyCalendar</code> which will also
-   *        be used to resolve the given start/end times.
+   *        the time zone for of the <code>DailyCalendar</code> which will also be used to resolve
+   *        the given start/end times.
    * @param rangeStartingTimeInMillis
    *        a long representing the starting time for the time range
    * @param rangeEndingTimeInMillis
@@ -463,26 +421,23 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the
-   * specified values and the specified <CODE>baseCalendar</CODE>. The values
-   * are subject to the following considerations:
+   * Create a <CODE>DailyCalendar</CODE> with a time range defined by the specified values and the
+   * specified <CODE>baseCalendar</CODE>. The values are subject to the following considerations:
    * <UL>
    * <LI>Only the time-of-day portion of the specified values will be used</LI>
-   * <LI>The starting time must be before the ending time of the defined time
-   * range. Note this means that a time range may not cross daily boundaries
-   * (10PM - 2AM). <I>(because only time value are are used, it is possible for
-   * the two values to represent a valid time range and
+   * <LI>The starting time must be before the ending time of the defined time range. Note this means
+   * that a time range may not cross daily boundaries (10PM - 2AM). <I>(because only time value are
+   * are used, it is possible for the two values to represent a valid time range and
    * <CODE>rangeStartingTime &gt;
    *         rangeEndingTime</CODE>)</I></LI>
    * </UL>
    *
    * @param baseCalendar
-   *        the base calendar for this calendar instance &ndash; see
-   *        {@link AbstractCalendar} for more information on base calendar
-   *        functionality
+   *        the base calendar for this calendar instance &ndash; see {@link AbstractCalendar} for
+   *        more information on base calendar functionality
    * @param timeZone
-   *        the time zone for of the <code>DailyCalendar</code> which will also
-   *        be used to resolve the given start/end times.
+   *        the time zone for of the <code>DailyCalendar</code> which will also be used to resolve
+   *        the given start/end times.
    * @param rangeStartingTimeInMillis
    *        a long representing the starting time for the time range
    * @param rangeEndingTimeInMillis
@@ -503,8 +458,8 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    *
    * @param timeInMillis
    *        the date/time to test
-   * @return a boolean indicating whether the specified time is 'included' by
-   *         the <CODE>AbstractCalendar</CODE>
+   * @return a boolean indicating whether the specified time is 'included' by the
+   *         <CODE>AbstractCalendar</CODE>
    */
   @Override
   public boolean isTimeIncluded (final long timeInMillis)
@@ -527,13 +482,11 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Determines the next time included by the <CODE>DailyCalendar</CODE> after
-   * the specified time.
+   * Determines the next time included by the <CODE>DailyCalendar</CODE> after the specified time.
    *
    * @param timeInMillis
    *        the initial date/time after which to find an included time
-   * @return the time in milliseconds representing the next time included after
-   *         the specified time.
+   * @return the time in milliseconds representing the next time included after the specified time.
    */
   @Override
   public long getNextIncludedTime (final long timeInMillis)
@@ -600,14 +553,13 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Returns the start time of the time range (in milliseconds) of the day
-   * specified in <CODE>timeInMillis</CODE>
+   * Returns the start time of the time range (in milliseconds) of the day specified in
+   * <CODE>timeInMillis</CODE>
    *
    * @param timeInMillis
-   *        a time containing the desired date for the starting time of the time
-   *        range.
-   * @return a date/time (in milliseconds) representing the start time of the
-   *         time range for the specified date.
+   *        a time containing the desired date for the starting time of the time range.
+   * @return a date/time (in milliseconds) representing the start time of the time range for the
+   *         specified date.
    */
   public long getTimeRangeStartingTimeInMillis (final long timeInMillis)
   {
@@ -620,14 +572,13 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Returns the end time of the time range (in milliseconds) of the day
-   * specified in <CODE>timeInMillis</CODE>
+   * Returns the end time of the time range (in milliseconds) of the day specified in
+   * <CODE>timeInMillis</CODE>
    *
    * @param timeInMillis
-   *        a time containing the desired date for the ending time of the time
-   *        range.
-   * @return a date/time (in milliseconds) representing the end time of the time
-   *         range for the specified date.
+   *        a time containing the desired date for the ending time of the time range.
+   * @return a date/time (in milliseconds) representing the end time of the time range for the
+   *         specified date.
    */
   public long getTimeRangeEndingTimeInMillis (final long timeInMillis)
   {
@@ -640,8 +591,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Indicates whether the time range represents an inverted time range (see
-   * class description).
+   * Indicates whether the time range represents an inverted time range (see class description).
    *
    * @return a boolean indicating whether the time range is inverted
    */
@@ -651,8 +601,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Indicates whether the time range represents an inverted time range (see
-   * class description).
+   * Indicates whether the time range represents an inverted time range (see class description).
    *
    * @param flag
    *        the new value for the <CODE>invertTimeRange</CODE> flag.
@@ -663,8 +612,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Returns a string representing the properties of the
-   * <CODE>DailyCalendar</CODE>
+   * Returns a string representing the properties of the <CODE>DailyCalendar</CODE>
    *
    * @return the properteis of the DailyCalendar in a String format
    */
@@ -705,8 +653,8 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Sets the time range for the <CODE>DailyCalendar</CODE> to the times
-   * represented in the specified Strings.
+   * Sets the time range for the <CODE>DailyCalendar</CODE> to the times represented in the
+   * specified Strings.
    *
    * @param rangeStartingTimeString
    *        a String representing the start time of the time range
@@ -768,8 +716,8 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Sets the time range for the <CODE>DailyCalendar</CODE> to the times
-   * represented in the specified values.
+   * Sets the time range for the <CODE>DailyCalendar</CODE> to the times represented in the
+   * specified values.
    *
    * @param rangeStartingHourOfDay
    *        the hour of the start of the time range
@@ -844,15 +792,13 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Sets the time range for the <CODE>DailyCalendar</CODE> to the times
-   * represented in the specified <CODE>Calendar</CODE>s.
+   * Sets the time range for the <CODE>DailyCalendar</CODE> to the times represented in the
+   * specified <CODE>Calendar</CODE>s.
    *
    * @param rangeStartingCalendar
-   *        a Calendar containing the start time for the
-   *        <CODE>DailyCalendar</CODE>
+   *        a Calendar containing the start time for the <CODE>DailyCalendar</CODE>
    * @param rangeEndingCalendar
-   *        a Calendar containing the end time for the
-   *        <CODE>DailyCalendar</CODE>
+   *        a Calendar containing the end time for the <CODE>DailyCalendar</CODE>
    */
   public final void setTimeRange (final Calendar rangeStartingCalendar, final Calendar rangeEndingCalendar)
   {
@@ -867,8 +813,8 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
   }
 
   /**
-   * Sets the time range for the <CODE>DailyCalendar</CODE> to the times
-   * represented in the specified values.
+   * Sets the time range for the <CODE>DailyCalendar</CODE> to the times represented in the
+   * specified values.
    *
    * @param rangeStartingTime
    *        the starting time (in milliseconds) for the time range

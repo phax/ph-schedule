@@ -42,8 +42,7 @@ public final class CQuartz
   {}
 
   /**
-   * Return a date with time of day reset to this object values. The millisecond
-   * value will be zero.
+   * Return a date with time of day reset to this object values. The millisecond value will be zero.
    */
   @Nullable
   public static Date onDate (@NonNull final LocalTime aLT, @Nullable final Date dateTime)

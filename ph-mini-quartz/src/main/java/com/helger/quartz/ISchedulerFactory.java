@@ -21,8 +21,7 @@ package com.helger.quartz;
 import com.helger.collection.commons.ICommonsCollection;
 
 /**
- * Provides a mechanism for obtaining client-usable handles to
- * <code>Scheduler</code> instances.
+ * Provides a mechanism for obtaining client-usable handles to <code>Scheduler</code> instances.
  *
  * @see IScheduler
  * @see com.helger.quartz.impl.StdSchedulerFactory
@@ -44,8 +43,7 @@ public interface ISchedulerFactory
   IScheduler getScheduler (String schedName) throws SchedulerException;
 
   /**
-   * Returns handles to all known Schedulers (made by any SchedulerFactory
-   * within this jvm.).
+   * Returns handles to all known Schedulers (made by any SchedulerFactory within this jvm.).
    */
   ICommonsCollection <IScheduler> getAllSchedulers () throws SchedulerException;
 }

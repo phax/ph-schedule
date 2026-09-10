@@ -22,17 +22,14 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
- * An interface to be implemented by objects that define spaces of time during
- * which an associated <code>{@link ITrigger}</code> may (not) fire. Calendars
- * do not define actual fire times, but rather are used to limit a
- * <code>Trigger</code> from firing on its normal schedule if necessary. Most
- * Calendars include all times by default and allow the user to specify times to
- * exclude.
+ * An interface to be implemented by objects that define spaces of time during which an associated
+ * <code>{@link ITrigger}</code> may (not) fire. Calendars do not define actual fire times, but
+ * rather are used to limit a <code>Trigger</code> from firing on its normal schedule if necessary.
+ * Most Calendars include all times by default and allow the user to specify times to exclude.
  * <p>
- * As such, it is often useful to think of Calendars as being used to
- * <I>exclude</I> a block of time - as opposed to <I>include</I> a block of
- * time. (i.e. the schedule &quot;fire every five minutes except on
- * Sundays&quot; could be implemented with a <code>SimpleTrigger</code> and a
+ * As such, it is often useful to think of Calendars as being used to <I>exclude</I> a block of time
+ * - as opposed to <I>include</I> a block of time. (i.e. the schedule &quot;fire every five minutes
+ * except on Sundays&quot; could be implemented with a <code>SimpleTrigger</code> and a
  * <code>WeeklyCalendar</code> which excludes Sundays)
  * </p>
  *
@@ -58,8 +55,7 @@ public interface ICalendar
   void setBaseCalendar (@Nullable ICalendar baseCalendar);
 
   /**
-   * Return the description given to the <code>Calendar</code> instance by its
-   * creator (if any).
+   * Return the description given to the <code>Calendar</code> instance by its creator (if any).
    *
    * @return <code>null</code> if no description was set.
    */
@@ -67,9 +63,9 @@ public interface ICalendar
   String getDescription ();
 
   /**
-   * Set a description for the <code>Calendar</code> instance - may be useful
-   * for remembering/displaying the purpose of the calendar, though the
-   * description has no meaning to Quartz.
+   * Set a description for the <code>Calendar</code> instance - may be useful for
+   * remembering/displaying the purpose of the calendar, though the description has no meaning to
+   * Quartz.
    *
    * @param description
    *        The new description. May be <code>null</code>.
@@ -77,14 +73,13 @@ public interface ICalendar
   void setDescription (@Nullable String description);
 
   /**
-   * Determine whether the given time (in milliseconds) is 'included' by the
-   * Calendar.
+   * Determine whether the given time (in milliseconds) is 'included' by the Calendar.
    */
   boolean isTimeIncluded (long timeStamp);
 
   /**
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar after the given
+   * time.
    */
   long getNextIncludedTime (long timeStamp);
 

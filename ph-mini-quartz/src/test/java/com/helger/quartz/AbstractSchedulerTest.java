@@ -49,8 +49,7 @@ import com.helger.quartz.impl.matchers.GroupMatcher;
 import com.helger.quartz.utils.Key;
 
 /**
- * Test High Level Scheduler functionality (implicitly tests the underlying
- * jobstore (RAMJobStore))
+ * Test High Level Scheduler functionality (implicitly tests the underlying jobstore (RAMJobStore))
  */
 public abstract class AbstractSchedulerTest
 {
@@ -350,9 +349,8 @@ public abstract class AbstractSchedulerTest
                      ")  in group: " +
                      t.getThreadGroup ().getName () +
                      " with parent group: " +
-                     (t.getThreadGroup ().getParent () == null ? "-none-" : t.getThreadGroup ()
-                                                                             .getParent ()
-                                                                             .getName ()));
+                     (t.getThreadGroup ().getParent () == null ? "-none-"
+                                                               : t.getThreadGroup ().getParent ().getName ()));
       }
       // log all threads that were running before shutdown
       for (final Thread t : allThreadsRunning.keySet ())
@@ -362,12 +360,13 @@ public abstract class AbstractSchedulerTest
                      " (of type " +
                      t.getClass ().getName () +
                      ")  in group: " +
-                     (t.getThreadGroup () == null ? "-none-" : (t.getThreadGroup ().getName () +
-                                                                " with parent group: " +
-                                                                (t.getThreadGroup ().getParent () == null ? "-none-" : t
-                                                                                                                        .getThreadGroup ()
-                                                                                                                        .getParent ()
-                                                                                                                        .getName ()))));
+                     (t.getThreadGroup () == null ? "-none-"
+                                                  : (t.getThreadGroup ().getName () +
+                                                     " with parent group: " +
+                                                     (t.getThreadGroup ().getParent () == null ? "-none-"
+                                                                                               : t.getThreadGroup ()
+                                                                                                  .getParent ()
+                                                                                                  .getName ()))));
       }
     }
     assertTrue ("Found unexpected new threads (see console output for listing)", allThreadsEnd.size () == 0);

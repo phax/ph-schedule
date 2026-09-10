@@ -106,7 +106,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testYearlyIntervalGetFireTimeAfter ()
   {
-
     final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -130,7 +129,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testMonthlyIntervalGetFireTimeAfter ()
   {
-
     final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -156,7 +154,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testWeeklyIntervalGetFireTimeAfter ()
   {
-
     final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -182,7 +179,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testDailyIntervalGetFireTimeAfter ()
   {
-
     final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -208,7 +204,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testHourlyIntervalGetFireTimeAfter ()
   {
-
     final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -233,7 +228,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testMinutelyIntervalGetFireTimeAfter ()
   {
-
     final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -258,7 +252,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testSecondlyIntervalGetFireTimeAfter ()
   {
-
     final Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2005, Calendar.JUNE, 1, 9, 30, 17);
     startCalendar.clear (Calendar.MILLISECOND);
@@ -283,7 +276,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testDaylightSavingsTransitions ()
   {
-
     // Pick a day before a spring daylight savings transition...
 
     Calendar startCalendar = PDTFactory.createCalendar ();
@@ -454,7 +446,6 @@ public class CalendarIntervalTriggerTest
   @Test
   public void testFinalFireTimes ()
   {
-
     Calendar startCalendar = PDTFactory.createCalendar ();
     startCalendar.set (2010, Calendar.MARCH, 12, 9, 0, 0);
     startCalendar.clear (Calendar.MILLISECOND);

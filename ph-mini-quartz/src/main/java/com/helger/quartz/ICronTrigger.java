@@ -21,13 +21,12 @@ package com.helger.quartz;
 import java.util.TimeZone;
 
 /**
- * The public interface for inspecting settings specific to a CronTrigger, .
- * which is used to fire a <code>{@link com.helger.quartz.IJob}</code> at given
- * moments in time, defined with Unix 'cron-like' schedule definitions.
+ * The public interface for inspecting settings specific to a CronTrigger, . which is used to fire a
+ * <code>{@link com.helger.quartz.IJob}</code> at given moments in time, defined with Unix
+ * 'cron-like' schedule definitions.
  * <p>
- * For those unfamiliar with "cron", this means being able to create a firing
- * schedule such as: "At 8:00am every Monday through Friday" or "At 1:30am every
- * last Friday of the month".
+ * For those unfamiliar with "cron", this means being able to create a firing schedule such as: "At
+ * 8:00am every Monday through Friday" or "At 1:30am every last Friday of the month".
  * </p>
  * <p>
  * The format of a "Cron-Expression" string is documented on the
@@ -70,16 +69,14 @@ import java.util.TimeZone;
  * <tr>
  * <td><code>"0 * 14 * * ?"</code></td>
  * <td>&nbsp;</td>
- * <td align=
- * "left"><code>Fire every minute starting at 2pm and ending at 2:59pm, every day</code>
+ * <td align= "left"><code>Fire every minute starting at 2pm and ending at 2:59pm, every day</code>
  * </td>
  * </tr>
  * <tr>
  * <td><code>"0 0/5 14 * * ?"</code></td>
  * <td>&nbsp;</td>
  * <td align=
- * "left"><code>Fire every 5 minutes starting at 2pm and ending at 2:55pm, every day</code>
- * </td>
+ * "left"><code>Fire every 5 minutes starting at 2pm and ending at 2:55pm, every day</code></td>
  * </tr>
  * <tr>
  * <td><code>"0 0/5 14,18 * * ?"</code></td>
@@ -91,23 +88,20 @@ import java.util.TimeZone;
  * <tr>
  * <td><code>"0 0-5 14 * * ?"</code></td>
  * <td>&nbsp;</td>
- * <td align=
- * "left"><code>Fire every minute starting at 2pm and ending at 2:05pm, every day</code>
+ * <td align= "left"><code>Fire every minute starting at 2pm and ending at 2:05pm, every day</code>
  * </td>
  * </tr>
  * <tr>
  * <td><code>"0 10,44 14 ? 3 WED"</code></td>
  * <td>&nbsp;</td>
  * <td align=
- * "left"><code>Fire at 2:10pm and at 2:44pm every Wednesday in the month of March.</code>
- * </td>
+ * "left"><code>Fire at 2:10pm and at 2:44pm every Wednesday in the month of March.</code></td>
  * </tr>
  * <tr>
  * <td><code>"0 15 10 ? * MON-FRI"</code></td>
  * <td>&nbsp;</td>
  * <td align=
- * "left"><code>Fire at 10:15am every Monday, Tuesday, Wednesday, Thursday and Friday</code>
- * </td>
+ * "left"><code>Fire at 10:15am every Monday, Tuesday, Wednesday, Thursday and Friday</code></td>
  * </tr>
  * <tr>
  * <td><code>"0 15 10 15 * ?"</code></td>
@@ -122,14 +116,12 @@ import java.util.TimeZone;
  * <tr>
  * <td><code>"0 15 10 ? * 6L"</code></td>
  * <td>&nbsp;</td>
- * <td align=
- * "left"><code>Fire at 10:15am on the last Friday of every month</code></td>
+ * <td align= "left"><code>Fire at 10:15am on the last Friday of every month</code></td>
  * </tr>
  * <tr>
  * <td><code>"0 15 10 ? * 6L"</code></td>
  * <td>&nbsp;</td>
- * <td align=
- * "left"><code>Fire at 10:15am on the last Friday of every month</code></td>
+ * <td align= "left"><code>Fire at 10:15am on the last Friday of every month</code></td>
  * </tr>
  * <tr>
  * <td><code>"0 15 10 ? * 6L 2002-2005"</code></td>
@@ -141,23 +133,20 @@ import java.util.TimeZone;
  * <tr>
  * <td><code>"0 15 10 ? * 6#3"</code></td>
  * <td>&nbsp;</td>
- * <td align=
- * "left"><code>Fire at 10:15am on the third Friday of every month</code></td>
+ * <td align= "left"><code>Fire at 10:15am on the third Friday of every month</code></td>
  * </tr>
  * </table>
  * <p>
- * Pay attention to the effects of '?' and '*' in the day-of-week and
- * day-of-month fields!
+ * Pay attention to the effects of '?' and '*' in the day-of-week and day-of-month fields!
  * </p>
  * <p>
  * <b>NOTES:</b>
  * </p>
  * <ul>
- * <li>Support for specifying both a day-of-week and a day-of-month value is not
- * complete (you'll need to use the '?' character in on of these fields).</li>
- * <li>Be careful when setting fire times between mid-night and 1:00 AM -
- * "daylight savings" can cause a skip or a repeat depending on whether the time
- * moves back or jumps forward.</li>
+ * <li>Support for specifying both a day-of-week and a day-of-month value is not complete (you'll
+ * need to use the '?' character in on of these fields).</li>
+ * <li>Be careful when setting fire times between mid-night and 1:00 AM - "daylight savings" can
+ * cause a skip or a repeat depending on whether the time moves back or jumps forward.</li>
  * </ul>
  *
  * @see CronScheduleBuilder
@@ -171,8 +160,8 @@ public interface ICronTrigger extends ITrigger
 
   /**
    * <p>
-   * Returns the time zone for which the <code>cronExpression</code> of this
-   * {@link ICronTrigger} will be resolved.
+   * Returns the time zone for which the <code>cronExpression</code> of this {@link ICronTrigger}
+   * will be resolved.
    * </p>
    */
   TimeZone getTimeZone ();

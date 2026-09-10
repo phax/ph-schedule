@@ -37,8 +37,8 @@ import com.helger.quartz.ICalendar;
 
 /**
  * <p>
- * This implementation of the Calendar excludes a set of days of the year. You
- * may use it to exclude bank holidays which are on the same date every year.
+ * This implementation of the Calendar excludes a set of days of the year. You may use it to exclude
+ * bank holidays which are on the same date every year.
  * </p>
  *
  * @see com.helger.quartz.ICalendar
@@ -131,8 +131,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
   }
 
   /**
-   * Redefine the list of days excluded. The ArrayList should contain
-   * <code>Calendar</code> objects.
+   * Redefine the list of days excluded. The ArrayList should contain <code>Calendar</code> objects.
    *
    * @param days
    *        The days to be excluded
@@ -215,8 +214,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
 
   /**
    * <p>
-   * Determine whether the given time (in milliseconds) is 'included' by the
-   * Calendar.
+   * Determine whether the given time (in milliseconds) is 'included' by the Calendar.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -236,9 +234,8 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time. Return the original value if timeStamp is
-   * included. Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar after the given
+   * time. Return the original value if timeStamp is included. Return 0 if all days are excluded.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.

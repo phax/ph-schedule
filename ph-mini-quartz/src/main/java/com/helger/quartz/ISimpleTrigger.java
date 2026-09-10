@@ -19,8 +19,8 @@
 package com.helger.quartz;
 
 /**
- * A <code>{@link ITrigger}</code> that is used to fire a <code>Job</code> at a
- * given moment in time, and optionally repeated at a specified interval.
+ * A <code>{@link ITrigger}</code> that is used to fire a <code>Job</code> at a given moment in
+ * time, and optionally repeated at a specified interval.
  *
  * @see TriggerBuilder
  * @see SimpleScheduleBuilder
@@ -30,16 +30,15 @@ package com.helger.quartz;
 public interface ISimpleTrigger extends ITrigger
 {
   /**
-   * Used to indicate the 'repeat count' of the trigger is indefinite. Or in
-   * other words, the trigger should repeat continually until the trigger's
-   * ending timestamp.
+   * Used to indicate the 'repeat count' of the trigger is indefinite. Or in other words, the
+   * trigger should repeat continually until the trigger's ending timestamp.
    */
   int REPEAT_INDEFINITELY = -1;
 
   /**
    * <p>
-   * Get the the number of times the <code>SimpleTrigger</code> should repeat,
-   * after which it will be automatically deleted.
+   * Get the the number of times the <code>SimpleTrigger</code> should repeat, after which it will
+   * be automatically deleted.
    * </p>
    *
    * @see #REPEAT_INDEFINITELY
@@ -48,8 +47,8 @@ public interface ISimpleTrigger extends ITrigger
 
   /**
    * <p>
-   * Get the the time interval (in milliseconds) at which the
-   * <code>SimpleTrigger</code> should repeat.
+   * Get the the time interval (in milliseconds) at which the <code>SimpleTrigger</code> should
+   * repeat.
    * </p>
    */
   long getRepeatInterval ();

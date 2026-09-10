@@ -19,8 +19,8 @@
 package com.helger.quartz;
 
 /**
- * An exception that is thrown to indicate that there has been a failure in the
- * scheduler's underlying persistence mechanism.
+ * An exception that is thrown to indicate that there has been a failure in the scheduler's
+ * underlying persistence mechanism.
  *
  * @author James House
  */
@@ -35,8 +35,7 @@ public class JobPersistenceException extends SchedulerException
   }
 
   /**
-   * Create a <code>JobPersistenceException</code> with the given message and
-   * cause.
+   * Create a <code>JobPersistenceException</code> with the given message and cause.
    */
   public JobPersistenceException (final String msg, final Throwable cause)
   {

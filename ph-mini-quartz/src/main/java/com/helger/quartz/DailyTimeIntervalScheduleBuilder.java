@@ -35,26 +35,23 @@ import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.impl.triggers.DailyTimeIntervalTrigger;
 
 /**
- * A {@link IScheduleBuilder} implementation that build schedule for
- * DailyTimeIntervalTrigger.
+ * A {@link IScheduleBuilder} implementation that build schedule for DailyTimeIntervalTrigger.
  * <p>
- * This builder provide an extra convenient method for you to set the trigger's
- * endTimeOfDay. You may use either endingDailyAt() or endingDailyAfterCount()
- * to set the value. The later will auto calculate your endTimeOfDay by using
- * the interval, intervalUnit and startTimeOfDay to perform the calculation.
+ * This builder provide an extra convenient method for you to set the trigger's endTimeOfDay. You
+ * may use either endingDailyAt() or endingDailyAfterCount() to set the value. The later will auto
+ * calculate your endTimeOfDay by using the interval, intervalUnit and startTimeOfDay to perform the
+ * calculation.
  * <p>
- * When using endingDailyAfterCount(), you should note that it is used to
- * calculating endTimeOfDay. So if your startTime on the first day is already
- * pass by a time that would not add up to the count you expected, until the
- * next day comes. Remember that DailyTimeIntervalTrigger will use
+ * When using endingDailyAfterCount(), you should note that it is used to calculating endTimeOfDay.
+ * So if your startTime on the first day is already pass by a time that would not add up to the
+ * count you expected, until the next day comes. Remember that DailyTimeIntervalTrigger will use
  * startTimeOfDay and endTimeOfDay as fresh per each day!
  * <p>
- * Quartz provides a builder-style API for constructing scheduling-related
- * entities via a Domain-Specific Language (DSL). The DSL can best be utilized
- * through the usage of static imports of the methods on the classes
- * <code>TriggerBuilder</code>, <code>JobBuilder</code>,
- * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and
- * the various <code>ScheduleBuilder</code> implementations.
+ * Quartz provides a builder-style API for constructing scheduling-related entities via a
+ * Domain-Specific Language (DSL). The DSL can best be utilized through the usage of static imports
+ * of the methods on the classes <code>TriggerBuilder</code>, <code>JobBuilder</code>,
+ * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and the various
+ * <code>ScheduleBuilder</code> implementations.
  * </p>
  * <p>
  * Client code can then use the DSL to write code such as this:
@@ -84,21 +81,20 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   private EMisfireInstruction m_eMisfireInstruction = EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY;
 
   /**
-   * A set of all days of the week. The set contains all values between
-   * {@link Calendar#SUNDAY} and {@link Calendar#SATURDAY}.
+   * A set of all days of the week. The set contains all values between {@link Calendar#SUNDAY} and
+   * {@link Calendar#SATURDAY}.
    */
   private static final EnumSet <DayOfWeek> ALL_DAYS_OF_THE_WEEK;
 
   /**
-   * A set of the business days of the week (for locales similar to the USA).
-   * The set contains all values between {@link Calendar#MONDAY} and
-   * {@link Calendar#FRIDAY}.
+   * A set of the business days of the week (for locales similar to the USA). The set contains all
+   * values between {@link Calendar#MONDAY} and {@link Calendar#FRIDAY}.
    */
   private static final EnumSet <DayOfWeek> MONDAY_THROUGH_FRIDAY;
 
   /**
-   * A set of the weekend days of the week (for locales similar to the USA). The
-   * set contains {@link Calendar#SATURDAY} and {@link Calendar#SUNDAY}
+   * A set of the weekend days of the week (for locales similar to the USA). The set contains
+   * {@link Calendar#SATURDAY} and {@link Calendar#SUNDAY}
    */
   private static final EnumSet <DayOfWeek> SATURDAY_AND_SUNDAY;
 
@@ -128,9 +124,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   }
 
   /**
-   * Build the actual Trigger -- NOT intended to be invoked by end users, but
-   * will rather be invoked by a TriggerBuilder which this ScheduleBuilder is
-   * given to.
+   * Build the actual Trigger -- NOT intended to be invoked by end users, but will rather be invoked
+   * by a TriggerBuilder which this ScheduleBuilder is given to.
    *
    * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
@@ -167,9 +162,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @param timeInterval
    *        the interval at which the trigger should repeat.
    * @param unit
-   *        the time unit (IntervalUnit) of the interval. The only intervals
-   *        that are valid for this type of trigger are
-   *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
+   *        the time unit (IntervalUnit) of the interval. The only intervals that are valid for this
+   *        type of trigger are {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
    *        {@link EIntervalUnit#HOUR}.
    * @return the updated DailyTimeIntervalScheduleBuilder
    * @see IDailyTimeIntervalTrigger#getRepeatInterval()
@@ -188,8 +182,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   }
 
   /**
-   * Specify an interval in the IntervalUnit.SECOND that the produced Trigger
-   * will repeat at.
+   * Specify an interval in the IntervalUnit.SECOND that the produced Trigger will repeat at.
    *
    * @param intervalInSeconds
    *        the number of seconds at which the trigger should repeat.
@@ -204,8 +197,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   }
 
   /**
-   * Specify an interval in the IntervalUnit.MINUTE that the produced Trigger
-   * will repeat at.
+   * Specify an interval in the IntervalUnit.MINUTE that the produced Trigger will repeat at.
    *
    * @param intervalInMinutes
    *        the number of minutes at which the trigger should repeat.
@@ -220,8 +212,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   }
 
   /**
-   * Specify an interval in the IntervalUnit.HOUR that the produced Trigger will
-   * repeat at.
+   * Specify an interval in the IntervalUnit.HOUR that the produced Trigger will repeat at.
    *
    * @param intervalInHours
    *        the number of hours at which the trigger should repeat.
@@ -240,9 +231,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * Set the trigger to fire on the given days of the week.
    *
    * @param onDaysOfWeek
-   *        a Set containing the integers representing the days of the week, per
-   *        the values 1-7 as defined by {@link Calendar#SUNDAY} -
-   *        {@link Calendar#SATURDAY}.
+   *        a Set containing the integers representing the days of the week, per the values 1-7 as
+   *        defined by {@link Calendar#SUNDAY} - {@link Calendar#SATURDAY}.
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @NonNull
@@ -258,9 +248,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * Set the trigger to fire on the given days of the week.
    *
    * @param onDaysOfWeek
-   *        a variable length list of Integers representing the days of the
-   *        week, per the values 1-7 as defined by {@link Calendar#SUNDAY} -
-   *        {@link Calendar#SATURDAY}.
+   *        a variable length list of Integers representing the days of the week, per the values 1-7
+   *        as defined by {@link Calendar#SUNDAY} - {@link Calendar#SATURDAY}.
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @NonNull
@@ -323,8 +312,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   }
 
   /**
-   * Set the startTimeOfDay for this trigger to end firing each day at the given
-   * time.
+   * Set the startTimeOfDay for this trigger to end firing each day at the given time.
    *
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
@@ -336,8 +324,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   }
 
   /**
-   * Calculate and set the endTimeOfDay using count, interval and starTimeOfDay.
-   * This means that these must be set before this method is call.
+   * Calculate and set the endTimeOfDay using count, interval and starTimeOfDay. This means that
+   * these must be set before this method is call.
    *
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
@@ -396,8 +384,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
 
   /**
    * If the Trigger misfires, use the
-   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY}
-   * instruction.
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
    *
    * @return the updated DailyTimeIntervalScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
@@ -410,8 +397,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   }
 
   /**
-   * If the Trigger misfires, use the
-   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
+   * If the Trigger misfires, use the {@link EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING}
+   * instruction.
    *
    * @return the updated DailyTimeIntervalScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING
@@ -424,8 +411,8 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   }
 
   /**
-   * If the Trigger misfires, use the
-   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW} instruction.
+   * If the Trigger misfires, use the {@link EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW}
+   * instruction.
    *
    * @return the updated DailyTimeIntervalScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW

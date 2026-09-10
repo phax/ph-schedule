@@ -28,9 +28,9 @@ import com.helger.quartz.ICalendar;
 
 /**
  * <p>
- * This implementation of the Calendar excludes a set of days of the week. You
- * may use it to exclude weekends for example. But you may define any day of the
- * week. By default it excludes SATURDAY and SUNDAY.
+ * This implementation of the Calendar excludes a set of days of the week. You may use it to exclude
+ * weekends for example. But you may define any day of the week. By default it excludes SATURDAY and
+ * SUNDAY.
  * </p>
  *
  * @see com.helger.quartz.ICalendar
@@ -89,8 +89,7 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
 
   /**
    * <p>
-   * Return true, if wday (see Calendar.get()) is defined to be exluded. E. g.
-   * saturday and sunday.
+   * Return true, if wday (see Calendar.get()) is defined to be exluded. E. g. saturday and sunday.
    * </p>
    */
   public boolean isDayExcluded (final int wday)
@@ -100,9 +99,8 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
 
   /**
    * <p>
-   * Redefine the array of days excluded. The array must of size greater or
-   * equal 8. Calendar's constants like MONDAY should be used as index. A value
-   * of true is regarded as: exclude it.
+   * Redefine the array of days excluded. The array must of size greater or equal 8. Calendar's
+   * constants like MONDAY should be used as index. A value of true is regarded as: exclude it.
    * </p>
    */
   public void setDaysExcluded (final boolean [] weekDays)
@@ -116,8 +114,8 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
 
   /**
    * <p>
-   * Redefine a certain day of the week to be excluded (true) or included
-   * (false). Use Calendar's constants like MONDAY to determine the wday.
+   * Redefine a certain day of the week to be excluded (true) or included (false). Use Calendar's
+   * constants like MONDAY to determine the wday.
    * </p>
    */
   public void setDayExcluded (final int wday, final boolean exclude)
@@ -146,8 +144,7 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
 
   /**
    * <p>
-   * Determine whether the given time (in milliseconds) is 'included' by the
-   * Calendar.
+   * Determine whether the given time (in milliseconds) is 'included' by the Calendar.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -171,9 +168,8 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
 
   /**
    * <p>
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time. Return the original value if timeStamp is
-   * included. Return 0 if all days are excluded.
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar after the given
+   * time. Return the original value if timeStamp is included. Return 0 if all days are excluded.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.

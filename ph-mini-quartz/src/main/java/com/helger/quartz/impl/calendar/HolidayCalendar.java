@@ -32,13 +32,12 @@ import com.helger.quartz.ICalendar;
 
 /**
  * <p>
- * This implementation of the Calendar stores a list of holidays (full days that
- * are excluded from scheduling).
+ * This implementation of the Calendar stores a list of holidays (full days that are excluded from
+ * scheduling).
  * </p>
  * <p>
- * The implementation DOES take the year into consideration, so if you want to
- * exclude July 4th for the next 10 years, you need to add 10 entries to the
- * exclude list.
+ * The implementation DOES take the year into consideration, so if you want to exclude July 4th for
+ * the next 10 years, you need to add 10 entries to the exclude list.
  * </p>
  *
  * @author Sharada Jambula
@@ -77,8 +76,7 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
 
   /**
    * <p>
-   * Determine whether the given time (in milliseconds) is 'included' by the
-   * Calendar.
+   * Determine whether the given time (in milliseconds) is 'included' by the Calendar.
    * </p>
    * <p>
    * Note that this Calendar is only has full-day precision.
@@ -95,8 +93,8 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
   }
 
   /**
-   * Determine the next time (in milliseconds) that is 'included' by the
-   * Calendar after the given time.<br>
+   * Determine the next time (in milliseconds) that is 'included' by the Calendar after the given
+   * time.<br>
    * Note that this Calendar is only has full-day precision.
    */
   @Override
@@ -121,15 +119,14 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
   }
 
   /**
-   * Add the given Date to the list of excluded days. Only the month, day and
-   * year of the returned dates are significant.
+   * Add the given Date to the list of excluded days. Only the month, day and year of the returned
+   * dates are significant.
    */
   public void addExcludedDate (final Date excludedDate)
   {
     final Date date = getStartOfDayJavaCalendar (excludedDate.getTime ()).getTime ();
     /*
-     * System.err.println( "HolidayCalendar.add(): date=" +
-     * excludedDate.toLocaleString());
+     * System.err.println( "HolidayCalendar.add(): date=" + excludedDate.toLocaleString());
      */
     m_aDates.add (date);
   }
@@ -142,8 +139,8 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
 
   /**
    * <p>
-   * Returns a <code>SortedSet</code> of Dates representing the excluded days.
-   * Only the month, day and year of the returned dates are significant.
+   * Returns a <code>SortedSet</code> of Dates representing the excluded days. Only the month, day
+   * and year of the returned dates are significant.
    * </p>
    */
   public SortedSet <Date> getExcludedDates ()

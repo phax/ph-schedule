@@ -26,13 +26,12 @@ import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.typeconvert.collection.AttributeContainerAny;
 
 /**
- * Holds context/environment data that can be made available to Jobs as they are
- * executed. This feature is much like the ServletContext feature when working
- * with J2EE servlets.
+ * Holds context/environment data that can be made available to Jobs as they are executed. This
+ * feature is much like the ServletContext feature when working with J2EE servlets.
  * <p>
  * Future versions of Quartz may make distinctions on how it propagates data in
- * <code>SchedulerContext</code> between instances of proxies to a single
- * scheduler instance - i.e. if Quartz is being used via RMI.
+ * <code>SchedulerContext</code> between instances of proxies to a single scheduler instance - i.e.
+ * if Quartz is being used via RMI.
  * </p>
  *
  * @see IScheduler#getContext

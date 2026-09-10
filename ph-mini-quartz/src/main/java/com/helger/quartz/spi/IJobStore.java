@@ -40,13 +40,12 @@ import com.helger.quartz.impl.matchers.GroupMatcher;
 /**
  * <p>
  * The interface to be implemented by classes that want to provide a
- * <code>{@link com.helger.quartz.IJob}</code> and
- * <code>{@link com.helger.quartz.ITrigger}</code> storage mechanism for the
- * <code>{@link com.helger.quartz.core.QuartzScheduler}</code>'s use.
+ * <code>{@link com.helger.quartz.IJob}</code> and <code>{@link com.helger.quartz.ITrigger}</code>
+ * storage mechanism for the <code>{@link com.helger.quartz.core.QuartzScheduler}</code>'s use.
  * </p>
  * <p>
- * Storage of <code>Job</code> s and <code>Trigger</code> s should be keyed on
- * the combination of their name and group for uniqueness.
+ * Storage of <code>Job</code> s and <code>Trigger</code> s should be keyed on the combination of
+ * their name and group for uniqueness.
  * </p>
  *
  * @see com.helger.quartz.core.QuartzScheduler
@@ -61,41 +60,40 @@ import com.helger.quartz.impl.matchers.GroupMatcher;
 public interface IJobStore
 {
   /**
-   * Called by the QuartzScheduler before the <code>JobStore</code> is used, in
-   * order to give the it a chance to initialize.
+   * Called by the QuartzScheduler before the <code>JobStore</code> is used, in order to give the it
+   * a chance to initialize.
    */
   void initialize (IClassLoadHelper loadHelper, ISchedulerSignaler signaler) throws SchedulerConfigException;
 
   /**
-   * Called by the QuartzScheduler to inform the <code>JobStore</code> that the
-   * scheduler has started.
+   * Called by the QuartzScheduler to inform the <code>JobStore</code> that the scheduler has
+   * started.
    */
   void schedulerStarted () throws SchedulerException;
 
   /**
-   * Called by the QuartzScheduler to inform the <code>JobStore</code> that the
-   * scheduler has been paused.
+   * Called by the QuartzScheduler to inform the <code>JobStore</code> that the scheduler has been
+   * paused.
    */
   void schedulerPaused ();
 
   /**
-   * Called by the QuartzScheduler to inform the <code>JobStore</code> that the
-   * scheduler has resumed after being paused.
+   * Called by the QuartzScheduler to inform the <code>JobStore</code> that the scheduler has
+   * resumed after being paused.
    */
   void schedulerResumed ();
 
   /**
-   * Called by the QuartzScheduler to inform the <code>JobStore</code> that it
-   * should free up all of it's resources because the scheduler is shutting
-   * down.
+   * Called by the QuartzScheduler to inform the <code>JobStore</code> that it should free up all of
+   * it's resources because the scheduler is shutting down.
    */
   void shutdown ();
 
   boolean supportsPersistence ();
 
   /**
-   * How long (in milliseconds) the <code>JobStore</code> implementation
-   * estimates that it will take to release a trigger and acquire a new one.
+   * How long (in milliseconds) the <code>JobStore</code> implementation estimates that it will take
+   * to release a trigger and acquire a new one.
    */
   long getEstimatedTimeToReleaseAndAcquireTrigger ();
 
@@ -129,12 +127,11 @@ public interface IJobStore
    * @param newJob
    *        The <code>JobDetail</code> to be stored.
    * @param replaceExisting
-   *        If <code>true</code>, any <code>Job</code> existing in the
-   *        <code>JobStore</code> with the same name &amp; group should be
-   *        over-written.
+   *        If <code>true</code>, any <code>Job</code> existing in the <code>JobStore</code> with
+   *        the same name &amp; group should be over-written.
    * @throws JobPersistenceException
-   *         if a <code>Job</code> with the same name/group already exists, and
-   *         replaceExisting is set to false.
+   *         if a <code>Job</code> with the same name/group already exists, and replaceExisting is
+   *         set to false.
    */
   void storeJob (IJobDetail newJob, boolean replaceExisting) throws JobPersistenceException;
 
@@ -142,25 +139,23 @@ public interface IJobStore
                              boolean replace) throws JobPersistenceException;
 
   /**
-   * Remove (delete) the <code>{@link com.helger.quartz.IJob}</code> with the
-   * given key, and any <code>{@link com.helger.quartz.ITrigger}</code> s that
-   * reference it.
+   * Remove (delete) the <code>{@link com.helger.quartz.IJob}</code> with the given key, and any
+   * <code>{@link com.helger.quartz.ITrigger}</code> s that reference it.
    * <p>
-   * If removal of the <code>Job</code> results in an empty group, the group
-   * should be removed from the <code>JobStore</code>'s list of known group
-   * names.
+   * If removal of the <code>Job</code> results in an empty group, the group should be removed from
+   * the <code>JobStore</code>'s list of known group names.
    * </p>
    *
-   * @return <code>true</code> if a <code>Job</code> with the given name &amp;
-   *         group was found and removed from the store.
+   * @return <code>true</code> if a <code>Job</code> with the given name &amp; group was found and
+   *         removed from the store.
    */
   boolean removeJob (JobKey jobKey) throws JobPersistenceException;
 
   boolean removeJobs (List <JobKey> jobKeys) throws JobPersistenceException;
 
   /**
-   * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the
-   * given <code>{@link com.helger.quartz.IJob}</code>.
+   * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the given
+   * <code>{@link com.helger.quartz.IJob}</code>.
    *
    * @return The desired <code>Job</code>, or null if there is no match.
    */
@@ -172,46 +167,41 @@ public interface IJobStore
    * @param newTrigger
    *        The <code>Trigger</code> to be stored.
    * @param replaceExisting
-   *        If <code>true</code>, any <code>Trigger</code> existing in the
-   *        <code>JobStore</code> with the same name &amp; group should be
-   *        over-written.
+   *        If <code>true</code>, any <code>Trigger</code> existing in the <code>JobStore</code>
+   *        with the same name &amp; group should be over-written.
    * @throws JobPersistenceException
-   *         if a <code>Trigger</code> with the same name/group already exists,
-   *         and replaceExisting is set to false.
+   *         if a <code>Trigger</code> with the same name/group already exists, and replaceExisting
+   *         is set to false.
    * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
    */
   void storeTrigger (IOperableTrigger newTrigger, boolean replaceExisting) throws JobPersistenceException;
 
   /**
-   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
-   * the given key.
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the given key.
    * <p>
-   * If removal of the <code>Trigger</code> results in an empty group, the group
-   * should be removed from the <code>JobStore</code>'s list of known group
-   * names.
+   * If removal of the <code>Trigger</code> results in an empty group, the group should be removed
+   * from the <code>JobStore</code>'s list of known group names.
    * </p>
    * <p>
-   * If removal of the <code>Trigger</code> results in an 'orphaned'
-   * <code>Job</code> that is not 'durable', then the <code>Job</code> should be
-   * deleted also.
+   * If removal of the <code>Trigger</code> results in an 'orphaned' <code>Job</code> that is not
+   * 'durable', then the <code>Job</code> should be deleted also.
    * </p>
    *
-   * @return <code>true</code> if a <code>Trigger</code> with the given name
-   *         &amp; group was found and removed from the store.
+   * @return <code>true</code> if a <code>Trigger</code> with the given name &amp; group was found
+   *         and removed from the store.
    */
   boolean removeTrigger (TriggerKey triggerKey) throws JobPersistenceException;
 
   boolean removeTriggers (List <TriggerKey> triggerKeys) throws JobPersistenceException;
 
   /**
-   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with
-   * the given key, and store the new given one - which must be associated with
-   * the same job.
+   * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the given key, and
+   * store the new given one - which must be associated with the same job.
    *
    * @param newTrigger
    *        The new <code>Trigger</code> to be stored.
-   * @return <code>true</code> if a <code>Trigger</code> with the given name
-   *         &amp; group was found and removed from the store.
+   * @return <code>true</code> if a <code>Trigger</code> with the given name &amp; group was found
+   *         and removed from the store.
    */
   boolean replaceTrigger (TriggerKey triggerKey, IOperableTrigger newTrigger) throws JobPersistenceException;
 
@@ -224,8 +214,7 @@ public interface IJobStore
   IOperableTrigger retrieveTrigger (TriggerKey triggerKey) throws JobPersistenceException;
 
   /**
-   * Determine whether a job with the given identifier already exists within the
-   * scheduler.
+   * Determine whether a job with the given identifier already exists within the scheduler.
    *
    * @param jobKey
    *        the identifier to check for
@@ -235,8 +224,8 @@ public interface IJobStore
   boolean checkExists (JobKey jobKey) throws JobPersistenceException;
 
   /**
-   * Determine whether a {@link ITrigger} with the given identifier already
-   * exists within the scheduler.
+   * Determine whether a {@link ITrigger} with the given identifier already exists within the
+   * scheduler.
    *
    * @param triggerKey
    *        the identifier to check for
@@ -246,8 +235,7 @@ public interface IJobStore
   boolean checkExists (TriggerKey triggerKey) throws JobPersistenceException;
 
   /**
-   * Clear (delete!) all scheduling data - all jobs, {@link ITrigger}s and
-   * {@link ICalendar}s.
+   * Clear (delete!) all scheduling data - all jobs, {@link ITrigger}s and {@link ICalendar}s.
    *
    * @throws JobPersistenceException
    */
@@ -259,17 +247,15 @@ public interface IJobStore
    * @param calendar
    *        The <code>Calendar</code> to be stored.
    * @param replaceExisting
-   *        If <code>true</code>, any <code>Calendar</code> existing in the
-   *        <code>JobStore</code> with the same name &amp; group should be
-   *        over-written.
+   *        If <code>true</code>, any <code>Calendar</code> existing in the <code>JobStore</code>
+   *        with the same name &amp; group should be over-written.
    * @param updateTriggers
-   *        If <code>true</code>, any <code>Trigger</code>s existing in the
-   *        <code>JobStore</code> that reference an existing Calendar with the
-   *        same name with have their next fire time re-computed with the new
-   *        <code>Calendar</code>.
+   *        If <code>true</code>, any <code>Trigger</code>s existing in the <code>JobStore</code>
+   *        that reference an existing Calendar with the same name with have their next fire time
+   *        re-computed with the new <code>Calendar</code>.
    * @throws JobPersistenceException
-   *         if a <code>Calendar</code> with the same name already exists, and
-   *         replaceExisting is set to false.
+   *         if a <code>Calendar</code> with the same name already exists, and replaceExisting is
+   *         set to false.
    */
   void storeCalendar (String name,
                       ICalendar calendar,
@@ -277,19 +263,17 @@ public interface IJobStore
                       boolean updateTriggers) throws JobPersistenceException;
 
   /**
-   * Remove (delete) the <code>{@link com.helger.quartz.ICalendar}</code> with
-   * the given name.
+   * Remove (delete) the <code>{@link com.helger.quartz.ICalendar}</code> with the given name.
    * <p>
-   * If removal of the <code>Calendar</code> would result in
-   * <code>Trigger</code>s pointing to non-existent calendars, then a
-   * <code>JobPersistenceException</code> will be thrown.
+   * If removal of the <code>Calendar</code> would result in <code>Trigger</code>s pointing to
+   * non-existent calendars, then a <code>JobPersistenceException</code> will be thrown.
    * </p>
    * *
    *
    * @param calName
    *        The name of the <code>Calendar</code> to be removed.
-   * @return <code>true</code> if a <code>Calendar</code> with the given name
-   *         was found and removed from the store.
+   * @return <code>true</code> if a <code>Calendar</code> with the given name was found and removed
+   *         from the store.
    */
   boolean removeCalendar (String calName) throws JobPersistenceException;
 
@@ -309,70 +293,67 @@ public interface IJobStore
   /////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Get the number of <code>{@link com.helger.quartz.IJob}</code> s that are
-   * stored in the <code>JobsStore</code>.
+   * Get the number of <code>{@link com.helger.quartz.IJob}</code> s that are stored in the
+   * <code>JobsStore</code>.
    */
   int getNumberOfJobs () throws JobPersistenceException;
 
   /**
-   * Get the number of <code>{@link com.helger.quartz.ITrigger}</code> s that
-   * are stored in the <code>JobsStore</code>.
+   * Get the number of <code>{@link com.helger.quartz.ITrigger}</code> s that are stored in the
+   * <code>JobsStore</code>.
    */
   int getNumberOfTriggers () throws JobPersistenceException;
 
   /**
-   * Get the number of <code>{@link com.helger.quartz.ICalendar}</code> s that
-   * are stored in the <code>JobsStore</code>.
+   * Get the number of <code>{@link com.helger.quartz.ICalendar}</code> s that are stored in the
+   * <code>JobsStore</code>.
    */
   int getNumberOfCalendars () throws JobPersistenceException;
 
   /**
-   * Get the keys of all of the <code>{@link com.helger.quartz.IJob}</code> s
-   * that have the given group name.
+   * Get the keys of all of the <code>{@link com.helger.quartz.IJob}</code> s that have the given
+   * group name.
    * <p>
-   * If there are no jobs in the given group name, the result should be an empty
-   * collection (not <code>null</code>).
+   * If there are no jobs in the given group name, the result should be an empty collection (not
+   * <code>null</code>).
    * </p>
    */
   ICommonsSet <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws JobPersistenceException;
 
   /**
-   * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code>
-   * s that have the given group name.
+   * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code> s that have the
+   * given group name.
    * <p>
-   * If there are no triggers in the given group name, the result should be a
-   * zero-length array (not <code>null</code>).
+   * If there are no triggers in the given group name, the result should be a zero-length array (not
+   * <code>null</code>).
    * </p>
    */
   ICommonsSet <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
   /**
-   * Get the names of all of the <code>{@link com.helger.quartz.IJob}</code>
-   * groups.
+   * Get the names of all of the <code>{@link com.helger.quartz.IJob}</code> groups.
    * <p>
-   * If there are no known group names, the result should be a zero-length array
-   * (not <code>null</code>).
+   * If there are no known group names, the result should be a zero-length array (not
+   * <code>null</code>).
    * </p>
    */
   ICommonsList <String> getJobGroupNames () throws JobPersistenceException;
 
   /**
-   * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code>
-   * groups.
+   * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code> groups.
    * <p>
-   * If there are no known group names, the result should be a zero-length array
-   * (not <code>null</code>).
+   * If there are no known group names, the result should be a zero-length array (not
+   * <code>null</code>).
    * </p>
    */
   ICommonsList <String> getTriggerGroupNames () throws JobPersistenceException;
 
   /**
-   * Get the names of all of the
-   * <code>{@link com.helger.quartz.ICalendar}</code> s in the
+   * Get the names of all of the <code>{@link com.helger.quartz.ICalendar}</code> s in the
    * <code>JobStore</code>.
    * <p>
-   * If there are no Calendars in the given group name, the result should be a
-   * zero-length array (not <code>null</code>).
+   * If there are no Calendars in the given group name, the result should be a zero-length array
+   * (not <code>null</code>).
    * </p>
    */
   ICommonsList <String> getCalendarNames () throws JobPersistenceException;
@@ -399,20 +380,17 @@ public interface IJobStore
   /////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Pause the <code>{@link com.helger.quartz.ITrigger}</code> with the given
-   * key.
+   * Pause the <code>{@link com.helger.quartz.ITrigger}</code> with the given key.
    *
    * @see #resumeTrigger(TriggerKey)
    */
   void pauseTrigger (TriggerKey triggerKey) throws JobPersistenceException;
 
   /**
-   * Pause all of the <code>{@link com.helger.quartz.ITrigger}s</code> in the
-   * given group.
+   * Pause all of the <code>{@link com.helger.quartz.ITrigger}s</code> in the given group.
    * <p>
-   * The JobStore should "remember" that the group is paused, and impose the
-   * pause on any new triggers that are added to the group while the group is
-   * paused.
+   * The JobStore should "remember" that the group is paused, and impose the pause on any new
+   * triggers that are added to the group while the group is paused.
    * </p>
    *
    * @see #resumeTriggers(GroupMatcher)
@@ -420,20 +398,19 @@ public interface IJobStore
   ICommonsCollection <String> pauseTriggers (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
   /**
-   * Pause the <code>{@link com.helger.quartz.IJob}</code> with the given name -
-   * by pausing all of its current <code>Trigger</code>s.
+   * Pause the <code>{@link com.helger.quartz.IJob}</code> with the given name - by pausing all of
+   * its current <code>Trigger</code>s.
    *
    * @see #resumeJob(JobKey)
    */
   void pauseJob (JobKey jobKey) throws JobPersistenceException;
 
   /**
-   * Pause all of the <code>{@link com.helger.quartz.IJob}s</code> in the given
-   * group - by pausing all of their <code>Trigger</code>s.
+   * Pause all of the <code>{@link com.helger.quartz.IJob}s</code> in the given group - by pausing
+   * all of their <code>Trigger</code>s.
    * <p>
-   * The JobStore should "remember" that the group is paused, and impose the
-   * pause on any new jobs that are added to the group while the group is
-   * paused.
+   * The JobStore should "remember" that the group is paused, and impose the pause on any new jobs
+   * that are added to the group while the group is paused.
    * </p>
    *
    * @see #resumeJobs(GroupMatcher)
@@ -441,11 +418,10 @@ public interface IJobStore
   ICommonsCollection <String> pauseJobs (GroupMatcher <JobKey> groupMatcher) throws JobPersistenceException;
 
   /**
-   * Resume (un-pause) the <code>{@link com.helger.quartz.ITrigger}</code> with
-   * the given key.
+   * Resume (un-pause) the <code>{@link com.helger.quartz.ITrigger}</code> with the given key.
    * <p>
-   * If the <code>Trigger</code> missed one or more fire-times, then the
-   * <code>Trigger</code>'s misfire instruction will be applied.
+   * If the <code>Trigger</code> missed one or more fire-times, then the <code>Trigger</code>'s
+   * misfire instruction will be applied.
    * </p>
    *
    * @see #pauseTrigger(TriggerKey)
@@ -453,11 +429,11 @@ public interface IJobStore
   void resumeTrigger (TriggerKey triggerKey) throws JobPersistenceException;
 
   /**
-   * Resume (un-pause) all of the
-   * <code>{@link com.helger.quartz.ITrigger}s</code> in the given group.
+   * Resume (un-pause) all of the <code>{@link com.helger.quartz.ITrigger}s</code> in the given
+   * group.
    * <p>
-   * If any <code>Trigger</code> missed one or more fire-times, then the
-   * <code>Trigger</code>'s misfire instruction will be applied.
+   * If any <code>Trigger</code> missed one or more fire-times, then the <code>Trigger</code>'s
+   * misfire instruction will be applied.
    * </p>
    *
    * @see #pauseTriggers(GroupMatcher)
@@ -467,12 +443,10 @@ public interface IJobStore
   ICommonsSet <String> getPausedTriggerGroups () throws JobPersistenceException;
 
   /**
-   * Resume (un-pause) the <code>{@link com.helger.quartz.IJob}</code> with the
-   * given key.
+   * Resume (un-pause) the <code>{@link com.helger.quartz.IJob}</code> with the given key.
    * <p>
-   * If any of the <code>Job</code>'s<code>Trigger</code> s missed one or more
-   * fire-times, then the <code>Trigger</code>'s misfire instruction will be
-   * applied.
+   * If any of the <code>Job</code>'s<code>Trigger</code> s missed one or more fire-times, then the
+   * <code>Trigger</code>'s misfire instruction will be applied.
    * </p>
    *
    * @see #pauseJob(JobKey)
@@ -480,12 +454,10 @@ public interface IJobStore
   void resumeJob (JobKey jobKey) throws JobPersistenceException;
 
   /**
-   * Resume (un-pause) all of the <code>{@link com.helger.quartz.IJob}s</code>
-   * in the given group.
+   * Resume (un-pause) all of the <code>{@link com.helger.quartz.IJob}s</code> in the given group.
    * <p>
-   * If any of the <code>Job</code> s had <code>Trigger</code> s that missed one
-   * or more fire-times, then the <code>Trigger</code>'s misfire instruction
-   * will be applied.
+   * If any of the <code>Job</code> s had <code>Trigger</code> s that missed one or more fire-times,
+   * then the <code>Trigger</code>'s misfire instruction will be applied.
    * </p>
    *
    * @see #pauseJobs(GroupMatcher)
@@ -493,11 +465,11 @@ public interface IJobStore
   ICommonsCollection <String> resumeJobs (GroupMatcher <JobKey> matcher) throws JobPersistenceException;
 
   /**
-   * Pause all triggers - equivalent of calling
-   * <code>pauseTriggerGroup(group)</code> on every group.
+   * Pause all triggers - equivalent of calling <code>pauseTriggerGroup(group)</code> on every
+   * group.
    * <p>
-   * When <code>resumeAll()</code> is called (to un-pause), trigger misfire
-   * instructions WILL be applied.
+   * When <code>resumeAll()</code> is called (to un-pause), trigger misfire instructions WILL be
+   * applied.
    * </p>
    *
    * @see #resumeAll()
@@ -506,11 +478,11 @@ public interface IJobStore
   void pauseAll () throws JobPersistenceException;
 
   /**
-   * Resume (un-pause) all triggers - equivalent of calling
-   * <code>resumeTriggerGroup(group)</code> on every group.
+   * Resume (un-pause) all triggers - equivalent of calling <code>resumeTriggerGroup(group)</code>
+   * on every group.
    * <p>
-   * If any <code>Trigger</code> missed one or more fire-times, then the
-   * <code>Trigger</code>'s misfire instruction will be applied.
+   * If any <code>Trigger</code> missed one or more fire-times, then the <code>Trigger</code>'s
+   * misfire instruction will be applied.
    * </p>
    *
    * @see #pauseAll()
@@ -524,12 +496,12 @@ public interface IJobStore
   /////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Get a handle to the next trigger to be fired, and mark it as 'reserved' by
-   * the calling scheduler.
+   * Get a handle to the next trigger to be fired, and mark it as 'reserved' by the calling
+   * scheduler.
    *
    * @param noLaterThan
-   *        If &gt; 0, the JobStore should only return a Trigger that will fire
-   *        no later than the time represented in this value as milliseconds.
+   *        If &gt; 0, the JobStore should only return a Trigger that will fire no later than the
+   *        time represented in this value as milliseconds.
    * @see #releaseAcquiredTrigger(IOperableTrigger)
    */
   ICommonsList <IOperableTrigger> acquireNextTriggers (long noLaterThan,
@@ -537,46 +509,43 @@ public interface IJobStore
                                                        long timeWindow) throws JobPersistenceException;
 
   /**
-   * Inform the <code>JobStore</code> that the scheduler no longer plans to fire
-   * the given <code>Trigger</code>, that it had previously acquired (reserved).
+   * Inform the <code>JobStore</code> that the scheduler no longer plans to fire the given
+   * <code>Trigger</code>, that it had previously acquired (reserved).
    */
   void releaseAcquiredTrigger (IOperableTrigger trigger);
 
   /**
    * Inform the <code>JobStore</code> that the scheduler is now firing the given
-   * <code>Trigger</code> (executing its associated <code>Job</code>), that it
-   * had previously acquired (reserved).
+   * <code>Trigger</code> (executing its associated <code>Job</code>), that it had previously
+   * acquired (reserved).
    *
-   * @return may return null if all the triggers or their calendars no longer
-   *         exist, or if the trigger was not successfully put into the
-   *         'executing' state. Preference is to return an empty list if none of
-   *         the triggers could be fired.
+   * @return may return null if all the triggers or their calendars no longer exist, or if the
+   *         trigger was not successfully put into the 'executing' state. Preference is to return an
+   *         empty list if none of the triggers could be fired.
    */
   ICommonsList <TriggerFiredResult> triggersFired (List <IOperableTrigger> triggers) throws JobPersistenceException;
 
   /**
-   * Inform the <code>JobStore</code> that the scheduler has completed the
-   * firing of the given <code>Trigger</code> (and the execution of its
-   * associated <code>Job</code> completed, threw an exception, or was vetoed),
-   * and that the <code>{@link com.helger.quartz.JobDataMap}</code> in the given
-   * <code>JobDetail</code> should be updated if the <code>Job</code> is
-   * stateful.
+   * Inform the <code>JobStore</code> that the scheduler has completed the firing of the given
+   * <code>Trigger</code> (and the execution of its associated <code>Job</code> completed, threw an
+   * exception, or was vetoed), and that the <code>{@link com.helger.quartz.JobDataMap}</code> in
+   * the given <code>JobDetail</code> should be updated if the <code>Job</code> is stateful.
    */
   void triggeredJobComplete (IOperableTrigger trigger,
                              IJobDetail jobDetail,
                              ECompletedExecutionInstruction triggerInstCode);
 
   /**
-   * Inform the <code>JobStore</code> of the Scheduler instance's Id, prior to
-   * initialize being invoked.
+   * Inform the <code>JobStore</code> of the Scheduler instance's Id, prior to initialize being
+   * invoked.
    *
    * @since 1.7
    */
   void setInstanceId (String schedInstId);
 
   /**
-   * Inform the <code>JobStore</code> of the Scheduler instance's name, prior to
-   * initialize being invoked.
+   * Inform the <code>JobStore</code> of the Scheduler instance's name, prior to initialize being
+   * invoked.
    *
    * @since 1.7
    */

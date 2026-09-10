@@ -24,17 +24,15 @@ import com.helger.quartz.utils.Key;
 /**
  * Uniquely identifies a {@link ITrigger}.
  * <p>
- * Keys are composed of both a name and group, and the name must be unique
- * within the group. If only a name is specified then the default group name
- * will be used.
+ * Keys are composed of both a name and group, and the name must be unique within the group. If only
+ * a name is specified then the default group name will be used.
  * </p>
  * <p>
- * Quartz provides a builder-style API for constructing scheduling-related
- * entities via a Domain-Specific Language (DSL). The DSL can best be utilized
- * through the usage of static imports of the methods on the classes
- * <code>TriggerBuilder</code>, <code>JobBuilder</code>,
- * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and
- * the various <code>ScheduleBuilder</code> implementations.
+ * Quartz provides a builder-style API for constructing scheduling-related entities via a
+ * Domain-Specific Language (DSL). The DSL can best be utilized through the usage of static imports
+ * of the methods on the classes <code>TriggerBuilder</code>, <code>JobBuilder</code>,
+ * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and the various
+ * <code>ScheduleBuilder</code> implementations.
  * </p>
  * <p>
  * Client code can then use the DSL to write code such as this:

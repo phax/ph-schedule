@@ -19,12 +19,10 @@
 package com.helger.quartz;
 
 /**
- * Base class for exceptions thrown by the Quartz
- * <code>{@link IScheduler}</code>.
+ * Base class for exceptions thrown by the Quartz <code>{@link IScheduler}</code>.
  * <p>
- * <code>SchedulerException</code>s may contain a reference to another
- * <code>Exception</code>, which was the underlying cause of the
- * <code>SchedulerException</code>.
+ * <code>SchedulerException</code>s may contain a reference to another <code>Exception</code>, which
+ * was the underlying cause of the <code>SchedulerException</code>.
  * </p>
  *
  * @author James House

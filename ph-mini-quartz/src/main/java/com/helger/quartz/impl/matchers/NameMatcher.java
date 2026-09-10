@@ -83,8 +83,7 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a NameMatcher that matches trigger names starting with the given
-   * string.
+   * Create a NameMatcher that matches trigger names starting with the given string.
    */
   public static NameMatcher <TriggerKey> triggerNameStartsWith (final String sCompareTo)
   {
@@ -108,8 +107,7 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a NameMatcher that matches trigger names ending with the given
-   * string.
+   * Create a NameMatcher that matches trigger names ending with the given string.
    */
   public static NameMatcher <TriggerKey> triggerNameEndsWith (final String sCompareTo)
   {
@@ -133,8 +131,7 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   /**
-   * Create a NameMatcher that matches trigger names containing the given
-   * string.
+   * Create a NameMatcher that matches trigger names containing the given string.
    */
   public static NameMatcher <TriggerKey> triggerNameContains (final String sCompareTo)
   {

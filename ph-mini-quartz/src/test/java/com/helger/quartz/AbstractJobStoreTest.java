@@ -45,8 +45,8 @@ import com.helger.quartz.spi.IOperableTrigger;
 import com.helger.quartz.spi.ISchedulerSignaler;
 
 /**
- * Unit test for JobStores. These tests were submitted by Johannes Zillmann as
- * part of issue QUARTZ-306.
+ * Unit test for JobStores. These tests were submitted by Johannes Zillmann as part of issue
+ * QUARTZ-306.
  */
 public abstract class AbstractJobStoreTest
 {
@@ -84,7 +84,6 @@ public abstract class AbstractJobStoreTest
   @Test
   public void testAcquireNextTrigger () throws Exception
   {
-
     final Date baseFireTimeDate = DateBuilder.evenMinuteDateAfterNow ();
     final long baseFireTime = baseFireTimeDate.getTime ();
 
@@ -133,14 +132,12 @@ public abstract class AbstractJobStoreTest
     assertEquals (trigger3,
                   m_aJobStore.acquireNextTriggers (new Date (trigger1.getNextFireTime ().getTime ()).getTime () + 10000,
                                                    1,
-                                                   1L)
-                             .get (0));
+                                                   1L).get (0));
   }
 
   @Test
   public void testAcquireNextTriggerBatch () throws Exception
   {
-
     final long baseFireTime = System.currentTimeMillis () - 1000;
 
     final IOperableTrigger early = SimpleTrigger.create ("early",
@@ -288,26 +285,22 @@ public abstract class AbstractJobStoreTest
 
     trigger = m_aJobStore.acquireNextTriggers (new Date (trigger.getNextFireTime ().getTime ()).getTime () + 10000,
                                                1,
-                                               1L)
-                         .get (0);
+                                               1L).get (0);
     assertNotNull (trigger);
     m_aJobStore.releaseAcquiredTrigger (trigger);
     trigger = m_aJobStore.acquireNextTriggers (new Date (trigger.getNextFireTime ().getTime ()).getTime () + 10000,
                                                1,
-                                               1L)
-                         .get (0);
+                                               1L).get (0);
     assertNotNull (trigger);
     assertTrue (m_aJobStore.acquireNextTriggers (new Date (trigger.getNextFireTime ().getTime ()).getTime () + 10000,
                                                  1,
-                                                 1L)
-                           .isEmpty ());
+                                                 1L).isEmpty ());
   }
 
   // See: http://jira.opensymphony.com/browse/QUARTZ-606
   @Test
   public void testStoreTriggerReplacesTrigger () throws Exception
   {
-
     final String jobName = "StoreTriggerReplacesTrigger";
     final String jobGroup = "StoreTriggerReplacesTriggerGroup";
     final JobDetail detail = JobDetail.create (jobName, jobGroup, MyJob.class);
@@ -538,7 +531,6 @@ public abstract class AbstractJobStoreTest
 
     tkeys = store.getTriggerKeys (GroupMatcher.triggerGroupContains ("yz"));
     assertEquals ("Wrong number of triggers found by contains with matcher", 2, tkeys.size ());
-
   }
 
   @Test

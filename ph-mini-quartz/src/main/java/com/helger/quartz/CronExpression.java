@@ -49,14 +49,13 @@ import com.helger.collection.commons.ICommonsMap;
 
 /**
  * <p>
- * Provides a parser and evaluator for unix-like cron expressions. Cron
- * expressions provide the ability to specify complex time combinations such as
- * &quot;At 8:00am every Monday through Friday&quot; or &quot;At 1:30am every
- * last Friday of the month&quot;.
+ * Provides a parser and evaluator for unix-like cron expressions. Cron expressions provide the
+ * ability to specify complex time combinations such as &quot;At 8:00am every Monday through
+ * Friday&quot; or &quot;At 1:30am every last Friday of the month&quot;.
  * </p>
  * <p>
- * Cron expressions are comprised of 6 required fields and one optional field
- * separated by white space. The fields respectively are described as follows:
+ * Cron expressions are comprised of 6 required fields and one optional field separated by white
+ * space. The fields respectively are described as follows:
  * </p>
  * <table>
  * <tr>
@@ -117,107 +116,92 @@ import com.helger.collection.commons.ICommonsMap;
  * </tr>
  * </table>
  * <p>
- * The '*' character is used to specify all values. For example, &quot;*&quot;
- * in the minute field means &quot;every minute&quot;.
+ * The '*' character is used to specify all values. For example, &quot;*&quot; in the minute field
+ * means &quot;every minute&quot;.
  * </p>
  * <p>
- * The '?' character is allowed for the day-of-month and day-of-week fields. It
- * is used to specify 'no specific value'. This is useful when you need to
- * specify something in one of the two fields, but not the other.
+ * The '?' character is allowed for the day-of-month and day-of-week fields. It is used to specify
+ * 'no specific value'. This is useful when you need to specify something in one of the two fields,
+ * but not the other.
  * </p>
  * <p>
- * The '-' character is used to specify ranges For example &quot;10-12&quot; in
- * the hour field means &quot;the hours 10, 11 and 12&quot;.
+ * The '-' character is used to specify ranges For example &quot;10-12&quot; in the hour field means
+ * &quot;the hours 10, 11 and 12&quot;.
  * </p>
  * <p>
- * The ',' character is used to specify additional values. For example
- * &quot;MON,WED,FRI&quot; in the day-of-week field means &quot;the days Monday,
- * Wednesday, and Friday&quot;.
+ * The ',' character is used to specify additional values. For example &quot;MON,WED,FRI&quot; in
+ * the day-of-week field means &quot;the days Monday, Wednesday, and Friday&quot;.
  * </p>
  * <p>
- * The '/' character is used to specify increments. For example &quot;0/15&quot;
- * in the seconds field means &quot;the seconds 0, 15, 30, and 45&quot;. And
- * &quot;5/15&quot; in the seconds field means &quot;the seconds 5, 20, 35, and
- * 50&quot;. Specifying '*' before the '/' is equivalent to specifying 0 is the
- * value to start with. Essentially, for each field in the expression, there is
- * a set of numbers that can be turned on or off. For seconds and minutes, the
- * numbers range from 0 to 59. For hours 0 to 23, for days of the month 0 to 31,
- * and for months 0 to 11 (JAN to DEC). The &quot;/&quot; character simply helps
- * you turn on every &quot;nth&quot; value in the given set. Thus
- * &quot;7/6&quot; in the month field only turns on month &quot;7&quot;, it does
- * NOT mean every 6th month, please note that subtlety.
+ * The '/' character is used to specify increments. For example &quot;0/15&quot; in the seconds
+ * field means &quot;the seconds 0, 15, 30, and 45&quot;. And &quot;5/15&quot; in the seconds field
+ * means &quot;the seconds 5, 20, 35, and 50&quot;. Specifying '*' before the '/' is equivalent to
+ * specifying 0 is the value to start with. Essentially, for each field in the expression, there is
+ * a set of numbers that can be turned on or off. For seconds and minutes, the numbers range from 0
+ * to 59. For hours 0 to 23, for days of the month 0 to 31, and for months 0 to 11 (JAN to DEC). The
+ * &quot;/&quot; character simply helps you turn on every &quot;nth&quot; value in the given set.
+ * Thus &quot;7/6&quot; in the month field only turns on month &quot;7&quot;, it does NOT mean every
+ * 6th month, please note that subtlety.
  * </p>
  * <p>
- * The 'L' character is allowed for the day-of-month and day-of-week fields.
- * This character is short-hand for &quot;last&quot;, but it has different
- * meaning in each of the two fields. For example, the value &quot;L&quot; in
- * the day-of-month field means &quot;the last day of the month&quot; - day 31
- * for January, day 28 for February on non-leap years. If used in the
- * day-of-week field by itself, it simply means &quot;7&quot; or
- * &quot;SAT&quot;. But if used in the day-of-week field after another value, it
- * means &quot;the last xxx day of the month&quot; - for example &quot;6L&quot;
- * means &quot;the last friday of the month&quot;. You can also specify an
- * offset from the last day of the month, such as "L-3" which would mean the
- * third-to-last day of the calendar month. <i>When using the 'L' option, it is
- * important not to specify lists, or ranges of values, as you'll get
- * confusing/unexpected results.</i>
+ * The 'L' character is allowed for the day-of-month and day-of-week fields. This character is
+ * short-hand for &quot;last&quot;, but it has different meaning in each of the two fields. For
+ * example, the value &quot;L&quot; in the day-of-month field means &quot;the last day of the
+ * month&quot; - day 31 for January, day 28 for February on non-leap years. If used in the
+ * day-of-week field by itself, it simply means &quot;7&quot; or &quot;SAT&quot;. But if used in the
+ * day-of-week field after another value, it means &quot;the last xxx day of the month&quot; - for
+ * example &quot;6L&quot; means &quot;the last friday of the month&quot;. You can also specify an
+ * offset from the last day of the month, such as "L-3" which would mean the third-to-last day of
+ * the calendar month. <i>When using the 'L' option, it is important not to specify lists, or ranges
+ * of values, as you'll get confusing/unexpected results.</i>
  * </p>
  * <p>
- * The 'W' character is allowed for the day-of-month field. This character is
- * used to specify the weekday (Monday-Friday) nearest the given day. As an
- * example, if you were to specify &quot;15W&quot; as the value for the
- * day-of-month field, the meaning is: &quot;the nearest weekday to the 15th of
- * the month&quot;. So if the 15th is a Saturday, the trigger will fire on
- * Friday the 14th. If the 15th is a Sunday, the trigger will fire on Monday the
- * 16th. If the 15th is a Tuesday, then it will fire on Tuesday the 15th.
- * However if you specify &quot;1W&quot; as the value for day-of-month, and the
- * 1st is a Saturday, the trigger will fire on Monday the 3rd, as it will not
- * 'jump' over the boundary of a month's days. The 'W' character can only be
- * specified when the day-of-month is a single day, not a range or list of days.
+ * The 'W' character is allowed for the day-of-month field. This character is used to specify the
+ * weekday (Monday-Friday) nearest the given day. As an example, if you were to specify
+ * &quot;15W&quot; as the value for the day-of-month field, the meaning is: &quot;the nearest
+ * weekday to the 15th of the month&quot;. So if the 15th is a Saturday, the trigger will fire on
+ * Friday the 14th. If the 15th is a Sunday, the trigger will fire on Monday the 16th. If the 15th
+ * is a Tuesday, then it will fire on Tuesday the 15th. However if you specify &quot;1W&quot; as the
+ * value for day-of-month, and the 1st is a Saturday, the trigger will fire on Monday the 3rd, as it
+ * will not 'jump' over the boundary of a month's days. The 'W' character can only be specified when
+ * the day-of-month is a single day, not a range or list of days.
  * </p>
  * <p>
- * The 'L' and 'W' characters can also be combined for the day-of-month
- * expression to yield 'LW', which translates to &quot;last weekday of the
- * month&quot;.
+ * The 'L' and 'W' characters can also be combined for the day-of-month expression to yield 'LW',
+ * which translates to &quot;last weekday of the month&quot;.
  * </p>
  * <p>
- * The '#' character is allowed for the day-of-week field. This character is
- * used to specify &quot;the nth&quot; XXX day of the month. For example, the
- * value of &quot;6#3&quot; in the day-of-week field means the third Friday of
- * the month (day 6 = Friday and &quot;#3&quot; = the 3rd one in the month).
- * Other examples: &quot;2#1&quot; = the first Monday of the month and
- * &quot;4#5&quot; = the fifth Wednesday of the month. Note that if you specify
- * &quot;#5&quot; and there is not 5 of the given day-of-week in the month, then
- * no firing will occur that month. If the '#' character is used, there can only
- * be one expression in the day-of-week field (&quot;3#1,6#3&quot; is not valid,
- * since there are two expressions).
+ * The '#' character is allowed for the day-of-week field. This character is used to specify
+ * &quot;the nth&quot; XXX day of the month. For example, the value of &quot;6#3&quot; in the
+ * day-of-week field means the third Friday of the month (day 6 = Friday and &quot;#3&quot; = the
+ * 3rd one in the month). Other examples: &quot;2#1&quot; = the first Monday of the month and
+ * &quot;4#5&quot; = the fifth Wednesday of the month. Note that if you specify &quot;#5&quot; and
+ * there is not 5 of the given day-of-week in the month, then no firing will occur that month. If
+ * the '#' character is used, there can only be one expression in the day-of-week field
+ * (&quot;3#1,6#3&quot; is not valid, since there are two expressions).
  * </p>
  * <!--
  * <p>
- * The 'C' character is allowed for the day-of-month and day-of-week fields.
- * This character is short-hand for "calendar". This means values are calculated
- * against the associated calendar, if any. If no calendar is associated, then
- * it is equivalent to having an all-inclusive calendar. A value of "5C" in the
- * day-of-month field means "the first day included by the calendar on or after
- * the 5th". A value of "1C" in the day-of-week field means "the first day
- * included by the calendar on or after Sunday".
+ * The 'C' character is allowed for the day-of-month and day-of-week fields. This character is
+ * short-hand for "calendar". This means values are calculated against the associated calendar, if
+ * any. If no calendar is associated, then it is equivalent to having an all-inclusive calendar. A
+ * value of "5C" in the day-of-month field means "the first day included by the calendar on or after
+ * the 5th". A value of "1C" in the day-of-week field means "the first day included by the calendar
+ * on or after Sunday".
  * </p>
  * -->
  * <p>
- * The legal characters and the names of months and days of the week are not
- * case sensitive.
+ * The legal characters and the names of months and days of the week are not case sensitive.
  * </p>
  * <b>NOTES:</b>
  * <ul>
- * <li>Support for specifying both a day-of-week and a day-of-month value is not
- * complete (you'll need to use the '?' character in one of these fields).</li>
- * <li>Overflowing ranges is supported - that is, having a larger number on the
- * left hand side than the right. You might do 22-2 to catch 10 o'clock at night
- * until 2 o'clock in the morning, or you might have NOV-FEB. It is very
- * important to note that overuse of overflowing ranges creates ranges that
- * don't make sense and no effort has been made to determine which
- * interpretation CronExpression chooses. An example would be "0 0 14-6 ? *
- * FRI-MON".</li>
+ * <li>Support for specifying both a day-of-week and a day-of-month value is not complete (you'll
+ * need to use the '?' character in one of these fields).</li>
+ * <li>Overflowing ranges is supported - that is, having a larger number on the left hand side than
+ * the right. You might do 22-2 to catch 10 o'clock at night until 2 o'clock in the morning, or you
+ * might have NOV-FEB. It is very important to note that overuse of overflowing ranges creates
+ * ranges that don't make sense and no effort has been made to determine which interpretation
+ * CronExpression chooses. An example would be "0 0 14-6 ? * FRI-MON".</li>
  * </ul>
  *
  * @author Sharada Jambula, James House
@@ -288,15 +272,12 @@ public final class CronExpression implements ICloneable <CronExpression>
   private int m_nLastdayOffset = 0;
 
   /**
-   * Constructs a new <CODE>CronExpression</CODE> based on the specified
-   * parameter.
+   * Constructs a new <CODE>CronExpression</CODE> based on the specified parameter.
    *
    * @param cronExpression
-   *        String representation of the cron expression the new object should
-   *        represent
+   *        String representation of the cron expression the new object should represent
    * @throws java.text.ParseException
-   *         if the string expression cannot be parsed into a valid
-   *         <CODE>CronExpression</CODE>
+   *         if the string expression cannot be parsed into a valid <CODE>CronExpression</CODE>
    */
   public CronExpression (@NonNull final String cronExpression) throws ParseException
   {
@@ -315,9 +296,8 @@ public final class CronExpression implements ICloneable <CronExpression>
   public CronExpression (final CronExpression expression)
   {
     /*
-     * We don't call the other constructor here since we need to swallow the
-     * ParseException. We also elide some of the sanity checking as it is not
-     * logically trippable.
+     * We don't call the other constructor here since we need to swallow the ParseException. We also
+     * elide some of the sanity checking as it is not logically trippable.
      */
     m_sCronExpression = expression.getCronExpression ();
     try
@@ -332,14 +312,13 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * Indicates whether the given date satisfies the cron expression. Note that
-   * milliseconds are ignored, so two Dates falling on different milliseconds of
-   * the same second will always have the same result here.
+   * Indicates whether the given date satisfies the cron expression. Note that milliseconds are
+   * ignored, so two Dates falling on different milliseconds of the same second will always have the
+   * same result here.
    *
    * @param date
    *        the date to evaluate
-   * @return a boolean indicating whether the given date satisfies the cron
-   *         expression
+   * @return a boolean indicating whether the given date satisfies the cron expression
    */
   public boolean isSatisfiedBy (final Date date)
   {
@@ -356,12 +335,11 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * Returns the next date/time <I>after</I> the given date/time which satisfies
-   * the cron expression.
+   * Returns the next date/time <I>after</I> the given date/time which satisfies the cron
+   * expression.
    *
    * @param date
-   *        the date/time at which to begin the search for the next valid
-   *        date/time
+   *        the date/time at which to begin the search for the next valid date/time
    * @return the next valid date/time
    */
   public Date getNextValidTimeAfter (final Date date)
@@ -370,12 +348,11 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * Returns the next date/time <I>after</I> the given date/time which does
-   * <I>not</I> satisfy the expression
+   * Returns the next date/time <I>after</I> the given date/time which does <I>not</I> satisfy the
+   * expression
    *
    * @param date
-   *        the date/time at which to begin the search for the next invalid
-   *        date/time
+   *        the date/time at which to begin the search for the next invalid date/time
    * @return the next valid date/time
    */
   public Date getNextInvalidTimeAfter (final Date date)
@@ -412,8 +389,7 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * @return the time zone for which this <code>CronExpression</code> will be
-   *         resolved.
+   * @return the time zone for which this <code>CronExpression</code> will be resolved.
    */
   @NonNull
   public TimeZone getTimeZone ()
@@ -425,8 +401,7 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * Sets the time zone for which this <code>CronExpression</code> will be
-   * resolved.
+   * Sets the time zone for which this <code>CronExpression</code> will be resolved.
    *
    * @param timeZone
    *        Time zone to use
@@ -448,13 +423,11 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * Indicates whether the specified cron expression can be parsed into a valid
-   * cron expression
+   * Indicates whether the specified cron expression can be parsed into a valid cron expression
    *
    * @param cronExpression
    *        the expression to evaluate
-   * @return a boolean indicating whether the given expression is a valid cron
-   *         expression
+   * @return a boolean indicating whether the given expression is a valid cron expression
    */
   public static boolean isValidExpression (final String cronExpression)
   {
@@ -1766,8 +1739,8 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * Advance the calendar to the particular hour paying particular attention to
-   * daylight saving problems.
+   * Advance the calendar to the particular hour paying particular attention to daylight saving
+   * problems.
    *
    * @param cal
    *        the calendar to operate on
@@ -1789,8 +1762,8 @@ public final class CronExpression implements ICloneable <CronExpression>
    *
    * @param endTime
    *        end time
-   * @return the time before the given time that the <code>CronExpression</code>
-   *         matches. May be <code>null</code>.
+   * @return the time before the given time that the <code>CronExpression</code> matches. May be
+   *         <code>null</code>.
    */
   @Nullable
   public Date getTimeBefore (final Date endTime)
@@ -1800,8 +1773,7 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * NOT YET IMPLEMENTED: Returns the final time that the
-   * <code>CronExpression</code> will match.
+   * NOT YET IMPLEMENTED: Returns the final time that the <code>CronExpression</code> will match.
    *
    * @return the final time that the <code>CronExpression</code> will match.
    */

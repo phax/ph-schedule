@@ -27,8 +27,8 @@ import com.helger.quartz.spi.IClassLoadHelper;
 import com.helger.quartz.spi.ISchedulerPlugin;
 
 /**
- * This plugin catches the event of the JVM terminating (such as upon a CRTL-C)
- * and tells the scheuler to shutdown.
+ * This plugin catches the event of the JVM terminating (such as upon a CRTL-C) and tells the
+ * scheuler to shutdown.
  *
  * @see com.helger.quartz.IScheduler#shutdown(boolean)
  * @author James House
@@ -43,8 +43,7 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
   {}
 
   /**
-   * Determine whether or not the plug-in is configured to cause a clean
-   * shutdown of the scheduler.
+   * Determine whether or not the plug-in is configured to cause a clean shutdown of the scheduler.
    * <p>
    * The default value is <code>true</code>.
    * </p>
@@ -57,8 +56,7 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
   }
 
   /**
-   * Set whether or not the plug-in is configured to cause a clean shutdown of
-   * the scheduler.
+   * Set whether or not the plug-in is configured to cause a clean shutdown of the scheduler.
    * <p>
    * The default value is <code>true</code>.
    * </p>
@@ -83,7 +81,6 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
                           final IScheduler scheduler,
                           final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
-
     LOGGER.info ("Registering Quartz shutdown hook.");
 
     final Thread t = new Thread ("Quartz Shutdown-Hook " + scheduler.getSchedulerName ())
@@ -113,8 +110,8 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
 
   /**
    * <p>
-   * Called in order to inform the <code>SchedulerPlugin</code> that it should
-   * free up all of it's resources because the scheduler is shutting down.
+   * Called in order to inform the <code>SchedulerPlugin</code> that it should free up all of it's
+   * resources because the scheduler is shutting down.
    * </p>
    */
   public void shutdown ()

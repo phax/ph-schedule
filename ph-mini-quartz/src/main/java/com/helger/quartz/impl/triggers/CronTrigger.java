@@ -39,9 +39,9 @@ import com.helger.quartz.IScheduleBuilder;
 import com.helger.quartz.QCloneUtils;
 
 /**
- * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to
- * fire a <code>{@link com.helger.quartz.IJobDetail}</code> at given moments in
- * time, defined with Unix 'cron-like' definitions.
+ * A concrete <code>{@link com.helger.quartz.ITrigger}</code> that is used to fire a
+ * <code>{@link com.helger.quartz.IJobDetail}</code> at given moments in time, defined with Unix
+ * 'cron-like' definitions.
  *
  * @author Sharada Jambula, James House
  * @author Contributions from Mads Henderson
@@ -70,8 +70,8 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * Create a <code>CronTrigger</code> with no settings.<br>
-   * The start-time will also be set to the current time, and the time zone will
-   * be set the the system's default time zone.
+   * The start-time will also be set to the current time, and the time zone will be set the the
+   * system's default time zone.
    */
   public CronTrigger ()
   {
@@ -94,8 +94,8 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   }
 
   /**
-   * Set the CronExpression to the given one. The TimeZone on the passed-in
-   * CronExpression over-rides any that was already set on the Trigger.
+   * Set the CronExpression to the given one. The TimeZone on the passed-in CronExpression
+   * over-rides any that was already set on the Trigger.
    */
   public void setCronExpression (@NonNull final CronExpression cronExpression)
   {
@@ -177,12 +177,11 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   }
 
   /**
-   * Sets the time zone for which the <code>cronExpression</code> of this
-   * <code>CronTrigger</code> will be resolved.<br>
-   * If {@link #setCronExpression(CronExpression)} is called after this method,
-   * the TimeZon setting on the CronExpression will "win". However if
-   * {@link #setCronExpression(String)} is called after this method, the time
-   * zone applied by this method will remain in effect, since the String cron
+   * Sets the time zone for which the <code>cronExpression</code> of this <code>CronTrigger</code>
+   * will be resolved.<br>
+   * If {@link #setCronExpression(CronExpression)} is called after this method, the TimeZon setting
+   * on the CronExpression will "win". However if {@link #setCronExpression(String)} is called after
+   * this method, the time zone applied by this method will remain in effect, since the String cron
    * expression does not carry a time zone!
    */
   public void setTimeZone (@Nullable final TimeZone timeZone)
@@ -194,13 +193,11 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * <p>
-   * Returns the next time at which the <code>CronTrigger</code> will fire,
-   * after the given time. If the trigger will not fire after the given time,
-   * <code>null</code> will be returned.
+   * Returns the next time at which the <code>CronTrigger</code> will fire, after the given time. If
+   * the trigger will not fire after the given time, <code>null</code> will be returned.
    * </p>
    * <p>
-   * Note that the date returned is NOT validated against the related
-   * {@link ICalendar} (if any)
+   * Note that the date returned is NOT validated against the related {@link ICalendar} (if any)
    * </p>
    *
    * @param aAfterTime
@@ -233,12 +230,11 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * <p>
-   * NOT YET IMPLEMENTED: Returns the final time at which the
-   * <code>CronTrigger</code> will fire.
+   * NOT YET IMPLEMENTED: Returns the final time at which the <code>CronTrigger</code> will fire.
    * </p>
    * <p>
-   * Note that the return time *may* be in the past. and the date returned is
-   * not validated against {@link ICalendar}
+   * Note that the return time *may* be in the past. and the date returned is not validated against
+   * {@link ICalendar}
    * </p>
    */
   public Date getFinalFireTime ()
@@ -280,17 +276,15 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * <p>
-   * Updates the <code>CronTrigger</code>'s state based on the
-   * MISFIRE_INSTRUCTION_XXX that was selected when the <code>CronTrigger</code>
-   * was created.
+   * Updates the <code>CronTrigger</code>'s state based on the MISFIRE_INSTRUCTION_XXX that was
+   * selected when the <code>CronTrigger</code> was created.
    * </p>
    * <p>
-   * If the misfire instruction is set to MISFIRE_INSTRUCTION_SMART_POLICY, then
-   * the following scheme will be used: <br>
+   * If the misfire instruction is set to MISFIRE_INSTRUCTION_SMART_POLICY, then the following
+   * scheme will be used: <br>
    * </p>
    * <ul>
-   * <li>The instruction will be interpreted as
-   * <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
+   * <li>The instruction will be interpreted as <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
   public void updateAfterMisfire (final ICalendar cal)
@@ -326,8 +320,8 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * <p>
-   * Determines whether the date and (optionally) time of the given Calendar
-   * instance falls on a scheduled fire-time of this trigger.
+   * Determines whether the date and (optionally) time of the given Calendar instance falls on a
+   * scheduled fire-time of this trigger.
    * </p>
    * <p>
    * Equivalent to calling <code>willFireOn(cal, false)</code>.
@@ -344,20 +338,18 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * <p>
-   * Determines whether the date and (optionally) time of the given Calendar
-   * instance falls on a scheduled fire-time of this trigger.
+   * Determines whether the date and (optionally) time of the given Calendar instance falls on a
+   * scheduled fire-time of this trigger.
    * </p>
    * <p>
-   * Note that the value returned is NOT validated against the related
-   * {@link ICalendar} (if any)
+   * Note that the value returned is NOT validated against the related {@link ICalendar} (if any)
    * </p>
    *
    * @param aTest
    *        the date to compare
    * @param dayOnly
-   *        if set to true, the method will only determine if the trigger will
-   *        fire during the day represented by the given Calendar (hours,
-   *        minutes and seconds will be ignored).
+   *        if set to true, the method will only determine if the trigger will fire during the day
+   *        represented by the given Calendar (hours, minutes and seconds will be ignored).
    * @see #willFireOn(Calendar)
    */
   public boolean willFireOn (final Calendar aTest, final boolean dayOnly)
@@ -404,10 +396,9 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * <p>
-   * Called when the <code>{@link com.helger.quartz.IScheduler}</code> has
-   * decided to 'fire' the trigger (execute the associated <code>Job</code>), in
-   * order to give the <code>Trigger</code> a chance to update itself for its
-   * next triggering (if any).
+   * Called when the <code>{@link com.helger.quartz.IScheduler}</code> has decided to 'fire' the
+   * trigger (execute the associated <code>Job</code>), in order to give the <code>Trigger</code> a
+   * chance to update itself for its next triggering (if any).
    * </p>
    *
    * @see #executionComplete(com.helger.quartz.IJobExecutionContext,
@@ -468,19 +459,17 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * <p>
-   * Called by the scheduler at the time a <code>Trigger</code> is first added
-   * to the scheduler, in order to have the <code>Trigger</code> compute its
-   * first fire time, based on any associated calendar.
+   * Called by the scheduler at the time a <code>Trigger</code> is first added to the scheduler, in
+   * order to have the <code>Trigger</code> compute its first fire time, based on any associated
+   * calendar.
    * </p>
    * <p>
-   * After this method has been called, <code>getNextFireTime()</code> should
-   * return a valid answer.
+   * After this method has been called, <code>getNextFireTime()</code> should return a valid answer.
    * </p>
    *
-   * @return the first time at which the <code>Trigger</code> will be fired by
-   *         the scheduler, which is also the same value
-   *         <code>getNextFireTime()</code> will return (until after the first
-   *         firing of the <code>Trigger</code>).
+   * @return the first time at which the <code>Trigger</code> will be fired by the scheduler, which
+   *         is also the same value <code>getNextFireTime()</code> will return (until after the
+   *         first firing of the <code>Trigger</code>).
    */
   @Override
   public Date computeFirstFireTime (final ICalendar calendar)
@@ -501,8 +490,8 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   }
 
   /**
-   * Get a {@link IScheduleBuilder} that is configured to produce a schedule
-   * identical to this trigger's schedule.
+   * Get a {@link IScheduleBuilder} that is configured to produce a schedule identical to this
+   * trigger's schedule.
    *
    * @see #getTriggerBuilder()
    */
@@ -530,8 +519,8 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   }
 
   /**
-   * NOT YET IMPLEMENTED: Returns the time before the given time that this
-   * <code>CronTrigger</code> will fire.
+   * NOT YET IMPLEMENTED: Returns the time before the given time that this <code>CronTrigger</code>
+   * will fire.
    */
   @Nullable
   protected Date getTimeBefore (final Date eTime)

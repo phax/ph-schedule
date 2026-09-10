@@ -40,7 +40,6 @@ public class GroupMatcherTest
   @Test
   public void testAnyGroupMatchers ()
   {
-
     final TriggerKey tKey = triggerKey ("booboo", "baz");
     final JobKey jKey = jobKey ("frumpwomp", "bazoo");
 
@@ -49,7 +48,6 @@ public class GroupMatcherTest
 
     assertTrue ("Expected match on trigger group", tgm.isMatch (tKey));
     assertTrue ("Expected match on job group", jgm.isMatch (jKey));
-
   }
 
 }

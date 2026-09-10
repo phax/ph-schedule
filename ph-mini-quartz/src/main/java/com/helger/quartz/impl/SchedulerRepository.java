@@ -30,9 +30,8 @@ import com.helger.quartz.SchedulerException;
 
 /**
  * <p>
- * Holds references to Scheduler instances - ensuring uniqueness, and preventing
- * garbage collection, and allowing 'global' lookups - all within a ClassLoader
- * space.
+ * Holds references to Scheduler instances - ensuring uniqueness, and preventing garbage collection,
+ * and allowing 'global' lookups - all within a ClassLoader space.
  * </p>
  *
  * @author James House
@@ -59,7 +58,7 @@ public class SchedulerRepository
   public void bind (final IScheduler sched) throws SchedulerException
   {
     final String sKey = sched.getSchedulerName ();
-    m_aRWLock.writeLockedThrowing ( () -> {
+    m_aRWLock.writeLockedThrowing (() -> {
       if (m_aSchedulers.containsKey (sKey))
         throw new SchedulerException ("Scheduler with name '" + sKey + "' already exists.");
       m_aSchedulers.put (sKey, sched);
@@ -68,12 +67,12 @@ public class SchedulerRepository
 
   public boolean remove (final String schedName)
   {
-    return m_aRWLock.writeLockedBoolean ( () -> m_aSchedulers.remove (schedName) != null);
+    return m_aRWLock.writeLockedBoolean (() -> m_aSchedulers.remove (schedName) != null);
   }
 
   public IScheduler lookup (final String schedName)
   {
-    return m_aRWLock.readLockedGet ( () -> m_aSchedulers.get (schedName));
+    return m_aRWLock.readLockedGet (() -> m_aSchedulers.get (schedName));
   }
 
   @NonNull

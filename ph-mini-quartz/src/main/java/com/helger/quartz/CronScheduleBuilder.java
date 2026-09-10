@@ -33,12 +33,11 @@ import com.helger.quartz.impl.triggers.CronTrigger;
  * <code>CronScheduleBuilder</code> is a {@link IScheduleBuilder} that defines
  * {@link CronExpression}-based schedules for <code>Trigger</code>s.
  * <p>
- * Quartz provides a builder-style API for constructing scheduling-related
- * entities via a Domain-Specific Language (DSL). The DSL can best be utilized
- * through the usage of static imports of the methods on the classes
- * <code>TriggerBuilder</code>, <code>JobBuilder</code>,
- * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and
- * the various <code>ScheduleBuilder</code> implementations.
+ * Quartz provides a builder-style API for constructing scheduling-related entities via a
+ * Domain-Specific Language (DSL). The DSL can best be utilized through the usage of static imports
+ * of the methods on the classes <code>TriggerBuilder</code>, <code>JobBuilder</code>,
+ * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and the various
+ * <code>ScheduleBuilder</code> implementations.
  * </p>
  * <p>
  * Client code can then use the DSL to write code such as this:
@@ -72,9 +71,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * Build the actual Trigger -- NOT intended to be invoked by end users, but
-   * will rather be invoked by a TriggerBuilder which this ScheduleBuilder is
-   * given to.
+   * Build the actual Trigger -- NOT intended to be invoked by end users, but will rather be invoked
+   * by a TriggerBuilder which this ScheduleBuilder is given to.
    *
    * @see TriggerBuilder#withSchedule(IScheduleBuilder)
    */
@@ -89,9 +87,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * Create a CronScheduleBuilder with the given cron-expression string - which
-   * is presumed to b e valid cron expression (and hence only a RuntimeException
-   * will be thrown if it is not).
+   * Create a CronScheduleBuilder with the given cron-expression string - which is presumed to b e
+   * valid cron expression (and hence only a RuntimeException will be thrown if it is not).
    *
    * @param cronExpression
    *        the cron expression string to base the schedule on.
@@ -116,9 +113,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * Create a CronScheduleBuilder with the given cron-expression string - which
-   * may not be a valid cron expression (and hence a ParseException will be
-   * thrown if it is not).
+   * Create a CronScheduleBuilder with the given cron-expression string - which may not be a valid
+   * cron expression (and hence a ParseException will be thrown if it is not).
    *
    * @param cronExpression
    *        the cron expression string to base the schedule on.
@@ -166,8 +162,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * Create a CronScheduleBuilder with a cron-expression that sets the schedule
-   * to fire every day at the given time (hour and minute).
+   * Create a CronScheduleBuilder with a cron-expression that sets the schedule to fire every day at
+   * the given time (hour and minute).
    *
    * @param hour
    *        the hour of day to fire
@@ -188,9 +184,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * Create a CronScheduleBuilder with a cron-expression that sets the schedule
-   * to fire at the given day at the given time (hour and minute) on the given
-   * days of the week.
+   * Create a CronScheduleBuilder with a cron-expression that sets the schedule to fire at the given
+   * day at the given time (hour and minute) on the given days of the week.
    *
    * @param daysOfWeek
    *        the dasy of the week to fire
@@ -224,8 +219,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * Create a CronScheduleBuilder with a cron-expression that sets the schedule
-   * to fire one per week on the given day at the given time (hour and minute).
+   * Create a CronScheduleBuilder with a cron-expression that sets the schedule to fire one per week
+   * on the given day at the given time (hour and minute).
    *
    * @param dayOfWeek
    *        the day of the week to fire
@@ -251,9 +246,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * Create a CronScheduleBuilder with a cron-expression that sets the schedule
-   * to fire one per month on the given day of month at the given time (hour and
-   * minute).
+   * Create a CronScheduleBuilder with a cron-expression that sets the schedule to fire one per
+   * month on the given day of month at the given time (hour and minute).
    *
    * @param dayOfMonth
    *        the day of the month to fire
@@ -294,8 +288,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
 
   /**
    * If the Trigger misfires, use the
-   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY}
-   * instruction.
+   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
    *
    * @return the updated CronScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
@@ -308,8 +301,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * If the Trigger misfires, use the
-   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
+   * If the Trigger misfires, use the {@link EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING}
+   * instruction.
    *
    * @return the updated CronScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_DO_NOTHING
@@ -322,8 +315,8 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   }
 
   /**
-   * If the Trigger misfires, use the
-   * {@link EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW} instruction.
+   * If the Trigger misfires, use the {@link EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW}
+   * instruction.
    *
    * @return the updated CronScheduleBuilder
    * @see EMisfireInstruction#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW

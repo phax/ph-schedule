@@ -33,8 +33,8 @@ import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.impl.StdSchedulerFactory;
 
 /**
- * A unit test to reproduce QTZ-205 bug: A TriggerListener vetoed job will
- * affect SchedulerListener's triggerFinalized() notification.
+ * A unit test to reproduce QTZ-205 bug: A TriggerListener vetoed job will affect
+ * SchedulerListener's triggerFinalized() notification.
  *
  * @author Zemian Deng saltnlight5@gmail.com
  */
@@ -143,7 +143,6 @@ public class Qtz205SchedulerListenerTest
 
     public void jobsResumed (final String jobGroup)
     {
-
     }
 
     public void schedulerError (final String msg, final SchedulerException cause)
