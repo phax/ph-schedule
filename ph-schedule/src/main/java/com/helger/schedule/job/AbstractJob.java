@@ -65,12 +65,11 @@ public abstract class AbstractJob implements IJob
   }
 
   /**
-   * Called before the job gets executed. This method is called before the
-   * scopes are initialized!
+   * Called before the job gets executed. This method is called before the scopes are initialized!
    *
    * @param aJobDataMap
-   *        The current job data map. Never <code>null</code>. The map might be
-   *        modified inside of this method.
+   *        The current job data map. Never <code>null</code>. The map might be modified inside of
+   *        this method.
    * @param aContext
    *        The current job execution context. Never <code>null</code>.
    */
@@ -93,8 +92,7 @@ public abstract class AbstractJob implements IJob
                                      @NonNull final IJobExecutionContext aContext) throws JobExecutionException;
 
   /**
-   * Called after the job gets executed. This method is called after the scopes
-   * are destroyed.
+   * Called after the job gets executed. This method is called after the scopes are destroyed.
    *
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.

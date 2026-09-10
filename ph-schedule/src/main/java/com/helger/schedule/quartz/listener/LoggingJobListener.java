@@ -27,10 +27,9 @@ import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
 
 /**
- * An implementation of the {@link IJobListener} interface that logs job
- * executions. Before execution debug log level is used, for vetoed executions
- * warning level is used and after job execution either info (upon success) or
- * error (in case of an execution) is used.
+ * An implementation of the {@link IJobListener} interface that logs job executions. Before
+ * execution debug log level is used, for vetoed executions warning level is used and after job
+ * execution either info (upon success) or error (in case of an execution) is used.
  *
  * @author Philip Helger
  */

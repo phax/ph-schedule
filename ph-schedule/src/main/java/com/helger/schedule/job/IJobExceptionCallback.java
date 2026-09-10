@@ -23,8 +23,7 @@ import com.helger.base.callback.ICallback;
 import com.helger.quartz.IJob;
 
 /**
- * Callback interface to handle thrown exception objects from the
- * {@link AbstractJob}.
+ * Callback interface to handle thrown exception objects from the {@link AbstractJob}.
  *
  * @author Philip Helger
  */

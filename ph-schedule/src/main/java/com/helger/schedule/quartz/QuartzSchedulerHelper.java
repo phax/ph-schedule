@@ -50,8 +50,8 @@ public final class QuartzSchedulerHelper
   }
 
   /**
-   * @return The single {@link IScheduler} instance that is ensured to be
-   *         started. Never <code>null</code>.
+   * @return The single {@link IScheduler} instance that is ensured to be started. Never
+   *         <code>null</code>.
    * @see #getScheduler(boolean)
    */
   @NonNull
@@ -64,8 +64,8 @@ public final class QuartzSchedulerHelper
    * Get the underlying Quartz scheduler
    *
    * @param bStartAutomatically
-   *        If <code>true</code> the returned scheduler is automatically
-   *        started. If <code>false</code> the state is not changed.
+   *        If <code>true</code> the returned scheduler is automatically started. If
+   *        <code>false</code> the state is not changed.
    * @return The underlying Quartz scheduler. Never <code>null</code>.
    */
   @NonNull
@@ -87,8 +87,8 @@ public final class QuartzSchedulerHelper
   }
 
   /**
-   * Get the metadata of the scheduler. The state of the scheduler is not
-   * changed within this method.
+   * Get the metadata of the scheduler. The state of the scheduler is not changed within this
+   * method.
    *
    * @return The metadata of the underlying scheduler.
    */

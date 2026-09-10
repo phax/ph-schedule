@@ -26,8 +26,8 @@ import com.helger.quartz.JobExecutionException;
 import com.helger.statistics.impl.StatisticsManager;
 
 /**
- * A Quartz job listener that handles statistics for job executions. It handles
- * vetoed job executions as well as job executions.
+ * A Quartz job listener that handles statistics for job executions. It handles vetoed job
+ * executions as well as job executions.
  *
  * @author Philip Helger
  */
