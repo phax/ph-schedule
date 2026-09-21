@@ -142,8 +142,7 @@ public class Qtz205SchedulerListenerTest
     {}
 
     public void jobsResumed (final String jobGroup)
-    {
-    }
+    {}
 
     public void schedulerError (final String msg, final SchedulerException cause)
     {}
