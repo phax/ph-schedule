@@ -24,9 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.annotation.Nonempty;
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.annotation.style.UsedViaReflection;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.state.EChange;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.datetime.helper.PDTFactory;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -38,6 +40,7 @@ import com.helger.quartz.SchedulerException;
 import com.helger.quartz.SimpleScheduleBuilder;
 import com.helger.quartz.TriggerKey;
 import com.helger.quartz.impl.matchers.EverythingMatcher;
+import com.helger.schedule.quartz.listener.ErrorHistoryJobListener;
 import com.helger.schedule.quartz.listener.StatisticsJobListener;
 import com.helger.schedule.quartz.trigger.JDK8TriggerBuilder;
 import com.helger.scope.IScope;
@@ -69,6 +72,8 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 
     // Always add the statistics listener
     addJobListener (new StatisticsJobListener ());
+    // Always remember why a job failed - see JobExecutionErrorRegistry
+    addJobListener (new ErrorHistoryJobListener ());
   }
 
   @NonNull
@@ -116,6 +121,73 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     catch (final SchedulerException ex)
     {
       throw new IllegalStateException ("Failed to add job listener " + aJobListener.toString (), ex);
+    }
+  }
+
+  /**
+   * Remove a previously added job listener by its name.
+   *
+   * @param sJobListenerName
+   *        The name of the job listener to be removed, as returned by
+   *        {@link IJobListener#getName()}. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} if the job listener was removed.
+   * @since 6.1.2
+   */
+  @NonNull
+  public EChange removeJobListener (@Nullable final String sJobListenerName)
+  {
+    if (sJobListenerName == null)
+      return EChange.UNCHANGED;
+
+    try
+    {
+      return EChange.valueOf (m_aScheduler.getListenerManager ().removeJobListener (sJobListenerName));
+    }
+    catch (final SchedulerException ex)
+    {
+      throw new IllegalStateException ("Failed to remove job listener '" + sJobListenerName + "'", ex);
+    }
+  }
+
+  /**
+   * @return A copy of all currently registered job listeners. Never <code>null</code>.
+   * @since 6.1.2
+   */
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsList <IJobListener> getAllJobListeners ()
+  {
+    try
+    {
+      return m_aScheduler.getListenerManager ().getJobListeners ().getClone ();
+    }
+    catch (final SchedulerException ex)
+    {
+      throw new IllegalStateException ("Failed to retrieve the job listeners", ex);
+    }
+  }
+
+  /**
+   * Get the job listener with the provided name.
+   *
+   * @param sJobListenerName
+   *        The name of the job listener to be retrieved. May be <code>null</code>.
+   * @return <code>null</code> if no such job listener is registered.
+   * @since 6.1.2
+   */
+  @Nullable
+  public IJobListener getJobListenerOfName (@Nullable final String sJobListenerName)
+  {
+    if (sJobListenerName == null)
+      return null;
+
+    try
+    {
+      return m_aScheduler.getListenerManager ().getJobListener (sJobListenerName);
+    }
+    catch (final SchedulerException ex)
+    {
+      throw new IllegalStateException ("Failed to retrieve the job listener '" + sJobListenerName + "'", ex);
     }
   }
 

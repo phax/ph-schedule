@@ -116,13 +116,18 @@ public final class QuartzSchedulerHelper
     {
       // Get the scheduler without starting it
       final IScheduler aScheduler = SCHEDULER_FACTORY.getScheduler ();
-      if (aScheduler.isStarted ())
-        return ESchedulerState.STARTED;
-      if (aScheduler.isInStandbyMode ())
-        return ESchedulerState.STANDBY;
       if (aScheduler.isShutdown ())
         return ESchedulerState.SHUTDOWN;
-      throw new IllegalStateException ("Unknown scheduler state: " + aScheduler.toString ());
+      if (aScheduler.isInStandbyMode ())
+      {
+        // Quartz reports standby mode both before the very first start and after an explicit
+        // standby call - only the start date tells the two apart.
+        // Note: IScheduler.isStarted is not usable here, because StdScheduler implements it as
+        // "was ever started" and therefore returns true in standby mode as well
+        return aScheduler.getMetaData ().getRunningSince () == null ? ESchedulerState.NOT_STARTED
+                                                                    : ESchedulerState.STANDBY;
+      }
+      return ESchedulerState.STARTED;
     }
     catch (final SchedulerException ex)
     {

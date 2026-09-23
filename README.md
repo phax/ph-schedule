@@ -31,6 +31,15 @@ This library is an in-process scheduler. Three points are worth knowing when int
 
 # News and noteworthy
 
+v6.1.2 - work in progress
+* Added the new classes `JobExecutionError`, `JobExecutionErrorRegistry` and `ErrorHistoryJobListener` in package `com.helger.schedule.quartz.listener`. The listener remembers the most recent failed job executions per job, so that the reason of a failure can be inspected without consulting the log file. `GlobalQuartzScheduler` registers it by default, next to the `StatisticsJobListener`.
+  At most `JobExecutionErrorRegistry.getMaxErrorsPerJob ()` (default 5) errors are kept per job; `JobExecutionErrorRegistry.setMaxErrorsPerJob (0)` disables the collection entirely. The causing `Throwable` is deliberately not retained - class name, message and stack trace are extracted eagerly, so no reference graph is kept alive
+* `StatisticsJobListener` now additionally collects the runtime of every finished job execution in a timer statistics handler, providing minimum, average and maximum runtime per job class
+* Added the public constants `StatisticsJobListener.STATS_PREFIX`, `STATS_SUFFIX_EXEC`, `STATS_SUFFIX_ERROR`, `STATS_SUFFIX_VETOED` and `STATS_SUFFIX_TIME` as well as the new static method `StatisticsJobListener.getStatisticsName (Class)`, so that the collected statistics can be read back without duplicating the name building
+* Added the new enum constant `ESchedulerState.NOT_STARTED` for a scheduler that exists but was never started. Quartz reports standby mode for that state as well, so previously it was indistinguishable from an explicit standby
+* **Potentially breaking**: `QuartzSchedulerHelper.getSchedulerState ()` now returns `ESchedulerState.NOT_STARTED` instead of `ESchedulerState.STANDBY` for a scheduler that was never started. It also evaluates `isShutdown ()` first and no longer throws an `IllegalStateException` if no state matches
+* Added `GlobalQuartzScheduler.removeJobListener (String)`, `getAllJobListeners ()` and `getJobListenerOfName (String)`, as previously job listeners could only be added
+
 v6.1.1 - 2026-05-18
 * Removed OSGI bundling
 * `QuartzSchedulerThread` now catches `Throwable` (instead of only `RuntimeException`) in its main loop, so the scheduler thread no longer dies silently on `Error`s like `OutOfMemoryError` or `NoClassDefFoundError`

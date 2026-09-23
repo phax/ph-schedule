@@ -46,11 +46,11 @@ Defaults (from `src/main/resources/quartz/quartz.properties`): `SimpleThreadPool
 
 A thin Quartz-aware integration layer that depends on `ph-mini-quartz`, `ph-collection`, and `ph-scopes`. This is where most application code should plug in.
 
-- `quartz.GlobalQuartzScheduler` — `AbstractGlobalSingleton` (ph-scope) wrapping a single auto-started `IScheduler`. Adds a `StatisticsJobListener` for every job. `onDestroy` shuts the scheduler down. Use `getInstance().scheduleJob(...)` / `scheduleJobNowOnce(...)` / `unscheduleJob(...)` / `pauseJob(...)` / `resumeJob(...)` for the common path.
+- `quartz.GlobalQuartzScheduler` — `AbstractGlobalSingleton` (ph-scope) wrapping a single auto-started `IScheduler`. Adds a `StatisticsJobListener` and an `ErrorHistoryJobListener` for every job. `onDestroy` shuts the scheduler down. Use `getInstance().scheduleJob(...)` / `scheduleJobNowOnce(...)` / `unscheduleJob(...)` / `pauseJob(...)` / `resumeJob(...)` for the common path.
 - `quartz.QuartzSchedulerHelper` — static accessor (`getScheduler()`, `getSchedulerState()`, `getSchedulerMetaData()`) backed by a private `StdSchedulerFactory`. `GlobalQuartzScheduler` is built on top of this.
-- `quartz.ESchedulerState` — `STARTED` / `STANDBY` / `SHUTDOWN`.
+- `quartz.ESchedulerState` — `STARTED` / `STANDBY` / `NOT_STARTED` / `SHUTDOWN`.
 - `quartz.trigger.JDK8TriggerBuilder` — replacement for Quartz's `TriggerBuilder` using `java.time.LocalDateTime` instead of `java.util.Date`. Prefer this over `com.helger.quartz.TriggerBuilder` in new code.
-- `quartz.listener.LoggingJobListener` / `StatisticsJobListener` — drop-in `IJobListener` implementations.
+- `quartz.listener.LoggingJobListener` / `StatisticsJobListener` / `ErrorHistoryJobListener` — drop-in `IJobListener` implementations. `ErrorHistoryJobListener` feeds `JobExecutionErrorRegistry`, a bounded per-job history of the most recent `JobExecutionError`s.
 - `quartz.utils.JobKeyGroupMatcher` / `TriggerKeyGroupMatcher` — group-name matchers.
 - `job.AbstractJob` — base class for application jobs. Subclasses implement `onExecute(JobDataMap, IJobExecutionContext)`; `beforeExecute` / `afterExecute` are overridable hooks. Wraps execution with `StopWatch`-based timing, success/failure counters via `StatisticsManager`, and dispatches exceptions through the global `AbstractJob.exceptionCallbacks()` (`IJobExceptionCallback`) before re-throwing as `JobExecutionException`.
 - `jobstore.BaseJobStore` — alternative `IJobStore` implementation (RAM-like) with ph-commons collections and a `SimpleReadWriteLock`. Use when you need a job store you can subclass; `RAMJobStore` in `ph-mini-quartz` remains the default.

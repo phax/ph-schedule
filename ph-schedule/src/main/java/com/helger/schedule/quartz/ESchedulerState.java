@@ -30,8 +30,22 @@ import com.helger.base.lang.EnumHelper;
  */
 public enum ESchedulerState implements IHasID <String>
 {
+  /** The scheduler is running and executes jobs */
   STARTED ("started"),
+  /**
+   * The scheduler was started and put into standby mode afterwards. No jobs are executed in this
+   * state.
+   */
   STANDBY ("standby"),
+  /**
+   * The scheduler exists, but was never started. No jobs are executed in this state. Quartz
+   * reports standby mode for this state as well, so the two can only be told apart via
+   * {@link com.helger.quartz.SchedulerMetaData#getRunningSince()}.
+   *
+   * @since 6.1.2
+   */
+  NOT_STARTED ("not-started"),
+  /** The scheduler was shut down. No jobs are executed in this state any more. */
   SHUTDOWN ("shutdown");
 
   private String m_sID;

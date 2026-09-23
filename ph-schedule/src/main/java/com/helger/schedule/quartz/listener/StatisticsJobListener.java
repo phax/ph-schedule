@@ -20,6 +20,7 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.annotation.Nonempty;
 import com.helger.base.lang.clazz.ClassHelper;
+import com.helger.quartz.IJob;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
 import com.helger.quartz.JobExecutionException;
@@ -33,6 +34,38 @@ import com.helger.statistics.impl.StatisticsManager;
  */
 public class StatisticsJobListener implements IJobListener
 {
+  /** The prefix of all statistics handler names created by this class */
+  public static final String STATS_PREFIX = "quartz.";
+  /** The suffix of the counter that counts all finished job executions */
+  public static final String STATS_SUFFIX_EXEC = "$EXEC";
+  /** The suffix of the counter that counts all failed job executions */
+  public static final String STATS_SUFFIX_ERROR = "$ERROR";
+  /** The suffix of the counter that counts all vetoed job executions */
+  public static final String STATS_SUFFIX_VETOED = "$VETOED";
+  /**
+   * The suffix of the timer that collects the runtime of all finished job executions.
+   *
+   * @since 6.1.2
+   */
+  public static final String STATS_SUFFIX_TIME = "$TIME";
+
+  /**
+   * Get the base name of all statistics handlers of a single job class. The suffixes
+   * <code>STATS_SUFFIX_*</code> are appended to this name to get the name of a single handler.
+   *
+   * @param aJobClass
+   *        The job class to get the name for. May not be <code>null</code>.
+   * @return {@link #STATS_PREFIX} plus the local name of the provided class. Neither
+   *         <code>null</code> nor empty.
+   * @since 6.1.2
+   */
+  @NonNull
+  @Nonempty
+  public static String getStatisticsName (@NonNull final Class <? extends IJob> aJobClass)
+  {
+    return STATS_PREFIX + ClassHelper.getClassLocalName (aJobClass);
+  }
+
   @NonNull
   @Nonempty
   public String getName ()
@@ -44,7 +77,7 @@ public class StatisticsJobListener implements IJobListener
   @Nonempty
   protected String getStatisticsName (@NonNull final IJobExecutionContext aContext)
   {
-    return "quartz." + ClassHelper.getClassLocalName (aContext.getJobDetail ().getJobClass ());
+    return getStatisticsName (aContext.getJobDetail ().getJobClass ());
   }
 
   @Override
@@ -54,14 +87,20 @@ public class StatisticsJobListener implements IJobListener
   @Override
   public void jobExecutionVetoed (@NonNull final IJobExecutionContext aContext)
   {
-    StatisticsManager.getCounterHandler (getStatisticsName (aContext) + "$VETOED").increment ();
+    StatisticsManager.getCounterHandler (getStatisticsName (aContext) + STATS_SUFFIX_VETOED).increment ();
   }
 
   @Override
   public void jobWasExecuted (@NonNull final IJobExecutionContext aContext, final JobExecutionException aJobException)
   {
-    StatisticsManager.getCounterHandler (getStatisticsName (aContext) + "$EXEC").increment ();
+    final String sStatsName = getStatisticsName (aContext);
+    StatisticsManager.getCounterHandler (sStatsName + STATS_SUFFIX_EXEC).increment ();
     if (aJobException != null)
-      StatisticsManager.getCounterHandler (getStatisticsName (aContext) + "$ERROR").increment ();
+      StatisticsManager.getCounterHandler (sStatsName + STATS_SUFFIX_ERROR).increment ();
+
+    // The runtime is only valid after the job completed - it is -1 as long as the job is running
+    final long nRunTimeMillis = aContext.getJobRunTime ();
+    if (nRunTimeMillis >= 0)
+      StatisticsManager.getTimerHandler (sStatsName + STATS_SUFFIX_TIME).addTime (nRunTimeMillis);
   }
 }

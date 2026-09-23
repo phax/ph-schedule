@@ -21,6 +21,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
+import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 
 /**
@@ -34,14 +35,32 @@ public final class QuartzSchedulerHelperTest
   public void testGetScheduler () throws SchedulerException
   {
     assertNotNull (QuartzSchedulerHelper.getScheduler (false));
-    assertSame (ESchedulerState.STANDBY, QuartzSchedulerHelper.getSchedulerState ());
+    // Was never started so far
+    assertSame (ESchedulerState.NOT_STARTED, QuartzSchedulerHelper.getSchedulerState ());
     assertNotNull (QuartzSchedulerHelper.getScheduler ());
     assertSame (ESchedulerState.STARTED, QuartzSchedulerHelper.getSchedulerState ());
     assertNotNull (QuartzSchedulerHelper.getSchedulerMetaData ());
     QuartzSchedulerHelper.getScheduler ().shutdown (true);
-    assertSame (ESchedulerState.STANDBY, QuartzSchedulerHelper.getSchedulerState ());
+    // After a shutdown the factory hands out a brand new scheduler, so the shut down one can no
+    // longer be observed through the helper
+    assertSame (ESchedulerState.NOT_STARTED, QuartzSchedulerHelper.getSchedulerState ());
     assertNotNull (QuartzSchedulerHelper.getScheduler ());
     assertSame (ESchedulerState.STARTED, QuartzSchedulerHelper.getSchedulerState ());
     QuartzSchedulerHelper.getScheduler ().shutdown (true);
+  }
+
+  @Test
+  public void testStandbyIsNotNotStarted () throws SchedulerException
+  {
+    final IScheduler aScheduler = QuartzSchedulerHelper.getScheduler ();
+    assertSame (ESchedulerState.STARTED, QuartzSchedulerHelper.getSchedulerState ());
+
+    // Standby after a start is a different state than "never started"
+    aScheduler.standby ();
+    assertSame (ESchedulerState.STANDBY, QuartzSchedulerHelper.getSchedulerState ());
+
+    aScheduler.start ();
+    assertSame (ESchedulerState.STARTED, QuartzSchedulerHelper.getSchedulerState ());
+    aScheduler.shutdown (true);
   }
 }
