@@ -131,7 +131,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    *        The name of the job listener to be removed, as returned by
    *        {@link IJobListener#getName()}. May be <code>null</code>.
    * @return {@link EChange#CHANGED} if the job listener was removed.
-   * @since 6.1.2
+   * @since 6.2.0
    */
   @NonNull
   public EChange removeJobListener (@Nullable final String sJobListenerName)
@@ -151,7 +151,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 
   /**
    * @return A copy of all currently registered job listeners. Never <code>null</code>.
-   * @since 6.1.2
+   * @since 6.2.0
    */
   @NonNull
   @ReturnsMutableCopy
@@ -173,7 +173,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @param sJobListenerName
    *        The name of the job listener to be retrieved. May be <code>null</code>.
    * @return <code>null</code> if no such job listener is registered.
-   * @since 6.1.2
+   * @since 6.2.0
    */
   @Nullable
   public IJobListener getJobListenerOfName (@Nullable final String sJobListenerName)

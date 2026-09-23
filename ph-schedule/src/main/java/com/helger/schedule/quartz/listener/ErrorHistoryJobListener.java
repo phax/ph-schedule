@@ -31,7 +31,7 @@ import com.helger.quartz.JobExecutionException;
  * log file, which is regularly not accessible from where the failure is noticed.
  *
  * @author Philip Helger
- * @since 6.1.2
+ * @since 6.2.0
  */
 public class ErrorHistoryJobListener implements IJobListener
 {

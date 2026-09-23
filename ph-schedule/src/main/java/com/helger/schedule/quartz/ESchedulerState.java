@@ -42,7 +42,7 @@ public enum ESchedulerState implements IHasID <String>
    * reports standby mode for this state as well, so the two can only be told apart via
    * {@link com.helger.quartz.SchedulerMetaData#getRunningSince()}.
    *
-   * @since 6.1.2
+   * @since 6.2.0
    */
   NOT_STARTED ("not-started"),
   /** The scheduler was shut down. No jobs are executed in this state any more. */

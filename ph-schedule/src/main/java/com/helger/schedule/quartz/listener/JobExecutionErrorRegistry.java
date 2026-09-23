@@ -44,7 +44,7 @@ import com.helger.quartz.JobKey;
  * </p>
  *
  * @author Philip Helger
- * @since 6.1.2
+ * @since 6.2.0
  */
 @ThreadSafe
 public final class JobExecutionErrorRegistry

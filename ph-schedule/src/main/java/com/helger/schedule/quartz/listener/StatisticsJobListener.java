@@ -45,7 +45,7 @@ public class StatisticsJobListener implements IJobListener
   /**
    * The suffix of the timer that collects the runtime of all finished job executions.
    *
-   * @since 6.1.2
+   * @since 6.2.0
    */
   public static final String STATS_SUFFIX_TIME = "$TIME";
 
@@ -57,7 +57,7 @@ public class StatisticsJobListener implements IJobListener
    *        The job class to get the name for. May not be <code>null</code>.
    * @return {@link #STATS_PREFIX} plus the local name of the provided class. Neither
    *         <code>null</code> nor empty.
-   * @since 6.1.2
+   * @since 6.2.0
    */
   @NonNull
   @Nonempty

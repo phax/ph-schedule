@@ -39,7 +39,7 @@ import com.helger.quartz.JobKey;
  * </p>
  *
  * @author Philip Helger
- * @since 6.1.2
+ * @since 6.2.0
  */
 @Immutable
 public class JobExecutionError
