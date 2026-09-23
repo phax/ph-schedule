@@ -47,6 +47,11 @@ v6.2.0 - work in progress
 * `IListenerManager.addTriggerListener (ITriggerListener, IMatcher)` is now declared `@NonNull` for the matcher, matching what the implementation always enforced
 * Fixed `SimpleTrigger.getClone ()` throwing a `NullPointerException` if no start time was set
 * All `ToStringGenerator.append` field names now start with an uppercase character
+* Added `JobExecutionException.setUnscheduleFiringTrigger (boolean)` and `setUnscheduleAllTriggers (boolean)`. The backing fields were `final false` with no way to set them, so `unscheduleFiringTrigger ()` and `unscheduleAllTriggers ()` always returned `false` and the resulting `SET_TRIGGER_COMPLETE` / `SET_ALL_JOB_TRIGGERS_COMPLETE` instructions in `AbstractTrigger.executionComplete` were unreachable
+* Implemented `CronExpression.getTimeBefore (Date)` (ported from Quartz 2.5.2, binary search over `getTimeAfter`); it previously always returned `null`. As a result `CronTrigger.getFinalFireTime ()` now returns the correct value if an end time is set. `CronExpression.getFinalFireTime ()` remains unimplemented - upstream Quartz has not solved QUARTZ-423 either
+* `SimpleClassLoadHelper.getClassLoader ()` no longer tries to reflectively call the JVM internal `ClassLoader.getCallerClassLoader`. That method was removed from the JDK years ago, so the lookup always failed and the class-loader of this class was used anyway
+* Added `QuartzScheduler.removeInternalTriggerListener (String)` and `notifySchedulerListenersScheduled (ITrigger)`. The previous names `removeinternalTriggerListener` and `notifySchedulerListenersSchduled` contained typos and are deprecated for removal
+* Renamed the private fields `QuartzServer.sched`, `QuartzScheduler.holdToPreventGC`, `RAMJobStore.ttc` and `SchedulerMetaData.m_sSchedClass` to follow the naming conventions
 
 v6.1.1 - 2026-05-18
 * Removed OSGI bundling

@@ -1820,11 +1820,11 @@ public class RAMJobStore implements IJobStore
 
 final class TriggerWrapperComparator implements IComparator <TriggerWrapper>
 {
-  private final TriggerTimeComparator ttc = new TriggerTimeComparator ();
+  private final TriggerTimeComparator m_aTTC = new TriggerTimeComparator ();
 
   public int compare (@NonNull final TriggerWrapper trig1, @NonNull final TriggerWrapper trig2)
   {
-    return ttc.compare (trig1.m_aTrigger, trig2.m_aTrigger);
+    return m_aTTC.compare (trig1.m_aTrigger, trig2.m_aTrigger);
   }
 
   @Override

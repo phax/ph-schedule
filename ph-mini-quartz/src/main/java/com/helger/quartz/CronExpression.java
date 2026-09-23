@@ -41,6 +41,7 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.annotation.style.VisibleForTesting;
+import com.helger.base.CGlobal;
 import com.helger.base.clone.ICloneable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.cache.regex.RegExHelper;
@@ -1771,19 +1772,70 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   /**
-   * NOT YET IMPLEMENTED: Returns the time before the given time that the
-   * <code>CronExpression</code> matches.
+   * Returns the time before the given time that the <code>CronExpression</code> matches.
    *
    * @param endTime
-   *        end time
+   *        end time. May be <code>null</code>.
    * @return the time before the given time that the <code>CronExpression</code> matches. May be
    *         <code>null</code>.
    */
   @Nullable
   public Date getTimeBefore (@Nullable final Date endTime)
   {
-    // FUTURE_TODO: implement QUARTZ-423
-    return null;
+    if (endTime == null)
+      return null;
+
+    // The current implementation is not a direct calculation, but rather uses getTimeAfter with a
+    // binary search to find the previous match time
+    final long nEnd = endTime.getTime ();
+    // The epoch date is the minimum supported by this class
+    long nMin = 0;
+    long nMax = nEnd;
+
+    // Check if it is satisfiable at all
+    final Date aDate = new Date (nMin);
+    Date aAfter = getTimeAfter (aDate);
+    if (aAfter == null || aAfter.getTime () >= nEnd)
+    {
+      // There are no after-times before the end time
+      return null;
+    }
+
+    // From this point forward the time-after of nMin is always less than nEnd, and the time-after
+    // of nMax is always equal to or greater than nEnd, so the interval just needs to be shrunk
+    // until they meet.
+    // Optimization - perform an inverse binary search to find a tighter lower bound
+    long nInterval = CGlobal.MILLISECONDS_PER_HOUR;
+    while (nInterval < nMax)
+    {
+      aDate.setTime (nMax - nInterval);
+      aAfter = getTimeAfter (aDate);
+      if (aAfter != null && aAfter.getTime () < nMax)
+      {
+        // Found a closer lower bound
+        nMin = aDate.getTime ();
+        break;
+      }
+      nInterval *= 2;
+    }
+
+    // Perform a regular binary search to find the earliest moment whose time-after is equal to or
+    // greater than the end time - this moment is the previous match time itself
+    while (nMax - nMin > CGlobal.MILLISECONDS_PER_SECOND)
+    {
+      // We can stop at 1 second resolution
+      final long nMid = (nMin + nMax) >>> 1;
+      aDate.setTime (nMid);
+      aAfter = getTimeAfter (aDate);
+      if (aAfter != null && aAfter.getTime () < nEnd)
+        nMin = nMid;
+      else
+        nMax = nMid;
+    }
+
+    // Round to second
+    aDate.setTime (nMax - nMax % CGlobal.MILLISECONDS_PER_SECOND);
+    return aDate;
   }
 
   /**

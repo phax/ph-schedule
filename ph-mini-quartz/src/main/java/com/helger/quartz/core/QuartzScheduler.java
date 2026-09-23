@@ -123,7 +123,7 @@ public class QuartzScheduler implements IQuartzScheduler
   private final ErrorLogger m_aErrLogger;
   private final ISchedulerSignaler m_aSignaler;
   private final Random m_aRandom = new Random ();
-  private final ICommonsList <Object> holdToPreventGC = new CommonsArrayList <> (5);
+  private final ICommonsList <Object> m_aHoldToPreventGC = new CommonsArrayList <> (5);
   private boolean m_bSignalOnSchedulingChange = true;
   private volatile boolean m_bClosed = false;
   private volatile boolean m_bShuttingDown = false;
@@ -262,12 +262,12 @@ public class QuartzScheduler implements IQuartzScheduler
 
   public void addNoGCObject (@NonNull final Object obj)
   {
-    holdToPreventGC.add (obj);
+    m_aHoldToPreventGC.add (obj);
   }
 
   public boolean removeNoGCObject (@Nullable final Object obj)
   {
-    return holdToPreventGC.remove (obj);
+    return m_aHoldToPreventGC.remove (obj);
   }
 
   /**
@@ -509,7 +509,7 @@ public class QuartzScheduler implements IQuartzScheduler
 
     SchedulerRepository.getInstance ().remove (m_aResources.getName ());
 
-    holdToPreventGC.clear ();
+    m_aHoldToPreventGC.clear ();
 
     LOGGER.info ("Scheduler " + m_aResources.getUniqueIdentifier () + " shutdown complete.");
   }
@@ -638,7 +638,7 @@ public class QuartzScheduler implements IQuartzScheduler
     m_aResources.getJobStore ().storeJobAndTrigger (jobDetail, trig);
     notifySchedulerListenersJobAdded (jobDetail);
     notifySchedulerThread (trigger.getNextFireTime ().getTime ());
-    notifySchedulerListenersSchduled (trigger);
+    notifySchedulerListenersScheduled (trigger);
 
     return ft;
   }
@@ -687,7 +687,7 @@ public class QuartzScheduler implements IQuartzScheduler
 
     m_aResources.getJobStore ().storeTrigger (trig, false);
     notifySchedulerThread (trigger.getNextFireTime ().getTime ());
-    notifySchedulerListenersSchduled (trigger);
+    notifySchedulerListenersScheduled (trigger);
 
     return ft;
   }
@@ -923,7 +923,7 @@ public class QuartzScheduler implements IQuartzScheduler
     {
       notifySchedulerThread (newTrigger.getNextFireTime ().getTime ());
       notifySchedulerListenersUnscheduled (triggerKey);
-      notifySchedulerListenersSchduled (newTrigger);
+      notifySchedulerListenersScheduled (newTrigger);
     }
     else
     {
@@ -978,7 +978,7 @@ public class QuartzScheduler implements IQuartzScheduler
     }
 
     notifySchedulerThread (trig.getNextFireTime ().getTime ());
-    notifySchedulerListenersSchduled (trig);
+    notifySchedulerListenersScheduled (trig);
   }
 
   /**
@@ -1007,7 +1007,7 @@ public class QuartzScheduler implements IQuartzScheduler
     }
 
     notifySchedulerThread (trig.getNextFireTime ().getTime ());
-    notifySchedulerListenersSchduled (trig);
+    notifySchedulerListenersScheduled (trig);
   }
 
   /**
@@ -1535,12 +1535,28 @@ public class QuartzScheduler implements IQuartzScheduler
    *
    * @return true if the identified listener was found in the list, and removed.
    */
-  public boolean removeinternalTriggerListener (@Nullable final String name)
+  public boolean removeInternalTriggerListener (@Nullable final String name)
   {
     synchronized (m_aInternalTriggerListeners)
     {
       return m_aInternalTriggerListeners.remove (name) != null;
     }
+  }
+
+  /**
+   * <p>
+   * Remove the identified <code>{@link ITriggerListener}</code> from the <code>Scheduler</code>'s
+   * list of <i>internal</i> listeners.
+   * </p>
+   *
+   * @return true if the identified listener was found in the list, and removed.
+   * @deprecated Since 6.2.0; use {@link #removeInternalTriggerListener(String)} instead - this
+   *             method only exists because of a typo in the method name
+   */
+  @Deprecated (forRemoval = true, since = "6.2.0")
+  public boolean removeinternalTriggerListener (@Nullable final String name)
+  {
+    return removeInternalTriggerListener (name);
   }
 
   /**
@@ -1856,7 +1872,7 @@ public class QuartzScheduler implements IQuartzScheduler
     }
   }
 
-  public void notifySchedulerListenersSchduled (@NonNull final ITrigger trigger)
+  public void notifySchedulerListenersScheduled (@NonNull final ITrigger trigger)
   {
     // build a list of all scheduler listeners that are to be notified...
     final ICommonsList <ISchedulerListener> schedListeners = _buildSchedulerListenerList ();
@@ -1870,9 +1886,22 @@ public class QuartzScheduler implements IQuartzScheduler
       }
       catch (final Exception e)
       {
-        LOGGER.error ("Error while notifying SchedulerListener of scheduled job." + "  Triger=" + trigger.getKey (), e);
+        LOGGER.error ("Error while notifying SchedulerListener of scheduled job." + "  Trigger=" + trigger.getKey (),
+                      e);
       }
     }
+  }
+
+  /**
+   * @param trigger
+   *        The trigger that was scheduled. May not be <code>null</code>.
+   * @deprecated Since 6.2.0; use {@link #notifySchedulerListenersScheduled(ITrigger)} instead -
+   *             this method only exists because of a typo in the method name
+   */
+  @Deprecated (forRemoval = true, since = "6.2.0")
+  public void notifySchedulerListenersSchduled (@NonNull final ITrigger trigger)
+  {
+    notifySchedulerListenersScheduled (trigger);
   }
 
   public void notifySchedulerListenersUnscheduled (@Nullable final TriggerKey triggerKey)

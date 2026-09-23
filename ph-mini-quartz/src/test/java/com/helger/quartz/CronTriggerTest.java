@@ -19,9 +19,13 @@
 package com.helger.quartz;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.junit.Test;
 
@@ -46,6 +50,35 @@ public class CronTriggerTest
 
     // equals() doesn't test the cron expression
     assertEquals ("Cloning failed for the cron expression", "0 0 12 * * ?", trigger2.getCronExpression ());
+  }
+
+  @Test
+  public void testGetFinalFireTime () throws ParseException
+  {
+    final TimeZone aUTC = TimeZone.getTimeZone ("UTC");
+    final Calendar aCal = Calendar.getInstance (aUTC, Locale.getDefault (Locale.Category.FORMAT));
+
+    final CronTrigger aTrigger = new CronTrigger ();
+    aTrigger.setName ("test");
+    aTrigger.setJobName ("job");
+    aTrigger.setCronExpression ("0 0 12 * * ?");
+    aTrigger.setTimeZone (aUTC);
+
+    aCal.clear ();
+    aCal.set (2026, Calendar.JANUARY, 1, 0, 0, 0);
+    aTrigger.setStartTime (aCal.getTime ());
+
+    // Without an end time there is no final fire time
+    assertNull (aTrigger.getFinalFireTime ());
+
+    aCal.clear ();
+    aCal.set (2026, Calendar.MARCH, 10, 18, 0, 0);
+    aTrigger.setEndTime (aCal.getTime ());
+
+    // The last firing before the end time
+    aCal.clear ();
+    aCal.set (2026, Calendar.MARCH, 10, 12, 0, 0);
+    assertEquals (aCal.getTime (), aTrigger.getFinalFireTime ());
   }
 
   // http://jira.opensymphony.com/browse/QUARTZ-558

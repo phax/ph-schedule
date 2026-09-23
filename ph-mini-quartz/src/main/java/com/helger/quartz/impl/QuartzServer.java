@@ -59,16 +59,16 @@ public class QuartzServer implements ISchedulerListener
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (QuartzServer.class);
 
-  private IScheduler sched;
+  private IScheduler m_aScheduler;
 
   QuartzServer ()
   {}
 
   public void serve (@NonNull final ISchedulerFactory schedFact, final boolean bConsole) throws Exception
   {
-    sched = schedFact.getScheduler ();
+    m_aScheduler = schedFact.getScheduler ();
 
-    sched.start ();
+    m_aScheduler.start ();
 
     ThreadHelper.sleep (3000L);
 
@@ -96,7 +96,7 @@ public class QuartzServer implements ISchedulerListener
 
       LOGGER.info ("\n...Shutting down server...");
 
-      sched.shutdown (true);
+      m_aScheduler.shutdown (true);
     }
   }
 
@@ -126,7 +126,7 @@ public class QuartzServer implements ISchedulerListener
   public void schedulerShutdown ()
   {
     LOGGER.info ("\n*** The scheduler is now shutdown.");
-    sched = null;
+    m_aScheduler = null;
   }
 
   public static void main (@NonNull final String [] args) throws Exception

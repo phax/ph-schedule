@@ -36,7 +36,7 @@ public class SchedulerMetaData
 {
   private final String m_sSchedName;
   private final String m_sSchedInst;
-  private final Class <?> m_sSchedClass;
+  private final Class <?> m_aSchedClass;
   private final boolean m_bStarted;
   private final boolean m_bIsInStandbyMode;
   private final boolean m_bShutdown;
@@ -73,7 +73,7 @@ public class SchedulerMetaData
 
     m_sSchedName = schedName;
     m_sSchedInst = schedInst;
-    m_sSchedClass = schedClass;
+    m_aSchedClass = schedClass;
     m_bStarted = started;
     m_bIsInStandbyMode = isInStandbyMode;
     m_bShutdown = shutdown;
@@ -113,7 +113,7 @@ public class SchedulerMetaData
   @NonNull
   public Class <?> getSchedulerClass ()
   {
-    return m_sSchedClass;
+    return m_aSchedClass;
   }
 
   /**

@@ -20,11 +20,13 @@ package com.helger.quartz;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -256,6 +258,38 @@ public final class CronExpressionTest
       assertTrue ("Incorrect ParseException thrown: " + pe.getMessage (),
                   pe.getMessage ().startsWith ("The 'W' option does not make sense with values larger than"));
     }
+  }
+
+  @Test
+  public void testGetTimeBefore () throws ParseException
+  {
+    final TimeZone aUTC = TimeZone.getTimeZone ("UTC");
+    final Calendar aCal = Calendar.getInstance (aUTC, Locale.getDefault (Locale.Category.FORMAT));
+
+    // Every day at 12:00:00
+    final CronExpression aCronExpression = new CronExpression ("0 0 12 * * ?");
+    aCronExpression.setTimeZone (aUTC);
+
+    aCal.clear ();
+    aCal.set (2026, Calendar.MARCH, 10, 18, 0, 0);
+    final Date aEnd = aCal.getTime ();
+
+    aCal.clear ();
+    aCal.set (2026, Calendar.MARCH, 10, 12, 0, 0);
+    final Date aExpected = aCal.getTime ();
+
+    assertEquals (aExpected, aCronExpression.getTimeBefore (aEnd));
+
+    // Exactly on a fire time - the match before it must be returned
+    aCal.clear ();
+    aCal.set (2026, Calendar.MARCH, 9, 12, 0, 0);
+    assertEquals (aCal.getTime (), aCronExpression.getTimeBefore (aExpected));
+
+    // Nothing matches that early
+    assertNull (aCronExpression.getTimeBefore (new Date (1000L)));
+
+    // null in, null out
+    assertNull (aCronExpression.getTimeBefore (null));
   }
 
   @Test

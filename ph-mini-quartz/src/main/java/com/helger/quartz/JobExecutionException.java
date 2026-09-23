@@ -38,8 +38,8 @@ import org.jspecify.annotations.Nullable;
 public class JobExecutionException extends SchedulerException
 {
   private final boolean m_bRefire;
-  private final boolean m_bUnscheduleTrigg = false;
-  private final boolean m_bUnscheduleAllTriggs = false;
+  private boolean m_bUnscheduleTrigg = false;
+  private boolean m_bUnscheduleAllTriggs = false;
 
   /**
    * Create a JobExcecutionException, with the 're-fire immediately' flag set to <code>false</code>.
@@ -117,9 +117,33 @@ public class JobExecutionException extends SchedulerException
     return m_bRefire;
   }
 
+  /**
+   * Instruct the <code>Scheduler</code> to unschedule the <code>Trigger</code> that fired the job.
+   *
+   * @param bUnscheduleTrigg
+   *        <code>true</code> to unschedule the firing trigger.
+   * @since 6.2.0
+   */
+  public void setUnscheduleFiringTrigger (final boolean bUnscheduleTrigg)
+  {
+    m_bUnscheduleTrigg = bUnscheduleTrigg;
+  }
+
   public boolean unscheduleFiringTrigger ()
   {
     return m_bUnscheduleTrigg;
+  }
+
+  /**
+   * Instruct the <code>Scheduler</code> to unschedule all <code>Trigger</code>s of the job.
+   *
+   * @param bUnscheduleAllTriggs
+   *        <code>true</code> to unschedule all triggers of the job.
+   * @since 6.2.0
+   */
+  public void setUnscheduleAllTriggers (final boolean bUnscheduleAllTriggs)
+  {
+    m_bUnscheduleAllTriggs = bUnscheduleAllTriggs;
   }
 
   public boolean unscheduleAllTriggers ()

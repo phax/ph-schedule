@@ -233,11 +233,15 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
 
   /**
    * <p>
-   * NOT YET IMPLEMENTED: Returns the final time at which the <code>CronTrigger</code> will fire.
+   * Returns the final time at which the <code>CronTrigger</code> will fire.
    * </p>
    * <p>
    * Note that the return time *may* be in the past. and the date returned is not validated against
    * {@link ICalendar}
+   * </p>
+   * <p>
+   * If no end time is set this returns <code>null</code>, because
+   * {@link CronExpression#getFinalFireTime()} is not yet implemented (QUARTZ-423).
    * </p>
    */
   @Nullable
@@ -526,8 +530,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   }
 
   /**
-   * NOT YET IMPLEMENTED: Returns the time before the given time that this <code>CronTrigger</code>
-   * will fire.
+   * Returns the time before the given time that this <code>CronTrigger</code> will fire.
    */
   @Nullable
   protected Date getTimeBefore (@Nullable final Date eTime)
