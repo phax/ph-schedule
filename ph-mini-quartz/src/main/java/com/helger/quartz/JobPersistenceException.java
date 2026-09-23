@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * An exception that is thrown to indicate that there has been a failure in the scheduler's
  * underlying persistence mechanism.
@@ -29,7 +31,7 @@ public class JobPersistenceException extends SchedulerException
   /**
    * Create a <code>JobPersistenceException</code> with the given message.
    */
-  public JobPersistenceException (final String msg)
+  public JobPersistenceException (@Nullable final String msg)
   {
     super (msg);
   }
@@ -37,7 +39,7 @@ public class JobPersistenceException extends SchedulerException
   /**
    * Create a <code>JobPersistenceException</code> with the given message and cause.
    */
-  public JobPersistenceException (final String msg, final Throwable cause)
+  public JobPersistenceException (@Nullable final String msg, @Nullable final Throwable cause)
   {
     super (msg, cause);
   }

@@ -21,7 +21,10 @@ package com.helger.quartz.utils.counter.sampled;
 import java.util.TimerTask;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.utils.CircularLossyQueue;
 import com.helger.quartz.utils.counter.Counter;
 
@@ -55,7 +58,7 @@ public class SampledCounter extends Counter implements ISampledCounter
    */
   public SampledCounter (@NonNull final SampledCounterConfig config)
   {
-    super (config.getInitialValue ());
+    super (ValueEnforcer.notNull (config, "Config").getInitialValue ());
 
     m_nIntervalMillis = config.getIntervalSecs () * (long) MILLIS_PER_SEC;
     m_aHistory = new CircularLossyQueue <> (config.getHistorySize ());
@@ -73,11 +76,14 @@ public class SampledCounter extends Counter implements ISampledCounter
     recordSample ();
   }
 
+  @Nullable
   public TimeStampedCounterValue getMostRecentSample ()
   {
     return m_aHistory.peek ();
   }
 
+  @NonNull
+  @ReturnsMutableCopy
   public TimeStampedCounterValue [] getAllSampleValues ()
   {
     return m_aHistory.toArray (new TimeStampedCounterValue [m_aHistory.depth ()]);
@@ -94,6 +100,7 @@ public class SampledCounter extends Counter implements ISampledCounter
   /**
    * @return the timer task for this sampled counter
    */
+  @NonNull
   public TimerTask getTimerTask ()
   {
     return m_aSamplerTask;

@@ -18,6 +18,10 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.ICommonsCollection;
 
 /**
@@ -35,15 +39,19 @@ public interface ISchedulerFactory
    * @throws SchedulerException
    *         if there is a problem with the underlying <code>Scheduler</code>.
    */
+  @NonNull
   IScheduler getScheduler () throws SchedulerException;
 
   /**
    * Returns a handle to the Scheduler with the given name, if it exists.
    */
-  IScheduler getScheduler (String schedName) throws SchedulerException;
+  @Nullable
+  IScheduler getScheduler (@Nullable String schedName) throws SchedulerException;
 
   /**
    * Returns handles to all known Schedulers (made by any SchedulerFactory within this jvm.).
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsCollection <IScheduler> getAllSchedulers () throws SchedulerException;
 }

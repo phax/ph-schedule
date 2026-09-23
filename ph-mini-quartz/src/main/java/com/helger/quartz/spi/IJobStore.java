@@ -22,6 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonnegative;
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.ICommonsCollection;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.collection.commons.ICommonsSet;
@@ -63,7 +68,8 @@ public interface IJobStore
    * Called by the QuartzScheduler before the <code>JobStore</code> is used, in order to give the it
    * a chance to initialize.
    */
-  void initialize (IClassLoadHelper loadHelper, ISchedulerSignaler signaler) throws SchedulerConfigException;
+  void initialize (@NonNull IClassLoadHelper loadHelper,
+                   @NonNull ISchedulerSignaler signaler) throws SchedulerConfigException;
 
   /**
    * Called by the QuartzScheduler to inform the <code>JobStore</code> that the scheduler has
@@ -119,7 +125,8 @@ public interface IJobStore
    * @throws JobPersistenceException
    *         if a <code>Job</code> with the same name/group already exists.
    */
-  void storeJobAndTrigger (IJobDetail newJob, IOperableTrigger newTrigger) throws JobPersistenceException;
+  void storeJobAndTrigger (@NonNull IJobDetail newJob,
+                           @NonNull IOperableTrigger newTrigger) throws JobPersistenceException;
 
   /**
    * Store the given <code>{@link com.helger.quartz.IJobDetail}</code>.
@@ -133,9 +140,9 @@ public interface IJobStore
    *         if a <code>Job</code> with the same name/group already exists, and replaceExisting is
    *         set to false.
    */
-  void storeJob (IJobDetail newJob, boolean replaceExisting) throws JobPersistenceException;
+  void storeJob (@NonNull IJobDetail newJob, boolean replaceExisting) throws JobPersistenceException;
 
-  void storeJobsAndTriggers (Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
+  void storeJobsAndTriggers (@NonNull Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                              boolean replace) throws JobPersistenceException;
 
   /**
@@ -149,9 +156,9 @@ public interface IJobStore
    * @return <code>true</code> if a <code>Job</code> with the given name &amp; group was found and
    *         removed from the store.
    */
-  boolean removeJob (JobKey jobKey) throws JobPersistenceException;
+  boolean removeJob (@NonNull JobKey jobKey) throws JobPersistenceException;
 
-  boolean removeJobs (List <JobKey> jobKeys) throws JobPersistenceException;
+  boolean removeJobs (@NonNull List <JobKey> jobKeys) throws JobPersistenceException;
 
   /**
    * Retrieve the <code>{@link com.helger.quartz.IJobDetail}</code> for the given
@@ -159,7 +166,8 @@ public interface IJobStore
    *
    * @return The desired <code>Job</code>, or null if there is no match.
    */
-  IJobDetail retrieveJob (JobKey jobKey) throws JobPersistenceException;
+  @Nullable
+  IJobDetail retrieveJob (@NonNull JobKey jobKey) throws JobPersistenceException;
 
   /**
    * Store the given <code>{@link com.helger.quartz.ITrigger}</code>.
@@ -174,7 +182,7 @@ public interface IJobStore
    *         is set to false.
    * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
    */
-  void storeTrigger (IOperableTrigger newTrigger, boolean replaceExisting) throws JobPersistenceException;
+  void storeTrigger (@NonNull IOperableTrigger newTrigger, boolean replaceExisting) throws JobPersistenceException;
 
   /**
    * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the given key.
@@ -190,9 +198,9 @@ public interface IJobStore
    * @return <code>true</code> if a <code>Trigger</code> with the given name &amp; group was found
    *         and removed from the store.
    */
-  boolean removeTrigger (TriggerKey triggerKey) throws JobPersistenceException;
+  boolean removeTrigger (@NonNull TriggerKey triggerKey) throws JobPersistenceException;
 
-  boolean removeTriggers (List <TriggerKey> triggerKeys) throws JobPersistenceException;
+  boolean removeTriggers (@NonNull List <TriggerKey> triggerKeys) throws JobPersistenceException;
 
   /**
    * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the given key, and
@@ -203,7 +211,8 @@ public interface IJobStore
    * @return <code>true</code> if a <code>Trigger</code> with the given name &amp; group was found
    *         and removed from the store.
    */
-  boolean replaceTrigger (TriggerKey triggerKey, IOperableTrigger newTrigger) throws JobPersistenceException;
+  boolean replaceTrigger (@NonNull TriggerKey triggerKey,
+                          @NonNull IOperableTrigger newTrigger) throws JobPersistenceException;
 
   /**
    * Retrieve the given <code>{@link com.helger.quartz.ITrigger}</code>.
@@ -211,7 +220,8 @@ public interface IJobStore
    * @return The desired <code>Trigger</code>, or null if there is no match.
    * @throws JobPersistenceException
    */
-  IOperableTrigger retrieveTrigger (TriggerKey triggerKey) throws JobPersistenceException;
+  @Nullable
+  IOperableTrigger retrieveTrigger (@NonNull TriggerKey triggerKey) throws JobPersistenceException;
 
   /**
    * Determine whether a job with the given identifier already exists within the scheduler.
@@ -221,7 +231,7 @@ public interface IJobStore
    * @return true if a Job exists with the given identifier
    * @throws JobPersistenceException
    */
-  boolean checkExists (JobKey jobKey) throws JobPersistenceException;
+  boolean checkExists (@NonNull JobKey jobKey) throws JobPersistenceException;
 
   /**
    * Determine whether a {@link ITrigger} with the given identifier already exists within the
@@ -232,7 +242,7 @@ public interface IJobStore
    * @return true if a Trigger exists with the given identifier
    * @throws JobPersistenceException
    */
-  boolean checkExists (TriggerKey triggerKey) throws JobPersistenceException;
+  boolean checkExists (@NonNull TriggerKey triggerKey) throws JobPersistenceException;
 
   /**
    * Clear (delete!) all scheduling data - all jobs, {@link ITrigger}s and {@link ICalendar}s.
@@ -257,8 +267,8 @@ public interface IJobStore
    *         if a <code>Calendar</code> with the same name already exists, and replaceExisting is
    *         set to false.
    */
-  void storeCalendar (String name,
-                      ICalendar calendar,
+  void storeCalendar (@NonNull String name,
+                      @NonNull ICalendar calendar,
                       boolean replaceExisting,
                       boolean updateTriggers) throws JobPersistenceException;
 
@@ -275,7 +285,7 @@ public interface IJobStore
    * @return <code>true</code> if a <code>Calendar</code> with the given name was found and removed
    *         from the store.
    */
-  boolean removeCalendar (String calName) throws JobPersistenceException;
+  boolean removeCalendar (@NonNull String calName) throws JobPersistenceException;
 
   /**
    * Retrieve the given <code>{@link com.helger.quartz.ITrigger}</code>.
@@ -284,7 +294,8 @@ public interface IJobStore
    *        The name of the <code>Calendar</code> to be retrieved.
    * @return The desired <code>Calendar</code>, or null if there is no match.
    */
-  ICalendar retrieveCalendar (String calName) throws JobPersistenceException;
+  @Nullable
+  ICalendar retrieveCalendar (@NonNull String calName) throws JobPersistenceException;
 
   /////////////////////////////////////////////////////////////////////////////
   //
@@ -296,18 +307,21 @@ public interface IJobStore
    * Get the number of <code>{@link com.helger.quartz.IJob}</code> s that are stored in the
    * <code>JobsStore</code>.
    */
+  @Nonnegative
   int getNumberOfJobs () throws JobPersistenceException;
 
   /**
    * Get the number of <code>{@link com.helger.quartz.ITrigger}</code> s that are stored in the
    * <code>JobsStore</code>.
    */
+  @Nonnegative
   int getNumberOfTriggers () throws JobPersistenceException;
 
   /**
    * Get the number of <code>{@link com.helger.quartz.ICalendar}</code> s that are stored in the
    * <code>JobsStore</code>.
    */
+  @Nonnegative
   int getNumberOfCalendars () throws JobPersistenceException;
 
   /**
@@ -318,7 +332,9 @@ public interface IJobStore
    * <code>null</code>).
    * </p>
    */
-  ICommonsSet <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws JobPersistenceException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsSet <JobKey> getJobKeys (@NonNull GroupMatcher <JobKey> matcher) throws JobPersistenceException;
 
   /**
    * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code> s that have the
@@ -328,7 +344,9 @@ public interface IJobStore
    * <code>null</code>).
    * </p>
    */
-  ICommonsSet <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsSet <TriggerKey> getTriggerKeys (@NonNull GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
   /**
    * Get the names of all of the <code>{@link com.helger.quartz.IJob}</code> groups.
@@ -337,6 +355,8 @@ public interface IJobStore
    * <code>null</code>).
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getJobGroupNames () throws JobPersistenceException;
 
   /**
@@ -346,6 +366,8 @@ public interface IJobStore
    * <code>null</code>).
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getTriggerGroupNames () throws JobPersistenceException;
 
   /**
@@ -356,6 +378,8 @@ public interface IJobStore
    * (not <code>null</code>).
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getCalendarNames () throws JobPersistenceException;
 
   /**
@@ -364,14 +388,17 @@ public interface IJobStore
    * If there are no matches, a zero-length array should be returned.
    * </p>
    */
-  ICommonsList <IOperableTrigger> getTriggersForJob (JobKey jobKey) throws JobPersistenceException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsList <IOperableTrigger> getTriggersForJob (@NonNull JobKey jobKey) throws JobPersistenceException;
 
   /**
    * Get the current state of the identified <code>{@link ITrigger}</code>.
    *
    * @see ETriggerState
    */
-  ETriggerState getTriggerState (TriggerKey triggerKey) throws JobPersistenceException;
+  @NonNull
+  ETriggerState getTriggerState (@NonNull TriggerKey triggerKey) throws JobPersistenceException;
 
   /////////////////////////////////////////////////////////////////////////////
   //
@@ -384,7 +411,7 @@ public interface IJobStore
    *
    * @see #resumeTrigger(TriggerKey)
    */
-  void pauseTrigger (TriggerKey triggerKey) throws JobPersistenceException;
+  void pauseTrigger (@NonNull TriggerKey triggerKey) throws JobPersistenceException;
 
   /**
    * Pause all of the <code>{@link com.helger.quartz.ITrigger}s</code> in the given group.
@@ -395,7 +422,9 @@ public interface IJobStore
    *
    * @see #resumeTriggers(GroupMatcher)
    */
-  ICommonsCollection <String> pauseTriggers (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsCollection <String> pauseTriggers (@NonNull GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
   /**
    * Pause the <code>{@link com.helger.quartz.IJob}</code> with the given name - by pausing all of
@@ -403,7 +432,7 @@ public interface IJobStore
    *
    * @see #resumeJob(JobKey)
    */
-  void pauseJob (JobKey jobKey) throws JobPersistenceException;
+  void pauseJob (@NonNull JobKey jobKey) throws JobPersistenceException;
 
   /**
    * Pause all of the <code>{@link com.helger.quartz.IJob}s</code> in the given group - by pausing
@@ -415,7 +444,9 @@ public interface IJobStore
    *
    * @see #resumeJobs(GroupMatcher)
    */
-  ICommonsCollection <String> pauseJobs (GroupMatcher <JobKey> groupMatcher) throws JobPersistenceException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsCollection <String> pauseJobs (@NonNull GroupMatcher <JobKey> groupMatcher) throws JobPersistenceException;
 
   /**
    * Resume (un-pause) the <code>{@link com.helger.quartz.ITrigger}</code> with the given key.
@@ -426,7 +457,7 @@ public interface IJobStore
    *
    * @see #pauseTrigger(TriggerKey)
    */
-  void resumeTrigger (TriggerKey triggerKey) throws JobPersistenceException;
+  void resumeTrigger (@NonNull TriggerKey triggerKey) throws JobPersistenceException;
 
   /**
    * Resume (un-pause) all of the <code>{@link com.helger.quartz.ITrigger}s</code> in the given
@@ -438,8 +469,13 @@ public interface IJobStore
    *
    * @see #pauseTriggers(GroupMatcher)
    */
-  ICommonsCollection <String> resumeTriggers (GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsCollection <String> resumeTriggers (@NonNull
+                                              GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsSet <String> getPausedTriggerGroups () throws JobPersistenceException;
 
   /**
@@ -451,7 +487,7 @@ public interface IJobStore
    *
    * @see #pauseJob(JobKey)
    */
-  void resumeJob (JobKey jobKey) throws JobPersistenceException;
+  void resumeJob (@NonNull JobKey jobKey) throws JobPersistenceException;
 
   /**
    * Resume (un-pause) all of the <code>{@link com.helger.quartz.IJob}s</code> in the given group.
@@ -462,7 +498,9 @@ public interface IJobStore
    *
    * @see #pauseJobs(GroupMatcher)
    */
-  ICommonsCollection <String> resumeJobs (GroupMatcher <JobKey> matcher) throws JobPersistenceException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsCollection <String> resumeJobs (@NonNull GroupMatcher <JobKey> matcher) throws JobPersistenceException;
 
   /**
    * Pause all triggers - equivalent of calling <code>pauseTriggerGroup(group)</code> on every
@@ -504,6 +542,8 @@ public interface IJobStore
    *        time represented in this value as milliseconds.
    * @see #releaseAcquiredTrigger(IOperableTrigger)
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <IOperableTrigger> acquireNextTriggers (long noLaterThan,
                                                        int maxCount,
                                                        long timeWindow) throws JobPersistenceException;
@@ -512,7 +552,7 @@ public interface IJobStore
    * Inform the <code>JobStore</code> that the scheduler no longer plans to fire the given
    * <code>Trigger</code>, that it had previously acquired (reserved).
    */
-  void releaseAcquiredTrigger (IOperableTrigger trigger);
+  void releaseAcquiredTrigger (@NonNull IOperableTrigger trigger);
 
   /**
    * Inform the <code>JobStore</code> that the scheduler is now firing the given
@@ -523,7 +563,10 @@ public interface IJobStore
    *         trigger was not successfully put into the 'executing' state. Preference is to return an
    *         empty list if none of the triggers could be fired.
    */
-  ICommonsList <TriggerFiredResult> triggersFired (List <IOperableTrigger> triggers) throws JobPersistenceException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsList <TriggerFiredResult> triggersFired (@NonNull
+                                                   List <IOperableTrigger> triggers) throws JobPersistenceException;
 
   /**
    * Inform the <code>JobStore</code> that the scheduler has completed the firing of the given
@@ -531,9 +574,9 @@ public interface IJobStore
    * exception, or was vetoed), and that the <code>{@link com.helger.quartz.JobDataMap}</code> in
    * the given <code>JobDetail</code> should be updated if the <code>Job</code> is stateful.
    */
-  void triggeredJobComplete (IOperableTrigger trigger,
-                             IJobDetail jobDetail,
-                             ECompletedExecutionInstruction triggerInstCode);
+  void triggeredJobComplete (@NonNull IOperableTrigger trigger,
+                             @NonNull IJobDetail jobDetail,
+                             @NonNull ECompletedExecutionInstruction triggerInstCode);
 
   /**
    * Inform the <code>JobStore</code> of the Scheduler instance's Id, prior to initialize being
@@ -541,7 +584,7 @@ public interface IJobStore
    *
    * @since 1.7
    */
-  void setInstanceId (String schedInstId);
+  void setInstanceId (@Nullable String schedInstId);
 
   /**
    * Inform the <code>JobStore</code> of the Scheduler instance's name, prior to initialize being
@@ -549,7 +592,7 @@ public interface IJobStore
    *
    * @since 1.7
    */
-  void setInstanceName (String schedName);
+  void setInstanceName (@Nullable String schedName);
 
   /**
    * Tells the JobStore the pool size used to execute jobs
@@ -558,5 +601,5 @@ public interface IJobStore
    *        amount of threads allocated for job execution
    * @since 2.0
    */
-  void setThreadPoolSize (int poolSize);
+  void setThreadPoolSize (@Nonnegative int poolSize);
 }

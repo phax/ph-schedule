@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.array.ArrayHelper;
 import com.helger.quartz.ICalendar;
@@ -58,17 +59,17 @@ public class WeeklyCalendar extends AbstractCalendar <WeeklyCalendar>
     this (null, null);
   }
 
-  public WeeklyCalendar (final ICalendar baseCalendar)
+  public WeeklyCalendar (@Nullable final ICalendar baseCalendar)
   {
     this (baseCalendar, null);
   }
 
-  public WeeklyCalendar (final TimeZone timeZone)
+  public WeeklyCalendar (@Nullable final TimeZone timeZone)
   {
     this (null, timeZone);
   }
 
-  public WeeklyCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
+  public WeeklyCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
 

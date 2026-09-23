@@ -22,10 +22,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.annotation.Nonnegative;
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.SchedulerConfigException;
@@ -208,10 +211,10 @@ public class SimpleThreadPool implements IThreadPool
     m_bMakeThreadsDaemons = makeThreadsDaemons;
   }
 
-  public void setInstanceId (final String schedInstId)
+  public void setInstanceId (@Nullable final String schedInstId)
   {}
 
-  public void setInstanceName (final String schedName)
+  public void setInstanceName (@Nullable final String schedName)
   {
     m_sSchedulerInstanceName = schedName;
   }
@@ -269,7 +272,9 @@ public class SimpleThreadPool implements IThreadPool
     LOGGER.info ("Initialized " + m_nCount + " worker threads");
   }
 
-  protected List <WorkerThread> createWorkerThreads (final int nCreateCount)
+  @NonNull
+  @ReturnsMutableCopy
+  protected List <WorkerThread> createWorkerThreads (@Nonnegative final int nCreateCount)
   {
     m_aWorkers = new CommonsArrayList <> ();
     for (int i = 1; i <= nCreateCount; ++i)
@@ -420,7 +425,7 @@ public class SimpleThreadPool implements IThreadPool
    * @param aRunnable
    *        the <code>Runnable</code> to be added.
    */
-  public boolean runInThread (final Runnable aRunnable)
+  public boolean runInThread (@Nullable final Runnable aRunnable)
   {
     if (aRunnable == null)
       return false;
@@ -490,7 +495,7 @@ public class SimpleThreadPool implements IThreadPool
     }
   }
 
-  protected void makeAvailable (final WorkerThread wt)
+  protected void makeAvailable (@NonNull final WorkerThread wt)
   {
     synchronized (m_aNextRunnableLock)
     {
@@ -503,7 +508,7 @@ public class SimpleThreadPool implements IThreadPool
     }
   }
 
-  protected void clearFromBusyWorkersList (final WorkerThread wt)
+  protected void clearFromBusyWorkersList (@NonNull final WorkerThread wt)
   {
     synchronized (m_aNextRunnableLock)
     {
@@ -567,7 +572,7 @@ public class SimpleThreadPool implements IThreadPool
       m_aCanRun.set (false);
     }
 
-    public void run (final Runnable aNewRunnable)
+    public void run (@NonNull final Runnable aNewRunnable)
     {
       synchronized (m_aLock)
       {

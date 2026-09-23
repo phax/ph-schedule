@@ -39,6 +39,14 @@ v6.2.0 - work in progress
 * Added the new enum constant `ESchedulerState.NOT_STARTED` for a scheduler that exists but was never started. Quartz reports standby mode for that state as well, so previously it was indistinguishable from an explicit standby
 * **Potentially breaking**: `QuartzSchedulerHelper.getSchedulerState ()` now returns `ESchedulerState.NOT_STARTED` instead of `ESchedulerState.STANDBY` for a scheduler that was never started. It also evaluates `isShutdown ()` first and no longer throws an `IllegalStateException` if no state matches
 * Added `GlobalQuartzScheduler.removeJobListener (String)`, `getAllJobListeners ()` and `getJobListenerOfName (String)`, as previously job listeners could only be added
+* Added the JSpecify annotations `@NonNull` and `@Nullable` as well as `@Nonempty`, `@Nonnegative`, `@ReturnsMutableCopy`, `@ReturnsMutableObject` and `@ReturnsImmutableObject` to the whole API of `ph-mini-quartz` and `ph-schedule`
+* Replaced the manual `null`, empty and range checks with `ValueEnforcer` calls throughout both modules. Note that `ValueEnforcer.notNull` throws a `NullPointerException` where previously an `IllegalArgumentException` was thrown
+* **Potentially breaking**: `CronScheduleBuilder.cronSchedule (String)` now throws an `IllegalArgumentException` instead of a `RuntimeException` for an invalid cron expression
+* **Potentially breaking**: `DailyTimeIntervalScheduleBuilder.endingDailyAfterCount (int)` now throws an `IllegalStateException` instead of an `IllegalArgumentException` if `startingDailyAt` was not called before
+* **Potentially breaking**: `GlobalQuartzScheduler.scheduleJob (...)` now throws an `IllegalStateException` instead of a `RuntimeException` if the job could not be scheduled
+* `IListenerManager.addTriggerListener (ITriggerListener, IMatcher)` is now declared `@NonNull` for the matcher, matching what the implementation always enforced
+* Fixed `SimpleTrigger.getClone ()` throwing a `NullPointerException` if no start time was set
+* All `ToStringGenerator.append` field names now start with an uppercase character
 
 v6.1.1 - 2026-05-18
 * Removed OSGI bundling

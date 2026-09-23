@@ -20,6 +20,10 @@ package com.helger.quartz;
 
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.ICommonsList;
 
 /**
@@ -47,7 +51,7 @@ public interface IListenerManager
    * @see IMatcher
    * @see com.helger.quartz.impl.matchers.EverythingMatcher
    */
-  void addJobListener (IJobListener jobListener);
+  void addJobListener (@NonNull IJobListener jobListener);
 
   /**
    * Add the given <code>{@link IJobListener}</code> to the <code>Scheduler</code>, and register it
@@ -57,7 +61,7 @@ public interface IListenerManager
    * @see IMatcher
    * @see com.helger.quartz.impl.matchers.EverythingMatcher
    */
-  void addJobListener (IJobListener jobListener, IMatcher <JobKey> matcher);
+  void addJobListener (@NonNull IJobListener jobListener, @Nullable IMatcher <JobKey> matcher);
 
   /**
    * Add the given <code>{@link IJobListener}</code> to the <code>Scheduler</code>, and register it
@@ -67,7 +71,8 @@ public interface IListenerManager
    * @see IMatcher
    * @see com.helger.quartz.impl.matchers.EverythingMatcher
    */
-  void addJobListener (IJobListener jobListener, @SuppressWarnings ("unchecked") IMatcher <JobKey>... matchers);
+  void addJobListener (@NonNull IJobListener jobListener,
+                       @SuppressWarnings ("unchecked") @Nullable IMatcher <JobKey>... matchers);
 
   /**
    * Add the given <code>{@link IJobListener}</code> to the <code>Scheduler</code>, and register it
@@ -77,7 +82,7 @@ public interface IListenerManager
    * @see IMatcher
    * @see com.helger.quartz.impl.matchers.EverythingMatcher
    */
-  void addJobListener (IJobListener jobListener, List <IMatcher <JobKey>> matchers);
+  void addJobListener (@NonNull IJobListener jobListener, @Nullable List <IMatcher <JobKey>> matchers);
 
   /**
    * Add the given Matcher to the set of matchers for which the listener will receive events if ANY
@@ -89,7 +94,7 @@ public interface IListenerManager
    *        the additional matcher to apply for selecting events
    * @return true if the identified listener was found and updated
    */
-  boolean addJobListenerMatcher (String listenerName, IMatcher <JobKey> matcher);
+  boolean addJobListenerMatcher (@NonNull String listenerName, @NonNull IMatcher <JobKey> matcher);
 
   /**
    * Remove the given Matcher to the set of matchers for which the listener will receive events if
@@ -101,7 +106,7 @@ public interface IListenerManager
    *        the additional matcher to apply for selecting events
    * @return true if the given matcher was found and removed from the listener's list of matchers
    */
-  boolean removeJobListenerMatcher (String listenerName, IMatcher <JobKey> matcher);
+  boolean removeJobListenerMatcher (@NonNull String listenerName, @NonNull IMatcher <JobKey> matcher);
 
   /**
    * Set the set of Matchers for which the listener will receive events if ANY of the matchers
@@ -116,7 +121,7 @@ public interface IListenerManager
    *        the matchers to apply for selecting events
    * @return true if the given matcher was found and removed from the listener's list of matchers
    */
-  boolean setJobListenerMatchers (String listenerName, List <IMatcher <JobKey>> matchers);
+  boolean setJobListenerMatchers (@NonNull String listenerName, @NonNull List <IMatcher <JobKey>> matchers);
 
   /**
    * Get the set of Matchers for which the listener will receive events if ANY of the matchers
@@ -126,25 +131,30 @@ public interface IListenerManager
    *        the name of the listener to add the matcher to
    * @return the matchers registered for selecting events for the identified listener
    */
-  ICommonsList <IMatcher <JobKey>> getJobListenerMatchers (String listenerName);
+  @Nullable
+  @ReturnsMutableCopy
+  ICommonsList <IMatcher <JobKey>> getJobListenerMatchers (@Nullable String listenerName);
 
   /**
    * Remove the identified <code>{@link IJobListener}</code> from the <code>Scheduler</code>.
    *
    * @return true if the identified listener was found in the list, and removed.
    */
-  boolean removeJobListener (String name);
+  boolean removeJobListener (@Nullable String name);
 
   /**
    * Get a List containing all of the <code>{@link IJobListener}</code>s in the
    * <code>Scheduler</code>, in the order in which they were registered.
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <IJobListener> getJobListeners ();
 
   /**
    * Get the <code>{@link IJobListener}</code> that has the given name.
    */
-  IJobListener getJobListener (String name);
+  @Nullable
+  IJobListener getJobListener (@Nullable String name);
 
   /**
    * Add the given <code>{@link ITriggerListener}</code> to the <code>Scheduler</code>, and register
@@ -154,7 +164,7 @@ public interface IListenerManager
    * @see IMatcher
    * @see com.helger.quartz.impl.matchers.EverythingMatcher
    */
-  void addTriggerListener (ITriggerListener triggerListener);
+  void addTriggerListener (@NonNull ITriggerListener triggerListener);
 
   /**
    * Add the given <code>{@link ITriggerListener}</code> to the <code>Scheduler</code>, and register
@@ -164,7 +174,7 @@ public interface IListenerManager
    * @see IMatcher
    * @see com.helger.quartz.impl.matchers.EverythingMatcher
    */
-  void addTriggerListener (ITriggerListener triggerListener, IMatcher <TriggerKey> matcher);
+  void addTriggerListener (@NonNull ITriggerListener triggerListener, @NonNull IMatcher <TriggerKey> matcher);
 
   /**
    * Add the given <code>{@link ITriggerListener}</code> to the <code>Scheduler</code>, and register
@@ -174,8 +184,8 @@ public interface IListenerManager
    * @see IMatcher
    * @see com.helger.quartz.impl.matchers.EverythingMatcher
    */
-  void addTriggerListener (ITriggerListener triggerListener,
-                           @SuppressWarnings ("unchecked") IMatcher <TriggerKey>... matchers);
+  void addTriggerListener (@NonNull ITriggerListener triggerListener,
+                           @SuppressWarnings ("unchecked") @Nullable IMatcher <TriggerKey>... matchers);
 
   /**
    * Add the given <code>{@link ITriggerListener}</code> to the <code>Scheduler</code>, and register
@@ -185,7 +195,7 @@ public interface IListenerManager
    * @see IMatcher
    * @see com.helger.quartz.impl.matchers.EverythingMatcher
    */
-  void addTriggerListener (ITriggerListener triggerListener, List <IMatcher <TriggerKey>> matchers);
+  void addTriggerListener (@NonNull ITriggerListener triggerListener, @Nullable List <IMatcher <TriggerKey>> matchers);
 
   /**
    * Add the given Matcher to the set of matchers for which the listener will receive events if ANY
@@ -197,7 +207,7 @@ public interface IListenerManager
    *        the additional matcher to apply for selecting events
    * @return true if the identified listener was found and updated
    */
-  boolean addTriggerListenerMatcher (String listenerName, IMatcher <TriggerKey> matcher);
+  boolean addTriggerListenerMatcher (@NonNull String listenerName, @NonNull IMatcher <TriggerKey> matcher);
 
   /**
    * Remove the given Matcher to the set of matchers for which the listener will receive events if
@@ -209,7 +219,7 @@ public interface IListenerManager
    *        the additional matcher to apply for selecting events
    * @return true if the given matcher was found and removed from the listener's list of matchers
    */
-  boolean removeTriggerListenerMatcher (String listenerName, IMatcher <TriggerKey> matcher);
+  boolean removeTriggerListenerMatcher (@NonNull String listenerName, @NonNull IMatcher <TriggerKey> matcher);
 
   /**
    * Set the set of Matchers for which the listener will receive events if ANY of the matchers
@@ -224,7 +234,7 @@ public interface IListenerManager
    *        the matchers to apply for selecting events
    * @return true if the given matcher was found and removed from the listener's list of matchers
    */
-  boolean setTriggerListenerMatchers (String listenerName, List <IMatcher <TriggerKey>> matchers);
+  boolean setTriggerListenerMatchers (@NonNull String listenerName, @NonNull List <IMatcher <TriggerKey>> matchers);
 
   /**
    * Get the set of Matchers for which the listener will receive events if ANY of the matchers
@@ -234,41 +244,48 @@ public interface IListenerManager
    *        the name of the listener to add the matcher to
    * @return the matchers registered for selecting events for the identified listener
    */
-  ICommonsList <IMatcher <TriggerKey>> getTriggerListenerMatchers (String listenerName);
+  @Nullable
+  @ReturnsMutableCopy
+  ICommonsList <IMatcher <TriggerKey>> getTriggerListenerMatchers (@Nullable String listenerName);
 
   /**
    * Remove the identified <code>{@link ITriggerListener}</code> from the <code>Scheduler</code>.
    *
    * @return true if the identified listener was found in the list, and removed.
    */
-  boolean removeTriggerListener (String name);
+  boolean removeTriggerListener (@Nullable String name);
 
   /**
    * Get a List containing all of the <code>{@link ITriggerListener}</code>s in the
    * <code>Scheduler</code>, in the order in which they were registered.
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <ITriggerListener> getTriggerListeners ();
 
   /**
    * Get the <code>{@link ITriggerListener}</code> that has the given name.
    */
-  ITriggerListener getTriggerListener (String name);
+  @Nullable
+  ITriggerListener getTriggerListener (@Nullable String name);
 
   /**
    * Register the given <code>{@link ISchedulerListener}</code> with the <code>Scheduler</code>.
    */
-  void addSchedulerListener (ISchedulerListener schedulerListener);
+  void addSchedulerListener (@NonNull ISchedulerListener schedulerListener);
 
   /**
    * Remove the given <code>{@link ISchedulerListener}</code> from the <code>Scheduler</code>.
    *
    * @return true if the identified listener was found in the list, and removed.
    */
-  boolean removeSchedulerListener (ISchedulerListener schedulerListener);
+  boolean removeSchedulerListener (@Nullable ISchedulerListener schedulerListener);
 
   /**
    * Get a List containing all of the <code>{@link ISchedulerListener}</code>s registered with the
    * <code>Scheduler</code>, in the order in which they were registered.
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <ISchedulerListener> getSchedulerListeners ();
 }

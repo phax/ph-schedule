@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.CronExpression;
@@ -60,7 +61,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * @param expression
    *        a String representation of the desired cron expression
    */
-  public CronCalendar (final String expression) throws ParseException
+  public CronCalendar (@NonNull final String expression) throws ParseException
   {
     this (null, expression, null);
   }
@@ -75,7 +76,8 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * @param expression
    *        a String representation of the desired cron expression
    */
-  public CronCalendar (final ICalendar baseCalendar, final String expression) throws ParseException
+  public CronCalendar (@Nullable final ICalendar baseCalendar,
+                       @NonNull final String expression) throws ParseException
   {
     this (baseCalendar, expression, null);
   }
@@ -95,9 +97,9 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    *        <code>timeZone</code> is <code>null</code> then <code>TimeZone.getDefault()</code> will
    *        be used.
    */
-  public CronCalendar (final ICalendar baseCalendar,
-                       final String expression,
-                       final TimeZone timeZone) throws ParseException
+  public CronCalendar (@Nullable final ICalendar baseCalendar,
+                       @NonNull final String expression,
+                       @Nullable final TimeZone timeZone) throws ParseException
   {
     super (baseCalendar, null);
     m_aCronExpression = new CronExpression (expression);
@@ -113,6 +115,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * </p>
    */
   @Override
+  @NonNull
   public TimeZone getTimeZone ()
   {
     return m_aCronExpression.getTimeZone ();
@@ -128,7 +131,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * </p>
    */
   @Override
-  public void setTimeZone (final TimeZone timeZone)
+  public void setTimeZone (@Nullable final TimeZone timeZone)
   {
     m_aCronExpression.setTimeZone (timeZone);
   }

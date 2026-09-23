@@ -17,6 +17,7 @@
 package com.helger.schedule.quartz.listener;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonempty;
 import com.helger.base.lang.clazz.ClassHelper;
@@ -91,7 +92,8 @@ public class StatisticsJobListener implements IJobListener
   }
 
   @Override
-  public void jobWasExecuted (@NonNull final IJobExecutionContext aContext, final JobExecutionException aJobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext aContext,
+                              @Nullable final JobExecutionException aJobException)
   {
     final String sStatsName = getStatisticsName (aContext);
     StatisticsManager.getCounterHandler (sStatsName + STATS_SUFFIX_EXEC).increment ();

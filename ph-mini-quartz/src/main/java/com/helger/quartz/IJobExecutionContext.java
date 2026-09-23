@@ -20,6 +20,11 @@ package com.helger.quartz;
 
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonnegative;
+
 /**
  * A context bundle containing handles to various environment information, that is given to a
  * <code>{@link com.helger.quartz.IJobDetail}</code> instance as it is executed, and to a
@@ -58,6 +63,7 @@ public interface IJobExecutionContext
    * Get a handle to the <code>Scheduler</code> instance that fired the <code>Job</code>.
    * </p>
    */
+  @NonNull
   IScheduler getScheduler ();
 
   /**
@@ -65,6 +71,7 @@ public interface IJobExecutionContext
    * Get a handle to the <code>Trigger</code> instance that fired the <code>Job</code>.
    * </p>
    */
+  @NonNull
   ITrigger getTrigger ();
 
   /**
@@ -73,6 +80,7 @@ public interface IJobExecutionContext
    * fired the <code>Job</code>.
    * </p>
    */
+  @Nullable
   ICalendar getCalendar ();
 
   /**
@@ -97,8 +105,10 @@ public interface IJobExecutionContext
    * @throws IllegalStateException
    *         if this is not a recovering job.
    */
+  @NonNull
   TriggerKey getRecoveringTriggerKey ();
 
+  @Nonnegative
   int getRefireCount ();
 
   /**
@@ -122,6 +132,7 @@ public interface IJobExecutionContext
    * <code>IllegalStateException</code>.
    * </p>
    */
+  @NonNull
   JobDataMap getMergedJobDataMap ();
 
   /**
@@ -129,6 +140,7 @@ public interface IJobExecutionContext
    * Get the <code>JobDetail</code> associated with the <code>Job</code>.
    * </p>
    */
+  @NonNull
   IJobDetail getJobDetail ();
 
   /**
@@ -139,6 +151,7 @@ public interface IJobExecutionContext
    * Note: The Job instance is not available through remote scheduler interfaces.
    * </p>
    */
+  @NonNull
   IJob getJobInstance ();
 
   /**
@@ -148,6 +161,7 @@ public interface IJobExecutionContext
    * @return Returns the fireTime.
    * @see #getScheduledFireTime()
    */
+  @Nullable
   Date getFireTime ();
 
   /**
@@ -157,10 +171,13 @@ public interface IJobExecutionContext
    * @return Returns the scheduledFireTime.
    * @see #getFireTime()
    */
+  @Nullable
   Date getScheduledFireTime ();
 
+  @Nullable
   Date getPreviousFireTime ();
 
+  @Nullable
   Date getNextFireTime ();
 
   /**
@@ -170,6 +187,7 @@ public interface IJobExecutionContext
    * @return the unique fire instance id
    * @see IScheduler#interrupt(String)
    */
+  @Nullable
   String getFireInstanceId ();
 
   /**
@@ -183,6 +201,7 @@ public interface IJobExecutionContext
    *
    * @return Returns the result.
    */
+  @Nullable
   Object getResult ();
 
   /**
@@ -194,7 +213,7 @@ public interface IJobExecutionContext
    * the job's execution.
    * </p>
    */
-  void setResult (Object result);
+  void setResult (@Nullable Object result);
 
   /**
    * The amount of time the job ran for (in milliseconds). The returned value will be -1 until the
@@ -218,7 +237,7 @@ public interface IJobExecutionContext
    * @param value
    *        the value to store
    */
-  void put (Object key, Object value);
+  void put (@NonNull Object key, @Nullable Object value);
 
   /**
    * Get the value with the given key from the context's data map.
@@ -226,5 +245,6 @@ public interface IJobExecutionContext
    * @param key
    *        the key for the desired value
    */
-  Object get (Object key);
+  @Nullable
+  Object get (@Nullable Object key);
 }

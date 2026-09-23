@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.spi;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
@@ -30,13 +33,13 @@ import com.helger.quartz.SchedulerException;
  */
 public interface ISchedulerSignaler
 {
-  void notifyTriggerListenersMisfired (ITrigger trigger);
+  void notifyTriggerListenersMisfired (@NonNull ITrigger trigger);
 
-  void notifySchedulerListenersFinalized (ITrigger trigger);
+  void notifySchedulerListenersFinalized (@NonNull ITrigger trigger);
 
-  void notifySchedulerListenersJobDeleted (JobKey jobKey);
+  void notifySchedulerListenersJobDeleted (@NonNull JobKey jobKey);
 
   void signalSchedulingChange (long candidateNewNextFireTime);
 
-  void notifySchedulerListenersError (String string, SchedulerException jpe);
+  void notifySchedulerListenersError (@Nullable String string, @Nullable SchedulerException jpe);
 }

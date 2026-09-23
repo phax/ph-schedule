@@ -19,6 +19,7 @@
 package com.helger.quartz.listeners;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +84,7 @@ public class JobChainingJobListener implements IJobListener
    * @param secondJob
    *        a JobKey with the name and group of the follow-up job
    */
-  public void addJobChainLink (final JobKey firstJob, final JobKey secondJob)
+  public void addJobChainLink (@NonNull final JobKey firstJob, @NonNull final JobKey secondJob)
   {
     ValueEnforcer.notNull (firstJob, "FirstJob");
     ValueEnforcer.notNull (firstJob.getName (), "FirstJob.Name");
@@ -94,7 +95,8 @@ public class JobChainingJobListener implements IJobListener
   }
 
   @Override
-  public void jobWasExecuted (@NonNull final IJobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext context,
+                              @Nullable final JobExecutionException jobException)
   {
     final JobKey sj = m_aChainLinks.get (context.getJobDetail ().getKey ());
     if (sj == null)

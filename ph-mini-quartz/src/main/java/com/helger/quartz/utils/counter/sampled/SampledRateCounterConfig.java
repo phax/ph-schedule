@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.annotation.Nonnegative;
 import com.helger.quartz.utils.counter.ICounter;
 
 /**
@@ -42,7 +45,9 @@ public class SampledRateCounterConfig extends SampledCounterConfig
    * @param isResetOnSample
    *        reset on sample?
    */
-  public SampledRateCounterConfig (final int intervalSecs, final int historySize, final boolean isResetOnSample)
+  public SampledRateCounterConfig (@Nonnegative final int intervalSecs,
+                                   @Nonnegative final int historySize,
+                                   final boolean isResetOnSample)
   {
     this (intervalSecs, historySize, isResetOnSample, 0, 0);
   }
@@ -62,8 +67,8 @@ public class SampledRateCounterConfig extends SampledCounterConfig
    * @param initialDenominatorValue
    *        initial value
    */
-  public SampledRateCounterConfig (final int intervalSecs,
-                                   final int historySize,
+  public SampledRateCounterConfig (@Nonnegative final int intervalSecs,
+                                   @Nonnegative final int historySize,
                                    final boolean isResetOnSample,
                                    final long initialNumeratorValue,
                                    final long initialDenominatorValue)
@@ -74,6 +79,7 @@ public class SampledRateCounterConfig extends SampledCounterConfig
   }
 
   @Override
+  @NonNull
   public ICounter createCounter ()
   {
     final SampledRateCounter sampledRateCounter = new SampledRateCounter (this);

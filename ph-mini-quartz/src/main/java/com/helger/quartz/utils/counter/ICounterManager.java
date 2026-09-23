@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.utils.counter;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * A Counter Manager that accepts a config to create counters. Creates counter's based on
  * {@link CounterConfig}. This manages the lifycycle of a counter
@@ -33,7 +36,8 @@ public interface ICounterManager
    * @param config
    * @return The counter created and managed by this CounterManager
    */
-  ICounter createCounter (CounterConfig config);
+  @NonNull
+  ICounter createCounter (@NonNull CounterConfig config);
 
   /**
    * Shuts down this counter manager
@@ -45,5 +49,5 @@ public interface ICounterManager
    *
    * @param counter
    */
-  void shutdownCounter (ICounter counter);
+  void shutdownCounter (@Nullable ICounter counter);
 }

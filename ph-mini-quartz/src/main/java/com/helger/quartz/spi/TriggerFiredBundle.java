@@ -20,6 +20,10 @@ package com.helger.quartz.spi;
 
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJobDetail;
 
@@ -43,15 +47,19 @@ public class TriggerFiredBundle
   private final Date m_aPrevFireTime;
   private final Date m_aNextFireTime;
 
-  public TriggerFiredBundle (final IJobDetail job,
-                             final IOperableTrigger trigger,
-                             final ICalendar cal,
+  public TriggerFiredBundle (@NonNull final IJobDetail job,
+                             @NonNull final IOperableTrigger trigger,
+                             @Nullable final ICalendar cal,
                              final boolean jobIsRecovering,
-                             final Date fireTime,
-                             final Date scheduledFireTime,
-                             final Date prevFireTime,
-                             final Date nextFireTime)
+                             @NonNull final Date fireTime,
+                             @Nullable final Date scheduledFireTime,
+                             @Nullable final Date prevFireTime,
+                             @Nullable final Date nextFireTime)
   {
+    ValueEnforcer.notNull (job, "Job");
+    ValueEnforcer.notNull (trigger, "Trigger");
+    ValueEnforcer.notNull (fireTime, "FireTime");
+
     m_aJob = job;
     m_aTrigger = trigger;
     m_aCal = cal;
@@ -62,16 +70,19 @@ public class TriggerFiredBundle
     m_aNextFireTime = nextFireTime;
   }
 
+  @NonNull
   public IJobDetail getJobDetail ()
   {
     return m_aJob;
   }
 
+  @NonNull
   public IOperableTrigger getTrigger ()
   {
     return m_aTrigger;
   }
 
+  @Nullable
   public ICalendar getCalendar ()
   {
     return m_aCal;
@@ -85,6 +96,7 @@ public class TriggerFiredBundle
   /**
    * @return Returns the fireTime.
    */
+  @NonNull
   public Date getFireTime ()
   {
     return m_aFireTime;
@@ -93,6 +105,7 @@ public class TriggerFiredBundle
   /**
    * @return Returns the nextFireTime.
    */
+  @Nullable
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
@@ -101,6 +114,7 @@ public class TriggerFiredBundle
   /**
    * @return Returns the prevFireTime.
    */
+  @Nullable
   public Date getPrevFireTime ()
   {
     return m_aPrevFireTime;
@@ -109,6 +123,7 @@ public class TriggerFiredBundle
   /**
    * @return Returns the scheduledFireTime.
    */
+  @Nullable
   public Date getScheduledFireTime ()
   {
     return m_aScheduledFireTime;

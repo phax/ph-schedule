@@ -21,6 +21,7 @@ package com.helger.quartz.utils.counter;
 import java.util.Timer;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
@@ -77,7 +78,8 @@ public class CounterManager implements ICounterManager
   /**
    * {@inheritDoc}
    */
-  public synchronized ICounter createCounter (final CounterConfig config)
+  @NonNull
+  public synchronized ICounter createCounter (@NonNull final CounterConfig config)
   {
     ValueEnforcer.notNull (config, "Config");
     ValueEnforcer.isFalse (m_bShutdown, "counter manager is shutdown");
@@ -96,7 +98,7 @@ public class CounterManager implements ICounterManager
   /**
    * {@inheritDoc}
    */
-  public void shutdownCounter (final ICounter counter)
+  public void shutdownCounter (@Nullable final ICounter counter)
   {
     if (counter instanceof final ISampledCounter aSampledCounter)
       aSampledCounter.shutdown ();

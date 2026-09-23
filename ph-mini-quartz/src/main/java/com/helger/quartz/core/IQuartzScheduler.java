@@ -23,6 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.Nonnegative;
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.collection.commons.ICommonsSet;
 import com.helger.quartz.ICalendar;
@@ -44,15 +50,20 @@ import com.helger.quartz.spi.IOperableTrigger;
  */
 public interface IQuartzScheduler
 {
+  @NonNull
+  @Nonempty
   String getSchedulerName ();
 
+  @NonNull
+  @Nonempty
   String getSchedulerInstanceId ();
 
+  @NonNull
   SchedulerContext getSchedulerContext () throws SchedulerException;
 
   void start () throws SchedulerException;
 
-  void startDelayed (int seconds) throws SchedulerException;
+  void startDelayed (@Nonnegative int seconds) throws SchedulerException;
 
   void standby ();
 
@@ -64,111 +75,141 @@ public interface IQuartzScheduler
 
   boolean isShutdown ();
 
+  @Nullable
   Date runningSince ();
 
+  @NonNull
+  @Nonempty
   String getVersion ();
 
+  @Nonnegative
   int numJobsExecuted ();
 
+  @NonNull
   Class <?> getJobStoreClass ();
 
   boolean supportsPersistence ();
 
   boolean isClustered ();
 
+  @NonNull
   Class <?> getThreadPoolClass ();
 
+  @Nonnegative
   int getThreadPoolSize ();
 
   void clear () throws SchedulerException;
 
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <IJobExecutionContext> getCurrentlyExecutingJobs () throws SchedulerException;
 
-  Date scheduleJob (IJobDetail jobDetail, ITrigger trigger) throws SchedulerException;
+  @NonNull
+  Date scheduleJob (@NonNull IJobDetail jobDetail, @NonNull ITrigger trigger) throws SchedulerException;
 
-  Date scheduleJob (ITrigger trigger) throws SchedulerException;
+  @NonNull
+  Date scheduleJob (@NonNull ITrigger trigger) throws SchedulerException;
 
-  void addJob (IJobDetail jobDetail, boolean replace) throws SchedulerException;
+  void addJob (@NonNull IJobDetail jobDetail, boolean replace) throws SchedulerException;
 
-  void addJob (IJobDetail jobDetail,
+  void addJob (@NonNull IJobDetail jobDetail,
                boolean replace,
                boolean storeNonDurableWhileAwaitingScheduling) throws SchedulerException;
 
-  boolean deleteJob (JobKey jobKey) throws SchedulerException;
+  boolean deleteJob (@NonNull JobKey jobKey) throws SchedulerException;
 
-  boolean unscheduleJob (TriggerKey triggerKey) throws SchedulerException;
+  boolean unscheduleJob (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
-  Date rescheduleJob (TriggerKey triggerKey, ITrigger newTrigger) throws SchedulerException;
+  @Nullable
+  Date rescheduleJob (@NonNull TriggerKey triggerKey, @NonNull ITrigger newTrigger) throws SchedulerException;
 
-  void triggerJob (JobKey jobKey, JobDataMap data) throws SchedulerException;
+  void triggerJob (@NonNull JobKey jobKey, @Nullable JobDataMap data) throws SchedulerException;
 
-  void triggerJob (IOperableTrigger trig) throws SchedulerException;
+  void triggerJob (@NonNull IOperableTrigger trig) throws SchedulerException;
 
-  void pauseTrigger (TriggerKey triggerKey) throws SchedulerException;
+  void pauseTrigger (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
-  void pauseTriggers (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
+  void pauseTriggers (@Nullable GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
-  void pauseJob (JobKey jobKey) throws SchedulerException;
+  void pauseJob (@NonNull JobKey jobKey) throws SchedulerException;
 
-  void pauseJobs (GroupMatcher <JobKey> matcher) throws SchedulerException;
+  void pauseJobs (@Nullable GroupMatcher <JobKey> matcher) throws SchedulerException;
 
-  void resumeTrigger (TriggerKey triggerKey) throws SchedulerException;
+  void resumeTrigger (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
-  void resumeTriggers (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
+  void resumeTriggers (@Nullable GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsSet <String> getPausedTriggerGroups () throws SchedulerException;
 
-  void resumeJob (JobKey jobKey) throws SchedulerException;
+  void resumeJob (@NonNull JobKey jobKey) throws SchedulerException;
 
-  void resumeJobs (GroupMatcher <JobKey> matcher) throws SchedulerException;
+  void resumeJobs (@Nullable GroupMatcher <JobKey> matcher) throws SchedulerException;
 
   void pauseAll () throws SchedulerException;
 
   void resumeAll () throws SchedulerException;
 
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getJobGroupNames () throws SchedulerException;
 
-  ICommonsSet <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws SchedulerException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsSet <JobKey> getJobKeys (@Nullable GroupMatcher <JobKey> matcher) throws SchedulerException;
 
-  ICommonsList <? extends ITrigger> getTriggersOfJob (JobKey jobKey) throws SchedulerException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsList <? extends ITrigger> getTriggersOfJob (@NonNull JobKey jobKey) throws SchedulerException;
 
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getTriggerGroupNames () throws SchedulerException;
 
-  ICommonsSet <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsSet <TriggerKey> getTriggerKeys (@Nullable GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
-  IJobDetail getJobDetail (JobKey jobKey) throws SchedulerException;
+  @Nullable
+  IJobDetail getJobDetail (@NonNull JobKey jobKey) throws SchedulerException;
 
-  ITrigger getTrigger (TriggerKey triggerKey) throws SchedulerException;
+  @Nullable
+  ITrigger getTrigger (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
-  ETriggerState getTriggerState (TriggerKey triggerKey) throws SchedulerException;
+  @NonNull
+  ETriggerState getTriggerState (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
-  void addCalendar (String calName,
-                    ICalendar calendar,
+  void addCalendar (@NonNull String calName,
+                    @NonNull ICalendar calendar,
                     boolean replace,
                     boolean updateTriggers) throws SchedulerException;
 
-  boolean deleteCalendar (String calName) throws SchedulerException;
+  boolean deleteCalendar (@NonNull String calName) throws SchedulerException;
 
-  ICalendar getCalendar (String calName) throws SchedulerException;
+  @Nullable
+  ICalendar getCalendar (@NonNull String calName) throws SchedulerException;
 
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getCalendarNames () throws SchedulerException;
 
-  boolean interrupt (JobKey jobKey) throws UnableToInterruptJobException;
+  boolean interrupt (@NonNull JobKey jobKey) throws UnableToInterruptJobException;
 
-  boolean interrupt (String fireInstanceId) throws UnableToInterruptJobException;
+  boolean interrupt (@NonNull String fireInstanceId) throws UnableToInterruptJobException;
 
-  boolean checkExists (JobKey jobKey) throws SchedulerException;
+  boolean checkExists (@NonNull JobKey jobKey) throws SchedulerException;
 
-  boolean checkExists (TriggerKey triggerKey) throws SchedulerException;
+  boolean checkExists (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
-  boolean deleteJobs (List <JobKey> jobKeys) throws SchedulerException;
+  boolean deleteJobs (@NonNull List <JobKey> jobKeys) throws SchedulerException;
 
-  void scheduleJobs (Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
+  void scheduleJobs (@NonNull Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                      boolean replace) throws SchedulerException;
 
-  void scheduleJob (IJobDetail jobDetail,
-                    Set <? extends ITrigger> triggersForJob,
+  void scheduleJob (@NonNull IJobDetail jobDetail,
+                    @NonNull Set <? extends ITrigger> triggersForJob,
                     boolean replace) throws SchedulerException;
 
-  boolean unscheduleJobs (List <TriggerKey> triggerKeys) throws SchedulerException;
+  boolean unscheduleJobs (@NonNull List <TriggerKey> triggerKeys) throws SchedulerException;
 }

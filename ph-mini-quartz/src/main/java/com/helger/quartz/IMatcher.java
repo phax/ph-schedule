@@ -36,7 +36,7 @@ import com.helger.quartz.utils.Key;
 @MustImplementEqualsAndHashcode
 public interface IMatcher <T extends Key <T>>
 {
-  boolean isMatch (T aKey);
+  boolean isMatch (@NonNull T aKey);
 
   boolean equals (Object aObj);
 

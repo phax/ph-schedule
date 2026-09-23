@@ -17,6 +17,7 @@
 package com.helger.schedule.quartz.listener;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonempty;
 import com.helger.datetime.helper.PDTFactory;
@@ -51,7 +52,8 @@ public class ErrorHistoryJobListener implements IJobListener
   {}
 
   @Override
-  public void jobWasExecuted (@NonNull final IJobExecutionContext aContext, final JobExecutionException aJobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext aContext,
+                              @Nullable final JobExecutionException aJobException)
   {
     if (aJobException == null)
     {

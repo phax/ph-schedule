@@ -78,7 +78,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   @NonNull
   @Override
-  public Class <?> loadClass (final String sClassName) throws ClassNotFoundException
+  public Class <?> loadClass (@NonNull final String sClassName) throws ClassNotFoundException
   {
     if (m_aBestCandidate != null)
     {
@@ -125,8 +125,8 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
 
   @NonNull
   @Override
-  public <T> Class <? extends T> loadClass (final String sClassName,
-                                            final Class <T> dummy) throws ClassNotFoundException
+  public <T> Class <? extends T> loadClass (@NonNull final String sClassName,
+                                            @NonNull final Class <T> dummy) throws ClassNotFoundException
   {
     return GenericReflection.uncheckedCast (loadClass (sClassName));
   }
@@ -141,7 +141,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   @Nullable
   @Override
-  public URL getResource (final String name)
+  public URL getResource (@Nullable final String name)
   {
     URL ret = null;
 
@@ -177,7 +177,7 @@ public class CascadingClassLoadHelper implements IClassLoadHelper
    */
   @Nullable
   @Override
-  public InputStream getResourceAsStream (final String name)
+  public InputStream getResourceAsStream (@Nullable final String name)
   {
     InputStream ret = null;
     if (m_aBestCandidate != null)

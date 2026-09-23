@@ -20,6 +20,13 @@ package com.helger.quartz;
 
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.Nonnegative;
+import com.helger.base.enforce.ValueEnforcer;
+
 /**
  * Describes the settings and capabilities of a given <code>{@link IScheduler}</code> instance.
  *
@@ -42,21 +49,28 @@ public class SchedulerMetaData
   private final int m_nTpSize;
   private final String m_sVersion;
 
-  public SchedulerMetaData (final String schedName,
-                            final String schedInst,
-                            final Class <?> schedClass,
+  public SchedulerMetaData (@NonNull @Nonempty final String schedName,
+                            @NonNull @Nonempty final String schedInst,
+                            @NonNull final Class <?> schedClass,
                             final boolean started,
                             final boolean isInStandbyMode,
                             final boolean shutdown,
-                            final Date startTime,
-                            final int numJobsExec,
-                            final Class <?> jsClass,
+                            @Nullable final Date startTime,
+                            @Nonnegative final int numJobsExec,
+                            @NonNull final Class <?> jsClass,
                             final boolean jsPersistent,
                             final boolean jsClustered,
-                            final Class <?> tpClass,
-                            final int tpSize,
-                            final String version)
+                            @NonNull final Class <?> tpClass,
+                            @Nonnegative final int tpSize,
+                            @NonNull @Nonempty final String version)
   {
+    ValueEnforcer.notEmpty (schedName, "SchedulerName");
+    ValueEnforcer.notEmpty (schedInst, "SchedulerInstanceID");
+    ValueEnforcer.notNull (schedClass, "SchedulerClass");
+    ValueEnforcer.notNull (jsClass, "JobStoreClass");
+    ValueEnforcer.notNull (tpClass, "ThreadPoolClass");
+    ValueEnforcer.notEmpty (version, "Version");
+
     m_sSchedName = schedName;
     m_sSchedInst = schedInst;
     m_sSchedClass = schedClass;
@@ -76,6 +90,8 @@ public class SchedulerMetaData
   /**
    * Returns the name of the <code>Scheduler</code>.
    */
+  @NonNull
+  @Nonempty
   public String getSchedulerName ()
   {
     return m_sSchedName;
@@ -84,6 +100,8 @@ public class SchedulerMetaData
   /**
    * Returns the instance Id of the <code>Scheduler</code>.
    */
+  @NonNull
+  @Nonempty
   public String getSchedulerInstanceId ()
   {
     return m_sSchedInst;
@@ -92,6 +110,7 @@ public class SchedulerMetaData
   /**
    * Returns the class-name of the <code>Scheduler</code> instance.
    */
+  @NonNull
   public Class <?> getSchedulerClass ()
   {
     return m_sSchedClass;
@@ -102,6 +121,7 @@ public class SchedulerMetaData
    *
    * @return null if the scheduler has not been started.
    */
+  @Nullable
   public Date getRunningSince ()
   {
     return m_aStartTime;
@@ -110,6 +130,7 @@ public class SchedulerMetaData
   /**
    * Returns the number of jobs executed since the <code>Scheduler</code> started.
    */
+  @Nonnegative
   public int getNumberOfJobsExecuted ()
   {
     return m_nNumJobsExec;
@@ -153,6 +174,7 @@ public class SchedulerMetaData
    * <code>Scheduler</code>.
    * </p>
    */
+  @NonNull
   public Class <?> getJobStoreClass ()
   {
     return m_aJsClass;
@@ -185,6 +207,7 @@ public class SchedulerMetaData
    * <code>Scheduler</code>.
    * </p>
    */
+  @NonNull
   public Class <?> getThreadPoolClass ()
   {
     return m_aTpClass;
@@ -206,6 +229,8 @@ public class SchedulerMetaData
    * Returns the version of Quartz that is running.
    * </p>
    */
+  @NonNull
+  @Nonempty
   public String getVersion ()
   {
     return m_sVersion;
@@ -245,6 +270,8 @@ public class SchedulerMetaData
    * @throws SchedulerException
    *         On error
    */
+  @NonNull
+  @Nonempty
   public String getSummary () throws SchedulerException
   {
     final StringBuilder aSB = new StringBuilder ("Mini Quartz Scheduler (v");

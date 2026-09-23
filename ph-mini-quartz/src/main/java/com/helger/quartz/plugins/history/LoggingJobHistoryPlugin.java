@@ -22,6 +22,8 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -288,6 +290,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   /**
    * Get the message that is logged when a Job successfully completes its execution.
    */
+  @Nullable
   public String getJobSuccessMessage ()
   {
     return m_sJobSuccessMessage;
@@ -296,6 +299,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   /**
    * Get the message that is logged when a Job fails its execution.
    */
+  @Nullable
   public String getJobFailedMessage ()
   {
     return m_sJobFailedMessage;
@@ -304,6 +308,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   /**
    * Get the message that is logged when a Job is about to execute.
    */
+  @Nullable
   public String getJobToBeFiredMessage ()
   {
     return m_sJobToBeFiredMessage;
@@ -315,7 +320,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    * @param jobSuccessMessage
    *        String in java.text.MessageFormat syntax.
    */
-  public void setJobSuccessMessage (final String jobSuccessMessage)
+  public void setJobSuccessMessage (@Nullable final String jobSuccessMessage)
   {
     m_sJobSuccessMessage = jobSuccessMessage;
   }
@@ -326,7 +331,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    * @param jobFailedMessage
    *        String in java.text.MessageFormat syntax.
    */
-  public void setJobFailedMessage (final String jobFailedMessage)
+  public void setJobFailedMessage (@Nullable final String jobFailedMessage)
   {
     m_sJobFailedMessage = jobFailedMessage;
   }
@@ -337,7 +342,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    * @param jobToBeFiredMessage
    *        String in java.text.MessageFormat syntax.
    */
-  public void setJobToBeFiredMessage (final String jobToBeFiredMessage)
+  public void setJobToBeFiredMessage (@Nullable final String jobToBeFiredMessage)
   {
     m_sJobToBeFiredMessage = jobToBeFiredMessage;
   }
@@ -345,6 +350,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   /**
    * Get the message that is logged when a Job execution is vetoed by a trigger listener.
    */
+  @Nullable
   public String getJobWasVetoedMessage ()
   {
     return m_sJobWasVetoedMessage;
@@ -356,7 +362,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    * @param jobWasVetoedMessage
    *        String in java.text.MessageFormat syntax.
    */
-  public void setJobWasVetoedMessage (final String jobWasVetoedMessage)
+  public void setJobWasVetoedMessage (@Nullable final String jobWasVetoedMessage)
   {
     m_sJobWasVetoedMessage = jobWasVetoedMessage;
   }
@@ -370,9 +376,9 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
    * @throws SchedulerException
    *         if there is an error initializing.
    */
-  public void initialize (final String pname,
-                          final IScheduler scheduler,
-                          final IClassLoadHelper classLoadHelper) throws SchedulerException
+  public void initialize (@NonNull final String pname,
+                          @NonNull final IScheduler scheduler,
+                          @NonNull final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
     m_sName = pname;
     scheduler.getListenerManager ().addJobListener (this, EverythingMatcher.allJobs ());
@@ -394,13 +400,14 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
     // nothing to do...
   }
 
+  @Nullable
   public String getName ()
   {
     return m_sName;
   }
 
   @Override
-  public void jobToBeExecuted (final IJobExecutionContext context)
+  public void jobToBeExecuted (@NonNull final IJobExecutionContext context)
   {
     final ITrigger trigger = context.getTrigger ();
 
@@ -417,7 +424,8 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   }
 
   @Override
-  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext context,
+                              @Nullable final JobExecutionException jobException)
   {
     final ITrigger trigger = context.getTrigger ();
 
@@ -454,7 +462,7 @@ public class LoggingJobHistoryPlugin implements ISchedulerPlugin, IJobListener
   }
 
   @Override
-  public void jobExecutionVetoed (final IJobExecutionContext context)
+  public void jobExecutionVetoed (@NonNull final IJobExecutionContext context)
   {
     final ITrigger trigger = context.getTrigger ();
 

@@ -21,6 +21,8 @@ package com.helger.quartz.impl;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +64,7 @@ public class QuartzServer implements ISchedulerListener
   QuartzServer ()
   {}
 
-  public void serve (final ISchedulerFactory schedFact, final boolean bConsole) throws Exception
+  public void serve (@NonNull final ISchedulerFactory schedFact, final boolean bConsole) throws Exception
   {
     sched = schedFact.getScheduler ();
 
@@ -110,7 +112,7 @@ public class QuartzServer implements ISchedulerListener
    * </p>
    */
   @Override
-  public void schedulerError (final String msg, final SchedulerException cause)
+  public void schedulerError (@Nullable final String msg, @Nullable final SchedulerException cause)
   {
     LOGGER.error ("*** " + msg, cause);
   }
@@ -127,7 +129,7 @@ public class QuartzServer implements ISchedulerListener
     sched = null;
   }
 
-  public static void main (final String [] args) throws Exception
+  public static void main (@NonNull final String [] args) throws Exception
   {
     // //Configure Log4J
     // org.apache.log4j.PropertyConfigurator.configure(

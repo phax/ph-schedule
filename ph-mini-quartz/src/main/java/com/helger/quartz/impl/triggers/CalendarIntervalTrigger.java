@@ -25,6 +25,8 @@ import java.util.TimeZone;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.Nonnegative;
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
@@ -106,7 +108,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * Create a <code>DateIntervalTrigger</code> that will occur immediately, and repeat at the the
    * given interval.
    */
-  public CalendarIntervalTrigger (final String name, final EIntervalUnit intervalUnit, final int repeatInterval)
+  public CalendarIntervalTrigger (@NonNull @Nonempty final String name,
+                                  @NonNull final EIntervalUnit intervalUnit,
+                                  @Nonnegative final int repeatInterval)
   {
     this (name, null, intervalUnit, repeatInterval);
   }
@@ -117,10 +121,10 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * given interval.
    * </p>
    */
-  public CalendarIntervalTrigger (final String name,
-                                  final String group,
-                                  final EIntervalUnit intervalUnit,
-                                  final int repeatInterval)
+  public CalendarIntervalTrigger (@NonNull @Nonempty final String name,
+                                  @Nullable final String group,
+                                  @NonNull final EIntervalUnit intervalUnit,
+                                  @Nonnegative final int repeatInterval)
   {
     this (name, group, new Date (), null, intervalUnit, repeatInterval);
   }
@@ -140,11 +144,11 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    */
-  public CalendarIntervalTrigger (final String name,
-                                  final Date startTime,
-                                  final Date endTime,
-                                  final EIntervalUnit intervalUnit,
-                                  final int repeatInterval)
+  public CalendarIntervalTrigger (@NonNull @Nonempty final String name,
+                                  @NonNull final Date startTime,
+                                  @Nullable final Date endTime,
+                                  @NonNull final EIntervalUnit intervalUnit,
+                                  @Nonnegative final int repeatInterval)
   {
     this (name, null, startTime, endTime, intervalUnit, repeatInterval);
   }
@@ -164,12 +168,12 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    */
-  public CalendarIntervalTrigger (final String name,
-                                  final String group,
-                                  final Date startTime,
-                                  final Date endTime,
-                                  final EIntervalUnit intervalUnit,
-                                  final int repeatInterval)
+  public CalendarIntervalTrigger (@NonNull @Nonempty final String name,
+                                  @Nullable final String group,
+                                  @NonNull final Date startTime,
+                                  @Nullable final Date endTime,
+                                  @NonNull final EIntervalUnit intervalUnit,
+                                  @Nonnegative final int repeatInterval)
   {
     super (name, group);
 
@@ -194,14 +198,14 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * @param repeatInterval
    *        The number of milliseconds to pause between the repeat firing.
    */
-  public CalendarIntervalTrigger (final String name,
-                                  final String group,
-                                  final String jobName,
-                                  final String jobGroup,
-                                  final Date startTime,
-                                  final Date endTime,
-                                  final EIntervalUnit intervalUnit,
-                                  final int repeatInterval)
+  public CalendarIntervalTrigger (@NonNull @Nonempty final String name,
+                                  @Nullable final String group,
+                                  @NonNull @Nonempty final String jobName,
+                                  @Nullable final String jobGroup,
+                                  @NonNull final Date startTime,
+                                  @Nullable final Date endTime,
+                                  @NonNull final EIntervalUnit intervalUnit,
+                                  @Nonnegative final int repeatInterval)
   {
     super (name, group, jobName, jobGroup);
 
@@ -211,6 +215,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
     setRepeatInterval (repeatInterval);
   }
 
+  @NonNull
   public final Date getStartTime ()
   {
     if (m_aStartTime == null)
@@ -218,7 +223,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
     return m_aStartTime;
   }
 
-  public final void setStartTime (final Date startTime)
+  public final void setStartTime (@NonNull final Date startTime)
   {
     ValueEnforcer.notNull (startTime, "StartTime");
 
@@ -244,6 +249,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
     m_aEndTime = endTime;
   }
 
+  @NonNull
   public EIntervalUnit getRepeatIntervalUnit ()
   {
     return m_eRepeatIntervalUnit;
@@ -254,7 +260,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * Set the interval unit - the time unit on with the interval applies.
    * </p>
    */
-  public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
+  public void setRepeatIntervalUnit (@NonNull final EIntervalUnit intervalUnit)
   {
     m_eRepeatIntervalUnit = intervalUnit;
   }
@@ -282,6 +288,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
     m_nRepeatInterval = repeatInterval;
   }
 
+  @NonNull
   public TimeZone getTimeZone ()
   {
     if (m_aTimeZone == null)
@@ -299,7 +306,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * @param timeZone
    *        the desired TimeZone, or null for the system default.
    */
-  public void setTimeZone (final TimeZone timeZone)
+  public void setTimeZone (@Nullable final TimeZone timeZone)
   {
     m_aTimeZone = timeZone;
   }
@@ -376,7 +383,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
   }
 
   @Override
-  protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
+  protected boolean validateMisfireInstruction (@Nullable final EMisfireInstruction misfireInstruction)
   {
     switch (misfireInstruction)
     {
@@ -403,7 +410,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * <li>The instruction will be interpreted as <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
-  public void updateAfterMisfire (final ICalendar cal)
+  public void updateAfterMisfire (@Nullable final ICalendar cal)
   {
     EMisfireInstruction instr = getMisfireInstruction ();
     if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY)
@@ -449,7 +456,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    *      com.helger.quartz.JobExecutionException)
    */
   @Override
-  public void triggered (final com.helger.quartz.ICalendar calendar)
+  public void triggered (@Nullable final ICalendar calendar)
   {
     m_nTimesTriggered++;
     m_aPreviousFireTime = m_aNextFireTime;
@@ -477,7 +484,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * @see com.helger.quartz.spi.IOperableTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
-  public void updateWithNewCalendar (final com.helger.quartz.ICalendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (@Nullable final ICalendar calendar, final long misfireThreshold)
   {
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
 
@@ -529,7 +536,8 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    *         first firing of the <code>Trigger</code>).
    */
   @Override
-  public Date computeFirstFireTime (final com.helger.quartz.ICalendar calendar)
+  @Nullable
+  public Date computeFirstFireTime (@Nullable final ICalendar calendar)
   {
     m_aNextFireTime = getStartTime ();
 
@@ -565,6 +573,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * added to the scheduler.
    * </p>
    */
+  @Nullable
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
@@ -575,6 +584,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * Returns the previous time at which the <code>DateIntervalTrigger</code> fired. If the trigger
    * has not yet fired, <code>null</code> will be returned.
    */
+  @Nullable
   public Date getPreviousFireTime ()
   {
     return m_aPreviousFireTime;
@@ -588,7 +598,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * <b>This method should not be invoked by client code.</b>
    * </p>
    */
-  public void setNextFireTime (final Date nextFireTime)
+  public void setNextFireTime (@Nullable final Date nextFireTime)
   {
     m_aNextFireTime = nextFireTime;
   }
@@ -601,7 +611,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * <b>This method should not be invoked by client code.</b>
    * </p>
    */
-  public void setPreviousFireTime (final Date previousFireTime)
+  public void setPreviousFireTime (@Nullable final Date previousFireTime)
   {
     m_aPreviousFireTime = previousFireTime;
   }
@@ -612,12 +622,14 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * time. If the trigger will not fire after the given time, <code>null</code> will be returned.
    * </p>
    */
-  public Date getFireTimeAfter (final Date afterTime)
+  @Nullable
+  public Date getFireTimeAfter (@Nullable final Date afterTime)
   {
     return getFireTimeAfter (afterTime, false);
   }
 
-  protected Date getFireTimeAfter (final Date aAfterTime, final boolean ignoreEndTime)
+  @Nullable
+  protected Date getFireTimeAfter (@Nullable final Date aAfterTime, final boolean ignoreEndTime)
   {
     // increment afterTme by a second, so that we are
     // comparing against a time after it!
@@ -808,9 +820,9 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
     return time;
   }
 
-  private boolean daylightSavingHourShiftOccurredAndAdvanceNeeded (final Calendar newTime,
+  private boolean daylightSavingHourShiftOccurredAndAdvanceNeeded (@NonNull final Calendar newTime,
                                                                    final int initialHourOfDay,
-                                                                   final Date afterTime)
+                                                                   @NonNull final Date afterTime)
   {
     if (isPreserveHourOfDayAcrossDaylightSavings () && newTime.get (Calendar.HOUR_OF_DAY) != initialHourOfDay)
     {
@@ -833,6 +845,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * Note that the return time may be in the past.
    * </p>
    */
+  @Nullable
   public Date getFinalFireTime ()
   {
     if (getEndTime () == null)
@@ -916,6 +929,7 @@ public class CalendarIntervalTrigger extends AbstractTrigger <CalendarIntervalTr
    * @see #getTriggerBuilder()
    */
   @Override
+  @NonNull
   public CalendarIntervalScheduleBuilder getScheduleBuilder ()
   {
     final CalendarIntervalScheduleBuilder cb = CalendarIntervalScheduleBuilder.calendarIntervalSchedule ()

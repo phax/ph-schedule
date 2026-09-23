@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Base class for exceptions thrown by the Quartz <code>{@link IScheduler}</code>.
  * <p>
@@ -34,17 +36,17 @@ public class SchedulerException extends Exception
     super ();
   }
 
-  public SchedulerException (final String msg)
+  public SchedulerException (@Nullable final String msg)
   {
     super (msg);
   }
 
-  public SchedulerException (final Throwable cause)
+  public SchedulerException (@Nullable final Throwable cause)
   {
     super (cause);
   }
 
-  public SchedulerException (final String msg, final Throwable cause)
+  public SchedulerException (@Nullable final String msg, @Nullable final Throwable cause)
   {
     super (msg, cause);
   }

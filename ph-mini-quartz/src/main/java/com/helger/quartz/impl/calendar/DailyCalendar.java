@@ -25,8 +25,10 @@ import java.util.Locale.Category;
 import java.util.TimeZone;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.string.StringHelper;
+import com.helger.quartz.ICalendar;
 
 /**
  * This implementation of the Calendar excludes (or includes - see below) a specified time range
@@ -106,7 +108,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingTime
    *        a String representing the ending time for the the time range
    */
-  public DailyCalendar (final String rangeStartingTime, final String rangeEndingTime)
+  public DailyCalendar (@NonNull final String rangeStartingTime, @NonNull final String rangeEndingTime)
   {
     super (null, null);
     setTimeRange (rangeStartingTime, rangeEndingTime);
@@ -140,9 +142,9 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingTime
    *        a String representing the ending time for the time range
    */
-  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
-                        final String rangeStartingTime,
-                        final String rangeEndingTime)
+  public DailyCalendar (@Nullable final ICalendar baseCalendar,
+                        @NonNull final String rangeStartingTime,
+                        @NonNull final String rangeEndingTime)
   {
     super (baseCalendar, null);
     setTimeRange (rangeStartingTime, rangeEndingTime);
@@ -239,7 +241,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingMillis
    *        the millisecond of the start of the time range
    */
-  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
+  public DailyCalendar (@Nullable final ICalendar baseCalendar,
                         final int rangeStartingHourOfDay,
                         final int rangeStartingMinute,
                         final int rangeStartingSecond,
@@ -284,7 +286,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingCalendar
    *        a Calendar representing the ending time for the time range
    */
-  public DailyCalendar (final Calendar rangeStartingCalendar, final Calendar rangeEndingCalendar)
+  public DailyCalendar (@NonNull final Calendar rangeStartingCalendar, @NonNull final Calendar rangeEndingCalendar)
   {
     super (null, null);
     setTimeRange (rangeStartingCalendar, rangeEndingCalendar);
@@ -317,9 +319,9 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingCalendar
    *        a Calendar representing the ending time for the time range
    */
-  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
-                        final Calendar rangeStartingCalendar,
-                        final Calendar rangeEndingCalendar)
+  public DailyCalendar (@Nullable final ICalendar baseCalendar,
+                        @NonNull final Calendar rangeStartingCalendar,
+                        @NonNull final Calendar rangeEndingCalendar)
   {
     super (baseCalendar, null);
     setTimeRange (rangeStartingCalendar, rangeEndingCalendar);
@@ -384,7 +386,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingTimeInMillis
    *        a long representing the ending time for the time range
    */
-  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
+  public DailyCalendar (@Nullable final ICalendar baseCalendar,
                         final long rangeStartingTimeInMillis,
                         final long rangeEndingTimeInMillis)
   {
@@ -412,7 +414,7 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingTimeInMillis
    *        a long representing the ending time for the time range
    */
-  public DailyCalendar (final TimeZone timeZone,
+  public DailyCalendar (@Nullable final TimeZone timeZone,
                         final long rangeStartingTimeInMillis,
                         final long rangeEndingTimeInMillis)
   {
@@ -443,8 +445,8 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingTimeInMillis
    *        a long representing the ending time for the time range
    */
-  public DailyCalendar (final com.helger.quartz.ICalendar baseCalendar,
-                        final TimeZone timeZone,
+  public DailyCalendar (@Nullable final ICalendar baseCalendar,
+                        @Nullable final TimeZone timeZone,
                         final long rangeStartingTimeInMillis,
                         final long rangeEndingTimeInMillis)
   {
@@ -661,7 +663,8 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingTimeString
    *        a String representing the end time of the excluded time range
    */
-  public final void setTimeRange (final String rangeStartingTimeString, final String rangeEndingTimeString)
+  public final void setTimeRange (@NonNull final String rangeStartingTimeString,
+                                  @NonNull final String rangeEndingTimeString)
   {
     String [] rangeStartingTime;
     int rStartingHourOfDay;
@@ -800,7 +803,8 @@ public class DailyCalendar extends AbstractCalendar <DailyCalendar>
    * @param rangeEndingCalendar
    *        a Calendar containing the end time for the <CODE>DailyCalendar</CODE>
    */
-  public final void setTimeRange (final Calendar rangeStartingCalendar, final Calendar rangeEndingCalendar)
+  public final void setTimeRange (@NonNull final Calendar rangeStartingCalendar,
+                                  @NonNull final Calendar rangeEndingCalendar)
   {
     setTimeRange (rangeStartingCalendar.get (Calendar.HOUR_OF_DAY),
                   rangeStartingCalendar.get (Calendar.MINUTE),

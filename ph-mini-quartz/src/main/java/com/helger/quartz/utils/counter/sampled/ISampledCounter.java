@@ -18,6 +18,10 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.quartz.utils.counter.ICounter;
 
 /**
@@ -38,6 +42,7 @@ public interface ISampledCounter extends ICounter
    *
    * @return Value of the most recent sampled value
    */
+  @Nullable
   TimeStampedCounterValue getMostRecentSample ();
 
   /**
@@ -45,6 +50,8 @@ public interface ISampledCounter extends ICounter
    *
    * @return An array containing the TimeStampedCounterValue's
    */
+  @NonNull
+  @ReturnsMutableCopy
   TimeStampedCounterValue [] getAllSampleValues ();
 
   /**

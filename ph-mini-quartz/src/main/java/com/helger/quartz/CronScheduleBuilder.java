@@ -23,7 +23,9 @@ import java.time.DayOfWeek;
 import java.util.TimeZone;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.util.PDTHelper;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
@@ -98,7 +100,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
    * @see CronExpression
    */
   @NonNull
-  public static CronScheduleBuilder cronSchedule (final String cronExpression)
+  public static CronScheduleBuilder cronSchedule (@NonNull final String cronExpression)
   {
     try
     {
@@ -108,7 +110,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
     {
       // all methods of construction ensure the expression is valid by
       // this point...
-      throw new RuntimeException ("CronExpression '" + cronExpression + "' is invalid.", e);
+      throw new IllegalArgumentException ("CronExpression '" + cronExpression + "' is invalid.", e);
     }
   }
 
@@ -124,13 +126,14 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
    * @see CronExpression
    */
   @NonNull
-  public static CronScheduleBuilder cronScheduleNonvalidatedExpression (final String cronExpression) throws ParseException
+  public static CronScheduleBuilder cronScheduleNonvalidatedExpression (@NonNull
+                                                                        final String cronExpression) throws ParseException
   {
     return cronSchedule (new CronExpression (cronExpression));
   }
 
   @NonNull
-  private static CronScheduleBuilder _cronScheduleNoParseException (final String presumedValidCronExpression)
+  private static CronScheduleBuilder _cronScheduleNoParseException (@NonNull final String presumedValidCronExpression)
   {
     try
     {
@@ -140,10 +143,10 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
     {
       // all methods of construction ensure the expression is valid by
       // this point...
-      throw new RuntimeException ("CronExpression '" +
-                                  presumedValidCronExpression +
-                                  "' is invalid, which should not be possible, please report bug to Quartz developers.",
-                                  e);
+      throw new IllegalStateException ("CronExpression '" +
+                                       presumedValidCronExpression +
+                                       "' is invalid, which should not be possible, please report bug to Quartz developers.",
+                                       e);
     }
   }
 
@@ -156,7 +159,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
    * @see CronExpression
    */
   @NonNull
-  public static CronScheduleBuilder cronSchedule (final CronExpression cronExpression)
+  public static CronScheduleBuilder cronSchedule (@NonNull final CronExpression cronExpression)
   {
     return new CronScheduleBuilder (cronExpression);
   }
@@ -199,7 +202,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
   @NonNull
   public static CronScheduleBuilder atHourAndMinuteOnGivenDaysOfWeek (final int hour,
                                                                       final int minute,
-                                                                      final DayOfWeek... daysOfWeek)
+                                                                      @NonNull @Nonempty final DayOfWeek... daysOfWeek)
   {
     ValueEnforcer.notEmptyNoNullValue (daysOfWeek, "DaysOfWeek");
     DateBuilder.validateHour (hour);
@@ -232,7 +235,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
    * @see CronExpression
    */
   @NonNull
-  public static CronScheduleBuilder weeklyOnDayAndHourAndMinute (final DayOfWeek dayOfWeek,
+  public static CronScheduleBuilder weeklyOnDayAndHourAndMinute (@NonNull final DayOfWeek dayOfWeek,
                                                                  final int hour,
                                                                  final int minute)
   {
@@ -280,7 +283,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
    * @see CronExpression#getTimeZone()
    */
   @NonNull
-  public CronScheduleBuilder inTimeZone (final TimeZone timezone)
+  public CronScheduleBuilder inTimeZone (@Nullable final TimeZone timezone)
   {
     m_aCronExpression.setTimeZone (timezone);
     return this;

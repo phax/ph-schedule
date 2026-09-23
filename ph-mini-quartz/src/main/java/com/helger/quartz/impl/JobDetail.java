@@ -21,6 +21,7 @@ package com.helger.quartz.impl;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
@@ -96,6 +97,7 @@ public class JobDetail implements IJobDetail
   /**
    * Get the name of this <code>Job</code>.
    */
+  @Nullable
   public final String getName ()
   {
     return m_sName;
@@ -109,9 +111,9 @@ public class JobDetail implements IJobDetail
    * @exception IllegalArgumentException
    *            if name is null or empty.
    */
-  public final void setName (final String name)
+  public final void setName (@NonNull @Nonempty final String name)
   {
-    ValueEnforcer.notNull (name, "Name");
+    ValueEnforcer.notEmpty (name, "Name");
     ValueEnforcer.isFalse (name.trim ().isEmpty (), "Job name cannot be empty.");
 
     m_sName = name;
@@ -121,6 +123,7 @@ public class JobDetail implements IJobDetail
   /**
    * Get the group of this <code>Job</code>.
    */
+  @NonNull
   public final String getGroup ()
   {
     return m_sGroup;
@@ -136,7 +139,7 @@ public class JobDetail implements IJobDetail
    * @exception IllegalArgumentException
    *            if the group is an empty string.
    */
-  public final void setGroup (final String group)
+  public final void setGroup (@Nullable final String group)
   {
     if (group != null)
       ValueEnforcer.isFalse (group.trim ().isEmpty (), "Group name cannot be empty.");
@@ -179,6 +182,7 @@ public class JobDetail implements IJobDetail
     m_aKey = key;
   }
 
+  @Nullable
   public final String getDescription ()
   {
     return m_sDescription;
@@ -188,11 +192,12 @@ public class JobDetail implements IJobDetail
    * Set a description for the <code>Job</code> instance - may be useful for remembering/displaying
    * the purpose of the job, though the description has no meaning to Quartz.
    */
-  public final void setDescription (final String description)
+  public final void setDescription (@Nullable final String description)
   {
     m_sDescription = description;
   }
 
+  @Nullable
   public final Class <? extends IJob> getJobClass ()
   {
     return m_aJobClass;
@@ -206,7 +211,7 @@ public class JobDetail implements IJobDetail
    * @exception IllegalArgumentException
    *            if jobClass is null or the class is not a <code>Job</code>.
    */
-  public final void setJobClass (final Class <? extends IJob> jobClass)
+  public final void setJobClass (@NonNull final Class <? extends IJob> jobClass)
   {
     ValueEnforcer.notNull (jobClass, "JobClass");
     m_aJobClass = jobClass;
@@ -340,7 +345,9 @@ public class JobDetail implements IJobDetail
   }
 
   @NonNull
-  public static JobDetail create (final String name, final String group, final Class <? extends IJob> jobClass)
+  public static JobDetail create (@NonNull @Nonempty final String name,
+                                  @Nullable final String group,
+                                  @NonNull final Class <? extends IJob> jobClass)
   {
     final JobDetail ret = new JobDetail ();
     ret.setName (name);

@@ -82,6 +82,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
     m_aTimeZone = aTimeZone;
   }
 
+  @Nullable
   public final ICalendar getBaseCalendar ()
   {
     return m_aBaseCalendar;
@@ -92,6 +93,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
     m_aBaseCalendar = baseCalendar;
   }
 
+  @Nullable
   public final String getDescription ()
   {
     return m_sDescription;
@@ -124,8 +126,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
    */
   public boolean isTimeIncluded (final long timeStamp)
   {
-    if (timeStamp <= 0)
-      throw new IllegalArgumentException ("timeStamp must be greater 0");
+    ValueEnforcer.isGT0 (timeStamp, "TimeStamp");
 
     return m_aBaseCalendar == null || m_aBaseCalendar.isTimeIncluded (timeStamp);
   }
@@ -140,8 +141,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
    */
   public long getNextIncludedTime (final long timeStamp)
   {
-    if (timeStamp <= 0)
-      throw new IllegalArgumentException ("timeStamp must be greater 0");
+    ValueEnforcer.isGT0 (timeStamp, "TimeStamp");
 
     if (m_aBaseCalendar != null)
       return m_aBaseCalendar.getNextIncludedTime (timeStamp);
@@ -153,6 +153,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
    * Build a <code>{@link Calendar}</code> for the given timeStamp. The new Calendar will use the
    * <code>AbstractCalendar</code> time zone if it is not <code>null</code>.
    */
+  @NonNull
   protected final Calendar createJavaCalendar (final long timeStamp)
   {
     final Calendar calendar = createJavaCalendar ();
@@ -164,6 +165,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
    * Build a <code>{@link Calendar}</code> with the current time. The new Calendar will use the
    * <code>AbstractCalendar</code> time zone if it is not <code>null</code>.
    */
+  @NonNull
   protected final Calendar createJavaCalendar ()
   {
     return Calendar.getInstance (getTimeZone () != null ? getTimeZone () : TimeZone.getDefault (),
@@ -178,6 +180,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
    *        A time containing the desired date for the start-of-day time
    * @return A <code>{@link Calendar}</code> set to the start of the given day.
    */
+  @NonNull
   protected final Calendar getStartOfDayJavaCalendar (final long timeInMillis)
   {
     final Calendar startOfDay = createJavaCalendar (timeInMillis);
@@ -196,6 +199,7 @@ public abstract class AbstractCalendar <IMPLTYPE extends AbstractCalendar <IMPLT
    *        a time containing the desired date for the end-of-day time.
    * @return A <code>{@link Calendar}</code> set to the end of the given day.
    */
+  @NonNull
   protected final Calendar getEndOfDayJavaCalendar (final long timeInMillis)
   {
     final Calendar endOfDay = createJavaCalendar (timeInMillis);

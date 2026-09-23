@@ -28,6 +28,9 @@ import java.util.Set;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.Nonnegative;
+import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.CGlobal;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
@@ -146,11 +149,11 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @throws IllegalArgumentException
    *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
-  public DailyTimeIntervalTrigger (final String name,
-                                   final LocalTime startTimeOfDay,
-                                   final LocalTime endTimeOfDay,
-                                   final EIntervalUnit intervalUnit,
-                                   final int repeatInterval)
+  public DailyTimeIntervalTrigger (@NonNull @Nonempty final String name,
+                                   @NonNull final LocalTime startTimeOfDay,
+                                   @NonNull final LocalTime endTimeOfDay,
+                                   @NonNull final EIntervalUnit intervalUnit,
+                                   @Nonnegative final int repeatInterval)
   {
     this (name, null, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
   }
@@ -172,12 +175,12 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @throws IllegalArgumentException
    *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
-  public DailyTimeIntervalTrigger (final String name,
-                                   final String group,
-                                   final LocalTime startTimeOfDay,
-                                   final LocalTime endTimeOfDay,
-                                   final EIntervalUnit intervalUnit,
-                                   final int repeatInterval)
+  public DailyTimeIntervalTrigger (@NonNull @Nonempty final String name,
+                                   @Nullable final String group,
+                                   @NonNull final LocalTime startTimeOfDay,
+                                   @NonNull final LocalTime endTimeOfDay,
+                                   @NonNull final EIntervalUnit intervalUnit,
+                                   @Nonnegative final int repeatInterval)
   {
     this (name, group, new Date (), null, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
   }
@@ -205,13 +208,13 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @throws IllegalArgumentException
    *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
-  public DailyTimeIntervalTrigger (final String name,
-                                   final Date startTime,
-                                   final Date endTime,
-                                   final LocalTime startTimeOfDay,
-                                   final LocalTime endTimeOfDay,
-                                   final EIntervalUnit intervalUnit,
-                                   final int repeatInterval)
+  public DailyTimeIntervalTrigger (@NonNull @Nonempty final String name,
+                                   @NonNull final Date startTime,
+                                   @Nullable final Date endTime,
+                                   @NonNull final LocalTime startTimeOfDay,
+                                   @NonNull final LocalTime endTimeOfDay,
+                                   @NonNull final EIntervalUnit intervalUnit,
+                                   @Nonnegative final int repeatInterval)
   {
     this (name, null, startTime, endTime, startTimeOfDay, endTimeOfDay, intervalUnit, repeatInterval);
   }
@@ -239,14 +242,14 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @throws IllegalArgumentException
    *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
-  public DailyTimeIntervalTrigger (final String name,
-                                   final String group,
-                                   final Date startTime,
-                                   final Date endTime,
-                                   final LocalTime startTimeOfDay,
-                                   final LocalTime endTimeOfDay,
-                                   final EIntervalUnit intervalUnit,
-                                   final int repeatInterval)
+  public DailyTimeIntervalTrigger (@NonNull @Nonempty final String name,
+                                   @Nullable final String group,
+                                   @NonNull final Date startTime,
+                                   @Nullable final Date endTime,
+                                   @NonNull final LocalTime startTimeOfDay,
+                                   @NonNull final LocalTime endTimeOfDay,
+                                   @NonNull final EIntervalUnit intervalUnit,
+                                   @Nonnegative final int repeatInterval)
   {
     super (name, group);
 
@@ -281,16 +284,16 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @throws IllegalArgumentException
    *         if an invalid IntervalUnit is given, or the repeat interval is zero or less.
    */
-  public DailyTimeIntervalTrigger (final String name,
-                                   final String group,
-                                   final String jobName,
-                                   final String jobGroup,
-                                   final Date startTime,
-                                   final Date endTime,
-                                   final LocalTime startTimeOfDay,
-                                   final LocalTime endTimeOfDay,
-                                   final EIntervalUnit intervalUnit,
-                                   final int repeatInterval)
+  public DailyTimeIntervalTrigger (@NonNull @Nonempty final String name,
+                                   @Nullable final String group,
+                                   @NonNull @Nonempty final String jobName,
+                                   @Nullable final String jobGroup,
+                                   @NonNull final Date startTime,
+                                   @Nullable final Date endTime,
+                                   @NonNull final LocalTime startTimeOfDay,
+                                   @NonNull final LocalTime endTimeOfDay,
+                                   @NonNull final EIntervalUnit intervalUnit,
+                                   @Nonnegative final int repeatInterval)
   {
     super (name, group, jobName, jobGroup);
 
@@ -336,6 +339,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     m_aEndTime = endTime;
   }
 
+  @NonNull
   public EIntervalUnit getRepeatIntervalUnit ()
   {
     return m_eRepeatIntervalUnit;
@@ -351,7 +355,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    *        {@link EIntervalUnit#SECOND}, {@link EIntervalUnit#MINUTE}, and
    *        {@link EIntervalUnit#HOUR}.
    */
-  public void setRepeatIntervalUnit (final EIntervalUnit intervalUnit)
+  public void setRepeatIntervalUnit (@NonNull final EIntervalUnit intervalUnit)
   {
     if (m_eRepeatIntervalUnit == null ||
         !(m_eRepeatIntervalUnit.equals (EIntervalUnit.SECOND) ||
@@ -398,7 +402,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   }
 
   @Override
-  protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
+  protected boolean validateMisfireInstruction (@Nullable final EMisfireInstruction misfireInstruction)
   {
     switch (misfireInstruction)
     {
@@ -425,7 +429,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * <li>The instruction will be interpreted as <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
-  public void updateAfterMisfire (final ICalendar cal)
+  public void updateAfterMisfire (@Nullable final ICalendar cal)
   {
     EMisfireInstruction instr = getMisfireInstruction ();
     if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY)
@@ -471,7 +475,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    *      com.helger.quartz.JobExecutionException)
    */
   @Override
-  public void triggered (final ICalendar calendar)
+  public void triggered (@Nullable final ICalendar calendar)
   {
     m_nTimesTriggered++;
     m_aPreviousFireTime = m_aNextFireTime;
@@ -500,7 +504,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
-  public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (@Nullable final ICalendar calendar, final long misfireThreshold)
   {
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
     if (m_aNextFireTime == null || calendar == null)
@@ -547,7 +551,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    *         first firing of the <code>Trigger</code>).
    */
   @Override
-  public Date computeFirstFireTime (final ICalendar calendar)
+  @Nullable
+  public Date computeFirstFireTime (@Nullable final ICalendar calendar)
   {
     m_aNextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000L));
 
@@ -571,7 +576,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   }
 
   @NonNull
-  private static Calendar _createCalendarTime (final Date dateTime)
+  private static Calendar _createCalendarTime (@NonNull final Date dateTime)
   {
     final Calendar cal = PDTFactory.createCalendar ();
     cal.setTime (dateTime);
@@ -591,6 +596,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * added to the scheduler.
    * </p>
    */
+  @Nullable
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
@@ -601,6 +607,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * Returns the previous time at which the <code>DailyTimeIntervalTrigger</code> fired. If the
    * trigger has not yet fired, <code>null</code> will be returned.
    */
+  @Nullable
   public Date getPreviousFireTime ()
   {
     return m_aPreviousFireTime;
@@ -614,7 +621,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * <b>This method should not be invoked by client code.</b>
    * </p>
    */
-  public void setNextFireTime (final Date nextFireTime)
+  public void setNextFireTime (@Nullable final Date nextFireTime)
   {
     m_aNextFireTime = nextFireTime;
   }
@@ -627,7 +634,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * <b>This method should not be invoked by client code.</b>
    * </p>
    */
-  public void setPreviousFireTime (final Date previousFireTime)
+  public void setPreviousFireTime (@Nullable final Date previousFireTime)
   {
     m_aPreviousFireTime = previousFireTime;
   }
@@ -642,6 +649,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @param aAfterTime
    *        after time
    */
+  @Nullable
   public Date getFireTimeAfter (@Nullable final Date aAfterTime)
   {
     // Check if trigger has completed or not.
@@ -742,7 +750,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     return fireTime;
   }
 
-  private static boolean _isSameDay (final Date d1, final Date d2)
+  private static boolean _isSameDay (@NonNull final Date d1, @NonNull final Date d2)
   {
     final Calendar c1 = _createCalendarTime (d1);
     final Calendar c2 = _createCalendarTime (d2);
@@ -763,7 +771,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    *        move to next day anyway.
    * @return a next day fireTime.
    */
-  private Date _advanceToNextDayOfWeekIfNecessary (final Date aFireTime, final boolean forceToAdvanceNextDay)
+  @Nullable
+  private Date _advanceToNextDayOfWeekIfNecessary (@Nullable final Date aFireTime, final boolean forceToAdvanceNextDay)
   {
     // a. Advance or adjust to next dayOfWeek if need to first, starting next
     // day with startTimeOfDay.
@@ -814,6 +823,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * Note that the return time may be in the past.
    * </p>
    */
+  @Nullable
   public Date getFinalFireTime ()
   {
     if (m_bComplete || getEndTime () == null)
@@ -899,6 +909,8 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     }
   }
 
+  @NonNull
+  @ReturnsMutableObject
   public Set <DayOfWeek> getDaysOfWeek ()
   {
     if (m_aDaysOfWeek == null)
@@ -906,12 +918,13 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     return m_aDaysOfWeek;
   }
 
-  public void setDaysOfWeek (final Set <DayOfWeek> daysOfWeek)
+  public void setDaysOfWeek (@NonNull @Nonempty final Set <DayOfWeek> daysOfWeek)
   {
     ValueEnforcer.notEmpty (daysOfWeek, "DaysOfWeek");
     m_aDaysOfWeek = EnumSet.copyOf (daysOfWeek);
   }
 
+  @NonNull
   public LocalTime getStartTimeOfDay ()
   {
     if (m_aStartTimeOfDay == null)
@@ -919,7 +932,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
     return m_aStartTimeOfDay;
   }
 
-  public void setStartTimeOfDay (final LocalTime startTimeOfDay)
+  public void setStartTimeOfDay (@NonNull final LocalTime startTimeOfDay)
   {
     ValueEnforcer.notNull (startTimeOfDay, "StartTimeOfDay");
 
@@ -933,12 +946,13 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
   /**
    * {@inheritDoc}
    */
+  @Nullable
   public LocalTime getEndTimeOfDay ()
   {
     return m_aEndTimeOfDay;
   }
 
-  public void setEndTimeOfDay (final LocalTime aEndTimeOfDay)
+  public void setEndTimeOfDay (@NonNull final LocalTime aEndTimeOfDay)
   {
     ValueEnforcer.notNull (aEndTimeOfDay, "EndTimeOfDay");
     final LocalTime aStartTimeOfDay = getStartTimeOfDay ();
@@ -954,6 +968,7 @@ public class DailyTimeIntervalTrigger extends AbstractTrigger <DailyTimeInterval
    * @see #getTriggerBuilder()
    */
   @Override
+  @NonNull
   public IScheduleBuilder <DailyTimeIntervalTrigger> getScheduleBuilder ()
   {
     final DailyTimeIntervalScheduleBuilder cb = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule ()

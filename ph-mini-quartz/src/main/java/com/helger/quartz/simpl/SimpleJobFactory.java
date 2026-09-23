@@ -18,6 +18,7 @@
  */
 package com.helger.quartz.simpl;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,9 @@ public class SimpleJobFactory implements IJobFactory
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (SimpleJobFactory.class);
 
-  public IJob newJob (final TriggerFiredBundle bundle, final IScheduler aScheduler) throws SchedulerException
+  @NonNull
+  public IJob newJob (@NonNull final TriggerFiredBundle bundle,
+                      @NonNull final IScheduler aScheduler) throws SchedulerException
   {
     final IJobDetail jobDetail = bundle.getJobDetail ();
     final Class <? extends IJob> jobClass = jobDetail.getJobClass ();

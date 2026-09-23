@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.simpl;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.quartz.spi.IClassLoadHelper;
 
 /**
@@ -38,6 +40,7 @@ public class LoadingLoaderClassLoadHelper implements IClassLoadHelper
    *
    * @return the class-loader user be the helper.
    */
+  @NonNull
   public ClassLoader getClassLoader ()
   {
     return getClass ().getClassLoader ();

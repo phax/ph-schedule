@@ -46,7 +46,7 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
     return m_aCompareTo;
   }
 
-  public boolean isMatch (final T aKey)
+  public boolean isMatch (@NonNull final T aKey)
   {
     return m_aCompareTo.equals (aKey);
   }
@@ -71,6 +71,7 @@ public class KeyMatcher <T extends Key <T>> implements IMatcher <T>
   /**
    * Create a KeyMatcher that matches Keys that equal the given key.
    */
+  @NonNull
   public static <U extends Key <U>> KeyMatcher <U> keyEquals (@NonNull final U aCompareTo)
   {
     return new KeyMatcher <> (aCompareTo);

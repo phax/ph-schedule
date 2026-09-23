@@ -18,9 +18,12 @@
  */
 package com.helger.quartz.core;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
@@ -71,8 +74,11 @@ public class JobRunShell implements Runnable, ISchedulerListener
    *        The <code>Scheduler</code> instance that should be made available within the
    *        <code>JobExecutionContext</code>.
    */
-  public JobRunShell (final IScheduler scheduler, final TriggerFiredBundle bndle)
+  public JobRunShell (@NonNull final IScheduler scheduler, @NonNull final TriggerFiredBundle bndle)
   {
+    ValueEnforcer.notNull (scheduler, "Scheduler");
+    ValueEnforcer.notNull (bndle, "FiredTriggerBundle");
+
     m_aScheduler = scheduler;
     m_aFiredTriggerBundle = bndle;
   }
@@ -83,8 +89,10 @@ public class JobRunShell implements Runnable, ISchedulerListener
     requestShutdown ();
   }
 
-  public void initialize (final QuartzScheduler sched) throws SchedulerException
+  public void initialize (@NonNull final QuartzScheduler sched) throws SchedulerException
   {
+    ValueEnforcer.notNull (sched, "Scheduler");
+
     m_aQS = sched;
 
     IJob job = null;
@@ -305,7 +313,7 @@ public class JobRunShell implements Runnable, ISchedulerListener
     m_aQS = null;
   }
 
-  private boolean _notifyListenersBeginning (final IJobExecutionContext jobExCtxt) throws VetoedException
+  private boolean _notifyListenersBeginning (@NonNull final IJobExecutionContext jobExCtxt) throws VetoedException
   {
     boolean vetoed = false;
 
@@ -366,8 +374,8 @@ public class JobRunShell implements Runnable, ISchedulerListener
     return true;
   }
 
-  private boolean _notifyJobListenersComplete (final IJobExecutionContext jobExCtxt,
-                                               final JobExecutionException jobExEx)
+  private boolean _notifyJobListenersComplete (@NonNull final IJobExecutionContext jobExCtxt,
+                                               @Nullable final JobExecutionException jobExEx)
   {
     try
     {
@@ -388,8 +396,8 @@ public class JobRunShell implements Runnable, ISchedulerListener
     return true;
   }
 
-  private boolean _notifyTriggerListenersComplete (final IJobExecutionContext jobExCtxt,
-                                                   final ECompletedExecutionInstruction instCode)
+  private boolean _notifyTriggerListenersComplete (@NonNull final IJobExecutionContext jobExCtxt,
+                                                   @NonNull final ECompletedExecutionInstruction instCode)
   {
     try
     {

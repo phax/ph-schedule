@@ -19,6 +19,7 @@
 package com.helger.quartz.impl;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.concurrent.SimpleReadWriteLock;
@@ -55,7 +56,7 @@ public class SchedulerRepository
     return SingletonHolder.INSTANCE;
   }
 
-  public void bind (final IScheduler sched) throws SchedulerException
+  public void bind (@NonNull final IScheduler sched) throws SchedulerException
   {
     final String sKey = sched.getSchedulerName ();
     m_aRWLock.writeLockedThrowing (() -> {
@@ -65,12 +66,13 @@ public class SchedulerRepository
     });
   }
 
-  public boolean remove (final String schedName)
+  public boolean remove (@Nullable final String schedName)
   {
     return m_aRWLock.writeLockedBoolean (() -> m_aSchedulers.remove (schedName) != null);
   }
 
-  public IScheduler lookup (final String schedName)
+  @Nullable
+  public IScheduler lookup (@Nullable final String schedName)
   {
     return m_aRWLock.readLockedGet (() -> m_aSchedulers.get (schedName));
   }

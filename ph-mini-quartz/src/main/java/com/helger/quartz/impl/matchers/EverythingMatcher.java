@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.impl.matchers;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.quartz.IMatcher;
 import com.helger.quartz.JobKey;
@@ -34,7 +36,7 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
   protected EverythingMatcher ()
   {}
 
-  public boolean isMatch (final T key)
+  public boolean isMatch (@NonNull final T key)
   {
     return true;
   }
@@ -58,6 +60,7 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
   /**
    * Create an EverythingMatcher that matches all jobs.
    */
+  @NonNull
   public static EverythingMatcher <JobKey> allJobs ()
   {
     return new EverythingMatcher <> ();
@@ -66,6 +69,7 @@ public class EverythingMatcher <T extends Key <T>> implements IMatcher <T>
   /**
    * Create an EverythingMatcher that matches all triggers.
    */
+  @NonNull
   public static EverythingMatcher <TriggerKey> allTriggers ()
   {
     return new EverythingMatcher <> ();

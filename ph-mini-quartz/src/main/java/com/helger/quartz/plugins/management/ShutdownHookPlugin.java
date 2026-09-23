@@ -18,6 +18,7 @@
  */
 package com.helger.quartz.plugins.management;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,9 +78,9 @@ public class ShutdownHookPlugin implements ISchedulerPlugin
    * @throws SchedulerException
    *         if there is an error initializing.
    */
-  public void initialize (final String name,
-                          final IScheduler scheduler,
-                          final IClassLoadHelper classLoadHelper) throws SchedulerException
+  public void initialize (@NonNull final String name,
+                          @NonNull final IScheduler scheduler,
+                          @NonNull final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
     LOGGER.info ("Registering Quartz shutdown hook.");
 

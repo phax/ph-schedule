@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.impl;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.spi.IThreadExecutor;
 
 /**
@@ -31,8 +34,10 @@ public class DefaultThreadExecutor implements IThreadExecutor
   public void initialize ()
   {}
 
-  public void execute (final Thread thread)
+  public void execute (@NonNull final Thread thread)
   {
+    ValueEnforcer.notNull (thread, "Thread");
+
     thread.start ();
   }
 }

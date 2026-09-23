@@ -21,6 +21,7 @@ package com.helger.quartz.simpl;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
 import com.helger.base.string.StringHelper;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IInstanceIdGenerator;
@@ -54,6 +55,8 @@ public class SystemPropertyInstanceIdGenerator implements IInstanceIdGenerator
    * @throws SchedulerException
    *         Shouldn't a value be found
    */
+  @NonNull
+  @Nonempty
   public String generateInstanceId () throws SchedulerException
   {
     String ret = System.getProperty (getSystemPropertyName ());

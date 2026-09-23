@@ -19,6 +19,7 @@
 package com.helger.quartz.listeners;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
@@ -56,7 +57,7 @@ public class BroadcastSchedulerListener implements ISchedulerListener
    * @param listeners
    *        the initial List of SchedulerListeners to broadcast to.
    */
-  public BroadcastSchedulerListener (final Iterable <? extends ISchedulerListener> listeners)
+  public BroadcastSchedulerListener (@NonNull final Iterable <? extends ISchedulerListener> listeners)
   {
     m_aListeners.addAll (listeners);
   }
@@ -67,7 +68,7 @@ public class BroadcastSchedulerListener implements ISchedulerListener
     m_aListeners.add (listener);
   }
 
-  public boolean removeListener (final ISchedulerListener listener)
+  public boolean removeListener (@Nullable final ISchedulerListener listener)
   {
     return m_aListeners.remove (listener);
   }
@@ -80,55 +81,55 @@ public class BroadcastSchedulerListener implements ISchedulerListener
   }
 
   @Override
-  public void jobAdded (final IJobDetail jobDetail)
+  public void jobAdded (@NonNull final IJobDetail jobDetail)
   {
     m_aListeners.forEach (x -> x.jobAdded (jobDetail));
   }
 
   @Override
-  public void jobDeleted (final JobKey jobKey)
+  public void jobDeleted (@NonNull final JobKey jobKey)
   {
     m_aListeners.forEach (x -> x.jobDeleted (jobKey));
   }
 
   @Override
-  public void jobScheduled (final ITrigger trigger)
+  public void jobScheduled (@NonNull final ITrigger trigger)
   {
     m_aListeners.forEach (x -> x.jobScheduled (trigger));
   }
 
   @Override
-  public void jobUnscheduled (final TriggerKey triggerKey)
+  public void jobUnscheduled (@NonNull final TriggerKey triggerKey)
   {
     m_aListeners.forEach (x -> x.jobUnscheduled (triggerKey));
   }
 
   @Override
-  public void triggerFinalized (final ITrigger trigger)
+  public void triggerFinalized (@NonNull final ITrigger trigger)
   {
     m_aListeners.forEach (x -> x.triggerFinalized (trigger));
   }
 
   @Override
-  public void triggerPaused (final TriggerKey key)
+  public void triggerPaused (@Nullable final TriggerKey key)
   {
     m_aListeners.forEach (x -> x.triggerPaused (key));
   }
 
   @Override
-  public void triggersPaused (final String triggerGroup)
+  public void triggersPaused (@Nullable final String triggerGroup)
   {
     m_aListeners.forEach (x -> x.triggersPaused (triggerGroup));
   }
 
   @Override
-  public void triggerResumed (final TriggerKey key)
+  public void triggerResumed (@Nullable final TriggerKey key)
   {
     m_aListeners.forEach (x -> x.triggerResumed (key));
   }
 
   @Override
-  public void triggersResumed (final String triggerGroup)
+  public void triggersResumed (@Nullable final String triggerGroup)
   {
     m_aListeners.forEach (x -> x.triggersResumed (triggerGroup));
   }
@@ -140,31 +141,31 @@ public class BroadcastSchedulerListener implements ISchedulerListener
   }
 
   @Override
-  public void jobPaused (final JobKey key)
+  public void jobPaused (@Nullable final JobKey key)
   {
     m_aListeners.forEach (x -> x.jobPaused (key));
   }
 
   @Override
-  public void jobsPaused (final String jobGroup)
+  public void jobsPaused (@Nullable final String jobGroup)
   {
     m_aListeners.forEach (x -> x.jobsPaused (jobGroup));
   }
 
   @Override
-  public void jobResumed (final JobKey key)
+  public void jobResumed (@Nullable final JobKey key)
   {
     m_aListeners.forEach (x -> x.jobResumed (key));
   }
 
   @Override
-  public void jobsResumed (final String jobGroup)
+  public void jobsResumed (@Nullable final String jobGroup)
   {
     m_aListeners.forEach (x -> x.jobsResumed (jobGroup));
   }
 
   @Override
-  public void schedulerError (final String msg, final SchedulerException cause)
+  public void schedulerError (@Nullable final String msg, @Nullable final SchedulerException cause)
   {
     m_aListeners.forEach (x -> x.schedulerError (msg, cause));
   }

@@ -27,10 +27,12 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.annotation.Nonempty;
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.compare.IComparator;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.hashcode.HashCodeGenerator;
@@ -112,7 +114,7 @@ public class RAMJobStore implements IJobStore
    * a chance to initialize.
    * </p>
    */
-  public void initialize (final IClassLoadHelper loadHelper, final ISchedulerSignaler schedSignaler)
+  public void initialize (@NonNull final IClassLoadHelper loadHelper, @NonNull final ISchedulerSignaler schedSignaler)
   {
     m_aSignaler = schedSignaler;
     LOGGER.info ("RAMJobStore initialized.");
@@ -221,8 +223,8 @@ public class RAMJobStore implements IJobStore
    * @throws ObjectAlreadyExistsException
    *         if a <code>Job</code> with the same name/group already exists.
    */
-  public void storeJobAndTrigger (final IJobDetail newJob,
-                                  final IOperableTrigger newTrigger) throws JobPersistenceException
+  public void storeJobAndTrigger (@NonNull final IJobDetail newJob,
+                                  @NonNull final IOperableTrigger newTrigger) throws JobPersistenceException
   {
     storeJob (newJob, false);
     storeTrigger (newTrigger, false);
@@ -242,7 +244,8 @@ public class RAMJobStore implements IJobStore
    *         if a <code>Job</code> with the same name/group already exists, and replaceExisting is
    *         set to false.
    */
-  public void storeJob (final IJobDetail newJob, final boolean bReplaceExisting) throws ObjectAlreadyExistsException
+  public void storeJob (@NonNull final IJobDetail newJob,
+                        final boolean bReplaceExisting) throws ObjectAlreadyExistsException
   {
     final JobWrapper jw = new JobWrapper (newJob.getClone ());
     boolean bReplace = false;
@@ -289,7 +292,7 @@ public class RAMJobStore implements IJobStore
    * @return <code>true</code> if a <code>Job</code> with the given name &amp; group was found and
    *         removed from the store.
    */
-  public boolean removeJob (final JobKey jobKey)
+  public boolean removeJob (@NonNull final JobKey jobKey)
   {
     boolean bFound = false;
 
@@ -321,7 +324,7 @@ public class RAMJobStore implements IJobStore
     return bFound;
   }
 
-  public boolean removeJobs (final List <JobKey> jobKeys) throws JobPersistenceException
+  public boolean removeJobs (@NonNull final List <JobKey> jobKeys) throws JobPersistenceException
   {
     boolean allFound = true;
 
@@ -334,7 +337,7 @@ public class RAMJobStore implements IJobStore
     return allFound;
   }
 
-  public boolean removeTriggers (final List <TriggerKey> triggerKeys) throws JobPersistenceException
+  public boolean removeTriggers (@NonNull final List <TriggerKey> triggerKeys) throws JobPersistenceException
   {
     boolean allFound = true;
 
@@ -347,7 +350,7 @@ public class RAMJobStore implements IJobStore
     return allFound;
   }
 
-  public void storeJobsAndTriggers (final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
+  public void storeJobsAndTriggers (@NonNull final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                                     final boolean replace) throws JobPersistenceException
   {
     synchronized (m_aLock)
@@ -393,7 +396,7 @@ public class RAMJobStore implements IJobStore
    *         is set to false.
    * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
    */
-  public void storeTrigger (final IOperableTrigger newTrigger,
+  public void storeTrigger (@NonNull final IOperableTrigger newTrigger,
                             final boolean bReplaceExisting) throws JobPersistenceException
   {
     final TriggerWrapper tw = new TriggerWrapper (newTrigger.getClone ());
@@ -459,12 +462,12 @@ public class RAMJobStore implements IJobStore
    * @return <code>true</code> if a <code>Trigger</code> with the given name &amp; group was found
    *         and removed from the store.
    */
-  public boolean removeTrigger (final TriggerKey triggerKey)
+  public boolean removeTrigger (@NonNull final TriggerKey triggerKey)
   {
     return _removeTrigger (triggerKey, true);
   }
 
-  private boolean _removeTrigger (final TriggerKey key, final boolean removeOrphanedJob)
+  private boolean _removeTrigger (@NonNull final TriggerKey key, final boolean removeOrphanedJob)
   {
     boolean bFound;
 
@@ -520,8 +523,8 @@ public class RAMJobStore implements IJobStore
    * @see com.helger.quartz.spi.IJobStore#replaceTrigger(TriggerKey triggerKey, IOperableTrigger
    *      newTrigger)
    */
-  public boolean replaceTrigger (final TriggerKey triggerKey,
-                                 final IOperableTrigger newTrigger) throws JobPersistenceException
+  public boolean replaceTrigger (@NonNull final TriggerKey triggerKey,
+                                 @NonNull final IOperableTrigger newTrigger) throws JobPersistenceException
   {
     boolean found;
 
@@ -587,7 +590,8 @@ public class RAMJobStore implements IJobStore
    *
    * @return The desired <code>Job</code>, or null if there is no match.
    */
-  public IJobDetail retrieveJob (final JobKey jobKey)
+  @Nullable
+  public IJobDetail retrieveJob (@NonNull final JobKey jobKey)
   {
     synchronized (m_aLock)
     {
@@ -603,7 +607,8 @@ public class RAMJobStore implements IJobStore
    *
    * @return The desired <code>Trigger</code>, or null if there is no match.
    */
-  public IOperableTrigger retrieveTrigger (final TriggerKey triggerKey)
+  @Nullable
+  public IOperableTrigger retrieveTrigger (@NonNull final TriggerKey triggerKey)
   {
     synchronized (m_aLock)
     {
@@ -622,7 +627,7 @@ public class RAMJobStore implements IJobStore
    * @throws JobPersistenceException
    *         on error
    */
-  public boolean checkExists (final JobKey jobKey) throws JobPersistenceException
+  public boolean checkExists (@NonNull final JobKey jobKey) throws JobPersistenceException
   {
     synchronized (m_aLock)
     {
@@ -640,7 +645,7 @@ public class RAMJobStore implements IJobStore
    * @throws JobPersistenceException
    *         on error
    */
-  public boolean checkExists (final TriggerKey triggerKey) throws JobPersistenceException
+  public boolean checkExists (@NonNull final TriggerKey triggerKey) throws JobPersistenceException
   {
     synchronized (m_aLock)
     {
@@ -660,7 +665,8 @@ public class RAMJobStore implements IJobStore
    * @see ETriggerState#BLOCKED
    * @see ETriggerState#NONE
    */
-  public ETriggerState getTriggerState (final TriggerKey triggerKey) throws JobPersistenceException
+  @NonNull
+  public ETriggerState getTriggerState (@NonNull final TriggerKey triggerKey) throws JobPersistenceException
   {
     synchronized (m_aLock)
     {
@@ -708,8 +714,8 @@ public class RAMJobStore implements IJobStore
    *         if a <code>Calendar</code> with the same name already exists, and replaceExisting is
    *         set to false.
    */
-  public void storeCalendar (final String name,
-                             final ICalendar aCalendar,
+  public void storeCalendar (@NonNull final String name,
+                             @NonNull final ICalendar aCalendar,
                              final boolean replaceExisting,
                              final boolean updateTriggers) throws ObjectAlreadyExistsException
   {
@@ -759,7 +765,7 @@ public class RAMJobStore implements IJobStore
    * @return <code>true</code> if a <code>Calendar</code> with the given name was found and removed
    *         from the store.
    */
-  public boolean removeCalendar (final String calName) throws JobPersistenceException
+  public boolean removeCalendar (@NonNull final String calName) throws JobPersistenceException
   {
     int numRefs = 0;
 
@@ -792,7 +798,8 @@ public class RAMJobStore implements IJobStore
    *        The name of the <code>Calendar</code> to be retrieved.
    * @return The desired <code>Calendar</code>, or null if there is no match.
    */
-  public ICalendar retrieveCalendar (final String calName)
+  @Nullable
+  public ICalendar retrieveCalendar (@NonNull final String calName)
   {
     synchronized (m_aLock)
     {
@@ -851,7 +858,9 @@ public class RAMJobStore implements IJobStore
    * groupMatcher.
    * </p>
    */
-  public ICommonsSet <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsSet <JobKey> getJobKeys (@NonNull final GroupMatcher <JobKey> matcher)
   {
     ICommonsSet <JobKey> outList = null;
     synchronized (m_aLock)
@@ -899,6 +908,8 @@ public class RAMJobStore implements IJobStore
    * (not <code>null</code>).
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <String> getCalendarNames ()
   {
     synchronized (m_aLock)
@@ -913,7 +924,9 @@ public class RAMJobStore implements IJobStore
    * given groupMatcher.
    * </p>
    */
-  public ICommonsSet <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsSet <TriggerKey> getTriggerKeys (@NonNull final GroupMatcher <TriggerKey> matcher)
   {
     ICommonsSet <TriggerKey> outList = null;
     synchronized (m_aLock)
@@ -956,6 +969,8 @@ public class RAMJobStore implements IJobStore
    * Get the names of all of the <code>{@link com.helger.quartz.IJob}</code> groups.
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <String> getJobGroupNames ()
   {
     synchronized (m_aLock)
@@ -969,6 +984,8 @@ public class RAMJobStore implements IJobStore
    * Get the names of all of the <code>{@link com.helger.quartz.ITrigger}</code> groups.
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <String> getTriggerGroupNames ()
   {
     synchronized (m_aLock)
@@ -985,7 +1002,9 @@ public class RAMJobStore implements IJobStore
    * If there are no matches, a zero-length array should be returned.
    * </p>
    */
-  public ICommonsList <IOperableTrigger> getTriggersForJob (final JobKey jobKey)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsList <IOperableTrigger> getTriggersForJob (@NonNull final JobKey jobKey)
   {
     final ICommonsList <IOperableTrigger> trigList = new CommonsArrayList <> ();
 
@@ -999,7 +1018,9 @@ public class RAMJobStore implements IJobStore
     return trigList;
   }
 
-  protected ICommonsList <TriggerWrapper> getTriggerWrappersForJob (final JobKey jobKey)
+  @NonNull
+  @ReturnsMutableCopy
+  protected ICommonsList <TriggerWrapper> getTriggerWrappersForJob (@NonNull final JobKey jobKey)
   {
     final ICommonsList <TriggerWrapper> trigList = new CommonsArrayList <> ();
 
@@ -1013,7 +1034,9 @@ public class RAMJobStore implements IJobStore
     return trigList;
   }
 
-  protected ICommonsList <TriggerWrapper> getTriggerWrappersForCalendar (final String calName)
+  @NonNull
+  @ReturnsMutableCopy
+  protected ICommonsList <TriggerWrapper> getTriggerWrappersForCalendar (@Nullable final String calName)
   {
     final ICommonsList <TriggerWrapper> trigList = new CommonsArrayList <> ();
 
@@ -1035,7 +1058,7 @@ public class RAMJobStore implements IJobStore
    * Pause the <code>{@link ITrigger}</code> with the given name.
    * </p>
    */
-  public void pauseTrigger (final TriggerKey triggerKey)
+  public void pauseTrigger (@NonNull final TriggerKey triggerKey)
   {
     synchronized (m_aLock)
     {
@@ -1067,7 +1090,9 @@ public class RAMJobStore implements IJobStore
    * are added to one of these groups while the group is paused.
    * </p>
    */
-  public ICommonsList <String> pauseTriggers (final GroupMatcher <TriggerKey> matcher)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsList <String> pauseTriggers (@NonNull final GroupMatcher <TriggerKey> matcher)
   {
     ICommonsList <String> pausedGroups;
     synchronized (m_aLock)
@@ -1107,7 +1132,7 @@ public class RAMJobStore implements IJobStore
    * all of its current <code>Trigger</code>s.
    * </p>
    */
-  public void pauseJob (final JobKey jobKey)
+  public void pauseJob (@NonNull final JobKey jobKey)
   {
     synchronized (m_aLock)
     {
@@ -1129,7 +1154,9 @@ public class RAMJobStore implements IJobStore
    * that are added to the group while the group is paused.
    * </p>
    */
-  public ICommonsList <String> pauseJobs (final GroupMatcher <JobKey> matcher)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsList <String> pauseJobs (@NonNull final GroupMatcher <JobKey> matcher)
   {
     final ICommonsList <String> pausedGroups = new CommonsArrayList <> ();
     synchronized (m_aLock)
@@ -1181,7 +1208,7 @@ public class RAMJobStore implements IJobStore
    * misfire instruction will be applied.
    * </p>
    */
-  public void resumeTrigger (final TriggerKey triggerKey)
+  public void resumeTrigger (@NonNull final TriggerKey triggerKey)
   {
     synchronized (m_aLock)
     {
@@ -1222,7 +1249,9 @@ public class RAMJobStore implements IJobStore
    * misfire instruction will be applied.
    * </p>
    */
-  public ICommonsList <String> resumeTriggers (final GroupMatcher <TriggerKey> matcher)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsList <String> resumeTriggers (@NonNull final GroupMatcher <TriggerKey> matcher)
   {
     final ICommonsSet <String> groups = new CommonsHashSet <> ();
 
@@ -1260,7 +1289,7 @@ public class RAMJobStore implements IJobStore
    * <code>Trigger</code>'s misfire instruction will be applied.
    * </p>
    */
-  public void resumeJob (final JobKey jobKey)
+  public void resumeJob (@NonNull final JobKey jobKey)
   {
     synchronized (m_aLock)
     {
@@ -1282,7 +1311,9 @@ public class RAMJobStore implements IJobStore
    * then the <code>Trigger</code>'s misfire instruction will be applied.
    * </p>
    */
-  public ICommonsCollection <String> resumeJobs (final GroupMatcher <JobKey> matcher)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsCollection <String> resumeJobs (@NonNull final GroupMatcher <JobKey> matcher)
   {
     final ICommonsSet <String> resumedGroups = new CommonsHashSet <> ();
     synchronized (m_aLock)
@@ -1351,7 +1382,7 @@ public class RAMJobStore implements IJobStore
     }
   }
 
-  protected boolean applyMisfire (final TriggerWrapper tw)
+  protected boolean applyMisfire (@NonNull final TriggerWrapper tw)
   {
     long misfireTime = System.currentTimeMillis ();
     if (getMisfireThreshold () > 0)
@@ -1408,6 +1439,8 @@ public class RAMJobStore implements IJobStore
    *
    * @see #releaseAcquiredTrigger(IOperableTrigger)
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <IOperableTrigger> acquireNextTriggers (final long noLaterThan,
                                                               final int maxCount,
                                                               final long timeWindow)
@@ -1500,7 +1533,7 @@ public class RAMJobStore implements IJobStore
    * <code>Trigger</code>, that it had previously acquired (reserved).
    * </p>
    */
-  public void releaseAcquiredTrigger (final IOperableTrigger trigger)
+  public void releaseAcquiredTrigger (@NonNull final IOperableTrigger trigger)
   {
     synchronized (m_aLock)
     {
@@ -1520,7 +1553,9 @@ public class RAMJobStore implements IJobStore
    * acquired (reserved).
    * </p>
    */
-  public ICommonsList <TriggerFiredResult> triggersFired (final List <IOperableTrigger> firedTriggers)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsList <TriggerFiredResult> triggersFired (@NonNull final List <IOperableTrigger> firedTriggers)
   {
     synchronized (m_aLock)
     {
@@ -1608,9 +1643,9 @@ public class RAMJobStore implements IJobStore
    * updated if the <code>Job</code> is stateful.
    * </p>
    */
-  public void triggeredJobComplete (final IOperableTrigger trigger,
-                                    final IJobDetail jobDetail,
-                                    final ECompletedExecutionInstruction triggerInstCode)
+  public void triggeredJobComplete (@NonNull final IOperableTrigger trigger,
+                                    @NonNull final IJobDetail jobDetail,
+                                    @NonNull final ECompletedExecutionInstruction triggerInstCode)
   {
     synchronized (m_aLock)
     {
@@ -1707,7 +1742,7 @@ public class RAMJobStore implements IJobStore
     }
   }
 
-  protected void setAllTriggersOfJobToState (final JobKey jobKey, final int state)
+  protected void setAllTriggersOfJobToState (@NonNull final JobKey jobKey, final int state)
   {
     final ICommonsList <TriggerWrapper> tws = getTriggerWrappersForJob (jobKey);
     for (final TriggerWrapper tw : tws)
@@ -1720,6 +1755,7 @@ public class RAMJobStore implements IJobStore
     }
   }
 
+  @NonNull
   protected String peekTriggers ()
   {
     final StringBuilder str = new StringBuilder ();
@@ -1744,6 +1780,8 @@ public class RAMJobStore implements IJobStore
   /**
    * @see com.helger.quartz.spi.IJobStore#getPausedTriggerGroups()
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsSet <String> getPausedTriggerGroups () throws JobPersistenceException
   {
     final ICommonsSet <String> set = new CommonsHashSet <> ();
@@ -1753,12 +1791,12 @@ public class RAMJobStore implements IJobStore
     return set;
   }
 
-  public void setInstanceId (final String schedInstId)
+  public void setInstanceId (@Nullable final String schedInstId)
   {
     //
   }
 
-  public void setInstanceName (final String schedName)
+  public void setInstanceName (@Nullable final String schedName)
   {
     //
   }
@@ -1784,7 +1822,7 @@ final class TriggerWrapperComparator implements IComparator <TriggerWrapper>
 {
   private final TriggerTimeComparator ttc = new TriggerTimeComparator ();
 
-  public int compare (final TriggerWrapper trig1, final TriggerWrapper trig2)
+  public int compare (@NonNull final TriggerWrapper trig1, @NonNull final TriggerWrapper trig2)
   {
     return ttc.compare (trig1.m_aTrigger, trig2.m_aTrigger);
   }
@@ -1871,6 +1909,7 @@ final class TriggerWrapper
     m_aJobKey = trigger.getJobKey ();
   }
 
+  @NonNull
   public IOperableTrigger getTrigger ()
   {
     return m_aTrigger;

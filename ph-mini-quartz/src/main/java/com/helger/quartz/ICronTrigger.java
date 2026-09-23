@@ -20,6 +20,9 @@ package com.helger.quartz;
 
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * The public interface for inspecting settings specific to a CronTrigger, . which is used to fire a
  * <code>{@link com.helger.quartz.IJob}</code> at given moments in time, defined with Unix
@@ -156,6 +159,7 @@ import java.util.TimeZone;
  */
 public interface ICronTrigger extends ITrigger
 {
+  @Nullable
   String getCronExpression ();
 
   /**
@@ -164,9 +168,12 @@ public interface ICronTrigger extends ITrigger
    * will be resolved.
    * </p>
    */
+  @NonNull
   TimeZone getTimeZone ();
 
+  @Nullable
   String getExpressionSummary ();
 
+  @NonNull
   TriggerBuilder <? extends ICronTrigger> getTriggerBuilder ();
 }

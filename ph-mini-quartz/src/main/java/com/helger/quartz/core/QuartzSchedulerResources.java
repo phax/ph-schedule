@@ -20,6 +20,12 @@ package com.helger.quartz.core;
 
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.style.ReturnsMutableObject;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.quartz.spi.IJobStore;
@@ -72,6 +78,7 @@ public class QuartzSchedulerResources
    * Get the name for the <code>{@link QuartzScheduler}</code>.
    * </p>
    */
+  @Nullable
   public String getName ()
   {
     return m_sName;
@@ -85,12 +92,10 @@ public class QuartzSchedulerResources
    * @exception IllegalArgumentException
    *            if name is null or empty.
    */
-  public void setName (final String name)
+  public void setName (@NonNull @Nonempty final String name)
   {
-    if (name == null || name.trim ().length () == 0)
-    {
-      throw new IllegalArgumentException ("Scheduler name cannot be empty.");
-    }
+    ValueEnforcer.notEmpty (name, "Name");
+    ValueEnforcer.isFalse (name.trim ().isEmpty (), "Scheduler name cannot be empty.");
 
     m_sName = name;
 
@@ -106,6 +111,7 @@ public class QuartzSchedulerResources
    * Get the instance Id for the <code>{@link QuartzScheduler}</code>.
    * </p>
    */
+  @Nullable
   public String getInstanceId ()
   {
     return m_sInstanceId;
@@ -119,21 +125,21 @@ public class QuartzSchedulerResources
    * @exception IllegalArgumentException
    *            if name is null or empty.
    */
-  public void setInstanceId (final String instanceId)
+  public void setInstanceId (@NonNull @Nonempty final String instanceId)
   {
-    if (instanceId == null || instanceId.trim ().length () == 0)
-    {
-      throw new IllegalArgumentException ("Scheduler instanceId cannot be empty.");
-    }
+    ValueEnforcer.notEmpty (instanceId, "InstanceId");
+    ValueEnforcer.isFalse (instanceId.trim ().isEmpty (), "Scheduler instanceId cannot be empty.");
 
     m_sInstanceId = instanceId;
   }
 
-  public static String getUniqueIdentifier (final String schedName, final String schedInstId)
+  @NonNull
+  public static String getUniqueIdentifier (@Nullable final String schedName, @Nullable final String schedInstId)
   {
     return schedName + "_$_" + schedInstId;
   }
 
+  @NonNull
   public String getUniqueIdentifier ()
   {
     return getUniqueIdentifier (m_sName, m_sInstanceId);
@@ -144,6 +150,7 @@ public class QuartzSchedulerResources
    * Get the name for the <code>{@link QuartzSchedulerThread}</code>.
    * </p>
    */
+  @Nullable
   public String getThreadName ()
   {
     return m_sThreadName;
@@ -157,12 +164,10 @@ public class QuartzSchedulerResources
    * @exception IllegalArgumentException
    *            if name is null or empty.
    */
-  public void setThreadName (final String threadName)
+  public void setThreadName (@NonNull @Nonempty final String threadName)
   {
-    if (threadName == null || threadName.trim ().length () == 0)
-    {
-      throw new IllegalArgumentException ("Scheduler thread name cannot be empty.");
-    }
+    ValueEnforcer.notEmpty (threadName, "ThreadName");
+    ValueEnforcer.isFalse (threadName.trim ().isEmpty (), "Scheduler thread name cannot be empty.");
 
     m_sThreadName = threadName;
   }
@@ -172,6 +177,7 @@ public class QuartzSchedulerResources
    * Get the <code>{@link IThreadPool}</code> for the <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
+  @Nullable
   public IThreadPool getThreadPool ()
   {
     return m_aThreadPool;
@@ -185,12 +191,9 @@ public class QuartzSchedulerResources
    * @exception IllegalArgumentException
    *            if threadPool is null.
    */
-  public void setThreadPool (final IThreadPool threadPool)
+  public void setThreadPool (@NonNull final IThreadPool threadPool)
   {
-    if (threadPool == null)
-    {
-      throw new IllegalArgumentException ("ThreadPool cannot be null.");
-    }
+    ValueEnforcer.notNull (threadPool, "ThreadPool");
 
     m_aThreadPool = threadPool;
   }
@@ -200,6 +203,7 @@ public class QuartzSchedulerResources
    * Get the <code>{@link IJobStore}</code> for the <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
+  @Nullable
   public IJobStore getJobStore ()
   {
     return m_aJobStore;
@@ -213,12 +217,9 @@ public class QuartzSchedulerResources
    * @exception IllegalArgumentException
    *            if jobStore is null.
    */
-  public void setJobStore (final IJobStore jobStore)
+  public void setJobStore (@NonNull final IJobStore jobStore)
   {
-    if (jobStore == null)
-    {
-      throw new IllegalArgumentException ("JobStore cannot be null.");
-    }
+    ValueEnforcer.notNull (jobStore, "JobStore");
 
     m_aJobStore = jobStore;
   }
@@ -229,6 +230,7 @@ public class QuartzSchedulerResources
    * to use.
    * </p>
    */
+  @Nullable
   public IJobRunShellFactory getJobRunShellFactory ()
   {
     return m_aJobRunShellFactory;
@@ -243,12 +245,9 @@ public class QuartzSchedulerResources
    * @exception IllegalArgumentException
    *            if jobRunShellFactory is null.
    */
-  public void setJobRunShellFactory (final IJobRunShellFactory jobRunShellFactory)
+  public void setJobRunShellFactory (@NonNull final IJobRunShellFactory jobRunShellFactory)
   {
-    if (jobRunShellFactory == null)
-    {
-      throw new IllegalArgumentException ("JobRunShellFactory cannot be null.");
-    }
+    ValueEnforcer.notNull (jobRunShellFactory, "JobRunShellFactory");
 
     m_aJobRunShellFactory = jobRunShellFactory;
   }
@@ -260,8 +259,10 @@ public class QuartzSchedulerResources
    * method to be invoked externally (either before or after this method is called).
    * </p>
    */
-  public void addSchedulerPlugin (final ISchedulerPlugin plugin)
+  public void addSchedulerPlugin (@NonNull final ISchedulerPlugin plugin)
   {
+    ValueEnforcer.notNull (plugin, "Plugin");
+
     m_aSchedulerPlugins.add (plugin);
   }
 
@@ -271,6 +272,8 @@ public class QuartzSchedulerResources
    * for the <code>{@link QuartzScheduler}</code> to use.
    * </p>
    */
+  @NonNull
+  @ReturnsMutableObject
   public List <ISchedulerPlugin> getSchedulerPlugins ()
   {
     return m_aSchedulerPlugins;
@@ -317,6 +320,7 @@ public class QuartzSchedulerResources
   /**
    * Get the ThreadExecutor which runs the QuartzSchedulerThread
    */
+  @Nullable
   public IThreadExecutor getThreadExecutor ()
   {
     return m_aThreadExecutor;
@@ -325,7 +329,7 @@ public class QuartzSchedulerResources
   /**
    * Set the ThreadExecutor which runs the QuartzSchedulerThread
    */
-  public void setThreadExecutor (final IThreadExecutor threadExecutor)
+  public void setThreadExecutor (@Nullable final IThreadExecutor threadExecutor)
   {
     m_aThreadExecutor = threadExecutor;
   }

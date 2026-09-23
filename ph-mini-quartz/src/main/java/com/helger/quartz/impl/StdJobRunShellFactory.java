@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.impl;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.core.IJobRunShellFactory;
@@ -40,8 +43,10 @@ public class StdJobRunShellFactory implements IJobRunShellFactory
    * Initialize the factory, providing a handle to the {@link IScheduler} that should be made
    * available within the {@link JobRunShell} and the JobExecutionContexts within it.
    */
-  public void initialize (final IScheduler aScheduler)
+  public void initialize (@NonNull final IScheduler aScheduler)
   {
+    ValueEnforcer.notNull (aScheduler, "Scheduler");
+
     m_aScheduler = aScheduler;
   }
 
@@ -51,7 +56,8 @@ public class StdJobRunShellFactory implements IJobRunShellFactory
    * {@link com.helger.quartz.core.JobRunShell}.
    * </p>
    */
-  public JobRunShell createJobRunShell (final TriggerFiredBundle bndle) throws SchedulerException
+  @NonNull
+  public JobRunShell createJobRunShell (@NonNull final TriggerFiredBundle bndle) throws SchedulerException
   {
     return new JobRunShell (m_aScheduler, bndle);
   }

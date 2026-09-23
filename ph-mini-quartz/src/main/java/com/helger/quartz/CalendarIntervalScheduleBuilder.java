@@ -21,6 +21,7 @@ package com.helger.quartz;
 import java.util.TimeZone;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
@@ -296,7 +297,7 @@ public class CalendarIntervalScheduleBuilder implements IScheduleBuilder <Calend
    * @see ICalendarIntervalTrigger#getTimeZone()
    */
   @NonNull
-  public CalendarIntervalScheduleBuilder inTimeZone (final TimeZone timezone)
+  public CalendarIntervalScheduleBuilder inTimeZone (@Nullable final TimeZone timezone)
   {
     m_aTimeZone = timezone;
     return this;

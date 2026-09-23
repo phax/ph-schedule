@@ -273,7 +273,7 @@ public class DailyTimeIntervalScheduleBuilderTest
                    .build ();
       fail ("We should not accept endingDailyAfterCount(x) without first setting startingDailyAt.");
     }
-    catch (final IllegalArgumentException e)
+    catch (final IllegalStateException e)
     {
       // Expected.
     }

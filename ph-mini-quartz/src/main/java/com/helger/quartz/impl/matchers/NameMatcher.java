@@ -37,7 +37,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   }
 
   @Override
-  protected String getValue (final T aKey)
+  @NonNull
+  protected String getValue (@NonNull final T aKey)
   {
     return aKey.getName ();
   }
@@ -45,7 +46,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches names equaling the given string.
    */
-  public static <T extends Key <T>> NameMatcher <T> nameEquals (final String sCompareTo)
+  @NonNull
+  public static <T extends Key <T>> NameMatcher <T> nameEquals (@NonNull final String sCompareTo)
   {
     return new NameMatcher <> (sCompareTo, EStringOperatorName.EQUALS);
   }
@@ -53,7 +55,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches job names equaling the given string.
    */
-  public static NameMatcher <JobKey> jobNameEquals (final String sCompareTo)
+  @NonNull
+  public static NameMatcher <JobKey> jobNameEquals (@NonNull final String sCompareTo)
   {
     return nameEquals (sCompareTo);
   }
@@ -61,7 +64,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches trigger names equaling the given string.
    */
-  public static NameMatcher <TriggerKey> triggerNameEquals (final String sCompareTo)
+  @NonNull
+  public static NameMatcher <TriggerKey> triggerNameEquals (@NonNull final String sCompareTo)
   {
     return nameEquals (sCompareTo);
   }
@@ -69,7 +73,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches names starting with the given string.
    */
-  public static <U extends Key <U>> NameMatcher <U> nameStartsWith (final String sCompareTo)
+  @NonNull
+  public static <U extends Key <U>> NameMatcher <U> nameStartsWith (@NonNull final String sCompareTo)
   {
     return new NameMatcher <> (sCompareTo, EStringOperatorName.STARTS_WITH);
   }
@@ -77,7 +82,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches job names starting with the given string.
    */
-  public static NameMatcher <JobKey> jobNameStartsWith (final String sCompareTo)
+  @NonNull
+  public static NameMatcher <JobKey> jobNameStartsWith (@NonNull final String sCompareTo)
   {
     return nameStartsWith (sCompareTo);
   }
@@ -85,7 +91,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches trigger names starting with the given string.
    */
-  public static NameMatcher <TriggerKey> triggerNameStartsWith (final String sCompareTo)
+  @NonNull
+  public static NameMatcher <TriggerKey> triggerNameStartsWith (@NonNull final String sCompareTo)
   {
     return nameStartsWith (sCompareTo);
   }
@@ -93,7 +100,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches names ending with the given string.
    */
-  public static <U extends Key <U>> NameMatcher <U> nameEndsWith (final String sCompareTo)
+  @NonNull
+  public static <U extends Key <U>> NameMatcher <U> nameEndsWith (@NonNull final String sCompareTo)
   {
     return new NameMatcher <> (sCompareTo, EStringOperatorName.ENDS_WITH);
   }
@@ -101,7 +109,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches job names ending with the given string.
    */
-  public static NameMatcher <JobKey> jobNameEndsWith (final String sCompareTo)
+  @NonNull
+  public static NameMatcher <JobKey> jobNameEndsWith (@NonNull final String sCompareTo)
   {
     return nameEndsWith (sCompareTo);
   }
@@ -109,7 +118,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches trigger names ending with the given string.
    */
-  public static NameMatcher <TriggerKey> triggerNameEndsWith (final String sCompareTo)
+  @NonNull
+  public static NameMatcher <TriggerKey> triggerNameEndsWith (@NonNull final String sCompareTo)
   {
     return nameEndsWith (sCompareTo);
   }
@@ -117,7 +127,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches names containing the given string.
    */
-  public static <U extends Key <U>> NameMatcher <U> nameContains (final String sCompareTo)
+  @NonNull
+  public static <U extends Key <U>> NameMatcher <U> nameContains (@NonNull final String sCompareTo)
   {
     return new NameMatcher <> (sCompareTo, EStringOperatorName.CONTAINS);
   }
@@ -125,7 +136,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches job names containing the given string.
    */
-  public static NameMatcher <JobKey> jobNameContains (final String sCompareTo)
+  @NonNull
+  public static NameMatcher <JobKey> jobNameContains (@NonNull final String sCompareTo)
   {
     return nameContains (sCompareTo);
   }
@@ -133,7 +145,8 @@ public class NameMatcher <T extends Key <T>> extends StringMatcher <T>
   /**
    * Create a NameMatcher that matches trigger names containing the given string.
    */
-  public static NameMatcher <TriggerKey> triggerNameContains (final String sCompareTo)
+  @NonNull
+  public static NameMatcher <TriggerKey> triggerNameContains (@NonNull final String sCompareTo)
   {
     return nameContains (sCompareTo);
   }

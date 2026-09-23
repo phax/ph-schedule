@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+
 /**
  * <p>
  * The interface to be implemented by classes which represent a 'job' to be performed.
@@ -55,5 +57,5 @@ public interface IJob
    * @throws JobExecutionException
    *         if there is an exception while executing the job.
    */
-  void execute (IJobExecutionContext context) throws JobExecutionException;
+  void execute (@NonNull IJobExecutionContext context) throws JobExecutionException;
 }

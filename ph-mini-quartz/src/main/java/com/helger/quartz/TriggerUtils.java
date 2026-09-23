@@ -21,7 +21,9 @@ package com.helger.quartz;
 import java.util.Date;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonnegative;
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.CommonsArrayList;
@@ -60,9 +62,9 @@ public final class TriggerUtils
    */
   @NonNull
   @ReturnsMutableCopy
-  public static ICommonsList <Date> computeFireTimes (final IOperableTrigger trigg,
-                                                      final ICalendar cal,
-                                                      final int numTimes)
+  public static ICommonsList <Date> computeFireTimes (@NonNull final IOperableTrigger trigg,
+                                                      @Nullable final ICalendar cal,
+                                                      @Nonnegative final int numTimes)
   {
     final ICommonsList <Date> lst = new CommonsArrayList <> ();
 
@@ -102,9 +104,10 @@ public final class TriggerUtils
    * @return the computed Date, or null if the trigger (as configured) will not fire that many
    *         times.
    */
-  public static Date computeEndTimeToAllowParticularNumberOfFirings (final IOperableTrigger trigg,
-                                                                     final ICalendar cal,
-                                                                     final int numTimes)
+  @Nullable
+  public static Date computeEndTimeToAllowParticularNumberOfFirings (@NonNull final IOperableTrigger trigg,
+                                                                     @Nullable final ICalendar cal,
+                                                                     @Nonnegative final int numTimes)
   {
     final IOperableTrigger t = trigg.getClone ();
     if (t.getNextFireTime () == null)
@@ -154,10 +157,12 @@ public final class TriggerUtils
    *        The ending date at which to stop finding fire times
    * @return List of java.util.Date objects
    */
-  public static ICommonsList <Date> computeFireTimesBetween (final IOperableTrigger trigg,
-                                                             final ICalendar cal,
-                                                             final Date from,
-                                                             final Date to)
+  @NonNull
+  @ReturnsMutableCopy
+  public static ICommonsList <Date> computeFireTimesBetween (@NonNull final IOperableTrigger trigg,
+                                                             @Nullable final ICalendar cal,
+                                                             @NonNull final Date from,
+                                                             @NonNull final Date to)
   {
     final ICommonsList <Date> lst = new CommonsArrayList <> ();
     final IOperableTrigger t = trigg.getClone ();

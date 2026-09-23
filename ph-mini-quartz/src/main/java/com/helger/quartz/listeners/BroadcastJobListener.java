@@ -21,7 +21,9 @@ package com.helger.quartz.listeners;
 import java.util.List;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
@@ -53,9 +55,9 @@ public class BroadcastJobListener implements IJobListener
    * @param name
    *        the name of this instance
    */
-  public BroadcastJobListener (@NonNull final String name)
+  public BroadcastJobListener (@NonNull @Nonempty final String name)
   {
-    ValueEnforcer.notNull (name, "Listener Name");
+    ValueEnforcer.notEmpty (name, "ListenerName");
     m_sName = name;
   }
 
@@ -67,24 +69,27 @@ public class BroadcastJobListener implements IJobListener
    * @param listeners
    *        the initial List of JobListeners to broadcast to.
    */
-  public BroadcastJobListener (@NonNull final String name, final List <IJobListener> listeners)
+  public BroadcastJobListener (@NonNull @Nonempty final String name, @NonNull final List <IJobListener> listeners)
   {
     this (name);
     m_aListeners.addAll (listeners);
   }
 
   @NonNull
+  @Nonempty
   public String getName ()
   {
     return m_sName;
   }
 
-  public void addListener (final IJobListener listener)
+  public void addListener (@NonNull final IJobListener listener)
   {
+    ValueEnforcer.notNull (listener, "Listener");
+
     m_aListeners.add (listener);
   }
 
-  public boolean removeListener (final IJobListener listener)
+  public boolean removeListener (@Nullable final IJobListener listener)
   {
     return m_aListeners.remove (listener);
   }
@@ -97,19 +102,20 @@ public class BroadcastJobListener implements IJobListener
   }
 
   @Override
-  public void jobToBeExecuted (final IJobExecutionContext context)
+  public void jobToBeExecuted (@NonNull final IJobExecutionContext context)
   {
     m_aListeners.forEach (x -> x.jobToBeExecuted (context));
   }
 
   @Override
-  public void jobExecutionVetoed (final IJobExecutionContext context)
+  public void jobExecutionVetoed (@NonNull final IJobExecutionContext context)
   {
     m_aListeners.forEach (x -> x.jobExecutionVetoed (context));
   }
 
   @Override
-  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext context,
+                              @Nullable final JobExecutionException jobException)
   {
     m_aListeners.forEach (x -> x.jobWasExecuted (context, jobException));
   }

@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.spi;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.quartz.IJob;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
@@ -59,5 +61,6 @@ public interface IJobFactory
    *         if there is a problem instantiating the Job.
    * @return the newly instantiated Job
    */
-  IJob newJob (TriggerFiredBundle bundle, IScheduler scheduler) throws SchedulerException;
+  @NonNull
+  IJob newJob (@NonNull TriggerFiredBundle bundle, @NonNull IScheduler scheduler) throws SchedulerException;
 }

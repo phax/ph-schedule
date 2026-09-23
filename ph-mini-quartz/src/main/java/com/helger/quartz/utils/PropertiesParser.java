@@ -20,9 +20,14 @@ package com.helger.quartz.utils;
 
 import java.util.StringTokenizer;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.annotation.style.ReturnsMutableObject;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.rt.NonBlockingProperties;
 import com.helger.base.string.StringHelper;
 import com.helger.collection.commons.CommonsArrayList;
@@ -43,13 +48,17 @@ public class PropertiesParser
 
   private final NonBlockingProperties m_aProps;
 
-  public PropertiesParser (final NonBlockingProperties props)
+  public PropertiesParser (@NonNull final NonBlockingProperties props)
   {
+    ValueEnforcer.notNull (props, "Props");
+
     m_aProps = props;
     if (LOGGER.isDebugEnabled ())
       LOGGER.debug ("PropertiesParser ctor: " + props);
   }
 
+  @NonNull
+  @ReturnsMutableObject
   public NonBlockingProperties getUnderlyingProperties ()
   {
     return m_aProps;
@@ -59,7 +68,8 @@ public class PropertiesParser
    * Get the trimmed String value of the property with the given <code>name</code>. If the value the
    * empty String (after trimming), then it returns null.
    */
-  public String getStringProperty (final String name)
+  @Nullable
+  public String getStringProperty (@Nullable final String name)
   {
     return getStringProperty (name, null);
   }
@@ -68,7 +78,8 @@ public class PropertiesParser
    * Get the trimmed String value of the property with the given <code>name</code> or the given
    * default value if the value is null or empty after trimming.
    */
-  public String getStringProperty (final String sName, final String sDefault)
+  @Nullable
+  public String getStringProperty (@Nullable final String sName, @Nullable final String sDefault)
   {
     String val = m_aProps.getProperty (sName);
     if (val != null)
@@ -80,12 +91,14 @@ public class PropertiesParser
     return StringHelper.trim (sDefault);
   }
 
-  public String [] getStringArrayProperty (final String sName)
+  @Nullable
+  public String [] getStringArrayProperty (@Nullable final String sName)
   {
     return getStringArrayProperty (sName, null);
   }
 
-  public String [] getStringArrayProperty (final String sName, final String [] aDefault)
+  @Nullable
+  public String [] getStringArrayProperty (@Nullable final String sName, @Nullable final String [] aDefault)
   {
     final String sVals = getStringProperty (sName);
     if (sVals == null)
@@ -107,18 +120,18 @@ public class PropertiesParser
     }
   }
 
-  public boolean getBooleanProperty (final String sName)
+  public boolean getBooleanProperty (@Nullable final String sName)
   {
     return getBooleanProperty (sName, false);
   }
 
-  public boolean getBooleanProperty (final String sName, final boolean bDefault)
+  public boolean getBooleanProperty (@Nullable final String sName, final boolean bDefault)
   {
     final String val = getStringProperty (sName);
     return val == null ? bDefault : Boolean.parseBoolean (val);
   }
 
-  public byte getByteProperty (final String sName)
+  public byte getByteProperty (@Nullable final String sName)
   {
     final String sValue = getStringProperty (sName);
     if (sValue == null)
@@ -134,7 +147,7 @@ public class PropertiesParser
     }
   }
 
-  public byte getByteProperty (final String name, final byte def)
+  public byte getByteProperty (@Nullable final String name, final byte def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -150,18 +163,18 @@ public class PropertiesParser
     }
   }
 
-  public char getCharProperty (final String name)
+  public char getCharProperty (@Nullable final String name)
   {
     return getCharProperty (name, '\0');
   }
 
-  public char getCharProperty (final String name, final char def)
+  public char getCharProperty (@Nullable final String name, final char def)
   {
     final String sParam = getStringProperty (name);
     return sParam == null ? def : sParam.charAt (0);
   }
 
-  public double getDoubleProperty (final String name)
+  public double getDoubleProperty (@Nullable final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -177,7 +190,7 @@ public class PropertiesParser
     }
   }
 
-  public double getDoubleProperty (final String name, final double def)
+  public double getDoubleProperty (@Nullable final String name, final double def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -193,7 +206,7 @@ public class PropertiesParser
     }
   }
 
-  public float getFloatProperty (final String name)
+  public float getFloatProperty (@Nullable final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -209,7 +222,7 @@ public class PropertiesParser
     }
   }
 
-  public float getFloatProperty (final String name, final float def)
+  public float getFloatProperty (@Nullable final String name, final float def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -225,7 +238,7 @@ public class PropertiesParser
     }
   }
 
-  public int getIntProperty (final String name)
+  public int getIntProperty (@Nullable final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -241,7 +254,7 @@ public class PropertiesParser
     }
   }
 
-  public int getIntProperty (final String name, final int def)
+  public int getIntProperty (@Nullable final String name, final int def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -257,12 +270,14 @@ public class PropertiesParser
     }
   }
 
-  public int [] getIntArrayProperty (final String name)
+  @Nullable
+  public int [] getIntArrayProperty (@Nullable final String name)
   {
     return getIntArrayProperty (name, null);
   }
 
-  public int [] getIntArrayProperty (final String name, final int [] def)
+  @Nullable
+  public int [] getIntArrayProperty (@Nullable final String name, @Nullable final int [] def)
   {
     final String vals = getStringProperty (name);
     if (vals == null)
@@ -295,7 +310,7 @@ public class PropertiesParser
     }
   }
 
-  public long getLongProperty (final String name)
+  public long getLongProperty (@Nullable final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -311,7 +326,7 @@ public class PropertiesParser
     }
   }
 
-  public long getLongProperty (final String name, final long def)
+  public long getLongProperty (@Nullable final String name, final long def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -327,7 +342,7 @@ public class PropertiesParser
     }
   }
 
-  public short getShortProperty (final String name)
+  public short getShortProperty (@Nullable final String name)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -343,7 +358,7 @@ public class PropertiesParser
     }
   }
 
-  public short getShortProperty (final String name, final short def)
+  public short getShortProperty (@Nullable final String name, final short def)
   {
     final String val = getStringProperty (name);
     if (val == null)
@@ -359,7 +374,9 @@ public class PropertiesParser
     }
   }
 
-  public ICommonsList <String> getPropertyGroups (final String sPrefix)
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsList <String> getPropertyGroups (@NonNull final String sPrefix)
   {
     final ICommonsSet <String> groups = new CommonsLinkedHashSet <> (10);
     String sRealPrefix = sPrefix;
@@ -377,12 +394,16 @@ public class PropertiesParser
     return groups.getCopyAsList ();
   }
 
-  public NonBlockingProperties getPropertyGroup (final String prefix)
+  @NonNull
+  @ReturnsMutableCopy
+  public NonBlockingProperties getPropertyGroup (@NonNull final String prefix)
   {
     return getPropertyGroup (prefix, false, null);
   }
 
-  public NonBlockingProperties getPropertyGroup (final String prefix, final boolean stripPrefix)
+  @NonNull
+  @ReturnsMutableCopy
+  public NonBlockingProperties getPropertyGroup (@NonNull final String prefix, final boolean stripPrefix)
   {
     return getPropertyGroup (prefix, stripPrefix, null);
   }
@@ -403,9 +424,11 @@ public class PropertiesParser
    *         optionally have that prefix removed, and do not include properties that start with one
    *         of the given excluded prefixes.
    */
-  public NonBlockingProperties getPropertyGroup (final String sPrefix,
+  @NonNull
+  @ReturnsMutableCopy
+  public NonBlockingProperties getPropertyGroup (@NonNull final String sPrefix,
                                                  final boolean bStripPrefix,
-                                                 final String [] aExcludedPrefixes)
+                                                 @Nullable final String [] aExcludedPrefixes)
   {
     final NonBlockingProperties group = new NonBlockingProperties ();
 

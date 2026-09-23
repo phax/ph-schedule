@@ -23,7 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.CommonsLinkedHashMap;
@@ -47,15 +49,17 @@ public class ListenerManager implements IListenerManager
   private final ICommonsList <ISchedulerListener> m_aSchedulerListeners = new CommonsArrayList <> (10);
 
   @SafeVarargs
-  public final void addJobListener (final IJobListener aJobListener, final IMatcher <JobKey>... matchers)
+  public final void addJobListener (@NonNull final IJobListener aJobListener,
+                                    @Nullable final IMatcher <JobKey>... matchers)
   {
     addJobListener (aJobListener, new CommonsArrayList <> (matchers));
   }
 
-  public void addJobListener (final IJobListener jobListener, final List <IMatcher <JobKey>> matchers)
+  public void addJobListener (@NonNull final IJobListener jobListener,
+                              @Nullable final List <IMatcher <JobKey>> matchers)
   {
-    if (jobListener.getName () == null || jobListener.getName ().length () == 0)
-      throw new IllegalArgumentException ("JobListener name cannot be empty.");
+    ValueEnforcer.notNull (jobListener, "JobListener");
+    ValueEnforcer.notEmpty (jobListener.getName (), "JobListener.Name");
 
     synchronized (m_aGlobalJobListeners)
     {
@@ -70,15 +74,15 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public void addJobListener (final IJobListener jobListener)
+  public void addJobListener (@NonNull final IJobListener jobListener)
   {
     addJobListener (jobListener, EverythingMatcher.allJobs ());
   }
 
-  public void addJobListener (final IJobListener jobListener, final IMatcher <JobKey> matcher)
+  public void addJobListener (@NonNull final IJobListener jobListener, @Nullable final IMatcher <JobKey> matcher)
   {
-    if (jobListener.getName () == null || jobListener.getName ().length () == 0)
-      throw new IllegalArgumentException ("JobListener name cannot be empty.");
+    ValueEnforcer.notNull (jobListener, "JobListener");
+    ValueEnforcer.notEmpty (jobListener.getName (), "JobListener.Name");
 
     synchronized (m_aGlobalJobListeners)
     {
@@ -93,10 +97,9 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean addJobListenerMatcher (final String listenerName, final IMatcher <JobKey> matcher)
+  public boolean addJobListenerMatcher (@NonNull final String listenerName, @NonNull final IMatcher <JobKey> matcher)
   {
-    if (matcher == null)
-      throw new IllegalArgumentException ("Null value not acceptable.");
+    ValueEnforcer.notNull (matcher, "Matcher");
 
     synchronized (m_aGlobalJobListeners)
     {
@@ -108,10 +111,9 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean removeJobListenerMatcher (final String listenerName, final IMatcher <JobKey> matcher)
+  public boolean removeJobListenerMatcher (@NonNull final String listenerName, @NonNull final IMatcher <JobKey> matcher)
   {
-    if (matcher == null)
-      throw new IllegalArgumentException ("Non-null value not acceptable.");
+    ValueEnforcer.notNull (matcher, "Matcher");
 
     synchronized (m_aGlobalJobListeners)
     {
@@ -122,7 +124,9 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public ICommonsList <IMatcher <JobKey>> getJobListenerMatchers (final String listenerName)
+  @Nullable
+  @ReturnsMutableCopy
+  public ICommonsList <IMatcher <JobKey>> getJobListenerMatchers (@Nullable final String listenerName)
   {
     synchronized (m_aGlobalJobListeners)
     {
@@ -133,7 +137,8 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean setJobListenerMatchers (final String listenerName, @NonNull final List <IMatcher <JobKey>> matchers)
+  public boolean setJobListenerMatchers (@NonNull final String listenerName,
+                                         @NonNull final List <IMatcher <JobKey>> matchers)
   {
     ValueEnforcer.notNull (matchers, "Matchers");
 
@@ -147,7 +152,7 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean removeJobListener (final String name)
+  public boolean removeJobListener (@Nullable final String name)
   {
     synchronized (m_aGlobalJobListeners)
     {
@@ -155,6 +160,8 @@ public class ListenerManager implements IListenerManager
     }
   }
 
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <IJobListener> getJobListeners ()
   {
     synchronized (m_aGlobalJobListeners)
@@ -163,7 +170,8 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public IJobListener getJobListener (final String name)
+  @Nullable
+  public IJobListener getJobListener (@Nullable final String name)
   {
     synchronized (m_aGlobalJobListeners)
     {
@@ -172,17 +180,17 @@ public class ListenerManager implements IListenerManager
   }
 
   @SafeVarargs
-  public final void addTriggerListener (final ITriggerListener triggerListener, final IMatcher <TriggerKey>... matchers)
+  public final void addTriggerListener (@NonNull final ITriggerListener triggerListener,
+                                        @Nullable final IMatcher <TriggerKey>... matchers)
   {
     addTriggerListener (triggerListener, Arrays.asList (matchers));
   }
 
-  public void addTriggerListener (final ITriggerListener triggerListener, final List <IMatcher <TriggerKey>> matchers)
+  public void addTriggerListener (@NonNull final ITriggerListener triggerListener,
+                                  @Nullable final List <IMatcher <TriggerKey>> matchers)
   {
-    if (triggerListener.getName () == null || triggerListener.getName ().length () == 0)
-    {
-      throw new IllegalArgumentException ("TriggerListener name cannot be empty.");
-    }
+    ValueEnforcer.notNull (triggerListener, "TriggerListener");
+    ValueEnforcer.notEmpty (triggerListener.getName (), "TriggerListener.Name");
 
     synchronized (m_aGlobalTriggerListeners)
     {
@@ -198,18 +206,17 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public void addTriggerListener (final ITriggerListener triggerListener)
+  public void addTriggerListener (@NonNull final ITriggerListener triggerListener)
   {
     addTriggerListener (triggerListener, EverythingMatcher.allTriggers ());
   }
 
-  public void addTriggerListener (final ITriggerListener triggerListener, final IMatcher <TriggerKey> matcher)
+  public void addTriggerListener (@NonNull final ITriggerListener triggerListener,
+                                  @NonNull final IMatcher <TriggerKey> matcher)
   {
-    if (matcher == null)
-      throw new IllegalArgumentException ("Null value not acceptable for matcher.");
-
-    if (triggerListener.getName () == null || triggerListener.getName ().length () == 0)
-      throw new IllegalArgumentException ("TriggerListener name cannot be empty.");
+    ValueEnforcer.notNull (triggerListener, "TriggerListener");
+    ValueEnforcer.notNull (matcher, "Matcher");
+    ValueEnforcer.notEmpty (triggerListener.getName (), "TriggerListener.Name");
 
     synchronized (m_aGlobalTriggerListeners)
     {
@@ -220,10 +227,10 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean addTriggerListenerMatcher (final String listenerName, final IMatcher <TriggerKey> matcher)
+  public boolean addTriggerListenerMatcher (@NonNull final String listenerName,
+                                            @NonNull final IMatcher <TriggerKey> matcher)
   {
-    if (matcher == null)
-      throw new IllegalArgumentException ("Non-null value not acceptable.");
+    ValueEnforcer.notNull (matcher, "Matcher");
 
     synchronized (m_aGlobalTriggerListeners)
     {
@@ -235,10 +242,10 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean removeTriggerListenerMatcher (final String listenerName, final IMatcher <TriggerKey> matcher)
+  public boolean removeTriggerListenerMatcher (@NonNull final String listenerName,
+                                               @NonNull final IMatcher <TriggerKey> matcher)
   {
-    if (matcher == null)
-      throw new IllegalArgumentException ("Non-null value not acceptable.");
+    ValueEnforcer.notNull (matcher, "Matcher");
 
     synchronized (m_aGlobalTriggerListeners)
     {
@@ -249,7 +256,9 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public ICommonsList <IMatcher <TriggerKey>> getTriggerListenerMatchers (final String listenerName)
+  @Nullable
+  @ReturnsMutableCopy
+  public ICommonsList <IMatcher <TriggerKey>> getTriggerListenerMatchers (@Nullable final String listenerName)
   {
     synchronized (m_aGlobalTriggerListeners)
     {
@@ -260,7 +269,7 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean setTriggerListenerMatchers (final String listenerName,
+  public boolean setTriggerListenerMatchers (@NonNull final String listenerName,
                                              @NonNull final List <IMatcher <TriggerKey>> matchers)
   {
     ValueEnforcer.noNullValue (matchers, "Matchers");
@@ -275,7 +284,7 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean removeTriggerListener (final String name)
+  public boolean removeTriggerListener (@Nullable final String name)
   {
     synchronized (m_aGlobalTriggerListeners)
     {
@@ -283,6 +292,8 @@ public class ListenerManager implements IListenerManager
     }
   }
 
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <ITriggerListener> getTriggerListeners ()
   {
     synchronized (m_aGlobalTriggerListeners)
@@ -291,7 +302,8 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public ITriggerListener getTriggerListener (final String name)
+  @Nullable
+  public ITriggerListener getTriggerListener (@Nullable final String name)
   {
     synchronized (m_aGlobalTriggerListeners)
     {
@@ -299,7 +311,7 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public void addSchedulerListener (final ISchedulerListener schedulerListener)
+  public void addSchedulerListener (@NonNull final ISchedulerListener schedulerListener)
   {
     synchronized (m_aSchedulerListeners)
     {
@@ -307,7 +319,7 @@ public class ListenerManager implements IListenerManager
     }
   }
 
-  public boolean removeSchedulerListener (final ISchedulerListener schedulerListener)
+  public boolean removeSchedulerListener (@Nullable final ISchedulerListener schedulerListener)
   {
     synchronized (m_aSchedulerListeners)
     {
@@ -315,6 +327,8 @@ public class ListenerManager implements IListenerManager
     }
   }
 
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <ISchedulerListener> getSchedulerListeners ()
   {
     synchronized (m_aSchedulerListeners)

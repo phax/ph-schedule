@@ -18,6 +18,10 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.impl.JobDetail;
 import com.helger.quartz.utils.Key;
 
@@ -70,6 +74,7 @@ public class JobBuilder
    *
    * @return a new JobBuilder
    */
+  @NonNull
   public static JobBuilder newJob ()
   {
     return new JobBuilder ();
@@ -81,7 +86,8 @@ public class JobBuilder
    *
    * @return a new JobBuilder
    */
-  public static JobBuilder newJob (final Class <? extends IJob> jobClass)
+  @NonNull
+  public static JobBuilder newJob (@NonNull final Class <? extends IJob> jobClass)
   {
     final JobBuilder b = new JobBuilder ();
     b.ofType (jobClass);
@@ -93,6 +99,7 @@ public class JobBuilder
    *
    * @return the defined JobDetail.
    */
+  @NonNull
   public IJobDetail build ()
   {
     final JobDetail job = new JobDetail ();
@@ -124,7 +131,8 @@ public class JobBuilder
    * @see JobKey
    * @see IJobDetail#getKey()
    */
-  public JobBuilder withIdentity (final String name)
+  @NonNull
+  public JobBuilder withIdentity (@NonNull final String name)
   {
     m_aKey = new JobKey (name, null);
     return this;
@@ -145,7 +153,8 @@ public class JobBuilder
    * @see JobKey
    * @see IJobDetail#getKey()
    */
-  public JobBuilder withIdentity (final String name, final String group)
+  @NonNull
+  public JobBuilder withIdentity (@NonNull final String name, @Nullable final String group)
   {
     m_aKey = new JobKey (name, group);
     return this;
@@ -164,7 +173,8 @@ public class JobBuilder
    * @see JobKey
    * @see IJobDetail#getKey()
    */
-  public JobBuilder withIdentity (final JobKey jobKey)
+  @NonNull
+  public JobBuilder withIdentity (@NonNull final JobKey jobKey)
   {
     m_aKey = jobKey;
     return this;
@@ -178,7 +188,8 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getDescription()
    */
-  public JobBuilder withDescription (final String jobDescription)
+  @NonNull
+  public JobBuilder withDescription (@Nullable final String jobDescription)
   {
     m_sDescription = jobDescription;
     return this;
@@ -193,8 +204,11 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobClass()
    */
-  public JobBuilder ofType (final Class <? extends IJob> jobClazz)
+  @NonNull
+  public JobBuilder ofType (@NonNull final Class <? extends IJob> jobClazz)
   {
+    ValueEnforcer.notNull (jobClazz, "JobClass");
+
     m_aJobClass = jobClazz;
     return this;
   }
@@ -209,6 +223,7 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#requestsRecovery()
    */
+  @NonNull
   public JobBuilder requestRecovery ()
   {
     m_bShouldRecover = true;
@@ -226,6 +241,7 @@ public class JobBuilder
    *        the desired setting
    * @return the updated JobBuilder
    */
+  @NonNull
   public JobBuilder requestRecovery (final boolean jobShouldRecover)
   {
     m_bShouldRecover = jobShouldRecover;
@@ -243,6 +259,7 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#isDurable()
    */
+  @NonNull
   public JobBuilder storeDurably ()
   {
     m_bDurability = true;
@@ -261,6 +278,7 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#isDurable()
    */
+  @NonNull
   public JobBuilder storeDurably (final boolean jobDurability)
   {
     m_bDurability = jobDurability;
@@ -273,7 +291,8 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
    */
-  public JobBuilder usingJobData (final String dataKey, final String value)
+  @NonNull
+  public JobBuilder usingJobData (@NonNull final String dataKey, @Nullable final String value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -285,7 +304,8 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
    */
-  public JobBuilder usingJobData (final String dataKey, final Integer value)
+  @NonNull
+  public JobBuilder usingJobData (@NonNull final String dataKey, @Nullable final Integer value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -297,7 +317,8 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
    */
-  public JobBuilder usingJobData (final String dataKey, final Long value)
+  @NonNull
+  public JobBuilder usingJobData (@NonNull final String dataKey, @Nullable final Long value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -309,7 +330,8 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
    */
-  public JobBuilder usingJobData (final String dataKey, final Float value)
+  @NonNull
+  public JobBuilder usingJobData (@NonNull final String dataKey, @Nullable final Float value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -321,7 +343,8 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
    */
-  public JobBuilder usingJobData (final String dataKey, final Double value)
+  @NonNull
+  public JobBuilder usingJobData (@NonNull final String dataKey, @Nullable final Double value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -333,7 +356,8 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
    */
-  public JobBuilder usingJobData (final String dataKey, final Boolean value)
+  @NonNull
+  public JobBuilder usingJobData (@NonNull final String dataKey, @Nullable final Boolean value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -346,8 +370,11 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
    */
-  public JobBuilder usingJobData (final JobDataMap newJobDataMap)
+  @NonNull
+  public JobBuilder usingJobData (@NonNull final JobDataMap newJobDataMap)
   {
+    ValueEnforcer.notNull (newJobDataMap, "NewJobDataMap");
+
     m_aJobDataMap.putAll (newJobDataMap);
     return this;
   }
@@ -358,8 +385,11 @@ public class JobBuilder
    * @return the updated JobBuilder
    * @see IJobDetail#getJobDataMap()
    */
-  public JobBuilder setJobData (final JobDataMap newJobDataMap)
+  @NonNull
+  public JobBuilder setJobData (@NonNull final JobDataMap newJobDataMap)
   {
+    ValueEnforcer.notNull (newJobDataMap, "NewJobDataMap");
+
     m_aJobDataMap = newJobDataMap;
     return this;
   }

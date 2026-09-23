@@ -20,6 +20,9 @@ package com.helger.quartz.simpl;
 
 import java.net.InetAddress;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.annotation.Nonempty;
 import com.helger.quartz.SchedulerException;
 import com.helger.quartz.spi.IInstanceIdGenerator;
 
@@ -39,6 +42,8 @@ import com.helger.quartz.spi.IInstanceIdGenerator;
  */
 public class HostnameInstanceIdGenerator implements IInstanceIdGenerator
 {
+  @NonNull
+  @Nonempty
   public String generateInstanceId () throws SchedulerException
   {
     try

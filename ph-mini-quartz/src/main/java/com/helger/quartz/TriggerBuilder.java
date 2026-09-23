@@ -21,7 +21,9 @@ package com.helger.quartz;
 import java.util.Date;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.reflection.GenericReflection;
 import com.helger.quartz.spi.IMutableTrigger;
 import com.helger.quartz.utils.Key;
@@ -126,7 +128,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getKey()
    */
   @NonNull
-  public TriggerBuilder <T> withIdentity (final String name)
+  public TriggerBuilder <T> withIdentity (@NonNull final String name)
   {
     m_aKey = new TriggerKey (name, null);
     return this;
@@ -148,7 +150,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getKey()
    */
   @NonNull
-  public TriggerBuilder <T> withIdentity (final String name, final String group)
+  public TriggerBuilder <T> withIdentity (@NonNull final String name, @Nullable final String group)
   {
     m_aKey = new TriggerKey (name, group);
     return this;
@@ -168,8 +170,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getKey()
    */
   @NonNull
-  public TriggerBuilder <T> withIdentity (final TriggerKey triggerKey)
+  public TriggerBuilder <T> withIdentity (@NonNull final TriggerKey triggerKey)
   {
+    ValueEnforcer.notNull (triggerKey, "TriggerKey");
+
     m_aKey = triggerKey;
     return this;
   }
@@ -183,7 +187,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getDescription()
    */
   @NonNull
-  public TriggerBuilder <T> withDescription (final String triggerDescription)
+  public TriggerBuilder <T> withDescription (@Nullable final String triggerDescription)
   {
     m_sDescription = triggerDescription;
     return this;
@@ -216,7 +220,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getCalendarName()
    */
   @NonNull
-  public TriggerBuilder <T> modifiedByCalendar (final String calName)
+  public TriggerBuilder <T> modifiedByCalendar (@Nullable final String calName)
   {
     m_sCalendarName = calName;
     return this;
@@ -234,8 +238,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see DateBuilder
    */
   @NonNull
-  public TriggerBuilder <T> startAt (final Date triggerStartTime)
+  public TriggerBuilder <T> startAt (@NonNull final Date triggerStartTime)
   {
+    ValueEnforcer.notNull (triggerStartTime, "TriggerStartTime");
+
     m_aStartTime = triggerStartTime;
     return this;
   }
@@ -264,7 +270,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see DateBuilder
    */
   @NonNull
-  public TriggerBuilder <T> endAt (final Date triggerEndTime)
+  public TriggerBuilder <T> endAt (@Nullable final Date triggerEndTime)
   {
     m_aEndTime = triggerEndTime;
     return this;
@@ -289,7 +295,8 @@ public class TriggerBuilder <T extends ITrigger>
    */
   @SuppressWarnings ("unchecked")
   @NonNull
-  public <SBT extends IMutableTrigger> TriggerBuilder <SBT> withSchedule (final IScheduleBuilder <SBT> schedBuilder)
+  public <SBT extends IMutableTrigger> TriggerBuilder <SBT> withSchedule (@NonNull
+                                                                          final IScheduleBuilder <SBT> schedBuilder)
   {
     m_aScheduleBuilder = schedBuilder;
     return (TriggerBuilder <SBT>) this;
@@ -304,8 +311,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobKey()
    */
   @NonNull
-  public TriggerBuilder <T> forJob (final JobKey keyOfJobToFire)
+  public TriggerBuilder <T> forJob (@NonNull final JobKey keyOfJobToFire)
   {
+    ValueEnforcer.notNull (keyOfJobToFire, "KeyOfJobToFire");
+
     m_aJobKey = keyOfJobToFire;
     return this;
   }
@@ -320,7 +329,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobKey()
    */
   @NonNull
-  public TriggerBuilder <T> forJob (final String jobName)
+  public TriggerBuilder <T> forJob (@NonNull final String jobName)
   {
     m_aJobKey = new JobKey (jobName, null);
     return this;
@@ -338,7 +347,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobKey()
    */
   @NonNull
-  public TriggerBuilder <T> forJob (final String jobName, final String jobGroup)
+  public TriggerBuilder <T> forJob (@NonNull final String jobName, @Nullable final String jobGroup)
   {
     m_aJobKey = new JobKey (jobName, jobGroup);
     return this;
@@ -374,7 +383,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobDataMap()
    */
   @NonNull
-  public TriggerBuilder <T> usingJobData (final String dataKey, final String value)
+  public TriggerBuilder <T> usingJobData (@NonNull final String dataKey, @Nullable final String value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -391,7 +400,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobDataMap()
    */
   @NonNull
-  public TriggerBuilder <T> usingJobData (final String dataKey, final Integer value)
+  public TriggerBuilder <T> usingJobData (@NonNull final String dataKey, @Nullable final Integer value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -408,7 +417,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobDataMap()
    */
   @NonNull
-  public TriggerBuilder <T> usingJobData (final String dataKey, final Long value)
+  public TriggerBuilder <T> usingJobData (@NonNull final String dataKey, @Nullable final Long value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -425,7 +434,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobDataMap()
    */
   @NonNull
-  public TriggerBuilder <T> usingJobData (final String dataKey, final Float value)
+  public TriggerBuilder <T> usingJobData (@NonNull final String dataKey, @Nullable final Float value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -442,7 +451,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobDataMap()
    */
   @NonNull
-  public TriggerBuilder <T> usingJobData (final String dataKey, final Double value)
+  public TriggerBuilder <T> usingJobData (@NonNull final String dataKey, @Nullable final Double value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -459,7 +468,7 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobDataMap()
    */
   @NonNull
-  public TriggerBuilder <T> usingJobData (final String dataKey, final Boolean value)
+  public TriggerBuilder <T> usingJobData (@NonNull final String dataKey, @Nullable final Boolean value)
   {
     m_aJobDataMap.put (dataKey, value);
     return this;
@@ -475,8 +484,10 @@ public class TriggerBuilder <T extends ITrigger>
    * @see ITrigger#getJobDataMap()
    */
   @NonNull
-  public TriggerBuilder <T> usingJobData (final JobDataMap newJobDataMap)
+  public TriggerBuilder <T> usingJobData (@NonNull final JobDataMap newJobDataMap)
   {
+    ValueEnforcer.notNull (newJobDataMap, "NewJobDataMap");
+
     // add any existing data to this new map
     newJobDataMap.putAll (m_aJobDataMap);
     m_aJobDataMap = newJobDataMap; // set new map as the map to use

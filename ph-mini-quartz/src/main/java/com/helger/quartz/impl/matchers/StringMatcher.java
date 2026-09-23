@@ -107,9 +107,9 @@ public abstract class StringMatcher <T extends Key <T>> implements IMatcher <T>
   }
 
   @NonNull
-  protected abstract String getValue (T key);
+  protected abstract String getValue (@NonNull T key);
 
-  public final boolean isMatch (final T key)
+  public final boolean isMatch (@NonNull final T key)
   {
     return m_eCompareWith.evaluate (getValue (key), m_sCompareTo);
   }

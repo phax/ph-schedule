@@ -24,6 +24,7 @@ import java.util.UUID;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.base.compare.IComparable;
 import com.helger.base.enforce.ValueEnforcer;
@@ -92,6 +93,8 @@ public class Key <T> implements IComparable <Key <T>>
    *
    * @return the string representation of the key
    */
+  @NonNull
+  @Nonempty
   public final String getAsString ()
   {
     return getGroup () + '.' + getName ();
@@ -127,7 +130,7 @@ public class Key <T> implements IComparable <Key <T>>
     return m_sName.equals (rhs.m_sName) && m_sGroup.equals (rhs.m_sGroup);
   }
 
-  public int compareTo (final Key <T> o)
+  public int compareTo (@NonNull final Key <T> o)
   {
     if (m_sGroup.equals (DEFAULT_GROUP) && !o.m_sGroup.equals (DEFAULT_GROUP))
       return -1;
@@ -141,7 +144,7 @@ public class Key <T> implements IComparable <Key <T>>
   }
 
   @NonNull
-  public static String createUniqueName (final String sGroup)
+  public static String createUniqueName (@Nullable final String sGroup)
   {
     final String n1 = UUID.randomUUID ().toString ();
     final String n2 = UUID.nameUUIDFromBytes ((sGroup != null ? sGroup : DEFAULT_GROUP).getBytes (

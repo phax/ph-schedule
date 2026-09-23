@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.spi;
 
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonnegative;
 import com.helger.quartz.SchedulerConfigException;
 
 /**
@@ -52,7 +55,7 @@ public interface IThreadPool
    *
    * @return true, if the runnable was assigned to run on a Thread.
    */
-  boolean runInThread (Runnable runnable);
+  boolean runInThread (@Nullable Runnable runnable);
 
   /**
    * <p>
@@ -66,6 +69,7 @@ public interface IThreadPool
    *
    * @return the number of currently available threads
    */
+  @Nonnegative
   int blockForAvailableThreads ();
 
   /**
@@ -92,6 +96,7 @@ public interface IThreadPool
    * Get the current number of threads in the <code>ThreadPool</code>.
    * </p>
    */
+  @Nonnegative
   int getPoolSize ();
 
   /**
@@ -102,7 +107,7 @@ public interface IThreadPool
    *
    * @since 1.7
    */
-  void setInstanceId (String schedInstId);
+  void setInstanceId (@Nullable String schedInstId);
 
   /**
    * <p>
@@ -112,5 +117,5 @@ public interface IThreadPool
    *
    * @since 1.7
    */
-  void setInstanceName (String schedName);
+  void setInstanceName (@Nullable String schedName);
 }

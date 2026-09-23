@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.spi;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.annotation.Nonempty;
 import com.helger.quartz.SchedulerException;
 
 /**
@@ -40,5 +43,7 @@ public interface IInstanceIdGenerator
    *
    * @return The clusterwide unique instance id.
    */
+  @NonNull
+  @Nonempty
   String generateInstanceId () throws SchedulerException;
 }

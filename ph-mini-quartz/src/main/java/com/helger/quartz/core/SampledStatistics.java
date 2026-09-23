@@ -21,7 +21,9 @@ package com.helger.quartz.core;
 import java.util.Timer;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
 import com.helger.quartz.IJobDetail;
 import com.helger.quartz.IJobExecutionContext;
 import com.helger.quartz.IJobListener;
@@ -71,7 +73,8 @@ public class SampledStatistics implements ISampledStatistics, IJobListener, ISch
     m_aCounterManager.shutdown (true);
   }
 
-  private ISampledCounter createSampledCounter (final CounterConfig defaultCounterConfig)
+  @NonNull
+  private ISampledCounter createSampledCounter (@NonNull final CounterConfig defaultCounterConfig)
   {
     return (ISampledCounter) m_aCounterManager.createCounter (defaultCounterConfig);
   }
@@ -101,37 +104,40 @@ public class SampledStatistics implements ISampledStatistics, IJobListener, ISch
     return m_aJobsScheduledCount.getMostRecentSample ().getCounterValue ();
   }
 
+  @NonNull
+  @Nonempty
   public String getName ()
   {
     return NAME;
   }
 
   @Override
-  public void jobScheduled (final ITrigger trigger)
+  public void jobScheduled (@NonNull final ITrigger trigger)
   {
     m_aJobsScheduledCount.increment ();
   }
 
   @Override
-  public void jobExecutionVetoed (final IJobExecutionContext context)
+  public void jobExecutionVetoed (@NonNull final IJobExecutionContext context)
   {
     /**/
   }
 
   @Override
-  public void jobToBeExecuted (final IJobExecutionContext context)
+  public void jobToBeExecuted (@NonNull final IJobExecutionContext context)
   {
     m_aJobsExecutingCount.increment ();
   }
 
   @Override
-  public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext context,
+                              @Nullable final JobExecutionException jobException)
   {
     m_aJobsCompletedCount.increment ();
   }
 
   @Override
-  public void jobAdded (final IJobDetail jobDetail)
+  public void jobAdded (@NonNull final IJobDetail jobDetail)
   {
     /**/
   }

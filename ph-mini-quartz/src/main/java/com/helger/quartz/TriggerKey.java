@@ -18,6 +18,9 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.quartz.utils.Key;
 
@@ -53,22 +56,24 @@ import com.helger.quartz.utils.Key;
 @Immutable
 public final class TriggerKey extends Key <TriggerKey>
 {
-  public TriggerKey (final String name)
+  public TriggerKey (@NonNull final String name)
   {
     super (name, null);
   }
 
-  public TriggerKey (final String name, final String group)
+  public TriggerKey (@NonNull final String name, @Nullable final String group)
   {
     super (name, group);
   }
 
-  public static TriggerKey triggerKey (final String name)
+  @NonNull
+  public static TriggerKey triggerKey (@NonNull final String name)
   {
     return new TriggerKey (name, null);
   }
 
-  public static TriggerKey triggerKey (final String name, final String group)
+  @NonNull
+  public static TriggerKey triggerKey (@NonNull final String name, @Nullable final String group)
   {
     return new TriggerKey (name, group);
   }

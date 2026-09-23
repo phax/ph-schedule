@@ -21,6 +21,7 @@ package com.helger.quartz.impl.triggers;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
 import com.helger.base.clone.ICloneable;
 import com.helger.base.compare.CompareHelper;
 import com.helger.base.enforce.ValueEnforcer;
@@ -129,7 +130,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @exception IllegalArgumentException
    *            if name is null or empty, or the group is an empty string.
    */
-  public AbstractTrigger (final String name)
+  public AbstractTrigger (@NonNull @Nonempty final String name)
   {
     setName (name);
     setGroup (null);
@@ -149,7 +150,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @exception IllegalArgumentException
    *            if name is null or empty, or the group is an empty string.
    */
-  public AbstractTrigger (final String name, final String group)
+  public AbstractTrigger (@NonNull @Nonempty final String name, @Nullable final String group)
   {
     setName (name);
     setGroup (group);
@@ -165,7 +166,10 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @exception IllegalArgumentException
    *            if name is null or empty, or the group is an empty string.
    */
-  public AbstractTrigger (final String name, final String group, final String jobName, final String jobGroup)
+  public AbstractTrigger (@NonNull @Nonempty final String name,
+                          @Nullable final String group,
+                          @NonNull @Nonempty final String jobName,
+                          @Nullable final String jobGroup)
   {
     setName (name);
     setGroup (group);
@@ -176,6 +180,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
   /**
    * Get the name of this <code>Trigger</code>.
    */
+  @Nullable
   public final String getName ()
   {
     return m_sName;
@@ -189,9 +194,9 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @exception IllegalArgumentException
    *            if name is null or empty.
    */
-  public final void setName (@NonNull final String name)
+  public final void setName (@NonNull @Nonempty final String name)
   {
-    ValueEnforcer.notNull (name, "Name");
+    ValueEnforcer.notEmpty (name, "Name");
     ValueEnforcer.isFalse (name.trim ().isEmpty (), "Trigger name cannot be null or empty.");
 
     m_sName = name;
@@ -201,6 +206,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
   /**
    * Get the group of this <code>Trigger</code>.
    */
+  @NonNull
   public final String getGroup ()
   {
     return m_sGroup;
@@ -238,6 +244,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * Get the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>.
    * </p>
    */
+  @Nullable
   public final String getJobName ()
   {
     return m_sJobName;
@@ -251,9 +258,9 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @exception IllegalArgumentException
    *            if jobName is null or empty.
    */
-  public final void setJobName (@NonNull final String jobName)
+  public final void setJobName (@NonNull @Nonempty final String jobName)
   {
-    ValueEnforcer.notNull (jobName, "JobName");
+    ValueEnforcer.notEmpty (jobName, "JobName");
     ValueEnforcer.isFalse (jobName.trim ().isEmpty (), "Job name cannot be null or empty.");
 
     m_sJobName = jobName;
@@ -264,6 +271,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * Get the name of the associated <code>{@link com.helger.quartz.IJobDetail}</code>'s group.
    * </p>
    */
+  @NonNull
   public final String getJobGroup ()
   {
     return m_sJobGroup;
@@ -398,7 +406,7 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
    * @see com.helger.quartz.ITrigger.ECompletedExecutionInstruction
    * @see #triggered(com.helger.quartz.ICalendar)
    */
-  public ITrigger.@NonNull ECompletedExecutionInstruction executionComplete (final IJobExecutionContext context,
+  public ITrigger.@NonNull ECompletedExecutionInstruction executionComplete (@NonNull final IJobExecutionContext context,
                                                                              @Nullable final JobExecutionException result)
   {
     if (result != null)
@@ -417,19 +425,20 @@ public abstract class AbstractTrigger <IMPLTYPE extends AbstractTrigger <IMPLTYP
     return ECompletedExecutionInstruction.NOOP;
   }
 
+  @NonNull
   public final EMisfireInstruction getMisfireInstruction ()
   {
     return m_eMisfireInstruction;
   }
 
-  public final void setMisfireInstruction (final EMisfireInstruction misfireInstruction)
+  public final void setMisfireInstruction (@NonNull final EMisfireInstruction misfireInstruction)
   {
     if (!validateMisfireInstruction (misfireInstruction))
       throw new IllegalArgumentException ("The misfire instruction code is invalid for this type of trigger.");
     m_eMisfireInstruction = misfireInstruction;
   }
 
-  protected abstract boolean validateMisfireInstruction (EMisfireInstruction candidateMisfireInstruction);
+  protected abstract boolean validateMisfireInstruction (@Nullable EMisfireInstruction candidateMisfireInstruction);
 
   /**
    * <p>

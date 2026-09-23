@@ -21,6 +21,7 @@ package com.helger.quartz;
 import java.util.Map;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.typeconvert.collection.AttributeContainerAny;
@@ -48,7 +49,7 @@ public class SchedulerContext extends AttributeContainerAny <String>
   /**
    * Create a <code>SchedulerContext</code> with the given data.
    */
-  public SchedulerContext (final Map <String, ?> map)
+  public SchedulerContext (@Nullable final Map <String, ?> map)
   {
     super (map);
   }

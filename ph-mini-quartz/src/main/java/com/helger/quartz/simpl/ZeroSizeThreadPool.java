@@ -18,6 +18,7 @@
  */
 package com.helger.quartz.simpl;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +66,7 @@ public class ZeroSizeThreadPool implements IThreadPool
       LOGGER.debug ("shutdown complete");
   }
 
-  public boolean runInThread (final Runnable runnable)
+  public boolean runInThread (@Nullable final Runnable runnable)
   {
     throw new UnsupportedOperationException ("This ThreadPool should not be used on Scheduler instances that are start()ed.");
   }
@@ -75,10 +76,10 @@ public class ZeroSizeThreadPool implements IThreadPool
     throw new UnsupportedOperationException ("This ThreadPool should not be used on Scheduler instances that are start()ed.");
   }
 
-  public void setInstanceId (final String schedInstId)
+  public void setInstanceId (@Nullable final String schedInstId)
   {}
 
-  public void setInstanceName (final String schedName)
+  public void setInstanceName (@Nullable final String schedName)
   {}
 
 }

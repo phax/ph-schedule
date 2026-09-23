@@ -56,7 +56,7 @@ public class OrMatcher <T extends Key <T>> implements IMatcher <T>
     return m_aRightOperand;
   }
 
-  public boolean isMatch (final T key)
+  public boolean isMatch (@NonNull final T key)
   {
     return m_aLeftOperand.isMatch (key) || m_aRightOperand.isMatch (key);
   }

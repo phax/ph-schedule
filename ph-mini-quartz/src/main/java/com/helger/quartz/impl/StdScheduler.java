@@ -23,6 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.style.ReturnsMutableCopy;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.collection.commons.ICommonsSet;
 import com.helger.quartz.ICalendar;
@@ -63,8 +69,10 @@ public class StdScheduler implements IScheduler
    * instance, and with the given <code>SchedulingContext</code>.
    * </p>
    */
-  public StdScheduler (final QuartzScheduler sched)
+  public StdScheduler (@NonNull final QuartzScheduler sched)
   {
+    ValueEnforcer.notNull (sched, "Scheduler");
+
     m_aSched = sched;
   }
 
@@ -78,6 +86,8 @@ public class StdScheduler implements IScheduler
    * Returns the name of the <code>Scheduler</code>.
    * </p>
    */
+  @NonNull
+  @Nonempty
   public String getSchedulerName ()
   {
     return m_aSched.getSchedulerName ();
@@ -88,11 +98,14 @@ public class StdScheduler implements IScheduler
    * Returns the instance Id of the <code>Scheduler</code>.
    * </p>
    */
+  @NonNull
+  @Nonempty
   public String getSchedulerInstanceId ()
   {
     return m_aSched.getSchedulerInstanceId ();
   }
 
+  @NonNull
   public SchedulerMetaData getMetaData ()
   {
     return new SchedulerMetaData (getSchedulerName (),
@@ -116,6 +129,7 @@ public class StdScheduler implements IScheduler
    * Returns the <code>SchedulerContext</code> of the <code>Scheduler</code>.
    * </p>
    */
+  @NonNull
   public SchedulerContext getContext () throws SchedulerException
   {
     return m_aSched.getSchedulerContext ();
@@ -219,6 +233,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <IJobExecutionContext> getCurrentlyExecutingJobs ()
   {
     return m_aSched.getCurrentlyExecutingJobs ();
@@ -241,7 +257,9 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Date scheduleJob (final IJobDetail jobDetail, final ITrigger trigger) throws SchedulerException
+  @NonNull
+  public Date scheduleJob (@NonNull final IJobDetail jobDetail,
+                           @NonNull final ITrigger trigger) throws SchedulerException
   {
     return m_aSched.scheduleJob (jobDetail, trigger);
   }
@@ -251,7 +269,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Date scheduleJob (final ITrigger trigger) throws SchedulerException
+  @NonNull
+  public Date scheduleJob (@NonNull final ITrigger trigger) throws SchedulerException
   {
     return m_aSched.scheduleJob (trigger);
   }
@@ -261,37 +280,37 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void addJob (final IJobDetail jobDetail, final boolean replace) throws SchedulerException
+  public void addJob (@NonNull final IJobDetail jobDetail, final boolean replace) throws SchedulerException
   {
     m_aSched.addJob (jobDetail, replace);
   }
 
-  public void addJob (final IJobDetail jobDetail,
+  public void addJob (@NonNull final IJobDetail jobDetail,
                       final boolean replace,
                       final boolean storeNonDurableWhileAwaitingScheduling) throws SchedulerException
   {
     m_aSched.addJob (jobDetail, replace, storeNonDurableWhileAwaitingScheduling);
   }
 
-  public boolean deleteJobs (final List <JobKey> jobKeys) throws SchedulerException
+  public boolean deleteJobs (@NonNull final List <JobKey> jobKeys) throws SchedulerException
   {
     return m_aSched.deleteJobs (jobKeys);
   }
 
-  public void scheduleJobs (final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
+  public void scheduleJobs (@NonNull final Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                             final boolean replace) throws SchedulerException
   {
     m_aSched.scheduleJobs (triggersAndJobs, replace);
   }
 
-  public void scheduleJob (final IJobDetail jobDetail,
-                           final Set <? extends ITrigger> triggersForJob,
+  public void scheduleJob (@NonNull final IJobDetail jobDetail,
+                           @NonNull final Set <? extends ITrigger> triggersForJob,
                            final boolean replace) throws SchedulerException
   {
     m_aSched.scheduleJob (jobDetail, triggersForJob, replace);
   }
 
-  public boolean unscheduleJobs (final List <TriggerKey> triggerKeys) throws SchedulerException
+  public boolean unscheduleJobs (@NonNull final List <TriggerKey> triggerKeys) throws SchedulerException
   {
     return m_aSched.unscheduleJobs (triggerKeys);
   }
@@ -301,7 +320,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public boolean deleteJob (final JobKey jobKey) throws SchedulerException
+  public boolean deleteJob (@NonNull final JobKey jobKey) throws SchedulerException
   {
     return m_aSched.deleteJob (jobKey);
   }
@@ -311,7 +330,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public boolean unscheduleJob (final TriggerKey triggerKey) throws SchedulerException
+  public boolean unscheduleJob (@NonNull final TriggerKey triggerKey) throws SchedulerException
   {
     return m_aSched.unscheduleJob (triggerKey);
   }
@@ -321,7 +340,9 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public Date rescheduleJob (final TriggerKey triggerKey, final ITrigger newTrigger) throws SchedulerException
+  @Nullable
+  public Date rescheduleJob (@NonNull final TriggerKey triggerKey,
+                             @NonNull final ITrigger newTrigger) throws SchedulerException
   {
     return m_aSched.rescheduleJob (triggerKey, newTrigger);
   }
@@ -331,7 +352,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void triggerJob (final JobKey jobKey) throws SchedulerException
+  public void triggerJob (@NonNull final JobKey jobKey) throws SchedulerException
   {
     triggerJob (jobKey, null);
   }
@@ -341,7 +362,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void triggerJob (final JobKey jobKey, final JobDataMap data) throws SchedulerException
+  public void triggerJob (@NonNull final JobKey jobKey, @Nullable final JobDataMap data) throws SchedulerException
   {
     m_aSched.triggerJob (jobKey, data);
   }
@@ -351,7 +372,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void pauseTrigger (final TriggerKey triggerKey) throws SchedulerException
+  public void pauseTrigger (@NonNull final TriggerKey triggerKey) throws SchedulerException
   {
     m_aSched.pauseTrigger (triggerKey);
   }
@@ -361,7 +382,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void pauseTriggers (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public void pauseTriggers (@NonNull final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     m_aSched.pauseTriggers (matcher);
   }
@@ -371,7 +392,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void pauseJob (final JobKey jobKey) throws SchedulerException
+  public void pauseJob (@NonNull final JobKey jobKey) throws SchedulerException
   {
     m_aSched.pauseJob (jobKey);
   }
@@ -379,6 +400,8 @@ public class StdScheduler implements IScheduler
   /**
    * @see com.helger.quartz.IScheduler#getPausedTriggerGroups()
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsSet <String> getPausedTriggerGroups () throws SchedulerException
   {
     return m_aSched.getPausedTriggerGroups ();
@@ -389,7 +412,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void pauseJobs (final GroupMatcher <JobKey> matcher) throws SchedulerException
+  public void pauseJobs (@NonNull final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
     m_aSched.pauseJobs (matcher);
   }
@@ -399,7 +422,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void resumeTrigger (final TriggerKey triggerKey) throws SchedulerException
+  public void resumeTrigger (@NonNull final TriggerKey triggerKey) throws SchedulerException
   {
     m_aSched.resumeTrigger (triggerKey);
   }
@@ -409,7 +432,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void resumeTriggers (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public void resumeTriggers (@NonNull final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     m_aSched.resumeTriggers (matcher);
   }
@@ -419,7 +442,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void resumeJob (final JobKey jobKey) throws SchedulerException
+  public void resumeJob (@NonNull final JobKey jobKey) throws SchedulerException
   {
     m_aSched.resumeJob (jobKey);
   }
@@ -429,7 +452,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void resumeJobs (final GroupMatcher <JobKey> matcher) throws SchedulerException
+  public void resumeJobs (@NonNull final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
     m_aSched.resumeJobs (matcher);
   }
@@ -459,6 +482,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <String> getJobGroupNames () throws SchedulerException
   {
     return m_aSched.getJobGroupNames ();
@@ -469,7 +494,9 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public ICommonsList <? extends ITrigger> getTriggersOfJob (final JobKey jobKey) throws SchedulerException
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsList <? extends ITrigger> getTriggersOfJob (@NonNull final JobKey jobKey) throws SchedulerException
   {
     return m_aSched.getTriggersOfJob (jobKey);
   }
@@ -479,7 +506,9 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public ICommonsSet <JobKey> getJobKeys (final GroupMatcher <JobKey> matcher) throws SchedulerException
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsSet <JobKey> getJobKeys (@NonNull final GroupMatcher <JobKey> matcher) throws SchedulerException
   {
     return m_aSched.getJobKeys (matcher);
   }
@@ -489,6 +518,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <String> getTriggerGroupNames () throws SchedulerException
   {
     return m_aSched.getTriggerGroupNames ();
@@ -499,7 +530,10 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public ICommonsSet <TriggerKey> getTriggerKeys (final GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  @NonNull
+  @ReturnsMutableCopy
+  public ICommonsSet <TriggerKey> getTriggerKeys (@NonNull
+                                                  final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     return m_aSched.getTriggerKeys (matcher);
   }
@@ -509,7 +543,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public IJobDetail getJobDetail (final JobKey jobKey) throws SchedulerException
+  @Nullable
+  public IJobDetail getJobDetail (@NonNull final JobKey jobKey) throws SchedulerException
   {
     return m_aSched.getJobDetail (jobKey);
   }
@@ -519,7 +554,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public ITrigger getTrigger (final TriggerKey triggerKey) throws SchedulerException
+  @Nullable
+  public ITrigger getTrigger (@NonNull final TriggerKey triggerKey) throws SchedulerException
   {
     return m_aSched.getTrigger (triggerKey);
   }
@@ -529,7 +565,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public ETriggerState getTriggerState (final TriggerKey triggerKey) throws SchedulerException
+  @NonNull
+  public ETriggerState getTriggerState (@NonNull final TriggerKey triggerKey) throws SchedulerException
   {
     return m_aSched.getTriggerState (triggerKey);
   }
@@ -539,8 +576,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public void addCalendar (final String calName,
-                           final ICalendar calendar,
+  public void addCalendar (@NonNull final String calName,
+                           @NonNull final ICalendar calendar,
                            final boolean replace,
                            final boolean updateTriggers) throws SchedulerException
   {
@@ -552,7 +589,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public boolean deleteCalendar (final String calName) throws SchedulerException
+  public boolean deleteCalendar (@NonNull final String calName) throws SchedulerException
   {
     return m_aSched.deleteCalendar (calName);
   }
@@ -562,7 +599,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public ICalendar getCalendar (final String calName) throws SchedulerException
+  @Nullable
+  public ICalendar getCalendar (@NonNull final String calName) throws SchedulerException
   {
     return m_aSched.getCalendar (calName);
   }
@@ -572,6 +610,8 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsList <String> getCalendarNames () throws SchedulerException
   {
     return m_aSched.getCalendarNames ();
@@ -582,7 +622,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public boolean checkExists (final JobKey jobKey) throws SchedulerException
+  public boolean checkExists (@NonNull final JobKey jobKey) throws SchedulerException
   {
     return m_aSched.checkExists (jobKey);
   }
@@ -592,7 +632,7 @@ public class StdScheduler implements IScheduler
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
    */
-  public boolean checkExists (final TriggerKey triggerKey) throws SchedulerException
+  public boolean checkExists (@NonNull final TriggerKey triggerKey) throws SchedulerException
   {
     return m_aSched.checkExists (triggerKey);
   }
@@ -606,7 +646,7 @@ public class StdScheduler implements IScheduler
   /**
    * @see com.helger.quartz.IScheduler#setJobFactory(com.helger.quartz.spi.IJobFactory)
    */
-  public void setJobFactory (final IJobFactory factory) throws SchedulerException
+  public void setJobFactory (@NonNull final IJobFactory factory) throws SchedulerException
   {
     m_aSched.setJobFactory (factory);
   }
@@ -614,17 +654,18 @@ public class StdScheduler implements IScheduler
   /**
    * @see com.helger.quartz.IScheduler#getListenerManager()
    */
+  @NonNull
   public IListenerManager getListenerManager () throws SchedulerException
   {
     return m_aSched.getListenerManager ();
   }
 
-  public boolean interrupt (final JobKey jobKey) throws UnableToInterruptJobException
+  public boolean interrupt (@NonNull final JobKey jobKey) throws UnableToInterruptJobException
   {
     return m_aSched.interrupt (jobKey);
   }
 
-  public boolean interrupt (final String fireInstanceId) throws UnableToInterruptJobException
+  public boolean interrupt (@NonNull final String fireInstanceId) throws UnableToInterruptJobException
   {
     return m_aSched.interrupt (fireInstanceId);
   }

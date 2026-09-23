@@ -63,17 +63,17 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
     this (null, null);
   }
 
-  public AnnualCalendar (final ICalendar baseCalendar)
+  public AnnualCalendar (@Nullable final ICalendar baseCalendar)
   {
     this (baseCalendar, null);
   }
 
-  public AnnualCalendar (final TimeZone timeZone)
+  public AnnualCalendar (@Nullable final TimeZone timeZone)
   {
     this (null, timeZone);
   }
 
-  public AnnualCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
+  public AnnualCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
   }
@@ -81,6 +81,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
   /**
    * @return Get the list which defines the exclude-value of each day of month
    */
+  @NonNull
   @ReturnsMutableObject
   public ICommonsList <Calendar> getDaysExcluded ()
   {
@@ -149,7 +150,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
   /**
    * Redefine a certain day to be excluded (true) or included (false).
    */
-  public void setDayExcluded (final Calendar day, final boolean exclude)
+  public void setDayExcluded (@NonNull final Calendar day, final boolean exclude)
   {
     if (exclude)
     {
@@ -172,12 +173,12 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
    * @param day
    *        the day to exclude
    */
-  public void removeExcludedDay (final Calendar day)
+  public void removeExcludedDay (@NonNull final Calendar day)
   {
     _removeExcludedDay (day, false);
   }
 
-  private void _removeExcludedDay (final Calendar aDay, final boolean isChecked)
+  private void _removeExcludedDay (@NonNull final Calendar aDay, final boolean isChecked)
   {
     Calendar day = aDay;
     if (!isChecked && !isDayExcluded (day))
@@ -279,7 +280,7 @@ public class AnnualCalendar extends AbstractCalendar <AnnualCalendar>
 
 class CalendarComparator implements IComparator <Calendar>
 {
-  public int compare (final Calendar c1, final Calendar c2)
+  public int compare (@NonNull final Calendar c1, @NonNull final Calendar c2)
   {
     final int month1 = c1.get (Calendar.MONTH);
     final int month2 = c2.get (Calendar.MONTH);

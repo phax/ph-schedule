@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -497,7 +498,7 @@ public class QuartzSchedulerThread extends Thread
     m_aQSRsrcs = null;
   }
 
-  private boolean _releaseIfScheduleChangedSignificantly (final List <IOperableTrigger> triggers,
+  private boolean _releaseIfScheduleChangedSignificantly (@NonNull final List <IOperableTrigger> triggers,
                                                           final long triggerTime)
   {
     if (_isCandidateNewTimeEarlierWithinReason (triggerTime, true))

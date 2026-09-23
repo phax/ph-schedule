@@ -22,6 +22,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonnegative;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * An implementation of a CircularQueue data-structure. When the number of items added exceeds the
@@ -45,8 +49,10 @@ public class CircularLossyQueue <T>
    *        must be &gt; 0
    */
   @SuppressWarnings ("unchecked")
-  public CircularLossyQueue (final int size)
+  public CircularLossyQueue (@Nonnegative final int size)
   {
+    ValueEnforcer.isGT0 (size, "Size");
+
     m_aCircularArray = new AtomicReference [size];
     for (int i = 0; i < size; i++)
       m_aCircularArray[i] = new AtomicReference <> ();
@@ -59,7 +65,7 @@ public class CircularLossyQueue <T>
    * @param newVal
    *        value to push
    */
-  public void push (final T newVal)
+  public void push (@Nullable final T newVal)
   {
     final int index = (int) (m_aCurrentIndex.incrementAndGet () % m_nMaxSize);
     m_aCircularArray[index].set (newVal);
@@ -74,6 +80,7 @@ public class CircularLossyQueue <T>
    * @return An array containing the current elements in the queue. The first element of the array
    *         is the tail of the queue and the last element is the head of the queue
    */
+  @NonNull
   public T [] toArray (@NonNull final T [] type)
   {
     if (type.length > m_nMaxSize)
@@ -98,6 +105,7 @@ public class CircularLossyQueue <T>
    *
    * @return Value at the tail of the queue
    */
+  @Nullable
   public T peek ()
   {
     if (depth () == 0)
@@ -125,6 +133,7 @@ public class CircularLossyQueue <T>
    *
    * @return the number of items in the queue
    */
+  @Nonnegative
   public int depth ()
   {
     final long currInd = m_aCurrentIndex.get () + 1;

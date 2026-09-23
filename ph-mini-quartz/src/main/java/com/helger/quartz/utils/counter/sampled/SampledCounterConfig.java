@@ -18,6 +18,9 @@
  */
 package com.helger.quartz.utils.counter.sampled;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.utils.counter.CounterConfig;
 import com.helger.quartz.utils.counter.ICounter;
@@ -44,8 +47,8 @@ public class SampledCounterConfig extends CounterConfig
    * @param isResetOnSample
    *        true if the counter should be reset to 0 upon each sample
    */
-  public SampledCounterConfig (final int intervalSecs,
-                               final int historySize,
+  public SampledCounterConfig (@Nonnegative final int intervalSecs,
+                               @Nonnegative final int historySize,
                                final boolean isResetOnSample,
                                final long initialValue)
   {
@@ -63,6 +66,7 @@ public class SampledCounterConfig extends CounterConfig
    *
    * @return The history size
    */
+  @Nonnegative
   public int getHistorySize ()
   {
     return m_nHistorySize;
@@ -73,6 +77,7 @@ public class SampledCounterConfig extends CounterConfig
    *
    * @return Interval of the sampling thread in seconds
    */
+  @Nonnegative
   public int getIntervalSecs ()
   {
     return m_nIntervalSecs;
@@ -92,6 +97,7 @@ public class SampledCounterConfig extends CounterConfig
    * {@inheritDoc}
    */
   @Override
+  @NonNull
   public ICounter createCounter ()
   {
     return new SampledCounter (this);

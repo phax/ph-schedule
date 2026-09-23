@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.CGlobal;
 import com.helger.base.enforce.ValueEnforcer;
@@ -84,7 +85,7 @@ public final class DateBuilder
    * Create a DateBuilder, with initial settings for the current date and time in the given
    * timezone.
    */
-  private DateBuilder (final TimeZone tz)
+  private DateBuilder (@Nullable final TimeZone tz)
   {
     this (tz, Locale.getDefault (Locale.Category.FORMAT));
   }
@@ -92,7 +93,7 @@ public final class DateBuilder
   /**
    * Create a DateBuilder, with initial settings for the current date and time in the given locale.
    */
-  private DateBuilder (final Locale lc)
+  private DateBuilder (@Nullable final Locale lc)
   {
     this (TimeZone.getDefault (), lc);
   }
@@ -101,7 +102,7 @@ public final class DateBuilder
    * Create a DateBuilder, with initial settings for the current date and time in the given timezone
    * and locale.
    */
-  private DateBuilder (final TimeZone tz, final Locale lc)
+  private DateBuilder (@Nullable final TimeZone tz, @Nullable final Locale lc)
   {
     final Calendar cal = Calendar.getInstance (tz, lc);
 
@@ -119,6 +120,7 @@ public final class DateBuilder
    * Create a DateBuilder, with initial settings for the current date and time in the system default
    * timezone.
    */
+  @NonNull
   public static DateBuilder newDate ()
   {
     return new DateBuilder ();
@@ -128,7 +130,8 @@ public final class DateBuilder
    * Create a DateBuilder, with initial settings for the current date and time in the given
    * timezone.
    */
-  public static DateBuilder newDateInTimezone (final TimeZone tz)
+  @NonNull
+  public static DateBuilder newDateInTimezone (@Nullable final TimeZone tz)
   {
     return new DateBuilder (tz);
   }
@@ -136,7 +139,8 @@ public final class DateBuilder
   /**
    * Create a DateBuilder, with initial settings for the current date and time in the given locale.
    */
-  public static DateBuilder newDateInLocale (final Locale lc)
+  @NonNull
+  public static DateBuilder newDateInLocale (@Nullable final Locale lc)
   {
     return new DateBuilder (lc);
   }
@@ -145,7 +149,8 @@ public final class DateBuilder
    * Create a DateBuilder, with initial settings for the current date and time in the given timezone
    * and locale.
    */
-  public static DateBuilder newDateInTimeZoneAndLocale (final TimeZone tz, final Locale lc)
+  @NonNull
+  public static DateBuilder newDateInTimeZoneAndLocale (@Nullable final TimeZone tz, @Nullable final Locale lc)
   {
     return new DateBuilder (tz, lc);
   }
@@ -181,6 +186,7 @@ public final class DateBuilder
   /**
    * Set the hour (0-23) for the Date that will be built by this builder.
    */
+  @NonNull
   public DateBuilder atHourOfDay (final int atHour)
   {
     validateHour (atHour);
@@ -192,6 +198,7 @@ public final class DateBuilder
   /**
    * Set the minute (0-59) for the Date that will be built by this builder.
    */
+  @NonNull
   public DateBuilder atMinute (final int atMinute)
   {
     validateMinute (atMinute);
@@ -204,6 +211,7 @@ public final class DateBuilder
    * Set the second (0-59) for the Date that will be built by this builder, and truncate the
    * milliseconds to 000.
    */
+  @NonNull
   public DateBuilder atSecond (final int atSecond)
   {
     validateSecond (atSecond);
@@ -212,6 +220,7 @@ public final class DateBuilder
     return this;
   }
 
+  @NonNull
   public DateBuilder atHourMinuteAndSecond (final int atHour, final int atMinute, final int atSecond)
   {
     validateHour (atHour);
@@ -227,6 +236,7 @@ public final class DateBuilder
   /**
    * Set the day of month (1-31) for the Date that will be built by this builder.
    */
+  @NonNull
   public DateBuilder onDay (final int onDay)
   {
     validateDayOfMonth (onDay);
@@ -238,7 +248,8 @@ public final class DateBuilder
   /**
    * Set the month (1-12) for the Date that will be built by this builder.
    */
-  public DateBuilder inMonth (final Month inMonth)
+  @NonNull
+  public DateBuilder inMonth (@NonNull final Month inMonth)
   {
     validateMonth (inMonth);
 
@@ -246,7 +257,8 @@ public final class DateBuilder
     return this;
   }
 
-  public DateBuilder inMonthOnDay (final Month inMonth, final int onDay)
+  @NonNull
+  public DateBuilder inMonthOnDay (@NonNull final Month inMonth, final int onDay)
   {
     validateMonth (inMonth);
     validateDayOfMonth (onDay);
@@ -259,6 +271,7 @@ public final class DateBuilder
   /**
    * Set the year for the Date that will be built by this builder.
    */
+  @NonNull
   public DateBuilder inYear (final int inYear)
   {
     validateYear (inYear);
@@ -271,7 +284,8 @@ public final class DateBuilder
    * Set the TimeZone for the Date that will be built by this builder (if "null", system default
    * will be used)
    */
-  public DateBuilder inTimeZone (final TimeZone timezone)
+  @NonNull
+  public DateBuilder inTimeZone (@Nullable final TimeZone timezone)
   {
     m_aTZ = timezone;
     return this;
@@ -281,13 +295,15 @@ public final class DateBuilder
    * Set the Locale for the Date that will be built by this builder (if "null", system default will
    * be used)
    */
-  public DateBuilder inLocale (final Locale locale)
+  @NonNull
+  public DateBuilder inLocale (@Nullable final Locale locale)
   {
     m_aLocale = locale;
     return this;
   }
 
-  public static Date futureDate (final int interval, final EIntervalUnit unit)
+  @NonNull
+  public static Date futureDate (final int interval, @NonNull final EIntervalUnit unit)
   {
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (new Date ());
@@ -298,7 +314,7 @@ public final class DateBuilder
     return c.getTime ();
   }
 
-  private static int _translate (final EIntervalUnit unit)
+  private static int _translate (@NonNull final EIntervalUnit unit)
   {
     switch (unit)
     {
@@ -336,6 +352,7 @@ public final class DateBuilder
    *        The value (0-23) to give the hours field of the date
    * @return the new date
    */
+  @NonNull
   public static Date tomorrowAt (final int hour, final int minute, final int second)
   {
     validateSecond (second);
@@ -373,6 +390,7 @@ public final class DateBuilder
    *        The value (0-23) to give the hours field of the date
    * @return the new date
    */
+  @NonNull
   public static Date todayAt (final int hour, final int minute, final int second)
   {
     return dateOf (hour, minute, second);
@@ -392,6 +410,7 @@ public final class DateBuilder
    *        The value (0-23) to give the hours field of the date
    * @return the new date
    */
+  @NonNull
   public static Date dateOf (final int hour, final int minute, final int second)
   {
     validateSecond (second);
@@ -429,11 +448,12 @@ public final class DateBuilder
    *        The value (1-12) to give the month field of the date
    * @return the new date
    */
+  @NonNull
   public static Date dateOf (final int hour,
                              final int minute,
                              final int second,
                              final int dayOfMonth,
-                             final Month month)
+                             @NonNull final Month month)
   {
     validateSecond (second);
     validateMinute (minute);
@@ -475,11 +495,12 @@ public final class DateBuilder
    *        The value (1970-2099) to give the year field of the date
    * @return the new date
    */
+  @NonNull
   public static Date dateOf (final int hour,
                              final int minute,
                              final int second,
                              final int dayOfMonth,
-                             final Month month,
+                             @NonNull final Month month,
                              final int year)
   {
     validateSecond (second);
@@ -517,6 +538,7 @@ public final class DateBuilder
    *
    * @return the new rounded date
    */
+  @NonNull
   public static Date evenHourDateAfterNow ()
   {
     return evenHourDate (null);
@@ -536,7 +558,8 @@ public final class DateBuilder
    *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
-  public static Date evenHourDate (final Date date)
+  @NonNull
+  public static Date evenHourDate (@Nullable final Date date)
   {
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
@@ -563,7 +586,8 @@ public final class DateBuilder
    *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
-  public static Date evenHourDateBefore (final Date date)
+  @NonNull
+  public static Date evenHourDateBefore (@Nullable final Date date)
   {
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
@@ -586,6 +610,7 @@ public final class DateBuilder
    *
    * @return the new rounded date
    */
+  @NonNull
   public static Date evenMinuteDateAfterNow ()
   {
     return evenMinuteDate (null);
@@ -605,7 +630,8 @@ public final class DateBuilder
    *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
-  public static Date evenMinuteDate (final Date date)
+  @NonNull
+  public static Date evenMinuteDate (@Nullable final Date date)
   {
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
@@ -630,7 +656,8 @@ public final class DateBuilder
    *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
-  public static Date evenMinuteDateBefore (final Date date)
+  @NonNull
+  public static Date evenMinuteDateBefore (@Nullable final Date date)
   {
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
@@ -646,6 +673,7 @@ public final class DateBuilder
    *
    * @return the new rounded date
    */
+  @NonNull
   public static Date evenSecondDateAfterNow ()
   {
     return evenSecondDate (null);
@@ -660,7 +688,8 @@ public final class DateBuilder
    *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
-  public static Date evenSecondDate (final Date date)
+  @NonNull
+  public static Date evenSecondDate (@Nullable final Date date)
   {
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
@@ -683,7 +712,8 @@ public final class DateBuilder
    *        the Date to round, if <code>null</code> the current time will be used
    * @return the new rounded date
    */
-  public static Date evenSecondDateBefore (final Date date)
+  @NonNull
+  public static Date evenSecondDateBefore (@Nullable final Date date)
   {
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
@@ -780,12 +810,10 @@ public final class DateBuilder
    * @return the new rounded date
    * @see #nextGivenSecondDate(Date, int)
    */
-  public static Date nextGivenMinuteDate (final Date date, final int minuteBase)
+  @NonNull
+  public static Date nextGivenMinuteDate (@Nullable final Date date, final int minuteBase)
   {
-    if (minuteBase < 0 || minuteBase > 59)
-    {
-      throw new IllegalArgumentException ("minuteBase must be >=0 and <= 59");
-    }
+    ValueEnforcer.isBetweenInclusive (minuteBase, "MinuteBase", 0, 59);
 
     final Calendar c = PDTFactory.createCalendar ();
     c.setTime (date != null ? date : new Date ());
@@ -837,7 +865,8 @@ public final class DateBuilder
    * @return the new rounded date
    * @see #nextGivenMinuteDate(Date, int)
    */
-  public static Date nextGivenSecondDate (final Date date, final int secondBase)
+  @NonNull
+  public static Date nextGivenSecondDate (@Nullable final Date date, final int secondBase)
   {
     if (secondBase < 0 || secondBase > 59)
       throw new IllegalArgumentException ("secondBase must be >=0 and <= 59");
@@ -884,7 +913,10 @@ public final class DateBuilder
    *        the destination time-zone
    * @return the translated date
    */
-  public static Date translateTime (final Date date, final TimeZone aSrcTZ, final TimeZone aDestTZ)
+  @NonNull
+  public static Date translateTime (@NonNull final Date date,
+                                    @NonNull final TimeZone aSrcTZ,
+                                    @NonNull final TimeZone aDestTZ)
   {
     final Date newDate = new Date ();
     final int offset = aDestTZ.getOffset (date.getTime ()) - aSrcTZ.getOffset (date.getTime ());
@@ -894,53 +926,38 @@ public final class DateBuilder
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public static void validateDayOfWeek (final DayOfWeek dayOfWeek)
+  public static void validateDayOfWeek (@NonNull final DayOfWeek dayOfWeek)
   {
     ValueEnforcer.notNull (dayOfWeek, "DayOfWeek");
   }
 
   public static void validateHour (final int hour)
   {
-    if (hour < 0 || hour > 23)
-    {
-      throw new IllegalArgumentException ("Invalid hour (must be >= 0 and <= 23).");
-    }
+    ValueEnforcer.isBetweenInclusive (hour, "Hour", 0, 23);
   }
 
   public static void validateMinute (final int minute)
   {
-    if (minute < 0 || minute > 59)
-    {
-      throw new IllegalArgumentException ("Invalid minute (must be >= 0 and <= 59).");
-    }
+    ValueEnforcer.isBetweenInclusive (minute, "Minute", 0, 59);
   }
 
   public static void validateSecond (final int second)
   {
-    if (second < 0 || second > 59)
-    {
-      throw new IllegalArgumentException ("Invalid second (must be >= 0 and <= 59).");
-    }
+    ValueEnforcer.isBetweenInclusive (second, "Second", 0, 59);
   }
 
   public static void validateDayOfMonth (final int day)
   {
-    if (day < 1 || day > 31)
-    {
-      throw new IllegalArgumentException ("Invalid day of month.");
-    }
+    ValueEnforcer.isBetweenInclusive (day, "DayOfMonth", 1, 31);
   }
 
-  public static void validateMonth (final Month month)
+  public static void validateMonth (@NonNull final Month month)
   {
     ValueEnforcer.notNull (month, "Month");
   }
 
   public static void validateYear (final int year)
   {
-    if (year < 0 || year > CQuartz.MAX_YEAR)
-    {
-      throw new IllegalArgumentException ("Invalid year (must be >= 0 and <= " + CQuartz.MAX_YEAR);
-    }
+    ValueEnforcer.isBetweenInclusive (year, "Year", 0, CQuartz.MAX_YEAR);
   }
 }

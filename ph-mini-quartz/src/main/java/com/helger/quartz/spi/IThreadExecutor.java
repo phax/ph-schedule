@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.spi;
 
+import org.jspecify.annotations.NonNull;
+
 /**
  * Allows different strategies for scheduling threads. The {@link #initialize()} method is required
  * to be called before the first call to {@link #execute(Thread)}. The Thread containing the work to
@@ -34,7 +36,7 @@ public interface IThreadExecutor
    * @param thread
    *        the thread to execute
    */
-  void execute (Thread thread);
+  void execute (@NonNull Thread thread);
 
   /**
    * Initialize any state prior to calling {@link #execute(Thread)}

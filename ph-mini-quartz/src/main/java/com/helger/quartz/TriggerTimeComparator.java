@@ -20,6 +20,9 @@ package com.helger.quartz;
 
 import java.util.Date;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.compare.IComparator;
 
 /**
@@ -30,12 +33,12 @@ import com.helger.base.compare.IComparator;
 public class TriggerTimeComparator implements IComparator <ITrigger>
 {
   // This static method exists for comparator in TC clustered quartz
-  static int compare (final Date nextFireTime1,
+  static int compare (@Nullable final Date nextFireTime1,
                       final int priority1,
-                      final TriggerKey key1,
-                      final Date nextFireTime2,
+                      @NonNull final TriggerKey key1,
+                      @Nullable final Date nextFireTime2,
                       final int priority2,
-                      final TriggerKey key2)
+                      @NonNull final TriggerKey key2)
   {
     if (nextFireTime1 != null || nextFireTime2 != null)
     {
@@ -55,7 +58,7 @@ public class TriggerTimeComparator implements IComparator <ITrigger>
     return comp;
   }
 
-  public int compare (final ITrigger t1, final ITrigger t2)
+  public int compare (@NonNull final ITrigger t1, @NonNull final ITrigger t2)
   {
     return compare (t1.getNextFireTime (),
                     t1.getPriority (),

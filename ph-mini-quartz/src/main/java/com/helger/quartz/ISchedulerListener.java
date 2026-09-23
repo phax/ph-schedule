@@ -18,6 +18,9 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * The interface to be implemented by classes that want to be informed of major
  * <code>{@link IScheduler}</code> events.
@@ -35,7 +38,7 @@ public interface ISchedulerListener
    *
    * @param trigger
    */
-  default void jobScheduled (final ITrigger trigger)
+  default void jobScheduled (@NonNull final ITrigger trigger)
   {}
 
   /**
@@ -45,7 +48,7 @@ public interface ISchedulerListener
    * @param triggerKey
    * @see ISchedulerListener#schedulingDataCleared()
    */
-  default void jobUnscheduled (final TriggerKey triggerKey)
+  default void jobUnscheduled (@NonNull final TriggerKey triggerKey)
   {}
 
   /**
@@ -54,7 +57,7 @@ public interface ISchedulerListener
    *
    * @param trigger
    */
-  default void triggerFinalized (final ITrigger trigger)
+  default void triggerFinalized (@NonNull final ITrigger trigger)
   {}
 
   /**
@@ -63,7 +66,7 @@ public interface ISchedulerListener
    *
    * @param triggerKey
    */
-  default void triggerPaused (final TriggerKey triggerKey)
+  default void triggerPaused (@Nullable final TriggerKey triggerKey)
   {}
 
   /**
@@ -73,7 +76,7 @@ public interface ISchedulerListener
    * @param triggerGroup
    *        the paused group, or null if all were paused
    */
-  default void triggersPaused (final String triggerGroup)
+  default void triggersPaused (@Nullable final String triggerGroup)
   {}
 
   /**
@@ -82,7 +85,7 @@ public interface ISchedulerListener
    *
    * @param triggerKey
    */
-  default void triggerResumed (final TriggerKey triggerKey)
+  default void triggerResumed (@Nullable final TriggerKey triggerKey)
   {}
 
   /**
@@ -91,7 +94,7 @@ public interface ISchedulerListener
    *
    * @param triggerGroup
    */
-  default void triggersResumed (final String triggerGroup)
+  default void triggersResumed (@Nullable final String triggerGroup)
   {}
 
   /**
@@ -100,7 +103,7 @@ public interface ISchedulerListener
    *
    * @param jobDetail
    */
-  default void jobAdded (final IJobDetail jobDetail)
+  default void jobAdded (@NonNull final IJobDetail jobDetail)
   {}
 
   /**
@@ -109,7 +112,7 @@ public interface ISchedulerListener
    *
    * @param jobKey
    */
-  default void jobDeleted (final JobKey jobKey)
+  default void jobDeleted (@NonNull final JobKey jobKey)
   {}
 
   /**
@@ -118,7 +121,7 @@ public interface ISchedulerListener
    *
    * @param jobKey
    */
-  default void jobPaused (final JobKey jobKey)
+  default void jobPaused (@Nullable final JobKey jobKey)
   {}
 
   /**
@@ -128,7 +131,7 @@ public interface ISchedulerListener
    * @param jobGroup
    *        the paused group, or null if all were paused
    */
-  default void jobsPaused (final String jobGroup)
+  default void jobsPaused (@Nullable final String jobGroup)
   {}
 
   /**
@@ -137,7 +140,7 @@ public interface ISchedulerListener
    *
    * @param jobKey
    */
-  default void jobResumed (final JobKey jobKey)
+  default void jobResumed (@Nullable final JobKey jobKey)
   {}
 
   /**
@@ -146,7 +149,7 @@ public interface ISchedulerListener
    *
    * @param jobGroup
    */
-  default void jobsResumed (final String jobGroup)
+  default void jobsResumed (@Nullable final String jobGroup)
   {}
 
   /**
@@ -163,7 +166,7 @@ public interface ISchedulerListener
    * @param msg
    * @param cause
    */
-  default void schedulerError (final String msg, final SchedulerException cause)
+  default void schedulerError (@Nullable final String msg, @Nullable final SchedulerException cause)
   {}
 
   /**

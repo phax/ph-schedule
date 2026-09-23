@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * An exception that is thrown to indicate that a call to InterruptableJob.interrupt() failed
  * without interrupting the Job.
@@ -30,7 +32,7 @@ public class UnableToInterruptJobException extends SchedulerException
   /**
    * Create a <code>UnableToInterruptJobException</code> with the given message.
    */
-  public UnableToInterruptJobException (final String msg)
+  public UnableToInterruptJobException (@Nullable final String msg)
   {
     super (msg);
   }
@@ -38,7 +40,7 @@ public class UnableToInterruptJobException extends SchedulerException
   /**
    * Create a <code>UnableToInterruptJobException</code> with the given cause.
    */
-  public UnableToInterruptJobException (final Throwable cause)
+  public UnableToInterruptJobException (@Nullable final Throwable cause)
   {
     super (cause);
   }

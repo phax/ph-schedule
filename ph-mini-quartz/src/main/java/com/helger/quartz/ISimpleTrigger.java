@@ -18,6 +18,10 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.annotation.Nonnegative;
+
 /**
  * A <code>{@link ITrigger}</code> that is used to fire a <code>Job</code> at a given moment in
  * time, and optionally repeated at a specified interval.
@@ -58,7 +62,9 @@ public interface ISimpleTrigger extends ITrigger
    * Get the number of times the <code>SimpleTrigger</code> has already fired.
    * </p>
    */
+  @Nonnegative
   int getTimesTriggered ();
 
+  @NonNull
   TriggerBuilder <? extends ISimpleTrigger> getTriggerBuilder ();
 }

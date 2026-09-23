@@ -88,7 +88,9 @@ public class PropertySettingJobFactory extends SimpleJobFactory
   private ICommonsSet <String> m_aAllowedProperties = null;
 
   @Override
-  public IJob newJob (final TriggerFiredBundle bundle, final IScheduler scheduler) throws SchedulerException
+  @NonNull
+  public IJob newJob (@NonNull final TriggerFiredBundle bundle,
+                      @NonNull final IScheduler scheduler) throws SchedulerException
   {
     final IJob job = super.newJob (bundle, scheduler);
 
@@ -102,7 +104,7 @@ public class PropertySettingJobFactory extends SimpleJobFactory
     return job;
   }
 
-  protected void setBeanProps (final Object obj, final JobDataMap data) throws SchedulerException
+  protected void setBeanProps (@NonNull final Object obj, @NonNull final JobDataMap data) throws SchedulerException
   {
     BeanInfo bi = null;
     try
@@ -297,12 +299,12 @@ public class PropertySettingJobFactory extends SimpleJobFactory
     }
   }
 
-  private void _handleError (final String message) throws SchedulerException
+  private void _handleError (@NonNull final String message) throws SchedulerException
   {
     _handleError (message, null);
   }
 
-  private void _handleError (final String message, final Exception e) throws SchedulerException
+  private void _handleError (@NonNull final String message, @Nullable final Exception e) throws SchedulerException
   {
     if (isThrowIfPropertyNotFound ())
       throw new SchedulerException (message, e);
@@ -316,7 +318,8 @@ public class PropertySettingJobFactory extends SimpleJobFactory
     }
   }
 
-  private static Method _getSetMethod (final String name, final PropertyDescriptor [] props)
+  @Nullable
+  private static Method _getSetMethod (@NonNull final String name, @NonNull final PropertyDescriptor [] props)
   {
     for (final PropertyDescriptor prop : props)
     {

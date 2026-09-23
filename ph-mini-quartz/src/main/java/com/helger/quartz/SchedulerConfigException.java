@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * An exception that is thrown to indicate that there is a misconfiguration of the
  * <code>SchedulerFactory</code>- or one of the components it configures.
@@ -29,7 +31,7 @@ public class SchedulerConfigException extends SchedulerException
   /**
    * Create a <code>JobPersistenceException</code> with the given message.
    */
-  public SchedulerConfigException (final String msg)
+  public SchedulerConfigException (@Nullable final String msg)
   {
     super (msg);
   }
@@ -37,7 +39,7 @@ public class SchedulerConfigException extends SchedulerException
   /**
    * Create a <code>JobPersistenceException</code> with the given message and cause.
    */
-  public SchedulerConfigException (final String msg, final Throwable cause)
+  public SchedulerConfigException (@Nullable final String msg, @Nullable final Throwable cause)
   {
     super (msg, cause);
   }

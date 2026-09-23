@@ -293,7 +293,7 @@ public final class CronExpression implements ICloneable <CronExpression>
    * @param expression
    *        The existing cron expression to be copied
    */
-  public CronExpression (final CronExpression expression)
+  public CronExpression (@NonNull final CronExpression expression)
   {
     /*
      * We don't call the other constructor here since we need to swallow the ParseException. We also
@@ -320,7 +320,7 @@ public final class CronExpression implements ICloneable <CronExpression>
    *        the date to evaluate
    * @return a boolean indicating whether the given date satisfies the cron expression
    */
-  public boolean isSatisfiedBy (final Date date)
+  public boolean isSatisfiedBy (@NonNull final Date date)
   {
     final Calendar testDateCal = Calendar.getInstance (getTimeZone (), Locale.getDefault (Locale.Category.FORMAT));
     testDateCal.setTime (date);
@@ -342,7 +342,8 @@ public final class CronExpression implements ICloneable <CronExpression>
    *        the date/time at which to begin the search for the next valid date/time
    * @return the next valid date/time
    */
-  public Date getNextValidTimeAfter (final Date date)
+  @Nullable
+  public Date getNextValidTimeAfter (@NonNull final Date date)
   {
     return getTimeAfter (date);
   }
@@ -355,7 +356,8 @@ public final class CronExpression implements ICloneable <CronExpression>
    *        the date/time at which to begin the search for the next invalid date/time
    * @return the next valid date/time
    */
-  public Date getNextInvalidTimeAfter (final Date date)
+  @Nullable
+  public Date getNextInvalidTimeAfter (@NonNull final Date date)
   {
     long difference = 1000;
 
@@ -429,7 +431,7 @@ public final class CronExpression implements ICloneable <CronExpression>
    *        the expression to evaluate
    * @return a boolean indicating whether the given expression is a valid cron expression
    */
-  public static boolean isValidExpression (final String cronExpression)
+  public static boolean isValidExpression (@Nullable final String cronExpression)
   {
     try
     {
@@ -442,13 +444,13 @@ public final class CronExpression implements ICloneable <CronExpression>
     }
   }
 
-  public static void validateExpression (final String cronExpression) throws ParseException
+  public static void validateExpression (@Nullable final String cronExpression) throws ParseException
   {
     // Parse the exception - throws an exception in case of error
     new CronExpression (cronExpression);
   }
 
-  private void _buildExpression (final String expression) throws ParseException
+  private void _buildExpression (@NonNull final String expression) throws ParseException
   {
     try
     {
@@ -534,7 +536,9 @@ public final class CronExpression implements ICloneable <CronExpression>
     }
   }
 
-  private int _storeExpressionVals (final int pos, final String s, final EType type) throws ParseException
+  private int _storeExpressionVals (final int pos,
+                                    @NonNull final String s,
+                                    @NonNull final EType type) throws ParseException
   {
     int i = _skipWhiteSpace (pos, s);
     if (i >= s.length ())
@@ -760,7 +764,10 @@ public final class CronExpression implements ICloneable <CronExpression>
     throw new ParseException ("Unexpected character: " + c, i);
   }
 
-  private int _checkNext (final int pos, final String s, final int val, final EType type) throws ParseException
+  private int _checkNext (final int pos,
+                          @NonNull final String s,
+                          final int val,
+                          @NonNull final EType type) throws ParseException
   {
     int end = -1;
     int i = pos;
@@ -909,11 +916,13 @@ public final class CronExpression implements ICloneable <CronExpression>
     return i;
   }
 
+  @Nullable
   public String getCronExpression ()
   {
     return m_sCronExpression;
   }
 
+  @NonNull
   public String getExpressionSummary ()
   {
     final StringBuilder buf = new StringBuilder ();
@@ -955,7 +964,8 @@ public final class CronExpression implements ICloneable <CronExpression>
     return buf.toString ();
   }
 
-  private static String _getExpressionSetSummary (final Set <Integer> set)
+  @NonNull
+  private static String _getExpressionSetSummary (@Nullable final Set <Integer> set)
   {
     if (set.contains (NO_SPEC))
       return "?";
@@ -978,7 +988,7 @@ public final class CronExpression implements ICloneable <CronExpression>
     return buf.toString ();
   }
 
-  private static int _skipWhiteSpace (final int i, final String s)
+  private static int _skipWhiteSpace (final int i, @NonNull final String s)
   {
     int nIndex = i;
     final int nMax = s.length ();
@@ -992,7 +1002,7 @@ public final class CronExpression implements ICloneable <CronExpression>
     return nIndex;
   }
 
-  private static int _findNextWhiteSpace (final int i, final String s)
+  private static int _findNextWhiteSpace (final int i, @NonNull final String s)
   {
     int nIndex = i;
     final int nMax = s.length ();
@@ -1006,7 +1016,10 @@ public final class CronExpression implements ICloneable <CronExpression>
     return nIndex;
   }
 
-  private void _addToSet (final int val, final int end, final int nIncr, final EType type) throws ParseException
+  private void _addToSet (final int val,
+                          final int end,
+                          final int nIncr,
+                          @NonNull final EType type) throws ParseException
   {
     int incr = nIncr;
     final Set <Integer> set = getSet (type);
@@ -1190,7 +1203,7 @@ public final class CronExpression implements ICloneable <CronExpression>
   }
 
   @NonNull
-  private static ValueSet _getValue (final int v, final String s, final int nI)
+  private static ValueSet _getValue (final int v, @NonNull final String s, final int nI)
   {
     int nIndex = nI;
     char c = s.charAt (nIndex);
@@ -1207,14 +1220,14 @@ public final class CronExpression implements ICloneable <CronExpression>
     return new ValueSet (Integer.parseInt (aNums.toString ()), nIndex < s.length () ? nIndex : nIndex + 1);
   }
 
-  private static int _getNumericValue (final String s, final int i)
+  private static int _getNumericValue (@NonNull final String s, final int i)
   {
     final int endOfVal = _findNextWhiteSpace (i, s);
     final String val = s.substring (i, endOfVal);
     return Integer.parseInt (val);
   }
 
-  private static int _getMonthNumber (final String s)
+  private static int _getMonthNumber (@NonNull final String s)
   {
     final Integer integer = MONTH_MAP.get (s);
 
@@ -1224,7 +1237,7 @@ public final class CronExpression implements ICloneable <CronExpression>
     return integer.intValue ();
   }
 
-  private static int _getDayOfWeekNumber (final String s)
+  private static int _getDayOfWeekNumber (@NonNull final String s)
   {
     final Integer integer = DAY_OF_WEEK_MAP.get (s);
 
@@ -1240,7 +1253,8 @@ public final class CronExpression implements ICloneable <CronExpression>
   //
   ////////////////////////////////////////////////////////////////////////////
 
-  public Date getTimeAfter (final Date aAfterTime)
+  @Nullable
+  public Date getTimeAfter (@NonNull final Date aAfterTime)
   {
     // Computation is based on Gregorian year only.
     final Calendar cl = new GregorianCalendar (getTimeZone (), Locale.getDefault (Category.FORMAT));
@@ -1747,7 +1761,7 @@ public final class CronExpression implements ICloneable <CronExpression>
    * @param hour
    *        the hour to set
    */
-  private static void _setCalendarHour (final Calendar cal, final int hour)
+  private static void _setCalendarHour (@NonNull final Calendar cal, final int hour)
   {
     cal.set (Calendar.HOUR_OF_DAY, hour);
     if (cal.get (Calendar.HOUR_OF_DAY) != hour && hour != 24)
@@ -1766,7 +1780,7 @@ public final class CronExpression implements ICloneable <CronExpression>
    *         <code>null</code>.
    */
   @Nullable
-  public Date getTimeBefore (final Date endTime)
+  public Date getTimeBefore (@Nullable final Date endTime)
   {
     // FUTURE_TODO: implement QUARTZ-423
     return null;
@@ -1822,7 +1836,7 @@ public final class CronExpression implements ICloneable <CronExpression>
     }
   }
 
-  private void readObject (final ObjectInputStream stream) throws IOException, ClassNotFoundException
+  private void readObject (@NonNull final ObjectInputStream stream) throws IOException, ClassNotFoundException
   {
     stream.defaultReadObject ();
     try

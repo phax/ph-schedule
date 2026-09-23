@@ -50,7 +50,8 @@ public interface IClassLoadHelper
    * @throws ClassNotFoundException
    *         if the class can be found in the classpath.
    */
-  default Class <?> loadClass (final String sClassName) throws ClassNotFoundException
+  @NonNull
+  default Class <?> loadClass (@NonNull final String sClassName) throws ClassNotFoundException
   {
     return getClassLoader ().loadClass (sClassName);
   }
@@ -67,7 +68,9 @@ public interface IClassLoadHelper
    *         if the class can be found in the classpath.
    */
   @SuppressWarnings ("unchecked")
-  default <T> Class <? extends T> loadClass (final String name, final Class <T> dummy) throws ClassNotFoundException
+  @NonNull
+  default <T> Class <? extends T> loadClass (@NonNull final String name,
+                                             @NonNull final Class <T> dummy) throws ClassNotFoundException
   {
     return (Class <? extends T>) loadClass (name);
   }
@@ -81,7 +84,7 @@ public interface IClassLoadHelper
    * @return a java.net.URL object
    */
   @Nullable
-  default URL getResource (final String sName)
+  default URL getResource (@Nullable final String sName)
   {
     return getClassLoader ().getResource (sName);
   }
@@ -95,7 +98,7 @@ public interface IClassLoadHelper
    * @return a java.io.InputStream object
    */
   @Nullable
-  default InputStream getResourceAsStream (final String sName)
+  default InputStream getResourceAsStream (@Nullable final String sName)
   {
     return getClassLoader ().getResourceAsStream (sName);
   }

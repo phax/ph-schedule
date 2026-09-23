@@ -18,9 +18,12 @@
  */
 package com.helger.quartz.core;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ITrigger;
 import com.helger.quartz.JobKey;
 import com.helger.quartz.SchedulerException;
@@ -39,15 +42,18 @@ public class SchedulerSignaler implements ISchedulerSignaler
   protected QuartzScheduler m_aScheduler;
   protected QuartzSchedulerThread m_aSchedulerThread;
 
-  public SchedulerSignaler (final QuartzScheduler sched, final QuartzSchedulerThread schedThread)
+  public SchedulerSignaler (@NonNull final QuartzScheduler sched, @NonNull final QuartzSchedulerThread schedThread)
   {
+    ValueEnforcer.notNull (sched, "Scheduler");
+    ValueEnforcer.notNull (schedThread, "SchedulerThread");
+
     m_aScheduler = sched;
     m_aSchedulerThread = schedThread;
 
     LOGGER.info ("Initialized Scheduler Signaller of type: " + getClass ());
   }
 
-  public void notifyTriggerListenersMisfired (final ITrigger trigger)
+  public void notifyTriggerListenersMisfired (@NonNull final ITrigger trigger)
   {
     try
     {
@@ -60,7 +66,7 @@ public class SchedulerSignaler implements ISchedulerSignaler
     }
   }
 
-  public void notifySchedulerListenersFinalized (final ITrigger trigger)
+  public void notifySchedulerListenersFinalized (@NonNull final ITrigger trigger)
   {
     m_aScheduler.notifySchedulerListenersFinalized (trigger);
   }
@@ -70,12 +76,12 @@ public class SchedulerSignaler implements ISchedulerSignaler
     m_aSchedulerThread.signalSchedulingChange (candidateNewNextFireTime);
   }
 
-  public void notifySchedulerListenersJobDeleted (final JobKey jobKey)
+  public void notifySchedulerListenersJobDeleted (@NonNull final JobKey jobKey)
   {
     m_aScheduler.notifySchedulerListenersJobDeleted (jobKey);
   }
 
-  public void notifySchedulerListenersError (final String string, final SchedulerException jpe)
+  public void notifySchedulerListenersError (@Nullable final String string, @Nullable final SchedulerException jpe)
   {
     m_aScheduler.notifySchedulerListenersError (string, jpe);
   }

@@ -18,6 +18,9 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * An exception that is thrown to indicate that an attempt to store a new object (i.e.
  * <code>{@link com.helger.quartz.IJobDetail}</code>,<code>{@link ITrigger}</code> or
@@ -31,7 +34,7 @@ public class ObjectAlreadyExistsException extends JobPersistenceException
   /**
    * Create a <code>ObjectAlreadyExistsException</code> with the given message.
    */
-  public ObjectAlreadyExistsException (final String msg)
+  public ObjectAlreadyExistsException (@Nullable final String msg)
   {
     super (msg);
   }
@@ -47,7 +50,7 @@ public class ObjectAlreadyExistsException extends JobPersistenceException
    * identification."
    * </p>
    */
-  public ObjectAlreadyExistsException (final IJobDetail offendingJob)
+  public ObjectAlreadyExistsException (@NonNull final IJobDetail offendingJob)
   {
     super ("Unable to store Job : '" +
            offendingJob.getKey () +
@@ -65,7 +68,7 @@ public class ObjectAlreadyExistsException extends JobPersistenceException
    * identification."
    * </p>
    */
-  public ObjectAlreadyExistsException (final ITrigger offendingTrigger)
+  public ObjectAlreadyExistsException (@NonNull final ITrigger offendingTrigger)
   {
     super ("Unable to store Trigger with name: '" +
            offendingTrigger.getKey ().getName () +

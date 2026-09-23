@@ -18,6 +18,9 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.quartz.utils.Key;
 
@@ -53,22 +56,24 @@ import com.helger.quartz.utils.Key;
 @Immutable
 public final class JobKey extends Key <JobKey>
 {
-  public JobKey (final String name)
+  public JobKey (@NonNull final String name)
   {
     super (name, null);
   }
 
-  public JobKey (final String name, final String group)
+  public JobKey (@NonNull final String name, @Nullable final String group)
   {
     super (name, group);
   }
 
-  public static JobKey jobKey (final String name)
+  @NonNull
+  public static JobKey jobKey (@NonNull final String name)
   {
     return new JobKey (name, null);
   }
 
-  public static JobKey jobKey (final String name, final String group)
+  @NonNull
+  public static JobKey jobKey (@NonNull final String name, @Nullable final String group)
   {
     return new JobKey (name, group);
   }

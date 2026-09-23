@@ -17,6 +17,7 @@
 package com.helger.schedule.quartz.listener;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +70,8 @@ public class LoggingJobListener implements IJobListener
   }
 
   @Override
-  public void jobWasExecuted (@NonNull final IJobExecutionContext aContext, final JobExecutionException aJobException)
+  public void jobWasExecuted (@NonNull final IJobExecutionContext aContext,
+                              @Nullable final JobExecutionException aJobException)
   {
     final Object aResult = aContext.getResult ();
     final long nRuntimeMilliSecs = aContext.getJobRunTime ();

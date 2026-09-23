@@ -23,6 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.Nonnegative;
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.collection.commons.ICommonsSet;
 import com.helger.quartz.ITrigger.ETriggerState;
@@ -168,16 +174,21 @@ public interface IScheduler
   /**
    * Returns the name of the <code>Scheduler</code>.
    */
+  @NonNull
+  @Nonempty
   String getSchedulerName () throws SchedulerException;
 
   /**
    * Returns the instance Id of the <code>Scheduler</code>.
    */
+  @NonNull
+  @Nonempty
   String getSchedulerInstanceId () throws SchedulerException;
 
   /**
    * Returns the <code>SchedulerContext</code> of the <code>Scheduler</code>.
    */
+  @NonNull
   SchedulerContext getContext () throws SchedulerException;
 
   /// Scheduler State Management Methods
@@ -212,7 +223,7 @@ public interface IScheduler
    * @see #standby()
    * @see #shutdown()
    */
-  void startDelayed (int seconds) throws SchedulerException;
+  void startDelayed (@Nonnegative int seconds) throws SchedulerException;
 
   /**
    * Whether the scheduler has been started.
@@ -291,6 +302,7 @@ public interface IScheduler
    * the meta data values may be different.
    * </p>
    */
+  @NonNull
   SchedulerMetaData getMetaData () throws SchedulerException;
 
   /**
@@ -308,6 +320,8 @@ public interface IScheduler
    *
    * @see IJobExecutionContext
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <IJobExecutionContext> getCurrentlyExecutingJobs () throws SchedulerException;
 
   /**
@@ -320,7 +334,7 @@ public interface IScheduler
    *
    * @see com.helger.quartz.spi.IJobFactory
    */
-  void setJobFactory (IJobFactory factory) throws SchedulerException;
+  void setJobFactory (@NonNull IJobFactory factory) throws SchedulerException;
 
   /**
    * Get a reference to the scheduler's <code>ListenerManager</code>, through which listeners may be
@@ -334,6 +348,7 @@ public interface IScheduler
    * @see ITriggerListener
    * @see ISchedulerListener
    */
+  @NonNull
   IListenerManager getListenerManager () throws SchedulerException;
 
   ///////////////////////////////////////////////////////////////////////////
@@ -354,7 +369,8 @@ public interface IScheduler
    *         if the Job or Trigger cannot be added to the Scheduler, or there is an internal
    *         Scheduler error.
    */
-  Date scheduleJob (IJobDetail jobDetail, ITrigger trigger) throws SchedulerException;
+  @NonNull
+  Date scheduleJob (@NonNull IJobDetail jobDetail, @NonNull ITrigger trigger) throws SchedulerException;
 
   /**
    * Schedule the given <code>{@link com.helger.quartz.ITrigger}</code> with the <code>Job</code>
@@ -364,7 +380,8 @@ public interface IScheduler
    *         if the indicated Job does not exist, or the Trigger cannot be added to the Scheduler,
    *         or there is an internal Scheduler error.
    */
-  Date scheduleJob (ITrigger trigger) throws SchedulerException;
+  @NonNull
+  Date scheduleJob (@NonNull ITrigger trigger) throws SchedulerException;
 
   /**
    * Schedule all of the given jobs with the related set of triggers.
@@ -376,7 +393,7 @@ public interface IScheduler
    * @throws ObjectAlreadyExistsException
    *         if the job/trigger keys are not unique and the replace flag is not set to true.
    */
-  void scheduleJobs (Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
+  void scheduleJobs (@NonNull Map <IJobDetail, Set <? extends ITrigger>> triggersAndJobs,
                      boolean replace) throws SchedulerException;
 
   /**
@@ -389,8 +406,8 @@ public interface IScheduler
    * @throws ObjectAlreadyExistsException
    *         if the job/trigger keys are not unique and the replace flag is not set to true.
    */
-  void scheduleJob (IJobDetail jobDetail,
-                    Set <? extends ITrigger> triggersForJob,
+  void scheduleJob (@NonNull IJobDetail jobDetail,
+                    @NonNull Set <? extends ITrigger> triggersForJob,
                     boolean replace) throws SchedulerException;
 
   /**
@@ -400,7 +417,7 @@ public interface IScheduler
    * will also be deleted.
    * </p>
    */
-  boolean unscheduleJob (TriggerKey triggerKey) throws SchedulerException;
+  boolean unscheduleJob (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
   /**
    * Remove all of the indicated <code>{@link ITrigger}</code>s from the scheduler.
@@ -415,7 +432,7 @@ public interface IScheduler
    * of time).
    * </p>
    */
-  boolean unscheduleJobs (List <TriggerKey> triggerKeys) throws SchedulerException;
+  boolean unscheduleJobs (@NonNull List <TriggerKey> triggerKeys) throws SchedulerException;
 
   /**
    * Remove (delete) the <code>{@link com.helger.quartz.ITrigger}</code> with the given key, and
@@ -431,7 +448,8 @@ public interface IScheduler
    *         found and removed from the store (and the new trigger is therefore not stored),
    *         otherwise the first fire time of the newly scheduled trigger is returned.
    */
-  Date rescheduleJob (TriggerKey triggerKey, ITrigger newTrigger) throws SchedulerException;
+  @Nullable
+  Date rescheduleJob (@NonNull TriggerKey triggerKey, @NonNull ITrigger newTrigger) throws SchedulerException;
 
   /**
    * Add the given <code>Job</code> to the Scheduler - with no associated <code>Trigger</code>. The
@@ -447,7 +465,7 @@ public interface IScheduler
    *         if there is an internal Scheduler error, or if the Job is not durable, or a Job with
    *         the same name already exists, and <code>replace</code> is <code>false</code>.
    */
-  void addJob (IJobDetail jobDetail, boolean replace) throws SchedulerException;
+  void addJob (@NonNull IJobDetail jobDetail, boolean replace) throws SchedulerException;
 
   /**
    * Add the given <code>Job</code> to the Scheduler - with no associated <code>Trigger</code>. The
@@ -463,7 +481,7 @@ public interface IScheduler
    *         if there is an internal Scheduler error, or if the Job is not durable, or a Job with
    *         the same name already exists, and <code>replace</code> is <code>false</code>.
    */
-  void addJob (IJobDetail jobDetail,
+  void addJob (@NonNull IJobDetail jobDetail,
                boolean replace,
                boolean storeNonDurableWhileAwaitingScheduling) throws SchedulerException;
 
@@ -475,7 +493,7 @@ public interface IScheduler
    * @throws SchedulerException
    *         if there is an internal Scheduler error.
    */
-  boolean deleteJob (JobKey jobKey) throws SchedulerException;
+  boolean deleteJob (@NonNull JobKey jobKey) throws SchedulerException;
 
   /**
    * Delete the identified <code>Job</code>s from the Scheduler - and any associated
@@ -490,12 +508,12 @@ public interface IScheduler
    * @throws SchedulerException
    *         if there is an internal Scheduler error.
    */
-  boolean deleteJobs (List <JobKey> jobKeys) throws SchedulerException;
+  boolean deleteJobs (@NonNull List <JobKey> jobKeys) throws SchedulerException;
 
   /**
    * Trigger the identified <code>{@link com.helger.quartz.IJobDetail}</code> (execute it now).
    */
-  void triggerJob (JobKey jobKey) throws SchedulerException;
+  void triggerJob (@NonNull JobKey jobKey) throws SchedulerException;
 
   /**
    * Trigger the identified <code>{@link com.helger.quartz.IJobDetail}</code> (execute it now).
@@ -504,7 +522,7 @@ public interface IScheduler
    *        the (possibly <code>null</code>) JobDataMap to be associated with the trigger that fires
    *        the job immediately.
    */
-  void triggerJob (JobKey jobKey, JobDataMap data) throws SchedulerException;
+  void triggerJob (@NonNull JobKey jobKey, @Nullable JobDataMap data) throws SchedulerException;
 
   /**
    * Pause the <code>{@link com.helger.quartz.IJobDetail}</code> with the given key - by pausing all
@@ -512,7 +530,7 @@ public interface IScheduler
    *
    * @see #resumeJob(JobKey)
    */
-  void pauseJob (JobKey jobKey) throws SchedulerException;
+  void pauseJob (@NonNull JobKey jobKey) throws SchedulerException;
 
   /**
    * Pause all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in the matching groups - by
@@ -539,14 +557,14 @@ public interface IScheduler
    *         On error
    * @see #resumeJobs(com.helger.quartz.impl.matchers.GroupMatcher)
    */
-  void pauseJobs (GroupMatcher <JobKey> matcher) throws SchedulerException;
+  void pauseJobs (@NonNull GroupMatcher <JobKey> matcher) throws SchedulerException;
 
   /**
    * Pause the <code>{@link ITrigger}</code> with the given key.
    *
    * @see #resumeTrigger(TriggerKey)
    */
-  void pauseTrigger (TriggerKey triggerKey) throws SchedulerException;
+  void pauseTrigger (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
   /**
    * Pause all of the <code>{@link ITrigger}s</code> in the groups matching.
@@ -571,7 +589,7 @@ public interface IScheduler
    * @throws SchedulerException
    * @see #resumeTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
    */
-  void pauseTriggers (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
+  void pauseTriggers (@NonNull GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
   /**
    * Resume (un-pause) the <code>{@link com.helger.quartz.IJobDetail}</code> with the given key.
@@ -582,7 +600,7 @@ public interface IScheduler
    *
    * @see #pauseJob(JobKey)
    */
-  void resumeJob (JobKey jobKey) throws SchedulerException;
+  void resumeJob (@NonNull JobKey jobKey) throws SchedulerException;
 
   /**
    * Resume (un-pause) all of the <code>{@link com.helger.quartz.IJobDetail}s</code> in matching
@@ -598,7 +616,7 @@ public interface IScheduler
    *         On error
    * @see #pauseJobs(GroupMatcher)
    */
-  void resumeJobs (GroupMatcher <JobKey> matcher) throws SchedulerException;
+  void resumeJobs (@NonNull GroupMatcher <JobKey> matcher) throws SchedulerException;
 
   /**
    * Resume (un-pause) the <code>{@link ITrigger}</code> with the given key.
@@ -609,7 +627,7 @@ public interface IScheduler
    *
    * @see #pauseTrigger(TriggerKey)
    */
-  void resumeTrigger (TriggerKey triggerKey) throws SchedulerException;
+  void resumeTrigger (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
   /**
    * Resume (un-pause) all of the <code>{@link ITrigger}s</code> in matching groups.
@@ -624,7 +642,7 @@ public interface IScheduler
    *         On error
    * @see #pauseTriggers(com.helger.quartz.impl.matchers.GroupMatcher)
    */
-  void resumeTriggers (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
+  void resumeTriggers (@NonNull GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
   /**
    * Pause all triggers - similar to calling <code>pauseTriggerGroup(group)</code> on every group,
@@ -656,6 +674,8 @@ public interface IScheduler
   /**
    * Get the names of all known <code>{@link com.helger.quartz.IJobDetail}</code> groups.
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getJobGroupNames () throws SchedulerException;
 
   /**
@@ -668,7 +688,9 @@ public interface IScheduler
    * @throws SchedulerException
    *         On error
    */
-  ICommonsSet <JobKey> getJobKeys (GroupMatcher <JobKey> matcher) throws SchedulerException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsSet <JobKey> getJobKeys (@NonNull GroupMatcher <JobKey> matcher) throws SchedulerException;
 
   /**
    * Get all <code>{@link ITrigger}</code> s that are associated with the identified
@@ -679,11 +701,15 @@ public interface IScheduler
    * {@link #rescheduleJob(TriggerKey, ITrigger)}).
    * </p>
    */
-  ICommonsList <? extends ITrigger> getTriggersOfJob (JobKey jobKey) throws SchedulerException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsList <? extends ITrigger> getTriggersOfJob (@NonNull JobKey jobKey) throws SchedulerException;
 
   /**
    * Get the names of all known <code>{@link ITrigger}</code> groups.
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getTriggerGroupNames () throws SchedulerException;
 
   /**
@@ -695,11 +721,15 @@ public interface IScheduler
    * @throws SchedulerException
    *         On error
    */
-  ICommonsSet <TriggerKey> getTriggerKeys (GroupMatcher <TriggerKey> matcher) throws SchedulerException;
+  @NonNull
+  @ReturnsMutableCopy
+  ICommonsSet <TriggerKey> getTriggerKeys (@NonNull GroupMatcher <TriggerKey> matcher) throws SchedulerException;
 
   /**
    * Get the names of all <code>{@link ITrigger}</code> groups that are paused.
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsSet <String> getPausedTriggerGroups () throws SchedulerException;
 
   /**
@@ -710,7 +740,8 @@ public interface IScheduler
    * {@link #addJob(IJobDetail, boolean)}).
    * </p>
    */
-  IJobDetail getJobDetail (JobKey jobKey) throws SchedulerException;
+  @Nullable
+  IJobDetail getJobDetail (@NonNull JobKey jobKey) throws SchedulerException;
 
   /**
    * Get the <code>{@link ITrigger}</code> instance with the given key.
@@ -720,14 +751,16 @@ public interface IScheduler
    * {@link #rescheduleJob(TriggerKey, ITrigger)}).
    * </p>
    */
-  ITrigger getTrigger (TriggerKey triggerKey) throws SchedulerException;
+  @Nullable
+  ITrigger getTrigger (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
   /**
    * Get the current state of the identified <code>{@link ITrigger}</code>.
    *
    * @see ITrigger.ETriggerState
    */
-  ETriggerState getTriggerState (TriggerKey triggerKey) throws SchedulerException;
+  @NonNull
+  ETriggerState getTriggerState (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
   /**
    * Add (register) the given <code>Calendar</code> to the Scheduler.
@@ -739,8 +772,8 @@ public interface IScheduler
    *         if there is an internal Scheduler error, or a Calendar with the same name already
    *         exists, and <code>replace</code> is <code>false</code>.
    */
-  void addCalendar (String calName,
-                    ICalendar calendar,
+  void addCalendar (@NonNull String calName,
+                    @NonNull ICalendar calendar,
                     boolean replace,
                     boolean updateTriggers) throws SchedulerException;
 
@@ -755,16 +788,19 @@ public interface IScheduler
    * @throws SchedulerException
    *         if there is an internal Scheduler error, or one or more triggers reference the calendar
    */
-  boolean deleteCalendar (String calName) throws SchedulerException;
+  boolean deleteCalendar (@NonNull String calName) throws SchedulerException;
 
   /**
    * Get the <code>{@link ICalendar}</code> instance with the given name.
    */
-  ICalendar getCalendar (String calName) throws SchedulerException;
+  @Nullable
+  ICalendar getCalendar (@NonNull String calName) throws SchedulerException;
 
   /**
    * Get the names of all registered <code>{@link ICalendar}s</code>.
    */
+  @NonNull
+  @ReturnsMutableCopy
   ICommonsList <String> getCalendarNames () throws SchedulerException;
 
   /**
@@ -791,7 +827,7 @@ public interface IScheduler
    * @see #getCurrentlyExecutingJobs()
    * @see #interrupt(String)
    */
-  boolean interrupt (JobKey jobKey) throws UnableToInterruptJobException;
+  boolean interrupt (@NonNull JobKey jobKey) throws UnableToInterruptJobException;
 
   /**
    * Request the interruption, within this Scheduler instance, of the identified executing
@@ -814,7 +850,7 @@ public interface IScheduler
    * @see IJobExecutionContext#getFireInstanceId()
    * @see #interrupt(JobKey)
    */
-  boolean interrupt (String fireInstanceId) throws UnableToInterruptJobException;
+  boolean interrupt (@NonNull String fireInstanceId) throws UnableToInterruptJobException;
 
   /**
    * Determine whether a {@link IJob} with the given identifier already exists within the scheduler.
@@ -824,7 +860,7 @@ public interface IScheduler
    * @return true if a Job exists with the given identifier
    * @throws SchedulerException
    */
-  boolean checkExists (JobKey jobKey) throws SchedulerException;
+  boolean checkExists (@NonNull JobKey jobKey) throws SchedulerException;
 
   /**
    * Determine whether a {@link ITrigger} with the given identifier already exists within the
@@ -835,7 +871,7 @@ public interface IScheduler
    * @return true if a Trigger exists with the given identifier
    * @throws SchedulerException
    */
-  boolean checkExists (TriggerKey triggerKey) throws SchedulerException;
+  boolean checkExists (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
   /**
    * Clears (deletes!) all scheduling data - all {@link IJob}s, {@link ITrigger}s

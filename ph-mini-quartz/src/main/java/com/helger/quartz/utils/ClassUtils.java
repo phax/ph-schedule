@@ -20,6 +20,9 @@ package com.helger.quartz.utils;
 
 import java.lang.annotation.Annotation;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
@@ -30,8 +33,8 @@ public final class ClassUtils
   private ClassUtils ()
   {}
 
-  private static boolean _isAnnotationPresentOnInterfacesRecursive (final Class <?> clazz,
-                                                                    final Class <? extends Annotation> a)
+  private static boolean _isAnnotationPresentOnInterfacesRecursive (@NonNull final Class <?> clazz,
+                                                                    @NonNull final Class <? extends Annotation> a)
   {
     for (final Class <?> i : clazz.getInterfaces ())
     {
@@ -44,7 +47,8 @@ public final class ClassUtils
     return false;
   }
 
-  public static boolean isAnnotationPresent (final Class <?> clazz, final Class <? extends Annotation> a)
+  public static boolean isAnnotationPresent (@NonNull final Class <?> clazz,
+                                             @NonNull final Class <? extends Annotation> a)
   {
     Class <?> c = clazz;
     while (c != null)
@@ -58,7 +62,9 @@ public final class ClassUtils
     return false;
   }
 
-  public static <T extends Annotation> T getAnnotation (final Class <?> clazz, final Class <T> aAnnotationClass)
+  @Nullable
+  public static <T extends Annotation> T getAnnotation (@NonNull final Class <?> clazz,
+                                                        @NonNull final Class <T> aAnnotationClass)
   {
     // Check class hierarchy
     Class <?> c = clazz;

@@ -22,6 +22,12 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Set;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonnegative;
+import com.helger.annotation.style.ReturnsMutableObject;
+
 /**
  * A <code>{@link ITrigger}</code> that is used to fire a
  * <code>{@link com.helger.quartz.IJobDetail}</code> based upon daily repeating time intervals.
@@ -71,6 +77,7 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    * The only intervals that are valid for this type of trigger are {@link EIntervalUnit#SECOND},
    * {@link EIntervalUnit#MINUTE}, and {@link EIntervalUnit#HOUR}.
    */
+  @NonNull
   EIntervalUnit getRepeatIntervalUnit ();
 
   /**
@@ -86,16 +93,19 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    * time (in the set repeat interval unit) in order to calculate the time of the next trigger
    * repeat.
    */
+  @Nonnegative
   int getRepeatInterval ();
 
   /**
    * The time of day to start firing at the given interval.
    */
+  @NonNull
   LocalTime getStartTimeOfDay ();
 
   /**
    * The time of day to complete firing at the given interval.
    */
+  @Nullable
   LocalTime getEndTimeOfDay ();
 
   /**
@@ -103,12 +113,16 @@ public interface IDailyTimeIntervalTrigger extends ITrigger
    *
    * @return a Set containing the enums representing the days of the week.
    */
+  @NonNull
+  @ReturnsMutableObject
   Set <DayOfWeek> getDaysOfWeek ();
 
   /**
    * Get the number of times the <code>DateIntervalTrigger</code> has already fired.
    */
+  @Nonnegative
   int getTimesTriggered ();
 
+  @NonNull
   TriggerBuilder <? extends IDailyTimeIntervalTrigger> getTriggerBuilder ();
 }

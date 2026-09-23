@@ -46,7 +46,7 @@ public class NotMatcher <T extends Key <T>> implements IMatcher <T>
     return m_aOperand;
   }
 
-  public boolean isMatch (final T aKey)
+  public boolean isMatch (@NonNull final T aKey)
   {
     return !m_aOperand.isMatch (aKey);
   }

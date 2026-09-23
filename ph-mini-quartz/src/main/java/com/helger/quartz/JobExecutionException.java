@@ -18,6 +18,8 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * An exception that can be thrown by a <code>{@link com.helger.quartz.IJob}</code> to indicate to
  * the Quartz <code>{@link IScheduler}</code> that an error occurred while executing, and whether or
@@ -50,7 +52,7 @@ public class JobExecutionException extends SchedulerException
   /**
    * Create a JobExcecutionException, with the given cause.
    */
-  public JobExecutionException (final Throwable cause)
+  public JobExecutionException (@Nullable final Throwable cause)
   {
     this (null, cause, false);
   }
@@ -58,7 +60,7 @@ public class JobExecutionException extends SchedulerException
   /**
    * Create a JobExcecutionException, with the given message.
    */
-  public JobExecutionException (final String msg)
+  public JobExecutionException (@Nullable final String msg)
   {
     this (msg, null, false);
   }
@@ -75,7 +77,7 @@ public class JobExecutionException extends SchedulerException
    * Create a JobExcecutionException with the given underlying exception, and the 're-fire
    * immediately' flag set to the given value.
    */
-  public JobExecutionException (final Throwable cause, final boolean refireImmediately)
+  public JobExecutionException (@Nullable final Throwable cause, final boolean refireImmediately)
   {
     this (null, cause, refireImmediately);
   }
@@ -83,7 +85,7 @@ public class JobExecutionException extends SchedulerException
   /**
    * Create a JobExcecutionException with the given message, and underlying exception.
    */
-  public JobExecutionException (final String msg, final Throwable cause)
+  public JobExecutionException (@Nullable final String msg, @Nullable final Throwable cause)
   {
     this (msg, cause, false);
   }
@@ -92,7 +94,7 @@ public class JobExecutionException extends SchedulerException
    * Create a JobExcecutionException with the given message and the 're-fire immediately' flag set
    * to the given value.
    */
-  public JobExecutionException (final String msg, final boolean refireImmediately)
+  public JobExecutionException (@Nullable final String msg, final boolean refireImmediately)
   {
     this (msg, null, refireImmediately);
   }
@@ -101,7 +103,9 @@ public class JobExecutionException extends SchedulerException
    * Create a JobExcecutionException with the given message, and underlying exception, and the
    * 're-fire immediately' flag set to the given value.
    */
-  public JobExecutionException (final String msg, final Throwable cause, final boolean refireImmediately)
+  public JobExecutionException (@Nullable final String msg,
+                                @Nullable final Throwable cause,
+                                final boolean refireImmediately)
   {
     super (msg, cause);
 

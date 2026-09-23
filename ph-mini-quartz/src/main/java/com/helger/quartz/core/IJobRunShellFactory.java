@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.core;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerConfigException;
 import com.helger.quartz.SchedulerException;
@@ -40,7 +42,7 @@ public interface IJobRunShellFactory
    * it.
    * </p>
    */
-  void initialize (IScheduler scheduler) throws SchedulerConfigException;
+  void initialize (@NonNull IScheduler scheduler) throws SchedulerConfigException;
 
   /**
    * <p>
@@ -48,5 +50,6 @@ public interface IJobRunShellFactory
    * instances of <code>{@link JobRunShell}</code>.
    * </p>
    */
-  JobRunShell createJobRunShell (TriggerFiredBundle bundle) throws SchedulerException;
+  @NonNull
+  JobRunShell createJobRunShell (@NonNull TriggerFiredBundle bundle) throws SchedulerException;
 }

@@ -22,6 +22,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ICalendar;
 import com.helger.quartz.IJob;
 import com.helger.quartz.IJobDetail;
@@ -54,8 +58,14 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * Create a JobExcecutionContext with the given context data.
    */
-  public JobExecutionContext (final IScheduler scheduler, final TriggerFiredBundle firedBundle, final IJob job)
+  public JobExecutionContext (@NonNull final IScheduler scheduler,
+                              @NonNull final TriggerFiredBundle firedBundle,
+                              @NonNull final IJob job)
   {
+    ValueEnforcer.notNull (scheduler, "Scheduler");
+    ValueEnforcer.notNull (firedBundle, "FiredBundle");
+    ValueEnforcer.notNull (job, "Job");
+
     m_aScheduler = scheduler;
     m_aTrigger = firedBundle.getTrigger ();
     m_aCalendar = firedBundle.getCalendar ();
@@ -80,6 +90,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @NonNull
   public IScheduler getScheduler ()
   {
     return m_aScheduler;
@@ -88,6 +99,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @NonNull
   public ITrigger getTrigger ()
   {
     return m_aTrigger;
@@ -96,6 +108,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @Nullable
   public ICalendar getCalendar ()
   {
     return m_aCalendar;
@@ -109,6 +122,7 @@ public class JobExecutionContext implements IJobExecutionContext
     return m_bRecovering;
   }
 
+  @NonNull
   public TriggerKey getRecoveringTriggerKey ()
   {
     if (isRecovering ())
@@ -135,6 +149,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @NonNull
   public JobDataMap getMergedJobDataMap ()
   {
     return m_aJobDataMap;
@@ -143,6 +158,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @NonNull
   public IJobDetail getJobDetail ()
   {
     return m_aJobDetail;
@@ -151,6 +167,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @NonNull
   public IJob getJobInstance ()
   {
     return m_aJob;
@@ -159,6 +176,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @Nullable
   public Date getFireTime ()
   {
     return m_aFireTime;
@@ -167,6 +185,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @Nullable
   public Date getScheduledFireTime ()
   {
     return m_aScheduledFireTime;
@@ -175,6 +194,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @Nullable
   public Date getPreviousFireTime ()
   {
     return m_aPrevFireTime;
@@ -183,6 +203,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @Nullable
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
@@ -213,6 +234,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @Nullable
   public Object getResult ()
   {
     return m_aResult;
@@ -221,7 +243,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
-  public void setResult (final Object result)
+  public void setResult (@Nullable final Object result)
   {
     m_aResult = result;
   }
@@ -246,15 +268,18 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
-  public void put (final Object key, final Object value)
+  public void put (@NonNull final Object key, @Nullable final Object value)
   {
+    ValueEnforcer.notNull (key, "Key");
+
     m_aData.put (key, value);
   }
 
   /**
    * {@inheritDoc}
    */
-  public Object get (final Object key)
+  @Nullable
+  public Object get (@Nullable final Object key)
   {
     return m_aData.get (key);
   }
@@ -262,6 +287,7 @@ public class JobExecutionContext implements IJobExecutionContext
   /**
    * {@inheritDoc}
    */
+  @Nullable
   public String getFireInstanceId ()
   {
     return ((IOperableTrigger) m_aTrigger).getFireInstanceId ();

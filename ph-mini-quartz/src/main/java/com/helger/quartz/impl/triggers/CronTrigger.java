@@ -145,22 +145,24 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
     m_aEndTime = endTime;
   }
 
+  @Nullable
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
   }
 
-  public void setNextFireTime (final Date nextFireTime)
+  public void setNextFireTime (@Nullable final Date nextFireTime)
   {
     m_aNextFireTime = nextFireTime;
   }
 
+  @Nullable
   public Date getPreviousFireTime ()
   {
     return m_aPreviousFireTime;
   }
 
-  public void setPreviousFireTime (final Date previousFireTime)
+  public void setPreviousFireTime (@Nullable final Date previousFireTime)
   {
     m_aPreviousFireTime = previousFireTime;
   }
@@ -203,6 +205,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * @param aAfterTime
    *        after time
    */
+  @Nullable
   public Date getFireTimeAfter (@Nullable final Date aAfterTime)
   {
     Date afterTime = aAfterTime;
@@ -237,6 +240,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * {@link ICalendar}
    * </p>
    */
+  @Nullable
   public Date getFinalFireTime ()
   {
     final Date resultTime;
@@ -260,7 +264,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   }
 
   @Override
-  protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
+  protected boolean validateMisfireInstruction (@Nullable final EMisfireInstruction misfireInstruction)
   {
     switch (misfireInstruction)
     {
@@ -287,7 +291,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * <li>The instruction will be interpreted as <code>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</code></li>
    * </ul>
    */
-  public void updateAfterMisfire (final ICalendar cal)
+  public void updateAfterMisfire (@Nullable final ICalendar cal)
   {
     EMisfireInstruction instr = getMisfireInstruction ();
     if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY)
@@ -331,7 +335,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    *        the date to compare
    * @see #willFireOn(Calendar, boolean)
    */
-  public boolean willFireOn (final Calendar test)
+  public boolean willFireOn (@NonNull final Calendar test)
   {
     return willFireOn (test, false);
   }
@@ -352,7 +356,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    *        represented by the given Calendar (hours, minutes and seconds will be ignored).
    * @see #willFireOn(Calendar)
    */
-  public boolean willFireOn (final Calendar aTest, final boolean dayOnly)
+  public boolean willFireOn (@NonNull final Calendar aTest, final boolean dayOnly)
   {
     final Calendar test = QCloneUtils.getClone (aTest);
     // don't compare millis.
@@ -405,7 +409,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    *      com.helger.quartz.JobExecutionException)
    */
   @Override
-  public void triggered (final ICalendar calendar)
+  public void triggered (@Nullable final ICalendar calendar)
   {
     m_aPreviousFireTime = m_aNextFireTime;
     m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
@@ -419,7 +423,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   /**
    * @see AbstractTrigger#updateWithNewCalendar(ICalendar, long)
    */
-  public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (@Nullable final ICalendar calendar, final long misfireThreshold)
   {
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
 
@@ -472,7 +476,8 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    *         first firing of the <code>Trigger</code>).
    */
   @Override
-  public Date computeFirstFireTime (final ICalendar calendar)
+  @Nullable
+  public Date computeFirstFireTime (@Nullable final ICalendar calendar)
   {
     m_aNextFireTime = getFireTimeAfter (new Date (getStartTime ().getTime () - 1000l));
 
@@ -484,6 +489,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
     return m_aNextFireTime;
   }
 
+  @Nullable
   public String getExpressionSummary ()
   {
     return m_aCronEx == null ? null : m_aCronEx.getExpressionSummary ();
@@ -496,6 +502,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * @see #getTriggerBuilder()
    */
   @Override
+  @NonNull
   public IScheduleBuilder <CronTrigger> getScheduleBuilder ()
   {
     final CronScheduleBuilder cb = CronScheduleBuilder.cronSchedule (getCronExpression ()).inTimeZone (getTimeZone ());
@@ -513,7 +520,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
   }
 
   @Nullable
-  protected Date getTimeAfter (final Date afterTime)
+  protected Date getTimeAfter (@NonNull final Date afterTime)
   {
     return m_aCronEx == null ? null : m_aCronEx.getTimeAfter (afterTime);
   }
@@ -523,7 +530,7 @@ public class CronTrigger extends AbstractTrigger <CronTrigger> implements ICronT
    * will fire.
    */
   @Nullable
-  protected Date getTimeBefore (final Date eTime)
+  protected Date getTimeBefore (@Nullable final Date eTime)
   {
     return m_aCronEx == null ? null : m_aCronEx.getTimeBefore (eTime);
   }

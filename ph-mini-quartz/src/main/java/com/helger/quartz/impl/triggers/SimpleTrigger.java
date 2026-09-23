@@ -66,7 +66,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   public SimpleTrigger (@NonNull final SimpleTrigger aOther)
   {
     super (aOther);
-    ValueEnforcer.notNull (aOther.m_aStartTime, "Other StartTime");
+    // Note: the start time may still be null, if it was never set
     m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
     m_aEndTime = QCloneUtils.getClone (aOther.m_aEndTime);
     m_aNextFireTime = QCloneUtils.getClone (aOther.m_aNextFireTime);
@@ -184,7 +184,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   }
 
   @Override
-  protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
+  protected boolean validateMisfireInstruction (@Nullable final EMisfireInstruction misfireInstruction)
   {
     return switch (misfireInstruction)
     {
@@ -214,7 +214,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * <code>MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT</code>.</li>
    * </ul>
    */
-  public void updateAfterMisfire (final ICalendar cal)
+  public void updateAfterMisfire (@Nullable final ICalendar cal)
   {
     EMisfireInstruction instr = getMisfireInstruction ();
     if (instr == EMisfireInstruction.MISFIRE_INSTRUCTION_SMART_POLICY)
@@ -356,7 +356,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    *      com.helger.quartz.JobExecutionException)
    */
   @Override
-  public void triggered (final ICalendar calendar)
+  public void triggered (@Nullable final ICalendar calendar)
   {
     m_nTimesTriggered++;
     m_aPreviousFireTime = m_aNextFireTime;
@@ -384,7 +384,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * @see com.helger.quartz.impl.triggers.AbstractTrigger#updateWithNewCalendar(com.helger.quartz.ICalendar,
    *      long)
    */
-  public void updateWithNewCalendar (final ICalendar calendar, final long misfireThreshold)
+  public void updateWithNewCalendar (@Nullable final ICalendar calendar, final long misfireThreshold)
   {
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
 
@@ -432,7 +432,8 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    *         first firing of the <code>Trigger</code>).
    */
   @Override
-  public Date computeFirstFireTime (final ICalendar calendar)
+  @Nullable
+  public Date computeFirstFireTime (@Nullable final ICalendar calendar)
   {
     m_aNextFireTime = getStartTime ();
 
@@ -468,6 +469,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * @see com.helger.quartz.TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger,
    *      ICalendar, Date, Date)
    */
+  @Nullable
   public Date getNextFireTime ()
   {
     return m_aNextFireTime;
@@ -477,6 +479,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * Returns the previous time at which the <code>SimpleTrigger</code> fired. If the trigger has not
    * yet fired, <code>null</code> will be returned.
    */
+  @Nullable
   public Date getPreviousFireTime ()
   {
     return m_aPreviousFireTime;
@@ -486,7 +489,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * Set the next time at which the <code>SimpleTrigger</code> should fire.<br>
    * <b>This method should not be invoked by client code.</b>
    */
-  public void setNextFireTime (final Date nextFireTime)
+  public void setNextFireTime (@Nullable final Date nextFireTime)
   {
     m_aNextFireTime = nextFireTime;
   }
@@ -495,7 +498,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * Set the previous time at which the <code>SimpleTrigger</code> fired.<br>
    * <b>This method should not be invoked by client code.</b>
    */
-  public void setPreviousFireTime (final Date previousFireTime)
+  public void setPreviousFireTime (@Nullable final Date previousFireTime)
   {
     m_aPreviousFireTime = previousFireTime;
   }
@@ -559,7 +562,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     return new Date (getStartTime ().getTime () + (numFires * m_nRepeatInterval));
   }
 
-  public int computeNumTimesFiredBetween (final Date start, final Date end)
+  public int computeNumTimesFiredBetween (@NonNull final Date start, @NonNull final Date end)
   {
     if (m_nRepeatInterval < 1)
       return 0;
@@ -635,6 +638,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * @see #getTriggerBuilder()
    */
   @Override
+  @NonNull
   public IScheduleBuilder <SimpleTrigger> getScheduleBuilder ()
   {
     final SimpleScheduleBuilder sb = SimpleScheduleBuilder.simpleSchedule ()
@@ -688,7 +692,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
                                       @NonNull final String jobName,
                                       @Nullable final String jobGroup,
                                       @NonNull final Date startTime,
-                                      final Date endTime,
+                                      @Nullable final Date endTime,
                                       final int repeatCount,
                                       final long repeatInterval)
   {

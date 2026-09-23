@@ -20,6 +20,10 @@ package com.helger.quartz;
 
 import java.util.TimeZone;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.annotation.Nonnegative;
+
 /**
  * A concrete <code>{@link ITrigger}</code> that is used to fire a
  * <code>{@link com.helger.quartz.IJobDetail}</code> based upon repeating calendar time intervals.
@@ -52,6 +56,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
   /**
    * @return the interval unit - the time unit on with the interval applies.
    */
+  @NonNull
   EIntervalUnit getRepeatIntervalUnit ();
 
   /**
@@ -61,6 +66,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * repeat.
    * </p>
    */
+  @Nonnegative
   int getRepeatInterval ();
 
   /**
@@ -68,6 +74,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * Get the number of times the <code>DateIntervalTrigger</code> has already fired.
    * </p>
    */
+  @Nonnegative
   int getTimesTriggered ();
 
   /**
@@ -78,6 +85,7 @@ public interface ICalendarIntervalTrigger extends ITrigger
    * If null, the system default TimeZone will be used.
    * </p>
    */
+  @NonNull
   TimeZone getTimeZone ();
 
   /**
@@ -120,5 +128,6 @@ public interface ICalendarIntervalTrigger extends ITrigger
    */
   boolean isSkipDayIfHourDoesNotExist ();
 
+  @NonNull
   TriggerBuilder <? extends ICalendarIntervalTrigger> getTriggerBuilder ();
 }

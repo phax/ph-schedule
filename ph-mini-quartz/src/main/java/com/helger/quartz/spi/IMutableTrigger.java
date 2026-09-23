@@ -101,7 +101,8 @@ public interface IMutableTrigger extends ITrigger
    * @see com.helger.quartz.ISimpleTrigger
    * @see com.helger.quartz.ICronTrigger
    */
-  void setMisfireInstruction (EMisfireInstruction eMisfireInstruction);
+  void setMisfireInstruction (@NonNull EMisfireInstruction eMisfireInstruction);
 
+  @NonNull
   IMutableTrigger getClone ();
 }

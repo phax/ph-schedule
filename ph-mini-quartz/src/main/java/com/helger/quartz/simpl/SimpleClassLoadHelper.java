@@ -21,6 +21,8 @@ package com.helger.quartz.simpl;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.CGlobal;
 import com.helger.quartz.spi.IClassLoadHelper;
 
@@ -49,7 +51,8 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
    * Return the class with the given name.
    */
   @Override
-  public Class <?> loadClass (final String name) throws ClassNotFoundException
+  @NonNull
+  public Class <?> loadClass (@NonNull final String name) throws ClassNotFoundException
   {
     return Class.forName (name);
   }
@@ -59,6 +62,7 @@ public class SimpleClassLoadHelper implements IClassLoadHelper
    *
    * @return the class-loader user be the helper.
    */
+  @NonNull
   public ClassLoader getClassLoader ()
   {
     // To follow the same behavior of Class.forName(...) I had to play

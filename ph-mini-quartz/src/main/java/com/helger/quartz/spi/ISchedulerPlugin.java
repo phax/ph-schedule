@@ -18,6 +18,8 @@
  */
 package com.helger.quartz.spi;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.SchedulerException;
 
@@ -69,7 +71,9 @@ public interface ISchedulerPlugin
    * @throws com.helger.quartz.SchedulerConfigException
    *         if there is an error initializing.
    */
-  void initialize (String name, IScheduler scheduler, IClassLoadHelper loadHelper) throws SchedulerException;
+  void initialize (@NonNull String name,
+                   @NonNull IScheduler scheduler,
+                   @NonNull IClassLoadHelper loadHelper) throws SchedulerException;
 
   /**
    * <p>

@@ -25,7 +25,9 @@ import java.util.SortedSet;
 import java.util.TimeZone;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.style.ReturnsImmutableObject;
 import com.helger.collection.commons.CommonsTreeSet;
 import com.helger.collection.commons.ICommonsSortedSet;
 import com.helger.quartz.ICalendar;
@@ -59,17 +61,17 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
     this (null, null);
   }
 
-  public HolidayCalendar (final ICalendar baseCalendar)
+  public HolidayCalendar (@Nullable final ICalendar baseCalendar)
   {
     this (baseCalendar, null);
   }
 
-  public HolidayCalendar (final TimeZone timeZone)
+  public HolidayCalendar (@Nullable final TimeZone timeZone)
   {
     this (null, timeZone);
   }
 
-  public HolidayCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
+  public HolidayCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
   }
@@ -122,7 +124,7 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
    * Add the given Date to the list of excluded days. Only the month, day and year of the returned
    * dates are significant.
    */
-  public void addExcludedDate (final Date excludedDate)
+  public void addExcludedDate (@NonNull final Date excludedDate)
   {
     final Date date = getStartOfDayJavaCalendar (excludedDate.getTime ()).getTime ();
     /*
@@ -131,7 +133,7 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
     m_aDates.add (date);
   }
 
-  public void removeExcludedDate (final Date dateToRemove)
+  public void removeExcludedDate (@NonNull final Date dateToRemove)
   {
     final Date date = getStartOfDayJavaCalendar (dateToRemove.getTime ()).getTime ();
     m_aDates.remove (date);
@@ -143,6 +145,8 @@ public class HolidayCalendar extends AbstractCalendar <HolidayCalendar>
    * and year of the returned dates are significant.
    * </p>
    */
+  @NonNull
+  @ReturnsImmutableObject
   public SortedSet <Date> getExcludedDates ()
   {
     return Collections.unmodifiableSortedSet (m_aDates);

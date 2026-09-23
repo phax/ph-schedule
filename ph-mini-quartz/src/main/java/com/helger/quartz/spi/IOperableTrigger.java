@@ -39,7 +39,7 @@ public interface IOperableTrigger extends IMutableTrigger
    *
    * @see #executionComplete(IJobExecutionContext, JobExecutionException)
    */
-  void triggered (ICalendar calendar);
+  void triggered (@Nullable ICalendar calendar);
 
   /**
    * This method should not be used by the Quartz client.<br>
@@ -52,7 +52,8 @@ public interface IOperableTrigger extends IMutableTrigger
    *         is also the same value <code>getNextFireTime()</code> will return (until after the
    *         first firing of the <code>Trigger</code>).
    */
-  Date computeFirstFireTime (ICalendar aCalendar);
+  @Nullable
+  Date computeFirstFireTime (@Nullable ICalendar aCalendar);
 
   /**
    * This method should not be used by the Quartz client.<br>
@@ -69,7 +70,7 @@ public interface IOperableTrigger extends IMutableTrigger
    * @return one of the <code>CompletedExecutionInstruction</code> constants.
    * @see #triggered(ICalendar)
    */
-  ITrigger.@NonNull ECompletedExecutionInstruction executionComplete (IJobExecutionContext aContext,
+  ITrigger.@NonNull ECompletedExecutionInstruction executionComplete (@NonNull IJobExecutionContext aContext,
                                                                       @Nullable JobExecutionException result);
 
   /**
@@ -78,7 +79,7 @@ public interface IOperableTrigger extends IMutableTrigger
    * The implementation should update the <code>Trigger</code>'s state based on the
    * MISFIRE_INSTRUCTION_XXX that was selected when the <code>Trigger</code> was created.
    */
-  void updateAfterMisfire (ICalendar cal);
+  void updateAfterMisfire (@Nullable ICalendar cal);
 
   /**
    * This method should not be used by the Quartz client.<br>
@@ -89,7 +90,7 @@ public interface IOperableTrigger extends IMutableTrigger
    *
    * @param cal
    */
-  void updateWithNewCalendar (ICalendar cal, long misfireThreshold);
+  void updateWithNewCalendar (@Nullable ICalendar cal, long misfireThreshold);
 
   /**
    * Validates whether the properties of the <code>JobDetail</code> are valid for submission into a
@@ -114,9 +115,10 @@ public interface IOperableTrigger extends IMutableTrigger
   @Nullable
   String getFireInstanceId ();
 
-  void setNextFireTime (Date nextFireTime);
+  void setNextFireTime (@Nullable Date nextFireTime);
 
-  void setPreviousFireTime (Date previousFireTime);
+  void setPreviousFireTime (@Nullable Date previousFireTime);
 
+  @NonNull
   IOperableTrigger getClone ();
 }

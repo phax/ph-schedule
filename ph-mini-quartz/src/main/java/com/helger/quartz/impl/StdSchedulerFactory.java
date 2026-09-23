@@ -32,10 +32,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.annotation.WillNotClose;
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.io.nonblocking.NonBlockingBufferedInputStream;
 import com.helger.base.rt.NonBlockingProperties;
 import com.helger.base.system.SystemProperties;
@@ -303,7 +305,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * @return this
    */
   @NonNull
-  public StdSchedulerFactory initialize (final String filename) throws SchedulerException
+  public StdSchedulerFactory initialize (@NonNull final String filename) throws SchedulerException
   {
     // short-circuit if already initialized
     if (m_aCfg != null)
@@ -386,7 +388,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * @return this
    */
   @NonNull
-  public StdSchedulerFactory initialize (final NonBlockingProperties props) throws SchedulerException
+  public StdSchedulerFactory initialize (@NonNull final NonBlockingProperties props) throws SchedulerException
   {
     if (m_sPropSrc == null)
       m_sPropSrc = "an externally provided properties instance.";
@@ -395,6 +397,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     return this;
   }
 
+  @NonNull
   private IScheduler _instantiate () throws SchedulerException
   {
     if (LOGGER.isDebugEnabled ())
@@ -946,8 +949,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
   }
 
-  private static void _shutdownFromInstantiateException (final IThreadPool tp,
-                                                         final QuartzScheduler qs,
+  private static void _shutdownFromInstantiateException (@Nullable final IThreadPool tp,
+                                                         @Nullable final QuartzScheduler qs,
                                                          final boolean tpInited,
                                                          final boolean qsInited)
   {
@@ -973,13 +976,13 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * @return Never <code>null</code>.
    */
   @NonNull
-  protected IScheduler instantiate (final QuartzSchedulerResources rsrcs, final QuartzScheduler qs)
+  protected IScheduler instantiate (@NonNull final QuartzSchedulerResources rsrcs, @NonNull final QuartzScheduler qs)
   {
     return new StdScheduler (qs);
   }
 
-  private void _setBeanProps (final Object obj,
-                              final NonBlockingProperties props) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IntrospectionException, SchedulerConfigException
+  private void _setBeanProps (@NonNull final Object obj,
+                              @NonNull final NonBlockingProperties props) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IntrospectionException, SchedulerConfigException
   {
     props.remove ("class");
 
@@ -992,7 +995,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
       final String c = name.substring (0, 1).toUpperCase (Locale.US);
       final String methName = "set" + c + name.substring (1);
 
-      final java.lang.reflect.Method setMeth = _getSetMethod (methName, propDescs);
+      final Method setMeth = _getSetMethod (methName, propDescs);
 
       try
       {
@@ -1063,11 +1066,13 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
   }
 
-  private static java.lang.reflect.Method _getSetMethod (final String name, final PropertyDescriptor [] props)
+  @Nullable
+  private static Method _getSetMethod (@NonNull final String name,
+                                                         @NonNull final PropertyDescriptor [] props)
   {
     for (final PropertyDescriptor prop : props)
     {
-      final java.lang.reflect.Method wMeth = prop.getWriteMethod ();
+      final Method wMeth = prop.getWriteMethod ();
 
       if (wMeth != null && wMeth.getName ().equals (name))
       {
@@ -1078,7 +1083,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
     return null;
   }
 
-  private Class <?> _loadClass (final String className) throws ClassNotFoundException, SchedulerConfigException
+  @NonNull
+  private Class <?> _loadClass (@NonNull final String className) throws ClassNotFoundException, SchedulerConfigException
   {
     try
     {
@@ -1095,6 +1101,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     }
   }
 
+  @NonNull
   private ClassLoader _findClassloader ()
   {
     // work-around set context loader for windows-service started jvms
@@ -1109,6 +1116,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
     return ret;
   }
 
+  @Nullable
   private String _getSchedulerName ()
   {
     return m_aCfg.getStringProperty (PROP_SCHED_INSTANCE_NAME, "MiniQuartzScheduler");
@@ -1123,6 +1131,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * (no-arg) <code>initialize()</code> method will be called by this method.
    * </p>
    */
+  @NonNull
   public IScheduler getScheduler () throws SchedulerException
   {
     if (m_aCfg == null)
@@ -1155,6 +1164,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
    *
    * @see #initialize()
    */
+  @NonNull
   public static IScheduler getDefaultScheduler () throws SchedulerException
   {
     final StdSchedulerFactory fact = new StdSchedulerFactory ();
@@ -1168,7 +1178,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * instantiated).
    * </p>
    */
-  public IScheduler getScheduler (final String schedName) throws SchedulerException
+  @Nullable
+  public IScheduler getScheduler (@Nullable final String schedName) throws SchedulerException
   {
     return SchedulerRepository.getInstance ().lookup (schedName);
   }
@@ -1178,6 +1189,8 @@ public class StdSchedulerFactory implements ISchedulerFactory
    * Returns a handle to all known Schedulers (made by any StdSchedulerFactory instance.).
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsCollection <IScheduler> getAllSchedulers () throws SchedulerException
   {
     return SchedulerRepository.getInstance ().lookupAll ();

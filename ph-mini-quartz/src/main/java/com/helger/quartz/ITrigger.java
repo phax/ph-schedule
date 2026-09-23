@@ -262,6 +262,7 @@ public interface ITrigger extends Comparable <ITrigger>
    *
    * @return The start. May be <code>null</code> depending on the implementation
    */
+  @Nullable
   Date getStartTime ();
 
   /**
@@ -288,19 +289,22 @@ public interface ITrigger extends Comparable <ITrigger>
    * @see TriggerUtils#computeFireTimesBetween(com.helger.quartz.spi.IOperableTrigger, ICalendar,
    *      Date, Date)
    */
+  @Nullable
   Date getNextFireTime ();
 
   /**
    * Returns the previous time at which the <code>Trigger</code> fired. If the trigger has not yet
    * fired, <code>null</code> will be returned.
    */
+  @Nullable
   Date getPreviousFireTime ();
 
   /**
    * Returns the next time at which the <code>Trigger</code> will fire, after the given time. If the
    * trigger will not fire after the given time, <code>null</code> will be returned.
    */
-  Date getFireTimeAfter (Date afterTime);
+  @Nullable
+  Date getFireTimeAfter (@Nullable Date afterTime);
 
   /**
    * Returns the last time at which the <code>Trigger</code> will fire, if the Trigger will repeat
@@ -309,6 +313,7 @@ public interface ITrigger extends Comparable <ITrigger>
    * Note that the return time *may* be in the past.
    * </p>
    */
+  @Nullable
   Date getFinalFireTime ();
 
   /**
@@ -323,6 +328,7 @@ public interface ITrigger extends Comparable <ITrigger>
    * @see ISimpleTrigger
    * @see ICronTrigger
    */
+  @NonNull
   EMisfireInstruction getMisfireInstruction ();
 
   /**
@@ -331,6 +337,7 @@ public interface ITrigger extends Comparable <ITrigger>
    *
    * @see #getScheduleBuilder()
    */
+  @NonNull
   TriggerBuilder <? extends ITrigger> getTriggerBuilder ();
 
   /**
@@ -339,6 +346,7 @@ public interface ITrigger extends Comparable <ITrigger>
    *
    * @see #getTriggerBuilder()
    */
+  @NonNull
   IScheduleBuilder <? extends IMutableTrigger> getScheduleBuilder ();
 
   /**
@@ -353,7 +361,7 @@ public interface ITrigger extends Comparable <ITrigger>
    * keys, or in other words, sorts them according to the natural (i.e. alphabetical) order of their
    * keys.
    */
-  int compareTo (ITrigger other);
+  int compareTo (@NonNull ITrigger other);
 
   @NonNull
   @ReturnsMutableCopy

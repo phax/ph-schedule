@@ -18,6 +18,11 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.annotation.Nonempty;
+
 /**
  * The interface to be implemented by classes that want to be informed when a
  * <code>{@link com.helger.quartz.IJobDetail}</code> executes. In general, applications that use a
@@ -38,6 +43,8 @@ public interface IJobListener
    * Get the name of the <code>JobListener</code>.
    * </p>
    */
+  @NonNull
+  @Nonempty
   String getName ();
 
   /**
@@ -54,7 +61,7 @@ public interface IJobListener
    * @param context
    * @see #jobExecutionVetoed(IJobExecutionContext)
    */
-  default void jobToBeExecuted (final IJobExecutionContext context)
+  default void jobToBeExecuted (@NonNull final IJobExecutionContext context)
   {}
 
   /**
@@ -68,7 +75,7 @@ public interface IJobListener
    * @param context
    * @see #jobToBeExecuted(IJobExecutionContext)
    */
-  default void jobExecutionVetoed (final IJobExecutionContext context)
+  default void jobExecutionVetoed (@NonNull final IJobExecutionContext context)
   {}
 
   /**
@@ -81,6 +88,7 @@ public interface IJobListener
    * @param context
    * @param jobException
    */
-  default void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
+  default void jobWasExecuted (@NonNull final IJobExecutionContext context,
+                               @Nullable final JobExecutionException jobException)
   {}
 }

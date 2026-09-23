@@ -22,8 +22,10 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.array.ArrayHelper;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.quartz.ICalendar;
 
 /**
@@ -59,17 +61,17 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
     this (null, null);
   }
 
-  public MonthlyCalendar (final ICalendar baseCalendar)
+  public MonthlyCalendar (@Nullable final ICalendar baseCalendar)
   {
     this (baseCalendar, null);
   }
 
-  public MonthlyCalendar (final TimeZone timeZone)
+  public MonthlyCalendar (@Nullable final TimeZone timeZone)
   {
     this (null, timeZone);
   }
 
-  public MonthlyCalendar (final ICalendar baseCalendar, final TimeZone timeZone)
+  public MonthlyCalendar (@Nullable final ICalendar baseCalendar, @Nullable final TimeZone timeZone)
   {
     super (baseCalendar, timeZone);
 
@@ -112,12 +114,9 @@ public class MonthlyCalendar extends AbstractCalendar <MonthlyCalendar>
    * 31. The 0 index element represents the first day of the month.
    * </p>
    */
-  public void setDaysExcluded (final boolean [] days)
+  public void setDaysExcluded (@NonNull final boolean [] days)
   {
-    if (days == null)
-    {
-      throw new IllegalArgumentException ("The days parameter cannot be null.");
-    }
+    ValueEnforcer.notNull (days, "Days");
 
     if (days.length < MAX_DAYS_IN_MONTH)
     {

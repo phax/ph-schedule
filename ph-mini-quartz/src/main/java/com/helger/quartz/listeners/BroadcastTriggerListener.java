@@ -19,7 +19,9 @@
 package com.helger.quartz.listeners;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.Nonempty;
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.collection.commons.CommonsArrayList;
@@ -53,9 +55,9 @@ public class BroadcastTriggerListener implements ITriggerListener
    * @param name
    *        the name of this instance
    */
-  public BroadcastTriggerListener (@NonNull final String name)
+  public BroadcastTriggerListener (@NonNull @Nonempty final String name)
   {
-    ValueEnforcer.notNull (name, "Name");
+    ValueEnforcer.notEmpty (name, "Name");
     m_sName = name;
   }
 
@@ -67,13 +69,15 @@ public class BroadcastTriggerListener implements ITriggerListener
    * @param listeners
    *        the initial List of TriggerListeners to broadcast to.
    */
-  public BroadcastTriggerListener (@NonNull final String name, final Iterable <? extends ITriggerListener> listeners)
+  public BroadcastTriggerListener (@NonNull @Nonempty final String name,
+                                   @NonNull final Iterable <? extends ITriggerListener> listeners)
   {
     this (name);
     m_aListeners.addAll (listeners);
   }
 
   @NonNull
+  @Nonempty
   public String getName ()
   {
     return m_sName;
@@ -85,7 +89,7 @@ public class BroadcastTriggerListener implements ITriggerListener
     m_aListeners.add (listener);
   }
 
-  public boolean removeListener (final ITriggerListener listener)
+  public boolean removeListener (@Nullable final ITriggerListener listener)
   {
     return m_aListeners.remove (listener);
   }
@@ -98,27 +102,27 @@ public class BroadcastTriggerListener implements ITriggerListener
   }
 
   @Override
-  public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
+  public void triggerFired (@NonNull final ITrigger trigger, @NonNull final IJobExecutionContext context)
   {
     m_aListeners.forEach (x -> x.triggerFired (trigger, context));
   }
 
   @Override
-  public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
+  public boolean vetoJobExecution (@NonNull final ITrigger trigger, @NonNull final IJobExecutionContext context)
   {
     return m_aListeners.containsAny (x -> x.vetoJobExecution (trigger, context));
   }
 
   @Override
-  public void triggerMisfired (final ITrigger trigger)
+  public void triggerMisfired (@NonNull final ITrigger trigger)
   {
     m_aListeners.forEach (x -> x.triggerMisfired (trigger));
   }
 
   @Override
-  public void triggerComplete (final ITrigger trigger,
-                               final IJobExecutionContext context,
-                               final ECompletedExecutionInstruction triggerInstructionCode)
+  public void triggerComplete (@NonNull final ITrigger trigger,
+                               @NonNull final IJobExecutionContext context,
+                               @NonNull final ECompletedExecutionInstruction triggerInstructionCode)
   {
     m_aListeners.forEach (x -> x.triggerComplete (trigger, context, triggerInstructionCode));
   }

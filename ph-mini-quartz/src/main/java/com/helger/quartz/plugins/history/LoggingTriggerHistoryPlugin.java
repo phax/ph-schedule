@@ -22,6 +22,8 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -228,6 +230,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    *
    * @return String
    */
+  @Nullable
   public String getTriggerCompleteMessage ()
   {
     return m_sTriggerCompleteMessage;
@@ -238,6 +241,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    *
    * @return String
    */
+  @Nullable
   public String getTriggerFiredMessage ()
   {
     return m_sTriggerFiredMessage;
@@ -248,6 +252,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    *
    * @return String
    */
+  @Nullable
   public String getTriggerMisfiredMessage ()
   {
     return m_sTriggerMisfiredMessage;
@@ -259,7 +264,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    * @param triggerCompleteMessage
    *        String in java.text.MessageFormat syntax.
    */
-  public void setTriggerCompleteMessage (final String triggerCompleteMessage)
+  public void setTriggerCompleteMessage (@Nullable final String triggerCompleteMessage)
   {
     m_sTriggerCompleteMessage = triggerCompleteMessage;
   }
@@ -270,7 +275,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    * @param triggerFiredMessage
    *        String in java.text.MessageFormat syntax.
    */
-  public void setTriggerFiredMessage (final String triggerFiredMessage)
+  public void setTriggerFiredMessage (@Nullable final String triggerFiredMessage)
   {
     m_sTriggerFiredMessage = triggerFiredMessage;
   }
@@ -281,7 +286,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    * @param triggerMisfiredMessage
    *        String in java.text.MessageFormat syntax.
    */
-  public void setTriggerMisfiredMessage (final String triggerMisfiredMessage)
+  public void setTriggerMisfiredMessage (@Nullable final String triggerMisfiredMessage)
   {
     m_sTriggerMisfiredMessage = triggerMisfiredMessage;
   }
@@ -295,9 +300,9 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
    * @throws SchedulerException
    *         if there is an error initializing.
    */
-  public void initialize (final String pname,
-                          final IScheduler scheduler,
-                          final IClassLoadHelper classLoadHelper) throws SchedulerException
+  public void initialize (@NonNull final String pname,
+                          @NonNull final IScheduler scheduler,
+                          @NonNull final IClassLoadHelper classLoadHelper) throws SchedulerException
   {
     m_sName = pname;
 
@@ -320,13 +325,14 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
     // nothing to do...
   }
 
+  @Nullable
   public String getName ()
   {
     return m_sName;
   }
 
   @Override
-  public void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
+  public void triggerFired (@NonNull final ITrigger trigger, @NonNull final IJobExecutionContext context)
   {
     final Object [] args = { trigger.getKey ().getName (),
                              trigger.getKey ().getGroup (),
@@ -340,7 +346,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
   }
 
   @Override
-  public void triggerMisfired (final ITrigger trigger)
+  public void triggerMisfired (@NonNull final ITrigger trigger)
   {
     final Object [] args = { trigger.getKey ().getName (),
                              trigger.getKey ().getGroup (),
@@ -353,9 +359,9 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
   }
 
   @Override
-  public void triggerComplete (final ITrigger trigger,
-                               final IJobExecutionContext context,
-                               final ECompletedExecutionInstruction triggerInstructionCode)
+  public void triggerComplete (@NonNull final ITrigger trigger,
+                               @NonNull final IJobExecutionContext context,
+                               @NonNull final ECompletedExecutionInstruction triggerInstructionCode)
   {
     String instrCode = "UNKNOWN";
     if (triggerInstructionCode == ECompletedExecutionInstruction.DELETE_TRIGGER)
@@ -397,7 +403,7 @@ public class LoggingTriggerHistoryPlugin implements ISchedulerPlugin, ITriggerLi
   }
 
   @Override
-  public boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
+  public boolean vetoJobExecution (@NonNull final ITrigger trigger, @NonNull final IJobExecutionContext context)
   {
     return false;
   }

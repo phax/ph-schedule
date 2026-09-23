@@ -215,12 +215,12 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @return The created trigger key for further usage. Never <code>null</code>.
    */
   @NonNull
-  public TriggerKey scheduleJob (@NonNull final String sJobName,
+  public TriggerKey scheduleJob (@NonNull @Nonempty final String sJobName,
                                  @NonNull final JDK8TriggerBuilder <? extends ITrigger> aTriggerBuilder,
                                  @NonNull final Class <? extends IJob> aJobClass,
                                  @Nullable final Map <String, ? extends Object> aJobData)
   {
-    ValueEnforcer.notNull (sJobName, "JobName");
+    ValueEnforcer.notEmpty (sJobName, "JobName");
     ValueEnforcer.notNull (aTriggerBuilder, "TriggerBuilder");
     ValueEnforcer.notNull (aJobClass, "JobClass");
 
@@ -247,7 +247,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
     }
     catch (final SchedulerException ex)
     {
-      throw new RuntimeException (ex);
+      throw new IllegalStateException ("Failed to schedule job '" + sJobName + "'", ex);
     }
   }
 
@@ -263,7 +263,7 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
    * @return The created trigger key for further usage. Never <code>null</code>.
    */
   @NonNull
-  public TriggerKey scheduleJobNowOnce (@NonNull final String sJobName,
+  public TriggerKey scheduleJobNowOnce (@NonNull @Nonempty final String sJobName,
                                         @NonNull final Class <? extends IJob> aJobClass,
                                         @Nullable final Map <String, ? extends Object> aJobData)
   {

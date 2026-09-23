@@ -18,6 +18,9 @@
  */
 package com.helger.quartz;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.annotation.Nonempty;
 import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 
 /**
@@ -37,6 +40,8 @@ public interface ITriggerListener
   /**
    * Get the name of the <code>TriggerListener</code>.
    */
+  @NonNull
+  @Nonempty
   String getName ();
 
   /**
@@ -54,7 +59,7 @@ public interface ITriggerListener
    *        The <code>JobExecutionContext</code> that will be passed to the
    *        <code>Job</code>'s<code>execute(xx)</code> method.
    */
-  default void triggerFired (final ITrigger trigger, final IJobExecutionContext context)
+  default void triggerFired (@NonNull final ITrigger trigger, @NonNull final IJobExecutionContext context)
   {}
 
   /**
@@ -74,7 +79,7 @@ public interface ITriggerListener
    *        The <code>JobExecutionContext</code> that will be passed to the
    *        <code>Job</code>'s<code>execute(xx)</code> method.
    */
-  default boolean vetoJobExecution (final ITrigger trigger, final IJobExecutionContext context)
+  default boolean vetoJobExecution (@NonNull final ITrigger trigger, @NonNull final IJobExecutionContext context)
   {
     return false;
   }
@@ -93,7 +98,7 @@ public interface ITriggerListener
    * @param trigger
    *        The <code>Trigger</code> that has misfired.
    */
-  default void triggerMisfired (final ITrigger trigger)
+  default void triggerMisfired (@NonNull final ITrigger trigger)
   {}
 
   /**
@@ -111,8 +116,8 @@ public interface ITriggerListener
    * @param triggerInstructionCode
    *        the result of the call on the <code>Trigger</code>'s<code>triggered(xx)</code> method.
    */
-  default void triggerComplete (final ITrigger trigger,
-                                final IJobExecutionContext context,
-                                final ECompletedExecutionInstruction triggerInstructionCode)
+  default void triggerComplete (@NonNull final ITrigger trigger,
+                                @NonNull final IJobExecutionContext context,
+                                @NonNull final ECompletedExecutionInstruction triggerInstructionCode)
   {}
 }

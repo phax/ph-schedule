@@ -22,9 +22,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.annotation.Nonempty;
+import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.collection.commons.ICommonsCollection;
 import com.helger.quartz.IScheduler;
 import com.helger.quartz.ISchedulerFactory;
@@ -154,7 +157,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * @throws SchedulerException
    *         if initialization failed
    */
-  public void createScheduler (final IThreadPool threadPool, final IJobStore jobStore) throws SchedulerException
+  public void createScheduler (@NonNull final IThreadPool threadPool,
+                               @NonNull final IJobStore jobStore) throws SchedulerException
   {
     createScheduler (DEFAULT_SCHEDULER_NAME, DEFAULT_INSTANCE_ID, threadPool, jobStore);
   }
@@ -176,10 +180,10 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * @throws SchedulerException
    *         if initialization failed
    */
-  public void createScheduler (final String schedulerName,
-                               final String schedulerInstanceId,
-                               final IThreadPool threadPool,
-                               final IJobStore jobStore) throws SchedulerException
+  public void createScheduler (@NonNull @Nonempty final String schedulerName,
+                               @NonNull @Nonempty final String schedulerInstanceId,
+                               @NonNull final IThreadPool threadPool,
+                               @NonNull final IJobStore jobStore) throws SchedulerException
   {
     createScheduler (schedulerName, schedulerInstanceId, threadPool, jobStore, -1);
   }
@@ -201,10 +205,10 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * @throws SchedulerException
    *         if initialization failed
    */
-  public void createScheduler (final String schedulerName,
-                               final String schedulerInstanceId,
-                               final IThreadPool threadPool,
-                               final IJobStore jobStore,
+  public void createScheduler (@NonNull @Nonempty final String schedulerName,
+                               @NonNull @Nonempty final String schedulerInstanceId,
+                               @NonNull final IThreadPool threadPool,
+                               @NonNull final IJobStore jobStore,
                                final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
@@ -237,11 +241,11 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * @throws SchedulerException
    *         if initialization failed
    */
-  public void createScheduler (final String schedulerName,
-                               final String schedulerInstanceId,
-                               final IThreadPool threadPool,
-                               final IJobStore jobStore,
-                               final Map <String, ISchedulerPlugin> schedulerPluginMap,
+  public void createScheduler (@NonNull @Nonempty final String schedulerName,
+                               @NonNull @Nonempty final String schedulerInstanceId,
+                               @NonNull final IThreadPool threadPool,
+                               @NonNull final IJobStore jobStore,
+                               @Nullable final Map <String, ISchedulerPlugin> schedulerPluginMap,
                                final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
@@ -277,12 +281,12 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * @throws SchedulerException
    *         if initialization failed
    */
-  public void createScheduler (final String schedulerName,
-                               final String schedulerInstanceId,
-                               final IThreadPool threadPool,
-                               final IThreadExecutor threadExecutor,
-                               final IJobStore jobStore,
-                               final Map <String, ISchedulerPlugin> schedulerPluginMap,
+  public void createScheduler (@NonNull @Nonempty final String schedulerName,
+                               @NonNull @Nonempty final String schedulerInstanceId,
+                               @NonNull final IThreadPool threadPool,
+                               @NonNull final IThreadExecutor threadExecutor,
+                               @NonNull final IJobStore jobStore,
+                               @Nullable final Map <String, ISchedulerPlugin> schedulerPluginMap,
                                final long idleWaitTime) throws SchedulerException
   {
     createScheduler (schedulerName,
@@ -324,12 +328,12 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * @throws SchedulerException
    *         if initialization failed
    */
-  public void createScheduler (final String schedulerName,
-                               final String schedulerInstanceId,
-                               final IThreadPool threadPool,
-                               final IThreadExecutor threadExecutor,
-                               final IJobStore jobStore,
-                               final Map <String, ISchedulerPlugin> schedulerPluginMap,
+  public void createScheduler (@NonNull @Nonempty final String schedulerName,
+                               @NonNull @Nonempty final String schedulerInstanceId,
+                               @NonNull final IThreadPool threadPool,
+                               @NonNull final IThreadExecutor threadExecutor,
+                               @NonNull final IJobStore jobStore,
+                               @Nullable final Map <String, ISchedulerPlugin> schedulerPluginMap,
                                final long idleWaitTime,
                                final int maxBatchSize,
                                final long batchTimeWindow) throws SchedulerException
@@ -411,6 +415,7 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * you must call createRemoteScheduler or createScheduler methods before calling getScheduler()
    * </p>
    */
+  @NonNull
   public IScheduler getScheduler () throws SchedulerException
   {
     if (!m_bInitialized)
@@ -424,7 +429,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * Returns a handle to the Scheduler with the given name, if it exists.
    * </p>
    */
-  public IScheduler getScheduler (final String schedName) throws SchedulerException
+  @Nullable
+  public IScheduler getScheduler (@Nullable final String schedName) throws SchedulerException
   {
     final SchedulerRepository schedRep = SchedulerRepository.getInstance ();
 
@@ -436,6 +442,8 @@ public class DirectSchedulerFactory implements ISchedulerFactory
    * Returns a handle to all known Schedulers (made by any StdSchedulerFactory instance.).
    * </p>
    */
+  @NonNull
+  @ReturnsMutableCopy
   public ICommonsCollection <IScheduler> getAllSchedulers () throws SchedulerException
   {
     return SchedulerRepository.getInstance ().lookupAll ();

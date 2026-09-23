@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.jspecify.annotations.NonNull;
 
+import com.helger.annotation.Nonempty;
 import com.helger.base.CGlobal;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
@@ -172,9 +173,9 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
   @NonNull
   public DailyTimeIntervalScheduleBuilder withInterval (final int timeInterval, @NonNull final EIntervalUnit unit)
   {
-    if (unit == null ||
-        !(unit.equals (EIntervalUnit.SECOND) || unit.equals (EIntervalUnit.MINUTE) || unit.equals (EIntervalUnit.HOUR)))
-      throw new IllegalArgumentException ("Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
+    ValueEnforcer.notNull (unit, "IntervalUnit");
+    ValueEnforcer.isTrue (unit == EIntervalUnit.SECOND || unit == EIntervalUnit.MINUTE || unit == EIntervalUnit.HOUR,
+                          "Invalid repeat IntervalUnit (must be SECOND, MINUTE or HOUR).");
     _validateInterval (timeInterval);
     m_nInterval = timeInterval;
     m_eIntervalUnit = unit;
@@ -236,7 +237,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @NonNull
-  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final Set <DayOfWeek> onDaysOfWeek)
+  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (@NonNull @Nonempty final Set <DayOfWeek> onDaysOfWeek)
   {
     ValueEnforcer.notEmpty (onDaysOfWeek, "OnDaysOfWeek");
 
@@ -253,7 +254,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @NonNull
-  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (final DayOfWeek... onDaysOfWeek)
+  public DailyTimeIntervalScheduleBuilder onDaysOfTheWeek (@NonNull @Nonempty final DayOfWeek... onDaysOfWeek)
   {
     final EnumSet <DayOfWeek> aSet = EnumSet.noneOf (DayOfWeek.class);
     Collections.addAll (aSet, onDaysOfWeek);
@@ -302,10 +303,9 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @NonNull
-  public DailyTimeIntervalScheduleBuilder startingDailyAt (final LocalTime timeOfDay)
+  public DailyTimeIntervalScheduleBuilder startingDailyAt (@NonNull final LocalTime timeOfDay)
   {
-    if (timeOfDay == null)
-      throw new IllegalArgumentException ("Start time of day cannot be null!");
+    ValueEnforcer.notNull (timeOfDay, "TimeOfDay");
 
     m_aStartTimeOfDay = timeOfDay;
     return this;
@@ -317,7 +317,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
    * @return the updated DailyTimeIntervalScheduleBuilder
    */
   @NonNull
-  public DailyTimeIntervalScheduleBuilder endingDailyAt (final LocalTime timeOfDay)
+  public DailyTimeIntervalScheduleBuilder endingDailyAt (@NonNull final LocalTime timeOfDay)
   {
     m_aEndTimeOfDay = timeOfDay;
     return this;
@@ -335,7 +335,7 @@ public class DailyTimeIntervalScheduleBuilder implements IScheduleBuilder <Daily
     ValueEnforcer.isGT0 (count, "Count");
 
     if (m_aStartTimeOfDay == null)
-      throw new IllegalArgumentException ("You must set the startDailyAt() before calling this endingDailyAfterCount()!");
+      throw new IllegalStateException ("You must set the startDailyAt() before calling this endingDailyAfterCount()!");
 
     final Date today = new Date ();
     final Date startTimeOfDayDate = CQuartz.onDate (m_aStartTimeOfDay, today);
