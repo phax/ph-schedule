@@ -31,7 +31,7 @@ This library is an in-process scheduler. Three points are worth knowing when int
 
 # News and noteworthy
 
-v6.2.0 - work in progress
+v6.2.0 - 2026-09-23
 * Added the new classes `JobExecutionError`, `JobExecutionErrorRegistry` and `ErrorHistoryJobListener` in package `com.helger.schedule.quartz.listener`. The listener remembers the most recent failed job executions per job, so that the reason of a failure can be inspected without consulting the log file. `GlobalQuartzScheduler` registers it by default, next to the `StatisticsJobListener`.
   At most `JobExecutionErrorRegistry.getMaxErrorsPerJob ()` (default 5) errors are kept per job; `JobExecutionErrorRegistry.setMaxErrorsPerJob (0)` disables the collection entirely. The causing `Throwable` is deliberately not retained - class name, message and stack trace are extracted eagerly, so no reference graph is kept alive
 * `StatisticsJobListener` now additionally collects the runtime of every finished job execution in a timer statistics handler, providing minimum, average and maximum runtime per job class
