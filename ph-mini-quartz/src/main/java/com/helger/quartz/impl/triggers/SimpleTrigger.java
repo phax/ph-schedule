@@ -23,7 +23,10 @@ import java.util.Date;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.helger.annotation.CheckForSigned;
 import com.helger.annotation.style.ReturnsMutableCopy;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.datetime.helper.PDTFactory;
@@ -50,6 +53,8 @@ import com.helger.quartz.SimpleScheduleBuilder;
  */
 public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements ISimpleTrigger
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (SimpleTrigger.class);
+
   private Date m_aStartTime;
   private Date m_aEndTime;
   private Date m_aNextFireTime;
@@ -61,6 +66,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   public SimpleTrigger (@NonNull final SimpleTrigger aOther)
   {
     super (aOther);
+    ValueEnforcer.notNull (aOther.m_aStartTime, "Other StartTime");
     m_aStartTime = QCloneUtils.getClone (aOther.m_aStartTime);
     m_aEndTime = QCloneUtils.getClone (aOther.m_aEndTime);
     m_aNextFireTime = QCloneUtils.getClone (aOther.m_aNextFireTime);
@@ -101,8 +107,8 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
 
   public final void setEndTime (@Nullable final Date endTime)
   {
-    final Date sTime = getStartTime ();
-    if (sTime != null && endTime != null && sTime.after (endTime))
+    final Date startTime = getStartTime ();
+    if (startTime != null && endTime != null && startTime.after (endTime))
       throw new IllegalArgumentException ("End time cannot be before start time");
 
     m_aEndTime = endTime;
@@ -134,6 +140,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     m_nRepeatCount = repeatCount;
   }
 
+  @CheckForSigned
   public long getRepeatInterval ()
   {
     return m_nRepeatInterval;
@@ -151,9 +158,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   public void setRepeatInterval (final long repeatInterval)
   {
     if (repeatInterval < 0)
-    {
       throw new IllegalArgumentException ("Repeat interval must be >= 0");
-    }
 
     m_nRepeatInterval = repeatInterval;
   }
@@ -181,19 +186,11 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
   @Override
   protected boolean validateMisfireInstruction (final EMisfireInstruction misfireInstruction)
   {
-    switch (misfireInstruction)
+    return switch (misfireInstruction)
     {
-      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
-      case MISFIRE_INSTRUCTION_SMART_POLICY:
-      case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
-      case MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT:
-      case MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT:
-      case MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT:
-      case MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT:
-        return true;
-      default:
-        return false;
-    }
+      case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY, MISFIRE_INSTRUCTION_SMART_POLICY, MISFIRE_INSTRUCTION_FIRE_ONCE_NOW, MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT, MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT, MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT, MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT -> true;
+      default -> false;
+    };
   }
 
   /**
@@ -345,6 +342,8 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
         }
         break;
       }
+      default:
+        LOGGER.error ("Unsupported misfire instructions: " + instr);
     }
   }
 
@@ -390,16 +389,12 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     m_aNextFireTime = getFireTimeAfter (m_aPreviousFireTime);
 
     if (m_aNextFireTime == null || calendar == null)
-    {
       return;
-    }
 
     final Date now = new Date ();
     while (m_aNextFireTime != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
-
       m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
-
       if (m_aNextFireTime == null)
         break;
 
@@ -444,7 +439,6 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
     while (m_aNextFireTime != null && calendar != null && !calendar.isTimeIncluded (m_aNextFireTime.getTime ()))
     {
       m_aNextFireTime = getFireTimeAfter (m_aNextFireTime);
-
       if (m_aNextFireTime == null)
         break;
 
@@ -452,9 +446,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
       final Calendar c = PDTFactory.createCalendar ();
       c.setTime (m_aNextFireTime);
       if (c.get (Calendar.YEAR) > CQuartz.MAX_YEAR)
-      {
         return null;
-      }
     }
 
     return m_aNextFireTime;
@@ -517,6 +509,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * @param aAfterTime
    *        After time. May be <code>null</code>
    */
+  @Nullable
   public Date getFireTimeAfter (@Nullable final Date aAfterTime)
   {
     if ((m_nTimesTriggered > m_nRepeatCount) && (m_nRepeatCount != REPEAT_INDEFINITELY))
@@ -531,7 +524,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
 
     final long startMillis = getStartTime ().getTime ();
     final long afterMillis = afterTime.getTime ();
-    final long endMillis = (getEndTime () == null) ? Long.MAX_VALUE : getEndTime ().getTime ();
+    final long endMillis = getEndTime () == null ? Long.MAX_VALUE : getEndTime ().getTime ();
 
     if (endMillis <= afterMillis)
       return null;
@@ -556,27 +549,22 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * If the trigger will not fire before the given time, <code>null</code> will be returned.
    * </p>
    */
-  public Date getFireTimeBefore (final Date end)
+  @Nullable
+  public Date getFireTimeBefore (@NonNull final Date end)
   {
     if (end.getTime () < getStartTime ().getTime ())
-    {
       return null;
-    }
 
     final int numFires = computeNumTimesFiredBetween (getStartTime (), end);
-
     return new Date (getStartTime ().getTime () + (numFires * m_nRepeatInterval));
   }
 
   public int computeNumTimesFiredBetween (final Date start, final Date end)
   {
     if (m_nRepeatInterval < 1)
-    {
       return 0;
-    }
 
     final long time = end.getTime () - start.getTime ();
-
     return (int) (time / m_nRepeatInterval);
   }
 
@@ -589,6 +577,7 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
    * Note that the return time may be in the past.
    * </p>
    */
+  @Nullable
   public Date getFinalFireTime ()
   {
     if (m_nRepeatCount == 0)
@@ -698,11 +687,15 @@ public class SimpleTrigger extends AbstractTrigger <SimpleTrigger> implements IS
                                       @Nullable final String group,
                                       @NonNull final String jobName,
                                       @Nullable final String jobGroup,
-                                      final Date startTime,
+                                      @NonNull final Date startTime,
                                       final Date endTime,
                                       final int repeatCount,
                                       final long repeatInterval)
   {
+    ValueEnforcer.notNull (name, "Name");
+    ValueEnforcer.notNull (jobName, "JobName");
+    ValueEnforcer.notNull (startTime, "StartTime");
+
     final SimpleTrigger ret = new SimpleTrigger ();
     ret.setName (name);
     ret.setGroup (group);
