@@ -31,34 +31,52 @@ This library is an in-process scheduler. Three points are worth knowing when int
 
 # News and noteworthy
 
-v6.2.1 - work in progress
-* Fixed that a job with `@DisallowConcurrentExecution` could stay marked as blocked in the job store forever. `JobRunShell.run ()` informed the job store about the end of an execution on the regular code path only, so an `Error` thrown by the job - or a job listener that failed while handling the end of the execution - left the job blocked. Its triggers stayed in state `BLOCKED`, were never acquired again, were ignored by the misfire handling and could not be resumed either, so the job silently stopped running until the next restart. The job store is now informed from a `finally` block in any case
+v6.2.1 - 2026-09-28
+* Fixed that a job with `@DisallowConcurrentExecution` could stay marked as blocked in the job store forever.
+  `JobRunShell.run ()` informed the job store about the end of an execution on the regular code path only, so an `Error` thrown by the job - or a job listener that failed while handling the end of the execution - left the job blocked.
+   Its triggers stayed in state `BLOCKED`, were never acquired again, were ignored by the misfire handling and could not be resumed either, so the job silently stopped running until the next restart.
+   The job store is now informed from a `finally` block in any case
 * `JobRunShell.run ()` now catches `Throwable` instead of `Exception` around the job execution, so that an `Error` - like the `OutOfMemoryError` of a job that ran out of heap - is turned into a regular failed execution and is reported to the job listeners like any other failure
-* `JobRunShell.initialize (...)` now catches `Throwable` instead of `Exception` as well. The typical failure of instantiating a job class is a `NoClassDefFoundError`, which is an `Error` and was therefore not caught at all, even though the code comment claimed otherwise
-* Added the new method `resetTriggerFromErrorState (TriggerKey)`, ported from the official Quartz project. A trigger that ended up in state `ETriggerState.ERROR` - which is what happens if the job class of a trigger cannot be instantiated - was never fired again, and neither pausing nor resuming it had any effect, so an application restart was the only way to get it going again. The new method moves such a trigger back to the waiting state, or to the paused state if its trigger group is paused. It is a no-op for a trigger that is not in the ERROR state.
+* `JobRunShell.initialize (...)` now catches `Throwable` instead of `Exception` as well.
+  The typical failure of instantiating a job class is a `NoClassDefFoundError`, which is an `Error` and was therefore not caught at all, even though the code comment claimed otherwise
+* Added the new method `resetTriggerFromErrorState (TriggerKey)`, ported from the official Quartz project.
+  A trigger that ended up in state `ETriggerState.ERROR` - which is what happens if the job class of a trigger cannot be instantiated - was never fired again, and neither pausing nor resuming it had any effect, so an application restart was the only way to get it going again.
+  The new method moves such a trigger back to the waiting state, or to the paused state if its trigger group is paused.
+  It is a no-op for a trigger that is not in the ERROR state.
   `GlobalQuartzScheduler.resetTriggerFromErrorState (TriggerKey)` is the convenience wrapper for it, next to `pauseJob (...)` and `resumeJob (...)`
-* **Potentially breaking**: the new method `resetTriggerFromErrorState (TriggerKey)` was added to the interfaces `IJobStore`, `IScheduler` and `IQuartzScheduler`. Custom implementations of these interfaces need to provide it - the shipped implementations `RAMJobStore`, `BaseJobStore`, `QuartzScheduler` and `StdScheduler` already do
+* **Potentially breaking**: the new method `resetTriggerFromErrorState (TriggerKey)` was added to the interfaces `IJobStore`, `IScheduler` and `IQuartzScheduler`.
+  Custom implementations of these interfaces need to provide it - the shipped implementations `RAMJobStore`, `BaseJobStore`, `QuartzScheduler` and `StdScheduler` already do
 
 v6.2.0 - 2026-09-23
-* Added the new classes `JobExecutionError`, `JobExecutionErrorRegistry` and `ErrorHistoryJobListener` in package `com.helger.schedule.quartz.listener`. The listener remembers the most recent failed job executions per job, so that the reason of a failure can be inspected without consulting the log file. `GlobalQuartzScheduler` registers it by default, next to the `StatisticsJobListener`.
-  At most `JobExecutionErrorRegistry.getMaxErrorsPerJob ()` (default 5) errors are kept per job; `JobExecutionErrorRegistry.setMaxErrorsPerJob (0)` disables the collection entirely. The causing `Throwable` is deliberately not retained - class name, message and stack trace are extracted eagerly, so no reference graph is kept alive
+* Added the new classes `JobExecutionError`, `JobExecutionErrorRegistry` and `ErrorHistoryJobListener` in package `com.helger.schedule.quartz.listener`. The listener remembers the most recent failed job executions per job, so that the reason of a failure can be inspected without consulting the log file.
+  `GlobalQuartzScheduler` registers it by default, next to the `StatisticsJobListener`.
+  At most `JobExecutionErrorRegistry.getMaxErrorsPerJob ()` (default 5) errors are kept per job; `JobExecutionErrorRegistry.setMaxErrorsPerJob (0)` disables the collection entirely.
+  The causing `Throwable` is deliberately not retained - class name, message and stack trace are extracted eagerly, so no reference graph is kept alive
 * `StatisticsJobListener` now additionally collects the runtime of every finished job execution in a timer statistics handler, providing minimum, average and maximum runtime per job class
 * Added the public constants `StatisticsJobListener.STATS_PREFIX`, `STATS_SUFFIX_EXEC`, `STATS_SUFFIX_ERROR`, `STATS_SUFFIX_VETOED` and `STATS_SUFFIX_TIME` as well as the new static method `StatisticsJobListener.getStatisticsName (Class)`, so that the collected statistics can be read back without duplicating the name building
-* Added the new enum constant `ESchedulerState.NOT_STARTED` for a scheduler that exists but was never started. Quartz reports standby mode for that state as well, so previously it was indistinguishable from an explicit standby
-* **Potentially breaking**: `QuartzSchedulerHelper.getSchedulerState ()` now returns `ESchedulerState.NOT_STARTED` instead of `ESchedulerState.STANDBY` for a scheduler that was never started. It also evaluates `isShutdown ()` first and no longer throws an `IllegalStateException` if no state matches
+* Added the new enum constant `ESchedulerState.NOT_STARTED` for a scheduler that exists but was never started.
+  Quartz reports standby mode for that state as well, so previously it was indistinguishable from an explicit standby
+* **Potentially breaking**: `QuartzSchedulerHelper.getSchedulerState ()` now returns `ESchedulerState.NOT_STARTED` instead of `ESchedulerState.STANDBY` for a scheduler that was never started.
+  It also evaluates `isShutdown ()` first and no longer throws an `IllegalStateException` if no state matches
 * Added `GlobalQuartzScheduler.removeJobListener (String)`, `getAllJobListeners ()` and `getJobListenerOfName (String)`, as previously job listeners could only be added
 * Added the JSpecify annotations `@NonNull` and `@Nullable` as well as `@Nonempty`, `@Nonnegative`, `@ReturnsMutableCopy`, `@ReturnsMutableObject` and `@ReturnsImmutableObject` to the whole API of `ph-mini-quartz` and `ph-schedule`
-* Replaced the manual `null`, empty and range checks with `ValueEnforcer` calls throughout both modules. Note that `ValueEnforcer.notNull` throws a `NullPointerException` where previously an `IllegalArgumentException` was thrown
+* Replaced the manual `null`, empty and range checks with `ValueEnforcer` calls throughout both modules.
+  Note that `ValueEnforcer.notNull` throws a `NullPointerException` where previously an `IllegalArgumentException` was thrown
 * **Potentially breaking**: `CronScheduleBuilder.cronSchedule (String)` now throws an `IllegalArgumentException` instead of a `RuntimeException` for an invalid cron expression
 * **Potentially breaking**: `DailyTimeIntervalScheduleBuilder.endingDailyAfterCount (int)` now throws an `IllegalStateException` instead of an `IllegalArgumentException` if `startingDailyAt` was not called before
 * **Potentially breaking**: `GlobalQuartzScheduler.scheduleJob (...)` now throws an `IllegalStateException` instead of a `RuntimeException` if the job could not be scheduled
 * `IListenerManager.addTriggerListener (ITriggerListener, IMatcher)` is now declared `@NonNull` for the matcher, matching what the implementation always enforced
 * Fixed `SimpleTrigger.getClone ()` throwing a `NullPointerException` if no start time was set
 * All `ToStringGenerator.append` field names now start with an uppercase character
-* Added `JobExecutionException.setUnscheduleFiringTrigger (boolean)` and `setUnscheduleAllTriggers (boolean)`. The backing fields were `final false` with no way to set them, so `unscheduleFiringTrigger ()` and `unscheduleAllTriggers ()` always returned `false` and the resulting `SET_TRIGGER_COMPLETE` / `SET_ALL_JOB_TRIGGERS_COMPLETE` instructions in `AbstractTrigger.executionComplete` were unreachable
-* Implemented `CronExpression.getTimeBefore (Date)` (ported from Quartz 2.5.2, binary search over `getTimeAfter`); it previously always returned `null`. As a result `CronTrigger.getFinalFireTime ()` now returns the correct value if an end time is set. `CronExpression.getFinalFireTime ()` remains unimplemented - upstream Quartz has not solved QUARTZ-423 either
-* `SimpleClassLoadHelper.getClassLoader ()` no longer tries to reflectively call the JVM internal `ClassLoader.getCallerClassLoader`. That method was removed from the JDK years ago, so the lookup always failed and the class-loader of this class was used anyway
-* Added `QuartzScheduler.removeInternalTriggerListener (String)` and `notifySchedulerListenersScheduled (ITrigger)`. The previous names `removeinternalTriggerListener` and `notifySchedulerListenersSchduled` contained typos and are deprecated for removal
+* Added `JobExecutionException.setUnscheduleFiringTrigger (boolean)` and `setUnscheduleAllTriggers (boolean)`.
+  The backing fields were `final false` with no way to set them, so `unscheduleFiringTrigger ()` and `unscheduleAllTriggers ()` always returned `false` and the resulting `SET_TRIGGER_COMPLETE` / `SET_ALL_JOB_TRIGGERS_COMPLETE` instructions in `AbstractTrigger.executionComplete` were unreachable
+* Implemented `CronExpression.getTimeBefore (Date)` (ported from Quartz 2.5.2, binary search over `getTimeAfter`); it previously always returned `null`.
+  As a result `CronTrigger.getFinalFireTime ()` now returns the correct value if an end time is set.
+  `CronExpression.getFinalFireTime ()` remains unimplemented - upstream Quartz has not solved QUARTZ-423 either
+* `SimpleClassLoadHelper.getClassLoader ()` no longer tries to reflectively call the JVM internal `ClassLoader.getCallerClassLoader`.
+  That method was removed from the JDK years ago, so the lookup always failed and the class-loader of this class was used anyway
+* Added `QuartzScheduler.removeInternalTriggerListener (String)` and `notifySchedulerListenersScheduled (ITrigger)`.
+  The previous names `removeinternalTriggerListener` and `notifySchedulerListenersSchduled` contained typos and are deprecated for removal
 * Renamed the private fields `QuartzServer.sched`, `QuartzScheduler.holdToPreventGC`, `RAMJobStore.ttc` and `SchedulerMetaData.m_sSchedClass` to follow the naming conventions
 
 v6.1.1 - 2026-05-18
@@ -69,7 +87,8 @@ v6.1.1 - 2026-05-18
 * `SimpleThreadPool.WorkerThread` now catches `Throwable` while running a job, so a worker thrown out by an `Error` is no longer leaked out of the pool
 * `QuartzSchedulerThread` no longer re-asserts the interrupt flag inside its three inner `wait()` catches; the previous pattern caused a 100% CPU busy spin if the scheduler thread was externally interrupted, because each subsequent `wait()` re-threw `InterruptedException` immediately
 * `QuartzSchedulerThread`'s outer `Throwable` catch now preserves the interrupt flag if it ever sees an `InterruptedException` (defensive — all known `wait()` sites catch it locally)
-* `PropertySettingJobFactory` now supports an opt-in allow-list of property names via `setAllowedProperties(Collection)` / `addAllowedProperty(String)`. When set, only listed keys in the merged `JobDataMap` are eligible for setter invocation; non-listed keys are skipped (or warned/thrown about, depending on the existing flags). Default behavior is unchanged.
+* `PropertySettingJobFactory` now supports an opt-in allow-list of property names via `setAllowedProperties(Collection)` / `addAllowedProperty(String)`. When set, only listed keys in the merged `JobDataMap` are eligible for setter invocation; non-listed keys are skipped (or warned/thrown about, depending on the existing flags).
+  Default behavior is unchanged.
 
 v6.1.0 - 2025-11-16
 * Updated to ph-commons 12.1.0
