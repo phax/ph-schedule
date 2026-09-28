@@ -1380,6 +1380,23 @@ public class QuartzScheduler implements IQuartzScheduler
 
   /**
    * <p>
+   * Reset the current state of the identified <code>{@link ITrigger}</code> from
+   * {@link ETriggerState#ERROR} to {@link ETriggerState#NORMAL} or {@link ETriggerState#PAUSED} as
+   * appropriate.
+   * </p>
+   *
+   * @see ETriggerState
+   * @since 6.2.1
+   */
+  public void resetTriggerFromErrorState (@NonNull final TriggerKey triggerKey) throws SchedulerException
+  {
+    validateState ();
+
+    m_aResources.getJobStore ().resetTriggerFromErrorState (triggerKey);
+  }
+
+  /**
+   * <p>
    * Add (register) the given <code>Calendar</code> to the Scheduler.
    * </p>
    *

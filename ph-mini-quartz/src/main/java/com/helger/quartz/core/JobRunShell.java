@@ -110,9 +110,10 @@ public class JobRunShell implements Runnable, ISchedulerListener
                                            se);
       throw se;
     }
-    catch (final Exception ncdfe)
+    catch (final Throwable ncdfe)
     {
-      // such as NoClassDefFoundError
+      // Catch Throwable (not just Exception) because the typical failure here is an Error - such
+      // as NoClassDefFoundError - and an Error escaping this method is not handled by the caller
       final SchedulerException se = new SchedulerException ("Problem instantiating class '" +
                                                             jobDetail.getJobClass ().getName () +
                                                             "' - ",
@@ -136,16 +137,22 @@ public class JobRunShell implements Runnable, ISchedulerListener
   {
     m_aQS.addInternalSchedulerListener (this);
 
+    final IOperableTrigger aTrigger = (IOperableTrigger) m_aJEC.getTrigger ();
+    final IJobDetail aJobDetail = m_aJEC.getJobDetail ();
+
+    // The JobStore must be informed that this execution ended, no matter how this method is left.
+    // For a job with @DisallowConcurrentExecution, triggeredJobComplete is the only thing that
+    // clears the "blocked" marker that triggersFired set, and a trigger left in state BLOCKED is
+    // never acquired again, is ignored by the misfire handling and cannot be resumed - so the job
+    // silently stops running until the next restart.
+    boolean jobStoreNotified = false;
+
     try
     {
-      final IOperableTrigger trigger = (IOperableTrigger) m_aJEC.getTrigger ();
-      final IJobDetail jobDetail = m_aJEC.getJobDetail ();
-
-      do
+      while (true)
       {
-
-        JobExecutionException jobExEx = null;
-        final IJob job = m_aJEC.getJobInstance ();
+        JobExecutionException aJobExEx = null;
+        final IJob aJob = m_aJEC.getJobInstance ();
 
         try
         {
@@ -164,16 +171,16 @@ public class JobRunShell implements Runnable, ISchedulerListener
         try
         {
           if (!_notifyListenersBeginning (m_aJEC))
-          {
             break;
-          }
         }
         catch (final VetoedException ve)
         {
           try
           {
-            final ECompletedExecutionInstruction instCode = trigger.executionComplete (m_aJEC, null);
-            m_aQS.notifyJobStoreJobVetoed (trigger, jobDetail, instCode);
+            final ECompletedExecutionInstruction instCode = aTrigger.executionComplete (m_aJEC,
+                                                                                        (JobExecutionException) null);
+            m_aQS.notifyJobStoreJobVetoed (aTrigger, aJobDetail, instCode);
+            jobStoreNotified = true;
 
             // QTZ-205
             // Even if trigger got vetoed, we still needs to check to see if
@@ -202,29 +209,32 @@ public class JobRunShell implements Runnable, ISchedulerListener
         try
         {
           if (LOGGER.isDebugEnabled ())
-            LOGGER.debug ("Calling execute on job " + jobDetail.getKey ());
-          job.execute (m_aJEC);
+            LOGGER.debug ("Calling execute on job " + aJobDetail.getKey ());
+          aJob.execute (m_aJEC);
           endTime = System.currentTimeMillis ();
         }
         catch (final JobExecutionException jee)
         {
           endTime = System.currentTimeMillis ();
-          jobExEx = jee;
-          LOGGER.info ("Job " + jobDetail.getKey () + " threw a JobExecutionException: ", jobExEx);
+          aJobExEx = jee;
+          LOGGER.info ("Job " + aJobDetail.getKey () + " threw a JobExecutionException: ", aJobExEx);
         }
-        catch (final Exception ex)
+        catch (final Throwable ex)
         {
+          // Catch Throwable (not just Exception) so that an Error - like the OutOfMemoryError of a
+          // job that ran out of heap - is turned into a regular failed execution. Otherwise it
+          // escapes this method and the JobStore is never told that the execution ended.
           endTime = System.currentTimeMillis ();
-          LOGGER.error ("Job " + jobDetail.getKey () + " threw an unhandled Exception: ", ex);
-          final SchedulerException se = new SchedulerException ("Job threw an unhandled exception.", ex);
+          LOGGER.error ("Job " + aJobDetail.getKey () + " threw an unhandled Throwable: ", ex);
+          final SchedulerException se = new SchedulerException ("Job threw an unhandled throwable.", ex);
           m_aQS.notifySchedulerListenersError ("Job (" + m_aJEC.getJobDetail ().getKey () + " threw an exception.", se);
-          jobExEx = new JobExecutionException (se, false);
+          aJobExEx = new JobExecutionException (se, false);
         }
 
         m_aJEC.setJobRunTime (endTime - startTime);
 
         // notify all job listeners
-        if (!_notifyJobListenersComplete (m_aJEC, jobExEx))
+        if (!_notifyJobListenersComplete (m_aJEC, aJobExEx))
         {
           break;
         }
@@ -234,7 +244,7 @@ public class JobRunShell implements Runnable, ISchedulerListener
         // update the trigger
         try
         {
-          instCode = trigger.executionComplete (m_aJEC, jobExEx);
+          instCode = aTrigger.executionComplete (m_aJEC, aJobExEx);
         }
         catch (final Exception e)
         {
@@ -280,14 +290,28 @@ public class JobRunShell implements Runnable, ISchedulerListener
           continue;
         }
 
-        m_aQS.notifyJobStoreJobComplete (trigger, jobDetail, instCode);
+        m_aQS.notifyJobStoreJobComplete (aTrigger, aJobDetail, instCode);
+        jobStoreNotified = true;
         break;
-      } while (true);
-
+      }
     }
     finally
     {
       m_aQS.removeInternalSchedulerListener (this);
+
+      if (!jobStoreNotified)
+      {
+        // Either one of the "break" paths above was taken - a failed begin(), a listener that could
+        // not be notified - or the plumbing threw an Error. Use NOOP, so that the trigger simply
+        // keeps its existing schedule and fires again: the causes that end up here are typically
+        // transient, and parking the trigger in the ERROR state would stop the job until somebody
+        // calls IScheduler.resetTriggerFromErrorState (...) by hand. The failure is logged here and
+        // is collected by the job listeners anyway.
+        LOGGER.error ("The execution of job " +
+                      aJobDetail.getKey () +
+                      " ended without the JobStore being notified - doing it now, so that the job is not blocked forever");
+        m_aQS.notifyJobStoreJobComplete (aTrigger, aJobDetail, ECompletedExecutionInstruction.NOOP);
+      }
     }
   }
 
@@ -380,6 +404,7 @@ public class JobRunShell implements Runnable, ISchedulerListener
     try
     {
       m_aQS.notifyJobListenersWasExecuted (jobExCtxt, jobExEx);
+      return true;
     }
     catch (final SchedulerException se)
     {
@@ -392,8 +417,6 @@ public class JobRunShell implements Runnable, ISchedulerListener
 
       return false;
     }
-
-    return true;
   }
 
   private boolean _notifyTriggerListenersComplete (@NonNull final IJobExecutionContext jobExCtxt,

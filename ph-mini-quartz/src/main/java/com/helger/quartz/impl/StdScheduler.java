@@ -575,6 +575,18 @@ public class StdScheduler implements IScheduler
    * <p>
    * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
    * </p>
+   *
+   * @since 6.2.1
+   */
+  public void resetTriggerFromErrorState (@NonNull final TriggerKey triggerKey) throws SchedulerException
+  {
+    m_aSched.resetTriggerFromErrorState (triggerKey);
+  }
+
+  /**
+   * <p>
+   * Calls the equivalent method on the 'proxied' <code>QuartzScheduler</code>.
+   * </p>
    */
   public void addCalendar (@NonNull final String calName,
                            @NonNull final ICalendar calendar,

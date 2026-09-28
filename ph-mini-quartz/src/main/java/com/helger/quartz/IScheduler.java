@@ -763,6 +763,28 @@ public interface IScheduler
   ETriggerState getTriggerState (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
   /**
+   * Reset the current state of the identified <code>{@link ITrigger}</code> from
+   * {@link ETriggerState#ERROR} to {@link ETriggerState#NORMAL} or {@link ETriggerState#PAUSED} as
+   * appropriate.
+   * <p>
+   * Only affects triggers that are in ERROR state - if the identified trigger is not in that state
+   * then the result is a no-op.
+   * </p>
+   * <p>
+   * The result will be the trigger returning to the normal, waiting to be fired state, unless the
+   * trigger's group has been paused, in which case it will go into the PAUSED state.
+   * </p>
+   *
+   * @param triggerKey
+   *        The key of the trigger to be reset. May not be <code>null</code>.
+   * @throws SchedulerException
+   *         on error
+   * @see ITrigger.ETriggerState
+   * @since 6.2.1
+   */
+  void resetTriggerFromErrorState (@NonNull TriggerKey triggerKey) throws SchedulerException;
+
+  /**
    * Add (register) the given <code>Calendar</code> to the Scheduler.
    *
    * @param updateTriggers

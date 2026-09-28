@@ -180,6 +180,16 @@ public interface IQuartzScheduler
   @NonNull
   ETriggerState getTriggerState (@NonNull TriggerKey triggerKey) throws SchedulerException;
 
+  /**
+   * @param triggerKey
+   *        The key of the trigger to be reset. May not be <code>null</code>.
+   * @throws SchedulerException
+   *         on error
+   * @see IScheduler#resetTriggerFromErrorState(TriggerKey)
+   * @since 6.2.1
+   */
+  void resetTriggerFromErrorState (@NonNull TriggerKey triggerKey) throws SchedulerException;
+
   void addCalendar (@NonNull String calName,
                     @NonNull ICalendar calendar,
                     boolean replace,

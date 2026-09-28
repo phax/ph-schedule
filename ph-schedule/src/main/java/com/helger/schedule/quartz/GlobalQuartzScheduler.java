@@ -348,6 +348,30 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
   }
 
   /**
+   * Reset the trigger with the specified trigger key from the state
+   * {@link com.helger.quartz.ITrigger.ETriggerState#ERROR} back to the waiting state. A trigger that
+   * is in the error state is never fired again, and pausing and resuming it has no effect, so this
+   * is the only way to get it going again without restarting the application.
+   *
+   * @param aTriggerKey
+   *        Trigger key to use. May not be <code>null</code>.
+   * @since 6.2.1
+   */
+  public void resetTriggerFromErrorState (@NonNull final TriggerKey aTriggerKey)
+  {
+    ValueEnforcer.notNull (aTriggerKey, "TriggerKey");
+    try
+    {
+      m_aScheduler.resetTriggerFromErrorState (aTriggerKey);
+      LOGGER.info ("Successfully reset the error state of the job with TriggerKey " + aTriggerKey.toString ());
+    }
+    catch (final SchedulerException ex)
+    {
+      LOGGER.error ("Failed to reset the error state of the job with TriggerKey " + aTriggerKey.toString (), ex);
+    }
+  }
+
+  /**
    * Shutdown the scheduler and wait for all jobs to complete.
    *
    * @throws SchedulerException

@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.quartz.ITrigger.ECompletedExecutionInstruction;
 import com.helger.quartz.ITrigger.EMisfireInstruction;
 import com.helger.quartz.ITrigger.ETriggerState;
 import com.helger.quartz.impl.JobDetail;
@@ -80,6 +81,92 @@ public abstract class AbstractJobStoreTest
   protected abstract IJobStore createJobStore (String name);
 
   protected abstract void destroyJobStore (String name);
+
+  /**
+   * A trigger that ended up in the ERROR state is never acquired again, and pausing and resuming it
+   * has no effect either - {@link IJobStore#resetTriggerFromErrorState(TriggerKey)} is the only way
+   * to get it going again.
+   */
+  @Test
+  public void testResetTriggerFromErrorState () throws Exception
+  {
+    final long baseFireTime = System.currentTimeMillis () - 1000;
+    final IOperableTrigger trigger1 = SimpleTrigger.create ("trigger1",
+                                                            "triggerGroup1",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime),
+                                                            new Date (baseFireTime + 200000),
+                                                            5,
+                                                            2000);
+    trigger1.computeFirstFireTime (null);
+    m_aJobStore.storeTrigger (trigger1, false);
+
+    assertEquals (ETriggerState.NORMAL, m_aJobStore.getTriggerState (trigger1.getKey ()));
+
+    // Resetting a trigger that is not in the ERROR state is a no-op
+    m_aJobStore.resetTriggerFromErrorState (trigger1.getKey ());
+    assertEquals (ETriggerState.NORMAL, m_aJobStore.getTriggerState (trigger1.getKey ()));
+
+    // Fire the trigger and let the execution end in the ERROR state - that is what the scheduler
+    // does if the job of the trigger could not be instantiated
+    final List <IOperableTrigger> aAcquired = m_aJobStore.acquireNextTriggers (baseFireTime + 10000, 1, 0L);
+    assertEquals (1, aAcquired.size ());
+    m_aJobStore.triggersFired (aAcquired);
+    m_aJobStore.triggeredJobComplete (trigger1,
+                                      m_aJobDetail,
+                                      ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
+    assertEquals (ETriggerState.ERROR, m_aJobStore.getTriggerState (trigger1.getKey ()));
+
+    // A trigger in the ERROR state is never acquired again
+    assertTrue (m_aJobStore.acquireNextTriggers (baseFireTime + 200000, 10, 0L).isEmpty ());
+
+    // Resuming does not help - it only deals with paused triggers
+    m_aJobStore.resumeTrigger (trigger1.getKey ());
+    assertEquals (ETriggerState.ERROR, m_aJobStore.getTriggerState (trigger1.getKey ()));
+
+    // Only the reset gets it going again
+    m_aJobStore.resetTriggerFromErrorState (trigger1.getKey ());
+    assertEquals (ETriggerState.NORMAL, m_aJobStore.getTriggerState (trigger1.getKey ()));
+    assertEquals (1, m_aJobStore.acquireNextTriggers (baseFireTime + 200000, 10, 0L).size ());
+  }
+
+  /**
+   * A trigger of a paused group must go back to PAUSED and not to NORMAL when it is reset from the
+   * ERROR state.
+   */
+  @Test
+  public void testResetTriggerFromErrorStateOfPausedGroup () throws Exception
+  {
+    final long baseFireTime = System.currentTimeMillis () - 1000;
+    final IOperableTrigger trigger1 = SimpleTrigger.create ("trigger1",
+                                                            "triggerGroup1",
+                                                            m_aJobDetail.getName (),
+                                                            m_aJobDetail.getGroup (),
+                                                            new Date (baseFireTime),
+                                                            new Date (baseFireTime + 200000),
+                                                            5,
+                                                            2000);
+    trigger1.computeFirstFireTime (null);
+    m_aJobStore.storeTrigger (trigger1, false);
+
+    final List <IOperableTrigger> aAcquired = m_aJobStore.acquireNextTriggers (baseFireTime + 10000, 1, 0L);
+    assertEquals (1, aAcquired.size ());
+    m_aJobStore.triggersFired (aAcquired);
+
+    // Pause the group while the execution is still running - pausing it afterwards would move the
+    // trigger out of the ERROR state all by itself
+    m_aJobStore.pauseTriggers (GroupMatcher.triggerGroupEquals ("triggerGroup1"));
+
+    m_aJobStore.triggeredJobComplete (trigger1,
+                                      m_aJobDetail,
+                                      ECompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
+    assertEquals (ETriggerState.ERROR, m_aJobStore.getTriggerState (trigger1.getKey ()));
+
+    m_aJobStore.resetTriggerFromErrorState (trigger1.getKey ());
+    assertEquals (ETriggerState.PAUSED, m_aJobStore.getTriggerState (trigger1.getKey ()));
+    assertTrue (m_aJobStore.acquireNextTriggers (baseFireTime + 200000, 10, 0L).isEmpty ());
+  }
 
   @Test
   public void testAcquireNextTrigger () throws Exception

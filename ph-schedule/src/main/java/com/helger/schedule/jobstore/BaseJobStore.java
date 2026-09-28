@@ -526,6 +526,32 @@ public class BaseJobStore implements IJobStore
     });
   }
 
+  /**
+   * @since 6.2.1
+   */
+  public void resetTriggerFromErrorState (@NonNull final TriggerKey triggerKey) throws JobPersistenceException
+  {
+    final TriggerWrapper tw = m_aRWLock.readLockedGet (() -> m_aTriggersByKey.get (triggerKey));
+
+    // does the trigger exist?
+    if (tw == null)
+      return;
+
+    // is the trigger in error state?
+    if (tw.getState () != TriggerWrapper.STATE_ERROR)
+      return;
+
+    m_aRWLock.writeLocked (() -> {
+      if (m_aPausedTriggerGroups.contains (triggerKey.getGroup ()))
+        tw.setState (TriggerWrapper.STATE_PAUSED);
+      else
+      {
+        tw.setState (TriggerWrapper.STATE_WAITING);
+        m_aTimeTriggers.add (tw);
+      }
+    });
+  }
+
   public void storeCalendar (@NonNull final String name,
                              @NonNull final ICalendar aCalendar,
                              final boolean bReplaceExisting,

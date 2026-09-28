@@ -25,10 +25,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +50,7 @@ public class DisallowConcurrentExecutionJobTest
 
   private static final String BARRIER = "BARRIER";
   private static final String DATE_STAMPS = "DATE_STAMPS";
+  private static final String LATCH = "LATCH";
 
   @DisallowConcurrentExecution
   public static class TestJob implements IJob
@@ -108,6 +111,128 @@ public class DisallowConcurrentExecutionJobTest
         }
       }
     }
+  }
+
+  /**
+   * A job that throws an {@link Error} - which is what a job that runs out of heap does - instead of
+   * an {@link Exception}.
+   */
+  @DisallowConcurrentExecution
+  public static class TestThrowingErrorJob implements IJob
+  {
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
+    {
+      try
+      {
+        ((CountDownLatch) context.getScheduler ().getContext ().get (LATCH)).countDown ();
+      }
+      catch (final SchedulerException e)
+      {
+        throw new JobExecutionException ("Failed to lookup the latch.", e);
+      }
+      throw new NoClassDefFoundError ("Deliberately thrown by TestThrowingErrorJob");
+    }
+  }
+
+  /** A job that just counts down its executions. */
+  @DisallowConcurrentExecution
+  public static class TestCountingJob implements IJob
+  {
+    public void execute (final IJobExecutionContext context) throws JobExecutionException
+    {
+      try
+      {
+        ((CountDownLatch) context.getScheduler ().getContext ().get (LATCH)).countDown ();
+      }
+      catch (final SchedulerException e)
+      {
+        throw new JobExecutionException ("Failed to lookup the latch.", e);
+      }
+    }
+  }
+
+  /** A job listener that fails to handle the end of an execution. */
+  public static class TestThrowingJobListener implements IJobListener
+  {
+    public String getName ()
+    {
+      return "TestThrowingJobListener";
+    }
+
+    @Override
+    public void jobWasExecuted (final IJobExecutionContext context, final JobExecutionException jobException)
+    {
+      throw new IllegalStateException ("Deliberately thrown by TestThrowingJobListener");
+    }
+  }
+
+  @NonNull
+  private static IScheduler _createSchedulerWithLatch (@NonNull final CountDownLatch aLatch) throws SchedulerException
+  {
+    final NonBlockingProperties props = new NonBlockingProperties ();
+    props.setProperty (StdSchedulerFactory.PROP_SCHED_IDLE_WAIT_TIME, "1000");
+    props.setProperty ("org.quartz.threadPool.threadCount", "2");
+    final IScheduler ret = new StdSchedulerFactory ().initialize (props).getScheduler ();
+    ret.getContext ().put (LATCH, aLatch);
+    return ret;
+  }
+
+  /**
+   * An {@link Error} thrown by the job used to escape {@link com.helger.quartz.core.JobRunShell}, so
+   * that the job store was never told that the execution ended. For a job with
+   * {@link DisallowConcurrentExecution} that meant it stayed marked as blocked forever: its triggers
+   * remained in state {@link ITrigger.ETriggerState#BLOCKED}, were never acquired again, were
+   * ignored by the misfire handling and could not be resumed either.
+   */
+  @Test
+  public void testErrorInJobDoesNotBlockTheJobForever () throws Exception
+  {
+    // More than a single execution is what proves that the job was not left blocked
+    final CountDownLatch latch = new CountDownLatch (3);
+
+    final IJobDetail job1 = JobBuilder.newJob (TestThrowingErrorJob.class).withIdentity ("errorJob").build ();
+    final ITrigger trigger1 = TriggerBuilder.newTrigger ()
+                                            .withIdentity ("errorTrigger")
+                                            .withSchedule (SimpleScheduleBuilder.repeatSecondlyForever (1))
+                                            .startNow ()
+                                            .build ();
+
+    final IScheduler scheduler = _createSchedulerWithLatch (latch);
+    scheduler.scheduleJob (job1, trigger1);
+    scheduler.start ();
+
+    assertTrue ("The job was not executed again after it threw an Error", latch.await (20, TimeUnit.SECONDS));
+
+    scheduler.shutdown (true);
+  }
+
+  /**
+   * A job listener that throws makes the notification loop abort with a {@link SchedulerException}.
+   * That used to leave the job store uninformed as well - see
+   * {@link #testErrorInJobDoesNotBlockTheJobForever()}.
+   */
+  @Test
+  public void testFailingJobListenerDoesNotBlockTheJobForever () throws Exception
+  {
+    // More than a single execution is what proves that the job was not left blocked
+    final CountDownLatch latch = new CountDownLatch (3);
+
+    final IJobDetail job1 = JobBuilder.newJob (TestCountingJob.class).withIdentity ("countingJob").build ();
+    final ITrigger trigger1 = TriggerBuilder.newTrigger ()
+                                            .withIdentity ("countingTrigger")
+                                            .withSchedule (SimpleScheduleBuilder.repeatSecondlyForever (1))
+                                            .startNow ()
+                                            .build ();
+
+    final IScheduler scheduler = _createSchedulerWithLatch (latch);
+    scheduler.getListenerManager ().addJobListener (new TestThrowingJobListener ());
+    scheduler.scheduleJob (job1, trigger1);
+    scheduler.start ();
+
+    assertTrue ("The job was not executed again after the job listener threw",
+                latch.await (20, TimeUnit.SECONDS));
+
+    scheduler.shutdown (true);
   }
 
   @Test

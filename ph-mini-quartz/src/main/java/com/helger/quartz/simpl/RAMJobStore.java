@@ -696,6 +696,47 @@ public class RAMJobStore implements IJobStore
 
   /**
    * <p>
+   * Reset the current state of the identified <code>{@link ITrigger}</code> from
+   * {@link ETriggerState#ERROR} to {@link ETriggerState#NORMAL} or {@link ETriggerState#PAUSED} as
+   * appropriate.
+   * </p>
+   * <p>
+   * Only affects triggers that are in ERROR state - if the identified trigger is not in that state
+   * then the result is a no-op.
+   * </p>
+   * <p>
+   * The result will be the trigger returning to the normal, waiting to be fired state, unless the
+   * trigger's group has been paused, in which case it will go into the PAUSED state.
+   * </p>
+   *
+   * @since 6.2.1
+   */
+  public void resetTriggerFromErrorState (@NonNull final TriggerKey triggerKey) throws JobPersistenceException
+  {
+    synchronized (m_aLock)
+    {
+      final TriggerWrapper tw = m_aTriggersByKey.get (triggerKey);
+
+      // does the trigger exist?
+      if (tw == null)
+        return;
+
+      // is the trigger in error state?
+      if (tw.m_nState != TriggerWrapper.STATE_ERROR)
+        return;
+
+      if (m_aPausedTriggerGroups.contains (triggerKey.getGroup ()))
+        tw.m_nState = TriggerWrapper.STATE_PAUSED;
+      else
+      {
+        tw.m_nState = TriggerWrapper.STATE_WAITING;
+        m_aTimeTriggers.add (tw);
+      }
+    }
+  }
+
+  /**
+   * <p>
    * Store the given <code>{@link com.helger.quartz.ICalendar}</code>.
    * </p>
    *
