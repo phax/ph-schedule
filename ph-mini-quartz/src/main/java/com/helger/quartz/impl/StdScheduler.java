@@ -532,8 +532,7 @@ public class StdScheduler implements IScheduler
    */
   @NonNull
   @ReturnsMutableCopy
-  public ICommonsSet <TriggerKey> getTriggerKeys (@NonNull
-                                                  final GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public ICommonsSet <TriggerKey> getTriggerKeys (@NonNull final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     return m_aSched.getTriggerKeys (matcher);
   }

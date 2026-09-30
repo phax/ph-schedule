@@ -295,8 +295,7 @@ public class TriggerBuilder <T extends ITrigger>
    */
   @SuppressWarnings ("unchecked")
   @NonNull
-  public <SBT extends IMutableTrigger> TriggerBuilder <SBT> withSchedule (@NonNull
-                                                                          final IScheduleBuilder <SBT> schedBuilder)
+  public <SBT extends IMutableTrigger> TriggerBuilder <SBT> withSchedule (@NonNull final IScheduleBuilder <SBT> schedBuilder)
   {
     m_aScheduleBuilder = schedBuilder;
     return (TriggerBuilder <SBT>) this;

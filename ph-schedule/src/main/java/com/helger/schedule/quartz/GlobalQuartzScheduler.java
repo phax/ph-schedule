@@ -349,9 +349,9 @@ public final class GlobalQuartzScheduler extends AbstractGlobalSingleton
 
   /**
    * Reset the trigger with the specified trigger key from the state
-   * {@link com.helger.quartz.ITrigger.ETriggerState#ERROR} back to the waiting state. A trigger that
-   * is in the error state is never fired again, and pausing and resuming it has no effect, so this
-   * is the only way to get it going again without restarting the application.
+   * {@link com.helger.quartz.ITrigger.ETriggerState#ERROR} back to the waiting state. A trigger
+   * that is in the error state is never fired again, and pausing and resuming it has no effect, so
+   * this is the only way to get it going again without restarting the application.
    *
    * @param aTriggerKey
    *        Trigger key to use. May not be <code>null</code>.

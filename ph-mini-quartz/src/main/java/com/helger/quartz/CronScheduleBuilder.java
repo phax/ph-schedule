@@ -126,8 +126,7 @@ public class CronScheduleBuilder implements IScheduleBuilder <CronTrigger>
    * @see CronExpression
    */
   @NonNull
-  public static CronScheduleBuilder cronScheduleNonvalidatedExpression (@NonNull
-                                                                        final String cronExpression) throws ParseException
+  public static CronScheduleBuilder cronScheduleNonvalidatedExpression (@NonNull final String cronExpression) throws ParseException
   {
     return cronSchedule (new CronExpression (cronExpression));
   }

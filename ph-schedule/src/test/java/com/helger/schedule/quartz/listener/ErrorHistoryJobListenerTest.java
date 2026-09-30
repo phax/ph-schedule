@@ -69,7 +69,11 @@ public final class ErrorHistoryJobListenerTest
 
     assertEquals (1, JobExecutionErrorRegistry.getTotalErrorCount ());
 
-    final JobExecutionError aError = JobExecutionErrorRegistry.getAllErrors ().values ().iterator ().next ().getLastOrNull ();
+    final JobExecutionError aError = JobExecutionErrorRegistry.getAllErrors ()
+                                                              .values ()
+                                                              .iterator ()
+                                                              .next ()
+                                                              .getLastOrNull ();
     assertNotNull (aError);
     assertEquals (MockFailingJob.class.getName (), aError.getJobClassName ());
     assertNotNull (aError.getErrorDateTime ());

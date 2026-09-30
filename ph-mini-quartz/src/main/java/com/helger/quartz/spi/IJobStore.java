@@ -493,8 +493,7 @@ public interface IJobStore
    */
   @NonNull
   @ReturnsMutableCopy
-  ICommonsCollection <String> resumeTriggers (@NonNull
-                                              GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
+  ICommonsCollection <String> resumeTriggers (@NonNull GroupMatcher <TriggerKey> matcher) throws JobPersistenceException;
 
   @NonNull
   @ReturnsMutableCopy
@@ -587,8 +586,7 @@ public interface IJobStore
    */
   @NonNull
   @ReturnsMutableCopy
-  ICommonsList <TriggerFiredResult> triggersFired (@NonNull
-                                                   List <IOperableTrigger> triggers) throws JobPersistenceException;
+  ICommonsList <TriggerFiredResult> triggersFired (@NonNull List <IOperableTrigger> triggers) throws JobPersistenceException;
 
   /**
    * Inform the <code>JobStore</code> that the scheduler has completed the firing of the given

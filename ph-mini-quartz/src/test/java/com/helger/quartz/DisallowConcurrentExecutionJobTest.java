@@ -114,8 +114,8 @@ public class DisallowConcurrentExecutionJobTest
   }
 
   /**
-   * A job that throws an {@link Error} - which is what a job that runs out of heap does - instead of
-   * an {@link Exception}.
+   * A job that throws an {@link Error} - which is what a job that runs out of heap does - instead
+   * of an {@link Exception}.
    */
   @DisallowConcurrentExecution
   public static class TestThrowingErrorJob implements IJob
@@ -178,11 +178,11 @@ public class DisallowConcurrentExecutionJobTest
   }
 
   /**
-   * An {@link Error} thrown by the job used to escape {@link com.helger.quartz.core.JobRunShell}, so
-   * that the job store was never told that the execution ended. For a job with
-   * {@link DisallowConcurrentExecution} that meant it stayed marked as blocked forever: its triggers
-   * remained in state {@link ITrigger.ETriggerState#BLOCKED}, were never acquired again, were
-   * ignored by the misfire handling and could not be resumed either.
+   * An {@link Error} thrown by the job used to escape {@link com.helger.quartz.core.JobRunShell},
+   * so that the job store was never told that the execution ended. For a job with
+   * {@link DisallowConcurrentExecution} that meant it stayed marked as blocked forever: its
+   * triggers remained in state {@link ITrigger.ETriggerState#BLOCKED}, were never acquired again,
+   * were ignored by the misfire handling and could not be resumed either.
    */
   @Test
   public void testErrorInJobDoesNotBlockTheJobForever () throws Exception
@@ -229,8 +229,7 @@ public class DisallowConcurrentExecutionJobTest
     scheduler.scheduleJob (job1, trigger1);
     scheduler.start ();
 
-    assertTrue ("The job was not executed again after the job listener threw",
-                latch.await (20, TimeUnit.SECONDS));
+    assertTrue ("The job was not executed again after the job listener threw", latch.await (20, TimeUnit.SECONDS));
 
     scheduler.shutdown (true);
   }

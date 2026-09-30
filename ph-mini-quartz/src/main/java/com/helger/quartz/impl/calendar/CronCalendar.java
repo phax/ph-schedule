@@ -76,8 +76,7 @@ public class CronCalendar extends AbstractCalendar <CronCalendar>
    * @param expression
    *        a String representation of the desired cron expression
    */
-  public CronCalendar (@Nullable final ICalendar baseCalendar,
-                       @NonNull final String expression) throws ParseException
+  public CronCalendar (@Nullable final ICalendar baseCalendar, @NonNull final String expression) throws ParseException
   {
     this (baseCalendar, expression, null);
   }

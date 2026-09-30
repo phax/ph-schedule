@@ -68,12 +68,12 @@ public final class JobExecutionErrorRegistry
   @Nonnegative
   public static int getMaxErrorsPerJob ()
   {
-    return RW_LOCK.readLockedInt ( () -> s_nMaxErrorsPerJob);
+    return RW_LOCK.readLockedInt (() -> s_nMaxErrorsPerJob);
   }
 
   /**
-   * Set the maximum number of errors to be remembered per job. Existing entries that exceed the
-   * new limit are dropped immediately.
+   * Set the maximum number of errors to be remembered per job. Existing entries that exceed the new
+   * limit are dropped immediately.
    *
    * @param nMaxErrorsPerJob
    *        The new maximum. Must be &ge; 0. Use 0 to disable the collection entirely.
@@ -82,7 +82,7 @@ public final class JobExecutionErrorRegistry
   {
     ValueEnforcer.isGE0 (nMaxErrorsPerJob, "MaxErrorsPerJob");
 
-    RW_LOCK.writeLocked ( () -> {
+    RW_LOCK.writeLocked (() -> {
       s_nMaxErrorsPerJob = nMaxErrorsPerJob;
       if (nMaxErrorsPerJob == 0)
         ERRORS.clear ();
@@ -103,7 +103,7 @@ public final class JobExecutionErrorRegistry
   {
     ValueEnforcer.notNull (aError, "Error");
 
-    RW_LOCK.writeLocked ( () -> {
+    RW_LOCK.writeLocked (() -> {
       if (s_nMaxErrorsPerJob == 0)
       {
         // Collection is disabled
@@ -132,7 +132,7 @@ public final class JobExecutionErrorRegistry
     if (aJobKey == null)
       return new CommonsArrayList <> ();
 
-    return RW_LOCK.readLockedGet ( () -> {
+    return RW_LOCK.readLockedGet (() -> {
       final ICommonsList <JobExecutionError> aList = ERRORS.get (aJobKey);
       return aList == null ? new CommonsArrayList <> () : aList.getClone ();
     });
@@ -151,7 +151,7 @@ public final class JobExecutionErrorRegistry
     if (aJobKey == null)
       return null;
 
-    return RW_LOCK.readLockedGet ( () -> {
+    return RW_LOCK.readLockedGet (() -> {
       final ICommonsList <JobExecutionError> aList = ERRORS.get (aJobKey);
       return aList == null ? null : aList.getLastOrNull ();
     });
@@ -165,7 +165,7 @@ public final class JobExecutionErrorRegistry
   @ReturnsMutableCopy
   public static ICommonsMap <JobKey, ICommonsList <JobExecutionError>> getAllErrors ()
   {
-    return RW_LOCK.readLockedGet ( () -> {
+    return RW_LOCK.readLockedGet (() -> {
       final ICommonsOrderedMap <JobKey, ICommonsList <JobExecutionError>> ret = new CommonsLinkedHashMap <> ();
       for (final var aEntry : ERRORS.entrySet ())
         ret.put (aEntry.getKey (), aEntry.getValue ().getClone ());
@@ -179,7 +179,7 @@ public final class JobExecutionErrorRegistry
   @Nonnegative
   public static int getTotalErrorCount ()
   {
-    return RW_LOCK.readLockedInt ( () -> {
+    return RW_LOCK.readLockedInt (() -> {
       int ret = 0;
       for (final ICommonsList <JobExecutionError> aList : ERRORS.values ())
         ret += aList.size ();
@@ -200,7 +200,7 @@ public final class JobExecutionErrorRegistry
     if (aJobKey == null)
       return EChange.UNCHANGED;
 
-    return RW_LOCK.writeLockedGet ( () -> EChange.valueOf (ERRORS.remove (aJobKey) != null));
+    return RW_LOCK.writeLockedGet (() -> EChange.valueOf (ERRORS.remove (aJobKey) != null));
   }
 
   /**
@@ -211,6 +211,6 @@ public final class JobExecutionErrorRegistry
   @NonNull
   public static EChange removeAllErrors ()
   {
-    return RW_LOCK.writeLockedGet ( () -> ERRORS.removeAll ());
+    return RW_LOCK.writeLockedGet (() -> ERRORS.removeAll ());
   }
 }

@@ -60,8 +60,7 @@ public final class JobExecutionExceptionTest
     assertTrue (aEx.unscheduleFiringTrigger ());
     assertFalse (aEx.unscheduleAllTriggers ());
 
-    assertEquals (ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE,
-                  _createTrigger ().executionComplete (null, aEx));
+    assertEquals (ECompletedExecutionInstruction.SET_TRIGGER_COMPLETE, _createTrigger ().executionComplete (null, aEx));
   }
 
   @Test

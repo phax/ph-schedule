@@ -38,8 +38,8 @@ public enum ESchedulerState implements IHasID <String>
    */
   STANDBY ("standby"),
   /**
-   * The scheduler exists, but was never started. No jobs are executed in this state. Quartz
-   * reports standby mode for this state as well, so the two can only be told apart via
+   * The scheduler exists, but was never started. No jobs are executed in this state. Quartz reports
+   * standby mode for this state as well, so the two can only be told apart via
    * {@link com.helger.quartz.SchedulerMetaData#getRunningSince()}.
    *
    * @since 6.2.0

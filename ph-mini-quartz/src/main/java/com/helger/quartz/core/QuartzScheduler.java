@@ -1279,8 +1279,7 @@ public class QuartzScheduler implements IQuartzScheduler
    */
   @NonNull
   @ReturnsMutableCopy
-  public ICommonsSet <TriggerKey> getTriggerKeys (@Nullable
-                                                  final GroupMatcher <TriggerKey> matcher) throws SchedulerException
+  public ICommonsSet <TriggerKey> getTriggerKeys (@Nullable final GroupMatcher <TriggerKey> matcher) throws SchedulerException
   {
     validateState ();
 

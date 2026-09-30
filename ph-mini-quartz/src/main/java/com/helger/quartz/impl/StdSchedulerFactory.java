@@ -1067,8 +1067,7 @@ public class StdSchedulerFactory implements ISchedulerFactory
   }
 
   @Nullable
-  private static Method _getSetMethod (@NonNull final String name,
-                                                         @NonNull final PropertyDescriptor [] props)
+  private static Method _getSetMethod (@NonNull final String name, @NonNull final PropertyDescriptor [] props)
   {
     for (final PropertyDescriptor prop : props)
     {
