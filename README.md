@@ -31,6 +31,9 @@ This library is an in-process scheduler. Three points are worth knowing when int
 
 # News and noteworthy
 
+v6.2.2 - work in progress
+* Requires at least ph-commons 12.6.0
+
 v6.2.1 - 2026-09-28
 * Fixed that a job with `@DisallowConcurrentExecution` could stay marked as blocked in the job store forever.
   `JobRunShell.run ()` informed the job store about the end of an execution on the regular code path only, so an `Error` thrown by the job - or a job listener that failed while handling the end of the execution - left the job blocked.

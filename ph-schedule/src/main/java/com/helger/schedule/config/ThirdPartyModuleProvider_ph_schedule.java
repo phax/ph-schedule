@@ -33,11 +33,13 @@ import com.helger.base.version.Version;
 @IsSPIImplementation
 public final class ThirdPartyModuleProvider_ph_schedule implements IThirdPartyModuleProviderSPI
 {
-  public static final IThirdPartyModule QUARTZ = new ThirdPartyModule ("Quartz",
-                                                                       "Terracotta",
-                                                                       ELicense.APACHE2,
-                                                                       new Version (2, 2, 3),
-                                                                       "http://www.quartz-scheduler.org/");
+  public static final IThirdPartyModule QUARTZ = ThirdPartyModule.builder ()
+                                                                 .displayName ("Quartz")
+                                                                 .copyrightOwner ("Terracotta")
+                                                                 .license (ELicense.APACHE2)
+                                                                 .version (new Version (2, 2, 3))
+                                                                 .webSiteUrl ("http://www.quartz-scheduler.org/")
+                                                                 .build ();
 
   @Nullable
   public IThirdPartyModule [] getAllThirdPartyModules ()
