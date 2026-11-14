@@ -25,7 +25,7 @@ The `forbidden-apis` plugin is configured in the parent POM with the `ph-forbidd
 
 ## Module Layout
 
-This repo ships two artifacts under groupId `com.helger.schedule`:
+This repo ships two artifacts under groupId `com.helger.schedule`, plus the BOM `ph-schedule-bom` (pure `dependencyManagement` with both artifacts at `${project.version}`; keep it in sync when adding a module):
 
 ### `ph-mini-quartz` — package `com.helger.quartz.*`
 

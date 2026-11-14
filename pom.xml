@@ -83,8 +83,8 @@
     <dependencies>
       <dependency>
         <groupId>com.helger.commons</groupId>
-        <artifactId>ph-commons-parent-pom</artifactId>
-        <version>12.6.0</version>
+        <artifactId>ph-commons-bom</artifactId>
+        <version>12.7.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -92,6 +92,11 @@
         <groupId>org.ow2.asm</groupId>
         <artifactId>asm</artifactId>
         <version>9.11.1</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit4.version}</version>
       </dependency>
 
       <dependency>
@@ -126,6 +131,7 @@
   </dependencies>
   
   <modules>
+    <module>ph-schedule-bom</module>
     <module>ph-mini-quartz</module>
     <module>ph-schedule</module>
   </modules>

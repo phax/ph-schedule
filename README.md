@@ -21,6 +21,22 @@ Add the following to your pom.xml to use this artifact, replacing `x.y.z` with t
 </dependency>
 ```
 
+Or import the BOM and skip per-module versions:
+
+```xml
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>com.helger.schedule</groupId>
+      <artifactId>ph-schedule-bom</artifactId>
+      <version>x.y.z</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
+```
+
 # Security notes
 
 This library is an in-process scheduler. Three points are worth knowing when integrating it into a host application:
@@ -31,8 +47,10 @@ This library is an in-process scheduler. Three points are worth knowing when int
 
 # News and noteworthy
 
-v6.2.2 - work in progress
-* Requires at least ph-commons 12.6.0
+v6.2.2 - 2026-11-14
+* Requires at least ph-commons 12.7.1
+* New module `ph-schedule-bom` - a dedicated Bill of Materials with the managed versions of `ph-mini-quartz` and `ph-schedule`.
+  Import it instead of `ph-schedule-parent-pom`, which also carries the build configuration of this project.
 
 v6.2.1 - 2026-09-28
 * Fixed that a job with `@DisallowConcurrentExecution` could stay marked as blocked in the job store forever.
