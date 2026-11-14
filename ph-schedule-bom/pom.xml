@@ -27,7 +27,7 @@
   </parent>
   <groupId>com.helger.schedule</groupId>
   <artifactId>ph-schedule-bom</artifactId>
-  <version>6.2.2-SNAPSHOT</version>
+  <version>6.2.2</version>
   <packaging>pom</packaging>
   <name>ph-schedule-bom</name>
   <description>Bill of Materials for all ph-schedule artifacts</description>
@@ -44,7 +44,7 @@
     <connection>scm:git:https://github.com/phax/ph-schedule.git</connection>
     <developerConnection>scm:git:https://github.com/phax/ph-schedule.git</developerConnection>
     <url>https://github.com/phax/ph-schedule</url>
-    <tag>HEAD</tag>
+    <tag>ph-schedule-parent-pom-6.2.2</tag>
   </scm>
   <organization>
     <name>Philip Helger</name>
